@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.gov.companieshouse</groupId>
-    <artifactId>web.accounts</artifactId>
+    <artifactId>company-accounts.web.ch.gov.uk</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
-    <name>web.accounts</name>
+    <name>company-accounts-web</name>
     <description>Web service to handle company account data</description>
 
     <parent>
