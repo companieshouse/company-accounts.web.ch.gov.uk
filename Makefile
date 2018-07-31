@@ -2,7 +2,6 @@ artifact_name       := company-accounts.web.ch.gov.uk
 commit              := $(shell git rev-parse --short HEAD)
 tag                 := $(shell git tag -l 'v*-rc*' --points-at HEAD)
 version             := $(shell if [[ -n "$(tag)" ]]; then echo $(tag) | sed 's/^v//'; else echo $(commit); fi)
-artifactory_publish := $(shell if [[ -n "$(tag)" ]]; then echo release; else echo dev; fi)
 
 .PHONY: all
 all: build
