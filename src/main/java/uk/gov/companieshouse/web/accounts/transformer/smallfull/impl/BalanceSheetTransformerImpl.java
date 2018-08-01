@@ -5,7 +5,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 
-@Component(value="Foo")
+@Component
 public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
     public BalanceSheet getBalanceSheet() {
