@@ -11,7 +11,7 @@ public class BalanceSheetTransformerTests {
     private BalanceSheetTransformer transformer = new BalanceSheetTransformerImpl();
 
     @Test
-    public void getBalanceSheetSuccess() {
+    void getBalanceSheetSuccess() {
 
         BalanceSheet balanceSheet = transformer.getBalanceSheet();
 

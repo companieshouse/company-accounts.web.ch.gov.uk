@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,7 +31,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    public void getBalanceSheetSuccess() {
+    void getBalanceSheetSuccess() {
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet("", "", "");
 
