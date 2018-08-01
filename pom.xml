@@ -25,10 +25,12 @@
 
         <lombok.version>1.18.0</lombok.version>
         <thymeleaf-extras.version>3.0.1.RELEASE</thymeleaf-extras.version>
+
+        <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
+        <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -45,9 +47,18 @@
             <version>${lombok.version}</version>
         </dependency>
 
+        <!-- Test scope -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-jupiter-engine.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito-junit-jupiter.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
