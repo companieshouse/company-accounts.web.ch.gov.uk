@@ -11,13 +11,13 @@ public class BalanceSheetTransformerTests {
     private BalanceSheetTransformer transformer;
 
     @BeforeEach
-    public void init() {
+    private void init() {
 
         transformer = new BalanceSheetTransformer();
     }
 
     @Test
-    public void getBalanceSheetSuccess() {
+    void getBalanceSheetSuccess() {
 
         BalanceSheet balanceSheet = transformer.getBalanceSheet();
 

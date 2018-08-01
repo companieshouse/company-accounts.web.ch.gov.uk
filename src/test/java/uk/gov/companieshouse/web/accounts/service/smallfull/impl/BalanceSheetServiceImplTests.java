@@ -19,7 +19,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    public void getBalanceSheetSuccess() {
+    void getBalanceSheetSuccess() {
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(any(String.class), any(String.class), any(String.class));
         assertNotNull(balanceSheet);
