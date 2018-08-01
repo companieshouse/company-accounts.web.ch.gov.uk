@@ -21,13 +21,4 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         return balanceSheet;
     }
-
-    /*private CurrentPeriod getCurrentPeriodFromAPI(String companyId, String transactionId, String accountsId) {
-
-
-    }*/
-
-    /*private PreviousPeriod getPreviousPeriodFromAPI(String companyId, String transactionId, String accountsId) {
-
-    }*/
 }
