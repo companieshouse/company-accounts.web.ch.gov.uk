@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE"></title>
+    <link
+        th:href="@{{cdnUrl}/stylesheets/assets-digital-cabinet-office-gov-uk-static/govuk-template.css?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+        media="screen" rel="stylesheet" type="text/css" />
+
+    <link
+            th:href="@{{cdnUrl}/stylesheets/assets-digital-cabinet-office-gov-uk-static/govuk-template-print.css?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+            media="print" rel="stylesheet" type="text/css" />
+
+    <link
+            th:href="@{{cdnUrl}/stylesheets/fonts.css?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+            media="all" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon"
+          th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+          type="image/x-icon" />
+    <link rel="mask-icon"
+          th:href="@{{cdnUrl}/images/gov.uk_logotype_crown.svg?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+          color="#0b0c0c" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152"
+          th:href="@{{cdnUrl}/images/apple-touch-icon-152x152.png?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120"
+          th:href="@{{cdnUrl}/images/apple-touch-icon-120x120.png?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76"
+          th:href="@{{cdnUrl}/images/apple-touch-icon-76x76.png?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}" />
+    <link rel="apple-touch-icon-precomposed"
+          th:href="@{{cdnUrl}/images/apple-touch-icon-60x60.png?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}" />
+
+    <link
+        th:href="@{{cdnUrl}/stylesheets/application.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+        media="all" rel="stylesheet" type="text/css" />
+    <link
+        th:href="@{{cdnUrl}/stylesheets/ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+        media="all" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+    <div class="entire-wrapper">
+        <div th:replace="fragments/header :: header"></div>
+        <main id="content" role="main" class="two-column-accounts">
+            <div th:replace="fragments/betaBanner :: betaBanner"></div>
+            <div th:replace="fragments/userBar :: userBar"></div>
+
+            <div layout:fragment="content"></div>
+        </main>
+    </div>
+    <div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>User Bar</title>
+    </head>
+    <body>
+        <div th:fragment="userBar" class="js-toggle-nav" id="global-nav">
+            <a href="#navigation" id="signed-in-user-href" class="js-header-toggle" text="jsmith@testcompany.co.uk:"></a>
+            <nav class="content" role="navigation">
+                <ul id="navigation" class="mobile-hidden">
+                    <li class="user" id="signed-in-user">jsmith@testcompany.co.uk: </li>
+                    <li><a href="javascript:void(0)">Your details</a></li>
+                    <li><a href="javascript:void(0)" id="recent_filings">Your filings</a></li>
+                    <li><a href="javascript:void(0)" id="">Companies you follow</a></li>
+                    <li><a href="/chs/chs-start-page-signed-out" id="user-signout">Sign out</a></li>
+                </ul>
+            </nav>
+        </div>
+    </body>
+
+    <!--<div class="js-toggle-nav" id="global-nav">
+        <a href="#navigation" id="signed-in-user-href" class="js-header-toggle" th:text="${email}"></a>
+        <nav role="navigation" class="content">
+            <ul id="navigation" class="mobile-hidden">
+                <li id="signed-in-user" class="user" th:text="${email} + ':'"> </li>
+                <li><a th:href="@{{chsAccountUrl}/user/account(chsAccountUrl=${@environment.getProperty('account.url')})}" id="your-details" class="piwik-event" data-event-id="Your details - top menu">Your details</a></li>
+                <li><a th:href="@{{chsUrl}/user/transactions(chsUrl=${@environment.getProperty('chs.url')})}" id="recent_filings" class="piwik-event" data-event-id="Your filings - top menu">Your filings</a></li>
+                <li><a th:href="@{{chsFollowUrl}/admin/monitor(chsFollowUrl=${@environment.getProperty('follow.url')})}" id="companies-you-follow" class="piwik-event" data-event-id="Companies you follow">Companies you follow</a></li>
+                <li><a id="user-signout" href="/signout" class="piwik-event" data-event-id="Sign out">Sign out</a></li>
+            </ul>
+        </nav>
+    </div>-->
+
+</html>
