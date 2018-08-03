@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>Balance Sheet</title>
+    </head>
+    <body>
+        <div id="balanceSheet-main-content" layout:fragment="content">
+
+            <form id="balanceSheet-form" th:action="@{''}" th:object="${balanceSheet}" class="form" method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    number = '1',
+                    headingText = 'Balance sheet'
+                )">
+                </div>
+
+                <div class="left-indent">
+                    <div class="panel panel-border-wide">
+                        <p id="balanceSheet-help-text" class="warning">Complete all items that are included in your prepared accounts.</p>
+                    </div>
+
+                    <div class="grid-row">
+                        <div class="column-half">
+                            <div th:replace="fragments/dropDownHelp :: dropDownHelp (
+                                id = 'calledUpShareCapitalNotPaid',
+                                title = 'Called up share capital not paid',
+                                text = 'This is the amount that has been called for when shares have been allotted but that amount has not been received as at the date of the balance sheet.',
+                                )">
+                            </div>
+                        </div>
+
+                        <div class="column-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'calledUpShareCapitalNotPaid.currentAmount',
+                                text = 'Called up share capital not paid',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input class="button" type="submit" role="button"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+
+</html>
