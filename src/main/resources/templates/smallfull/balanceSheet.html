@@ -25,6 +25,11 @@
                         <p id="balanceSheet-help-text" class="warning">Complete all items that are included in your prepared accounts.</p>
                     </div>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'calledUpShareCapitalNotPaid.currentAmount'
+                        )">
+                    </div>
+
                     <div class="grid-row">
                         <div class="column-half">
                             <div th:replace="fragments/dropDownHelp :: dropDownHelp (
