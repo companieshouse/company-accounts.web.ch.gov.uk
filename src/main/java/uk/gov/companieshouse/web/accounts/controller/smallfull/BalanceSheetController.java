@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
@@ -22,17 +22,17 @@ public class BalanceSheetController {
     @Autowired
     private BalanceSheetService balanceSheetService;
 
-    @RequestMapping(value = BALANCE_SHEET_PATH, method = RequestMethod.GET)
+    @GetMapping(value = BALANCE_SHEET_PATH)
     public String getBalanceSheet(@PathVariable String transactionId,
                                   @PathVariable String companyAccountsId,
                                   Model model) {
 
-        model.addAttribute(balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
+        model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
 
         return SMALL_FULL_BALANCE_SHEET;
     }
 
-    @RequestMapping(value = BALANCE_SHEET_PATH, method = RequestMethod.POST)
+    @PostMapping(value = BALANCE_SHEET_PATH)
     public String postBalanceSheet(@PathVariable String companyNumber,
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
