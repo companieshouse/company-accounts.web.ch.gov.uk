@@ -29,8 +29,12 @@
 
         <hamcrest.version>1.3</hamcrest.version>
 
+        <java-session-handler.version>2.0.0-rc4</java-session-handler.version>
+
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
+
+        <spring-security-core.version>5.0.7.RELEASE</spring-security-core.version>
 
         <spring-test.version>4.3.3.RELEASE</spring-test.version>
     </properties>
@@ -56,6 +60,29 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.gov.companieshouse</groupId>
+            <artifactId>java-session-handler</artifactId>
+            <version>${java-session-handler.version}</version>
+        </dependency>
+
+        <!-- Security dependencies -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
         </dependency>
 
         <!-- Test scope -->
