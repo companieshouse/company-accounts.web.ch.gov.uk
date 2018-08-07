@@ -24,7 +24,8 @@
         <java.version>1.8</java.version>
 
         <lombok.version>1.18.0</lombok.version>
-        <thymeleaf-extras.version>3.0.1.RELEASE</thymeleaf-extras.version>
+
+        <thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>
 
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
@@ -34,6 +35,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>${thymeleaf-layout-dialect.version}</version>
         </dependency>
 
         <dependency>
