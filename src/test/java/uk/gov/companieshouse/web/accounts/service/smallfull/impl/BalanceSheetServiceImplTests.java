@@ -33,7 +33,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     void getBalanceSheetSuccess() {
 
-        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet("", "", "");
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet("", "");
 
         assertNotNull(balanceSheet);
     }
