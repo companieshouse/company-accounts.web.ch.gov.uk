@@ -8,6 +8,5 @@ import org.hibernate.validator.constraints.Range;
 @Setter
 public class CalledUpShareCapitalNotPaid {
 
-    @Range(min = 0, max = 99999999, message = "{invalidRange}")
     private Integer currentAmount;
 }
