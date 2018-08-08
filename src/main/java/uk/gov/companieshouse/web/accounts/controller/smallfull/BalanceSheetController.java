@@ -19,8 +19,12 @@ public class BalanceSheetController {
 
     private static final String SMALL_FULL_BALANCE_SHEET = "smallfull/balanceSheet";
 
-    @Autowired
     private BalanceSheetService balanceSheetService;
+
+    @Autowired
+    public BalanceSheetController(BalanceSheetService balanceSheetService) {
+        this.balanceSheetService = balanceSheetService;
+    }
 
     @GetMapping(value = BALANCE_SHEET_PATH)
     public String getBalanceSheet(@PathVariable String transactionId,

@@ -9,8 +9,12 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTran
 @Service
 public class BalanceSheetServiceImpl implements BalanceSheetService {
 
-    @Autowired
     private BalanceSheetTransformer transformer;
+
+    @Autowired
+    public BalanceSheetServiceImpl(BalanceSheetTransformer transformer) {
+        this.transformer = transformer;
+    }
 
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId) {
