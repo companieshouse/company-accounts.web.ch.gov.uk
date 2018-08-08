@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.transaction.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
@@ -16,6 +17,7 @@ public class TransactionServiceImplTests {
     private static final String COMPANY_NUMBER = "123456";
     
     @Test
+    @DisplayName("Create transaction success path")
     void createTransactionSuccess() {
 
         Transaction transaction = transactionService.createTransaction(COMPANY_NUMBER);
