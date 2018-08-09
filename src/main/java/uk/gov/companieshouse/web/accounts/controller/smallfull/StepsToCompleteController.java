@@ -31,7 +31,7 @@ public class StepsToCompleteController {
 
         Transaction transaction = transactionService.createTransaction(companyNumber);
 
-        // TODO: perform a redirect when a navigation engine is implemented
+        // TODO: perform a redirect when navigation is implemented
         return TEMPLATE;
     }
 }
