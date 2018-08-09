@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>File full accounts</title>
+    </head>
+    <body>
+        <div id="stepsToComplete-main-content" layout:fragment="content">
+
+            <form id="stepsToComplete-form" th:action="@{''}" class="form" method="post">
+
+                <h1 id="page-title" class="heading-xlarge">
+                    <span id="page-title-heading">File full accounts</span>
+                </h1>
+
+                <div class="form-group">
+                    <input class="button" type="submit" role="button" value="Save and continue"/>
+                </div>
+
+            </form>
+
+        </div>
+    </body>
+</html>
