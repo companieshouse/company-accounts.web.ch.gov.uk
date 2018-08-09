@@ -18,7 +18,7 @@ public class StepsToCompleteController {
     private static final String TEMPLATE = "smallfull/stepsToComplete";
 
     @Autowired
-    TransactionService transactionService;
+    private TransactionService transactionService;
 
     @GetMapping()
     public String getStepsToComplete() {

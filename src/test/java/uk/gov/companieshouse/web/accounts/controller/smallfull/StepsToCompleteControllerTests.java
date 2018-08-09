@@ -26,10 +26,10 @@ public class StepsToCompleteControllerTests {
     private MockMvc mockMvc;
 
     @Mock
-    TransactionService transactionService;
+    private TransactionService transactionService;
 
     @InjectMocks
-    StepsToCompleteController controller;
+    private StepsToCompleteController controller;
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
