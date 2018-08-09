@@ -22,7 +22,7 @@ public class BalanceSheetServiceImplTests {
     private BalanceSheetTransformer transformer;
 
     @InjectMocks
-    private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
+    private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl(transformer);
 
     @BeforeEach
     private void init() {
