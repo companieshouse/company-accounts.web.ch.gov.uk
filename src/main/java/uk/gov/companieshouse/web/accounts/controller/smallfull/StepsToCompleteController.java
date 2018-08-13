@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
-import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
-import uk.gov.companieshouse.web.accounts.util.RequestPathResolver;
 
 @Controller
 @RequestMapping(value = "/company/{companyNumber}/small-full/steps-to-complete")
@@ -20,13 +18,13 @@ public class StepsToCompleteController {
     @Autowired
     private TransactionService transactionService;
 
-    @GetMapping()
+    @GetMapping
     public String getStepsToComplete() {
 
         return TEMPLATE;
     }
 
-    @PostMapping()
+    @PostMapping
     public String postStepsToComplete(@PathVariable String companyNumber) {
 
         Transaction transaction = transactionService.createTransaction(companyNumber);
