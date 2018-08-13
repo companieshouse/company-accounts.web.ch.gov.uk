@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
 @Controller
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController {
-
-    private static final String BALANCE_SHEET_PATH = "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet";
 
     private static final String SMALL_FULL_BALANCE_SHEET = "smallfull/balanceSheet";
 
     @Autowired
     private BalanceSheetService balanceSheetService;
 
-    @GetMapping(value = BALANCE_SHEET_PATH)
+    @GetMapping
     public String getBalanceSheet(@PathVariable String transactionId,
                                   @PathVariable String companyAccountsId,
                                   Model model) {
@@ -32,7 +32,7 @@ public class BalanceSheetController {
         return SMALL_FULL_BALANCE_SHEET;
     }
 
-    @PostMapping(value = BALANCE_SHEET_PATH)
+    @PostMapping
     public String postBalanceSheet(@PathVariable String companyNumber,
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
