@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title>Approval</title>
+</head>
+<body>
+<div id="approval-main-content" layout:fragment="content">
+
+  <form id="approval-form" th:action="@{''}" class="form" method="post">
+
+    <h1 id="page-title" class="heading-xlarge">
+      <span id="page-title-heading">Approve your accounts</span>
+    </h1>
+
+    <div class="form-group">
+      <input class="button" type="submit" role="button" value="Submit your full accounts"/>
+    </div>
+
+  </form>
+
+</div>
+</body>
+</html>
