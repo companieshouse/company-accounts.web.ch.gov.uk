@@ -12,9 +12,11 @@
 
   <form id="approval-form" th:action="@{''}" class="form" method="post">
 
-    <h1 id="page-title" class="heading-xlarge">
-      <span id="page-title-heading">Approve your accounts</span>
-    </h1>
+    <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    number = '5',
+                    headingText = 'Approve your accounts'
+                )">
+    </div>
 
     <div class="form-group">
       <input class="button" type="submit" role="button" value="Submit your full accounts"/>
