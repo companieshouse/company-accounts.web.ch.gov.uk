@@ -25,10 +25,16 @@ public class ApprovalControllerTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
+    private static final String TRANSACTION_ID = "transactionId";
+
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
     private static final String APPROVAL_VIEW = "smallfull/approval";
 
     private static final String APPROVAL_PATH = "/company/" + COMPANY_NUMBER +
-            "/small-full/approval";
+                                                "/transaction/" + TRANSACTION_ID +
+                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                                                "/small-full/approval";
 
     @BeforeEach
     private void setup() {
