@@ -31,7 +31,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                                .currentPeriod().get();
 
         //transform API data to web-readable data
-        BalanceSheet balanceSheet = transformer.getBalanceSheet();
+        BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriod);
 
         return balanceSheet;
     }

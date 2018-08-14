@@ -75,9 +75,11 @@ public class BalanceSheetServiceImplTests {
     @DisplayName("Get Balance Sheet - Success Path")
     void getBalanceSheetSuccess() throws ApiErrorResponseException {
 
-        when(currentPeriodResourceHandler.get()).thenReturn(new CurrentPeriod());
+        CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        when(transformer.getBalanceSheet()).thenReturn(new BalanceSheet());
+        when(currentPeriodResourceHandler.get()).thenReturn(currentPeriod);
+
+        when(transformer.getBalanceSheet(currentPeriod)).thenReturn(new BalanceSheet());
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
