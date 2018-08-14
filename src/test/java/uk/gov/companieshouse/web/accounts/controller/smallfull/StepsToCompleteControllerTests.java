@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +58,8 @@ public class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(new Transaction());
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
