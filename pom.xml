@@ -35,6 +35,8 @@
 
         <sdk-manager-java.version>1.0.0-rc1</sdk-manager-java.version>
 
+        <web-security-java.version>1.0.0-rc1</web-security-java.version>
+
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
 
@@ -82,6 +84,12 @@
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>sdk-manager-java</artifactId>
             <version>${sdk-manager-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.gov.companieshouse</groupId>
+            <artifactId>web-security-java</artifactId>
+            <version>${web-security-java.version}</version>
         </dependency>
 
         <!-- Security dependencies -->
