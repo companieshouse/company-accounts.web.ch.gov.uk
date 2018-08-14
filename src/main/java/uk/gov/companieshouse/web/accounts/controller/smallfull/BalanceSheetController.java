@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
@@ -27,7 +28,12 @@ public class BalanceSheetController {
                                   @PathVariable String companyAccountsId,
                                   Model model) {
 
-        model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
+        try {
+            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
+        } catch (ApiErrorResponseException e) {
+            // TODO: Handle with exception handler once implemented
+            e.printStackTrace();
+        }
 
         return SMALL_FULL_BALANCE_SHEET;
     }
