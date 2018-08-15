@@ -3,7 +3,8 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.BalanceSheetTransformerImpl;
 
@@ -16,19 +17,18 @@ public class BalanceSheetTransformerTests {
 
     private BalanceSheetTransformer transformer = new BalanceSheetTransformerImpl();
 
-    private CurrentPeriod currentPeriod;
+    private CurrentPeriodApi currentPeriod;
 
     @BeforeEach
     private void init() {
 
-        uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheet apiCurrentPeriodBalanceSheet
-                = new uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheet();
+        BalanceSheetApi currentPeriodBalanceSheetApi = new BalanceSheetApi();
 
-        apiCurrentPeriodBalanceSheet.setCalledUpShareCapitalNotPaid(CALLED_UP_SHARE_CAPITAL);
+        currentPeriodBalanceSheetApi.setCalledUpShareCapitalNotPaid(CALLED_UP_SHARE_CAPITAL);
 
-        currentPeriod = new CurrentPeriod();
+        currentPeriod = new CurrentPeriodApi();
 
-        currentPeriod.setBalanceSheet(apiCurrentPeriodBalanceSheet);
+        currentPeriod.setBalanceSheetApi(currentPeriodBalanceSheetApi);
     }
 
     @Test

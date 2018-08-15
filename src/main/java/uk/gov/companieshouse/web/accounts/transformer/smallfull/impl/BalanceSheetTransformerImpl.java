@@ -1,7 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
@@ -9,14 +10,16 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTran
 @Component
 public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
-    public BalanceSheet getBalanceSheet(CurrentPeriod currentPeriod) {
+    @Override
+    public BalanceSheet getBalanceSheet(CurrentPeriodApi currentPeriod) {
 
-        uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheet apiCurrentPeriodBalanceSheet = currentPeriod.getBalanceSheet();
+        BalanceSheetApi currentPeriodBalanceSheetApi = currentPeriod.getBalanceSheetApi();
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
-        calledUpShareCapitalNotPaid.setCurrentAmount(apiCurrentPeriodBalanceSheet.getCalledUpShareCapitalNotPaid());
+        calledUpShareCapitalNotPaid.setCurrentAmount(
+                currentPeriodBalanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
 
