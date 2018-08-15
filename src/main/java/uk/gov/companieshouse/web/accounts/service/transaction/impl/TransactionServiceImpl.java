@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
+import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
@@ -28,5 +29,17 @@ public class TransactionServiceImpl implements TransactionService {
         transaction = apiClient.transactions().create(transaction);
 
         return transaction;
+    }
+
+    @Override
+    public void closeTransaction(String transactionId) throws ApiErrorResponseException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        Transaction transaction = apiClient.transaction(transactionId).get();
+
+        transaction.setStatus(TransactionStatus.CLOSED);
+
+        apiClient.transaction(transactionId).update(transaction);
     }
 }
