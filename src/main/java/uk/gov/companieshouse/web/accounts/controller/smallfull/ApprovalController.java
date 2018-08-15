@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
 public class ApprovalController {
 
     private static final String TEMPLATE = "smallfull/approval";
@@ -18,7 +18,9 @@ public class ApprovalController {
     }
 
     @PostMapping
-    public String postApproval(@PathVariable String companyNumber) {
+    public String postApproval(@PathVariable String companyNumber,
+                               @PathVariable String transactionId,
+                               @PathVariable String companyAccountsId) {
 
         // TODO: Further implementation when navigation built
         return TEMPLATE;

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -44,18 +45,16 @@ public class ApprovalControllerTests {
     @Test
     @DisplayName("Get approval view success path")
     void getRequestSuccess() throws Exception {
-        checkPathStatus(APPROVAL_PATH, APPROVAL_VIEW);
+        this.mockMvc.perform(get(APPROVAL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(APPROVAL_VIEW));
     }
 
     @Test
     @DisplayName("Post approval success path")
     void postRequestSuccess() throws Exception {
-        checkPathStatus(APPROVAL_PATH, APPROVAL_VIEW);
-    }
-
-    private void checkPathStatus(String path, String view) throws Exception {
-        this.mockMvc.perform(get(path))
+        this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(view));
+                .andExpect(view().name(APPROVAL_VIEW));
     }
 }
