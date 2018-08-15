@@ -1,10 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
@@ -12,8 +15,12 @@ public class ApprovalController {
 
     private static final String TEMPLATE = "smallfull/approval";
 
+    @Autowired
+    private TransactionService transactionService;
+
     @GetMapping
     public String getApproval() {
+
         return TEMPLATE;
     }
 
@@ -21,6 +28,13 @@ public class ApprovalController {
     public String postApproval(@PathVariable String companyNumber,
                                @PathVariable String transactionId,
                                @PathVariable String companyAccountsId) {
+
+        try {
+            transactionService.closeTransaction(transactionId);
+        } catch (ApiErrorResponseException e) {
+            //TODO: Handle ApiErrorResponseExceptions
+            e.printStackTrace();
+        }
 
         // TODO: Further implementation when navigation built
         return TEMPLATE;
