@@ -6,10 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -20,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApprovalControllerTests {
 
     private MockMvc mockMvc;
+
+    @Mock
+    private TransactionService transactionService;
 
     @InjectMocks
     private ApprovalController approvalController;
@@ -53,6 +59,9 @@ public class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval success path")
     void postRequestSuccess() throws Exception {
+
+        doNothing().when(transactionService).closeTransaction(TRANSACTION_ID);
+
         this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(APPROVAL_VIEW));
