@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -25,13 +25,13 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        CurrentPeriod currentPeriod = apiClient.transaction(transactionId)
+        CurrentPeriodApi currentPeriod = apiClient.transaction(transactionId)
                                                .companyAccount(companyAccountsId)
                                                .smallFull()
                                                .currentPeriod().get();
 
         //transform API data to web-readable data
-        BalanceSheet balanceSheet = transformer.getBalanceSheet();
+        BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriod);
 
         return balanceSheet;
     }

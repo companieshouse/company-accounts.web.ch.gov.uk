@@ -14,7 +14,7 @@ import uk.gov.companieshouse.api.handler.transaction.TransactionResourceHandler;
 import uk.gov.companieshouse.api.handler.transaction.companyaccount.CompanyAccountResourceHandler;
 import uk.gov.companieshouse.api.handler.transaction.companyaccount.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.transaction.companyaccount.smallfull.subresource.CurrentPeriodResourceHandler;
-import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -75,9 +75,11 @@ public class BalanceSheetServiceImplTests {
     @DisplayName("Get Balance Sheet - Success Path")
     void getBalanceSheetSuccess() throws ApiErrorResponseException {
 
-        when(currentPeriodResourceHandler.get()).thenReturn(new CurrentPeriod());
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
 
-        when(transformer.getBalanceSheet()).thenReturn(new BalanceSheet());
+        when(currentPeriodResourceHandler.get()).thenReturn(currentPeriod);
+
+        when(transformer.getBalanceSheet(currentPeriod)).thenReturn(new BalanceSheet());
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
