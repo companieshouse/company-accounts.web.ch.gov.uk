@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
@@ -27,7 +28,12 @@ public class StepsToCompleteController {
     @PostMapping
     public String postStepsToComplete(@PathVariable String companyNumber) {
 
-        Transaction transaction = transactionService.createTransaction(companyNumber);
+        try {
+            Transaction transaction = transactionService.createTransaction(companyNumber);
+        } catch (ApiErrorResponseException e) {
+            // TODO: handle ApiErrorResponseExceptions 
+            e.printStackTrace();
+        }
 
         // TODO: perform a redirect when navigation is implemented
         return TEMPLATE;
