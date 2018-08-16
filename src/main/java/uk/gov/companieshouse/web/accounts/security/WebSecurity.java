@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import uk.gov.companieshouse.session.handler.SessionHandler;
+import uk.gov.companieshouse.auth.filter.HijackFilter;
+import uk.gov.companieshouse.auth.filter.CompanyAuthFilter;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -18,7 +20,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class);
+            http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
+                    .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
+                    .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class);
         }
     }
 

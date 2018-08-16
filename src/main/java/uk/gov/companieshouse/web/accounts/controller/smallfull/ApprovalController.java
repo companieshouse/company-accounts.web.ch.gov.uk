@@ -7,35 +7,36 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @Controller
-@RequestMapping(value = "/company/{companyNumber}/small-full/steps-to-complete")
-public class StepsToCompleteController {
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
+public class ApprovalController {
 
-    private static final String TEMPLATE = "smallfull/stepsToComplete";
+    private static final String TEMPLATE = "smallfull/approval";
 
     @Autowired
     private TransactionService transactionService;
 
     @GetMapping
-    public String getStepsToComplete() {
+    public String getApproval() {
 
         return TEMPLATE;
     }
 
     @PostMapping
-    public String postStepsToComplete(@PathVariable String companyNumber) {
+    public String postApproval(@PathVariable String companyNumber,
+                               @PathVariable String transactionId,
+                               @PathVariable String companyAccountsId) {
 
         try {
-            Transaction transaction = transactionService.createTransaction(companyNumber);
+            transactionService.closeTransaction(transactionId);
         } catch (ApiErrorResponseException e) {
-            // TODO: handle ApiErrorResponseExceptions 
+            //TODO: Handle ApiErrorResponseExceptions
             e.printStackTrace();
         }
 
-        // TODO: perform a redirect when navigation is implemented
+        // TODO: Further implementation when navigation built
         return TEMPLATE;
     }
 }
