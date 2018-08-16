@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
-public class ApprovalController {
+public class ApprovalController extends BaseController {
 
     private static final String TEMPLATE = "smallfull/approval";
 
@@ -32,8 +33,8 @@ public class ApprovalController {
         try {
             transactionService.closeTransaction(transactionId);
         } catch (ApiErrorResponseException e) {
-            //TODO: Handle ApiErrorResponseExceptions
-            e.printStackTrace();
+            // TODO: handle ApiErrorResponseExceptions (SFA-594)
+            LOGGER.error(e);
         }
 
         // TODO: Further implementation when navigation built

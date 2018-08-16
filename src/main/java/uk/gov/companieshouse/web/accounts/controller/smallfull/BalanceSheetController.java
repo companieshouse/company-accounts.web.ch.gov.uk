@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
-public class BalanceSheetController {
+public class BalanceSheetController extends BaseController {
 
     private static final String SMALL_FULL_BALANCE_SHEET = "smallfull/balanceSheet";
 
@@ -27,7 +29,12 @@ public class BalanceSheetController {
                                   @PathVariable String companyAccountsId,
                                   Model model) {
 
-        model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
+        try {
+            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
+        } catch (ApiErrorResponseException e) {
+            // TODO: handle ApiErrorResponseExceptions (SFA-594)
+            LOGGER.error(e);
+        }
 
         return SMALL_FULL_BALANCE_SHEET;
     }

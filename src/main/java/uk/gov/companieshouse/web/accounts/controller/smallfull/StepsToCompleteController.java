@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
+import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @Controller
 @RequestMapping(value = "/company/{companyNumber}/small-full/steps-to-complete")
-public class StepsToCompleteController {
+public class StepsToCompleteController extends BaseController {
 
     private static final String TEMPLATE = "smallfull/stepsToComplete";
 
@@ -31,8 +32,8 @@ public class StepsToCompleteController {
         try {
             Transaction transaction = transactionService.createTransaction(companyNumber);
         } catch (ApiErrorResponseException e) {
-            // TODO: handle ApiErrorResponseExceptions 
-            e.printStackTrace();
+            // TODO: handle ApiErrorResponseExceptions (SFA-594)
+            LOGGER.error(e);
         }
 
         // TODO: perform a redirect when navigation is implemented
