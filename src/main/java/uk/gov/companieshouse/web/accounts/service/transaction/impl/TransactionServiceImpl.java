@@ -21,8 +21,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
 
-        // TODO: Set this to something appropriate
-        transaction.setDescription("");
+        transaction.setDescription("Small Full Accounts");
 
         ApiClient apiClient = apiClientService.getApiClient();
 
