@@ -11,6 +11,7 @@ import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
 
 public class Navigator {
 
+    // Private constructor to prevent instantiation
     private Navigator() {}
 
     public static String getNextControllerRedirect(Class clazz, String... pathVars) throws MissingAnnotationException {
