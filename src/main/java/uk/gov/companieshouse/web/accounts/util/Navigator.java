@@ -21,6 +21,10 @@ public class Navigator {
         }
 
         Class nextControllerClass = ((NextController) nextControllerAnnotation).value();
+        if (nextControllerClass == null) {
+            throw new MissingAnnotationException("Missing @NextController value on class " + clazz.toString());
+        }
+
         Annotation requestMappingAnnotation = AnnotationUtils.findAnnotation(nextControllerClass, RequestMapping.class);
         if (requestMappingAnnotation == null) {
             throw new MissingAnnotationException("Missing @RequestMapping annotation on class " + nextControllerClass.toString());
