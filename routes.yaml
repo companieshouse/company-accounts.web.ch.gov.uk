@@ -2,5 +2,5 @@ app_name: company-accounts.web.ch.gov.uk
 group: web
 weight: 910
 routes:
-   1: /company/(.*)/smallfull/
-   2: /company/(.*)/transaction/(.*)/company-accounts/(.*)/smallfull/
+   1: /company/(.*)/small-full/
+   2: /company/(.*)/transaction/(.*)/company-accounts/(.*)/small-full/
