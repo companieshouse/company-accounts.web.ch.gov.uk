@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.companyaccounts.impl;
 
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -13,9 +14,12 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
     ApiClientService apiClientService;
 
     @Override
-    public CompanyAccountsApi createCompanyAccounts(String transactionId, CompanyAccountsApi companyAccounts) throws ApiErrorResponseException {
+    public CompanyAccountsApi createCompanyAccounts(String transactionId, Date periodEndOn) throws ApiErrorResponseException {
 
         ApiClient apiClient = apiClientService.getApiClient();
+
+        CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
+        companyAccounts.setPeriodEndOn(periodEndOn);
 
         return apiClient.transaction(transactionId).companyAccounts().create(companyAccounts);
     }

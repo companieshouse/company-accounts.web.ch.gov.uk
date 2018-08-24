@@ -2,8 +2,10 @@ package uk.gov.companieshouse.web.accounts.service.companyaccounts.impl;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,12 +58,12 @@ public class CompanyAccountsServiceImplTests {
     @DisplayName("Create Company Accounts - Success Path")
     void createCompanyAccountSuccess() throws ApiErrorResponseException {
 
-        CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
+        Date periodEndOn = new Date();
 
-        when(companyAccountsResourceHandler.create(companyAccounts)).thenReturn(companyAccounts);
+        when(companyAccountsResourceHandler.create(any(CompanyAccountsApi.class))).thenReturn(new CompanyAccountsApi());
 
         CompanyAccountsApi createdCompanyAccounts =
-                companyAccountsService.createCompanyAccounts(TRANSACTION_ID, companyAccounts);
+                companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn);
 
         assertNotNull(createdCompanyAccounts);
     }
@@ -70,12 +72,12 @@ public class CompanyAccountsServiceImplTests {
     @DisplayName("Get Company Profile - Throws ApiErrorResponseException")
     void getBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException {
 
-        CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
+        Date periodEndOn = new Date();
 
-        when(companyAccountsResourceHandler.create(companyAccounts))
+        when(companyAccountsResourceHandler.create(any(CompanyAccountsApi.class)))
                 .thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ApiErrorResponseException.class, () ->
-                companyAccountsService.createCompanyAccounts(TRANSACTION_ID, companyAccounts));
+                companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn));
     }
 }
