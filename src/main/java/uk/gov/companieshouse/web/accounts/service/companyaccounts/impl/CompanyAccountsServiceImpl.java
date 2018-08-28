@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.companyaccounts.impl;
 
 import com.google.api.client.util.DateTime;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
