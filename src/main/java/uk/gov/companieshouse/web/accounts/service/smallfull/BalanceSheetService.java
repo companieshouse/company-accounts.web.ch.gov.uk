@@ -8,4 +8,7 @@ public interface BalanceSheetService {
 
     BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
             throws ApiErrorResponseException;
+
+    void postBalanceSheet(String transactionId, String companyAccountsId, BalanceSheet balanceSheet)
+            throws ApiErrorResponseException;
 }

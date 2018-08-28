@@ -35,4 +35,18 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         return balanceSheet;
     }
+
+    @Override
+    public void postBalanceSheet(String transactionId, String companyAccountsId, BalanceSheet balanceSheet)
+            throws ApiErrorResponseException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
+
+        apiClient.transaction(transactionId)
+                .companyAccount(companyAccountsId)
+                .smallFull()
+                .currentPeriod().create(currentPeriod);
+    }
 }
