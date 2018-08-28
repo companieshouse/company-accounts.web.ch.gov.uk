@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 @Controller
+@NextController(ApprovalController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController extends BaseController {
 
@@ -34,6 +37,7 @@ public class BalanceSheetController extends BaseController {
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
             LOGGER.error(e);
+            model.addAttribute("balanceSheet", new BalanceSheet());
         }
 
         return SMALL_FULL_BALANCE_SHEET;
@@ -50,7 +54,9 @@ public class BalanceSheetController extends BaseController {
             return SMALL_FULL_BALANCE_SHEET;
         }
 
+        // Post balance sheet
+
         // The next page will be returned once created
-        return SMALL_FULL_BALANCE_SHEET;
+        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 }
