@@ -44,8 +44,10 @@
 
         <spring-test.version>4.3.3.RELEASE</spring-test.version>
 
-        <!-- Surefire plugins -->
+        <!-- Maven and Surefire plugins -->
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
+        <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
         <junit-platform-surefire-provider.version>1.2.0</junit-platform-surefire-provider.version>
 
         <!-- Sonar -->
@@ -53,6 +55,9 @@
         <sonar.host.url>${CODE_ANALYSIS_HOST_URL}</sonar.host.url>
         <sonar.login>${CODE_ANALYSIS_LOGIN}</sonar.login>
         <sonar.password>${CODE_ANALYSIS_PASSWORD}</sonar.password>
+
+        <!-- Jacoco -->
+        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
 
         <!-- Repositories -->
         <artifactoryResolveSnapshotRepo>libs-snapshot-local</artifactoryResolveSnapshotRepo>
@@ -171,6 +176,31 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <fork>true</fork>
+                    <meminitial>128m</meminitial>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <maxmem>512m</maxmem>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <dependencies>
@@ -180,6 +210,26 @@
                         <version>${junit-platform-surefire-provider.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
