@@ -56,7 +56,6 @@ public class BalanceSheetController extends BaseController {
 
         // Post balance sheet
 
-        // The next page will be returned once created
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 }
