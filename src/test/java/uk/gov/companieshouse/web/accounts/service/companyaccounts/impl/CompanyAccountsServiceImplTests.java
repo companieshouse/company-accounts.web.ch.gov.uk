@@ -1,11 +1,14 @@
 package uk.gov.companieshouse.web.accounts.service.companyaccounts.impl;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.google.api.client.util.DateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +46,8 @@ public class CompanyAccountsServiceImplTests {
 
     private static final String TRANSACTION_ID = "transactionId";
 
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
     @BeforeEach
     private void init() {
 
@@ -58,21 +63,26 @@ public class CompanyAccountsServiceImplTests {
     @DisplayName("Create Company Accounts - Success Path")
     void createCompanyAccountSuccess() throws ApiErrorResponseException {
 
-        Date periodEndOn = new Date();
+        DateTime periodEndOn = new DateTime(new Date());
 
-        when(companyAccountsResourceHandler.create(any(CompanyAccountsApi.class))).thenReturn(new CompanyAccountsApi());
+        CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
+        Map<String, String> links = new HashMap<>();
+        links.put("self", "/company-accounts/" + COMPANY_ACCOUNTS_ID);
 
-        CompanyAccountsApi createdCompanyAccounts =
-                companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn);
+        companyAccounts.setLinks(links);
 
-        assertNotNull(createdCompanyAccounts);
+        when(companyAccountsResourceHandler.create(any(CompanyAccountsApi.class))).thenReturn(companyAccounts);
+
+        String companyAccountsId = companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn);
+
+        assertEquals(COMPANY_ACCOUNTS_ID, companyAccountsId);
     }
 
     @Test
     @DisplayName("Get Company Profile - Throws ApiErrorResponseException")
     void getBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException {
 
-        Date periodEndOn = new Date();
+        DateTime periodEndOn = new DateTime(new Date());
 
         when(companyAccountsResourceHandler.create(any(CompanyAccountsApi.class)))
                 .thenThrow(ApiErrorResponseException.class);
