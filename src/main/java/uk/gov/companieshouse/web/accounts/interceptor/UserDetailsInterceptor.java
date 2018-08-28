@@ -21,12 +21,15 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
 
-        if (modelAndView != null) {
-            Map<String, Object> sessionData = SessionHandler.getSessionDataFromContext();
-            Map<String, Object> signInInfo = (Map<String, Object>) sessionData.get(SIGN_IN_KEY);
-            if (signInInfo != null) {
-                Map<String, Object> userProfile = (Map<String, Object>) signInInfo.get(USER_PROFILE_KEY);
-                modelAndView.getModelMap().addAttribute(USER_EMAIL, userProfile.get(EMAIL_KEY));
+        if (request.getMethod().equalsIgnoreCase("GET")) {
+            if (modelAndView != null) {
+                Map<String, Object> sessionData = SessionHandler.getSessionDataFromContext();
+                Map<String, Object> signInInfo = (Map<String, Object>) sessionData.get(SIGN_IN_KEY);
+                if (signInInfo != null) {
+                    Map<String, Object> userProfile = (Map<String, Object>) signInInfo
+                            .get(USER_PROFILE_KEY);
+                    modelAndView.addObject(USER_EMAIL, userProfile.get(EMAIL_KEY));
+                }
             }
         }
     }
