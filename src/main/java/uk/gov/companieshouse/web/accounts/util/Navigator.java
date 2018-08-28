@@ -14,7 +14,7 @@ public class Navigator {
     // Private constructor to prevent instantiation
     private Navigator() {}
 
-    public static String getNextControllerRedirect(Class clazz, String... pathVars) throws MissingAnnotationException {
+    public static String getNextControllerRedirect(Class clazz, String... pathVars) {
         Annotation nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
         if (nextControllerAnnotation == null) {
             throw new MissingAnnotationException("Missing @NextController annotation on class " + clazz.toString());
@@ -38,7 +38,7 @@ public class Navigator {
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[0]).expand(pathVars);
     }
 
-    public static String getPreviousControllerPath(Class clazz, String... pathVars) throws MissingAnnotationException {
+    public static String getPreviousControllerPath(Class clazz, String... pathVars) {
         Annotation previousControllerAnnotation = AnnotationUtils.findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
             return "";
