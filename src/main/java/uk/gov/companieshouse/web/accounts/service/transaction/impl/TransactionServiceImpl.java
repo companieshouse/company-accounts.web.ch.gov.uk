@@ -16,7 +16,7 @@ public class TransactionServiceImpl implements TransactionService {
     ApiClientService apiClientService;
 
     @Override
-    public Transaction createTransaction(String companyNumber) throws ApiErrorResponseException {
+    public String createTransaction(String companyNumber) throws ApiErrorResponseException {
 
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
@@ -27,7 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction = apiClient.transactions().create(transaction);
 
-        return transaction;
+        return transaction.getId();
     }
 
     @Override

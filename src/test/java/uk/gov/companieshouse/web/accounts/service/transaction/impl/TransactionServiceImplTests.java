@@ -63,14 +63,13 @@ public class TransactionServiceImplTests {
         when(apiClient.transactions()).thenReturn(transactionsResourceHandler);
 
         Transaction createdTransaction = new Transaction();
-        createdTransaction.setCompanyNumber(COMPANY_NUMBER);
+        createdTransaction.setId(TRANSACTION_ID);
 
         when(transactionsResourceHandler.create(any(Transaction.class))).thenReturn(createdTransaction);
 
-        Transaction transaction = transactionService.createTransaction(COMPANY_NUMBER);
+        String transactionId = transactionService.createTransaction(COMPANY_NUMBER);
 
-        assertNotNull(transaction);
-        assertEquals(COMPANY_NUMBER, transaction.getCompanyNumber());
+        assertEquals(TRANSACTION_ID, transactionId);
     }
 
     @Test
