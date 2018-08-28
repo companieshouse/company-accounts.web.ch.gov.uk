@@ -91,7 +91,7 @@
             <groupId>org.sonarsource.scanner.maven</groupId>
             <artifactId>sonar-maven-plugin</artifactId>
             <version>${sonar-maven-plugin.version}</version>
-        </dependency>ƒ
+        </dependency>
 
         <dependency>
             <groupId>uk.gov.companieshouse</groupId>
