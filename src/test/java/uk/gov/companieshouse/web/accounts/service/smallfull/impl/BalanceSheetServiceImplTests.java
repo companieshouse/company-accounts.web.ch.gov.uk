@@ -20,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -94,5 +95,37 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(ApiErrorResponseException.class, () ->
                 balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Post Balance Sheet - Success Path")
+    void postBalanceSheetSuccess() throws ApiErrorResponseException {
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+
+        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+
+        when(currentPeriodResourceHandler.create(currentPeriod)).thenReturn(currentPeriod);
+
+        assertAll(() ->
+                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+    }
+
+    @Test
+    @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException")
+    void postBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException {
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+
+        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+
+        when(currentPeriodResourceHandler.create(currentPeriod)).thenThrow(ApiErrorResponseException.class);
+
+        assertThrows(ApiErrorResponseException.class, () ->
+                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 }

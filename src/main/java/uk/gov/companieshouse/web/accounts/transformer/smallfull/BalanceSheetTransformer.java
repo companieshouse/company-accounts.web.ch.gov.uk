@@ -6,4 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 public interface BalanceSheetTransformer {
 
     BalanceSheet getBalanceSheet(CurrentPeriodApi currentPeriod);
+
+    CurrentPeriodApi getCurrentPeriod(BalanceSheet balanceSheet);
 }

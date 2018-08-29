@@ -25,4 +25,19 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         return balanceSheet;
     }
+
+    @Override
+    public CurrentPeriodApi getCurrentPeriod(BalanceSheet balanceSheet) {
+
+        BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
+
+        balanceSheetApi.setCalledUpShareCapitalNotPaid(
+                balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+
+        currentPeriod.setBalanceSheetApi(balanceSheetApi);
+
+        return currentPeriod;
+    }
 }
