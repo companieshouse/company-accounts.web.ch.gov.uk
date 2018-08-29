@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
@@ -81,9 +86,24 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
+        doNothing().when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class));
+
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + APPROVAL_PATH));
+    }
+
+    @Test
+    @DisplayName("Post balance sheet throws ApiErrorResponseException")
+    void postRequestThrowsApiErrorResponseException() throws Exception {
+
+        doThrow(ApiErrorResponseException.class)
+                .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class));
+
+        this.mockMvc.perform(post(BALANCE_SHEET_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(BALANCE_SHEET_VIEW))
+                .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR));
     }
 
 }

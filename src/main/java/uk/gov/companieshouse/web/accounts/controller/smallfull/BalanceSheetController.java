@@ -54,7 +54,12 @@ public class BalanceSheetController extends BaseController {
             return SMALL_FULL_BALANCE_SHEET;
         }
 
-        // Post balance sheet
+        try {
+            balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
+        } catch (ApiErrorResponseException e) {
+            LOGGER.error(e);
+            return SMALL_FULL_BALANCE_SHEET;
+        }
 
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
