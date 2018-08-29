@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
@@ -45,6 +48,11 @@ public class BalanceSheetControllerTests {
                                                      "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                      "/small-full/balance-sheet";
 
+    private static final String APPROVAL_PATH = "/company/" + COMPANY_NUMBER +
+                                                "/transaction/" + TRANSACTION_ID +
+                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                                                "/small-full/approval";
+
     private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
 
     private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
@@ -65,6 +73,8 @@ public class BalanceSheetControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(BALANCE_SHEET_VIEW))
                     .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR));
+
+        verify(balanceSheetService, times(1)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -72,9 +82,8 @@ public class BalanceSheetControllerTests {
     void postRequestSuccess() throws Exception {
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
-                .andExpect(status().isOk())
-                .andExpect(view().name(BALANCE_SHEET_VIEW))
-                .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + APPROVAL_PATH));
     }
 
 }
