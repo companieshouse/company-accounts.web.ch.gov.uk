@@ -30,7 +30,7 @@ public class StepsToCompleteController extends BaseController {
     public String postStepsToComplete(@PathVariable String companyNumber) {
 
         try {
-            Transaction transaction = transactionService.createTransaction(companyNumber);
+            String transaction = transactionService.createTransaction(companyNumber);
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
             LOGGER.error(e);

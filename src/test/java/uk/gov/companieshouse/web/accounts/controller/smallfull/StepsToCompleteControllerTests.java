@@ -40,6 +40,8 @@ public class StepsToCompleteControllerTests {
 
     private static final String STEPS_TO_COMPLETE_VIEW = "smallfull/stepsToComplete";
 
+    private static final String TRANSACTION_ID = "transactionId";
+
     @BeforeEach
     private void setup() {
 
@@ -59,7 +61,7 @@ public class StepsToCompleteControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
-        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(new Transaction());
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
