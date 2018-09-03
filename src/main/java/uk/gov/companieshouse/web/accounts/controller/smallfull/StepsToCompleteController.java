@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import com.google.api.client.util.DateTime;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,8 @@ public class StepsToCompleteController extends BaseController {
     }
 
     @PostMapping
-    public String postStepsToComplete(@PathVariable String companyNumber) {
+    public String postStepsToComplete(@PathVariable String companyNumber,
+                                      HttpServletRequest request) {
 
         try {
             String transactionId = transactionService.createTransaction(companyNumber);
@@ -53,7 +55,7 @@ public class StepsToCompleteController extends BaseController {
 
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
-            LOGGER.error(e);
+            LOGGER.errorRequest(request, "Failed to post steps to complete confirmation");
             return "error";
         }
     }

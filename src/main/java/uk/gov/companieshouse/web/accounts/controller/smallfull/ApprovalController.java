@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +29,14 @@ public class ApprovalController extends BaseController {
     @PostMapping
     public String postApproval(@PathVariable String companyNumber,
                                @PathVariable String transactionId,
-                               @PathVariable String companyAccountsId) {
+                               @PathVariable String companyAccountsId,
+                               HttpServletRequest request) {
 
         try {
             transactionService.closeTransaction(transactionId);
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
-            LOGGER.error(e);
+            LOGGER.errorRequest(request, "Failed to close transaction");
         }
 
         // TODO: Further implementation when navigation built
