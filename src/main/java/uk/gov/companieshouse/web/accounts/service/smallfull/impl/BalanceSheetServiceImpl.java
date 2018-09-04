@@ -30,10 +30,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                                .smallFull()
                                                .currentPeriod().get();
 
-        //transform API data to web-readable data
-        BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriod);
-
-        return balanceSheet;
+        return transformer.getBalanceSheet(currentPeriod);
     }
 
     @Override
