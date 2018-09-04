@@ -3,6 +3,9 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
@@ -62,6 +66,8 @@ public class StepsToCompleteControllerTests {
 
     private static final String STEPS_TO_COMPLETE_VIEW = "smallfull/stepsToComplete";
 
+    private static final String ERROR_VIEW = "error";
+
     @BeforeEach
     private void setup() {
 
@@ -78,7 +84,7 @@ public class StepsToCompleteControllerTests {
     }
 
     @Test
-    @DisplayName("Post balance sheet success path")
+    @DisplayName("Post steps to complete success path")
     void postRequestSuccess() throws Exception {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
@@ -107,6 +113,60 @@ public class StepsToCompleteControllerTests {
         verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID, periodEndOn);
+    }
+
+    @Test
+    @DisplayName("Post steps to complete failure path for transaction service")
+    void postRequestTransactionServiceFailure() throws Exception {
+
+        doThrow(ServiceException.class)
+                .when(transactionService).createTransaction(anyString());
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post steps to complete failure path for company service")
+    void postRequestCompanyServiceFailure() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
+
+        doThrow(ServiceException.class)
+                .when(companyService).getCompanyProfile(anyString());
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+
+    @Test
+    @DisplayName("Post steps to complete failure path for company accounts service")
+    void postRequestCompanyAccountsServiceFailure() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
+
+        DateTime periodEndOn = new DateTime(new Date());
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodEndOn(periodEndOn);
+
+        CompanyAccountApi companyAccount = new CompanyAccountApi();
+        companyAccount.setNextAccounts(nextAccounts);
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        companyProfile.setAccounts(companyAccount);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        doThrow(ServiceException.class)
+                .when(companyAccountsService).createCompanyAccounts(anyString(), any(DateTime.class));
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
 }

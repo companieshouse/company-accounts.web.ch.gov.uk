@@ -63,6 +63,8 @@ public class BalanceSheetControllerTests {
 
     private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
 
+    private static final String ERROR_VIEW = "error";
+
     @BeforeEach
     private void setup() {
 
@@ -95,16 +97,15 @@ public class BalanceSheetControllerTests {
     }
 
     @Test
-    @DisplayName("Post balance sheet throws ApiErrorResponseException")
-    void postRequestThrowsApiErrorResponseException() throws Exception {
+    @DisplayName("Post balance sheet failure path")
+    void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
                 .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class));
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(BALANCE_SHEET_VIEW))
-                .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR));
+                .andExpect(view().name(ERROR_VIEW));
     }
 
 }

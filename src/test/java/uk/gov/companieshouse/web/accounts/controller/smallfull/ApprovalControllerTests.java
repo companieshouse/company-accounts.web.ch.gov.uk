@@ -10,9 +10,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +48,8 @@ public class ApprovalControllerTests {
                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                 "/small-full/approval";
 
+    private static final String ERROR_VIEW = "error";
+
     @BeforeEach
     private void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(approvalController).build();
@@ -65,5 +72,17 @@ public class ApprovalControllerTests {
         this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(APPROVAL_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post approval failure path")
+    void postRequestFailure() throws Exception {
+
+        doThrow(ServiceException.class)
+                .when(transactionService).closeTransaction(anyString());
+
+        this.mockMvc.perform(post(APPROVAL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 }
