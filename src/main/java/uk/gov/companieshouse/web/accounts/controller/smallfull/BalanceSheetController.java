@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,13 +31,14 @@ public class BalanceSheetController extends BaseController {
     @GetMapping
     public String getBalanceSheet(@PathVariable String transactionId,
                                   @PathVariable String companyAccountsId,
-                                  Model model) {
+                                  Model model,
+                                  HttpServletRequest request) {
 
         try {
             model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
-            LOGGER.error(e);
+            LOGGER.errorRequest(request, "Failed to fetch balance sheet", e);
             model.addAttribute("balanceSheet", new BalanceSheet());
         }
 
@@ -48,7 +50,8 @@ public class BalanceSheetController extends BaseController {
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
                                    @ModelAttribute("balanceSheet") @Valid BalanceSheet balanceSheet,
-                                   BindingResult bindingResult) {
+                                   BindingResult bindingResult,
+                                   HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             return SMALL_FULL_BALANCE_SHEET;
@@ -57,7 +60,7 @@ public class BalanceSheetController extends BaseController {
         try {
             balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
         } catch (ApiErrorResponseException e) {
-            LOGGER.error(e);
+            LOGGER.errorRequest(request, "Failed to post balance sheet", e);
             return SMALL_FULL_BALANCE_SHEET;
         }
 
