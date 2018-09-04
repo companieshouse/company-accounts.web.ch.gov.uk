@@ -44,10 +44,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             throw new ServiceException(e);
         }
 
-        //transform API data to web-readable data
-        BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriod);
-
-        return balanceSheet;
+        return transformer.getBalanceSheet(currentPeriod);
     }
 
     @Override
