@@ -7,6 +7,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @Service
@@ -16,7 +17,7 @@ public class TransactionServiceImpl implements TransactionService {
     ApiClientService apiClientService;
 
     @Override
-    public String createTransaction(String companyNumber) throws ApiErrorResponseException {
+    public String createTransaction(String companyNumber) throws ServiceException {
 
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
@@ -25,20 +26,30 @@ public class TransactionServiceImpl implements TransactionService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        transaction = apiClient.transactions().create(transaction);
+        try {
+            transaction = apiClient.transactions().create(transaction);
+        } catch (ApiErrorResponseException e) {
+            
+            throw new ServiceException(e);
+        }
 
         return transaction.getId();
     }
 
     @Override
-    public void closeTransaction(String transactionId) throws ApiErrorResponseException {
+    public void closeTransaction(String transactionId) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        Transaction transaction = apiClient.transaction(transactionId).get();
+        Transaction transaction;
 
-        transaction.setStatus(TransactionStatus.CLOSED);
+        try {
+            transaction = apiClient.transaction(transactionId).get();
+            transaction.setStatus(TransactionStatus.CLOSED);
+            apiClient.transaction(transactionId).update(transaction);
+        } catch (ApiErrorResponseException e) {
 
-        apiClient.transaction(transactionId).update(transaction);
+            throw new ServiceException(e);
+        }
     }
 }

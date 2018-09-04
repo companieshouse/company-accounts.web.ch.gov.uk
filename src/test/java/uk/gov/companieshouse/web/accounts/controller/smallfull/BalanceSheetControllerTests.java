@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
@@ -97,7 +98,7 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet throws ApiErrorResponseException")
     void postRequestThrowsApiErrorResponseException() throws Exception {
 
-        doThrow(ApiErrorResponseException.class)
+        doThrow(ServiceException.class)
                 .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class));
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))

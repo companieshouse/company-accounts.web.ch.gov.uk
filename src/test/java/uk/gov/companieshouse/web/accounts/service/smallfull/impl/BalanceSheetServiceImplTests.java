@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import com.google.api.client.http.HttpHeaders;
+import com.google.api.client.http.HttpResponseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import uk.gov.companieshouse.api.handler.transaction.companyaccount.smallfull.Sm
 import uk.gov.companieshouse.api.handler.transaction.companyaccount.smallfull.subresource.CurrentPeriodResourceHandler;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
@@ -74,7 +77,7 @@ public class BalanceSheetServiceImplTests {
 
     @Test
     @DisplayName("Get Balance Sheet - Success Path")
-    void getBalanceSheetSuccess() throws ApiErrorResponseException {
+    void getBalanceSheetSuccess() throws ServiceException, ApiErrorResponseException {
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
 
@@ -93,8 +96,22 @@ public class BalanceSheetServiceImplTests {
 
         when(currentPeriodResourceHandler.get()).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ApiErrorResponseException.class, () ->
+        assertThrows(ServiceException.class, () ->
                 balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Get Balance Sheet - Creates Balance Sheet if not found")
+    void getBalanceSheetNotFound() throws ServiceException, ApiErrorResponseException {
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404, "Not Found", new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        when(currentPeriodResourceHandler.get()).thenThrow(apiErrorResponseException);
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertNotNull(balanceSheet);
     }
 
     @Test
@@ -125,7 +142,7 @@ public class BalanceSheetServiceImplTests {
 
         when(currentPeriodResourceHandler.create(currentPeriod)).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ApiErrorResponseException.class, () ->
+        assertThrows(ServiceException.class, () ->
                 balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 }

@@ -9,6 +9,7 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 
 @Service
@@ -20,14 +21,20 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
     private static final Pattern COMPANY_ACCOUNTS_ID_MATCHER = Pattern.compile("/company-accounts/(.*)");
 
     @Override
-    public String createCompanyAccounts(String transactionId, DateTime periodEndOn) throws ApiErrorResponseException {
+    public String createCompanyAccounts(String transactionId, DateTime periodEndOn) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
         CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
         companyAccounts.setPeriodEndOn(periodEndOn);
 
-        companyAccounts = apiClient.transaction(transactionId).companyAccounts().create(companyAccounts);
+        try {
+            companyAccounts = apiClient.transaction(transactionId).companyAccounts().create(companyAccounts);
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException(e);
+        }
+
         String selfLink = companyAccounts.getLinks().get("self");
 
         Matcher matcher = COMPANY_ACCOUNTS_ID_MATCHER.matcher(selfLink);

@@ -17,6 +17,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.company.CompanyResourceHandler;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +48,7 @@ public class CompanyServiceImplTests {
 
     @Test
     @DisplayName("Get Company Profile - Success Path")
-    void getCompanyProfileSuccess() throws ApiErrorResponseException {
+    void getCompanyProfileSuccess() throws ServiceException, ApiErrorResponseException {
 
         when(companyResourceHandler.get()).thenReturn(new CompanyProfileApi());
 
@@ -62,7 +63,7 @@ public class CompanyServiceImplTests {
 
         when(companyResourceHandler.get()).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ApiErrorResponseException.class, () ->
+        assertThrows(ServiceException.class, () ->
                 companyService.getCompanyProfile(COMPANY_NUMBER));
     }
 }
