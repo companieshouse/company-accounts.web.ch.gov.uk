@@ -36,7 +36,7 @@ public class ApprovalController extends BaseController {
             transactionService.closeTransaction(transactionId);
         } catch (ServiceException e) {
 
-            LOGGER.errorRequest(request, "Failed to close transaction");
+            LOGGER.errorRequest(request, "Failed to close transaction", e);
             return "error";
         }
 

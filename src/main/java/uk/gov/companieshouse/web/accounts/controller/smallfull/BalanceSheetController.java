@@ -38,7 +38,7 @@ public class BalanceSheetController extends BaseController {
             model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
         } catch (ServiceException e) {
 
-            LOGGER.errorRequest(request, "Failed to fetch balance sheet");
+            LOGGER.errorRequest(request, "Failed to fetch balance sheet", e);
             return "error";
         }
 
@@ -61,7 +61,7 @@ public class BalanceSheetController extends BaseController {
             balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
         } catch (ServiceException e) {
 
-            LOGGER.errorRequest(request, "Failed to post balance sheet");
+            LOGGER.errorRequest(request, "Failed to post balance sheet", e);
             return "error";
         }
 
