@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ public class GlobalExceptionHandlerTests {
         when(controller.getStepsToComplete()).thenThrow(new RuntimeException());
 
         mockMvc.perform(get(REQUEST_PATH))
-                .andExpect(status().is(HttpStatus.SC_INTERNAL_SERVER_ERROR))
+                .andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()))
                 .andExpect(view().name(ERROR_VIEW));
     }
 
