@@ -11,7 +11,7 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
