@@ -60,7 +60,7 @@ public class BalanceSheetController extends BaseController {
         try {
             balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
         } catch (ApiErrorResponseException e) {
-            LOGGER.errorRequest(request, "Failed to post balance sheet");
+            LOGGER.errorRequest(request, "Failed to post balance sheet", e);
             return SMALL_FULL_BALANCE_SHEET;
         }
 
