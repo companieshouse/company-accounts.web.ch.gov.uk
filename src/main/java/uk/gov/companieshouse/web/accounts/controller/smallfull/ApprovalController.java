@@ -36,7 +36,7 @@ public class ApprovalController extends BaseController {
             transactionService.closeTransaction(transactionId);
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
-            LOGGER.errorRequest(request, "Failed to close transaction");
+            LOGGER.errorRequest(request, "Failed to close transaction", e);
         }
 
         // TODO: Further implementation when navigation built

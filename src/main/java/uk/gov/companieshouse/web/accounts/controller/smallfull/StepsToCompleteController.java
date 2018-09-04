@@ -55,7 +55,7 @@ public class StepsToCompleteController extends BaseController {
 
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
-            LOGGER.errorRequest(request, "Failed to post steps to complete confirmation");
+            LOGGER.errorRequest(request, "Failed to post steps to complete confirmation", e);
             return "error";
         }
     }

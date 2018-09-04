@@ -38,7 +38,7 @@ public class BalanceSheetController extends BaseController {
             model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
         } catch (ApiErrorResponseException e) {
             // TODO: handle ApiErrorResponseExceptions (SFA-594)
-            LOGGER.errorRequest(request, "Failed to fetch balance sheet");
+            LOGGER.errorRequest(request, "Failed to fetch balance sheet", e);
             model.addAttribute("balanceSheet", new BalanceSheet());
         }
 
