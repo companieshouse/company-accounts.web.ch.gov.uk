@@ -10,4 +10,6 @@ public abstract class BaseController {
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
     protected static final String ERROR_VIEW = "error";
+
+    protected BaseController() { }
 }

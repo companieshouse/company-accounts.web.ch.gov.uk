@@ -40,7 +40,6 @@ public class ApprovalController extends BaseController {
             return ERROR_VIEW;
         }
 
-        // TODO: Further implementation when navigation built
         return TEMPLATE;
     }
 }
