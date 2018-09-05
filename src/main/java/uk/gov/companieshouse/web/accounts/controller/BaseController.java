@@ -6,6 +6,8 @@ import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
 
 public abstract class BaseController {
 
+    private BaseController() { }
+
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
