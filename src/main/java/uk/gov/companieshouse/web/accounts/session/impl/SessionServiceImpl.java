@@ -14,6 +14,7 @@ public class SessionServiceImpl implements SessionService {
      */
     @Override
     public Map<String, Object> getSessionDataFromContext() {
+
         return SessionHandler.getSessionDataFromContext();
     }
 }
