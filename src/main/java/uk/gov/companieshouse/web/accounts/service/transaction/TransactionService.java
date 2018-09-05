@@ -5,10 +5,9 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 public interface TransactionService {
 
     /**
-     * Create a CHS transaction record. A transaction is comprised of one or more filing resources.
-     * Once the status is set to 'closed', the transaction filings will be processed by CHIPS.
+     * Create a CHS transaction record
      *
-     * @param companyNumber The company number for which accounts are to be filed
+     * @param companyNumber The company number for which accounts are to be filed against the transaction
      * @return The ID of the created transaction
      * @throws ServiceException
      */
