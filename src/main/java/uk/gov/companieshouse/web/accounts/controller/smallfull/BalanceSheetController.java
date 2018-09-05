@@ -39,7 +39,7 @@ public class BalanceSheetController extends BaseController {
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, "Failed to fetch balance sheet", e);
-            return "error";
+            return ERROR_VIEW;
         }
 
         return SMALL_FULL_BALANCE_SHEET;
@@ -62,7 +62,7 @@ public class BalanceSheetController extends BaseController {
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, "Failed to post balance sheet", e);
-            return "error";
+            return ERROR_VIEW;
         }
 
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);

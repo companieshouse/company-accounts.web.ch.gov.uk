@@ -55,7 +55,7 @@ public class StepsToCompleteController extends BaseController {
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, "Failed to post steps to complete confirmation", e);
-            return "error";
+            return ERROR_VIEW;
         }
     }
 }
