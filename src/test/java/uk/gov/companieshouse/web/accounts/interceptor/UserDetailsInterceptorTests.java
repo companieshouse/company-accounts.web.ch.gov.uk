@@ -52,7 +52,7 @@ public class UserDetailsInterceptorTests {
 
     @Test
     @DisplayName("Tests the interceptor adds the user email to the model")
-    public void postHandleForGetRequestSuccess() throws Exception {
+    void postHandleForGetRequestSuccess() throws Exception {
 
         Map<String, Object> userProfile = new HashMap<>();
         userProfile.put(EMAIL_KEY, TEST_EMAIL_ADDRESS);
@@ -73,7 +73,7 @@ public class UserDetailsInterceptorTests {
 
     @Test
     @DisplayName("Tests the interceptor does not add the user email to the model for POST requests")
-    public void postHandleForPostRequestIgnored() throws Exception {
+    void postHandleForPostRequestIgnored() throws Exception {
 
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.POST.toString());
 
@@ -84,7 +84,7 @@ public class UserDetailsInterceptorTests {
 
     @Test
     @DisplayName("Tests the interceptor does not add the user email to the model if no sign in info is available")
-    public void postHandleForGetRequestWithoutSignInInfoIgnored() throws Exception {
+    void postHandleForGetRequestWithoutSignInInfoIgnored() throws Exception {
 
         Map<String, Object> sessionData = new HashMap<>();
 
