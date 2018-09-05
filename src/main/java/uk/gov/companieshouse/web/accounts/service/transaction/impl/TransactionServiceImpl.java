@@ -16,6 +16,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     ApiClientService apiClientService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String createTransaction(String companyNumber) throws ServiceException {
 
@@ -36,6 +39,9 @@ public class TransactionServiceImpl implements TransactionService {
         return transaction.getId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void closeTransaction(String transactionId) throws ServiceException {
 
