@@ -9,7 +9,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import uk.gov.companieshouse.session.handler.SessionHandler;
 import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @Component
