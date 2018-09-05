@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -86,6 +87,18 @@ public class BalanceSheetControllerTests {
     }
 
     @Test
+    @DisplayName("Get balance sheet view failure path")
+    void getRequestFailure() throws Exception {
+
+        doThrow(ServiceException.class)
+                .when(balanceSheetService).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        this.mockMvc.perform(get(BALANCE_SHEET_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
@@ -106,6 +119,20 @@ public class BalanceSheetControllerTests {
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post balance sheet with binding result errors")
+    void postRequestBindingResultErrors() throws Exception {
+
+        String beanElement = "calledUpShareCapitalNotPaid.currentAmount";
+        // Mock non-numeric input to trigger binding result errors
+        String invalidData = "test";
+
+        this.mockMvc.perform(post(BALANCE_SHEET_PATH)
+                .param(beanElement, invalidData))
+                .andExpect(status().isOk())
+                .andExpect(view().name(BALANCE_SHEET_VIEW));
     }
 
 }
