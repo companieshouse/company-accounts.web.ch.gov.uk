@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.ModelAndView;
-import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,10 +17,9 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDetailsInterceptorTests {
@@ -54,7 +52,7 @@ public class UserDetailsInterceptorTests {
 
     @Test
     @DisplayName("Tests the interceptor adds the user email to the model")
-    public void postHandle() throws Exception {
+    public void postHandleForGetRequestSuccess() throws Exception {
 
         Map<String, Object> userProfile = new HashMap<>();
         userProfile.put(EMAIL_KEY, TEST_EMAIL_ADDRESS);
@@ -71,5 +69,30 @@ public class UserDetailsInterceptorTests {
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
         verify(modelAndView, times(1)).addObject(USER_EMAIL, TEST_EMAIL_ADDRESS);
+    }
+
+    @Test
+    @DisplayName("Tests the interceptor does not add the user email to the model for POST requests")
+    public void postHandleForPostRequestIgnored() throws Exception {
+
+        when(httpServletRequest.getMethod()).thenReturn(HttpMethod.POST.toString());
+
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+
+        verify(modelAndView, never()).addObject(anyString(), any());
+    }
+
+    @Test
+    @DisplayName("Tests the interceptor does not add the user email to the model if no sign in info is available")
+    public void postHandleForGetRequestWithoutSignInInfoIgnored() throws Exception {
+
+        Map<String, Object> sessionData = new HashMap<>();
+
+        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
+        when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
+
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+
+        verify(modelAndView, never()).addObject(anyString(), any());
     }
 }
