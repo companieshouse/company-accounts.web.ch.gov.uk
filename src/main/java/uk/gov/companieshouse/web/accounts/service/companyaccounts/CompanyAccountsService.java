@@ -1,9 +1,9 @@
 package uk.gov.companieshouse.web.accounts.service.companyaccounts;
 
 import com.google.api.client.util.DateTime;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface CompanyAccountsService {
 
-    String createCompanyAccounts(String transactionId, DateTime periodEndOn) throws ApiErrorResponseException;
+    String createCompanyAccounts(String transactionId, DateTime periodEndOn) throws ServiceException;
 }

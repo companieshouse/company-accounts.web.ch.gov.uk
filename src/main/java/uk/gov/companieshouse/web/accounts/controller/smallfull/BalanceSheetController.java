@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
@@ -36,10 +36,10 @@ public class BalanceSheetController extends BaseController {
 
         try {
             model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId));
-        } catch (ApiErrorResponseException e) {
-            // TODO: handle ApiErrorResponseExceptions (SFA-594)
+        } catch (ServiceException e) {
+
             LOGGER.errorRequest(request, "Failed to fetch balance sheet", e);
-            model.addAttribute("balanceSheet", new BalanceSheet());
+            return ERROR_VIEW;
         }
 
         return SMALL_FULL_BALANCE_SHEET;
@@ -59,9 +59,10 @@ public class BalanceSheetController extends BaseController {
 
         try {
             balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
-        } catch (ApiErrorResponseException e) {
+        } catch (ServiceException e) {
+
             LOGGER.errorRequest(request, "Failed to post balance sheet", e);
-            return SMALL_FULL_BALANCE_SHEET;
+            return ERROR_VIEW;
         }
 
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);

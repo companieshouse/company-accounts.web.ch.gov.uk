@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
@@ -50,13 +50,12 @@ public class StepsToCompleteController extends BaseController {
             DateTime periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
 
             String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId, periodEndOn);
-
             return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
-        } catch (ApiErrorResponseException e) {
-            // TODO: handle ApiErrorResponseExceptions (SFA-594)
+        } catch (ServiceException e) {
+
             LOGGER.errorRequest(request, "Failed to post steps to complete confirmation", e);
-            return "error";
+            return ERROR_VIEW;
         }
     }
 }

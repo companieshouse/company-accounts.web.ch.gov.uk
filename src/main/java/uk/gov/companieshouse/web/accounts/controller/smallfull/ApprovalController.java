@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @Controller
@@ -34,9 +34,10 @@ public class ApprovalController extends BaseController {
 
         try {
             transactionService.closeTransaction(transactionId);
-        } catch (ApiErrorResponseException e) {
-            // TODO: handle ApiErrorResponseExceptions (SFA-594)
+        } catch (ServiceException e) {
+
             LOGGER.errorRequest(request, "Failed to close transaction", e);
+            return ERROR_VIEW;
         }
 
         return TEMPLATE;

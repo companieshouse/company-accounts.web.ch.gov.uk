@@ -25,6 +25,7 @@ import uk.gov.companieshouse.api.handler.transaction.TransactionsResourceHandler
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,7 +59,7 @@ public class TransactionServiceImplTests {
     
     @Test
     @DisplayName("Create Transaction - Success Path")
-    void createTransactionSuccess() throws ApiErrorResponseException {
+    void createTransactionSuccess() throws ServiceException, ApiErrorResponseException {
 
         when(apiClient.transactions()).thenReturn(transactionsResourceHandler);
 
@@ -80,12 +81,12 @@ public class TransactionServiceImplTests {
 
         when(transactionsResourceHandler.create(any(Transaction.class))).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ApiErrorResponseException.class, () -> transactionService.createTransaction(COMPANY_NUMBER));
+        assertThrows(ServiceException.class, () -> transactionService.createTransaction(COMPANY_NUMBER));
     }
 
     @Test
     @DisplayName("Close Transaction - Success Path")
-    void closeTransactionSuccess() throws ApiErrorResponseException {
+    void closeTransactionSuccess() throws ServiceException, ApiErrorResponseException {
 
         when(apiClient.transaction(TRANSACTION_ID)).thenReturn(transactionResourceHandler);
 
@@ -111,7 +112,7 @@ public class TransactionServiceImplTests {
 
         when(transactionResourceHandler.get()).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ApiErrorResponseException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+        assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
     }
 
     @Test
@@ -129,6 +130,6 @@ public class TransactionServiceImplTests {
 
         doThrow(ApiErrorResponseException.class).when(transactionResourceHandler).update(transaction);
 
-        assertThrows(ApiErrorResponseException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+        assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
     }
 }

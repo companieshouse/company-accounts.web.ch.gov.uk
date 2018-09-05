@@ -6,6 +6,7 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 
 @Service
@@ -15,10 +16,19 @@ public class CompanyServiceImpl implements CompanyService {
     ApiClientService apiClientService;
 
     @Override
-    public CompanyProfileApi getCompanyProfile(String companyNumber) throws ApiErrorResponseException {
+    public CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        return apiClient.company(companyNumber).get();
+        CompanyProfileApi companyProfileApi;
+
+        try {
+            companyProfileApi = apiClient.company(companyNumber).get();
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException(e);
+        }
+
+        return companyProfileApi;
     }
 }

@@ -23,6 +23,7 @@ import uk.gov.companieshouse.api.handler.transaction.TransactionResourceHandler;
 import uk.gov.companieshouse.api.handler.transaction.companyaccount.CompanyAccountsResourceHandler;
 import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,7 +62,7 @@ public class CompanyAccountsServiceImplTests {
 
     @Test
     @DisplayName("Create Company Accounts - Success Path")
-    void createCompanyAccountSuccess() throws ApiErrorResponseException {
+    void createCompanyAccountSuccess() throws ServiceException, ApiErrorResponseException {
 
         DateTime periodEndOn = new DateTime(new Date());
 
@@ -87,7 +88,7 @@ public class CompanyAccountsServiceImplTests {
         when(companyAccountsResourceHandler.create(any(CompanyAccountsApi.class)))
                 .thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ApiErrorResponseException.class, () ->
+        assertThrows(ServiceException.class, () ->
                 companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn));
     }
 }
