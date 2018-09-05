@@ -8,6 +8,8 @@ public abstract class BaseController {
 
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
-
+    
     protected static final String ERROR_VIEW = "error";
+
+    protected BaseController() { }
 }
