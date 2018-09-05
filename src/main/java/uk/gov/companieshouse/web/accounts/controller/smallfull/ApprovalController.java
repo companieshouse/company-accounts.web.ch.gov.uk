@@ -39,7 +39,6 @@ public class ApprovalController extends BaseController {
             LOGGER.errorRequest(request, "Failed to close transaction", e);
         }
 
-        // TODO: Further implementation when navigation built
         return TEMPLATE;
     }
 }

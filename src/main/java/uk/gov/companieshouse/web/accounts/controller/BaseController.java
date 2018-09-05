@@ -9,4 +9,5 @@ public abstract class BaseController {
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
+    protected BaseController() { }
 }
