@@ -31,8 +31,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 
-import javax.xml.ws.Service;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CompanyAccountsServiceImplTests {
