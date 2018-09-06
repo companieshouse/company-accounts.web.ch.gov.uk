@@ -42,4 +42,17 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
 
         return matcher.group(1);
     }
+
+    @Override
+    public void createSmallFullAccounts(String transactionId, String companyAccountsId) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        try {
+            apiClient.transaction(transactionId).companyAccount(companyAccountsId).smallFull().create();
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException(e);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -104,6 +105,8 @@ public class StepsToCompleteControllerTests {
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn)).thenReturn(COMPANY_ACCOUNTS_ID);
 
+        doNothing().when(companyAccountsService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + BALANCE_SHEET_PATH));
@@ -113,6 +116,8 @@ public class StepsToCompleteControllerTests {
         verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID, periodEndOn);
+
+        verify(companyAccountsService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -141,10 +146,9 @@ public class StepsToCompleteControllerTests {
                 .andExpect(view().name(ERROR_VIEW));
     }
 
-
     @Test
-    @DisplayName("Post steps to complete failure path for company accounts service")
-    void postRequestCompanyAccountsServiceFailure() throws Exception {
+    @DisplayName("Post steps to complete failure path for create company accounts resource")
+    void postRequestCompanyAccountsServiceCreateCompanyAccountsFailure() throws Exception {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
@@ -169,4 +173,32 @@ public class StepsToCompleteControllerTests {
                 .andExpect(view().name(ERROR_VIEW));
     }
 
+    @Test
+    @DisplayName("Post steps to complete failure path for create small full accounts resource")
+    void postRequestCompanyAccountsServiceCreateSmallFullAccountsFailure() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
+
+        DateTime periodEndOn = new DateTime(new Date());
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodEndOn(periodEndOn);
+
+        CompanyAccountApi companyAccount = new CompanyAccountApi();
+        companyAccount.setNextAccounts(nextAccounts);
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        companyProfile.setAccounts(companyAccount);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyAccountsService.createCompanyAccounts(anyString(), any(DateTime.class))).thenReturn("company_accounts_id");
+
+        doThrow(ServiceException.class)
+                .when(companyAccountsService).createSmallFullAccounts(anyString(), anyString());
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
 }
