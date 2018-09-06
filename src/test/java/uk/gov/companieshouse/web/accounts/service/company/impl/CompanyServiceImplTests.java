@@ -19,7 +19,6 @@ import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -33,9 +32,6 @@ public class CompanyServiceImplTests {
 
     @Mock
     private CompanyResourceHandler companyResourceHandler;
-
-    @Mock
-    private SessionService sessionService;
 
     @InjectMocks
     private CompanyService companyService = new CompanyServiceImpl();
