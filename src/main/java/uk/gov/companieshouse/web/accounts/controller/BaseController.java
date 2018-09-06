@@ -17,6 +17,6 @@ public abstract class BaseController {
 
     protected void addBackPageAttributeToModel(Model model, String... pathVars) {
 
-        model.addAttribute("backPage", Navigator.getPreviousControllerPath(this.getClass(), pathVars));
+        model.addAttribute("backButton", Navigator.getPreviousControllerPath(this.getClass(), pathVars));
     }
 }
