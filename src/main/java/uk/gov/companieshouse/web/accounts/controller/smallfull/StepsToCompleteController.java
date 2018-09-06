@@ -50,6 +50,9 @@ public class StepsToCompleteController extends BaseController {
             DateTime periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
 
             String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId, periodEndOn);
+
+            companyAccountsService.createSmallFullAccounts(transactionId, companyAccountsId);
+
             return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
         } catch (ServiceException e) {

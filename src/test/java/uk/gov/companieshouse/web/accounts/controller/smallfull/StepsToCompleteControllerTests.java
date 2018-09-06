@@ -141,10 +141,9 @@ public class StepsToCompleteControllerTests {
                 .andExpect(view().name(ERROR_VIEW));
     }
 
-
     @Test
-    @DisplayName("Post steps to complete failure path for company accounts service")
-    void postRequestCompanyAccountsServiceFailure() throws Exception {
+    @DisplayName("Post steps to complete failure path for create company accounts resource")
+    void postRequestCompanyAccountsServiceCreateCompanyAccountsFailure() throws Exception {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
@@ -169,4 +168,32 @@ public class StepsToCompleteControllerTests {
                 .andExpect(view().name(ERROR_VIEW));
     }
 
+    @Test
+    @DisplayName("Post steps to complete failure path for create small full accounts resource")
+    void postRequestCompanyAccountsServiceCreateSmallFullAccountsFailure() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
+
+        DateTime periodEndOn = new DateTime(new Date());
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodEndOn(periodEndOn);
+
+        CompanyAccountApi companyAccount = new CompanyAccountApi();
+        companyAccount.setNextAccounts(nextAccounts);
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        companyProfile.setAccounts(companyAccount);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyAccountsService.createCompanyAccounts(anyString(), any(DateTime.class))).thenReturn("company_accounts_id");
+
+        doThrow(ServiceException.class)
+                .when(companyAccountsService).createSmallFullAccounts(anyString(), anyString());
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
 }
