@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,12 @@ public class ApprovalController extends BaseController {
     private TransactionService transactionService;
 
     @GetMapping
-    public String getApproval() {
+    public String getApproval(@PathVariable String companyNumber,
+                              @PathVariable String transactionId,
+                              @PathVariable String companyAccountsId,
+                              Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         return TEMPLATE;
     }
