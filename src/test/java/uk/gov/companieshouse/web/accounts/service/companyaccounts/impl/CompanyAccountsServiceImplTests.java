@@ -137,6 +137,4 @@ public class CompanyAccountsServiceImplTests {
         assertThrows(ServiceException.class, () ->
                 companyAccountsService.createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
-
-
 }
