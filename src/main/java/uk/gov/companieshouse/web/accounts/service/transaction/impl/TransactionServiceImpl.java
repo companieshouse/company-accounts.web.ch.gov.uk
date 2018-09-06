@@ -45,14 +45,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void closeTransaction(String transactionId) throws ServiceException {
 
-        ApiClient apiClient = apiClientService.getApiClient();
-
-        Transaction transaction;
-
         try {
-            transaction = apiClient.transaction(transactionId).get();
+            Transaction transaction = apiClientService.getApiClient().transaction(transactionId).get();
             transaction.setStatus(TransactionStatus.CLOSED);
-            apiClient.transaction(transactionId).update(transaction);
+            apiClientService.getApiClient().transaction(transactionId).update(transaction);
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException(e);
