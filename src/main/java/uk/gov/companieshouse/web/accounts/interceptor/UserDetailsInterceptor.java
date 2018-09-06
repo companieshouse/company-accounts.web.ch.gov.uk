@@ -3,11 +3,13 @@ package uk.gov.companieshouse.web.accounts.interceptor;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import uk.gov.companieshouse.session.handler.SessionHandler;
+import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @Component
 public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
@@ -18,12 +20,15 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
     private static final String USER_PROFILE_KEY = "user_profile";
     private static final String EMAIL_KEY = "email";
 
+    @Autowired
+    SessionService sessionService;
+
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
 
         if (request.getMethod().equalsIgnoreCase("GET") && modelAndView != null) {
 
-            Map<String, Object> sessionData = SessionHandler.getSessionDataFromContext();
+            Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
             Map<String, Object> signInInfo = (Map<String, Object>) sessionData.get(SIGN_IN_KEY);
             if (signInInfo != null) {
                 Map<String, Object> userProfile = (Map<String, Object>) signInInfo
