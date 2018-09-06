@@ -41,7 +41,7 @@ public class Navigator {
     public static String getPreviousControllerPath(Class clazz, String... pathVars) {
         Annotation previousControllerAnnotation = AnnotationUtils.findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
-            return "";
+            throw new MissingAnnotationException("Missing @PreviousController annotation on class " + clazz.toString());
         }
 
         Class previousControllerClass = ((PreviousController) previousControllerAnnotation).value();
