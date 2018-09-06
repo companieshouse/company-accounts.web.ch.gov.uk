@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title></title>
+    </head>
+        <body>
+            <a th:fragment="backPageLink"
+               th:if="${backPage != null}"
+               th:href="${backPage}"
+               class="govuk-back-link">
+            </a>
+        </body>
+</html>
