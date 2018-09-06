@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -104,6 +105,8 @@ public class StepsToCompleteControllerTests {
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn)).thenReturn(COMPANY_ACCOUNTS_ID);
 
+        doNothing().when(companyAccountsService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + BALANCE_SHEET_PATH));
@@ -113,6 +116,8 @@ public class StepsToCompleteControllerTests {
         verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID, periodEndOn);
+
+        verify(companyAccountsService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
