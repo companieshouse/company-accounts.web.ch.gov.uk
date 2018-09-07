@@ -9,6 +9,8 @@ import javax.validation.Valid;
 @Setter
 public class BalanceSheet {
 
+    private BalanceSheetHeadings balanceSheetHeadings;
+
     @Valid
     private CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 }

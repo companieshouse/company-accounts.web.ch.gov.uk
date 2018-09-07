@@ -33,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
             transaction = apiClient.transactions().create(transaction);
         } catch (ApiErrorResponseException e) {
             
-            throw new ServiceException(e);
+            throw new ServiceException("Error creating transaction", e);
         }
 
         return transaction.getId();
@@ -51,7 +51,7 @@ public class TransactionServiceImpl implements TransactionService {
             apiClientService.getApiClient().transaction(transactionId).update(transaction);
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException(e);
+            throw new ServiceException("Error closing transaction", e);
         }
     }
 }

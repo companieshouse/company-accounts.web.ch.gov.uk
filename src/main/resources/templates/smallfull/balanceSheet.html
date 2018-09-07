@@ -25,6 +25,18 @@
                         <p id="balanceSheet-help-text" class="warning">Complete all items that are included in your prepared accounts.</p>
                     </div>
 
+                    <div class="grid-row">
+                        <div class="column-half">
+                            &nbsp;
+                        </div>
+
+                        <div class="column-quarter">
+                            <h2 class="heading-small">
+                                <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'></span>
+                            </h2>
+                        </div>
+                    </div>
+
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'calledUpShareCapitalNotPaid.currentAmount'
                         )">

@@ -32,7 +32,7 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
             companyAccounts = apiClient.transaction(transactionId).companyAccounts().create(companyAccounts);
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException(e);
+            throw new ServiceException("Error creating company account", e);
         }
 
         String selfLink = companyAccounts.getLinks().get("self");
@@ -52,7 +52,7 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
             apiClient.transaction(transactionId).companyAccount(companyAccountsId).smallFull().create();
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException(e);
+            throw new ServiceException("Error creating small full accounts", e);
         }
     }
 }
