@@ -5,7 +5,7 @@
 
     <groupId>uk.gov.companieshouse</groupId>
     <artifactId>company-accounts.web.ch.gov.uk</artifactId>
-    <version>2a32dc2</version>
+    <version>unversioned</version>
     <packaging>jar</packaging>
 
     <name>company-accounts-web</name>
@@ -40,7 +40,7 @@
 
         <web-security-java.version>1.1.0-rc1</web-security-java.version>
 
-        <company-accounts-library.version>0.0.1</company-accounts-library.version>
+        <company-accounts-library.version>1.0.0-rc2</company-accounts-library.version>
 
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
