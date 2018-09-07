@@ -49,7 +49,7 @@ public class ApprovalControllerTests {
                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                 "/small-full/approval";
 
-    private static final String BACK_PAGE_MODEL_ATTR = "backPage";
+    private static final String BACK_PAGE_MODEL_ATTR = "backButton";
 
     private static final String ERROR_VIEW = "error";
 
