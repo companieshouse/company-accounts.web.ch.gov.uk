@@ -20,6 +20,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -48,6 +49,8 @@ public class ApprovalControllerTests {
                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                 "/small-full/approval";
 
+    private static final String BACK_PAGE_MODEL_ATTR = "backButton";
+
     private static final String ERROR_VIEW = "error";
 
     @BeforeEach
@@ -60,7 +63,8 @@ public class ApprovalControllerTests {
     void getRequestSuccess() throws Exception {
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(APPROVAL_VIEW));
+                .andExpect(view().name(APPROVAL_VIEW))
+                .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR));
     }
 
     @Test
