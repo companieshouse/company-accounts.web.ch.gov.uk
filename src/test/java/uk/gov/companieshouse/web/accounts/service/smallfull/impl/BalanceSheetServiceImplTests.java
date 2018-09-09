@@ -214,11 +214,8 @@ public class BalanceSheetServiceImplTests {
         nextAccounts.setPeriodStartOn(currentPeriodStart);
         nextAccounts.setPeriodEndOn(currentPeriodEnd);
 
-        LastAccountsApi lastAccounts = new LastAccountsApi();
-
         CompanyAccountApi companyAccounts = new CompanyAccountApi();
         companyAccounts.setNextAccounts(nextAccounts);
-        companyAccounts.setLastAccounts(lastAccounts);
 
         CompanyProfileApi companyProfile = new CompanyProfileApi();
         companyProfile.setAccounts(companyAccounts);
