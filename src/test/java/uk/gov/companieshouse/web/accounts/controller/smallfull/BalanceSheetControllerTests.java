@@ -26,8 +26,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +41,9 @@ public class BalanceSheetControllerTests {
 
     @Mock
     BalanceSheetService balanceSheetService;
+
+    @Mock
+    CompanyService companyService;
 
     @InjectMocks
     BalanceSheetController controller;
@@ -76,6 +82,11 @@ public class BalanceSheetControllerTests {
     @DisplayName("Get balance sheet view success path")
     void getRequestSuccess() throws Exception {
 
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(balanceSheetService.getBalanceSheetHeadings(companyProfile)).thenReturn(new BalanceSheetHeadings());
+
         when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new BalanceSheet());
 
         this.mockMvc.perform(get(BALANCE_SHEET_PATH))
@@ -84,12 +95,37 @@ public class BalanceSheetControllerTests {
                     .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
                     .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
 
+        verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
+
+        verify(balanceSheetService, times(1)).getBalanceSheetHeadings(companyProfile);
+
         verify(balanceSheetService, times(1)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
-    @DisplayName("Get balance sheet view failure path")
-    void getRequestFailure() throws Exception {
+    @DisplayName("Get balance sheet view failure path due to error on company profile retrieval")
+    void getRequestFailureInGetCompanyProfile() throws Exception {
+
+        doThrow(ServiceException.class)
+            .when(companyService).getCompanyProfile(COMPANY_NUMBER);
+
+        this.mockMvc.perform(get(BALANCE_SHEET_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+
+        verify(balanceSheetService, times(0)).getBalanceSheetHeadings(any(CompanyProfileApi.class));
+
+        verify(balanceSheetService, times(0)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
+    @Test
+    @DisplayName("Get balance sheet view failure path due to error on balance sheet retrieval")
+    void getRequestFailureInGetBalanceSheet() throws Exception {
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(balanceSheetService.getBalanceSheetHeadings(companyProfile)).thenReturn(new BalanceSheetHeadings());
 
         doThrow(ServiceException.class)
                 .when(balanceSheetService).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);

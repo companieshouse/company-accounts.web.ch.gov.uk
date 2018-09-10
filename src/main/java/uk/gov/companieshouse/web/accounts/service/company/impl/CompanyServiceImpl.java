@@ -26,7 +26,7 @@ public class CompanyServiceImpl implements CompanyService {
             companyProfileApi = apiClient.company(companyNumber).get();
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException(e);
+            throw new ServiceException("Error retieving company profile", e);
         }
 
         return companyProfileApi;

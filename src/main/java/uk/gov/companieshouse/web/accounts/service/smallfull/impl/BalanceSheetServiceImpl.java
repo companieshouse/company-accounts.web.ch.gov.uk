@@ -1,14 +1,21 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import com.google.api.client.util.DateTime;
+import java.time.LocalDate;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
+import uk.gov.companieshouse.accountsdates.impl.AccountsDatesHelperImpl;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 
@@ -20,6 +27,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Autowired
     private ApiClientService apiClientService;
+
+    private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
@@ -41,7 +50,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 return new BalanceSheet();
             }
 
-            throw new ServiceException(e);
+            throw new ServiceException("Error retrieving balance sheet", e);
         }
 
         return transformer.getBalanceSheet(currentPeriod);
@@ -62,7 +71,37 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .currentPeriod().create(currentPeriod);
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException(e);
+            throw new ServiceException("Error posting balance sheet", e);
         }
+    }
+
+    @Override
+    public BalanceSheetHeadings getBalanceSheetHeadings(CompanyProfileApi companyProfile) {
+
+        LocalDate currentPeriodEndOn =
+                convertDateTimeToLocalDate(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
+        LocalDate currentPeriodStartOn =
+                convertDateTimeToLocalDate(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+
+        boolean isSameYear = false;
+
+        if (companyProfile.getAccounts().getLastAccounts() != null) {
+            LocalDate previousPeriodEndOn =
+                convertDateTimeToLocalDate(companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
+            isSameYear = accountsDatesHelper.isSameYear(previousPeriodEndOn, currentPeriodEndOn);
+        }
+
+        String currentPeriodHeading = accountsDatesHelper.generateBalanceSheetHeading(currentPeriodStartOn, currentPeriodEndOn, isSameYear);
+
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        balanceSheetHeadings.setCurrentPeriodHeading(currentPeriodHeading);
+
+        return balanceSheetHeadings;
+    }
+
+    private LocalDate convertDateTimeToLocalDate(DateTime dateTime) {
+
+        Date date = new Date(dateTime.getValue());
+        return accountsDatesHelper.convertDateToLocalDate(date);
     }
 }
