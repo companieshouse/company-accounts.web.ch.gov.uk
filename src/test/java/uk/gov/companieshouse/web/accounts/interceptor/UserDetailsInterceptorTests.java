@@ -54,7 +54,7 @@ public class UserDetailsInterceptorTests {
     private UserDetailsInterceptor userDetailsInterceptor;
 
     @Test
-    @DisplayName("Tests the interceptor adds the user email to the model")
+    @DisplayName("Tests the interceptor adds the user email to the model for GET requests")
     void postHandleForGetRequestSuccess() throws Exception {
 
         Map<String, Object> userProfile = new HashMap<>();
@@ -75,10 +75,33 @@ public class UserDetailsInterceptorTests {
     }
 
     @Test
+    @DisplayName("Tests the interceptor adds the user email to the model for POST requests which don't redirect")
+    void postHandleForPostRequestError() throws Exception {
+
+        Map<String, Object> userProfile = new HashMap<>();
+        userProfile.put(EMAIL_KEY, TEST_EMAIL_ADDRESS);
+
+        Map<String, Object> signInInfo = new HashMap<>();
+        signInInfo.put(USER_PROFILE_KEY, userProfile);
+
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put(SIGN_IN_KEY, signInInfo);
+
+        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
+        when(httpServletRequest.getMethod()).thenReturn(HttpMethod.POST.toString());
+        when(modelAndView.getViewName()).thenReturn("error");
+
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+
+        verify(modelAndView, times(1)).addObject(USER_EMAIL, TEST_EMAIL_ADDRESS);
+    }
+
+    @Test
     @DisplayName("Tests the interceptor does not add the user email to the model for POST requests")
     void postHandleForPostRequestIgnored() throws Exception {
 
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.POST.toString());
+        when(modelAndView.getViewName()).thenReturn("redirect:abc");
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
