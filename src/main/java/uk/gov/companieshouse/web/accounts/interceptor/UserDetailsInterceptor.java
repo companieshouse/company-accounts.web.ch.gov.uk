@@ -26,9 +26,8 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
 
-        if ((request.getMethod().equalsIgnoreCase("GET") ||
-             request.getMethod().equalsIgnoreCase("POST") && !modelAndView.getViewName().startsWith("redirect:"))
-                && modelAndView != null) {
+        if (modelAndView != null && (request.getMethod().equalsIgnoreCase("GET") ||
+             request.getMethod().equalsIgnoreCase("POST") && !modelAndView.getViewName().startsWith("redirect:"))) {
 
             Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
             Map<String, Object> signInInfo = (Map<String, Object>) sessionData.get(SIGN_IN_KEY);
