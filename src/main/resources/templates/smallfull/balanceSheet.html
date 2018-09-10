@@ -33,6 +33,8 @@
                         <div class="column-quarter" style="text-align: center">
                             <h2 class="heading-small">
                                 <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'></span>
+                                <!-- Hidden input for form binding -->
+                                <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
                             </h2>
                         </div>
                     </div>
