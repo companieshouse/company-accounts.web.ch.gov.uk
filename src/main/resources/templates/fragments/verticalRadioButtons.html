@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <fieldset class="form-group" th:fragment="verticalRadioButtons" th:classappend="${#fields.hasErrors('__${fieldName}__')} ? 'error' : ''">
+            <div class="form-group">
+                <span th:id="${fieldName} + '-errorId'"
+                     th:if="${#fields.hasErrors('__${fieldName}__')}"
+                     th:each="e : ${#fields.errors('__${fieldName}__')}" th:text="${e}" class="error-message">
+                </span>
+            </div>
+
+            <label class="block-label selection-button-radio" for="yesButton" id="yesButton-label">
+                <input id="yesButton" type="radio" value="1" th:field="*{__${fieldName}__}" th:errorclass="error-message"/>Yes
+            </label>
+
+            <label class="block-label selection-button-radio" for="noButton" id="noButton-label">
+                <input id="noButton" type="radio" value="0" th:field="*{__${fieldName}__}" th:errorclass="error-message"/>No
+            </label>
+        </fieldset>
+    </body>
+</html>
