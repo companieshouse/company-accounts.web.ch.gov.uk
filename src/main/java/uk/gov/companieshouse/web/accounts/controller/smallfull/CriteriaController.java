@@ -40,7 +40,7 @@ public class CriteriaController extends BaseController {
         }
 
         if (!criteria.getIsCriteriaMet()) {
-            // Temporarily return the criteria page until a 'criteria not met' page is created
+            // TODO: Temporarily return the criteria page until a 'criteria not met' page is created
             return TEMPLATE;
         }
 
