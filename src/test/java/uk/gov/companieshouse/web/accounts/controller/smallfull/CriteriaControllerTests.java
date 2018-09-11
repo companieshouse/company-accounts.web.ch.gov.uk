@@ -59,10 +59,10 @@ public class CriteriaControllerTests {
     void postRequestCriteriaMet() throws Exception {
 
         String beanElement = "isCriteriaMet";
-        String criteriaNotMet = "1";
+        String criteriaMet = "1";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaNotMet))
+                .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + STEPS_TO_COMPLETE_PATH));
     }
