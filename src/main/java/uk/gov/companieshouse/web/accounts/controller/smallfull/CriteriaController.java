@@ -40,7 +40,7 @@ public class CriteriaController extends BaseController {
         }
 
         if (!criteria.getIsCriteriaMet().equalsIgnoreCase("yes")) {
-            // TODO: Temporarily return the criteria page until a 'criteria not met' page is created
+            // TODO: Temporarily return the criteria page until other routes are developed
             return TEMPLATE;
         }
 
