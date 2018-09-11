@@ -39,8 +39,6 @@ public class GlobalExceptionHandlerTests {
     @BeforeEach
     private void setup() {
 
-        when(controller.getStepsToComplete(anyString(), any(Model.class))).thenThrow(new RuntimeException());
-
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller)
                             .setControllerAdvice(new GlobalExceptionHandler())
                             .build();
@@ -49,6 +47,8 @@ public class GlobalExceptionHandlerTests {
     @Test
     @DisplayName("Global Exception Handler Test - Assert runtime exceptions are caught")
     public void testGlobalExceptionHandlerError() throws Exception {
+
+        when(controller.getStepsToComplete(anyString(), any(Model.class))).thenThrow(new RuntimeException());
 
         mockMvc.perform(get(REQUEST_PATH))
                 .andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()))
