@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -65,6 +66,8 @@ public class StepsToCompleteControllerTests {
                                                         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                         "/small-full/balance-sheet";
 
+    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
+
     private static final String STEPS_TO_COMPLETE_VIEW = "smallfull/stepsToComplete";
 
     private static final String ERROR_VIEW = "error";
@@ -81,7 +84,8 @@ public class StepsToCompleteControllerTests {
 
         this.mockMvc.perform(get(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(STEPS_TO_COMPLETE_VIEW));
+                .andExpect(view().name(STEPS_TO_COMPLETE_VIEW))
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
     }
 
     @Test
