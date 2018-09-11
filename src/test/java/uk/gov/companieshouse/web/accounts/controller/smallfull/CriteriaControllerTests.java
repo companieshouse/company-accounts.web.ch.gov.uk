@@ -59,7 +59,7 @@ public class CriteriaControllerTests {
     void postRequestCriteriaMet() throws Exception {
 
         String beanElement = "isCriteriaMet";
-        String criteriaMet = "1";
+        String criteriaMet = "yes";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
                 .param(beanElement, criteriaMet))
@@ -68,11 +68,24 @@ public class CriteriaControllerTests {
     }
 
     @Test
-    @DisplayName("Post criteria with criteria not met selection")
-    void postRequestCriteriaNotMet() throws Exception {
+    @DisplayName("Post criteria with criteria not met and alternative filing method selection")
+    void postRequestCriteriaNotMetAlternativeFiling() throws Exception {
 
         String beanElement = "isCriteriaMet";
-        String criteriaNotMet = "0";
+        String criteriaNotMet = "noAlternativeFilingMethod";
+
+        this.mockMvc.perform(post(CRITERIA_PATH)
+                .param(beanElement, criteriaNotMet))
+                .andExpect(status().isOk())
+                .andExpect(view().name(CRITERIA_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post criteria with criteria not met and other accounts selection")
+    void postRequestCriteriaNotMetOtherAccounts() throws Exception {
+
+        String beanElement = "isCriteriaMet";
+        String criteriaNotMet = "noOtherAccounts";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
                 .param(beanElement, criteriaNotMet))
