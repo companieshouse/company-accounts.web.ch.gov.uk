@@ -39,7 +39,7 @@ public class CriteriaController extends BaseController {
             return TEMPLATE;
         }
 
-        if (!criteria.getIsCriteriaMet()) {
+        if (!criteria.getIsCriteriaMet().equalsIgnoreCase("yes")) {
             // TODO: Temporarily return the criteria page until a 'criteria not met' page is created
             return TEMPLATE;
         }

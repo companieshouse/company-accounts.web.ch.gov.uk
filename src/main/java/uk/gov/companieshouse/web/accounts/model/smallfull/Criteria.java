@@ -9,5 +9,5 @@ import lombok.Setter;
 public class Criteria {
 
     @NotNull(message = "{criteria.selectionNotMade}")
-    private Boolean isCriteriaMet;
+    private String isCriteriaMet;
 }
