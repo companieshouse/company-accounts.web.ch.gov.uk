@@ -17,13 +17,13 @@
                 File full accounts
             </h1>
 
-            <h2 class="heading-medium">Criteria</h2>
+            <h2 class="heading-medium" id="criteria-sub-heading">Criteria</h2>
 
-            <p>Check your prepared accounts to see if you meet the criteria.</p>
+            <p id="criteria-overview">Check your prepared accounts to see if you meet the criteria.</p>
 
-            <p>You can file full accounts here if:</p>
+            <p id="criteria-list-heading">You can file full accounts here if:</p>
 
-            <ul class="list list-bullet text">
+            <ul class="list list-bullet text" id="criteria-list">
                 <li>you don't need to include a directors' report or profit and loss account</li>
                 <li>you don't need to change the date the accounts are made up to</li>
                 <li>your balance sheet doesn’t have 'fixed asset investments', 'current asset investments',
@@ -33,15 +33,15 @@
                     or 'creditors - amounts falling due after one year'</li>
             </ul>
 
-            <p id="small-full-criteria-heading">Your full accounts must meet at least 2 of the following:</p>
+            <p id="criteria-additional-criteria-list-heading">Your full accounts must meet at least 2 of the following:</p>
 
-            <ul class="list list-bullet text" id="small-full-criteria-list">
+            <ul class="list list-bullet text" id="criteria-additional-criteria-list">
                 <li>turnover is not over £10.2 million</li>
                 <li>balance sheet total is not over £5.1 million</li>
                 <li>average number of employees is not over 50</li>
             </ul>
 
-            <h2 class="heading-medium">Do your prepared full accounts meet the criteria?</h2>
+            <h2 class="heading-medium" id="citeria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
 
             <fieldset class="form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'error' : ''">
                 <div class="form-group">
