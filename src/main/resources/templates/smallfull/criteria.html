@@ -45,31 +45,35 @@
 
             <fieldset class="form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'error' : ''">
                 <div class="form-group">
-                <span th:id="${isCriteriaMet} + '-errorId'"
-                      th:if="${#fields.hasErrors('isCriteriaMet')}"
-                      th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" class="error-message">
-                </span>
+                    <span th:id="${isCriteriaMet} + '-errorId'"
+                          th:if="${#fields.hasErrors('isCriteriaMet')}"
+                          th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" class="error-message">
+                    </span>
+
+                    <label class="block-label selection-button-radio" for="yesButton" id="yesButton-label">
+                        <input id="yesButton"
+                               type="radio"
+                               value="yes"
+                               th:field="*{isCriteriaMet}"
+                               th:errorclass="error-message"/>Yes
+                    </label>
+
+                    <label class="block-label selection-button-radio" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
+                        <input id="noAlternativeFilingButton"
+                               type="radio"
+                               value="noAlternativeFilingMethod"
+                               th:field="*{isCriteriaMet}"
+                               th:errorclass="error-message"/>No - show me other ways to file full accounts
+                    </label>
+
+                    <label class="block-label selection-button-radio" for="noOtherAccountsButton" id="noButton-label">
+                        <input id="noOtherAccountsButton"
+                               type="radio"
+                               value="noOtherAccounts"
+                               th:field="*{isCriteriaMet}"
+                               th:errorclass="error-message"/>No - I'll file other types of accounts
+                    </label>
                 </div>
-
-                <label class="block-label selection-button-radio" for="yesButton" id="yesButton-label">
-                    <input id="yesButton" type="radio" value="yes" th:field="*{isCriteriaMet}" th:errorclass="error-message"/>Yes
-                </label>
-
-                <label class="block-label selection-button-radio" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
-                    <input id="noAlternativeFilingButton"
-                           type="radio"
-                           value="noAlternativeFilingMethod"
-                           th:field="*{isCriteriaMet}"
-                           th:errorclass="error-message"/>No - show me other ways to file full accounts
-                </label>
-
-                <label class="block-label selection-button-radio" for="noOtherAccountsButton" id="noButton-label">
-                    <input id="noOtherAccountsButton"
-                           type="radio"
-                           value="noOtherAccounts"
-                           th:field="*{isCriteriaMet}"
-                           th:errorclass="error-message"/>No - I'll file other types of accounts
-                </label>
             </fieldset>
 
             <div class="form-group">
