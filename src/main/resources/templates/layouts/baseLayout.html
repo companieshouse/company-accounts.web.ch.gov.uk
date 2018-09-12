@@ -18,7 +18,7 @@
         th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
         type="image/x-icon" />
 </head>
-<body>
+<body class="">
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header"></div>
         <main id="content" role="main" class="two-column-accounts">
@@ -29,5 +29,10 @@
         </main>
     </div>
     <div th:replace="fragments/footer :: footer"></div>
+    <script type="text/javascript">
+        document.body.className = ((document.body.className) ? document.body.className
+                + ' js-enabled'
+                : 'js-enabled');
+    </script>
 </body>
 </html>
