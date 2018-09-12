@@ -29,10 +29,8 @@
         </main>
     </div>
     <div th:replace="fragments/footer :: footer"></div>
-    <script type="text/javascript">
-        document.body.className = ((document.body.className) ? document.body.className
-                + ' js-enabled'
-                : 'js-enabled');
-    </script>
+    <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-1.12.4.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 </body>
 </html>
