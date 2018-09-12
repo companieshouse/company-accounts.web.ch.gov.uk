@@ -46,7 +46,7 @@
             <fieldset class="form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'error' : ''">
                 <legend class="visuallyhidden">Full accounts criteria radio buttons"</legend>
                 <div class="form-group">
-                    <span th:id="${isCriteriaMet} + '-errorId'"
+                    <span id="isCriteriaMet-errorId"
                           th:if="${#fields.hasErrors('isCriteriaMet')}"
                           th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" class="error-message">
                     </span>
