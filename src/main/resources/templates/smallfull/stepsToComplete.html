@@ -12,35 +12,40 @@
 
             <form id="stepsToComplete-form" th:action="@{''}" class="form" method="post">
 
-                <h1 id="page-title" class="heading-xlarge">
-                    <span id="page-title-heading">File full accounts</span>
-                </h1>
+                <div class="grid-row">
+                    <div class="column-two-thirds">
 
-                <p id="stepsToComplete-overview">
-                    Use this service to file prepared and approved full accounts.
-                </p>
+                        <h1 id="page-title" class="heading-xlarge">
+                            <span id="page-title-heading">File full accounts</span>
+                        </h1>
 
-                <p class="warning-note warning-note-large" id="stepsToComplete-warning-note">
-                    If you can't finish your filing in one session, you can come back later to continue.
-                    You'll need to go to <a href="/user/transactions">'Your filings'</a>
-                </p>
+                        <p id="stepsToComplete-overview">
+                            Use this service to file prepared and approved full accounts.
+                        </p>
 
-                <p id="stepsToComplete-heading">There are 5 steps to complete:</p>
+                        <p class="warning-note-solid-blue warning-note-solid-blue-large" id="stepsToComplete-warning-note">
+                            If you can't finish your filing in one session, you can come back later to continue.
+                            You'll need to go to <a style="color: white" href="/user/transactions">'Your filings'</a>
+                        </p>
 
-                <ol class="list example-icon-list" id="stepsToComplete-list">
-                    <li><span class="circle circle-step-large">1</span> Balance sheet</li>
-                    <li><span class="circle circle-step-large">2</span> Balance sheet statements</li>
-                    <li><span class="circle circle-step-large">3</span> Balance sheet notes</li>
-                    <li><span class="circle circle-step-large">4</span> Check your answers</li>
-                    <li><span class="circle circle-step-large">5</span> Approve and submit</li>
-                </ol>
+                        <p id="stepsToComplete-heading">There are 5 steps to complete:</p>
 
-                <p id="stepsToComplete-user-email-confirmation">
-                    Once we've received your accounts, you'll get a confirmation email (with a reference number) at <strong th:utext="${userEmail}"></strong>
-                </p>
+                        <ol class="list example-icon-list" id="stepsToComplete-list">
+                            <li><span class="circle circle-step-large">1</span> Balance sheet</li>
+                            <li><span class="circle circle-step-large">2</span> Balance sheet statements</li>
+                            <li><span class="circle circle-step-large">3</span> Balance sheet notes</li>
+                            <li><span class="circle circle-step-large">4</span> Check your answers</li>
+                            <li><span class="circle circle-step-large">5</span> Approve and submit</li>
+                        </ol>
 
-                <div class="form-group">
-                    <input class="button" type="submit" role="button" value="Continue"/>
+                        <p id="stepsToComplete-user-email-confirmation">
+                            Once we've received your accounts, you'll get a confirmation email (with a reference number) at <strong th:utext="${userEmail}"></strong>
+                        </p>
+
+                        <div class="form-group">
+                            <input class="button" type="submit" role="button" value="Continue"/>
+                        </div>
+                    </div>
                 </div>
 
             </form>
