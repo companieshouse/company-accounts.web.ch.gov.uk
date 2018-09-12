@@ -24,8 +24,7 @@ public class CriteriaController extends BaseController {
     @GetMapping
     public String getCriteria(Model model) {
 
-        Criteria criteria = new Criteria();
-        model.addAttribute("criteria", criteria);
+        model.addAttribute("criteria", new Criteria());
 
         return TEMPLATE;
     }
