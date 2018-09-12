@@ -44,6 +44,7 @@
             <h2 class="heading-medium" id="citeria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
 
             <fieldset class="form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'error' : ''">
+                <legend class="visuallyhidden">Full accounts criteria radio buttons"</legend>
                 <div class="form-group">
                     <span th:id="${isCriteriaMet} + '-errorId'"
                           th:if="${#fields.hasErrors('isCriteriaMet')}"
