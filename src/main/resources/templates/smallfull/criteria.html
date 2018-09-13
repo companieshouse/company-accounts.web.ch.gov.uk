@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+      <title>Full Accounts Criteria</title>
+    </head>
+    <body>
+    <div id="criteria-main-content" layout:fragment="content">
+        <form id="criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
+
+            <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+            <h1 id="page-title" class="heading-xlarge">
+                File full accounts
+            </h1>
+
+            <h2 class="heading-medium" id="criteria-sub-heading">Criteria</h2>
+
+            <p id="criteria-overview">Check your prepared accounts to see if you meet the criteria.</p>
+
+            <p id="criteria-list-heading">You can file full accounts here if:</p>
+
+            <ul class="list list-bullet text" id="criteria-list">
+                <li>you don't need to include a directors' report or profit and loss account</li>
+                <li>you don't need to change the date the accounts are made up to</li>
+                <li>your balance sheet doesn’t have 'fixed asset investments', 'current asset investments',
+                    'revaluation reserve', or 'intangible assets'</li>
+                <li>you only need to add notes (if applicable) for 'accounting policies', 'tangible assets',
+                    'stocks', 'debtors', 'creditors - amounts falling due within one year',
+                    or 'creditors - amounts falling due after one year'</li>
+            </ul>
+
+            <p id="criteria-additional-criteria-list-heading">Your full accounts must meet at least 2 of the following:</p>
+
+            <ul class="list list-bullet text" id="criteria-additional-criteria-list">
+                <li>turnover is not over £10.2 million</li>
+                <li>balance sheet total is not over £5.1 million</li>
+                <li>average number of employees is not over 50</li>
+            </ul>
+
+            <h2 class="heading-medium" id="criteria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
+
+            <fieldset class="form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'error' : ''">
+                <legend class="visuallyhidden">Full accounts criteria radio buttons"</legend>
+                <div class="form-group">
+                    <span id="isCriteriaMet-errorId"
+                          th:if="${#fields.hasErrors('isCriteriaMet')}"
+                          th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" class="error-message">
+                    </span>
+
+                    <label class="block-label selection-button-radio" for="yesButton" id="yesButton-label">
+                        <input id="yesButton"
+                               type="radio"
+                               value="yes"
+                               th:field="*{isCriteriaMet}"
+                               th:errorclass="error-message"/>Yes
+                    </label>
+
+                    <label class="block-label selection-button-radio" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
+                        <input id="noAlternativeFilingButton"
+                               type="radio"
+                               value="noAlternativeFilingMethod"
+                               th:field="*{isCriteriaMet}"
+                               th:errorclass="error-message"/>No - show me other ways to file full accounts
+                    </label>
+
+                    <label class="block-label selection-button-radio" for="noOtherAccountsButton" id="noButton-label">
+                        <input id="noOtherAccountsButton"
+                               type="radio"
+                               value="noOtherAccounts"
+                               th:field="*{isCriteriaMet}"
+                               th:errorclass="error-message"/>No - I'll file other types of accounts
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+              <input class="button" type="submit" role="button" value="Continue"/>
+            </div>
+        </form>
+    </div>
+    </body>
+</html>
