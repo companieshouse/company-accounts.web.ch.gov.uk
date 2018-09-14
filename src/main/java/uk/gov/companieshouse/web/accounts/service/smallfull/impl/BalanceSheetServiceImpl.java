@@ -30,8 +30,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
-    private static final String NULL_VALUE = "null";
-
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
             throws ServiceException {
