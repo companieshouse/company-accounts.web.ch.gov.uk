@@ -286,7 +286,6 @@ public class BalanceSheetServiceImplTests {
         CompanyProfileApi companyProfile = new CompanyProfileApi();
         companyProfile.setAccounts(companyAccounts);
 
-
         String currentPeriodHeading = "currentPeriodHeading";
 
         when(accountsDatesHelper.generateBalanceSheetHeading(
