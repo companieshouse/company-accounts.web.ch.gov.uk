@@ -76,8 +76,6 @@ public class BalanceSheetServiceImplTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String NULL_VALUE = "null";
-
     @Test
     @DisplayName("Get Balance Sheet - Success Path")
     void getBalanceSheetSuccess() throws ServiceException, ApiErrorResponseException {
@@ -234,7 +232,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("Get Balance Sheet Headings when Previous Period exists but data type is null for first year filer")
+    @DisplayName("Get Balance Sheet Headings when Previous Period exists but period end date is null")
     void getBalanceSheetHeadingsPreviousPeriodDataTypeNull() {
 
         DateTime currentPeriodStart = new DateTime("2018-01-01");
@@ -245,9 +243,7 @@ public class BalanceSheetServiceImplTests {
         nextAccounts.setPeriodEndOn(currentPeriodEnd);
 
         LastAccountsApi lastAccounts = new LastAccountsApi();
-        lastAccounts.setPeriodStartOn(null);
         lastAccounts.setPeriodEndOn(null);
-        lastAccounts.setType(NULL_VALUE);
 
         CompanyAccountApi companyAccounts = new CompanyAccountApi();
         companyAccounts.setNextAccounts(nextAccounts);
@@ -269,7 +265,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("Get Balance Sheet Headings when Previous Period is not Null")
+    @DisplayName("Get Balance Sheet Headings when Previous Period exists and period end date is not null")
     void getBalanceSheetHeadingsPreviousPeriodNotNull() {
 
         DateTime currentPeriodStart = new DateTime("2018-01-01");
