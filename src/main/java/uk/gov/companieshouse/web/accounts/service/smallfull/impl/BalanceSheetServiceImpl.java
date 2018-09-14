@@ -88,7 +88,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         boolean isSameYear = false;
 
         if (companyProfile.getAccounts().getLastAccounts() != null &&
-                companyProfile.getAccounts().getLastAccounts().getType() != NULL_VALUE) {
+                !companyProfile.getAccounts().getLastAccounts().getType().equals(NULL_VALUE)) {
 
             LocalDate previousPeriodEndOn =
                 convertDateTimeToLocalDate(companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
