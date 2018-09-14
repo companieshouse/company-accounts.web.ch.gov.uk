@@ -30,6 +30,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
+    private static final String NULL_VALUE = "null";
+
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
             throws ServiceException {
@@ -85,7 +87,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         boolean isSameYear = false;
 
-        if (companyProfile.getAccounts().getLastAccounts() != null) {
+        if (companyProfile.getAccounts().getLastAccounts() != null &&
+                companyProfile.getAccounts().getLastAccounts().getType() != NULL_VALUE) {
+
             LocalDate previousPeriodEndOn =
                 convertDateTimeToLocalDate(companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
             isSameYear = accountsDatesHelper.isSameYear(previousPeriodEndOn, currentPeriodEndOn);
