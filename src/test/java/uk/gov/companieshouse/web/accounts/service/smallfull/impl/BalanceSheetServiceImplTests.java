@@ -76,6 +76,8 @@ public class BalanceSheetServiceImplTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String NULL_VALUE = "null";
+
     @Test
     @DisplayName("Get Balance Sheet - Success Path")
     void getBalanceSheetSuccess() throws ServiceException, ApiErrorResponseException {
@@ -219,6 +221,40 @@ public class BalanceSheetServiceImplTests {
         CompanyProfileApi companyProfile = new CompanyProfileApi();
         companyProfile.setAccounts(companyAccounts);
 
+        String currentPeriodHeading = "currentPeriodHeading";
+
+        when(accountsDatesHelper.generateBalanceSheetHeading(
+                any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
+
+        when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
+
+        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
+
+        assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
+    }
+
+    @Test
+    @DisplayName("Get Balance Sheet Headings when Previous Period exists but data type is null for first year filer")
+    void getBalanceSheetHeadingsPreviousPeriodDataTypeNull() {
+
+        DateTime currentPeriodStart = new DateTime("2018-01-01");
+        DateTime currentPeriodEnd = new DateTime("2018-01-01");
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodStartOn(currentPeriodStart);
+        nextAccounts.setPeriodEndOn(currentPeriodEnd);
+
+        LastAccountsApi lastAccounts = new LastAccountsApi();
+        lastAccounts.setPeriodStartOn(null);
+        lastAccounts.setPeriodEndOn(null);
+        lastAccounts.setType(NULL_VALUE);
+
+        CompanyAccountApi companyAccounts = new CompanyAccountApi();
+        companyAccounts.setNextAccounts(nextAccounts);
+        companyAccounts.setLastAccounts(lastAccounts);
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        companyProfile.setAccounts(companyAccounts);
 
         String currentPeriodHeading = "currentPeriodHeading";
 
