@@ -219,6 +219,38 @@ public class BalanceSheetServiceImplTests {
         CompanyProfileApi companyProfile = new CompanyProfileApi();
         companyProfile.setAccounts(companyAccounts);
 
+        String currentPeriodHeading = "currentPeriodHeading";
+
+        when(accountsDatesHelper.generateBalanceSheetHeading(
+                any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
+
+        when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
+
+        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
+
+        assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
+    }
+
+    @Test
+    @DisplayName("Get Balance Sheet Headings when Previous Period exists but period end date is null")
+    void getBalanceSheetHeadingsPreviousPeriodDataTypeNull() {
+
+        DateTime currentPeriodStart = new DateTime("2018-01-01");
+        DateTime currentPeriodEnd = new DateTime("2018-01-01");
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodStartOn(currentPeriodStart);
+        nextAccounts.setPeriodEndOn(currentPeriodEnd);
+
+        LastAccountsApi lastAccounts = new LastAccountsApi();
+        lastAccounts.setPeriodEndOn(null);
+
+        CompanyAccountApi companyAccounts = new CompanyAccountApi();
+        companyAccounts.setNextAccounts(nextAccounts);
+        companyAccounts.setLastAccounts(lastAccounts);
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        companyProfile.setAccounts(companyAccounts);
 
         String currentPeriodHeading = "currentPeriodHeading";
 
@@ -233,7 +265,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("Get Balance Sheet Headings when Previous Period is not Null")
+    @DisplayName("Get Balance Sheet Headings when Previous Period exists and period end date is not null")
     void getBalanceSheetHeadingsPreviousPeriodNotNull() {
 
         DateTime currentPeriodStart = new DateTime("2018-01-01");
@@ -253,7 +285,6 @@ public class BalanceSheetServiceImplTests {
 
         CompanyProfileApi companyProfile = new CompanyProfileApi();
         companyProfile.setAccounts(companyAccounts);
-
 
         String currentPeriodHeading = "currentPeriodHeading";
 
