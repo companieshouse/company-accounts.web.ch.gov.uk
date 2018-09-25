@@ -6,7 +6,9 @@
     <title layout:title-pattern="$CONTENT_TITLE"></title>
 
     <!--Static stylesheet for accounts until cdn update is complete-->
-    <link th:href="@{{/application.css}}" media="all" rel="stylesheet" type="text/css" />
+    <link
+    th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+    media="all" rel="stylesheet" type="text/css" />
     
 </head>
 <body>
@@ -16,7 +18,7 @@
             <div th:replace="fragments/betaBanner :: betaBanner"></div>
             <div th:replace="fragments/userBar :: userBar"></div>
             <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
-            <main id="content" role="main" class="two-column-accounts">
+            <main id="content" role="main" class="govuk-main-wrapper two-column-accounts">
                 <div layout:fragment="content"></div>
             </main>
         </div>
