@@ -8,7 +8,7 @@
 
             <nav class="content" role="navigation">
                 <ul id="navigation" class="mobile-hidden">
-                    <li class="user" id="signed-in-user-href"th:text="${userEmail + ':'}"></li>
+                    <li class="user" id="signed-in-user"th:text="${userEmail + ':'}"></li>
                     <li><a th:href="@{{chsAccountUrl}/user/account(chsAccountUrl=${@environment.getProperty('account.url')})}" id="your-details">Your details</a></li>
                     <li><a href="/user/transactions" id="your-filings">Your filings</a></li>
                     <li><a th:href="@{{chsFollowUrl}/admin/monitor(chsFollowUrl=${@environment.getProperty('monitorGui.url')})}" id="companies-you-follow">Companies you follow</a></li>
