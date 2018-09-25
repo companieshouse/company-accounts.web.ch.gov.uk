@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
@@ -49,6 +50,9 @@ public class ApprovalControllerTests {
                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                 "/small-full/approval";
 
+    private static final String CONFIRMATION_VIEW = "/transaction/" + TRANSACTION_ID +
+                                                    "/confirmation";
+
     private static final String BACK_PAGE_MODEL_ATTR = "backButton";
 
     private static final String ERROR_VIEW = "error";
@@ -74,8 +78,8 @@ public class ApprovalControllerTests {
         doNothing().when(transactionService).closeTransaction(TRANSACTION_ID);
 
         this.mockMvc.perform(post(APPROVAL_PATH))
-                .andExpect(status().isOk())
-                .andExpect(view().name(APPROVAL_VIEW));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + CONFIRMATION_VIEW));
     }
 
     @Test
