@@ -50,6 +50,7 @@ public class ApprovalController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CONFIRMATION_REDIRECT.expand(transactionId).toString();
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                CONFIRMATION_REDIRECT.expand(transactionId).toString();
     }
 }
