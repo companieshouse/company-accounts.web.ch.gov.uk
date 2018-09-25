@@ -6,7 +6,7 @@
     <title layout:title-pattern="$CONTENT_TITLE"></title>
 
     <!--Static stylesheet for accounts until cdn update is complete-->
-    <link th:href="@{{/application.css}}" media="all" rel="stylesheet" type="text/css" />
+    <link th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"/>
     
 </head>
 <body>
