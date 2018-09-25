@@ -7,31 +7,32 @@
     <head>
         <title>Balance Sheet</title>
     </head>
-    <body>
+    <main class="govuk-main-wrapper two-column-accounts">
+
         <div id="balanceSheet-main-content" layout:fragment="content">
 
-            <form id="balanceSheet-form" th:action="@{''}" th:object="${balanceSheet}" class="form" method="post">
+            <form id="balanceSheet-form" th:action="@{''}" th:object="${balanceSheet}" class="form currency-included-within-inputs govuk-body" method="post">
 
                 <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
                 <div th:replace="fragments/numberedHeading :: numberedHeading (
-                    number = '1',
                     headingText = 'Balance sheet'
                 )">
                 </div>
 
                 <div class="left-indent">
                     <div class="panel panel-border-wide">
-                        <p id="balanceSheet-help-text" class="warning">Complete all items that are included in your prepared accounts.</p>
+                        <p id="balanceSheet-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
                     </div>
 
-                    <div class="grid-row">
-                        <div class="column-half">
+                    <div class="govuk-grid-row" id="accounts-header">
+
+                        <div class="govuk-grid-column-one-half">
                             &nbsp;
                         </div>
 
-                        <div class="column-quarter" style="text-align: center">
-                            <h2 class="heading-small">
+                        <div class="govuk-grid-column-one-quarter">
+                            <h2 class="govuk-heading-s">
                                 <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'></span>
                                 <!-- Hidden input for form binding -->
                                 <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
@@ -44,17 +45,15 @@
                         )">
                     </div>
 
-                    <div class="grid-row">
-                        <div class="column-half">
-                            <div th:replace="fragments/dropDownHelp :: dropDownHelp (
-                                id = 'calledUpShareCapitalNotPaid',
-                                title = 'Called up share capital not paid',
-                                text = 'This is the amount that has been called for when shares have been allotted but that amount has not been received as at the date of the balance sheet.',
-                                )">
-                            </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Called up share capital not paid
+                            <span class="govuk-hint">
+                                This should not be confused with ‘Called up share capital', which can be found under 'Capital and reserves' at the end of this Balance sheet
+                            </span>
                         </div>
 
-                        <div class="column-quarter">
+                        <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.currentAmount',
                                 text = 'Called up share capital not paid',
@@ -63,12 +62,15 @@
                         </div>
                     </div>
 
+                    <br>
+
                     <div class="form-group">
-                        <input id="next-button" class="button" type="submit" role="button" value="Save and continue"/>
+                        <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
                     </div>
                 </div>
             </form>
-        </div>
+         </div>
+      </main>
     </body>
 
 </html>
