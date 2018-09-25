@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <title layout:title-pattern="$CONTENT_TITLE"></title>
 
-    <!--Static stylesheet for accounts until cdn update is complete-->
-    <link th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"/>
-    
+    <link
+        th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+        media="all" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
     <div class="entire-wrapper">
