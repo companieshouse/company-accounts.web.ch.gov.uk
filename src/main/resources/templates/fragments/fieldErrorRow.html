@@ -6,16 +6,16 @@
     <body>
         <div th:fragment="fieldErrorRow">
             <div class="grid-row" th:class="${#fields.hasErrors('__${currentField}__')} ? '' : 'error-hidden'">
-                <div class="column-half">&nbsp;</div>
-                <div class="column-quarter">
+                <div class="govuk-grid-column-one-half">&nbsp;</div>
+                <div class="govuk-grid-column-one-quarter">
                     <span th:if="${#fields.hasErrors('__${currentField}__')}"
                           th:id="${currentField} + '-errorId'"
                           th:each="e : ${#fields.errors('__${currentField}__')}"
                           th:text="${e}"
-                          class="error-message">
+                          class="govuk-error-message">
                     </span>
                 </div>
-                <div class="column-quarter">
+                <div class="govuk-grid-column-one-quarter">
                     <!-- This fragment will be expanded to support a previous field -->
                     &nbsp;
                 </div>
