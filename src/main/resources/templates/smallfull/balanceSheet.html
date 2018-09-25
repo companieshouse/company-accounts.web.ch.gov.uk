@@ -7,9 +7,8 @@
     <head>
         <title>Balance Sheet</title>
     </head>
-    <main class="govuk-main-wrapper two-column-accounts">
 
-        <div id="balanceSheet-main-content" layout:fragment="content">
+        <div id="balanceSheet-main-content" layout:fragment="content" class="two-column-accounts">
 
             <form id="balanceSheet-form" th:action="@{''}" th:object="${balanceSheet}" class="form currency-included-within-inputs govuk-body" method="post">
 

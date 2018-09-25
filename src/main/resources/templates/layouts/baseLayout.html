@@ -8,6 +8,11 @@
     <link
         th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
         media="all" rel="stylesheet" type="text/css" />
+
+    <link
+        rel="icon"
+        th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+        type="image/x-icon" />
     
 </head>
 <body>
@@ -17,7 +22,7 @@
             <div th:replace="fragments/betaBanner :: betaBanner"></div>
             <div th:replace="fragments/userBar :: userBar"></div>
             <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
-            <main id="content" role="main" class="govuk-main-wrapper two-column-accounts">
+            <main id="content" role="main" class="govuk-main-wrapper">
                 <div layout:fragment="content"></div>
             </main>
         </div>
