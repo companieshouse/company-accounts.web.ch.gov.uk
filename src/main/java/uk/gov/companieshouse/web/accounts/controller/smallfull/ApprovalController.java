@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -19,6 +21,8 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 public class ApprovalController extends BaseController {
 
     private static final String TEMPLATE = "smallfull/approval";
+
+    private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
 
     @Autowired
     private TransactionService transactionService;
@@ -35,9 +39,7 @@ public class ApprovalController extends BaseController {
     }
 
     @PostMapping
-    public String postApproval(@PathVariable String companyNumber,
-                               @PathVariable String transactionId,
-                               @PathVariable String companyAccountsId,
+    public String postApproval(@PathVariable String transactionId,
                                HttpServletRequest request) {
 
         try {
@@ -48,6 +50,7 @@ public class ApprovalController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return TEMPLATE;
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                CONFIRMATION_REDIRECT.expand(transactionId).toString();
     }
 }
