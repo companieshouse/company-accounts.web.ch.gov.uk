@@ -5,13 +5,14 @@
         <title></title>
     </head>
     <body>
-        <div th:fragment="numberInput" class="form-group">
+        <div th:fragment="numberInput" class="govuk-form-group">
+            <span class="currency-type">£</span>
             <label th:for="${id}">
                 <span th:id="${id} + '-mobile-label'" th:text="${text}" class="mobile-only-label"></span>
                 <input th:field="*{__${id}__}"
                      th:id="${id}"
                      th:name="${id}"
-                     class="form-control"
+                     class="govuk-input"
                      type="text">
             </label>
         </div>
