@@ -13,7 +13,6 @@
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header"></div>
         <div class="govuk-width-container">
-
             <div th:replace="fragments/betaBanner :: betaBanner"></div>
             <div th:replace="fragments/userBar :: userBar"></div>
             <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
@@ -21,6 +20,7 @@
                 <div layout:fragment="content"></div>
             </main>
         </div>
+    </div>
     <div th:replace="fragments/footer :: footer"></div>
     <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-1.12.4.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
