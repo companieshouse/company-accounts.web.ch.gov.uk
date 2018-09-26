@@ -7,7 +7,7 @@
     <head>
         <title>Balance Sheet</title>
     </head>
-<body>
+
         <div id="balanceSheet-main-content" layout:fragment="content" class="two-column-accounts">
 
             <form id="balanceSheet-form" th:action="@{''}" th:object="${balanceSheet}" class="form currency-included-within-inputs govuk-body" method="post">
@@ -85,13 +85,15 @@
                         </div>
 
                         <div class="govuk-grid-column-one-quarter">
-                            <div th:replace="fragments/totalInput :: totalInput (
+                            <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'fixedAssets.totalFixedAssets',
-                                text = 'Total fixed assets',
+                                text = 'Tangible assets',
                                 )">
                             </div>
                         </div>
                     </div>
+
+                    <br>
 
                     <div class="form-group">
                         <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
@@ -100,6 +102,4 @@
             </form>
          </div>
       </main>
-    </body>
-
 </html>
