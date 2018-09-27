@@ -13,4 +13,7 @@ public class BalanceSheet {
 
     @Valid
     private CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
+
+    @Valid
+    private FixedAssets fixedAssets;
 }
