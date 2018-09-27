@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.enumeration;
 
+import org.apache.commons.lang.StringUtils;
 import uk.gov.companieshouse.web.accounts.exception.MissingMessageKeyException;
 
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public enum ValidationMessage {
      */
     public static String getMessageKeyForApiError(String apiError) {
         String key = mapping.get(apiError);
-        if (key == null || key.isEmpty()) {
+        if (StringUtils.isBlank(key)) {
             throw new MissingMessageKeyException("No message key mapping for API validation error: " + apiError);
         }
         return key;
