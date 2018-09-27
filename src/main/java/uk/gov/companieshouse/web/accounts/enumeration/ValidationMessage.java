@@ -26,6 +26,13 @@ public enum ValidationMessage {
         this.messageKey = messageKey;
     }
 
+    /**
+     * Returns a message key associated with the {@code apiError} parameter
+     * for use when binding API validation errors to model object fields.
+     *
+     * @param apiError the api validation error string
+     * @return         the message key
+     */
     public static String getMessageKeyForApiError(String apiError) {
         String key = mapping.get(apiError);
         if (key == null || key.isEmpty()) {
