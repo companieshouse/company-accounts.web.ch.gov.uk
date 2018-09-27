@@ -32,6 +32,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -139,7 +143,7 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
-        doNothing().when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class));
+        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -157,6 +161,25 @@ public class BalanceSheetControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
+
+    @Test
+    @DisplayName("Post balance sheet failure path with API validation errors")
+    void postRequestFailureWithApiValidationErrors() throws Exception {
+
+        ValidationError validationError = new ValidationError();
+        validationError.setFieldPath("calledUpShareCapitalNotPaid");
+        validationError.setMessageKey("invalid_character");
+
+        List<ValidationError> errors = new ArrayList<>();
+        errors.add(validationError);
+
+        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class))).thenReturn(errors);
+
+        this.mockMvc.perform(post(BALANCE_SHEET_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(BALANCE_SHEET_VIEW));
+    }
+
 
     @Test
     @DisplayName("Post balance sheet with binding result errors")

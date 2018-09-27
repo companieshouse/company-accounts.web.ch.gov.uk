@@ -16,11 +16,14 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
+
+import java.util.List;
 
 @Controller
 @NextController(ApprovalController.class)
@@ -75,7 +78,12 @@ public class BalanceSheetController extends BaseController {
         }
 
         try {
-            balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
+            List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return SMALL_FULL_BALANCE_SHEET;
+            }
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
