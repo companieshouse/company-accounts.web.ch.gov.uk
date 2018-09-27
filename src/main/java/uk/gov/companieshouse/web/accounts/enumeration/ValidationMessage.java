@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public enum ValidationMessage {
 
+    // API validation error to message key mappings
     VALUE_OUTSIDE_RANGE("value_outside_range", "validation.range.outside"),
     INVALID_CHARACTER("invalid_character", "validation.character.invalid");
 
@@ -41,6 +42,12 @@ public enum ValidationMessage {
         return key;
     }
 
+    /**
+     * Returns a map of API validation error strings mapped to message key
+     * strings.
+     *
+     * @return a map of validation error strings and message keys
+     */
     private static Map<String, String> initializeMapping() {
         HashMap<String, String> mapping = new HashMap<>();
         for (ValidationMessage validationMessage : ValidationMessage.values()) {
