@@ -96,9 +96,8 @@ public class ValidationHelperTest {
     public void testGetValidationError() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
         ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH);
-        
-        List<ApiError> errors = createErrors(1);
-        ApiErrorResponseException exception = createApiErrorResponse(errors);
+
+        ApiErrorResponseException exception = createApiErrorResponse(createErrors(1));
         
         List<ValidationError> validationErrors = helper.getValidationErrors(exception);
         assertNotNull(validationErrors);
@@ -113,14 +112,14 @@ public class ValidationHelperTest {
     public void testGetMultipleValidationErrors() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
         ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH);
-        
-        int count = 2;
-        List<ApiError> errors = createErrors(count);
-        ApiErrorResponseException exception = createApiErrorResponse(errors);
+
+        int errorCount = 2;
+
+        ApiErrorResponseException exception = createApiErrorResponse(createErrors(errorCount));
         
         List<ValidationError> validationErrors = helper.getValidationErrors(exception);
         assertNotNull(validationErrors);
-        assertEquals(count, validationErrors.size());
+        assertEquals(errorCount, validationErrors.size());
         
         for(ValidationError validationError : validationErrors) {
             assertEquals(FIELD_PATH, validationError.getFieldPath());
