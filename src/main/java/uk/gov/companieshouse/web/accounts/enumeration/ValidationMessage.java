@@ -43,10 +43,9 @@ public enum ValidationMessage {
     }
 
     /**
-     * Returns a map of API validation error strings mapped to message key
-     * strings.
+     * Returns a map of API validation error strings mapped to message keys.
      *
-     * @return a map of validation error strings and message keys
+     * @return a map of validation errors mapped to message keys
      */
     private static Map<String, String> initializeMapping() {
         HashMap<String, String> mapping = new HashMap<>();
