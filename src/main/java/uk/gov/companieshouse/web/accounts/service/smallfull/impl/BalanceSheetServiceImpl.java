@@ -12,6 +12,8 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
+import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
@@ -77,33 +79,51 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Override
     public BalanceSheetHeadings getBalanceSheetHeadings(CompanyProfileApi companyProfile) {
-
-        LocalDate currentPeriodEndOn =
-                convertDateTimeToLocalDate(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
-        LocalDate currentPeriodStartOn =
-                convertDateTimeToLocalDate(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-
-        boolean isSameYear = false;
-
-        if (companyProfile.getAccounts().getLastAccounts() != null &&
-                companyProfile.getAccounts().getLastAccounts().getPeriodEndOn() != null) {
-
-            LocalDate previousPeriodEndOn =
-                convertDateTimeToLocalDate(companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
-            isSameYear = accountsDatesHelper.isSameYear(previousPeriodEndOn, currentPeriodEndOn);
-        }
-
-        String currentPeriodHeading = accountsDatesHelper.generateBalanceSheetHeading(currentPeriodStartOn, currentPeriodEndOn, isSameYear);
-
+        boolean isSameYear = isSameYear(companyProfile);
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
-        balanceSheetHeadings.setCurrentPeriodHeading(currentPeriodHeading);
-
+        balanceSheetHeadings.setPreviousPeriodHeading(getPreviousPeriodHeading(companyProfile, isSameYear));
+        balanceSheetHeadings.setCurrentPeriodHeading(getCurrentPeriodHeading(companyProfile, isSameYear));
         return balanceSheetHeadings;
     }
 
-    private LocalDate convertDateTimeToLocalDate(DateTime dateTime) {
+    private String getCurrentPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
+        NextAccountsApi nextAccountsApi = companyProfile.getAccounts().getNextAccounts();
+        LocalDate currentPeriodEndOn = convertDateTimeToLocalDate(nextAccountsApi.getPeriodEndOn());
+        LocalDate currentPeriodStartOn = convertDateTimeToLocalDate(nextAccountsApi.getPeriodStartOn());
 
-        Date date = new Date(dateTime.getValue());
-        return accountsDatesHelper.convertDateToLocalDate(date);
+        return accountsDatesHelper.generateBalanceSheetHeading(currentPeriodStartOn, currentPeriodEndOn, isSameYear);
+    }
+
+    private String getPreviousPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
+        LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
+        if (isMultipleYearFiler(companyProfile)) {
+            LocalDate previousPeriodStartOn = convertDateTimeToLocalDate(lastAccountsApi.getPeriodStartOn());
+            LocalDate previousPeriodEndOn = convertDateTimeToLocalDate(lastAccountsApi.getPeriodEndOn());
+
+            return accountsDatesHelper.generateBalanceSheetHeading(previousPeriodStartOn, previousPeriodEndOn, isSameYear);
+        }
+        return null;
+    }
+
+    private boolean isSameYear(CompanyProfileApi companyProfile) {
+        if (isMultipleYearFiler(companyProfile)) {
+            LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
+            LocalDate previousPeriodEndOn = convertDateTimeToLocalDate(lastAccountsApi.getPeriodEndOn());
+
+            NextAccountsApi nextAccountsApi = companyProfile.getAccounts().getNextAccounts();
+            LocalDate currentPeriodEndOn = convertDateTimeToLocalDate(nextAccountsApi.getPeriodEndOn());
+
+            return accountsDatesHelper.isSameYear(previousPeriodEndOn, currentPeriodEndOn);
+        }
+        return false;
+    }
+
+    private boolean isMultipleYearFiler(CompanyProfileApi companyProfile) {
+        LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
+        return lastAccountsApi != null && lastAccountsApi.getPeriodEndOn() != null;
+    }
+
+    private LocalDate convertDateTimeToLocalDate(DateTime dateTime) {
+        return accountsDatesHelper.convertDateToLocalDate(new Date(dateTime.getValue()));
     }
 }
