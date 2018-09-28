@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.APPLICATION_NAME_SPACE;
 
 /**
- * The {@code ValidationHelper} class provides support methods for handling
+ * The {@code ValidationContext} class provides support methods for handling
  * API validation errors and makes use of the {@link ValidationModel} and
  * {@link ValidationMapping} annotations.
  * <p>
@@ -43,7 +43,7 @@ import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.A
  * @see ValidationMessage
  */
 @Component
-public class ValidationHelper {
+public class ValidationContext {
 
     private static final int MAX_DEPTH = 5;
 
@@ -57,7 +57,7 @@ public class ValidationHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAME_SPACE);
 
-    private ValidationHelper() {}
+    private ValidationContext() {}
 
     /**
      * Scans classes belonging to the specified package for any candidate
@@ -77,7 +77,7 @@ public class ValidationHelper {
         mappings = new HashMap<>();
         depth = 0;
 
-        scanner.findCandidateComponents(basePackage).stream().forEach(beanDefinition ->  {
+        scanner.findCandidateComponents(basePackage).forEach(beanDefinition ->  {
             try {
                 scanClassValidationMappings(Class.forName(beanDefinition.getBeanClassName()), "");
             } catch (ClassNotFoundException e) {
@@ -105,7 +105,7 @@ public class ValidationHelper {
 
         return apiErrors.stream().map(apiError -> {
             ValidationError validationError = new ValidationError();
-            validationError.setFieldPath(ValidationHelper.getModelPathForErrorPath(apiError.getLocation()));
+            validationError.setFieldPath(ValidationContext.getModelPathForErrorPath(apiError.getLocation()));
             validationError.setMessageKey(ValidationMessage.getMessageKeyForApiError(apiError.getError()));
             validationError.setMessageArguments(apiError.getErrorValues());
             return validationError;

@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationHelper;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 
 @Service
 public class BalanceSheetServiceImpl implements BalanceSheetService {
@@ -34,7 +34,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private ApiClientService apiClientService;
     
     @Autowired
-    private ValidationHelper validationHelper;
+    private ValidationContext validationContext;
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
@@ -80,7 +80,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         } catch (ApiErrorResponseException e) {
 
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationHelper.getValidationErrors(e);
+                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
                 if (validationErrors == null) {
                     throw new ServiceException("Bad request posting balance sheet", e);
                 }

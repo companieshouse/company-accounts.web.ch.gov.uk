@@ -37,7 +37,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ExtendWith(MockitoExtension.class)
-public class ValidationHelperTest {
+public class ValidationContextTest {
     
     private static final String BEAN_CLASS_NAME = MockValidationModel.class.getName();
     private static final String RECURSIVE_BEAN_NAME = MockRecursiveValidationModel.class.getName();
@@ -56,7 +56,7 @@ public class ValidationHelperTest {
     private ClassPathScanningCandidateComponentProvider mockProvider;
     
     @InjectMocks
-    private ValidationHelper helper;
+    private ValidationContext helper;
     
     @BeforeAll
     public static void setUpData() {
@@ -66,36 +66,36 @@ public class ValidationHelperTest {
     @Test
     public void testSuccessfulScan() {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH);
+        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
     }
     
     @Test
     public void testNoMappingsFound() {
-        assertThrows(IllegalStateException.class, () -> ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
     }
     
     @Test
     public void testValidationMappingBeanNotFound() {
         mockComponentScanning(INVALID_BEAN_CLASS_NAME);
-        assertThrows(IllegalStateException.class, () -> ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
     }
     
     @Test
     public void testNoAnnotationsInValidationModel() {
         mockComponentScanning(PRIMITIVES_ONLY_BEAN_NAME);
-        assertThrows(IllegalStateException.class, () -> ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
     }
     
     @Test
     public void testScanMaxDepthReached() {
         mockComponentScanning(RECURSIVE_BEAN_NAME);
-        assertThrows(IllegalStateException.class, () -> ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
     }
 
     @Test
     public void testGetValidationError() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH);
+        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
 
         ApiErrorResponseException exception = createApiErrorResponse(createErrors(1));
         
@@ -111,7 +111,7 @@ public class ValidationHelperTest {
     @Test
     public void testGetMultipleValidationErrors() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH);
+        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
 
         int errorCount = 2;
 
@@ -120,17 +120,22 @@ public class ValidationHelperTest {
         List<ValidationError> validationErrors = helper.getValidationErrors(exception);
         assertNotNull(validationErrors);
         assertEquals(errorCount, validationErrors.size());
-        
-        for(ValidationError validationError : validationErrors) {
+
+
+        long startTime = System.nanoTime();
+
+        validationErrors.stream().parallel().forEach(validationError -> {
             assertEquals(FIELD_PATH, validationError.getFieldPath());
             assertEquals(WEB_ERROR_MESSAGE, validationError.getMessageKey());
-        }
+        });
+
+        System.out.println("time taken: " + new Long(System.nanoTime() - startTime).toString());
     }
     
     @Test
     public void testMissingMappingKey() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationHelper.scanPackageForValidationMappings(mockProvider, BASE_PATH);
+        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
         
         List<ApiError> errors = new ArrayList<>();
         ApiError error = new ApiError();

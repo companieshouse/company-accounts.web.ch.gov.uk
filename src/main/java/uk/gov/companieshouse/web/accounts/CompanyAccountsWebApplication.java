@@ -10,7 +10,7 @@ import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.interceptor.LoggingInterceptor;
 import uk.gov.companieshouse.web.accounts.interceptor.UserDetailsInterceptor;
-import uk.gov.companieshouse.web.accounts.util.ValidationHelper;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 
 @SpringBootApplication
 public class CompanyAccountsWebApplication implements WebMvcConfigurer {
@@ -35,7 +35,7 @@ public class CompanyAccountsWebApplication implements WebMvcConfigurer {
 
         try {
             ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(true);
-            ValidationHelper.scanPackageForValidationMappings(provider, APPLICATION_MODEL_PACKAGE);
+            ValidationContext.scanPackageForValidationMappings(provider, APPLICATION_MODEL_PACKAGE);
         } catch (RuntimeException e) {
             LOGGER.error(e.getMessage());
             System.exit(1);
