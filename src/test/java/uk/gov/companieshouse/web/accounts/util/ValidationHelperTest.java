@@ -150,7 +150,7 @@ public class ValidationHelperTest {
      * @return exception
      * @throws JsonProcessingException
      */
-    private ApiErrorResponseException createApiErrorResponse(List<ApiError> errors) throws JsonProcessingException {
+    private ApiErrorResponseException createApiErrorResponse(List<ApiError> errors) {
         ApiErrorResponse response = new ApiErrorResponse();
         response.setErrors(errors);
         
