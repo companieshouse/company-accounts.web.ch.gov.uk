@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.util;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
@@ -127,7 +128,7 @@ public class ValidationHelper {
         }
 
         String modelPath = mappings.get(path);
-        if (modelPath == null || modelPath.isEmpty()) {
+        if (StringUtils.isBlank(modelPath)) {
             throw new MissingValidationMappingException("No validation mapping found for API JSON error path: \" + path");
         }
 
