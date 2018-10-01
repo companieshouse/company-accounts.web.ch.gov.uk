@@ -45,20 +45,19 @@ import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.A
  */
 public class ValidationContext {
 
-    private final int MAX_DEPTH = 5;
+    private static final int MAX_DEPTH = 5;
+
+    private static final String PATH_DELIMITER = ".";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAME_SPACE);
 
     private int depth = 0;
 
     private HashMap<String, String> mappings;
 
-    private final String PATH_DELIMITER = ".";
-
-    private final Set<Class<?>> primitivesSet = createPrimitivesSet();
-
-    private final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAME_SPACE);
+    private Set<Class<?>> primitivesSet = createPrimitivesSet();
 
     private ClassPathScanningCandidateComponentProvider scanner;
-
 
     /**
      * Constructs a {@code ValidationContext} instance with the specified
