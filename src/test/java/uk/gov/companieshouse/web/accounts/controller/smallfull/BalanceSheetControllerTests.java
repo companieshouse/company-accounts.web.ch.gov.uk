@@ -68,6 +68,8 @@ public class BalanceSheetControllerTests {
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+
     private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
 
     private static final String ERROR_VIEW = "error";
@@ -93,7 +95,8 @@ public class BalanceSheetControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(BALANCE_SHEET_VIEW))
                     .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
-                    .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
+                    .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                    .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
 

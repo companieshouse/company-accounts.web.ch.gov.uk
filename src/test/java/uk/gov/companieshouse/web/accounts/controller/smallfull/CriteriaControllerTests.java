@@ -36,6 +36,8 @@ public class CriteriaControllerTests {
 
     private static final String CRITERIA_MODEL_ATTR = "criteria";
 
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+
     private static final String CRITERIA_VIEW = "smallfull/criteria";
 
     @BeforeEach
@@ -51,7 +53,8 @@ public class CriteriaControllerTests {
         this.mockMvc.perform(get(CRITERIA_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CRITERIA_VIEW))
-                .andExpect(model().attributeExists(CRITERIA_MODEL_ATTR));
+                .andExpect(model().attributeExists(CRITERIA_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test

@@ -28,13 +28,16 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController extends BaseController {
 
-    private static final String SMALL_FULL_BALANCE_SHEET = "smallfull/balanceSheet";
-
     @Autowired
     private BalanceSheetService balanceSheetService;
 
     @Autowired
     private CompanyService companyService;
+
+    @Override
+    protected String getTemplateName() {
+        return "smallfull/balanceSheet";
+    }
 
     @GetMapping
     public String getBalanceSheet(@PathVariable String companyNumber,
@@ -59,7 +62,7 @@ public class BalanceSheetController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        return SMALL_FULL_BALANCE_SHEET;
+        return getTemplateName();
     }
 
     @PostMapping
@@ -71,7 +74,7 @@ public class BalanceSheetController extends BaseController {
                                    HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
-            return SMALL_FULL_BALANCE_SHEET;
+            return getTemplateName();
         }
 
         try {
