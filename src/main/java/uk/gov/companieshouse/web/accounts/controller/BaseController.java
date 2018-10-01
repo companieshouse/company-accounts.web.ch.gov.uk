@@ -37,9 +37,9 @@ public abstract class BaseController {
      */
     protected void bindValidationErrors(BindingResult bindingResult, List<ValidationError> errors) {
         Collections.sort(errors, Comparator.comparing(ValidationError::getFieldPath).thenComparing(ValidationError::getMessageKey));
-        errors.forEach(error -> {
-            bindingResult.rejectValue(error.getFieldPath(), error.getMessageKey(), getValidationArgs(error.getMessageArguments()), null);
-        });
+        errors.forEach(error ->
+            bindingResult.rejectValue(error.getFieldPath(),error.getMessageKey(), getValidationArgs(error.getMessageArguments()), null)
+        );
     }
 
     /**
