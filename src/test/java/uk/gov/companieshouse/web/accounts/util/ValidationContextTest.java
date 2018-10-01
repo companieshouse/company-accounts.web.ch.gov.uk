@@ -15,7 +15,6 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -54,10 +53,7 @@ public class ValidationContextTest {
 
     @Mock
     private ClassPathScanningCandidateComponentProvider mockProvider;
-    
-    @InjectMocks
-    private ValidationContext helper;
-    
+
     @BeforeAll
     public static void setUpData() {
         MESSAGE_ARGUMENTS.put(MESSAGE_KEY, ERROR);
@@ -66,40 +62,41 @@ public class ValidationContextTest {
     @Test
     public void testSuccessfulScan() {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
+        new ValidationContext(mockProvider, BASE_PATH);
     }
     
     @Test
     public void testNoMappingsFound() {
-        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
     
     @Test
     public void testValidationMappingBeanNotFound() {
         mockComponentScanning(INVALID_BEAN_CLASS_NAME);
-        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
     
     @Test
     public void testNoAnnotationsInValidationModel() {
         mockComponentScanning(PRIMITIVES_ONLY_BEAN_NAME);
-        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
     
     @Test
     public void testScanMaxDepthReached() {
         mockComponentScanning(RECURSIVE_BEAN_NAME);
-        assertThrows(IllegalStateException.class, () -> ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH));
+        assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
 
     @Test
     public void testGetValidationError() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
+
+        ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
 
         ApiErrorResponseException exception = createApiErrorResponse(createErrors(1));
         
-        List<ValidationError> validationErrors = helper.getValidationErrors(exception);
+        List<ValidationError> validationErrors = context.getValidationErrors(exception);
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
         
@@ -111,13 +108,14 @@ public class ValidationContextTest {
     @Test
     public void testGetMultipleValidationErrors() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
+
+        ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
 
         int errorCount = 2;
 
         ApiErrorResponseException exception = createApiErrorResponse(createErrors(errorCount));
         
-        List<ValidationError> validationErrors = helper.getValidationErrors(exception);
+        List<ValidationError> validationErrors = context.getValidationErrors(exception);
         assertNotNull(validationErrors);
         assertEquals(errorCount, validationErrors.size());
 
@@ -130,8 +128,9 @@ public class ValidationContextTest {
     @Test
     public void testMissingMappingKey() throws JsonProcessingException {
         mockComponentScanning(BEAN_CLASS_NAME);
-        ValidationContext.scanPackageForValidationMappings(mockProvider, BASE_PATH);
-        
+
+        ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
+
         List<ApiError> errors = new ArrayList<>();
         ApiError error = new ApiError();
         error.setError(MESSAGE_KEY);
@@ -140,7 +139,7 @@ public class ValidationContextTest {
         errors.add(error);
         
         ApiErrorResponseException exception = createApiErrorResponse(errors);
-        assertThrows(MissingValidationMappingException.class, () -> helper.getValidationErrors(exception));
+        assertThrows(MissingValidationMappingException.class, () -> context.getValidationErrors(exception));
     }
     
     /**

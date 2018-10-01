@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.util;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.error.ApiError;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.logging.Logger;
@@ -44,22 +43,37 @@ import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.A
  * @see ValidationMapping
  * @see ValidationMessage
  */
-@Component
 public class ValidationContext {
 
-    private static final int MAX_DEPTH = 5;
+    private final int MAX_DEPTH = 5;
 
-    private static int depth = 0;
+    private int depth = 0;
 
-    private static HashMap<String, String> mappings;
+    private HashMap<String, String> mappings;
 
-    private static final String PATH_DELIMITER = ".";
+    private final String PATH_DELIMITER = ".";
 
-    private static final Set<Class<?>> primitivesSet = createPrimitivesSet();
+    private final Set<Class<?>> primitivesSet = createPrimitivesSet();
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAME_SPACE);
+    private final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAME_SPACE);
 
-    private ValidationContext() {}
+    private ClassPathScanningCandidateComponentProvider scanner;
+
+
+    /**
+     * Constructs a {@code ValidationContext} instance with the specified
+     * scanner and base package.
+     *
+     * @param scanner  the scanner instance to use
+     * @param basePath the base package to begin scanning for validation
+     *                 annotations
+     */
+    public ValidationContext(ClassPathScanningCandidateComponentProvider scanner, String basePath) {
+        this.scanner = scanner;
+        this.mappings = new HashMap<>();
+
+        scanPackageForValidationMappings(basePath);
+    }
 
     /**
      * Scans classes belonging to the specified package for any candidate
@@ -67,16 +81,14 @@ public class ValidationContext {
      * generates a collection of mappings of JSON error paths to model object
      * fields to support the handling of API validation errors.
      *
-     * @param scanner {@link ClassPathScanningCandidateComponentProvider}
      * @param basePackage       the base package from which to begin scanning
      * @see   ValidationModel
      * @see   ValidationMapping
      */
-    public static void scanPackageForValidationMappings(ClassPathScanningCandidateComponentProvider scanner, String basePackage) {
+    public void scanPackageForValidationMappings(String basePackage) {
 
         scanner.addIncludeFilter(new AnnotationTypeFilter(ValidationModel.class));
 
-        mappings = new HashMap<>();
         depth = 0;
 
         scanner.findCandidateComponents(basePackage).forEach(beanDefinition ->  {
@@ -107,7 +119,7 @@ public class ValidationContext {
 
         return apiErrors.stream().map(apiError -> {
             ValidationError validationError = new ValidationError();
-            validationError.setFieldPath(ValidationContext.getModelPathForErrorPath(apiError.getLocation()));
+            validationError.setFieldPath(getModelPathForErrorPath(apiError.getLocation()));
             validationError.setMessageKey(ValidationMessage.getMessageKeyForApiError(apiError.getError()));
             validationError.setMessageArguments(apiError.getErrorValues());
             return validationError;
@@ -123,11 +135,7 @@ public class ValidationContext {
      * @param path the JSON path error string
      * @return     the model object field path for the JSON path error string
      */
-    private static String getModelPathForErrorPath(String path) {
-
-        if (mappings == null) {
-            throw new MissingValidationMappingException("No validation mappings found or validation scanning has not been performed");
-        }
+    private String getModelPathForErrorPath(String path) {
 
         String modelPath = mappings.get(path);
         if (StringUtils.isBlank(modelPath)) {
@@ -145,7 +153,7 @@ public class ValidationContext {
      * @param basePath the base path to be prepended to any generated field
      *                 path
      */
-    private static void scanClassValidationMappings(Class<?> clazz, String basePath) {
+    private void scanClassValidationMappings(Class<?> clazz, String basePath) {
 
         if (depth >= MAX_DEPTH) {
             throw new IllegalStateException("Maximum recursion depth reached when performing validation scan of class " + clazz.toString());
@@ -179,7 +187,7 @@ public class ValidationContext {
      *               primitive, collection or {@code String}, otherwise
      *               {@code false}
      */
-    private static boolean isCandidateModelClass(Class<?> clazz) {
+    private boolean isCandidateModelClass(Class<?> clazz) {
         return !(clazz.isPrimitive()
                 || primitivesSet.contains(clazz)
                 || Collection.class.isAssignableFrom(clazz)
@@ -192,7 +200,7 @@ public class ValidationContext {
      *
      * @return a set of class objects
      */
-    private static Set<Class<?>> createPrimitivesSet() {
+    private Set<Class<?>> createPrimitivesSet() {
         Set<Class<?>> types = new HashSet<>();
         types.add(Byte.class);
         types.add(Short.class);
