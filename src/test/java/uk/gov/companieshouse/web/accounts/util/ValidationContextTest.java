@@ -121,15 +121,10 @@ public class ValidationContextTest {
         assertNotNull(validationErrors);
         assertEquals(errorCount, validationErrors.size());
 
-
-        long startTime = System.nanoTime();
-
         validationErrors.stream().parallel().forEach(validationError -> {
             assertEquals(FIELD_PATH, validationError.getFieldPath());
             assertEquals(WEB_ERROR_MESSAGE, validationError.getMessageKey());
         });
-
-        System.out.println("time taken: " + new Long(System.nanoTime() - startTime).toString());
     }
     
     @Test
