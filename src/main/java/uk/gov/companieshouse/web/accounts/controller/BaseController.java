@@ -5,8 +5,8 @@ import org.springframework.validation.BindingResult;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,25 +21,7 @@ public abstract class BaseController {
 
     protected static final String ERROR_VIEW = "error";
 
-    protected BaseController() { }
-
-    protected void addBackPageAttributeToModel(Model model, String... pathVars) {
-
-        model.addAttribute("backButton", Navigator.getPreviousControllerPath(this.getClass(), pathVars));
-    }
-
-    /**
-     * Binds one or more API validation errors to model object fields.
-     *
-     * @param bindingResult the binding result object
-     * @param errors        the list of validation errors generated from an
-     *                      API request
-     */
-    protected void bindValidationErrors(BindingResult bindingResult, List<ValidationError> errors) {
-        Collections.sort(errors, Comparator.comparing(ValidationError::getFieldPath).thenComparing(ValidationError::getMessageKey));
-        errors.forEach(error ->
-            bindingResult.rejectValue(error.getFieldPath(),error.getMessageKey(), getValidationArgs(error.getMessageArguments()), null)
-        );
+    protected BaseController() {
     }
 
     /**
@@ -50,7 +32,7 @@ public abstract class BaseController {
      * guaranteed).
      *
      * @param errorArgs the map of error arguments
-     * @return          an array of message argument values
+     * @return an array of message argument values
      */
     private static Object[] getValidationArgs(Map<String, String> errorArgs) {
 
@@ -66,5 +48,30 @@ public abstract class BaseController {
         } else {
             return errorArgs.values().toArray();
         }
+    }
+
+    protected void addBackPageAttributeToModel(Model model, String... pathVars) {
+
+        model.addAttribute("backButton", Navigator.getPreviousControllerPath(this.getClass(), pathVars));
+    }
+
+    /**
+     * Binds one or more API validation errors to model object fields.
+     *
+     * @param bindingResult the binding result object
+     * @param errors        the list of validation errors generated from an
+     *                      API request
+     */
+    protected void bindValidationErrors(BindingResult bindingResult, List<ValidationError> errors) {
+        Collections.sort(errors,
+                Comparator.comparing(ValidationError::getFieldPath)
+                        .thenComparing(ValidationError::getMessageKey));
+
+        errors.forEach(error ->
+                bindingResult.rejectValue(error.getFieldPath(),
+                        error.getMessageKey(),
+                        getValidationArgs(error.getMessageArguments()),
+                        null)
+        );
     }
 }
