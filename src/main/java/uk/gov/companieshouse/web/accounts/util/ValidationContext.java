@@ -16,9 +16,11 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -157,7 +159,7 @@ public class ValidationContext {
 	            if (annotation != null) {
 	                String apiPath = ((ValidationMapping) annotation).value();
 	                mappings.put(apiPath, webPath);
-	            } else if (!isPrimitiveOrString(field.getType())) {
+	            } else if (isCandidateModelClass(field.getType())) {
 	                depth = depth + 1;
 	                scanClassValidationMappings(field.getType(), webPath);
 	            }
@@ -168,15 +170,20 @@ public class ValidationContext {
     }
 
     /**
-     * Returns {@code true} if the {@code Class} object is a boxed primitive
-     * or {@code String}.
+     * Returns {@code true} if the {@code Class} object is not a primitive,
+     * boxed primitive, collection or {@code String} and therefore likely
+     * to be a model class.
      *
      * @param  clazz the {@code Class} object to test
-     * @return       {@code true} if the class is a boxed primitive or String,
-     *               otherwise {@code false}
+     * @return       {@code true} if the class is not a primitive, boxed
+     *               primitive, collection or {@code String}, otherwise
+     *               {@code false}
      */
-    private static boolean isPrimitiveOrString(Class<?> clazz) {
-        return clazz.isPrimitive() || primitivesSet.contains(clazz);
+    private static boolean isCandidateModelClass(Class<?> clazz) {
+        return !(clazz.isPrimitive()
+                || primitivesSet.contains(clazz)
+                || Collection.class.isAssignableFrom(clazz)
+                || Map.class.isAssignableFrom(clazz));
     }
 
     /**
