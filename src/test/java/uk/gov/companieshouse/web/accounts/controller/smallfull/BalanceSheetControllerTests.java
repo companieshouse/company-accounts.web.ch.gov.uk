@@ -135,7 +135,8 @@ public class BalanceSheetControllerTests {
 
         this.mockMvc.perform(get(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(ERROR_VIEW));
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -158,7 +159,8 @@ public class BalanceSheetControllerTests {
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(ERROR_VIEW));
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -172,7 +174,8 @@ public class BalanceSheetControllerTests {
         this.mockMvc.perform(post(BALANCE_SHEET_PATH)
                 .param(beanElement, invalidData))
                 .andExpect(status().isOk())
-                .andExpect(view().name(BALANCE_SHEET_VIEW));
+                .andExpect(view().name(BALANCE_SHEET_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
 }
