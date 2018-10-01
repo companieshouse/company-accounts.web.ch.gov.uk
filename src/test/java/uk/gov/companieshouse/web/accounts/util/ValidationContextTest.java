@@ -39,6 +39,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 public class ValidationContextTest {
     
     private static final String BEAN_CLASS_NAME = MockValidationModel.class.getName();
+    private static final String NESTED_BEAN_NAME = MockNestedValidationModel.class.getName();
     private static final String RECURSIVE_BEAN_NAME = MockRecursiveValidationModel.class.getName();
     private static final String PRIMITIVES_ONLY_BEAN_NAME = MockPrimitivesOnlyValidationModel.class.getName();
     private static final String INVALID_BEAN_CLASS_NAME = MockValidationModel.class.getName() + "invalid";
@@ -46,6 +47,7 @@ public class ValidationContextTest {
     private static final String BASE_PATH = "test";
     private static final String JSON_PATH = "json.path";
     private static final String FIELD_PATH = "mockString";
+    private static final String NESTED_FIELD_PATH = "mockValidationModel.mockString";
     private static final String MESSAGE_KEY = "invalid_character";
     private static final String WEB_ERROR_MESSAGE = "validation.character.invalid";
     private static final String ERROR = "error";
@@ -102,6 +104,23 @@ public class ValidationContextTest {
         
         ValidationError validationError = validationErrors.get(0);
         assertEquals(FIELD_PATH, validationError.getFieldPath());
+        assertEquals(WEB_ERROR_MESSAGE, validationError.getMessageKey());
+    }
+
+    @Test
+    public void testGetValidationErrorForNestedModelField() throws JsonProcessingException {
+        mockComponentScanning(NESTED_BEAN_NAME);
+
+        ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
+
+        ApiErrorResponseException exception = createApiErrorResponse(createErrors(1));
+
+        List<ValidationError> validationErrors = context.getValidationErrors(exception);
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+
+        ValidationError validationError = validationErrors.get(0);
+        assertEquals(NESTED_FIELD_PATH, validationError.getFieldPath());
         assertEquals(WEB_ERROR_MESSAGE, validationError.getMessageKey());
     }
     
@@ -204,6 +223,15 @@ public class ValidationContextTest {
     private class MockValidationModel {
         @ValidationMapping(JSON_PATH)
         public String mockString;
+    }
+
+    /**
+     * Mocked class containing a single field which itself is a model
+     * object.
+     */
+    @ValidationModel
+    private class MockNestedValidationModel {
+        public MockValidationModel mockValidationModel;
     }
     
     /**
