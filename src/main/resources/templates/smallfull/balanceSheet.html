@@ -37,6 +37,14 @@
                                 <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
                             </h2>
                         </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <h2 class="govuk-heading-s">
+                                <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'></span>
+                                <!-- Hidden input for form binding -->
+                                <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
+                            </h2>
+                        </div>
                     </div>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
@@ -55,6 +63,14 @@
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.currentAmount',
+                                text = 'Called up share capital not paid',
+                                )">
+                            </div>
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'calledUpShareCapitalNotPaid.previousAmount',
                                 text = 'Called up share capital not paid',
                                 )">
                             </div>
