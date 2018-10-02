@@ -4,7 +4,10 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.util.DateTime;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,6 +33,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,6 +73,9 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private AccountsDatesHelper accountsDatesHelper;
+
+    @Mock
+    private ValidationContext validationContext;
 
     @InjectMocks
     private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
@@ -138,8 +146,11 @@ public class BalanceSheetServiceImplTests {
 
         when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404, "Not Found", new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,
+                "Not Found",
+                new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException
+                .fromHttpResponseException(httpResponseException);
 
         when(currentPeriodResourceHandler.get()).thenThrow(apiErrorResponseException);
 
@@ -176,7 +187,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException")
+    @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException without validation errors")
     void postBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -199,6 +210,84 @@ public class BalanceSheetServiceImplTests {
         when(currentPeriodResourceHandler.create(currentPeriod)).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
+                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+    }
+
+    @Test
+    @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException containing unparsable validation errors")
+    void postBalanceSheetThrowsApiErrorResponseExceptionWithUnparsableValidationErrors()
+            throws ApiErrorResponseException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.transaction(TRANSACTION_ID)).thenReturn(transactionResourceHandler);
+
+        when(transactionResourceHandler.companyAccount(COMPANY_ACCOUNTS_ID))
+                .thenReturn(companyAccountResourceHandler);
+
+        when(companyAccountResourceHandler.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+
+        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,
+                "Bad Request",
+                new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException
+                .fromHttpResponseException(httpResponseException);
+
+        when(currentPeriodResourceHandler.create(currentPeriod)).thenThrow(apiErrorResponseException);
+
+        when(validationContext.getValidationErrors(any(ApiErrorResponseException.class))).thenReturn(null);
+
+        assertThrows(ServiceException.class, () ->
+                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+    }
+
+    @Test
+    @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException containing parsable validation errors")
+    void postBalanceSheetThrowsApiErrorResponseExceptionWithParsableValidationErrors()
+            throws ApiErrorResponseException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.transaction(TRANSACTION_ID)).thenReturn(transactionResourceHandler);
+
+        when(transactionResourceHandler.companyAccount(COMPANY_ACCOUNTS_ID))
+                .thenReturn(companyAccountResourceHandler);
+
+        when(companyAccountResourceHandler.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+
+        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,
+                "Bad Request",
+                new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException
+                .fromHttpResponseException(httpResponseException);
+
+        when(currentPeriodResourceHandler.create(currentPeriod)).thenThrow(apiErrorResponseException);
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+        ValidationError validationError = new ValidationError();
+        validationError.setMessageKey("dummy-message-key");
+        validationError.setFieldPath("dummy-field-path");
+        validationErrors.add(validationError);
+
+        when(validationContext.getValidationErrors(any(ApiErrorResponseException.class))).thenReturn(validationErrors);
+
+        assertEquals(validationErrors,
                 balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 
