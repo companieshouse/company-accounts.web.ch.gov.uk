@@ -8,4 +8,6 @@ import lombok.Setter;
 public class CalledUpShareCapitalNotPaid {
 
     private Integer currentAmount;
+
+    private Integer previousAmount;
 }
