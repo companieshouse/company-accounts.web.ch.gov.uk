@@ -10,6 +10,7 @@ import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
 import uk.gov.companieshouse.accountsdates.impl.AccountsDatesHelperImpl;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.model.accounts.abridged.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
@@ -72,7 +73,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .smallFull()
                 .currentPeriod().create(currentPeriod);
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error posting balance sheet", e);
         }
     }
