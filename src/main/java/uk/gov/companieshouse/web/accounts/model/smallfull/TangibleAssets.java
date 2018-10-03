@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class TangibleAssets {
 
-    private Integer currentAmount;
+    private Long currentAmount;
 
 }

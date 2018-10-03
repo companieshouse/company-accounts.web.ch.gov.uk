@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class CalledUpShareCapitalNotPaid {
 
-    private Integer currentAmount;
+    private Long currentAmount;
 }
