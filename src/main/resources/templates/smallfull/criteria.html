@@ -56,7 +56,8 @@
                                type="radio"
                                value="yes"
                                th:field="*{isCriteriaMet}"
-                               th:errorclass="error-message"/>Yes
+                               th:errorclass="error-message"
+                               class="piwik-event" data-event-id="Yes"/>Yes
                     </label>
 
                     <label class="block-label selection-button-radio" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
@@ -64,7 +65,8 @@
                                type="radio"
                                value="noAlternativeFilingMethod"
                                th:field="*{isCriteriaMet}"
-                               th:errorclass="error-message"/>No - show me other ways to file full accounts
+                               th:errorclass="error-message"
+                               class="piwik-event" data-event-id="No other full"/>No - show me other ways to file full accounts
                     </label>
 
                     <label class="block-label selection-button-radio" for="noOtherAccountsButton" id="noButton-label">
@@ -72,7 +74,8 @@
                                type="radio"
                                value="noOtherAccounts"
                                th:field="*{isCriteriaMet}"
-                               th:errorclass="error-message"/>No - I'll file other types of accounts
+                               th:errorclass="error-message"
+                               class="piwik-event" data-event-id="No other accounts"/>No - I'll file other types of accounts
                     </label>
                 </div>
             </fieldset>
