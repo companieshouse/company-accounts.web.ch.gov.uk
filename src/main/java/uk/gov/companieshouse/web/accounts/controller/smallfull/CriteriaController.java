@@ -19,14 +19,17 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 @RequestMapping("/company/{companyNumber}/small-full/criteria")
 public class CriteriaController extends BaseController {
 
-    private static final String TEMPLATE = "smallfull/criteria";
-
     @GetMapping
     public String getCriteria(Model model) {
 
         model.addAttribute("criteria", new Criteria());
 
-        return TEMPLATE;
+        return getTemplateName();
+    }
+
+    @Override
+    protected String getTemplateName() {
+        return "smallfull/criteria";
     }
 
     @PostMapping
@@ -35,12 +38,12 @@ public class CriteriaController extends BaseController {
                                BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return TEMPLATE;
+            return getTemplateName();
         }
 
         if (!criteria.getIsCriteriaMet().equalsIgnoreCase("yes")) {
             // TODO: Temporarily return the criteria page until other routes are developed
-            return TEMPLATE;
+            return getTemplateName();
         }
 
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber);

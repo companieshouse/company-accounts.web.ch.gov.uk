@@ -25,8 +25,6 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 @RequestMapping("/company/{companyNumber}/small-full/steps-to-complete")
 public class StepsToCompleteController extends BaseController {
 
-    private static final String TEMPLATE = "smallfull/stepsToComplete";
-
     @Autowired
     private TransactionService transactionService;
 
@@ -36,13 +34,18 @@ public class StepsToCompleteController extends BaseController {
     @Autowired
     private CompanyAccountsService companyAccountsService;
 
+    @Override
+    protected String getTemplateName() {
+        return "smallfull/stepsToComplete";
+    }
+
     @GetMapping
     public String getStepsToComplete(@PathVariable String companyNumber,
                                      Model model) {
 
         addBackPageAttributeToModel(model, companyNumber);
 
-        return TEMPLATE;
+        return getTemplateName();
     }
 
     @PostMapping

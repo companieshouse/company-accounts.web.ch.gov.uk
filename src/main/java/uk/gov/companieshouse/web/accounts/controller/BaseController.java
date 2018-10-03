@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
@@ -19,4 +20,7 @@ public abstract class BaseController {
 
         model.addAttribute("backButton", Navigator.getPreviousControllerPath(this.getClass(), pathVars));
     }
+
+    @ModelAttribute("templateName")
+    protected abstract String getTemplateName();
 }

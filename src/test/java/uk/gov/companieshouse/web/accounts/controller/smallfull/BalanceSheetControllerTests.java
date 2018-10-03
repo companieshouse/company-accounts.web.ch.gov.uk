@@ -68,6 +68,8 @@ public class BalanceSheetControllerTests {
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+
     private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
 
     private static final String ERROR_VIEW = "error";
@@ -93,7 +95,8 @@ public class BalanceSheetControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(BALANCE_SHEET_VIEW))
                     .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
-                    .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
+                    .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                    .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
 
@@ -132,7 +135,8 @@ public class BalanceSheetControllerTests {
 
         this.mockMvc.perform(get(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(ERROR_VIEW));
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -155,7 +159,8 @@ public class BalanceSheetControllerTests {
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(ERROR_VIEW));
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -169,7 +174,8 @@ public class BalanceSheetControllerTests {
         this.mockMvc.perform(post(BALANCE_SHEET_PATH)
                 .param(beanElement, invalidData))
                 .andExpect(status().isOk())
-                .andExpect(view().name(BALANCE_SHEET_VIEW));
+                .andExpect(view().name(BALANCE_SHEET_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
 }

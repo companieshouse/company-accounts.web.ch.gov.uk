@@ -20,12 +20,15 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
 public class ApprovalController extends BaseController {
 
-    private static final String TEMPLATE = "smallfull/approval";
-
-    private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
+   private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
 
     @Autowired
     private TransactionService transactionService;
+
+    @Override
+    protected String getTemplateName() {
+        return "smallfull/approval";
+    }
 
     @GetMapping
     public String getApproval(@PathVariable String companyNumber,
@@ -35,7 +38,7 @@ public class ApprovalController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        return TEMPLATE;
+        return getTemplateName();
     }
 
     @PostMapping
