@@ -9,21 +9,27 @@
     </head>
     <body>
     <div id="criteria-main-content" layout:fragment="content">
+        <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
         <form id="criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
 
             <div th:replace="fragments/globalErrors :: globalErrors"></div>
+             <header>
+                <h1 id="page-title" class="govuk-heading-l">
+                    File full accounts
+                </h1>
+            </header>
 
-            <h1 id="page-title" class="heading-xlarge">
-                File full accounts
-            </h1>
+            <h2 class="govuk-heading-m" id="criteria-sub-heading">Criteria</h2>
 
-            <h2 class="heading-medium" id="criteria-sub-heading">Criteria</h2>
-
-            <p id="criteria-overview">Check your prepared accounts to see if you meet the criteria.</p>
+            <div class="panel panel-border-wide">
+                <p id="criteria-overview">Check your prepared accounts to see if you meet the criteria.</p>
+            </div>
 
             <p id="criteria-list-heading">You can file full accounts here if:</p>
 
-            <ul class="list list-bullet text" id="criteria-list">
+            <ul class="govuk-list govuk-list--bullet" id="criteria-list">
                 <li>you don't need to include a directors' report or profit and loss account</li>
                 <li>you don't need to change the date the accounts are made up to</li>
                 <li>your balance sheet doesn’t have 'fixed asset investments', 'current asset investments',
@@ -35,55 +41,70 @@
 
             <p id="criteria-additional-criteria-list-heading">Your full accounts must meet at least 2 of the following:</p>
 
-            <ul class="list list-bullet text" id="criteria-additional-criteria-list">
+            <ul class="govuk-list govuk-list--bullet" id="criteria-additional-criteria-list">
                 <li>turnover is not over £10.2 million</li>
                 <li>balance sheet total is not over £5.1 million</li>
                 <li>average number of employees is not over 50</li>
             </ul>
 
-            <h2 class="heading-medium" id="criteria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
+            <h2 class="govuk-heading-m" id="criteria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
 
-            <fieldset class="form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'error' : ''">
-                <legend class="visuallyhidden">Full accounts criteria radio buttons"</legend>
-                <div class="form-group">
-                    <span id="isCriteriaMet-errorId"
+            <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'error' : ''">
+                <legend class="govuk-fieldset__legend govuk-visually-hidden">Do your prepared full accounts meet the criteria?</legend>
+
+                    <span class="govuk-error-message"
+                          id="isCriteriaMet-errorId"
                           th:if="${#fields.hasErrors('isCriteriaMet')}"
-                          th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" class="error-message">
+                          th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" >
                     </span>
 
-                    <label class="block-label selection-button-radio" for="yesButton" id="yesButton-label">
+                <div class="govuk-radios">
+                    <div class="govuk-radios__item">
                         <input id="yesButton"
                                type="radio"
                                value="yes"
                                th:field="*{isCriteriaMet}"
-                               th:errorclass="error-message"
-                               class="piwik-event" data-event-id="Yes"/>Yes
+                               th:errorclass="govuk-error-message"
+                               class="govuk-radios__input piwik-event" data-event-id="Yes"/>
+                    <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
+                        Yes
                     </label>
 
-                    <label class="block-label selection-button-radio" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
+                    </div>
+                    <div class="govuk-radios__item">
                         <input id="noAlternativeFilingButton"
                                type="radio"
                                value="noAlternativeFilingMethod"
                                th:field="*{isCriteriaMet}"
-                               th:errorclass="error-message"
-                               class="piwik-event" data-event-id="No other full"/>No - show me other ways to file full accounts
+                               th:errorclass="govuk-error-message"
+                               class="govuk-radios__input piwik-event" data-event-id="No other full"/>
+                    <label class="govuk-label govuk-radios__label" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
+                        No - show me other ways to file full accounts
                     </label>
+                    </div>
 
-                    <label class="block-label selection-button-radio" for="noOtherAccountsButton" id="noButton-label">
+                    <div class="govuk-radios__item">
                         <input id="noOtherAccountsButton"
                                type="radio"
                                value="noOtherAccounts"
                                th:field="*{isCriteriaMet}"
-                               th:errorclass="error-message"
-                               class="piwik-event" data-event-id="No other accounts"/>No - I'll file other types of accounts
+                               th:errorclass="govuk-error-message"
+                               class="govuk-radios__input piwik-event" data-event-id="No other accounts"/>
+                    <label class="govuk-label govuk-radios__label" for="noOtherAccountsButton" id="noButton-label">
+                        No - I'll file other types of accounts
                     </label>
+                    </div>
                 </div>
             </fieldset>
+            </div>
 
             <div class="form-group">
-              <input id="next-button" class="button" type="submit" role="button" value="Continue"/>
+              <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
             </div>
         </form>
+        </div>
+        </div>
     </div>
     </body>
 </html>
