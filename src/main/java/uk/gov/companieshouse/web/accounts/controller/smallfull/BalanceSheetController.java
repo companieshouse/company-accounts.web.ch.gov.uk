@@ -85,7 +85,7 @@ public class BalanceSheetController extends BaseController {
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
-                return SMALL_FULL_BALANCE_SHEET;
+                return getTemplateName();
             }
         } catch (ServiceException e) {
 
