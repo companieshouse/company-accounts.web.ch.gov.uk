@@ -15,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.company.CompanyResourceHandler;
+import uk.gov.companieshouse.api.handler.company.request.CompanyGet;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -33,24 +35,31 @@ public class CompanyServiceImplTests {
     @Mock
     private CompanyResourceHandler companyResourceHandler;
 
+    @Mock
+    private CompanyGet companyGet;
+
     @InjectMocks
     private CompanyService companyService = new CompanyServiceImpl();
 
     private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String COMPANY_URI = "/company/" + COMPANY_NUMBER;
 
     @BeforeEach
     private void init() {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(apiClient.company(COMPANY_NUMBER)).thenReturn(companyResourceHandler);
+        when(apiClient.company()).thenReturn(companyResourceHandler);
+
+        when(companyResourceHandler.get(COMPANY_URI)).thenReturn(companyGet);
     }
 
     @Test
     @DisplayName("Get Company Profile - Success Path")
-    void getCompanyProfileSuccess() throws ServiceException, ApiErrorResponseException {
+    void getCompanyProfileSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
-        when(companyResourceHandler.get()).thenReturn(new CompanyProfileApi());
+        when(companyGet.execute()).thenReturn(new CompanyProfileApi());
 
         CompanyProfileApi companyProfile = companyService.getCompanyProfile(COMPANY_NUMBER);
 
@@ -59,9 +68,19 @@ public class CompanyServiceImplTests {
 
     @Test
     @DisplayName("Get Company Profile - Throws ApiErrorResponseException")
-    void getBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException {
+    void getBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
 
-        when(companyResourceHandler.get()).thenThrow(ApiErrorResponseException.class);
+        when(companyGet.execute()).thenThrow(ApiErrorResponseException.class);
+
+        assertThrows(ServiceException.class, () ->
+                companyService.getCompanyProfile(COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("Get Company Profile - Throws URIValidationException")
+    void getBalanceSheetThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException {
+
+        when(companyGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
                 companyService.getCompanyProfile(COMPANY_NUMBER));

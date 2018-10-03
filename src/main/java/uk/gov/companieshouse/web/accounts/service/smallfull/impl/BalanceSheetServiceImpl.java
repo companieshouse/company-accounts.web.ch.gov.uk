@@ -9,10 +9,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
 import uk.gov.companieshouse.accountsdates.impl.AccountsDatesHelperImpl;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -38,6 +40,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
+    private static final UriTemplate CURRENT_PERIOD_URI =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/current-period");
+
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
             throws ServiceException {
@@ -47,11 +52,10 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         CurrentPeriodApi currentPeriod;
 
+        String uri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
+
         try {
-            currentPeriod = apiClient.transaction(transactionId)
-                .companyAccount(companyAccountsId)
-                .smallFull()
-                .currentPeriod().get();
+            currentPeriod = apiClient.smallFull().currentPeriod().get(uri).execute();
         } catch (ApiErrorResponseException e) {
 
             if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
@@ -59,6 +63,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             }
 
             throw new ServiceException("Error retrieving balance sheet", e);
+        } catch (URIValidationException e) {
+
+            throw new ServiceException("Invalid URI for current period resource", e);
         }
 
         return transformer.getBalanceSheet(currentPeriod);
@@ -72,11 +79,10 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
 
+        String uri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
+
         try {
-            apiClient.transaction(transactionId)
-                .companyAccount(companyAccountsId)
-                .smallFull()
-                .currentPeriod().create(currentPeriod);
+            apiClient.smallFull().currentPeriod().create(uri, currentPeriod).execute();
         } catch (ApiErrorResponseException e) {
 
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
@@ -86,10 +92,12 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 }
 
                 return validationErrors;
-            } else {
-
-                throw new ServiceException("Error posting balance sheet", e);
             }
+
+            throw new ServiceException("Error posting balance sheet", e);
+        } catch (URIValidationException e) {
+
+            throw new ServiceException("Invalid URI for current period resource", e);
         }
 
         return new ArrayList<>();
