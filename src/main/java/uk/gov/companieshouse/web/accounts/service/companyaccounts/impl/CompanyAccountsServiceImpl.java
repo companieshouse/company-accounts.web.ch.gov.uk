@@ -71,7 +71,7 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
             throw new ServiceException("Error creating small full accounts", e);
         } catch (URIValidationException e) {
 
-            throw new ServiceException("Invalid URI for company accounts resource", e);
+            throw new ServiceException("Invalid URI for small full resource", e);
         }
     }
 }

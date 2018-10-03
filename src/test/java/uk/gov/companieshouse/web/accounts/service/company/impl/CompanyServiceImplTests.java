@@ -45,8 +45,6 @@ public class CompanyServiceImplTests {
 
     private static final String COMPANY_URI = "/company/" + COMPANY_NUMBER;
 
-    private static final String INVALID_COMPANY_URI = COMPANY_URI + "/blah";
-
     @BeforeEach
     private void init() {
 
