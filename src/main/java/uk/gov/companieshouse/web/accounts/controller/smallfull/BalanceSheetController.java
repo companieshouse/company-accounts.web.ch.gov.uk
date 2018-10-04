@@ -76,10 +76,6 @@ public class BalanceSheetController extends BaseController {
                                    BindingResult bindingResult,
                                    HttpServletRequest request) {
 
-        if (bindingResult.hasErrors()) {
-            return getTemplateName();
-        }
-
         try {
             List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(transactionId, companyAccountsId, balanceSheet);
 
