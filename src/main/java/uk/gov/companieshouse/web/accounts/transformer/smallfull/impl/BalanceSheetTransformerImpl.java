@@ -20,8 +20,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         BalanceSheet balanceSheet = new BalanceSheet();
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
-        calledUpShareCapitalNotPaid.setCurrentAmount(
-             currentPeriodBalanceSheetApi.getCalledUpShareCapitalNotPaid());
+        calledUpShareCapitalNotPaid.setCurrentAmount(currentPeriodBalanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         TangibleAssets tangibleAssets = new TangibleAssets();
         tangibleAssets.setCurrentAmount(currentPeriodBalanceSheetApi.getFixedAssetsApi().getTangibleApi());
