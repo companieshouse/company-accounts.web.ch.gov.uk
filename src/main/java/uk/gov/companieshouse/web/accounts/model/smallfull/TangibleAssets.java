@@ -9,6 +9,5 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 public class TangibleAssets {
 
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.tangible")
-    private Integer currentAmount;
-
+    private Long currentAmount;
 }

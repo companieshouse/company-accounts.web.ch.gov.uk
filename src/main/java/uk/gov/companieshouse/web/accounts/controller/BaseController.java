@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
@@ -49,6 +50,9 @@ public abstract class BaseController {
             return errorArgs.values().toArray();
         }
     }
+
+    @ModelAttribute("templateName")
+    protected abstract String getTemplateName();
 
     protected void addBackPageAttributeToModel(Model model, String... pathVars) {
 

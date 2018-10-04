@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +41,8 @@ public class ValidationContextTest {
     
     private static final String BEAN_CLASS_NAME = MockValidationModel.class.getName();
     private static final String NESTED_BEAN_NAME = MockNestedValidationModel.class.getName();
+    private static final String MAP_BEAN_NAME = MockMapValidationModel.class.getName();
+    private static final String COLLECTION_BEAN_NAME = MockCollectionValidationModel.class.getName();
     private static final String RECURSIVE_BEAN_NAME = MockRecursiveValidationModel.class.getName();
     private static final String PRIMITIVES_ONLY_BEAN_NAME = MockPrimitivesOnlyValidationModel.class.getName();
     private static final String INVALID_BEAN_CLASS_NAME = MockValidationModel.class.getName() + "invalid";
@@ -64,7 +67,25 @@ public class ValidationContextTest {
     @Test
     public void testSuccessfulScan() {
         mockComponentScanning(BEAN_CLASS_NAME);
-        new ValidationContext(mockProvider, BASE_PATH);
+
+        Assertions.assertAll(() ->
+                new ValidationContext(mockProvider, BASE_PATH));
+    }
+
+    @Test
+    public void testSuccessfulScanWithMapFieldPresent() {
+        mockComponentScanning(MAP_BEAN_NAME);
+
+        Assertions.assertAll(() ->
+                new ValidationContext(mockProvider, BASE_PATH));
+    }
+
+    @Test
+    public void testSuccessfulScanWithCollectionFieldPresent() {
+        mockComponentScanning(COLLECTION_BEAN_NAME);
+
+        Assertions.assertAll(() ->
+                new ValidationContext(mockProvider, BASE_PATH));
     }
     
     @Test
@@ -226,11 +247,40 @@ public class ValidationContextTest {
     }
 
     /**
+     * Mocked class containing a single validation mapping and a map field
+     * without validation annotation.
+     */
+    @ValidationModel
+    private class MockMapValidationModel {
+        @SuppressWarnings("unused")
+        @ValidationMapping(JSON_PATH)
+        public String mockString;
+
+        @SuppressWarnings("unused")
+        public Map<String, String> mockMap;
+    }
+
+    /**
+     * Mocked class containing a single validation mapping and a collection
+     * field without validation annotation.
+     */
+    @ValidationModel
+    private class MockCollectionValidationModel {
+        @SuppressWarnings("unused")
+        @ValidationMapping(JSON_PATH)
+        public String mockString;
+
+        @SuppressWarnings("unused")
+        public ArrayList<String> mockArrayList;
+    }
+
+    /**
      * Mocked class containing a single field which itself is a model
      * object.
      */
     @ValidationModel
     private class MockNestedValidationModel {
+        @SuppressWarnings("unused")
         public MockValidationModel mockValidationModel;
     }
     

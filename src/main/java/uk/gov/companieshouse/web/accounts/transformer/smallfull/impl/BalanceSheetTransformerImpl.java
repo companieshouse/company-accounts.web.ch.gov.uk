@@ -25,15 +25,15 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         calledUpShareCapitalNotPaid.setCurrentAmount(
              currentPeriodBalanceSheetApi.getCalledUpShareCapitalNotPaid());
 
-        TangibleAssets tangibleAssets = new TangibleAssets();
-        tangibleAssets.setCurrentAmount(currentPeriodBalanceSheetApi.getFixedAssetsApi().getTangibleApi().getValue());
-
-        FixedAssets fixedAssets = new FixedAssets();
-        fixedAssets.setTotalFixedAssets(currentPeriodBalanceSheetApi.getFixedAssetsApi().getTotal());
-        fixedAssets.setTangibleAssets(tangibleAssets);
+//        TangibleAssets tangibleAssets = new TangibleAssets();
+//        tangibleAssets.setCurrentAmount(currentPeriodBalanceSheetApi.getFixedAssetsApi().getTangibleApi());
+//
+//        FixedAssets fixedAssets = new FixedAssets();
+//        fixedAssets.setTotalFixedAssets(currentPeriodBalanceSheetApi.getFixedAssetsApi().getTotal());
+//        fixedAssets.setTangibleAssets(tangibleAssets);
 
         balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
-        balanceSheet.setFixedAssets(fixedAssets);
+//        balanceSheet.setFixedAssets(fixedAssets);
 
         return balanceSheet;
     }
@@ -42,18 +42,18 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     public CurrentPeriodApi getCurrentPeriod(BalanceSheet balanceSheet) {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
-        TangibleApi tangibleApi = new TangibleApi();
-
-        tangibleApi.setValue(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
-
-        fixedAssetsApi.setTangibleApi(tangibleApi);
-        fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getTotalFixedAssets());
+//        FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
+//        TangibleApi tangibleApi = new TangibleApi();
+//
+//        tangibleApi.setValue(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount().);
+//
+//        fixedAssetsApi.setTangibleApi(tangibleApi);
+//        fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getTotalFixedAssets());
 
         balanceSheetApi.setCalledUpShareCapitalNotPaid(
                 balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
 
-        balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
+//        balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
 
         currentPeriod.setBalanceSheetApi(balanceSheetApi);

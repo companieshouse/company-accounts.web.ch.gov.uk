@@ -55,6 +55,8 @@ public class ApprovalControllerTests {
 
     private static final String BACK_PAGE_MODEL_ATTR = "backButton";
 
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+
     private static final String ERROR_VIEW = "error";
 
     @BeforeEach
@@ -68,7 +70,8 @@ public class ApprovalControllerTests {
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(APPROVAL_VIEW))
-                .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR));
+                .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
