@@ -9,6 +9,6 @@ public class FixedAssets {
 
     private TangibleAssets tangibleAssets;
 
-    private Integer totalFixedAssets;
+    private Long totalFixedAssets;
 
 }

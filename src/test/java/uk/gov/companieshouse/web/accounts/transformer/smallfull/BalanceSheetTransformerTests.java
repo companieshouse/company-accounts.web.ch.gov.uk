@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BalanceSheetTransformerTests {
 
-    private Integer CALLED_UP_SHARE_CAPITAL = 1;
+    private Long CALLED_UP_SHARE_CAPITAL = Long.valueOf("1");
 
     private BalanceSheetTransformer transformer = new BalanceSheetTransformerImpl();
 

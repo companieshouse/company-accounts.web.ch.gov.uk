@@ -20,7 +20,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setCurrentAmount(
-                currentPeriodBalanceSheetApi.getCalledUpShareCapitalNotPaid());
+                currentPeriodBalanceSheetApi.getCalledUpShareCapitalNotPaid().longValue());
 
         balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
 
@@ -33,7 +33,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
         balanceSheetApi.setCalledUpShareCapitalNotPaid(
-                balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+                balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount().intValue());
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
 
@@ -47,7 +47,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
         balanceSheetApi.setCalledUpShareCapitalNotPaid(
-                balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
+                balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount().intValue());
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
 

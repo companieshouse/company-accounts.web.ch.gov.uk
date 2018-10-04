@@ -68,6 +68,8 @@ public class StepsToCompleteControllerTests {
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+
     private static final String STEPS_TO_COMPLETE_VIEW = "smallfull/stepsToComplete";
 
     private static final String ERROR_VIEW = "error";
@@ -85,7 +87,8 @@ public class StepsToCompleteControllerTests {
         this.mockMvc.perform(get(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(STEPS_TO_COMPLETE_VIEW))
-                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
