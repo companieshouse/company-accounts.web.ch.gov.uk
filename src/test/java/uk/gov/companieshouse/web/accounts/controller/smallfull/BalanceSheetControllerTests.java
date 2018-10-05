@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,13 +43,13 @@ public class BalanceSheetControllerTests {
     private MockMvc mockMvc;
 
     @Mock
-    BalanceSheetService balanceSheetService;
+    private BalanceSheetService balanceSheetService;
 
     @Mock
-    CompanyService companyService;
+    private CompanyService companyService;
 
     @InjectMocks
-    BalanceSheetController controller;
+    private BalanceSheetController controller;
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -67,6 +66,11 @@ public class BalanceSheetControllerTests {
                                                 "/transaction/" + TRANSACTION_ID +
                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                 "/small-full/approval";
+
+    private static final String REVIEW_PATH = "/company/" + COMPANY_NUMBER +
+                                               "/transaction/" + TRANSACTION_ID +
+                                               "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                                               "/small-full/review";
 
     private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
 
@@ -151,7 +155,7 @@ public class BalanceSheetControllerTests {
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + APPROVAL_PATH));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
     }
 
     @Test

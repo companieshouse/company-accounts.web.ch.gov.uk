@@ -35,7 +35,7 @@ public class Navigator {
             throw new MissingAnnotationException("Missing @RequestMapping value on class " + nextControllerClass.toString());
         }
 
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[0]).expand(pathVars);
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[0]).expand((Object[]) pathVars);
     }
 
     public static String getPreviousControllerPath(Class clazz, String... pathVars) {
@@ -59,6 +59,6 @@ public class Navigator {
             throw new MissingAnnotationException("Missing @RequestMapping value on class " + previousControllerClass.toString());
         }
 
-        return new UriTemplate(mappings[0]).expand(pathVars).toString();
+        return new UriTemplate(mappings[0]).expand((Object[]) pathVars).toString();
     }
 }

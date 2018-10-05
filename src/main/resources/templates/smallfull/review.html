@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>Check before you submit</title>
+    </head>
+
+    <body>
+        <div id="balanceSheet-main-content" layout:fragment="content" class="two-column-accounts">
+
+            <h1 id="page-title" class="heading-xlarge">
+                <span id="page-title-heading">Check before you submit</span>
+            </h1>
+
+            <form id="review-form" th:action="@{''}" class="form" method="post">
+
+                <div class="form-group accounts-row-spacer">
+                    <input id="next-button" class="button" type="submit" role="button" value="Save and continue"/>
+                </div>
+
+            </form>
+
+        </div>
+    </body>
+</html>

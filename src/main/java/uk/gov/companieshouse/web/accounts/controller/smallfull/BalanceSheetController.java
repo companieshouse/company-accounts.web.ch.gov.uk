@@ -26,7 +26,7 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 import java.util.List;
 
 @Controller
-@NextController(ApprovalController.class)
+@NextController(ReviewController.class)
 @PreviousController(StepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController extends BaseController {
