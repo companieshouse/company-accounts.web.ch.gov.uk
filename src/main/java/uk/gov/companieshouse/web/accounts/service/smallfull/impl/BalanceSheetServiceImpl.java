@@ -16,6 +16,7 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
@@ -44,6 +45,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private static final UriTemplate CURRENT_PERIOD_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/current-period");
+
+    private static final UriTemplate PREVIOUS_PERIOD_URI =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/previous-period");
 
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
@@ -79,11 +83,14 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         ApiClient apiClient = apiClientService.getApiClient();
 
         CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
+        String currentPeriodUri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
 
-        String uri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
-
+        PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
+        String previousPeriodUri = PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
         try {
-            apiClient.smallFull().currentPeriod().create(uri, currentPeriod).execute();
+            apiClient.smallFull().previousPeriod().create(previousPeriodUri, previousPeriodApi).execute();
+            apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
+
         } catch (ApiErrorResponseException e) {
 
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {

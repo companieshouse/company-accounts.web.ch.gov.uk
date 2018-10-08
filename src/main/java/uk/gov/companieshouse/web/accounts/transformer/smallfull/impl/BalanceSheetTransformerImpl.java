@@ -1,9 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.api.model.accounts.abridged.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
@@ -46,13 +46,12 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     public PreviousPeriodApi getPreviousPeriod(BalanceSheet balanceSheet) {
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
-        balanceSheetApi.setCalledUpShareCapitalNotPaid(
-                balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
+        balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
 
-        //previousPeriodApi.setBalanceSheetApi(balanceSheetApi);
+        previousPeriodApi.setBalanceSheet(balanceSheetApi);
 
-        return new PreviousPeriodApi();
+        return previousPeriodApi;
     }
 }
