@@ -11,5 +11,6 @@ public class CalledUpShareCapitalNotPaid {
     @ValidationMapping("$.current_period.balance_sheet.called_up_share_capital_not_paid")
     private Long currentAmount;
 
+    @ValidationMapping("$.previous_period.balance_sheet.called_up_share_capital_not_paid")
     private Long previousAmount;
 }
