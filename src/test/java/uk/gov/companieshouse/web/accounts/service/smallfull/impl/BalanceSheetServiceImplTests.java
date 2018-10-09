@@ -23,7 +23,10 @@ import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.CurrentPeriodResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.CurrentPeriodCreate;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.CurrentPeriodGet;
+import uk.gov.companieshouse.api.handler.smallfull.previousperiod.PreviousPeriodResourceHandler;
+import uk.gov.companieshouse.api.handler.smallfull.previousperiod.request.PreviousPeriodCreate;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
@@ -67,6 +70,9 @@ public class BalanceSheetServiceImplTests {
     private CurrentPeriodResourceHandler currentPeriodResourceHandler;
 
     @Mock
+    private PreviousPeriodResourceHandler previousPeriodResourceHandler;
+
+    @Mock
     private AccountsDatesHelper accountsDatesHelper;
 
     @Mock
@@ -74,6 +80,9 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private CurrentPeriodCreate currentPeriodCreate;
+
+    @Mock
+    private PreviousPeriodCreate previousPeriodCreate;
 
     @Mock
     private ValidationContext validationContext;
@@ -89,24 +98,18 @@ public class BalanceSheetServiceImplTests {
                                                         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                         "/small-full/current-period";
 
+    private static final String PREVIOUS_PERIOD_URI = "/transactions/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/previous-period";
+
     @Test
     @DisplayName("Get Balance Sheet - Success Path")
     void getBalanceSheetSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
-
-        when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
+        mockApiClientGet();
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-
         when(currentPeriodGet.execute()).thenReturn(currentPeriod);
-
         when(transformer.getBalanceSheet(currentPeriod)).thenReturn(new BalanceSheet());
-
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(balanceSheet);
@@ -115,56 +118,32 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Get Balance Sheet - Throws ApiErrorResponseException")
     void getBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
-
-        when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
+        mockApiClientGet();
 
         when(currentPeriodGet.execute()).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ServiceException.class, () ->
-                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get Balance Sheet - Throws URIValidationException")
     void getBalanceSheetThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
-
-        when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
+        mockApiClientGet();
 
         when(currentPeriodGet.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(ServiceException.class, () ->
-                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get Balance Sheet - Creates Balance Sheet if not found")
     void getBalanceSheetNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
-
-        when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
+        mockApiClientGet();
 
         HttpResponseException httpResponseException = new HttpResponseException.Builder(404,
                 "Not Found",
                 new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException
-                .fromHttpResponseException(httpResponseException);
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         when(currentPeriodGet.execute()).thenThrow(apiErrorResponseException);
 
@@ -176,20 +155,17 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Post Balance Sheet - Success Path")
     void postBalanceSheetSuccess() {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+        mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-
         when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
-
         when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodCreate);
+
+        PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
+        when(transformer.getPreviousPeriod(balanceSheet)).thenReturn(previousPeriodApi);
+        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodApi)).thenReturn(previousPeriodCreate);
 
         assertAll(() ->
                 balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
@@ -198,12 +174,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException without validation errors")
     void postBalanceSheetThrowsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+        mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
@@ -223,12 +194,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Post Balance Sheet - Throws URIValidationException")
     void postBalanceSheetThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+        mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
@@ -247,14 +213,8 @@ public class BalanceSheetServiceImplTests {
 
     @Test
     @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException containing unparsable validation errors")
-    void postBalanceSheetThrowsApiErrorResponseExceptionWithUnparsableValidationErrors()
-            throws ApiErrorResponseException, URIValidationException, ServiceException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+    void postBalanceSheetThrowsApiErrorResponseExceptionWithUnparsableValidationErrors() throws ApiErrorResponseException, URIValidationException {
+        mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
@@ -281,14 +241,8 @@ public class BalanceSheetServiceImplTests {
 
     @Test
     @DisplayName("Post Balance Sheet - Throws ApiErrorResponseException containing parsable validation errors")
-    void postBalanceSheetThrowsApiErrorResponseExceptionWithParsableValidationErrors()
-            throws ApiErrorResponseException, URIValidationException, ServiceException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+    void postBalanceSheetThrowsApiErrorResponseExceptionWithParsableValidationErrors() throws ApiErrorResponseException, URIValidationException, ServiceException {
+        mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
@@ -388,12 +342,14 @@ public class BalanceSheetServiceImplTests {
         DateTime currentPeriodStart = new DateTime("2018-01-01");
         DateTime currentPeriodEnd = new DateTime("2018-01-01");
         DateTime previousPeriodEnd = new DateTime("2018-01-01");
+        DateTime previousPeriodStart = new DateTime("2018-01-01");
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodStartOn(currentPeriodStart);
         nextAccounts.setPeriodEndOn(currentPeriodEnd);
 
         LastAccountsApi lastAccounts = new LastAccountsApi();
+        lastAccounts.setPeriodStartOn(previousPeriodStart);
         lastAccounts.setPeriodEndOn(previousPeriodEnd);
 
         CompanyAccountApi companyAccounts = new CompanyAccountApi();
@@ -421,5 +377,25 @@ public class BalanceSheetServiceImplTests {
 
         verify(accountsDatesHelper, times(1))
                 .isSameYear(any(LocalDate.class), any(LocalDate.class));
+    }
+
+
+    private void mockApiClientGet() {
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+
+        when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
+    }
+
+    private void mockApiClientPost() {
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+        when(smallFullResourceHandler.previousPeriod()).thenReturn(previousPeriodResourceHandler);
     }
 }
