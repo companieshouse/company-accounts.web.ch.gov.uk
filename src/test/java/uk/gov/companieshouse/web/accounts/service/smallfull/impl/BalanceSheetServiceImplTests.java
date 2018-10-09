@@ -338,7 +338,6 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Get Balance Sheet Headings when Previous Period exists and period end date is not null")
     void getBalanceSheetHeadingsPreviousPeriodNotNull() {
-
         DateTime currentPeriodStart = new DateTime("2018-01-01");
         DateTime currentPeriodEnd = new DateTime("2018-01-01");
         DateTime previousPeriodEnd = new DateTime("2018-01-01");
@@ -361,40 +360,30 @@ public class BalanceSheetServiceImplTests {
 
         String currentPeriodHeading = "currentPeriodHeading";
 
-        when(accountsDatesHelper.generateBalanceSheetHeading(
-                any(LocalDate.class), any(LocalDate.class), anyBoolean()))
-                .thenReturn(currentPeriodHeading);
+        when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
 
-        when(accountsDatesHelper.convertDateToLocalDate(any(Date.class)))
-                .thenReturn(LocalDate.now());
+        when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
 
-        when(accountsDatesHelper.isSameYear(any(LocalDate.class), any(LocalDate.class)))
-                .thenReturn(true);
+        when(accountsDatesHelper.isSameYear(any(LocalDate.class), any(LocalDate.class))).thenReturn(true);
 
         BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
 
         assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
 
-        verify(accountsDatesHelper, times(1))
-                .isSameYear(any(LocalDate.class), any(LocalDate.class));
+        verify(accountsDatesHelper, times(1)).isSameYear(any(LocalDate.class), any(LocalDate.class));
     }
 
 
     private void mockApiClientGet() {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
         when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
-
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
     }
 
     private void mockApiClientPost() {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
         when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
         when(smallFullResourceHandler.previousPeriod()).thenReturn(previousPeriodResourceHandler);
     }
