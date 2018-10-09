@@ -43,6 +43,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -94,13 +95,13 @@ public class BalanceSheetServiceImplTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String CURRENT_PERIOD_URI = "/transactions/" + TRANSACTION_ID +
+    private static final String BASE_SMALL_FULL_URI = "/transactions/" + TRANSACTION_ID +
                                                         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                        "/small-full/current-period";
+                                                        "/small-full/";
 
-    private static final String PREVIOUS_PERIOD_URI = "/transactions/" + TRANSACTION_ID +
-            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-            "/small-full/previous-period";
+    private static final String CURRENT_PERIOD_URI = BASE_SMALL_FULL_URI + "current-period";
+
+    private static final String PREVIOUS_PERIOD_URI = BASE_SMALL_FULL_URI + "previous-period";
 
     @Test
     @DisplayName("Get Balance Sheet - Success Path")
@@ -140,9 +141,7 @@ public class BalanceSheetServiceImplTests {
     void getBalanceSheetNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
         mockApiClientGet();
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,
-                "Not Found",
-                new HttpHeaders()).build();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404, "Not Found", new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         when(currentPeriodGet.execute()).thenThrow(apiErrorResponseException);
@@ -158,17 +157,10 @@ public class BalanceSheetServiceImplTests {
         mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
+        mockPreviousPeriod(balanceSheet);
+        mockCurrentPeriod(balanceSheet);
 
-        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodCreate);
-
-        PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
-        when(transformer.getPreviousPeriod(balanceSheet)).thenReturn(previousPeriodApi);
-        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodApi)).thenReturn(previousPeriodCreate);
-
-        assertAll(() ->
-                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+        assertAll(() -> balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 
     @Test
@@ -177,18 +169,12 @@ public class BalanceSheetServiceImplTests {
         mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
-
-        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
-
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod))
-                .thenReturn(currentPeriodCreate);
+        mockPreviousPeriod(balanceSheet);
+        mockCurrentPeriod(balanceSheet);
 
         when(currentPeriodCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ServiceException.class, () ->
-                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+        assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 
     @Test
@@ -197,18 +183,12 @@ public class BalanceSheetServiceImplTests {
         mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
-
-        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
-
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod))
-                .thenReturn(currentPeriodCreate);
+        mockPreviousPeriod(balanceSheet);
+        mockCurrentPeriod(balanceSheet);
 
         when(currentPeriodCreate.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(ServiceException.class, () ->
-                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+        assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 
     @Test
@@ -217,26 +197,12 @@ public class BalanceSheetServiceImplTests {
         mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
+        mockPreviousPeriod(balanceSheet);
+        mockCurrentPeriod(balanceSheet);
 
-        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+        when(validationContext.getValidationErrors(mockApiResponseException())).thenReturn(null);
 
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
-
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,
-                "Bad Request",
-                new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException
-                .fromHttpResponseException(httpResponseException);
-
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod))
-                .thenReturn(currentPeriodCreate);
-
-        when(currentPeriodCreate.execute()).thenThrow(apiErrorResponseException);
-
-        when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(null);
-
-        assertThrows(ServiceException.class, () ->
-                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+        assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 
     @Test
@@ -245,21 +211,8 @@ public class BalanceSheetServiceImplTests {
         mockApiClientPost();
 
         BalanceSheet balanceSheet = new BalanceSheet();
-
-        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
-
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,
-                "Bad Request",
-                new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException
-                .fromHttpResponseException(httpResponseException);
-
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod))
-                .thenReturn(currentPeriodCreate);
-
-        when(currentPeriodCreate.execute()).thenThrow(apiErrorResponseException);
+        mockPreviousPeriod(balanceSheet);
+        mockCurrentPeriod(balanceSheet);
 
         List<ValidationError> validationErrors = new ArrayList<>();
         ValidationError validationError = new ValidationError();
@@ -267,112 +220,71 @@ public class BalanceSheetServiceImplTests {
         validationError.setFieldPath("dummy-field-path");
         validationErrors.add(validationError);
 
-        when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(validationErrors);
-
-        assertEquals(validationErrors,
-                balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
+        when(validationContext.getValidationErrors(mockApiResponseException())).thenReturn(validationErrors);
+        assertEquals(validationErrors, balanceSheetService.postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet));
     }
 
     @Test
     @DisplayName("Get Balance Sheet Headings when Previous Period is Null")
     void getBalanceSheetHeadingsPreviousPeriodNull() {
-
-        DateTime currentPeriodStart = new DateTime("2018-01-01");
-        DateTime currentPeriodEnd = new DateTime("2018-01-01");
-
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodStartOn(currentPeriodStart);
-        nextAccounts.setPeriodEndOn(currentPeriodEnd);
-
-        CompanyAccountApi companyAccounts = new CompanyAccountApi();
-        companyAccounts.setNextAccounts(nextAccounts);
-
         CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccounts);
+        companyProfile.setAccounts(createFirstYearCompanyAccountsObject());
 
         String currentPeriodHeading = "currentPeriodHeading";
-
-        when(accountsDatesHelper.generateBalanceSheetHeading(
-                any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
-
+        when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
         when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
 
         BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
-
         assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
+        assertNull(balanceSheetHeadings.getPreviousPeriodHeading());
     }
 
     @Test
-    @DisplayName("Get Balance Sheet Headings when Previous Period exists but period end date is null")
+    @DisplayName("Get Balance Sheet Headings when Previous Period exists")
     void getBalanceSheetHeadingsPreviousPeriodDataTypeNull() {
-
-        DateTime currentPeriodStart = new DateTime("2018-01-01");
-        DateTime currentPeriodEnd = new DateTime("2018-01-01");
-
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodStartOn(currentPeriodStart);
-        nextAccounts.setPeriodEndOn(currentPeriodEnd);
-
-        LastAccountsApi lastAccounts = new LastAccountsApi();
-        lastAccounts.setPeriodEndOn(null);
-
-        CompanyAccountApi companyAccounts = new CompanyAccountApi();
-        companyAccounts.setNextAccounts(nextAccounts);
-        companyAccounts.setLastAccounts(lastAccounts);
-
         CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccounts);
+        companyProfile.setAccounts(createMultipleYearCompanyAccountsObject());
 
         String currentPeriodHeading = "currentPeriodHeading";
-
-        when(accountsDatesHelper.generateBalanceSheetHeading(
-                any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
-
+        when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
         when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
 
         BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
-
         assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
+        assertNotNull(balanceSheetHeadings.getPreviousPeriodHeading());
     }
 
-    @Test
-    @DisplayName("Get Balance Sheet Headings when Previous Period exists and period end date is not null")
-    void getBalanceSheetHeadingsPreviousPeriodNotNull() {
-        DateTime currentPeriodStart = new DateTime("2018-01-01");
-        DateTime currentPeriodEnd = new DateTime("2018-01-01");
-        DateTime previousPeriodEnd = new DateTime("2018-01-01");
-        DateTime previousPeriodStart = new DateTime("2018-01-01");
+    private CompanyAccountApi createFirstYearCompanyAccountsObject() {
+        CompanyAccountApi companyAccounts = new CompanyAccountApi();
+        companyAccounts.setNextAccounts(createCurrentPeriodObject());
+        return companyAccounts;
+    }
 
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodStartOn(currentPeriodStart);
-        nextAccounts.setPeriodEndOn(currentPeriodEnd);
+    private CompanyAccountApi createMultipleYearCompanyAccountsObject() {
+        CompanyAccountApi companyAccounts = createFirstYearCompanyAccountsObject();
+        companyAccounts.setLastAccounts(createPreviousPeriodObject());
+        return companyAccounts;
+    }
+
+    private LastAccountsApi createPreviousPeriodObject() {
+        DateTime previousPeriodEnd = new DateTime("2018-01-01");
+        DateTime previousPeriodStart = new DateTime("2017-01-01");
 
         LastAccountsApi lastAccounts = new LastAccountsApi();
         lastAccounts.setPeriodStartOn(previousPeriodStart);
         lastAccounts.setPeriodEndOn(previousPeriodEnd);
-
-        CompanyAccountApi companyAccounts = new CompanyAccountApi();
-        companyAccounts.setNextAccounts(nextAccounts);
-        companyAccounts.setLastAccounts(lastAccounts);
-
-        CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccounts);
-
-        String currentPeriodHeading = "currentPeriodHeading";
-
-        when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
-
-        when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
-
-        when(accountsDatesHelper.isSameYear(any(LocalDate.class), any(LocalDate.class))).thenReturn(true);
-
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
-
-        assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
-
-        verify(accountsDatesHelper, times(1)).isSameYear(any(LocalDate.class), any(LocalDate.class));
+        return lastAccounts;
     }
 
+    private NextAccountsApi createCurrentPeriodObject() {
+        DateTime currentPeriodStart = new DateTime("2018-01-01");
+        DateTime currentPeriodEnd = new DateTime("2019-01-01");
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodStartOn(currentPeriodStart);
+        nextAccounts.setPeriodEndOn(currentPeriodEnd);
+        return nextAccounts;
+    }
 
     private void mockApiClientGet() {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -386,5 +298,26 @@ public class BalanceSheetServiceImplTests {
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
         when(smallFullResourceHandler.previousPeriod()).thenReturn(previousPeriodResourceHandler);
+    }
+
+    private ApiErrorResponseException mockApiResponseException() throws ApiErrorResponseException, URIValidationException {
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(currentPeriodCreate.execute()).thenThrow(apiErrorResponseException);
+
+        return apiErrorResponseException;
+    }
+
+    private void mockPreviousPeriod(BalanceSheet balanceSheet) {
+        PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
+        when(transformer.getPreviousPeriod(balanceSheet)).thenReturn(previousPeriodApi);
+        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodApi)).thenReturn(previousPeriodCreate);
+    }
+
+    private void mockCurrentPeriod(BalanceSheet balanceSheet) {
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod))
+                .thenReturn(currentPeriodCreate);
     }
 }
