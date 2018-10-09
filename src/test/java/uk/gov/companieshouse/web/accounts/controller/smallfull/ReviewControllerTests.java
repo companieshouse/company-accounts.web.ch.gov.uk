@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
@@ -19,6 +20,8 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,6 +53,8 @@ public class ReviewControllerTests {
     private static final String REVIEW_VIEW = "smallfull/review";
 
     private static final String REVIEW_MODEL_ATTR = "review";
+
+    private static final String ERROR_VIEW = "error";
 
     @Mock
     CompanyService companyService;
@@ -96,6 +101,22 @@ public class ReviewControllerTests {
         verify(balanceSheetService, times(1)).getBalanceSheetHeadings(companyProfile);
 
         verify(reviewService, times(1)).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
+    @Test
+    @DisplayName("Get review page failure path")
+    void getRequestFailureInGetCompanyProfile() throws Exception {
+
+        doThrow(ServiceException.class)
+                .when(companyService).getCompanyProfile(COMPANY_NUMBER);
+
+        this.mockMvc.perform(get(REVIEW_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+
+        verify(balanceSheetService, times(0)).getBalanceSheetHeadings(any(CompanyProfileApi.class));
+
+        verify(reviewService, times(0)).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
