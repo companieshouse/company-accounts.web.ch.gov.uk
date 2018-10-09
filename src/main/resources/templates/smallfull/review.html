@@ -5,24 +5,52 @@
       layout:decorate="~{layouts/baseLayout}">
 
     <head>
-        <title>Check before you submit</title>
+        <title>Check your answers</title>
     </head>
 
-    <body>
+    <body th:object="${review}">
+
         <div id="balanceSheet-main-content" layout:fragment="content" class="two-column-accounts">
 
-            <h1 id="page-title" class="govuk-heading-l">
-                <span id="page-title-heading">Check before you submit</span>
-            </h1>
+            <h1 id="page-title-heading" class="govuk-heading-l">Check your answers</h1>
 
-            <form id="review-form" th:action="@{''}" class="form" method="post">
+            <form id="review-form" th:action="@{''}" class="govuk-body" method="post">
 
-                <div class="govuk-form-group accounts-row-spacer">
+                <!-- Start Balance Sheet -->
+
+                <div th:replace="fragments/changeLink :: changeLink (
+                    description = 'Balance Sheet',
+                    resource = 'balance-sheet'
+                    )">
+                </div>
+
+                <dl class="app-check-your-answers app-check-your-answers--short">
+
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question"></dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
+
+                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
+                        description = 'Called up share capital not paid',
+                        currentAmount = *{balanceSheet.calledUpShareCapitalNotPaid.currentAmount}
+                        )">
+                    </div>
+
+                </dl>
+
+                <!-- End Balance Sheet -->
+
+                <div class="govuk-form-group">
                     <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
                 </div>
 
             </form>
 
         </div>
+
     </body>
 </html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Change Link</title>
+    </head>
+    <body>
+        <div th:fragment="changeLink">
+            <h2 class="govuk-heading-m" th:text="${description}">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/${resource}|}"
+                   class="govuk-body float-right">Change<span class="govuk-visually-hidden" th:text="${description}"></span></a>
+            </h2>
+        </div>
+    </body>
+</html>
