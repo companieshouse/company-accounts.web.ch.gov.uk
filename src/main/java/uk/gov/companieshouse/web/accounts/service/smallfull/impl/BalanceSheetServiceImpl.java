@@ -82,32 +82,31 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
+        PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
+        String previousPeriodUri = PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
+
         CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
         String currentPeriodUri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
 
-        PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
-        String previousPeriodUri = PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
         try {
-            apiClient.smallFull().previousPeriod().create(previousPeriodUri, previousPeriodApi).execute();
-            apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
-
+            if (previousPeriodApi != null) {
+                apiClient.smallFull().previousPeriod().create(previousPeriodUri, previousPeriodApi).execute();
+            }
+            if (currentPeriod != null) {
+                apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
+            }
         } catch (ApiErrorResponseException e) {
-
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
                 List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
                 if (validationErrors == null) {
                     throw new ServiceException("Bad request posting balance sheet", e);
                 }
-
                 return validationErrors;
             }
-
             throw new ServiceException("Error posting balance sheet", e);
         } catch (URIValidationException e) {
-
-            throw new ServiceException("Invalid URI for current period resource", e);
+            throw new ServiceException("Invalid URI for period resource", e);
         }
-
         return new ArrayList<>();
     }
 
