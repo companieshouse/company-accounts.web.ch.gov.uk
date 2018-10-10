@@ -22,6 +22,7 @@ import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -40,6 +41,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     
     @Autowired
     private ValidationContext validationContext;
+
+    @Autowired
+    private CompanyService companyService;
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
@@ -77,23 +81,29 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     @Override
-    public List<ValidationError> postBalanceSheet(String transactionId, String companyAccountsId, BalanceSheet balanceSheet)
+    public List<ValidationError> postBalanceSheet(String transactionId, String companyAccountsId, BalanceSheet balanceSheet, String companyNumber)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
-
-        PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
-        String previousPeriodUri = PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
-
-        CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
-        String currentPeriodUri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        //createPreviousPeriod(apiClient, previousPeriodUri, previousPeriodApi, validationErrors);
+        CompanyProfileApi companyProfileApi = getCompanyProfile(companyNumber);
+
+        if (isMultipleYearFiler(companyProfileApi)) {
+            PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
+            String previousPeriodUri = PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
+            createPreviousPeriod(apiClient, previousPeriodUri, previousPeriodApi, validationErrors);
+        }
+
+        CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
+        String currentPeriodUri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
         createCurrentPeriod(apiClient, currentPeriodUri, currentPeriod, validationErrors);
 
         return validationErrors;
+    }
+
+    private CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException {
+        return companyService.getCompanyProfile(companyNumber);
     }
 
     private void createPreviousPeriod(ApiClient apiClient, String previousPeriodUri, PreviousPeriodApi previousPeriodApi, List<ValidationError> validationErrors)

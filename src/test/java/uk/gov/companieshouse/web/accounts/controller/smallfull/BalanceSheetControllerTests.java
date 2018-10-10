@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -48,6 +49,9 @@ public class BalanceSheetControllerTests {
 
     @Mock
     CompanyService companyService;
+
+    @Mock
+    private CompanyProfileApi companyProfileApiMock;
 
     @InjectMocks
     BalanceSheetController controller;
@@ -147,7 +151,7 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
-        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class))).thenReturn(new ArrayList<>());
+        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -159,7 +163,7 @@ public class BalanceSheetControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-                .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class));
+                .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
@@ -178,7 +182,7 @@ public class BalanceSheetControllerTests {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class))).thenReturn(errors);
+        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(errors);
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
