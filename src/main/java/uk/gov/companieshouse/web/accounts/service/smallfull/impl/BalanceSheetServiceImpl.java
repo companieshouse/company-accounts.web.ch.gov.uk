@@ -88,26 +88,44 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
         String currentPeriodUri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
 
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        //createPreviousPeriod(apiClient, previousPeriodUri, previousPeriodApi, validationErrors);
+        createCurrentPeriod(apiClient, currentPeriodUri, currentPeriod, validationErrors);
+
+        return validationErrors;
+    }
+
+    private void createPreviousPeriod(ApiClient apiClient, String previousPeriodUri, PreviousPeriodApi previousPeriodApi, List<ValidationError> validationErrors)
+            throws ServiceException {
         try {
-            if (previousPeriodApi != null) {
-                apiClient.smallFull().previousPeriod().create(previousPeriodUri, previousPeriodApi).execute();
-            }
-            if (currentPeriod != null) {
-                apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
-            }
+            apiClient.smallFull().previousPeriod().create(previousPeriodUri, previousPeriodApi).execute();
         } catch (ApiErrorResponseException e) {
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors == null) {
+                validationErrors.addAll(validationContext.getValidationErrors(e));
+                if (validationErrors.isEmpty()) {
                     throw new ServiceException("Bad request posting balance sheet", e);
                 }
-                return validationErrors;
             }
-            throw new ServiceException("Error posting balance sheet", e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for period resource", e);
+            throw new ServiceException("Invalid URI for previous period resource", e);
         }
-        return new ArrayList<>();
+    }
+
+    private void createCurrentPeriod(ApiClient apiClient, String currentPeriodUri, CurrentPeriodApi currentPeriod, List<ValidationError> validationErrors)
+            throws ServiceException {
+        try {
+            apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
+        } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
+                validationErrors.addAll(validationContext.getValidationErrors(e));
+                if (validationErrors.isEmpty()) {
+                    throw new ServiceException("Bad request posting balance sheet", e);
+                }
+            }
+        } catch (URIValidationException e) {
+            throw new ServiceException("Invalid URI for current period resource", e);
+        }
     }
 
     @Override
