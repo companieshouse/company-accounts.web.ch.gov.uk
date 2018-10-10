@@ -26,7 +26,7 @@ public class ReviewTransformerTests {
 
     @Test
     @DisplayName("Get Review - Assert Balance Sheet is correct")
-    void getBalanceSheetCalledUpShareCapital() {
+    void getReview() {
 
         CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
 
