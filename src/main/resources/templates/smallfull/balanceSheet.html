@@ -65,6 +65,11 @@
 
                     <h2 class="govuk-heading-m">Fixed assets</h2>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'fixedAssets.tangibleAssets.currentAmount'
+                        )">
+                    </div>
+
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half">
                             Tangible assets
@@ -79,6 +84,11 @@
                         </div>
                     </div>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'fixedAssets.totalCurrentFixedAssets'
+                        )">
+                    </div>
+
                     <div class="govuk-grid-row accounts-total">
                         <div class="govuk-grid-column-one-half">
                             <strong>Total fixed assets</strong>
@@ -86,8 +96,8 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'fixedAssets.totalFixedAssets',
-                                text = 'Tangible assets',
+                                id = 'fixedAssets.totalCurrentFixedAssets',
+                                text = 'Total fixed assets',
                                 )">
                             </div>
                         </div>
