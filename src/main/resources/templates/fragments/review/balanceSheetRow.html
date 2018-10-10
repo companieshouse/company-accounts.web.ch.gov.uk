@@ -10,6 +10,10 @@
                 th:classappend="${isHeaderRow} ? 'govuk-!-font-weight-bold' : ''">
                 <span class="mobile-only-label" th:text="*{'(' + balanceSheet.balanceSheetHeadings.currentPeriodHeading + ')'}"></span>
             </dd>
+            <dd th:text="${previousAmount != null ? previousAmount : ''}" class="app-check-your-answers__answer"
+                th:classappend="${isHeaderRow} ? 'govuk-!-font-weight-bold' : ''">
+                <span class="mobile-only-label" th:text="*{'(' + balanceSheet.balanceSheetHeadings.currentPeriodHeading + ')'}"></span>
+            </dd>
             <dd class="app-check-your-answers__change"></dd>
         </div>
     </body>
