@@ -204,7 +204,7 @@ public class BalanceSheetServiceImplTests {
                                                         TRANSACTION_ID,
                                                         COMPANY_ACCOUNTS_ID,
                                                         balanceSheet,
-                                        "0064000"));
+                                                        "0064000"));
     }
 
     @Test
@@ -222,7 +222,7 @@ public class BalanceSheetServiceImplTests {
                                                         TRANSACTION_ID,
                                                         COMPANY_ACCOUNTS_ID,
                                                         balanceSheet,
-                                        "0064000"));
+                                                        "0064000"));
     }
 
     @Test
