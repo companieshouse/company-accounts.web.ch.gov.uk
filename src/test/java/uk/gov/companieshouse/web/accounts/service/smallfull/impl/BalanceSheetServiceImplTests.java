@@ -236,10 +236,10 @@ public class BalanceSheetServiceImplTests {
         mockCurrentPeriod(balanceSheet);
 
         List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000");
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000");
         assertEquals(0, validationErrors.size());
     }
 
@@ -258,10 +258,10 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(ApiErrorResponseException.class, () -> previousPeriodCreate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
@@ -277,10 +277,10 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(URIValidationException.class, () -> previousPeriodCreate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
@@ -299,10 +299,10 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(ApiErrorResponseException.class, () -> currentPeriodCreate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
@@ -319,10 +319,10 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(URIValidationException.class, () -> currentPeriodCreate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
