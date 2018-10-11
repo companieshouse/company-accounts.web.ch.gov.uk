@@ -210,7 +210,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Success Path")
     void postFirstYearFilerBalanceSheetSuccess() throws ServiceException, URIValidationException, ApiErrorResponseException {
-        mockApiClientPost();
+        mockApiClient();
         createFirstYearFilerCompanyProfile();
         createFirstYearFilerSmallFullAccountPost();
 
@@ -228,7 +228,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Failure - Throws ServiceException due to ApiErrorResponseException")
     void postFirstYearFilerBalanceSheetFailureBadRequestWithNoValidationErrors() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createFirstYearFilerCompanyProfile();
         createFirstYearFilerSmallFullAccountPost();
 
@@ -250,7 +250,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Failure - Throws ServiceException due to URIValidationException")
     void postFirstYearFilerBalanceSheetFailureURIException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createFirstYearFilerCompanyProfile();
         createFirstYearFilerSmallFullAccountPost();
 
@@ -270,7 +270,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("First Year Filer - PUT - Balance Sheet - Success Path")
     void putFirstYearFilerBalanceSheetSuccess() throws ServiceException, URIValidationException, ApiErrorResponseException {
-        mockApiClientPost();
+        mockApiClient();
         createFirstYearFilerCompanyProfile();
         createFirstYearFilerSmallFullAccountPut();
 
@@ -278,17 +278,17 @@ public class BalanceSheetServiceImplTests {
         mockCurrentPeriodPut(balanceSheet);
 
         List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000");
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000");
         assertEquals(0, validationErrors.size());
     }
 
     @Test
     @DisplayName("First Year Filer - PUT - Balance Sheet - Failure - Throws ServiceException due to ApiErrorResponseException")
     void putFirstYearFilerBalanceSheetFailureBadRequestWithNoValidationErrors() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createFirstYearFilerCompanyProfile();
         createFirstYearFilerSmallFullAccountPut();
 
@@ -310,7 +310,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("First Year Filer - PUT - Balance Sheet - Failure - Throws ServiceException due to URIValidationException")
     void putFirstYearFilerBalanceSheetFailureURIException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createFirstYearFilerCompanyProfile();
         createFirstYearFilerSmallFullAccountPut();
 
@@ -321,16 +321,16 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(URIValidationException.class, () -> currentPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
     @DisplayName("Multiple Year Filer - POST - Balance Sheet - Success Path")
     void postMultipleYearFilerBalanceSheetSuccess() throws ServiceException, URIValidationException, ApiErrorResponseException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPost();
 
@@ -349,7 +349,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Multiple Year Filer - POST - Balance Sheet - Previous Period Failure - Throws ServiceException due to ApiErrorResponseException")
     void postMultipleYearFilerBalanceSheetPreviousPeriodFailureBadRequestWithNoValidationErrors() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPost();
 
@@ -371,7 +371,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Multiple Year Filer - POST - Balance Sheet - Previous Period Failure - Throws ServiceException due to URIValidationException")
     void postMultipleYearFilerBalanceSheetPreviousPeriodFailureURIException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPost();
 
@@ -391,7 +391,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Multiple Year Filer - POST - Balance Sheet - Current Period Failure - Throws ServiceException due to ApiErrorResponseException")
     void postMultipleYearFilerBalanceSheetCurrentPeriodFailureBadRequestWithNoValidationErrors() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPost();
 
@@ -414,7 +414,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Multiple Year Filer - POST - Balance Sheet - Current Period Failure - Throws ServiceException due to URIValidationException")
     void postMultipleYearFilerBalanceSheetCurrentPeriodFailureURIException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPost();
 
@@ -435,7 +435,7 @@ public class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Multiple Year Filer - PUT - Balance Sheet - Success Path")
     void putMultipleYearFilerBalanceSheetSuccess() throws ServiceException, URIValidationException, ApiErrorResponseException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPut();
 
@@ -444,17 +444,17 @@ public class BalanceSheetServiceImplTests {
         mockCurrentPeriodPut(balanceSheet);
 
         List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000");
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000");
         assertEquals(0, validationErrors.size());
     }
 
     @Test
     @DisplayName("Multiple Year Filer - PUT - Balance Sheet - Previous Period Failure - Throws ServiceException due to ApiErrorResponseException")
     void putMultipleYearFilerBalanceSheetPreviousPeriodFailureBadRequestWithNoValidationErrors() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPut();
 
@@ -467,16 +467,16 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(ApiErrorResponseException.class, () -> previousPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
     @DisplayName("Multiple Year Filer - PUT - Balance Sheet - Previous Period Failure - Throws ServiceException due to URIValidationException")
     void putMultipleYearFilerBalanceSheetPreviousPeriodFailureURIException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPut();
 
@@ -487,16 +487,16 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(URIValidationException.class, () -> previousPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
     @DisplayName("Multiple Year Filer - PUT - Balance Sheet - Current Period Failure - Throws ServiceException due to ApiErrorResponseException")
     void putMultipleYearFilerBalanceSheetCurrentPeriodFailureBadRequestWithNoValidationErrors() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPut();
 
@@ -510,16 +510,16 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(ApiErrorResponseException.class, () -> currentPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
     @DisplayName("Multiple Year Filer - PUT - Balance Sheet - Current Period Failure - Throws ServiceException due to URIValidationException")
     void putMultipleYearFilerBalanceSheetCurrentPeriodFailureURIException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-        mockApiClientPost();
+        mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPut();
 
@@ -531,10 +531,10 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(URIValidationException.class, () -> currentPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
@@ -689,7 +689,7 @@ public class BalanceSheetServiceImplTests {
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
     }
 
-    private void mockApiClientPost() {
+    private void mockApiClient() {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
     }
