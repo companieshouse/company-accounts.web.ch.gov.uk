@@ -32,6 +32,7 @@ import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.CurrentPeriodResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.CurrentPeriodCreate;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.CurrentPeriodGet;
+import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.CurrentPeriodUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiod.PreviousPeriodResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiod.request.PreviousPeriodCreate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
@@ -92,6 +93,9 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private CurrentPeriodCreate currentPeriodCreate;
+
+    @Mock
+    private CurrentPeriodUpdate currentPeriodUpdate;
 
     @Mock
     private PreviousPeriodCreate previousPeriodCreate;
@@ -167,6 +171,36 @@ public class BalanceSheetServiceImplTests {
 
         assertThrows(URIValidationException.class, () -> currentPeriodGet.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("POST - Balance Sheet - Failure - Throws ApiErrorResponseException getting Small Full Data")
+    void getSmallFullDataFailureApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+        mockApiClientGet();
+        when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGetMock);
+        when(smallFullGetMock.execute()).thenThrow(ApiErrorResponseException.class);
+
+        assertThrows(ApiErrorResponseException.class, () -> smallFullGetMock.execute());
+        assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        new BalanceSheet(),
+                                                        "0064000"));
+    }
+
+    @Test
+    @DisplayName("POST - Balance Sheet - Failure - Throws URIValidationException getting Small Full Data")
+    void getSmallFullDataFailureURIValidationException() throws ApiErrorResponseException, URIValidationException {
+        mockApiClientGet();
+        when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGetMock);
+        when(smallFullGetMock.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> smallFullGetMock.execute());
+        assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        new BalanceSheet(),
+                                                        "0064000"));
     }
 
     @Test
