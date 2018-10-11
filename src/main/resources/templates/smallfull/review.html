@@ -44,6 +44,27 @@
                         )">
                     </div>
 
+                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
+                        description = 'Fixed assets',
+                        fontBold = true
+                        )">
+                    </div>
+
+                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
+                        description = 'Tangible assets',
+                        currentAmount = *{balanceSheet.fixedAssets.tangibleAssets.currentAmount},
+                        previousAmount = *{balanceSheet.fixedAssets.tangibleAssets.previousAmount}
+                        )">
+                    </div>
+
+                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
+                        description = 'Total fixed assets',
+                        fontBold = true,
+                        currentAmount = *{balanceSheet.fixedAssets.totalCurrentFixedAssets},
+                        previousAmount = *{balanceSheet.fixedAssets.totalPreviousFixedAssets}
+                        )">
+                    </div>
+
                 </dl>
 
                 <!-- End Balance Sheet -->
