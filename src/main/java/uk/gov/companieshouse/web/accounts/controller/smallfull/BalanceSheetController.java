@@ -76,7 +76,7 @@ public class BalanceSheetController extends BaseController {
                                    BindingResult bindingResult,
                                    HttpServletRequest request) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
 

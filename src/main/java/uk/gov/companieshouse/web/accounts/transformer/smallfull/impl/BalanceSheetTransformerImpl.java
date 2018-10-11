@@ -40,7 +40,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
-        if (balanceSheet.getFixedAssets()!=null) {
+        if (balanceSheet.getFixedAssets() != null) {
 
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
