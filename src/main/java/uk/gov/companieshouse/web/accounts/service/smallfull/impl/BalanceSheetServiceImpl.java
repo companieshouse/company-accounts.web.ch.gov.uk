@@ -125,8 +125,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             if (!isCreated) {
                 apiClient.smallFull().previousPeriod().create(previousPeriodUri, previousPeriodApi).execute();
             } else {
-                // update logic
-                System.out.println("here");
+                apiClient.smallFull().previousPeriod().update(previousPeriodUri, previousPeriodApi).execute();
             }
 
         } catch (ApiErrorResponseException e) {
@@ -148,8 +147,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             if (!isCreated) {
                 apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
             } else {
-                // update logic
-                System.out.println("here");
+                apiClient.smallFull().currentPeriod().update(currentPeriodUri, currentPeriod).execute();
             }
 
         } catch (ApiErrorResponseException e) {

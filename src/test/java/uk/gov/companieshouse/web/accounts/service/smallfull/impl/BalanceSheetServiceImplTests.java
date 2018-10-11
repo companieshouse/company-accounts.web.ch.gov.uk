@@ -35,6 +35,7 @@ import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.Current
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.CurrentPeriodUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiod.PreviousPeriodResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiod.request.PreviousPeriodCreate;
+import uk.gov.companieshouse.api.handler.smallfull.previousperiod.request.PreviousPeriodUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
@@ -99,6 +100,9 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private PreviousPeriodCreate previousPeriodCreate;
+
+    @Mock
+    private PreviousPeriodUpdate previousPeriodUpdate;
 
     @Mock
     private ValidationContext validationContext;
@@ -293,14 +297,14 @@ public class BalanceSheetServiceImplTests {
 
         HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-        //when(currentPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
+        when(currentPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> currentPeriodCreate.execute());
+        assertThrows(ApiErrorResponseException.class, () -> currentPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                balanceSheet,
-                "0064000"));
+                                                        TRANSACTION_ID,
+                                                        COMPANY_ACCOUNTS_ID,
+                                                        balanceSheet,
+                                                        "0064000"));
     }
 
     @Test
@@ -313,9 +317,9 @@ public class BalanceSheetServiceImplTests {
         BalanceSheet balanceSheet = createFirstYearFilerBalanceSheetTestObject();
         mockCurrentPeriodPut(balanceSheet);
 
-        //when(currentPeriodUpdate.execute()).thenThrow(URIValidationException.class);
+        when(currentPeriodUpdate.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(URIValidationException.class, () -> currentPeriodCreate.execute());
+        assertThrows(URIValidationException.class, () -> currentPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
@@ -459,9 +463,9 @@ public class BalanceSheetServiceImplTests {
 
         HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-        //when(previousPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
+        when(previousPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> previousPeriodCreate.execute());
+        assertThrows(ApiErrorResponseException.class, () -> previousPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
@@ -479,9 +483,9 @@ public class BalanceSheetServiceImplTests {
         BalanceSheet balanceSheet = createMultipleYearFilerBalanceSheetTestObject();
         mockPreviousPeriodPut(balanceSheet);
 
-        //when(previousPeriodUpdate.execute()).thenThrow(URIValidationException.class);
+        when(previousPeriodUpdate.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(URIValidationException.class, () -> previousPeriodCreate.execute());
+        assertThrows(URIValidationException.class, () -> previousPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
@@ -502,9 +506,9 @@ public class BalanceSheetServiceImplTests {
 
         HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-        //when(currentPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
+        when(currentPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> currentPeriodCreate.execute());
+        assertThrows(ApiErrorResponseException.class, () -> currentPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
@@ -523,9 +527,9 @@ public class BalanceSheetServiceImplTests {
         mockPreviousPeriodPut(balanceSheet);
         mockCurrentPeriodPut(balanceSheet);
 
-        //when(currentPeriodUpdate.execute()).thenThrow(URIValidationException.class);
+        when(currentPeriodUpdate.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(URIValidationException.class, () -> currentPeriodCreate.execute());
+        assertThrows(URIValidationException.class, () -> currentPeriodUpdate.execute());
         assertThrows(ServiceException.class, () -> balanceSheetService.postBalanceSheet(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
@@ -703,7 +707,9 @@ public class BalanceSheetServiceImplTests {
     }
 
     private void mockPreviousPeriodPut(BalanceSheet balanceSheet) {
-        mockPreviousPeriod(balanceSheet);
+        PreviousPeriodApi previousPeriodApi = mockPreviousPeriod(balanceSheet);
+        when(smallFullResourceHandler.previousPeriod()).thenReturn(previousPeriodResourceHandler);
+        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriodApi)).thenReturn(previousPeriodUpdate);
     }
 
     private CurrentPeriodApi mockCurrentPeriod(BalanceSheet balanceSheet) {
@@ -719,6 +725,8 @@ public class BalanceSheetServiceImplTests {
     }
 
     private void mockCurrentPeriodPut(BalanceSheet balanceSheet) {
-        mockCurrentPeriod(balanceSheet);
+        CurrentPeriodApi currentPeriod = mockCurrentPeriod(balanceSheet);
+        when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
+        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodUpdate);
     }
 }
