@@ -28,15 +28,6 @@
                         <div class="govuk-grid-column-one-half">
                             &nbsp;
                         </div>
-
-                        <div class="govuk-grid-column-one-quarter">
-                            <h2 class="govuk-heading-s">
-                                <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'></span>
-                                <!-- Hidden input for form binding -->
-                                <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
-                            </h2>
-                        </div>
-
                         <div class="govuk-grid-column-one-quarter">
                             <h2 class="govuk-heading-s">
                                 <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'></span>
@@ -44,11 +35,18 @@
                                 <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
                             </h2>
                         </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <h2 class="govuk-heading-s">
+                                <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'></span>
+                                <!-- Hidden input for form binding -->
+                                <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
+                            </h2>
+                        </div>
                     </div>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        previousField = 'calledUpShareCapitalNotPaid.previousAmount',
-                        currentField = 'calledUpShareCapitalNotPaid.currentAmount'
+                        currentField = 'calledUpShareCapitalNotPaid.currentAmount',
+                        previousField = 'calledUpShareCapitalNotPaid.previousAmount'
                         )">
                     </div>
                     <div class="govuk-grid-row">
@@ -60,18 +58,19 @@
                         </div>
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'calledUpShareCapitalNotPaid.previousAmount',
-                                text = 'Called up share capital not paid',
-                                )">
-                            </div>
-                        </div>
-                        <div class="govuk-grid-column-one-quarter">
-                            <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.currentAmount',
                                 text = 'Called up share capital not paid',
                                 )">
                             </div>
                         </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'calledUpShareCapitalNotPaid.previousAmount',
+                                text = 'Called up share capital not paid',
+                                )">
+                            </div>
+                        </div>
+
                     </div>
 
                     <!--Fixed Assets-->
@@ -79,7 +78,8 @@
                     <h2 class="govuk-heading-m">Fixed assets</h2>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'fixedAssets.tangibleAssets.currentAmount'
+                        currentField = 'fixedAssets.tangibleAssets.currentAmount',
+                        previousField = 'fixedAssets.tangibleAssets.previousAmount'
                         )">
                     </div>
 
@@ -98,7 +98,9 @@
                     </div>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'fixedAssets.totalCurrentFixedAssets'
+                        currentField = 'fixedAssets.totalCurrentFixedAssets',
+                        previousField = 'fixedAssets.totalPreviousFixedAssets'
+
                         )">
                     </div>
 
