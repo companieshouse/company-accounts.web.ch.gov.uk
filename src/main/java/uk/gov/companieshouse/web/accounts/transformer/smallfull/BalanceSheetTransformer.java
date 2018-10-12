@@ -12,7 +12,7 @@ public interface BalanceSheetTransformer {
 
     /**
      * Gets the previous period data on the balance sheet.
-     * 
+     *
      * @param balanceSheet populated balance sheet
      * @return populated previous period object
      */
