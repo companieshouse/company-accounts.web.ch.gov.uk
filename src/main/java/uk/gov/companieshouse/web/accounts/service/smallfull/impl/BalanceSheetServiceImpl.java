@@ -120,7 +120,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private void createPreviousPeriod(ApiClient apiClient, SmallFullApi smallFullApi, String previousPeriodUri, PreviousPeriodApi previousPeriodApi, List<ValidationError> validationErrors)
             throws ServiceException {
-        boolean isCreated = isPreviousPeriodCreated(smallFullApi.getLinks());
+        boolean isCreated = hasPreviousPeriod(smallFullApi.getLinks());
         try {
             if (!isCreated) {
                 apiClient.smallFull().previousPeriod().create(previousPeriodUri, previousPeriodApi).execute();
@@ -142,7 +142,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private void createCurrentPeriod(ApiClient apiClient, SmallFullApi smallFullApi, String currentPeriodUri, CurrentPeriodApi currentPeriod, List<ValidationError> validationErrors)
             throws ServiceException {
-        boolean isCreated = isCurrentPeriodCreated(smallFullApi.getLinks());
+        boolean isCreated = hasCurrentPeriod(smallFullApi.getLinks());
         try {
             if (!isCreated) {
                 apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
@@ -216,11 +216,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         return lastAccountsApi != null && lastAccountsApi.getPeriodEndOn() != null;
     }
 
-    private boolean isCurrentPeriodCreated(Map<String, String> links) {
+    private boolean hasCurrentPeriod(Map<String, String> links) {
         return isCreated(links, SmallFullLinkType.CURRENT_PERIOD);
     }
 
-    private boolean isPreviousPeriodCreated(Map<String, String> links) {
+    private boolean hasPreviousPeriod(Map<String, String> links) {
         return isCreated(links, SmallFullLinkType.PREVIOUS_PERIOD);
     }
 
