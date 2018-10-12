@@ -89,13 +89,15 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        String smallFullUri = createUri(SMALL_FULL_URI, transactionId, companyAccountsId);
+
+        String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
         SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
 
         CompanyProfileApi companyProfileApi = getCompanyProfile(companyNumber);
         if (isMultipleYearFiler(companyProfileApi)) {
             PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
-            String previousPeriodUri = createUri(PREVIOUS_PERIOD_URI, transactionId, companyAccountsId);
+
+            String previousPeriodUri = PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
             createPreviousPeriod(apiClient, smallFullApi, previousPeriodUri, previousPeriodApi, validationErrors);
         }
 
@@ -205,10 +207,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException {
         return companyService.getCompanyProfile(companyNumber);
-    }
-
-    private String createUri(UriTemplate uri, String transactionId, String companyAccountsId) {
-        return uri.expand(transactionId, companyAccountsId).toString();
     }
 
     private boolean isMultipleYearFiler(CompanyProfileApi companyProfile) {
