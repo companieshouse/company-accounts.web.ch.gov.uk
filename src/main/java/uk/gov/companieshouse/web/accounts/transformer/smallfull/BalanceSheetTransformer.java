@@ -11,7 +11,8 @@ public interface BalanceSheetTransformer {
     CurrentPeriodApi getCurrentPeriod(BalanceSheet balanceSheet);
 
     /**
-     * Gets the previous period data on the balance sheet
+     * Gets the previous period data on the balance sheet.
+     * 
      * @param balanceSheet populated balance sheet
      * @return populated previous period object
      */
