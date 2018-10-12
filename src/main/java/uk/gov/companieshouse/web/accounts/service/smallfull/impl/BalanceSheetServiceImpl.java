@@ -164,7 +164,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Override
     public BalanceSheetHeadings getBalanceSheetHeadings(CompanyProfileApi companyProfile) {
-        boolean isSameYear = isSameYear(companyProfile);
+        boolean isSameYear = isSameYearFiler(companyProfile);
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         balanceSheetHeadings.setPreviousPeriodHeading(getPreviousPeriodHeading(companyProfile, isSameYear));
         balanceSheetHeadings.setCurrentPeriodHeading(getCurrentPeriodHeading(companyProfile, isSameYear));
@@ -190,7 +190,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         return null;
     }
 
-    private boolean isSameYear(CompanyProfileApi companyProfile) {
+    private boolean isSameYearFiler(CompanyProfileApi companyProfile) {
         if (isMultipleYearFiler(companyProfile)) {
             LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
             LocalDate previousPeriodEndOn = convertDateTimeToLocalDate(lastAccountsApi.getPeriodEndOn());
