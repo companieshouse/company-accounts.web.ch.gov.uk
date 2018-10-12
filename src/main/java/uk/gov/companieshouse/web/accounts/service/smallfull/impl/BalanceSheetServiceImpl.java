@@ -132,7 +132,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
                 validationErrors.addAll(validationContext.getValidationErrors(e));
                 if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request posting balance sheet", e);
+                    throw new ServiceException("Bad request when submitting previous period resource", e);
                 }
             }
         } catch (URIValidationException e) {
@@ -154,7 +154,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
                 validationErrors.addAll(validationContext.getValidationErrors(e));
                 if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request posting balance sheet", e);
+                    throw new ServiceException("Bad request when submitting current period resource", e);
                 }
             }
         } catch (URIValidationException e) {
