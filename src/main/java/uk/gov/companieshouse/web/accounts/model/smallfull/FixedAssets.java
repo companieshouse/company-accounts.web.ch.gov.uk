@@ -10,6 +10,9 @@ public class FixedAssets {
 
     private TangibleAssets tangibleAssets;
 
+    @ValidationMapping("$.previous_period.balance_sheet.fixed_assets.total")
+    private Long totalPreviousFixedAssets;
+
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.total")
     private Long totalCurrentFixedAssets;
 

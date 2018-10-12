@@ -10,4 +10,7 @@ public class TangibleAssets {
 
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.tangible")
     private Long currentAmount;
+
+    @ValidationMapping("$.previous_period.balance_sheet.fixed_assets.tangible")
+    private Long previousAmount;
 }
