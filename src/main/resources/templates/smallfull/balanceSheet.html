@@ -60,6 +60,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.currentAmount',
                                 text = 'Called up share capital not paid current',
+                                class= 'govuk-input',
                                 )">
                             </div>
                         </div>
@@ -67,6 +68,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.previousAmount',
                                 text = 'Called up share capital not paid previous',
+                                class= 'govuk-input',
                                 )">
                             </div>
                         </div>
@@ -92,6 +94,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'fixedAssets.tangibleAssets.currentAmount',
                                 text = 'Tangible assets current',
+                                class = 'govuk-input current-fixed-assets-add',
                                 )">
                             </div>
                         </div>
@@ -100,6 +103,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                    id = 'fixedAssets.tangibleAssets.previousAmount',
                                    text = 'Tangible assets previous',
+                                   class= 'govuk-input previous-fixed-assets-add',
                                    )">
                             </div>
                         </div>
@@ -118,8 +122,10 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
+
                                 id = 'fixedAssets.totalCurrentFixedAssets',
                                 text = 'Total current fixed assets',
+                                class= 'govuk-input current-fixed-assets-total',
                                 )">
                             </div>
                         </div>
@@ -127,6 +133,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                    id = 'fixedAssets.totalPreviousFixedAssets',
                                    text = 'Total previous fixed assets',
+                                   class= 'govuk-input previous-fixed-assets-total',
                                    )">
                             </div>
                         </div>
