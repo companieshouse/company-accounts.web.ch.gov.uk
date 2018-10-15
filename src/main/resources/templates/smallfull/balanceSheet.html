@@ -95,6 +95,14 @@
                                 )">
                             </div>
                         </div>
+
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                   id = 'fixedAssets.tangibleAssets.previousAmount',
+                                   text = 'Tangible assets',
+                                   )">
+                            </div>
+                        </div>
                     </div>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
@@ -113,6 +121,13 @@
                                 id = 'fixedAssets.totalCurrentFixedAssets',
                                 text = 'Total fixed assets',
                                 )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                   id = 'fixedAssets.totalPreviousFixedAssets',
+                                   text = 'Total fixed assets',
+                                   )">
                             </div>
                         </div>
                     </div>
