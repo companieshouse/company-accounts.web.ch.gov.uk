@@ -29,11 +29,11 @@
                     <div class="app-check-your-answers__contents cya-desktop-only">
                         <dt class="app-check-your-answers__question"></dt>
                         <dd class="app-check-your-answers__answer govuk-heading-s"
-                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-                        <dd class="app-check-your-answers__answer govuk-heading-s"
                             th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
                             th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
                         <dd class="app-check-your-answers__change"></dd>
                     </div>
 
