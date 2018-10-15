@@ -9,4 +9,6 @@ public class BalanceSheetHeadings {
 
     private String currentPeriodHeading;
 
+    private String previousPeriodHeading;
+
 }

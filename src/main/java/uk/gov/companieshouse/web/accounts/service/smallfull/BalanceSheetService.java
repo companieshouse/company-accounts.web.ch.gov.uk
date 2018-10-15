@@ -13,7 +13,7 @@ public interface BalanceSheetService {
     BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
             throws ServiceException;
 
-    List<ValidationError> postBalanceSheet(String transactionId, String companyAccountsId, BalanceSheet balanceSheet)
+    List<ValidationError> postBalanceSheet(String transactionId, String companyAccountsId, BalanceSheet balanceSheet, String companyNumber)
             throws ServiceException;
 
     BalanceSheetHeadings getBalanceSheetHeadings(CompanyProfileApi companyProfile);
