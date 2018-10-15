@@ -41,7 +41,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
-        if (balanceSheet.getFixedAssets()!=null) {
+        if (balanceSheet.getFixedAssets()!= null) {
 
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
@@ -52,24 +52,34 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         }
 
-        if (balanceSheet.getCalledUpShareCapitalNotPaid() !=null) {
+        if (balanceSheet.getCalledUpShareCapitalNotPaid() != null) {
 
             balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
 
         }
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-
         currentPeriod.setBalanceSheetApi(balanceSheetApi);
-
         return currentPeriod;
     }
 
     @Override
     public PreviousPeriodApi getPreviousPeriod(BalanceSheet balanceSheet) {
+
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
         balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
-        
+
+        if (balanceSheet.getFixedAssets()!= null) {
+
+            FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
+
+            fixedAssetsApi.setTangibleApi(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
+            fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getTotalPreviousFixedAssets());
+
+            balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
+
+        }
+
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
         previousPeriodApi.setBalanceSheet(balanceSheetApi);
         return previousPeriodApi;
