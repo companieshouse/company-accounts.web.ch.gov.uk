@@ -168,6 +168,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 if (validationErrors.isEmpty()) {
                     throw new ServiceException("Bad request when submitting previous period resource", e);
                 }
+            } else {
+                throw new ServiceException("Bad request when submitting previous period resource", e);
             }
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for previous period resource", e);
@@ -190,6 +192,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 if (validationErrors.isEmpty()) {
                     throw new ServiceException("Bad request when submitting current period resource", e);
                 }
+            } else {
+                throw new ServiceException("Bad request when submitting current period resource", e);
             }
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for current period resource", e);
