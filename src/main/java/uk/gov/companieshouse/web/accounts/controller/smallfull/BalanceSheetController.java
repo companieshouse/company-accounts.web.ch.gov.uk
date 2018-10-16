@@ -11,16 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 import java.util.List;
@@ -34,9 +31,6 @@ public class BalanceSheetController extends BaseController {
     @Autowired
     private BalanceSheetService balanceSheetService;
 
-    @Autowired
-    private CompanyService companyService;
-
     @Override
     protected String getTemplateName() {
         return "smallfull/balanceSheet";
@@ -49,21 +43,15 @@ public class BalanceSheetController extends BaseController {
                                   Model model,
                                   HttpServletRequest request) {
 
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
         try {
-            CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
-            BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
-
-            BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId);
-            balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
-
-            model.addAttribute("balanceSheet", balanceSheet);
+            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
-
-        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         return getTemplateName();
     }

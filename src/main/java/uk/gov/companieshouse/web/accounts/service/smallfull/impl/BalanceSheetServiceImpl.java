@@ -56,30 +56,61 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private static final UriTemplate PREVIOUS_PERIOD_URI = new UriTemplate(SMALL_FULL_URI.toString() + "/previous-period");
 
     @Override
-    public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId)
+    public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId, String companyNumber)
             throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        CurrentPeriodApi currentPeriod;
+        CurrentPeriodApi currentPeriodApi = getCurrentPeriod(apiClient, CURRENT_PERIOD_URI, transactionId, companyAccountsId);
+        PreviousPeriodApi previousPeriodApi = null;
 
-        String uri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
+        CompanyProfileApi companyProfileApi = getCompanyProfile(companyNumber);
+
+        if (isMultipleYearFiler(companyProfileApi)) {
+            previousPeriodApi = getPreviousPeriod(apiClient, PREVIOUS_PERIOD_URI, transactionId, companyAccountsId);
+        }
+
+        BalanceSheetHeadings balanceSheetHeadings = getBalanceSheetHeadings(companyProfileApi);
+
+        BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriodApi, previousPeriodApi);
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+
+        return balanceSheet;
+    }
+
+    private CurrentPeriodApi getCurrentPeriod(ApiClient apiClient, UriTemplate uri, String transactionId, String companyAccountsId) throws ServiceException {
 
         try {
-            currentPeriod = apiClient.smallFull().currentPeriod().get(uri).execute();
+            return apiClient.smallFull().currentPeriod().get(uri.expand(transactionId, companyAccountsId).toString()).execute();
         } catch (ApiErrorResponseException e) {
 
             if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return new BalanceSheet();
+                return null;
             }
 
-            throw new ServiceException("Error retrieving balance sheet", e);
+            throw new ServiceException("Error retrieving current period resource", e);
         } catch (URIValidationException e) {
 
             throw new ServiceException("Invalid URI for current period resource", e);
         }
+    }
 
-        return transformer.getBalanceSheet(currentPeriod);
+    private PreviousPeriodApi getPreviousPeriod(ApiClient apiClient, UriTemplate uri, String transactionId, String companyAccountsId) throws ServiceException {
+
+        try {
+            return apiClient.smallFull().previousPeriod().get(uri.expand(transactionId, companyAccountsId).toString()).execute();
+        } catch (ApiErrorResponseException e) {
+
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                return null;
+            }
+
+            throw new ServiceException("Error retrieving previous period resource", e);
+        } catch (URIValidationException e) {
+
+            throw new ServiceException("Invalid URI for previous period resource", e);
+        }
     }
 
     @Override
@@ -102,6 +133,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         }
 
         CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
+
         String currentPeriodUri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
         createCurrentPeriod(apiClient, smallFullApi, currentPeriodUri, currentPeriod, validationErrors);
 
@@ -136,6 +168,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 if (validationErrors.isEmpty()) {
                     throw new ServiceException("Bad request when submitting previous period resource", e);
                 }
+            } else {
+                throw new ServiceException("Bad request when submitting previous period resource", e);
             }
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for previous period resource", e);
@@ -158,14 +192,15 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 if (validationErrors.isEmpty()) {
                     throw new ServiceException("Bad request when submitting current period resource", e);
                 }
+            } else {
+                throw new ServiceException("Bad request when submitting current period resource", e);
             }
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for current period resource", e);
         }
     }
 
-    @Override
-    public BalanceSheetHeadings getBalanceSheetHeadings(CompanyProfileApi companyProfile) {
+    private BalanceSheetHeadings getBalanceSheetHeadings(CompanyProfileApi companyProfile) {
         boolean isSameYear = isSameYearFiler(companyProfile);
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         balanceSheetHeadings.setPreviousPeriodHeading(getPreviousPeriodHeading(companyProfile, isSameYear));
