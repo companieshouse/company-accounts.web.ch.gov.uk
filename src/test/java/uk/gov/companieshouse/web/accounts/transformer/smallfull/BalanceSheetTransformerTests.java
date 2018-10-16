@@ -90,10 +90,9 @@ public class BalanceSheetTransformerTests {
         assertNotNull(previousPeriodApi);
         assertNotNull(previousPeriodApi.getBalanceSheet());
 
-        // TODO Fixed assets
-        // assertNotNull(previousPeriodApi.getBalanceSheet().getFixedAssetsApi());
-        // assertEquals(PREVIOUS_TANGIBLE, previousPeriodApi.getBalanceSheet().getFixedAssetsApi().getTangibleApi());
-        // assertEquals(PREVIOUS_FIXED_ASSETS_TOTAL, previousPeriodApi.getBalanceSheet().getFixedAssetsApi().getTotal());
+        assertNotNull(previousPeriodApi.getBalanceSheet().getFixedAssetsApi());
+        assertEquals(PREVIOUS_TANGIBLE, previousPeriodApi.getBalanceSheet().getFixedAssetsApi().getTangibleApi());
+        assertEquals(PREVIOUS_FIXED_ASSETS_TOTAL, previousPeriodApi.getBalanceSheet().getFixedAssetsApi().getTotal());
 
         // Called up share capital not paid
         assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL, previousPeriodApi.getBalanceSheet().getCalledUpShareCapitalNotPaid());
