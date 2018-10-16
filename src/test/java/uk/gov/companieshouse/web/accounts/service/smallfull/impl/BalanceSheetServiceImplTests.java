@@ -1,12 +1,14 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import com.google.api.client.http.HttpHeaders;
@@ -35,6 +37,7 @@ import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.Current
 import uk.gov.companieshouse.api.handler.smallfull.currentperiod.request.CurrentPeriodUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiod.PreviousPeriodResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiod.request.PreviousPeriodCreate;
+import uk.gov.companieshouse.api.handler.smallfull.previousperiod.request.PreviousPeriodGet;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiod.request.PreviousPeriodUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
@@ -48,7 +51,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.links.SmallFullLinkType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
@@ -93,6 +95,9 @@ public class BalanceSheetServiceImplTests {
     private CurrentPeriodGet currentPeriodGet;
 
     @Mock
+    private PreviousPeriodGet previousPeriodGet;
+
+    @Mock
     private CurrentPeriodCreate currentPeriodCreate;
 
     @Mock
@@ -114,6 +119,8 @@ public class BalanceSheetServiceImplTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+
     private static final String BASE_SMALL_FULL_URI = "/transactions/" + TRANSACTION_ID +
                                                         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                         "/small-full/";
@@ -126,11 +133,13 @@ public class BalanceSheetServiceImplTests {
     @DisplayName("First Year Filer - GET - Balance Sheet - Success Path")
     void getFirstYearFilerBalanceSheetSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
         mockApiClientGetFirstYearFiler();
+        createFirstYearFilerCompanyProfile();
 
         CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
         when(currentPeriodGet.execute()).thenReturn(currentPeriodApi);
-        when(transformer.getBalanceSheet(currentPeriodApi)).thenReturn(createFirstYearFilerBalanceSheetTestObject());
-        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        when(transformer.getBalanceSheet(currentPeriodApi, null)).thenReturn(createFirstYearFilerBalanceSheetTestObject());
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(balanceSheet);
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
@@ -138,20 +147,43 @@ public class BalanceSheetServiceImplTests {
         assertNotNull(balanceSheet.getFixedAssets());
         assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets());
         assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
+        assertNotNull(balanceSheet.getBalanceSheetHeadings());
     }
 
     @Test
-    @DisplayName("First Year Filer - GET - Balance Sheet - Failure - ApiErrorResponseException - Not found")
-    void getFirstYearFilerBalanceSheetFailureNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    @DisplayName("First Year Filer - GET - Balance Sheet - Success - ApiErrorResponseException - Not found")
+    void getFirstYearFilerBalanceSheetSuccessNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
         mockApiClientGetFirstYearFiler();
+        createFirstYearFilerCompanyProfile();
+
+        BalanceSheet mockBalanceSheet = new BalanceSheet();
+
+        when(transformer.getBalanceSheet(isNull(), isNull())).thenReturn(mockBalanceSheet);
 
         HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not found",new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(currentPeriodGet.execute()).thenThrow(apiErrorResponseException);
-        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        assertThrows(ApiErrorResponseException.class, () -> currentPeriodGet.execute());
-        assertNotNull(balanceSheet);
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertAll("Should return a balance sheet instance",
+                () -> assertEquals(mockBalanceSheet, balanceSheet),
+                () -> assertNotNull(balanceSheet));
+    }
+
+    @Test
+    @DisplayName("First Year Filer - GET - Balance Sheet - Company profile service throws ServiceException")
+    void getFirstYearFilerBalanceSheetFailureCompanyService() throws ServiceException, ApiErrorResponseException, URIValidationException {
+        mockApiClientGetFirstYearFiler();
+
+        CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
+        when(currentPeriodGet.execute()).thenReturn(currentPeriodApi);
+
+        doThrow(ServiceException.class).when(companyServiceMock).getCompanyProfile(anyString());
+
+        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER));
     }
 
     @Test
@@ -162,9 +194,8 @@ public class BalanceSheetServiceImplTests {
         when(currentPeriodGet.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ApiErrorResponseException.class, () -> currentPeriodGet.execute());
-        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER));
     }
-
 
     @Test
     @DisplayName("First Year Filer - GET - Balance Sheet - Throws URIValidationException")
@@ -174,7 +205,7 @@ public class BalanceSheetServiceImplTests {
         when(currentPeriodGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(URIValidationException.class, () -> currentPeriodGet.execute());
-        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER));
     }
 
     @Test
@@ -347,6 +378,75 @@ public class BalanceSheetServiceImplTests {
                                                         COMPANY_ACCOUNTS_ID,
                                                         balanceSheet,
                                                         "0064000"));
+    }
+
+    @Test
+    @DisplayName("Multiple Year Filer - GET - Balance Sheet - Success Path")
+    void getMultipleYearFilerBalanceSheetSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+        mockApiClientGetMultipleYearFiler();
+        createMultipleYearFilerCompanyProfile();
+
+        CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
+        when(currentPeriodGet.execute()).thenReturn(currentPeriodApi);
+
+        PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
+        when(previousPeriodGet.execute()).thenReturn(previousPeriodApi);
+        when(transformer.getBalanceSheet(currentPeriodApi, previousPeriodApi)).thenReturn(createMultipleYearFilerBalanceSheetTestObject());
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertNotNull(balanceSheet);
+        assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
+        assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        assertNotNull(balanceSheet.getFixedAssets());
+        assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets());
+        assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
+        assertNotNull(balanceSheet.getBalanceSheetHeadings());
+    }
+
+    @Test
+    @DisplayName("Multiple Year Filer - GET - Balance Sheet - Success - ApiErrorResponseException - Not found")
+    void getMultipleYearFilerBalanceSheetSuccessNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
+        mockApiClientGetMultipleYearFiler();
+        createMultipleYearFilerCompanyProfile();
+
+        BalanceSheet mockBalanceSheet = new BalanceSheet();
+
+        when(transformer.getBalanceSheet(isNull(), isNull())).thenReturn(mockBalanceSheet);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(previousPeriodGet.execute()).thenThrow(apiErrorResponseException);
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertAll("Should return a balance sheet instance",
+                () -> assertEquals(mockBalanceSheet, balanceSheet),
+                () -> assertNotNull(balanceSheet));
+    }
+
+    @Test
+    @DisplayName("Multiple Year Filer - GET - Balance Sheet - Throws ApiErrorResponseException")
+    void getMultipleYearFilerBalanceSheetThrowsApiErrorResponseException() throws ServiceException, ApiErrorResponseException, URIValidationException {
+        mockApiClientGetMultipleYearFiler();
+        createMultipleYearFilerCompanyProfile();
+
+        when(previousPeriodGet.execute()).thenThrow(ApiErrorResponseException.class);
+
+        assertThrows(ApiErrorResponseException.class, () -> previousPeriodGet.execute());
+        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("Multiple Year Filer - GET - Balance Sheet - Throws URIValidationException")
+    void getMultipleYearFilerBalanceSheetThrowsURIValidationException() throws ServiceException, ApiErrorResponseException, URIValidationException {
+        mockApiClientGetMultipleYearFiler();
+        createMultipleYearFilerCompanyProfile();
+
+        when(previousPeriodGet.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> previousPeriodGet.execute());
+        assertThrows(ServiceException.class, () -> balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER));
     }
 
     @Test
@@ -650,33 +750,56 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("First Year Filer - Get Balance Sheet Headings")
-    void getBalanceSheetHeadingsPreviousPeriodNull() {
+    @DisplayName("First Year Filer - Get Balance Sheet - Headings")
+    void getFirstYearFilerBalanceSheetSuccessHeadings() throws ApiErrorResponseException, URIValidationException, ServiceException {
+        mockApiClientGetFirstYearFiler();
+        createFirstYearFilerCompanyProfile();
+
         String currentPeriodHeading = "currentPeriodHeading";
+
+        CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
+        when(currentPeriodGet.execute()).thenReturn(currentPeriodApi);
+
+        when(transformer.getBalanceSheet(currentPeriodApi, null)).thenReturn(createFirstYearFilerBalanceSheetTestObject());
+
+
         when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
         when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
 
-        CompanyProfileApi firstYearFilerCompanyProfile = new CompanyProfileApi();
-        firstYearFilerCompanyProfile.setAccounts(createFirstYearCompanyAccountsObject());
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(firstYearFilerCompanyProfile);
 
-        assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
-        assertNull(balanceSheetHeadings.getPreviousPeriodHeading());
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertNotNull(balanceSheet);
+        assertNotNull(balanceSheet.getBalanceSheetHeadings());
+        assertEquals(currentPeriodHeading, balanceSheet.getBalanceSheetHeadings().getCurrentPeriodHeading());
     }
 
     @Test
-    @DisplayName("Multiple Year Filer - Get Balance Sheet Headings")
-    void getBalanceSheetHeadingsPreviousPeriodDataTypeNull() {
+    @DisplayName("Multiple Year Filer - Get Balance Sheet - Headings")
+    void getMultipleYearFilerBalanceSheetSuccessHeadings() throws ApiErrorResponseException, URIValidationException, ServiceException {
+        mockApiClientGetMultipleYearFiler();
+        createMultipleYearFilerCompanyProfile();
+
         String currentPeriodHeading = "currentPeriodHeading";
-        when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
+        String previousPeriodHeading = "previousPeriodHeading";
+
+        CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
+        when(currentPeriodGet.execute()).thenReturn(currentPeriodApi);
+
+        PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
+        when(previousPeriodGet.execute()).thenReturn(previousPeriodApi);
+
+        when(transformer.getBalanceSheet(currentPeriodApi, previousPeriodApi)).thenReturn(createMultipleYearFilerBalanceSheetTestObject());
+
+        when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(previousPeriodHeading, currentPeriodHeading);
         when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
 
-        CompanyProfileApi multipleYearFilerCompanyProfile = new CompanyProfileApi();
-        multipleYearFilerCompanyProfile.setAccounts(createMultipleYearCompanyAccountsObject());
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(multipleYearFilerCompanyProfile);
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
-        assertEquals(currentPeriodHeading, balanceSheetHeadings.getCurrentPeriodHeading());
-        assertNotNull(balanceSheetHeadings.getPreviousPeriodHeading());
+        assertNotNull(balanceSheet);
+        assertNotNull(balanceSheet.getBalanceSheetHeadings());
+        assertEquals(currentPeriodHeading, balanceSheet.getBalanceSheetHeadings().getCurrentPeriodHeading());
+        assertEquals(previousPeriodHeading, balanceSheet.getBalanceSheetHeadings().getPreviousPeriodHeading());
     }
 
     private void createFirstYearFilerCompanyProfile() throws ServiceException {
@@ -799,6 +922,12 @@ public class BalanceSheetServiceImplTests {
         mockApiClientGet();
         when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
+    }
+
+    private void mockApiClientGetMultipleYearFiler() {
+        mockApiClientGetFirstYearFiler();
+        when(smallFullResourceHandler.previousPeriod()).thenReturn(previousPeriodResourceHandler);
+        when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
     }
 
     private void mockApiClient() {
