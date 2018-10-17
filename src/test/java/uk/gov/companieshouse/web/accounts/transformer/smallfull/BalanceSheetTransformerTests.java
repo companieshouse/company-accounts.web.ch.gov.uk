@@ -42,22 +42,6 @@ public class BalanceSheetTransformerTests {
         assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalCurrentFixedAssets());
     }
 
-    @Test
-    @DisplayName("Get Current Period - Assert Called Up Share Capital is Correct")
-    void getCurrentPeriodCalledUpShareCapital() {
-
-        CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
-        calledUpShareCapitalNotPaid.setCurrentAmount(CURRENT_CALLED_UP_SHARE_CAPITAL);
-
-        BalanceSheet balanceSheet = new BalanceSheet();
-        balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
-
-        CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
-
-        assertNotNull(currentPeriod);
-        assertNotNull(currentPeriod.getBalanceSheetApi());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, currentPeriod.getBalanceSheetApi().getCalledUpShareCapitalNotPaid());
-    }
 
     @Test
     @DisplayName("Get Current Period")

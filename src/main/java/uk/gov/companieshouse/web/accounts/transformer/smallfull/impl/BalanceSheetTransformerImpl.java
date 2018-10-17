@@ -162,10 +162,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         }
 
-        CurrentPeriodApi currentPeriodApi= new CurrentPeriodApi();
-        currentPeriodApi.setBalanceSheetApi(balanceSheetApi);
+        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
+        currentPeriod.setBalanceSheetApi(balanceSheetApi);
+        return currentPeriod;
 
-        return currentPeriodApi;
     }
 
     @Override
@@ -181,10 +181,12 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getTotalPreviousFixedAssets());
 
             balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
+
         }
 
         if (balanceSheet.getCalledUpShareCapitalNotPaid() != null) {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
+
         }
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
