@@ -39,8 +39,9 @@
 
                     <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
                         description = 'Called up share capital not paid',
-                        currentAmount = *{balanceSheet.calledUpShareCapitalNotPaid.currentAmount},
-                        previousAmount = *{balanceSheet.calledUpShareCapitalNotPaid.previousAmount}
+                        identifier = 'called-up-share-capital-not-paid',
+                        currentAmount = *{balanceSheet?.calledUpShareCapitalNotPaid?.currentAmount},
+                        previousAmount = *{balanceSheet?.calledUpShareCapitalNotPaid?.previousAmount}
                         )">
                     </div>
 
@@ -52,6 +53,7 @@
 
                     <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
                         description = 'Tangible assets',
+                        identifier = 'tangible-assets',
                         currentAmount = *{balanceSheet.fixedAssets.tangibleAssets.currentAmount},
                         previousAmount = *{balanceSheet.fixedAssets.tangibleAssets.previousAmount}
                         )">
@@ -59,6 +61,7 @@
 
                     <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
                         description = 'Total fixed assets',
+                        identifier = 'total-fixed-assets',
                         fontBold = true,
                         currentAmount = *{balanceSheet.fixedAssets.totalCurrentFixedAssets},
                         previousAmount = *{balanceSheet.fixedAssets.totalPreviousFixedAssets}

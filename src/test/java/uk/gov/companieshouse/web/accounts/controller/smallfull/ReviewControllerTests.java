@@ -84,23 +84,15 @@ public class ReviewControllerTests {
         review.setBalanceSheet(new BalanceSheet());
 
         CompanyProfileApi companyProfile = new CompanyProfileApi();
-        
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
-        when(balanceSheetService.getBalanceSheetHeadings(companyProfile)).thenReturn(new BalanceSheetHeadings());
-
-        when(reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(review);
+        when(reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(review);
 
         this.mockMvc.perform(get(REVIEW_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(REVIEW_VIEW))
                 .andExpect(model().attributeExists(REVIEW_MODEL_ATTR));
 
-        verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
-
-        verify(balanceSheetService, times(1)).getBalanceSheetHeadings(companyProfile);
-
-        verify(reviewService, times(1)).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(reviewService, times(1)).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
     }
 
     @Test
@@ -108,15 +100,11 @@ public class ReviewControllerTests {
     void getRequestFailureInGetCompanyProfile() throws Exception {
 
         doThrow(ServiceException.class)
-                .when(companyService).getCompanyProfile(COMPANY_NUMBER);
+                .when(reviewService).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         this.mockMvc.perform(get(REVIEW_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
-
-        verify(balanceSheetService, times(0)).getBalanceSheetHeadings(any(CompanyProfileApi.class));
-
-        verify(reviewService, times(0)).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test

@@ -28,12 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ReviewController extends BaseController {
 
     @Autowired
-    CompanyService companyService;
-
-    @Autowired
-    BalanceSheetService balanceSheetService;
-
-    @Autowired
     ReviewService reviewService;
 
     @GetMapping
@@ -46,11 +40,7 @@ public class ReviewController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
-            BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheetHeadings(companyProfile);
-
-            Review review = reviewService.getReview(transactionId, companyAccountsId);
-            review.getBalanceSheet().setBalanceSheetHeadings(balanceSheetHeadings);
+            Review review = reviewService.getReview(transactionId, companyAccountsId, companyNumber);
 
             model.addAttribute("review", review);
             model.addAttribute("companyNumber", companyNumber);
