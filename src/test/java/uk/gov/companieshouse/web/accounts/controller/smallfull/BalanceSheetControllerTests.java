@@ -56,11 +56,6 @@ public class BalanceSheetControllerTests {
                                                      "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                      "/small-full/balance-sheet";
 
-    private static final String APPROVAL_PATH = "/company/" + COMPANY_NUMBER +
-                                                "/transaction/" + TRANSACTION_ID +
-                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                "/small-full/approval";
-
     private static final String REVIEW_PATH = "/company/" + COMPANY_NUMBER +
                                                "/transaction/" + TRANSACTION_ID +
                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
