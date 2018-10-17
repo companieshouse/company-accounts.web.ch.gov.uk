@@ -5,7 +5,9 @@
     </head>
     <body>
         <h2 th:fragment="sectionHeader" class="govuk-heading-m"><th:block th:text="${description}"></th:block>
-            <a th:unless="${noChangeLink}" th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/${resource}|}"
+            <a th:if="${resource != null}"
+               th:attr="id=${identifier != null} ? 'review-' + ${identifier} + '-change-link' : null"
+               th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/${resource}|}"
                class="govuk-body float-right">Change<span class="govuk-visually-hidden" th:text="${description}"></span></a>
         </h2>
     </body>
