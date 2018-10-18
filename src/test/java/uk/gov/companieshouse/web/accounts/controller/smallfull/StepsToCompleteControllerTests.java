@@ -32,6 +32,7 @@ import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +49,9 @@ public class StepsToCompleteControllerTests {
 
     @Mock
     private CompanyAccountsService companyAccountsService;
+
+    @Mock
+    private SmallFullService smallFullService;
 
     @InjectMocks
     private StepsToCompleteController controller;
@@ -112,7 +116,7 @@ public class StepsToCompleteControllerTests {
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn)).thenReturn(COMPANY_ACCOUNTS_ID);
 
-        doNothing().when(companyAccountsService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        doNothing().when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -124,7 +128,7 @@ public class StepsToCompleteControllerTests {
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID, periodEndOn);
 
-        verify(companyAccountsService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(smallFullService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -202,7 +206,7 @@ public class StepsToCompleteControllerTests {
         when(companyAccountsService.createCompanyAccounts(anyString(), any(DateTime.class))).thenReturn("company_accounts_id");
 
         doThrow(ServiceException.class)
-                .when(companyAccountsService).createSmallFullAccounts(anyString(), anyString());
+                .when(smallFullService).createSmallFullAccounts(anyString(), anyString());
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
