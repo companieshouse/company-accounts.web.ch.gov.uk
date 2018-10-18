@@ -92,19 +92,19 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'fixedAssets.tangibleAssets.currentAmount',
-                                text = 'Tangible assets current',
-                                class = 'govuk-input current-fixed-assets-add',
-                                )">
+                                 id = 'fixedAssets.tangibleAssets.currentAmount',
+                                 text = 'Tangible assets current',
+                                 class = 'govuk-input current-fixed-assets-add',
+                                 )">
                             </div>
                         </div>
 
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                   id = 'fixedAssets.tangibleAssets.previousAmount',
-                                   text = 'Tangible assets previous',
-                                   class= 'govuk-input previous-fixed-assets-add',
-                                   )">
+                                 id = 'fixedAssets.tangibleAssets.previousAmount',
+                                 text = 'Tangible assets previous',
+                                 class= 'govuk-input previous-fixed-assets-add',
+                                 )">
                             </div>
                         </div>
                     </div>
@@ -122,19 +122,18 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-
-                                id = 'fixedAssets.totalCurrentFixedAssets',
-                                text = 'Total current fixed assets',
-                                class= 'govuk-input current-fixed-assets-total',
-                                )">
+                                 id = 'fixedAssets.totalCurrentFixedAssets',
+                                 text = 'Total current fixed assets',
+                                 class= 'govuk-input current-fixed-assets-total',
+                                 )">
                             </div>
                         </div>
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                   id = 'fixedAssets.totalPreviousFixedAssets',
-                                   text = 'Total previous fixed assets',
-                                   class= 'govuk-input previous-fixed-assets-total',
-                                   )">
+                                 id = 'fixedAssets.totalPreviousFixedAssets',
+                                 text = 'Total previous fixed assets',
+                                 class= 'govuk-input previous-fixed-assets-total',
+                                 )">
                             </div>
                         </div>
                     </div>
@@ -150,19 +149,19 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                    id = 'currentAssets.stocks.currentAmount',
-                                    text = 'Stocks current',
-                                    class = 'govuk-input current-current-assets-add',
-                                    )">
+                                 id = 'currentAssets.stocks.currentAmount',
+                                 text = 'Stocks current',
+                                 class = 'govuk-input current-current-assets-add',
+                                 )">
                             </div>
                         </div>
 
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                       id = 'currentAssets.stocks.previousAmount',
-                                       text = 'Stocks previous',
-                                       class= 'govuk-input previous-current-assets-add',
-                                       )">
+                                 id = 'currentAssets.stocks.previousAmount',
+                                 text = 'Stocks previous',
+                                 class= 'govuk-input previous-current-assets-add',
+                                 )">
                             </div>
                         </div>
                     </div>
@@ -174,19 +173,19 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                    id = 'currentAssets.debtors.currentAmount',
-                                    text = 'Debtors current',
-                                    class = 'govuk-input current-current-assets-add',
-                                    )">
+                                 id = 'currentAssets.debtors.currentAmount',
+                                 text = 'Debtors current',
+                                 class = 'govuk-input current-current-assets-add',
+                                 )">
                             </div>
                         </div>
 
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                       id = 'currentAssets.debtors.previousAmount',
-                                       text = 'Debtors previous',
-                                       class= 'govuk-input previous-current-assets-add',
-                                       )">
+                                 id = 'currentAssets.debtors.previousAmount',
+                                 text = 'Debtors previous',
+                                 class= 'govuk-input previous-current-assets-add',
+                                 )">
                             </div>
                         </div>
                     </div>
@@ -198,19 +197,19 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                    id = 'currentAssets.cashAtBankAndInHand.currentAmount',
-                                    text = 'Cash at bank and in hand current',
-                                    class = 'govuk-input current-current-assets-add',
-                                    )">
+                                 id = 'currentAssets.cashAtBankAndInHand.currentAmount',
+                                 text = 'Cash at bank and in hand current',
+                                 class = 'govuk-input current-current-assets-add',
+                                 )">
                             </div>
                         </div>
 
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                       id = 'currentAssets.cashAtBankAndInHand.previousAmount',
-                                       text = 'Cash at bank and in hand previous',
-                                       class= 'govuk-input previous-current-assets-add',
-                                       )">
+                                 id = 'currentAssets.cashAtBankAndInHand.previousAmount',
+                                 text = 'Cash at bank and in hand previous',
+                                 class= 'govuk-input previous-current-assets-add',
+                                 )">
                             </div>
                         </div>
                     </div>
