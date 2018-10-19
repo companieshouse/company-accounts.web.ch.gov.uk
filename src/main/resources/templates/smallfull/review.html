@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>Check your answers</title>
+    </head>
+
+    <body th:object="${review}">
+
+        <div id="balanceSheet-main-content" layout:fragment="content" class="two-column-accounts">
+
+            <h1 id="page-title-heading" class="govuk-heading-l">Check your answers</h1>
+
+            <form id="review-form" th:action="@{''}" class="govuk-body" method="post">
+
+                <!-- Start Balance Sheet -->
+
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                    description = 'Balance sheet',
+                    identifier= 'balance-sheet',
+                    resource = 'balance-sheet'
+                    )">
+                </div>
+
+                <dl class="app-check-your-answers app-check-your-answers--short">
+
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question"></dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
+
+                    <!-- Start Called Up Share Capital -->
+
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                        description = 'Called up share capital not paid',
+                        identifier = 'called-up-share-capital-not-paid',
+                        currentAmount = *{balanceSheet?.calledUpShareCapitalNotPaid?.currentAmount},
+                        previousAmount = *{balanceSheet?.calledUpShareCapitalNotPaid?.previousAmount}
+                        )">
+                    </div>
+
+                    <!-- End Called Up Share Capital -->
+
+                    <!-- Start Fixed Assets -->
+
+                    <th:block th:if="*{balanceSheet?.fixedAssets?.totalCurrentFixedAssets != null or balanceSheet?.fixedAssets?.totalPreviousFixedAssets != null}">
+
+                        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                            description = 'Fixed assets'
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Tangible assets',
+                            identifier = 'tangible-assets',
+                            currentAmount = *{balanceSheet?.fixedAssets?.tangibleAssets?.currentAmount},
+                            previousAmount = *{balanceSheet?.fixedAssets?.tangibleAssets?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Total fixed assets',
+                            identifier = 'total-fixed-assets',
+                            currentAmount = *{balanceSheet?.fixedAssets?.totalCurrentFixedAssets},
+                            previousAmount = *{balanceSheet?.fixedAssets?.totalPreviousFixedAssets},
+                            isTotalRow = true
+                        )">
+                        </div>
+
+                    </th:block>
+
+                    <!-- End Fixed Assets -->
+
+                </dl>
+
+                <!-- End Balance Sheet -->
+
+                <div class="govuk-form-group">
+                    <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
+                </div>
+
+            </form>
+
+        </div>
+
+    </body>
+</html>
