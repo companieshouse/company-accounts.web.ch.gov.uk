@@ -11,6 +11,15 @@ public abstract class SmallFullResourceService {
     protected SmallFullService smallFullService;
 
 
+    /**
+     * Returns true / false depending on whether a small full resource exists to determine whether to
+     * POST or PUT a child resource
+     * @param transactionId The CHS transaction id
+     * @param companyAccountsId The company accounts identifier
+     * @param resource The small full resource for which to determine the existence
+     * @return true or false
+     * @throws ServiceException on small full retrieval failure
+     */
     protected boolean smallFullResourceExists(String transactionId, String companyAccountsId,
                                                 SmallFullLinkType resource) throws ServiceException {
 
