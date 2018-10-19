@@ -38,7 +38,9 @@
                         <dd class="app-check-your-answers__change"></dd>
                     </div>
 
-                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
+                    <!-- Start Called Up Share Capital -->
+
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                         description = 'Called up share capital not paid',
                         identifier = 'called-up-share-capital-not-paid',
                         currentAmount = *{balanceSheet?.calledUpShareCapitalNotPaid?.currentAmount},
@@ -46,28 +48,37 @@
                         )">
                     </div>
 
-                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
-                        description = 'Fixed assets',
-                        fontBold = true
-                        )">
-                    </div>
+                    <!-- End Called Up Share Capital -->
 
-                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
-                        description = 'Tangible assets',
-                        identifier = 'tangible-assets',
-                        currentAmount = *{balanceSheet.fixedAssets.tangibleAssets.currentAmount},
-                        previousAmount = *{balanceSheet.fixedAssets.tangibleAssets.previousAmount}
-                        )">
-                    </div>
+                    <!-- Start Fixed Assets -->
 
-                    <div th:replace="fragments/review/balanceSheetRow :: balanceSheetRow (
-                        description = 'Total fixed assets',
-                        identifier = 'total-fixed-assets',
-                        fontBold = true,
-                        currentAmount = *{balanceSheet.fixedAssets.totalCurrentFixedAssets},
-                        previousAmount = *{balanceSheet.fixedAssets.totalPreviousFixedAssets}
+                    <th:block th:if="*{balanceSheet?.fixedAssets?.totalCurrentFixedAssets != null or balanceSheet?.fixedAssets?.totalPreviousFixedAssets != null}">
+
+                        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                            description = 'Fixed assets'
                         )">
-                    </div>
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Tangible assets',
+                            identifier = 'tangible-assets',
+                            currentAmount = *{balanceSheet?.fixedAssets?.tangibleAssets?.currentAmount},
+                            previousAmount = *{balanceSheet?.fixedAssets?.tangibleAssets?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Total fixed assets',
+                            identifier = 'total-fixed-assets',
+                            currentAmount = *{balanceSheet?.fixedAssets?.totalCurrentFixedAssets},
+                            previousAmount = *{balanceSheet?.fixedAssets?.totalPreviousFixedAssets},
+                            isTotalRow = true
+                        )">
+                        </div>
+
+                    </th:block>
+
+                    <!-- End Fixed Assets -->
 
                 </dl>
 
