@@ -35,6 +35,9 @@ public class ApprovalServiceImpl extends SmallFullResourceService implements App
     private static final UriTemplate APPROVAL_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval");
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ValidationError> submitApproval(String transactionId, String companyAccountsId,
             Approval approval) throws ServiceException {
