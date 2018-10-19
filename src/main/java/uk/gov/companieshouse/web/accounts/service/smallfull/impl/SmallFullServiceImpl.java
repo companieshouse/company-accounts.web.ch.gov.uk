@@ -15,11 +15,14 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 public class SmallFullServiceImpl implements SmallFullService {
 
     @Autowired
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     private static final UriTemplate SMALL_FULL_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createSmallFullAccounts(String transactionId, String companyAccountsId) throws ServiceException {
 
@@ -38,6 +41,9 @@ public class SmallFullServiceImpl implements SmallFullService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SmallFullApi getSmallFullAccounts(String transactionId, String companyAccountsId)
             throws ServiceException {

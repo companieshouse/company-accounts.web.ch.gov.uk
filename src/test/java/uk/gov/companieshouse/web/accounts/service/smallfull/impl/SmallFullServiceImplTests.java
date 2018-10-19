@@ -54,7 +54,7 @@ public class SmallFullServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @BeforeEach
-    private void init() {
+    private void setUp() {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -82,8 +82,7 @@ public class SmallFullServiceImplTests {
         when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
                 .thenReturn(smallFullCreate);
 
-        when(smallFullCreate.execute())
-                .thenThrow(ApiErrorResponseException.class);
+        when(smallFullCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
                 smallFullService.createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -96,8 +95,7 @@ public class SmallFullServiceImplTests {
         when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
                 .thenReturn(smallFullCreate);
 
-        when(smallFullCreate.execute())
-                .thenThrow(URIValidationException.class);
+        when(smallFullCreate.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
                 smallFullService.createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -120,11 +118,9 @@ public class SmallFullServiceImplTests {
     @DisplayName("Get Small Full Accounts - Throws ApiErrorResponseException")
     void getSmallFullApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
 
-        when(smallFullResourceHandler.get(anyString()))
-                .thenReturn(smallFullGet);
+        when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
 
-        when(smallFullGet.execute())
-                .thenThrow(ApiErrorResponseException.class);
+        when(smallFullGet.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
                 smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -134,11 +130,9 @@ public class SmallFullServiceImplTests {
     @DisplayName("Get Small Full Accounts - Throws URIValidationException")
     void getSmallFullURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
 
-        when(smallFullResourceHandler.get(anyString()))
-                .thenReturn(smallFullGet);
+        when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
 
-        when(smallFullGet.execute())
-                .thenThrow(URIValidationException.class);
+        when(smallFullGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
                 smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
