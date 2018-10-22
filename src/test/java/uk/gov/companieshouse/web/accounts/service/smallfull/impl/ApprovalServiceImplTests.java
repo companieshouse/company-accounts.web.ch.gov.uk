@@ -190,7 +190,7 @@ public class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - POST - ApiErrorResponseException Thrown - No Validation Errors")
     void createApprovalThrowsApiErrorResponseExceptionWithoutValidationErrors()
-            throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException {
 
         Approval approval = new Approval();
 
@@ -212,6 +212,30 @@ public class ApprovalServiceImplTests {
         when(approvalCreate.execute()).thenThrow(apiErrorResponseException);
 
         when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(null);
+
+        assertThrows(ServiceException.class, () ->
+                approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
+
+        verify(approvalCreate, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("Submit Approval - POST - Generic ApiErrorResponseException Thrown")
+    void createApprovalThrowsGenericApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
+
+        Approval approval = new Approval();
+
+        ApprovalApi approvalApi = new ApprovalApi();
+
+        when(approvalTransformer.getApprovalApi(approval)).thenReturn(approvalApi);
+
+        when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(approvalCreate);
+
+        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
+                .thenReturn(false);
+
+        when(approvalCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -326,6 +350,30 @@ public class ApprovalServiceImplTests {
         doThrow(apiErrorResponseException).when(approvalUpdate).execute();
 
         when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(null);
+
+        assertThrows(ServiceException.class, () ->
+                approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
+
+        verify(approvalUpdate, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("Submit Approval - PUT - Generic ApiErrorResponseException Thrown")
+    void updateApprovalThrowsGenericApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
+
+        Approval approval = new Approval();
+
+        ApprovalApi approvalApi = new ApprovalApi();
+
+        when(approvalTransformer.getApprovalApi(approval)).thenReturn(approvalApi);
+
+        when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(approvalUpdate);
+
+        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
+                .thenReturn(true);
+
+        doThrow(ApiErrorResponseException.class).when(approvalUpdate).execute();
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
