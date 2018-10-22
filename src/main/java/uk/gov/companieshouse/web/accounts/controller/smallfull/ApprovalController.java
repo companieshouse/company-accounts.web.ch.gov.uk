@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@PreviousController(BalanceSheetController.class)
+@PreviousController(ReviewController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
 public class ApprovalController extends BaseController {
 

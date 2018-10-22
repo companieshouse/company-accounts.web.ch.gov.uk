@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Balance Sheet Review Header Row</title>
+</head>
+    <body>
+        <div th:fragment="balanceSheetHeaderRow" class="app-check-your-answers__contents">
+            <dt class="app-check-your-answers__question" th:text="${description}"></dt>
+            <dd  class="app-check-your-answers__answer"></dd>
+            <dd  class="app-check-your-answers__answer"></dd>
+            <dd class="app-check-your-answers__change"></dd>
+        </div>
+    </body>
+</html>
