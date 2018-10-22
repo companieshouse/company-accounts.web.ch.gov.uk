@@ -14,15 +14,18 @@ public class ApprovalTransformerImpl implements ApprovalTransformer {
     public ApprovalApi getApprovalApi(Approval approval) {
 
         ApprovalApi approvalApi = new ApprovalApi();
-
-        LocalDate localDate = LocalDate.parse(
-                approval.getApprovalDate().getYear() + "-" +
-                approval.getApprovalDate().getMonth() + "-" +
-                approval.getApprovalDate().getDay(),
-                DateTimeFormatter.ofPattern("yyyy-M-d"));
-
-        approvalApi.setDate(localDate);
+        approvalApi.setDate(getApprovalDate(approval));
         approvalApi.setName(approval.getDirectorName());
         return approvalApi;
+    }
+
+    @Override
+    public LocalDate getApprovalDate(Approval approval) {
+
+        return LocalDate.parse(
+                approval.getDate().getYear() + "-" +
+                approval.getDate().getMonth() + "-" +
+                approval.getDate().getDay(),
+                DateTimeFormatter.ofPattern("yyyy-M-d"));
     }
 }

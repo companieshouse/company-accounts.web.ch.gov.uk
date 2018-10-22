@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.enumeration.ValidationMessage;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.links.SmallFullLinkType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
@@ -72,5 +74,22 @@ public class ApprovalServiceImpl extends SmallFullResourceService implements App
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<ValidationError> validateApprovalDate(Approval approval) {
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        try {
+            transformer.getApprovalDate(approval);
+        } catch (DateTimeParseException e) {
+            ValidationError error = new ValidationError();
+            error.setFieldPath("approvalDate");
+            error.setMessageKey(ValidationMessage.INVALID_DATE_SUPPLIED.getMessageKey() + ".approval.date");
+            validationErrors.add(error);
+        }
+
+        return validationErrors;
     }
 }
