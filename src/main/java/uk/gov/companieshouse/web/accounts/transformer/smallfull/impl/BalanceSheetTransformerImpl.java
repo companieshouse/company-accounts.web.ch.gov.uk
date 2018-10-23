@@ -1,14 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
-import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
-import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
-import uk.gov.companieshouse.api.model.accounts.smallfull.FixedAssetsApi;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
-import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
-import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.api.model.accounts.smallfull.*;
+import uk.gov.companieshouse.web.accounts.model.smallfull.*;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 
 @Component
@@ -39,6 +33,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         if (balanceSheetApi.getCalledUpShareCapitalNotPaid() != null) {
             populateCurrentCalledUpShareCapitalNotPaid(balanceSheet, balanceSheetApi.getCalledUpShareCapitalNotPaid());
         }
+
+        if (balanceSheetApi.getCurrentAssetsApi() != null) {
+            populateCurrentCurrentAssets(balanceSheet, balanceSheetApi.getCurrentAssetsApi());
+        }
     }
 
     private void populatePreviousPeriodValues(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
@@ -49,6 +47,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         if (balanceSheetApi.getCalledUpShareCapitalNotPaid() != null) {
             populatePreviousCalledUpShareCapitalNotPaid(balanceSheet, balanceSheetApi.getCalledUpShareCapitalNotPaid());
+        }
+
+        if (balanceSheetApi.getCurrentAssetsApi() != null) {
+            populatePreviousCurrentAssets(balanceSheet, balanceSheetApi.getCurrentAssetsApi());
         }
     }
 
@@ -111,6 +113,64 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         return fixedAssets;
     }
 
+    private CurrentAssets createCurrentAssets(BalanceSheet balanceSheet) {
+
+       CurrentAssets currentAssets;
+
+        if (balanceSheet.getCurrentAssets() == null) {
+            currentAssets = new CurrentAssets();
+            balanceSheet.setCurrentAssets(currentAssets);
+        } else {
+           currentAssets = balanceSheet.getCurrentAssets();
+        }
+
+        return currentAssets;
+    }
+
+    private Stocks createStocks (BalanceSheet balanceSheet) {
+
+        Stocks stocks;
+
+        if (balanceSheet.getCurrentAssets().getStocks() == null) {
+            stocks = new Stocks();
+            balanceSheet.getCurrentAssets().setStocks(stocks);
+        } else {
+            stocks = balanceSheet.getCurrentAssets().getStocks();
+        }
+
+        return stocks;
+    }
+
+    private Debtors createDebtors (BalanceSheet balanceSheet) {
+
+        Debtors debtors;
+
+        if (balanceSheet.getCurrentAssets().getDebtors() == null) {
+            debtors = new Debtors();
+            balanceSheet.getCurrentAssets().setDebtors(debtors);
+        } else {
+            debtors = balanceSheet.getCurrentAssets().getDebtors();
+        }
+
+        return debtors;
+    }
+
+    private CashAtBankAndInHand createCashAtBankAndInHand (BalanceSheet balanceSheet) {
+
+        CashAtBankAndInHand cashAtBankAndInHand;
+
+        if (balanceSheet.getCurrentAssets().getCashAtBankAndInHand() == null) {
+            cashAtBankAndInHand = new CashAtBankAndInHand();
+            balanceSheet.getCurrentAssets().setCashAtBankAndInHand(cashAtBankAndInHand);
+        } else {
+            cashAtBankAndInHand = balanceSheet.getCurrentAssets().getCashAtBankAndInHand();
+        }
+
+        return cashAtBankAndInHand;
+    }
+
+
+
     private TangibleAssets createTangibleAssets(BalanceSheet balanceSheet) {
 
         TangibleAssets tangibleAssets;
@@ -142,6 +202,75 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
     }
 
+    private void populatePreviousCurrentAssets(BalanceSheet balanceSheet, CurrentAssetsApi currentAssetsApi) {
+
+        CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
+
+        // Stocks
+        if (currentAssetsApi.getStocks() != null) {
+
+            Stocks stocks = createStocks(balanceSheet);
+            stocks.setPreviousAmount(currentAssetsApi.getStocks());
+        }
+
+        // Debtors
+
+        if (currentAssetsApi.getStocks() != null) {
+
+            Debtors debtors = createDebtors(balanceSheet);
+            debtors.setPreviousAmount(currentAssetsApi.getDebtors());
+        }
+
+        // Cash at bank and in hand
+
+        if (currentAssetsApi.getCashAtBankAndInHand() != null) {
+
+            CashAtBankAndInHand cashAtBankAndInHand = createCashAtBankAndInHand(balanceSheet);
+            cashAtBankAndInHand.setPreviousAmount(currentAssetsApi.getCashAtBankAndInHand());
+        }
+
+        // Total
+
+        if (currentAssetsApi.getTotal() != null) {
+            currentAssets.setPreviousCurrentAssetsTotal(currentAssetsApi.getTotal());
+        }
+    }
+
+    private void populateCurrentCurrentAssets(BalanceSheet balanceSheet, CurrentAssetsApi currentAssetsApi) {
+
+        CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
+
+        // Stocks
+        if (currentAssetsApi.getStocks() != null) {
+
+            Stocks stocks = createStocks(balanceSheet);
+            stocks.setCurrentAmount(currentAssetsApi.getStocks());
+        }
+
+        // Debtors
+
+        if (currentAssetsApi.getStocks() != null) {
+
+            Debtors debtors = createDebtors(balanceSheet);
+            debtors.setCurrentAmount(currentAssetsApi.getDebtors());
+        }
+
+        // Cash at bank and in hand
+
+        if (currentAssetsApi.getCashAtBankAndInHand() != null) {
+
+            CashAtBankAndInHand cashAtBankAndInHand = createCashAtBankAndInHand(balanceSheet);
+            cashAtBankAndInHand.setCurrentAmount(currentAssetsApi.getCashAtBankAndInHand());
+        }
+
+        // Total
+
+        if (currentAssetsApi.getTotal() != null) {
+            currentAssets.setCurrentCurrentAssetsTotal(currentAssetsApi.getTotal());
+        }
+    }
+
+
     @Override
     public CurrentPeriodApi getCurrentPeriod(BalanceSheet balanceSheet) {
 
@@ -160,6 +289,17 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         if (balanceSheet.getCalledUpShareCapitalNotPaid() != null) {
 
             balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        }
+
+        if (balanceSheet.getCurrentAssets() != null) {
+
+            CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
+            currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
+            currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
+            currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
+            currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentCurrentAssetsTotal());
+
+            balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
         }
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
@@ -187,6 +327,17 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         if (balanceSheet.getCalledUpShareCapitalNotPaid() != null) {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
 
+        }
+
+        if (balanceSheet.getCurrentAssets() != null) {
+
+            CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
+            currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
+            currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
+            currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
+            currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentCurrentAssetsTotal());
+
+            balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
         }
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
