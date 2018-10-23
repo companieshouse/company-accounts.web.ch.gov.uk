@@ -141,6 +141,12 @@
 
                     <h2 class="govuk-heading-m">Current assets</h2>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentAssets.stocks.currentAmount',
+                        previousField = 'currentAssets.stocks.previousAmount'
+                        )">
+                    </div>
+
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half">
                             Stocks
@@ -163,6 +169,12 @@
                                  )">
                             </div>
                         </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentAssets.debtors.currentAmount',
+                        previousField = 'currentAssets.debtors.previousAmount'
+                        )">
                     </div>
 
                     <div class="govuk-grid-row">
@@ -189,6 +201,12 @@
                         </div>
                     </div>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentAssets.cashAtBankAndInHand.currentAmount',
+                        previousField = 'currentAssets.cashAtBankAndInHand.previousAmount'
+                        )">
+                    </div>
+
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half">
                             Cash at bank and in hand
@@ -211,6 +229,12 @@
                                  )">
                             </div>
                         </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentAssets.currentCurrentAssetsTotal',
+                        previousField = 'currentAssets.previousCurrentAssetsTotal'
+                        )">
                     </div>
 
                     <div class="govuk-grid-row accounts-total">
