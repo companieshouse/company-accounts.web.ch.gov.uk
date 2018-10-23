@@ -222,7 +222,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
 
         // Debtors
-        if (currentAssetsApi.getStocks() != null) {
+        if (currentAssetsApi.getDebtors() != null) {
             Debtors debtors = createDebtors(balanceSheet);
             debtors.setPreviousAmount(currentAssetsApi.getDebtors());
         }
