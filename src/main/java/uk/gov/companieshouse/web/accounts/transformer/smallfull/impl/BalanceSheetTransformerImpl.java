@@ -288,7 +288,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
 
         if (balanceSheet.getCurrentAssets() != null) {
-            addCurrentCurrentAssetsToBalanceSheetApi(balanceSheet, balanceSheetApi);
+            populateCurrentPeriodCurrentAssets(balanceSheet, balanceSheetApi);
         }
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
@@ -319,7 +319,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
 
         if (balanceSheet.getCurrentAssets() != null) {
-            addPreviousCurrentAssetsToBalanceSheetApi(balanceSheet, balanceSheetApi);
+            populatePreviousPeriodCurrentAssets(balanceSheet, balanceSheetApi);
         }
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
@@ -329,7 +329,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     }
 
 
-    private void addCurrentCurrentAssetsToBalanceSheetApi(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+    private void populateCurrentPeriodCurrentAssets(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
         currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
         currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
@@ -339,7 +339,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
     }
 
-    private void addPreviousCurrentAssetsToBalanceSheetApi(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+    private void populatePreviousPeriodCurrentAssets(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
         currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
         currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
