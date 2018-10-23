@@ -20,6 +20,7 @@ public class BalanceSheet {
     private FixedAssets fixedAssets;
 
     @Valid
-    private OtherLiabilitiesOrAssets otherLiabilitiesOrAssets;
+    private CurrentAssets currentAssets;
 
+    private OtherLiabilitiesOrAssets otherLiabilitiesOrAssets;
 }
