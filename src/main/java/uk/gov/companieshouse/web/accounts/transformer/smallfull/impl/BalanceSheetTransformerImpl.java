@@ -1,8 +1,19 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.api.model.accounts.smallfull.*;
-import uk.gov.companieshouse.web.accounts.model.smallfull.*;
+import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.FixedAssetsApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentAssetsApi;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CashAtBankAndInHand;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 
 @Component
