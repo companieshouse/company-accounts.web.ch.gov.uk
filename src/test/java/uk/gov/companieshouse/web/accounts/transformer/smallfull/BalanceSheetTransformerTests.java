@@ -27,10 +27,10 @@ public class BalanceSheetTransformerTests {
     private static final Long CURRENT_CALLED_UP_SHARE_CAPITAL = 1L;
     private static final Long CURRENT_TANGIBLE = 5L;
     private static final Long CURRENT_FIXED_ASSETS_TOTAL = 5L;
-    private static final Long CURRENT_STOCKS = 6L;
-    private static final Long CURRENT_DEBTORS = 6L;
-    private static final Long CURRENT_CASH_AT_BANK = 6L;
-    private static final Long CURRENT_CURRENT_ASSETS_TOTAL = 18L;
+    private static final Long CURRENT_STOCKS = 3L;
+    private static final Long CURRENT_DEBTORS = 3L;
+    private static final Long CURRENT_CASH_AT_BANK = 3L;
+    private static final Long CURRENT_CURRENT_ASSETS_TOTAL = 9L;
 
     private static final Long PREVIOUS_CALLED_UP_SHARE_CAPITAL = 2L;
     private static final Long PREVIOUS_TANGIBLE = 10L;
