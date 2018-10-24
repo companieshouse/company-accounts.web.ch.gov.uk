@@ -17,7 +17,8 @@ public enum ValidationMessage {
     // API validation error to message key mappings
     VALUE_OUTSIDE_RANGE("value_outside_range", "validation.range.outside"),
     INVALID_CHARACTER("invalid_character", "validation.character.invalid"),
-    INCORRECT_TOTAL("incorrect_total", "validation.total.invalid");
+    INCORRECT_TOTAL("incorrect_total", "validation.total.invalid"),
+    MANDATORY_ELEMENT_MISSING("mandatory_element_missing", "validation.mandatory");
 
     private String messageKey;
     private String apiError;
