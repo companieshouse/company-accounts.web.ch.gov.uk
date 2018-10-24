@@ -258,7 +258,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         CreditorsDueWithinOneYear creditorsDueWithinOneYear;
 
-        if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() == null) {
+        if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() == null) {
             creditorsDueWithinOneYear = new CreditorsDueWithinOneYear();
             balanceSheet.getOtherLiabilitiesOrAssets().setCreditorsDueWithinOneYear(creditorsDueWithinOneYear);
         } else {
@@ -272,7 +272,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         NetCurrentAssets netCurrentAssets;
 
-        if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() == null) {
+        if (balanceSheet.getOtherLiabilitiesOrAssets().getNetCurrentAssets() == null) {
             netCurrentAssets = new NetCurrentAssets();
             balanceSheet.getOtherLiabilitiesOrAssets().setNetCurrentAssets(netCurrentAssets);
         } else {
@@ -286,7 +286,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome;
 
-        if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() == null) {
+        if (balanceSheet.getOtherLiabilitiesOrAssets().getPrepaymentsAndAccruedIncome() == null) {
             prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
             balanceSheet.getOtherLiabilitiesOrAssets().setPrepaymentsAndAccruedIncome(prepaymentsAndAccruedIncome);
         } else {
@@ -300,7 +300,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         ProvisionForLiabilities provisionForLiabilities;
 
-        if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() == null) {
+        if (balanceSheet.getOtherLiabilitiesOrAssets().getProvisionForLiabilities() == null) {
             provisionForLiabilities = new ProvisionForLiabilities();
             balanceSheet.getOtherLiabilitiesOrAssets().setProvisionForLiabilities(provisionForLiabilities);
         } else {
@@ -314,7 +314,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         TotalAssetsLessCurrentLiabilities totalAssetsLessCurrentLiabilities;
 
-        if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() == null) {
+        if (balanceSheet.getOtherLiabilitiesOrAssets().getTotalAssetsLessCurrentLiabilities() == null) {
             totalAssetsLessCurrentLiabilities = new TotalAssetsLessCurrentLiabilities();
             balanceSheet.getOtherLiabilitiesOrAssets().setTotalAssetsLessCurrentLiabilities(totalAssetsLessCurrentLiabilities);
         } else {
@@ -328,7 +328,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         TotalNetAssets totalNetAssets;
 
-        if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() == null) {
+        if (balanceSheet.getOtherLiabilitiesOrAssets().getTotalNetAssets() == null) {
             totalNetAssets = new TotalNetAssets();
             balanceSheet.getOtherLiabilitiesOrAssets().setTotalNetAssets(totalNetAssets);
         } else {
@@ -434,22 +434,22 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             netCurrentAssets.setCurrentAmount(otherLiabilitiesOrAssetsApi.getNetCurrentAssets());
         }
 
-        if (otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome() != null) {
+        if (otherLiabilitiesOrAssetsApi.getPrepaymentsAndAccruedIncome() != null) {
             PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = createPrepaymentsAndAccruedIncome(balanceSheet);
             prepaymentsAndAccruedIncome.setCurrentAmount(otherLiabilitiesOrAssetsApi.getPrepaymentsAndAccruedIncome());
         }
 
-        if (otherLiabilitiesOrAssets.getProvisionForLiabilities() != null) {
+        if (otherLiabilitiesOrAssetsApi.getProvisionForLiabilities() != null) {
             ProvisionForLiabilities provisionForLiabilities = createProvisionForLiabilities(balanceSheet);
             provisionForLiabilities.setCurrentAmount(otherLiabilitiesOrAssetsApi.getProvisionForLiabilities());
         }
 
-        if (otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities() != null) {
+        if (otherLiabilitiesOrAssetsApi.getTotalAssetsLessCurrentLiabilities() != null) {
             TotalAssetsLessCurrentLiabilities totalAssetsLessCurrentLiabilities = createTotalAssetsLessCurrentLiabilities(balanceSheet);
             totalAssetsLessCurrentLiabilities.setCurrentAmount(otherLiabilitiesOrAssetsApi.getTotalAssetsLessCurrentLiabilities());
         }
 
-        if (otherLiabilitiesOrAssets.getTotalNetAssets() != null) {
+        if (otherLiabilitiesOrAssetsApi.getTotalNetAssets() != null) {
             TotalNetAssets totalNetAssets = createTotalNetAssets(balanceSheet);
             totalNetAssets.setCurrentAmount(otherLiabilitiesOrAssetsApi.getTotalNetAssets());
         }
@@ -479,22 +479,22 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             netCurrentAssets.setPreviousAmount(otherLiabilitiesOrAssetsApi.getNetCurrentAssets());
         }
 
-        if (otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome() != null) {
+        if (otherLiabilitiesOrAssetsApi.getPrepaymentsAndAccruedIncome() != null) {
             PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = createPrepaymentsAndAccruedIncome(balanceSheet);
             prepaymentsAndAccruedIncome.setPreviousAmount(otherLiabilitiesOrAssetsApi.getPrepaymentsAndAccruedIncome());
         }
 
-        if (otherLiabilitiesOrAssets.getProvisionForLiabilities() != null) {
+        if (otherLiabilitiesOrAssetsApi.getProvisionForLiabilities() != null) {
             ProvisionForLiabilities provisionForLiabilities = createProvisionForLiabilities(balanceSheet);
             provisionForLiabilities.setPreviousAmount(otherLiabilitiesOrAssetsApi.getProvisionForLiabilities());
         }
 
-        if (otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities() != null) {
+        if (otherLiabilitiesOrAssetsApi.getTotalAssetsLessCurrentLiabilities() != null) {
             TotalAssetsLessCurrentLiabilities totalAssetsLessCurrentLiabilities = createTotalAssetsLessCurrentLiabilities(balanceSheet);
             totalAssetsLessCurrentLiabilities.setPreviousAmount(otherLiabilitiesOrAssetsApi.getTotalAssetsLessCurrentLiabilities());
         }
 
-        if (otherLiabilitiesOrAssets.getTotalNetAssets() != null) {
+        if (otherLiabilitiesOrAssetsApi.getTotalNetAssets() != null) {
             TotalNetAssets totalNetAssets = createTotalNetAssets(balanceSheet);
             totalNetAssets.setPreviousAmount(otherLiabilitiesOrAssetsApi.getTotalNetAssets());
         }
@@ -523,10 +523,14 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             addCurrentPeriodCurrentAssetsToBalanceSheet(balanceSheet, balanceSheetApi);
         }
 
+        if (balanceSheet.getOtherLiabilitiesOrAssets() != null) {
+            addCurrentPeriodOtherLiabilitiesOrAssets(balanceSheet, balanceSheetApi);
+        }
+
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
         currentPeriod.setBalanceSheetApi(balanceSheetApi);
-        return currentPeriod;
 
+        return currentPeriod;
     }
 
     @Override
@@ -547,11 +551,14 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         if (balanceSheet.getCalledUpShareCapitalNotPaid() != null) {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
-
         }
 
         if (balanceSheet.getCurrentAssets() != null) {
             addPreviousPeriodCurrentAssetsToBalanceSheet(balanceSheet, balanceSheetApi);
+        }
+
+        if (balanceSheet.getOtherLiabilitiesOrAssets() != null) {
+            addPreviousPeriodOtherLiabilitiesOrAssets(balanceSheet, balanceSheetApi);
         }
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
@@ -579,5 +586,85 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentCurrentAssetsTotal());
 
         balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
+    }
+
+    private void addCurrentPeriodOtherLiabilitiesOrAssets(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+
+        OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
+        OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
+
+        if (otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome() != null) {
+            otherLiabilitiesOrAssetsApi.setPrepaymentsAndAccruedIncome(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getCurrentAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear() != null) {
+            otherLiabilitiesOrAssetsApi.setCreditorsDueWithinOneYear(otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getCurrentAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getCreditorsAfterOneYear() != null) {
+            otherLiabilitiesOrAssetsApi.setCreditorsAfterOneYear(otherLiabilitiesOrAssets.getCreditorsAfterOneYear().getCurrentAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome() != null) {
+            otherLiabilitiesOrAssetsApi.setAccrualsAndDeferredIncome(otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getCurrentAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getNetCurrentAssets() != null) {
+            otherLiabilitiesOrAssetsApi.setNetCurrentAssets(otherLiabilitiesOrAssets.getNetCurrentAssets().getCurrentAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getProvisionForLiabilities() != null) {
+            otherLiabilitiesOrAssetsApi.setProvisionForLiabilities(otherLiabilitiesOrAssets.getProvisionForLiabilities().getCurrentAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getTotalNetAssets() != null) {
+            otherLiabilitiesOrAssetsApi.setTotalNetAssets(otherLiabilitiesOrAssets.getTotalNetAssets().getCurrentAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities() != null) {
+            otherLiabilitiesOrAssetsApi.setTotalAssetsLessCurrentLiabilities(otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getCurrentAmount());
+        }
+
+        balanceSheetApi.setOtherLiabilitiesOrAssetsApi(otherLiabilitiesOrAssetsApi);
+    }
+
+    private void addPreviousPeriodOtherLiabilitiesOrAssets(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+
+        OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
+        OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
+
+        if (otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome() != null) {
+            otherLiabilitiesOrAssetsApi.setPrepaymentsAndAccruedIncome(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getPreviousAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear() != null) {
+            otherLiabilitiesOrAssetsApi.setCreditorsDueWithinOneYear(otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getPreviousAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getCreditorsAfterOneYear() != null) {
+            otherLiabilitiesOrAssetsApi.setCreditorsAfterOneYear(otherLiabilitiesOrAssets.getCreditorsAfterOneYear().getPreviousAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome() != null) {
+            otherLiabilitiesOrAssetsApi.setAccrualsAndDeferredIncome(otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getPreviousAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getNetCurrentAssets() != null) {
+            otherLiabilitiesOrAssetsApi.setNetCurrentAssets(otherLiabilitiesOrAssets.getNetCurrentAssets().getPreviousAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getProvisionForLiabilities() != null) {
+            otherLiabilitiesOrAssetsApi.setProvisionForLiabilities(otherLiabilitiesOrAssets.getProvisionForLiabilities().getPreviousAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getTotalNetAssets() != null) {
+            otherLiabilitiesOrAssetsApi.setTotalNetAssets(otherLiabilitiesOrAssets.getTotalNetAssets().getPreviousAmount());
+        }
+
+        if (otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities() != null) {
+            otherLiabilitiesOrAssetsApi.setTotalAssetsLessCurrentLiabilities(otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getPreviousAmount());
+        }
+
+        balanceSheetApi.setOtherLiabilitiesOrAssetsApi(otherLiabilitiesOrAssetsApi);
     }
 }
