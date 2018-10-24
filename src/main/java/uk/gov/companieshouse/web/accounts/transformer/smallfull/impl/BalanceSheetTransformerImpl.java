@@ -48,15 +48,15 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     private void populateCurrentPeriodValues(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         if (balanceSheetApi.getFixedAssetsApi() != null) {
-            populateCurrentFixedAssets(balanceSheet, balanceSheetApi.getFixedAssetsApi());
+            populateCurrentPeriodFixedAssets(balanceSheet, balanceSheetApi.getFixedAssetsApi());
         }
 
         if (balanceSheetApi.getCalledUpShareCapitalNotPaid() != null) {
-            populateCurrentCalledUpShareCapitalNotPaid(balanceSheet, balanceSheetApi.getCalledUpShareCapitalNotPaid());
+            populateCurrentPeriodCalledUpShareCapitalNotPaid(balanceSheet, balanceSheetApi.getCalledUpShareCapitalNotPaid());
         }
 
         if (balanceSheetApi.getCurrentAssetsApi() != null) {
-            populateCurrentCurrentAssets(balanceSheet, balanceSheetApi.getCurrentAssetsApi());
+            populateCurrentPeriodCurrentAssets(balanceSheet, balanceSheetApi.getCurrentAssetsApi());
         }
 
         if (balanceSheetApi.getOtherLiabilitiesOrAssetsApi() != null) {
@@ -67,15 +67,15 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     private void populatePreviousPeriodValues(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         if (balanceSheetApi.getFixedAssetsApi() != null) {
-            populatePreviousFixedAssets(balanceSheet, balanceSheetApi.getFixedAssetsApi());
+            populatePreviousPeriodFixedAssets(balanceSheet, balanceSheetApi.getFixedAssetsApi());
         }
 
         if (balanceSheetApi.getCalledUpShareCapitalNotPaid() != null) {
-            populatePreviousCalledUpShareCapitalNotPaid(balanceSheet, balanceSheetApi.getCalledUpShareCapitalNotPaid());
+            populatePreviousPeriodCalledUpShareCapitalNotPaid(balanceSheet, balanceSheetApi.getCalledUpShareCapitalNotPaid());
         }
 
         if (balanceSheetApi.getCurrentAssetsApi() != null) {
-            populatePreviousCurrentAssets(balanceSheet, balanceSheetApi.getCurrentAssetsApi());
+            populatePreviousPeriodCurrentAssets(balanceSheet, balanceSheetApi.getCurrentAssetsApi());
         }
 
         if (balanceSheetApi.getOtherLiabilitiesOrAssetsApi() != null) {
@@ -83,7 +83,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
     }
 
-    private void populateCurrentCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet, Long amount) {
+    private void populateCurrentPeriodCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet, Long amount) {
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
@@ -97,7 +97,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         calledUpShareCapitalNotPaid.setCurrentAmount(amount);
     }
 
-    private void populatePreviousCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet, Long amount) {
+    private void populatePreviousPeriodCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet, Long amount) {
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
@@ -111,7 +111,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         calledUpShareCapitalNotPaid.setPreviousAmount(amount);
     }
 
-    private void populateCurrentFixedAssets(BalanceSheet balanceSheet, FixedAssetsApi fixedAssetsApi) {
+    private void populateCurrentPeriodFixedAssets(BalanceSheet balanceSheet, FixedAssetsApi fixedAssetsApi) {
 
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
 
@@ -338,7 +338,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         return totalNetAssets;
     }
 
-    private void populatePreviousFixedAssets(BalanceSheet balanceSheet, FixedAssetsApi fixedAssetsApi) {
+    private void populatePreviousPeriodFixedAssets(BalanceSheet balanceSheet, FixedAssetsApi fixedAssetsApi) {
 
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
 
@@ -354,7 +354,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
     }
 
-    private void populatePreviousCurrentAssets(BalanceSheet balanceSheet, CurrentAssetsApi currentAssetsApi) {
+    private void populatePreviousPeriodCurrentAssets(BalanceSheet balanceSheet, CurrentAssetsApi currentAssetsApi) {
 
         CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
 
@@ -365,7 +365,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
 
         // Debtors
-        if (currentAssetsApi.getStocks() != null) {
+        if (currentAssetsApi.getDebtors() != null) {
             Debtors debtors = createDebtors(balanceSheet);
             debtors.setPreviousAmount(currentAssetsApi.getDebtors());
         }
@@ -382,7 +382,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
     }
 
-    private void populateCurrentCurrentAssets(BalanceSheet balanceSheet, CurrentAssetsApi currentAssetsApi) {
+    private void populateCurrentPeriodCurrentAssets(BalanceSheet balanceSheet, CurrentAssetsApi currentAssetsApi) {
 
         CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
 
@@ -520,7 +520,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
 
         if (balanceSheet.getCurrentAssets() != null) {
-            addCurrentCurrentAssetsToBalanceSheetApi(balanceSheet, balanceSheetApi);
+            addCurrentPeriodCurrentAssetsToBalanceSheet(balanceSheet, balanceSheetApi);
         }
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
@@ -551,7 +551,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         }
 
         if (balanceSheet.getCurrentAssets() != null) {
-            addPreviousCurrentAssetsToBalanceSheetApi(balanceSheet, balanceSheetApi);
+            addPreviousPeriodCurrentAssetsToBalanceSheet(balanceSheet, balanceSheetApi);
         }
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
@@ -561,7 +561,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     }
 
 
-    private void addCurrentCurrentAssetsToBalanceSheetApi(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+    private void addCurrentPeriodCurrentAssetsToBalanceSheet(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
         currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
         currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
@@ -571,7 +571,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
     }
 
-    private void addPreviousCurrentAssetsToBalanceSheetApi(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+    private void addPreviousPeriodCurrentAssetsToBalanceSheet(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
         currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
         currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());

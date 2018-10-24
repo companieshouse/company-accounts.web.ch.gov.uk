@@ -2,8 +2,21 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import uk.gov.companieshouse.api.model.accounts.smallfull.*;
-import uk.gov.companieshouse.web.accounts.model.smallfull.*;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentAssetsApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.FixedAssetsApi;
+
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CashAtBankAndInHand;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
+
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.BalanceSheetTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,10 +27,10 @@ public class BalanceSheetTransformerTests {
     private static final Long CURRENT_CALLED_UP_SHARE_CAPITAL = 1L;
     private static final Long CURRENT_TANGIBLE = 5L;
     private static final Long CURRENT_FIXED_ASSETS_TOTAL = 5L;
-    private static final Long CURRENT_STOCKS = 6L;
-    private static final Long CURRENT_DEBTORS = 6L;
-    private static final Long CURRENT_CASH_AT_BANK = 6L;
-    private static final Long CURRENT_CURRENT_ASSETS_TOTAL = 18L;
+    private static final Long CURRENT_STOCKS = 3L;
+    private static final Long CURRENT_DEBTORS = 3L;
+    private static final Long CURRENT_CASH_AT_BANK = 3L;
+    private static final Long CURRENT_CURRENT_ASSETS_TOTAL = 9L;
 
     private static final Long PREVIOUS_CALLED_UP_SHARE_CAPITAL = 2L;
     private static final Long PREVIOUS_TANGIBLE = 10L;
