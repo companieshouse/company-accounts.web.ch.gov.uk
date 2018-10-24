@@ -324,7 +324,6 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
         previousPeriodApi.setBalanceSheet(balanceSheetApi);
-
         return previousPeriodApi;
     }
 
@@ -340,12 +339,14 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     }
 
     private void addPreviousPeriodCurrentAssetsToBalanceSheet(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-        CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
-        currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
-        currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
-        currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
-        currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentCurrentAssetsTotal());
+        if (balanceSheet.getCurrentAssets() != null) {
+            CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
+            currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
+            currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
+            currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
+            currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getPreviousCurrentAssetsTotal());
 
-        balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
+            balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
+        }
     }
 }
