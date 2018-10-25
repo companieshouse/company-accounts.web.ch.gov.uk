@@ -196,7 +196,7 @@ public class BalanceSheetTransformerTests {
         currentAssets.setStocks(stocks);
         currentAssets.setDebtors(debtors);
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
-        currentAssets.setCurrentCurrentAssetsTotal(PREVIOUS_CURRENT_ASSETS_TOTAL);
+        currentAssets.setPreviousCurrentAssetsTotal(PREVIOUS_CURRENT_ASSETS_TOTAL);
         balanceSheet.setCurrentAssets(currentAssets);
 
         return balanceSheet;
