@@ -52,7 +52,7 @@
 
                     <!-- Start Fixed Assets -->
 
-                    <th:block th:if="*{balanceSheet?.fixedAssets?.totalCurrentFixedAssets != null or balanceSheet?.fixedAssets?.totalPreviousFixedAssets != null}">
+                    <th:block th:if="*{balanceSheet?.fixedAssets?.currentTotal != null or balanceSheet?.fixedAssets?.previousTotal != null}">
 
                         <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
                             description = 'Fixed assets'
@@ -70,8 +70,8 @@
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total fixed assets',
                             identifier = 'total-fixed-assets',
-                            currentAmount = *{balanceSheet?.fixedAssets?.totalCurrentFixedAssets},
-                            previousAmount = *{balanceSheet?.fixedAssets?.totalPreviousFixedAssets},
+                            currentAmount = *{balanceSheet?.fixedAssets?.currentTotal},
+                            previousAmount = *{balanceSheet?.fixedAssets?.previousTotal},
                             isTotalRow = true
                         )">
                         </div>
@@ -82,7 +82,7 @@
 
                     <!-- Start Current Assets -->
 
-                    <th:block th:if="*{balanceSheet?.currentAssets?.totalCurrentCurrentAssetsTotal != null or balanceSheet?.currentAssets?.totalPreviousCurrentAssetsTotal != null}">
+                    <th:block th:if="*{balanceSheet?.currentAssets?.currentTotal != null or balanceSheet?.currentAssets?.previousTotal != null}">
 
                         <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
                             description = 'Current assets'
@@ -116,8 +116,8 @@
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total current assets',
                             identifier = 'total-current-assets',
-                            currentAmount = *{balanceSheet?.currentAssets?.totalCurrentCurrentAssets},
-                            previousAmount = *{balanceSheet?.currentAssets?.totalPreviousCurrentAssets},
+                            currentAmount = *{balanceSheet?.currentAssets?.currentTotal},
+                            previousAmount = *{balanceSheet?.currentAssets?.previousTotal},
                             isTotalRow = true
                         )">
                         </div>

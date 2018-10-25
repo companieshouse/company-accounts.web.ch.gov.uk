@@ -106,7 +106,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         // Total fixed assets
         if (fixedAssetsApi.getTotal() != null) {
-            fixedAssets.setTotalCurrentFixedAssets(fixedAssetsApi.getTotal());
+            fixedAssets.setCurrentTotal(fixedAssetsApi.getTotal());
         }
     }
 
@@ -207,7 +207,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         // Total fixed assets
         if (fixedAssetsApi.getTotal() != null) {
-            fixedAssets.setTotalPreviousFixedAssets(fixedAssetsApi.getTotal());
+            fixedAssets.setPreviousTotal(fixedAssetsApi.getTotal());
         }
     }
 
@@ -235,7 +235,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         // Total
         if (currentAssetsApi.getTotal() != null) {
-            currentAssets.setTotalPreviousCurrentAssets(currentAssetsApi.getTotal());
+            currentAssets.setPreviousTotal(currentAssetsApi.getTotal());
         }
     }
 
@@ -263,7 +263,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         // Total
         if (currentAssetsApi.getTotal() != null) {
-            currentAssets.setTotalCurrentCurrentAssets(currentAssetsApi.getTotal());
+            currentAssets.setCurrentTotal(currentAssetsApi.getTotal());
         }
     }
 
@@ -278,7 +278,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
             fixedAssetsApi.setTangibleApi(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
-            fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getTotalCurrentFixedAssets());
+            fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getCurrentTotal());
 
             balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
         }
@@ -307,7 +307,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
             fixedAssetsApi.setTangibleApi(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
-            fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getTotalPreviousFixedAssets());
+            fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getPreviousTotal());
 
             balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
 
@@ -333,7 +333,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
         currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
         currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
-        currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getTotalCurrentCurrentAssets());
+        currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentTotal());
 
         balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
     }
@@ -344,7 +344,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
             currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
-            currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getTotalPreviousCurrentAssets());
+            currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getPreviousTotal());
 
             balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
         }

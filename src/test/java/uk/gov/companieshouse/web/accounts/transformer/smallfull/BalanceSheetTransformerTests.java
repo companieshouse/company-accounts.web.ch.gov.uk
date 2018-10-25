@@ -54,11 +54,11 @@ public class BalanceSheetTransformerTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertEquals(CURRENT_TANGIBLE, balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
-        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalCurrentFixedAssets());
+        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getCurrentTotal());
         assertEquals(CURRENT_STOCKS, balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
         assertEquals(CURRENT_CASH_AT_BANK, balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
         assertEquals(CURRENT_DEBTORS, balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
-        assertEquals(CURRENT_CURRENT_ASSETS_TOTAL, balanceSheet.getCurrentAssets().getTotalCurrentCurrentAssets());
+        assertEquals(CURRENT_CURRENT_ASSETS_TOTAL, balanceSheet.getCurrentAssets().getCurrentTotal());
     }
 
 
@@ -127,7 +127,7 @@ public class BalanceSheetTransformerTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertEquals(CURRENT_TANGIBLE, balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
-        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalCurrentFixedAssets());
+        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getCurrentTotal());
     }
 
     private BalanceSheet createMockBalanceSheetWithCurrentPeriod() {
@@ -139,7 +139,7 @@ public class BalanceSheetTransformerTests {
         TangibleAssets tangible = new TangibleAssets();
         tangible.setCurrentAmount(CURRENT_TANGIBLE);
         fixedAssets.setTangibleAssets(tangible);
-        fixedAssets.setTotalCurrentFixedAssets(CURRENT_FIXED_ASSETS_TOTAL);
+        fixedAssets.setCurrentTotal(CURRENT_FIXED_ASSETS_TOTAL);
         balanceSheet.setFixedAssets(fixedAssets);
 
         // Called up share capital not paid
@@ -160,7 +160,7 @@ public class BalanceSheetTransformerTests {
         currentAssets.setStocks(stocks);
         currentAssets.setDebtors(debtors);
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
-        currentAssets.setTotalCurrentCurrentAssets(CURRENT_CURRENT_ASSETS_TOTAL);
+        currentAssets.setCurrentTotal(CURRENT_CURRENT_ASSETS_TOTAL);
         balanceSheet.setCurrentAssets(currentAssets);
 
         return balanceSheet;
@@ -175,7 +175,7 @@ public class BalanceSheetTransformerTests {
         TangibleAssets tangible = new TangibleAssets();
         tangible.setPreviousAmount(PREVIOUS_TANGIBLE);
         fixedAssets.setTangibleAssets(tangible);
-        fixedAssets.setTotalPreviousFixedAssets(PREVIOUS_FIXED_ASSETS_TOTAL);
+        fixedAssets.setPreviousTotal(PREVIOUS_FIXED_ASSETS_TOTAL);
         balanceSheet.setFixedAssets(fixedAssets);
 
         // Called up share capital not paid
@@ -196,7 +196,7 @@ public class BalanceSheetTransformerTests {
         currentAssets.setStocks(stocks);
         currentAssets.setDebtors(debtors);
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
-        currentAssets.setTotalPreviousCurrentAssets(PREVIOUS_CURRENT_ASSETS_TOTAL);
+        currentAssets.setPreviousTotal(PREVIOUS_CURRENT_ASSETS_TOTAL);
 
         balanceSheet.setCurrentAssets(currentAssets);
 
