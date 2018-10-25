@@ -235,7 +235,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         // Total
         if (currentAssetsApi.getTotal() != null) {
-            currentAssets.setPreviousCurrentAssetsTotal(currentAssetsApi.getTotal());
+            currentAssets.setTotalPreviousCurrentAssetsTotal(currentAssetsApi.getTotal());
         }
     }
 
@@ -263,7 +263,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         // Total
         if (currentAssetsApi.getTotal() != null) {
-            currentAssets.setCurrentCurrentAssetsTotal(currentAssetsApi.getTotal());
+            currentAssets.setTotalCurrentCurrentAssetsTotal(currentAssetsApi.getTotal());
         }
     }
 
@@ -333,7 +333,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
         currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
         currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
-        currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentCurrentAssetsTotal());
+        currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getTotalCurrentCurrentAssetsTotal());
 
         balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
     }
@@ -344,7 +344,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
             currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
-            currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getPreviousCurrentAssetsTotal());
+            currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getTotalPreviousCurrentAssetsTotal());
 
             balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
         }

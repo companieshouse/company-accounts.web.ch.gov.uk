@@ -13,10 +13,9 @@ public class CurrentAssets {
     private CashAtBankAndInHand cashAtBankAndInHand;
 
     @ValidationMapping("$.current_period.balance_sheet.current_assets.total")
-    private Long currentCurrentAssetsTotal;
+    private Long totalCurrentCurrentAssetsTotal;
 
     @ValidationMapping("$.previous_period.balance_sheet.current_assets.total")
-    private Long previousCurrentAssetsTotal;
-
+    private Long totalPreviousCurrentAssetsTotal;
 
 }

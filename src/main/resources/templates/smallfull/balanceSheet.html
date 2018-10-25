@@ -233,8 +233,8 @@
                     </div>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'currentAssets.currentCurrentAssetsTotal',
-                        previousField = 'currentAssets.previousCurrentAssetsTotal'
+                        currentField = 'currentAssets.totalPreviousCurrentAssetsTotal',
+                        previousField = 'currentAssets.totalPreviousCurrentAssetsTotal'
                         )">
                     </div>
 
@@ -245,7 +245,7 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'currentAssets.currentCurrentAssetsTotal',
+                                id = 'currentAssets.totalCurrentCurrentAssetsTotal',
                                 text = 'Total current current assets',
                                 class= 'govuk-input current-current-assets-total',
                                 )">
@@ -253,7 +253,7 @@
                         </div>
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'currentAssets.previousCurrentAssetsTotal',
+                                 id = 'currentAssets.totalPreviousCurrentAssetsTotal',
                                  text = 'Total previous current assets',
                                  class= 'govuk-input previous-current-assets-total',
                                  )">

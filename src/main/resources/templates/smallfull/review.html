@@ -80,6 +80,52 @@
 
                     <!-- End Fixed Assets -->
 
+                    <!-- Start Current Assets -->
+
+                    <th:block th:if="*{balanceSheet?.currentAssets?.totalCurrentCurrentAssetsTotal != null or balanceSheet?.currentAssets?.totalPreviousCurrentAssetsTotal != null}">
+
+                        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                            description = 'Current assets'
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Stocks',
+                            identifier = 'stocks',
+                            currentAmount = *{balanceSheet?.currentAssets?.stocks?.currentAmount},
+                            previousAmount = *{balanceSheet?.currentAssets?.stocks?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Debtors',
+                            identifier = 'debtors',
+                            currentAmount = *{balanceSheet?.currentAssets?.debtors?.currentAmount},
+                            previousAmount = *{balanceSheet?.currentAssets?.debtors?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Cash at bank and in hand',
+                            identifier = 'cash-at-bank-and-in-hand',
+                            currentAmount = *{balanceSheet?.currentAssets?.cashAtBankAndInHand?.currentAmount},
+                            previousAmount = *{balanceSheet?.currentAssets?.cashAtBankAndInHand?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Total current assets',
+                            identifier = 'total-current-assets',
+                            currentAmount = *{balanceSheet?.currentAssets?.totalCurrentCurrentAssetsTotal},
+                            previousAmount = *{balanceSheet?.currentAssets?.totalPreviousCurrentAssetsTotal},
+                            isTotalRow = true
+                        )">
+                        </div>
+
+                    </th:block>
+
+                    <!-- End Current Assets -->
+
                 </dl>
 
                 <!-- End Balance Sheet -->
