@@ -116,8 +116,8 @@
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total current assets',
                             identifier = 'total-current-assets',
-                            currentAmount = *{balanceSheet?.currentAssets?.totalCurrentCurrentAssetsTotal},
-                            previousAmount = *{balanceSheet?.currentAssets?.totalPreviousCurrentAssetsTotal},
+                            currentAmount = *{balanceSheet?.currentAssets?.totalCurrentCurrentAssets},
+                            previousAmount = *{balanceSheet?.currentAssets?.totalPreviousCurrentAssets},
                             isTotalRow = true
                         )">
                         </div>
