@@ -58,7 +58,7 @@ public class BalanceSheetTransformerTests {
         assertEquals(CURRENT_STOCKS, balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
         assertEquals(CURRENT_CASH_AT_BANK, balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
         assertEquals(CURRENT_DEBTORS, balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
-        assertEquals(CURRENT_CURRENT_ASSETS_TOTAL, balanceSheet.getCurrentAssets().getTotalCurrentCurrentAssetsTotal());
+        assertEquals(CURRENT_CURRENT_ASSETS_TOTAL, balanceSheet.getCurrentAssets().getTotalCurrentCurrentAssets());
     }
 
 
@@ -160,7 +160,7 @@ public class BalanceSheetTransformerTests {
         currentAssets.setStocks(stocks);
         currentAssets.setDebtors(debtors);
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
-        currentAssets.setTotalCurrentCurrentAssetsTotal(CURRENT_CURRENT_ASSETS_TOTAL);
+        currentAssets.setTotalCurrentCurrentAssets(CURRENT_CURRENT_ASSETS_TOTAL);
         balanceSheet.setCurrentAssets(currentAssets);
 
         return balanceSheet;
@@ -196,7 +196,7 @@ public class BalanceSheetTransformerTests {
         currentAssets.setStocks(stocks);
         currentAssets.setDebtors(debtors);
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
-        currentAssets.setTotalPreviousCurrentAssetsTotal(PREVIOUS_CURRENT_ASSETS_TOTAL);
+        currentAssets.setTotalPreviousCurrentAssets(PREVIOUS_CURRENT_ASSETS_TOTAL);
 
         balanceSheet.setCurrentAssets(currentAssets);
 
