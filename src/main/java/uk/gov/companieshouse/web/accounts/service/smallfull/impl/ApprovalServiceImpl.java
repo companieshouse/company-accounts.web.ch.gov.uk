@@ -13,7 +13,6 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
-import uk.gov.companieshouse.web.accounts.enumeration.ValidationMessage;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.links.SmallFullLinkType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
@@ -38,9 +37,7 @@ public class ApprovalServiceImpl extends SmallFullResourceService implements App
     private static final UriTemplate APPROVAL_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval");
 
-    private static final String DAY_REGEX = "[0-9]{1,2}";
-
-    private static final String MONTH_REGEX = "[0-9]{1,2}";
+    private static final String DAY_MONTH_REGEX = "[0-9]{1,2}";
 
     private static final String YEAR_REGEX = "[0-9]{4}";
 
@@ -118,8 +115,8 @@ public class ApprovalServiceImpl extends SmallFullResourceService implements App
             error.setMessageKey(DATE_INCOMPLETE);
             validationErrors.add(error);
 
-        } else if (!approval.getDate().getDay().matches(DAY_REGEX) ||
-                !approval.getDate().getMonth().matches(MONTH_REGEX) ||
+        } else if (!approval.getDate().getDay().matches(DAY_MONTH_REGEX) ||
+                !approval.getDate().getMonth().matches(DAY_MONTH_REGEX) ||
                 !approval.getDate().getYear().matches(YEAR_REGEX)) {
 
             ValidationError error = new ValidationError();
