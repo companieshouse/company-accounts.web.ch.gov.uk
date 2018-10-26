@@ -56,7 +56,7 @@ public class BalanceSheetTransformerTests {
 
         // Fixed assets
         assertNotNull(currentPeriod.getBalanceSheetApi().getFixedAssetsApi());
-        assertEquals(CURRENT_TANGIBLE, currentPeriod.getBalanceSheetApi().getFixedAssetsApi().getTangibleApi());
+        assertEquals(CURRENT_TANGIBLE, currentPeriod.getBalanceSheetApi().getFixedAssetsApi().getTangible());
         assertEquals(CURRENT_FIXED_ASSETS_TOTAL, currentPeriod.getBalanceSheetApi().getFixedAssetsApi().getTotal());
 
         // Called up share capital not paid
@@ -75,7 +75,7 @@ public class BalanceSheetTransformerTests {
         assertNotNull(previousPeriodApi.getBalanceSheet());
 
         assertNotNull(previousPeriodApi.getBalanceSheet().getFixedAssetsApi());
-        assertEquals(PREVIOUS_TANGIBLE, previousPeriodApi.getBalanceSheet().getFixedAssetsApi().getTangibleApi());
+        assertEquals(PREVIOUS_TANGIBLE, previousPeriodApi.getBalanceSheet().getFixedAssetsApi().getTangible());
         assertEquals(PREVIOUS_FIXED_ASSETS_TOTAL, previousPeriodApi.getBalanceSheet().getFixedAssetsApi().getTotal());
 
         // Called up share capital not paid
@@ -144,7 +144,7 @@ public class BalanceSheetTransformerTests {
         balanceSheetApi.setCalledUpShareCapitalNotPaid(CURRENT_CALLED_UP_SHARE_CAPITAL);
 
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
-        fixedAssetsApi.setTangibleApi(CURRENT_TANGIBLE);
+        fixedAssetsApi.setTangible(CURRENT_TANGIBLE);
         fixedAssetsApi.setTotal(CURRENT_FIXED_ASSETS_TOTAL);
 
         balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
@@ -160,7 +160,7 @@ public class BalanceSheetTransformerTests {
         balanceSheetApi.setCalledUpShareCapitalNotPaid(PREVIOUS_CALLED_UP_SHARE_CAPITAL);
 
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
-        fixedAssetsApi.setTangibleApi(PREVIOUS_TANGIBLE);
+        fixedAssetsApi.setTangible(PREVIOUS_TANGIBLE);
         fixedAssetsApi.setTotal(PREVIOUS_FIXED_ASSETS_TOTAL);
 
         balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);

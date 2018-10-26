@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
@@ -26,6 +27,6 @@ public class ApprovalTransformerImpl implements ApprovalTransformer {
                 approval.getDate().getYear() + "-" +
                 approval.getDate().getMonth() + "-" +
                 approval.getDate().getDay(),
-                DateTimeFormatter.ofPattern("yyyy-M-d"));
+                DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
     }
 }

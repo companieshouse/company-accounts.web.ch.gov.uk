@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.companyaccounts.impl;
 
-import com.google.api.client.util.DateTime;
+import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
             new UriTemplate("/transactions/{transactionId}/company-accounts");
 
     @Override
-    public String createCompanyAccounts(String transactionId, DateTime periodEndOn) throws ServiceException {
+    public String createCompanyAccounts(String transactionId, LocalDate periodEndOn) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 

@@ -1,9 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import com.google.api.client.util.DateTime;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,8 +208,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private String getCurrentPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
         NextAccountsApi nextAccountsApi = companyProfile.getAccounts().getNextAccounts();
-        LocalDate currentPeriodEndOn = convertDateTimeToLocalDate(nextAccountsApi.getPeriodEndOn());
-        LocalDate currentPeriodStartOn = convertDateTimeToLocalDate(nextAccountsApi.getPeriodStartOn());
+        LocalDate currentPeriodEndOn = nextAccountsApi.getPeriodEndOn();
+        LocalDate currentPeriodStartOn = nextAccountsApi.getPeriodStartOn();
 
         return accountsDatesHelper.generateBalanceSheetHeading(currentPeriodStartOn, currentPeriodEndOn, isSameYear);
     }
@@ -219,8 +217,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private String getPreviousPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
         LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
         if (isMultipleYearFiler(companyProfile)) {
-            LocalDate previousPeriodStartOn = convertDateTimeToLocalDate(lastAccountsApi.getPeriodStartOn());
-            LocalDate previousPeriodEndOn = convertDateTimeToLocalDate(lastAccountsApi.getPeriodEndOn());
+            LocalDate previousPeriodStartOn = lastAccountsApi.getPeriodStartOn();
+            LocalDate previousPeriodEndOn = lastAccountsApi.getPeriodEndOn();
 
             return accountsDatesHelper.generateBalanceSheetHeading(previousPeriodStartOn, previousPeriodEndOn, isSameYear);
         }
@@ -230,10 +228,10 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private boolean isSameYearFiler(CompanyProfileApi companyProfile) {
         if (isMultipleYearFiler(companyProfile)) {
             LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
-            LocalDate previousPeriodEndOn = convertDateTimeToLocalDate(lastAccountsApi.getPeriodEndOn());
+            LocalDate previousPeriodEndOn = lastAccountsApi.getPeriodEndOn();
 
             NextAccountsApi nextAccountsApi = companyProfile.getAccounts().getNextAccounts();
-            LocalDate currentPeriodEndOn = convertDateTimeToLocalDate(nextAccountsApi.getPeriodEndOn());
+            LocalDate currentPeriodEndOn = nextAccountsApi.getPeriodEndOn();
 
             return accountsDatesHelper.isSameYear(previousPeriodEndOn, currentPeriodEndOn);
         }
@@ -259,9 +257,5 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private boolean isCreated(Map<String, String> links, SmallFullLinkType linkType) {
         return links.containsKey(linkType.getLink());
-    }
-
-    private LocalDate convertDateTimeToLocalDate(DateTime dateTime) {
-        return accountsDatesHelper.convertDateToLocalDate(new Date(dateTime.getValue()));
     }
 }

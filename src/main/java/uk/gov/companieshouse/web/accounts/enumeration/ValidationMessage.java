@@ -1,10 +1,6 @@
 package uk.gov.companieshouse.web.accounts.enumeration;
 
-import org.apache.commons.lang.StringUtils;
 import uk.gov.companieshouse.web.accounts.exception.MissingMessageKeyException;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -20,7 +16,8 @@ public enum ValidationMessage {
     INCORRECT_TOTAL("incorrect_total", "validation.total.invalid", true),
     INVALID_CHARACTERS_ENTERED("invalid_characters_entered", "validation.characters.invalid", false),
     MANDATORY_ELEMENT_MISSING("mandatory_element_missing", "validation.element.missing", false),
-    INVALID_DATE_SUPPLIED("date_supplied_is_incorrect", "validation.date.invalid", false);
+    DATE_CANNOT_BE_FUTURE("date_cannot_be_in_future", "validation.date.cannotBeFuture", true),
+    DATE_INVALID("date_is_invalid", "validation.date.invalid", false);
 
     private String messageKey;
     private String apiError;

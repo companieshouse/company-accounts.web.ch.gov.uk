@@ -6,8 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.google.api.client.util.DateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +62,7 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
         Map<String, String> links = new HashMap<>();
@@ -87,7 +86,7 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);
@@ -105,7 +104,7 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);
