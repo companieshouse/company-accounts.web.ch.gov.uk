@@ -508,28 +508,12 @@ public class ApprovalServiceImplTests {
     }
 
     @Test
-    @DisplayName("Validate Approval Date - Only Day Provided")
-    void validateApprovalDateOnlyDayProvided() {
-
-        ApprovalDate approvalDate = new ApprovalDate();
-        approvalDate.setDay("12");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Only Month Provided")
-    void validateApprovalDateOnlyMonthProvided() {
+    @DisplayName("Validate Approval Date - Day Not Provided")
+    void validateApprovalDateDayNotProvided() {
 
         ApprovalDate approvalDate = new ApprovalDate();
         approvalDate.setMonth("12");
+        approvalDate.setYear("2018");
 
         Approval approval = new Approval();
         approval.setDate(approvalDate);
@@ -542,11 +526,30 @@ public class ApprovalServiceImplTests {
     }
 
     @Test
-    @DisplayName("Validate Approval Date - Only Year Provided")
-    void validateApprovalDateOnlyYearProvided() {
+    @DisplayName("Validate Approval Date - Month Not Provided")
+    void validateApprovalDateMonthNotProvided() {
 
         ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
         approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Year Not Provided")
+    void validateApprovalDateYearNotProvided() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setMonth("12");
 
         Approval approval = new Approval();
         approval.setDate(approvalDate);
