@@ -508,11 +508,45 @@ public class ApprovalServiceImplTests {
     }
 
     @Test
-    @DisplayName("Validate Approval Date - Some Fields Provided")
-    void validateApprovalDateSomeFieldsProvided() {
+    @DisplayName("Validate Approval Date - Only Day Provided")
+    void validateApprovalDateOnlyDayProvided() {
 
         ApprovalDate approvalDate = new ApprovalDate();
         approvalDate.setDay("12");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Only Month Provided")
+    void validateApprovalDateOnlyMonthProvided() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setMonth("12");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Only Year Provided")
+    void validateApprovalDateOnlyYearProvided() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setYear("2018");
 
         Approval approval = new Approval();
         approval.setDate(approvalDate);
