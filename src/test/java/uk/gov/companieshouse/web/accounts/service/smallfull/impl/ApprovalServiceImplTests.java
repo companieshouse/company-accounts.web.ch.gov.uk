@@ -559,13 +559,51 @@ public class ApprovalServiceImplTests {
     }
 
     @Test
-    @DisplayName("Validate Approval Date - Invalid Format")
-    void validateApprovalDateInvalidFormat() {
+    @DisplayName("Validate Approval Date - Invalid Day Format")
+    void validateApprovalDateInvalidDayFormat() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("1st");
+        approvalDate.setMonth("3");
+        approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Invalid Month Format")
+    void validateApprovalDateInvalidMonthFormat() {
 
         ApprovalDate approvalDate = new ApprovalDate();
         approvalDate.setDay("12");
         approvalDate.setMonth("Mar");
         approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Invalid Year Format")
+    void validateApprovalDateInvalidYearFormat() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setMonth("3");
+        approvalDate.setYear("18");
 
         Approval approval = new Approval();
         approval.setDate(approvalDate);
