@@ -30,7 +30,7 @@ public enum ValidationMessage {
     }
 
     /**
-     * Returns a {@code validationMessage} associated with the {@code apiError} parameter
+     * Returns a {@code ValidationMessage} associated with the {@code apiError} parameter
      * for use when binding API validation errors to model object fields.
      *
      * @param apiError the api validation error string

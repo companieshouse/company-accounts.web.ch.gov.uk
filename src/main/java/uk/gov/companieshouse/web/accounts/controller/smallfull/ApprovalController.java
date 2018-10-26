@@ -68,7 +68,6 @@ public class ApprovalController extends BaseController {
 
         try {
             validationErrors.addAll(approvalService.submitApproval(transactionId, companyAccountsId, approval));
-
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
