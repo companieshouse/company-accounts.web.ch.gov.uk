@@ -18,4 +18,7 @@ public class BalanceSheet {
 
     @Valid
     private FixedAssets fixedAssets;
+
+    @Valid
+    private CurrentAssets currentAssets;
 }
