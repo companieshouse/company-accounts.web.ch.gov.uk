@@ -39,7 +39,11 @@
                   th:each="e : ${#fields.errors('directorName')}" th:text="${e}" >
                             </span>
 
-            <input class="govuk-input" id="approval-director" th:field="*{directorName}" type="text">
+            <input class="govuk-input"
+                   id="approval-director"
+                   th:field="*{directorName}"
+                   th:errorclass="govuk-input--error"
+                   type="text">
           </div>
 
           <div class="govuk-form-group" th:classappend="${#fields.hasErrors('date')} ? 'govuk-form-group--error' : ''">
@@ -69,7 +73,11 @@
                       Day
                     </label>
 
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 " id="approval-date-day" th:field="*{date.day}" type="text">
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-day"
+                           th:field="*{date.day}"
+                           type="text">
                   </div>
                 </div>
 
@@ -79,7 +87,11 @@
                       Month
                     </label>
 
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 " id="approval-date-month" th:field="*{date.month}" type="text">
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-month"
+                           th:field="*{date.month}"
+                           type="text">
                   </div>
                 </div>
 
@@ -89,7 +101,11 @@
                       Year
                     </label>
 
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-4 " id="approval-date-year" th:field="*{date.year}" type="text">
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-year"
+                           th:field="*{date.year}"
+                           type="text">
                   </div>
                 </div>
 
