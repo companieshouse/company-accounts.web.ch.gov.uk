@@ -83,13 +83,13 @@ public class BalanceSheetTransformerTests {
 
         // Fixed assets
         assertEquals(CURRENT_TANGIBLE, balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
-        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalCurrentFixedAssets());
+        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getCurrentTotal());
 
         // Current assets
         assertEquals(CURRENT_STOCKS, balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
         assertEquals(CURRENT_CASH_AT_BANK, balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
         assertEquals(CURRENT_DEBTORS, balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
-        assertEquals(CURRENT_CURRENT_ASSETS_TOTAL, balanceSheet.getCurrentAssets().getCurrentCurrentAssetsTotal());
+        assertEquals(CURRENT_CURRENT_ASSETS_TOTAL, balanceSheet.getCurrentAssets().getCurrentTotal());
 
         // Other Liabilities and Assets
         assertEquals(CURRENT_PREPAYMENTS_AND_ACCRUED_INCOME, balanceSheet.getOtherLiabilitiesOrAssets().getPrepaymentsAndAccruedIncome().getCurrentAmount());
@@ -193,21 +193,21 @@ public class BalanceSheetTransformerTests {
 
         // Fixed assets - current period
         assertEquals(CURRENT_TANGIBLE, balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
-        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalCurrentFixedAssets());
+        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getCurrentTotal());
 
         // Fixed assets - previous period
         assertEquals(PREVIOUS_TANGIBLE, balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
-        assertEquals(PREVIOUS_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalPreviousFixedAssets());
+        assertEquals(PREVIOUS_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getPreviousTotal());
 
         // Current Assets - current period
         assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertEquals(CURRENT_TANGIBLE, balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
-        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalCurrentFixedAssets());
+        assertEquals(CURRENT_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getCurrentTotal());
 
         // Current Assets - previous period
         assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL, balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
         assertEquals(PREVIOUS_TANGIBLE, balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
-        assertEquals(PREVIOUS_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getTotalPreviousFixedAssets());
+        assertEquals(PREVIOUS_FIXED_ASSETS_TOTAL, balanceSheet.getFixedAssets().getPreviousTotal());
 
         // Other Liabilities and Assets - current period
         assertEquals(CURRENT_PREPAYMENTS_AND_ACCRUED_INCOME, balanceSheet.getOtherLiabilitiesOrAssets().getPrepaymentsAndAccruedIncome().getCurrentAmount());
@@ -239,7 +239,7 @@ public class BalanceSheetTransformerTests {
         TangibleAssets tangible = new TangibleAssets();
         tangible.setCurrentAmount(CURRENT_TANGIBLE);
         fixedAssets.setTangibleAssets(tangible);
-        fixedAssets.setTotalCurrentFixedAssets(CURRENT_FIXED_ASSETS_TOTAL);
+        fixedAssets.setCurrentTotal(CURRENT_FIXED_ASSETS_TOTAL);
         balanceSheet.setFixedAssets(fixedAssets);
 
         // Called up share capital not paid
@@ -260,7 +260,7 @@ public class BalanceSheetTransformerTests {
         currentAssets.setStocks(stocks);
         currentAssets.setDebtors(debtors);
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
-        currentAssets.setCurrentCurrentAssetsTotal(CURRENT_CURRENT_ASSETS_TOTAL);
+        currentAssets.setCurrentTotal(CURRENT_CURRENT_ASSETS_TOTAL);
         balanceSheet.setCurrentAssets(currentAssets);
 
         // Other Liabilities and Assets
@@ -312,7 +312,7 @@ public class BalanceSheetTransformerTests {
         TangibleAssets tangible = new TangibleAssets();
         tangible.setPreviousAmount(PREVIOUS_TANGIBLE);
         fixedAssets.setTangibleAssets(tangible);
-        fixedAssets.setTotalPreviousFixedAssets(PREVIOUS_FIXED_ASSETS_TOTAL);
+        fixedAssets.setPreviousTotal(PREVIOUS_FIXED_ASSETS_TOTAL);
         balanceSheet.setFixedAssets(fixedAssets);
 
         // Called up share capital not paid
@@ -333,7 +333,8 @@ public class BalanceSheetTransformerTests {
         currentAssets.setStocks(stocks);
         currentAssets.setDebtors(debtors);
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
-        currentAssets.setPreviousCurrentAssetsTotal(PREVIOUS_CURRENT_ASSETS_TOTAL);
+        currentAssets.setPreviousTotal(PREVIOUS_CURRENT_ASSETS_TOTAL);
+
         balanceSheet.setCurrentAssets(currentAssets);
 
         // Other Liabilities and Assets
