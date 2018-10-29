@@ -36,8 +36,8 @@
             <span class="govuk-error-message"
                   id="directorName-errorId"
                   th:if="${#fields.hasErrors('directorName')}"
-                  th:each="e : ${#fields.errors('directorName')}" th:text="${e}" >
-                            </span>
+                  th:each="e : ${#fields.errors('directorName')}" th:text="${e}">
+            </span>
 
             <input class="govuk-input"
                    id="approval-director"
@@ -53,7 +53,6 @@
                 When were the accounts approved?
               </legend>
 
-
               <span id="approval-date-hint" class="govuk-hint">
                   <p class="govuk-hint">This is the date the accounts were approved by the director.<br>
                     For example, 31 3 2017</p>
@@ -62,8 +61,8 @@
               <span class="govuk-error-message"
                     id="date-errorId"
                     th:if="${#fields.hasErrors('date')}"
-                    th:each="e : ${#fields.errors('date')}" th:text="${e}" >
-                            </span>
+                    th:each="e : ${#fields.errors('date')}" th:text="${e}">
+              </span>
 
               <div class="govuk-date-input" id="approval-date">
 
