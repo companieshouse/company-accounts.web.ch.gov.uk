@@ -412,7 +412,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
     private void populateCurrentOtherLiabilitiesOrAssets(BalanceSheet balanceSheet, OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi) {
 
-        OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = createOtherLiabilitiesOrAssets(balanceSheet);
+        createOtherLiabilitiesOrAssets(balanceSheet);
 
         if (otherLiabilitiesOrAssetsApi.getAccrualsAndDeferredIncome() != null) {
             AccrualsAndDeferredIncome accrualsAndDeferredIncome = createAccrualsAndDeferredIncome(balanceSheet);
@@ -457,7 +457,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
     private void populatePreviousOtherLiabilitiesOrAssets(BalanceSheet balanceSheet, OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi) {
 
-        OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = createOtherLiabilitiesOrAssets(balanceSheet);
+        createOtherLiabilitiesOrAssets(balanceSheet);
 
         if (otherLiabilitiesOrAssetsApi.getAccrualsAndDeferredIncome() != null) {
             AccrualsAndDeferredIncome accrualsAndDeferredIncome = createAccrualsAndDeferredIncome(balanceSheet);
