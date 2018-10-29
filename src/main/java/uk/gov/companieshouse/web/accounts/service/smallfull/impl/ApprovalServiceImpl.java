@@ -37,9 +37,9 @@ public class ApprovalServiceImpl extends SmallFullResourceService implements App
     private static final UriTemplate APPROVAL_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval");
 
-    private static final String DAY_MONTH_REGEX = "[0-9]{1,2}";
+    private static final String DAY_MONTH_REGEX = "\\d{1,2}";
 
-    private static final String YEAR_REGEX = "[0-9]{4}";
+    private static final String YEAR_REGEX = "\\d{4}";
 
     private static final String APPROVAL_DATE_FIELD_PATH = "date";
 
