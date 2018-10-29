@@ -16,6 +16,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 
@@ -30,6 +31,9 @@ public class StepsToCompleteController extends BaseController {
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private SmallFullService smallFullService;
 
     @Autowired
     private CompanyAccountsService companyAccountsService;
@@ -60,7 +64,7 @@ public class StepsToCompleteController extends BaseController {
 
             String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId, periodEndOn);
 
-            companyAccountsService.createSmallFullAccounts(transactionId, companyAccountsId);
+            smallFullService.createSmallFullAccounts(transactionId, companyAccountsId);
 
             return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
