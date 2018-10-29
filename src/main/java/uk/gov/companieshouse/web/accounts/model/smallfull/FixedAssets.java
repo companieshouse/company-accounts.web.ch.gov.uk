@@ -11,9 +11,9 @@ public class FixedAssets {
     private TangibleAssets tangibleAssets;
 
     @ValidationMapping("$.previous_period.balance_sheet.fixed_assets.total")
-    private Long totalPreviousFixedAssets;
+    private Long previousTotal;
 
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.total")
-    private Long totalCurrentFixedAssets;
+    private Long currentTotal;
 
 }
