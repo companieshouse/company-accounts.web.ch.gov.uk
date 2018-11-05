@@ -54,11 +54,15 @@ public class ApprovalController extends BaseController {
     }
 
     @PostMapping
-    public String postApproval(@PathVariable String transactionId,
+    public String postApproval(@PathVariable String companyNumber,
+                               @PathVariable String transactionId,
                                @PathVariable String companyAccountsId,
                                @ModelAttribute("approval") @Valid Approval approval,
+                               Model model,
                                BindingResult bindingResult,
                                HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
         if (!validationErrors.isEmpty()) {
