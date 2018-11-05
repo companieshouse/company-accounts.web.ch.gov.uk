@@ -58,8 +58,8 @@ public class ApprovalController extends BaseController {
                                @PathVariable String transactionId,
                                @PathVariable String companyAccountsId,
                                @ModelAttribute("approval") @Valid Approval approval,
-                               Model model,
                                BindingResult bindingResult,
+                               Model model,
                                HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);

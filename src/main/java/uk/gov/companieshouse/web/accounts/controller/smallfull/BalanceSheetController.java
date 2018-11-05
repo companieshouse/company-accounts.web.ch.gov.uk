@@ -61,8 +61,8 @@ public class BalanceSheetController extends BaseController {
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
                                    @ModelAttribute("balanceSheet") @Valid BalanceSheet balanceSheet,
-                                   Model model,
                                    BindingResult bindingResult,
+                                   Model model,
                                    HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
