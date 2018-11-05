@@ -17,7 +17,8 @@ public enum ValidationMessage {
     INVALID_CHARACTERS_ENTERED("invalid_characters_entered", "validation.characters.invalid", false),
     MANDATORY_ELEMENT_MISSING("mandatory_element_missing", "validation.element.missing", false),
     DATE_CANNOT_BE_FUTURE("date_cannot_be_in_future", "validation.date.cannotBeFuture", true),
-    DATE_INVALID("date_is_invalid", "validation.date.invalid", false);
+    DATE_INVALID("date_is_invalid", "validation.date.invalid", false),
+    MAX_LENGTH_EXCEEDED("max_length_exceeded", "validation.length.maxExceeded", false);
 
     private String messageKey;
     private String apiError;
