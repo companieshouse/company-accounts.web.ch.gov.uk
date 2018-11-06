@@ -25,6 +25,8 @@ public class StatementsServiceImpl implements StatementsService {
     private static final UriTemplate STATEMENTS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/statements");
 
+    private static final String INVALID_URI_ERROR = "Invalid URI for balance sheet statements resource";
+
     /**
      * {@inheritDoc}
      */
@@ -44,7 +46,7 @@ public class StatementsServiceImpl implements StatementsService {
         } catch (ApiErrorResponseException e) {
             throw new ServiceException("Error when creating balance sheet statements", e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for balance sheet statements resource", e);
+            throw new ServiceException(INVALID_URI_ERROR, e);
         }
 
     }
@@ -68,7 +70,7 @@ public class StatementsServiceImpl implements StatementsService {
         } catch (ApiErrorResponseException e) {
             throw new ServiceException("Error when accepting balance sheet statements", e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for balance sheet statements resource", e);
+            throw new ServiceException(INVALID_URI_ERROR, e);
         }
     }
 
@@ -92,7 +94,7 @@ public class StatementsServiceImpl implements StatementsService {
         } catch (ApiErrorResponseException e) {
             throw new ServiceException("Error when retrieving balance sheet statements", e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for balance sheet statements resource", e);
+            throw new ServiceException(INVALID_URI_ERROR, e);
         }
     }
 }
