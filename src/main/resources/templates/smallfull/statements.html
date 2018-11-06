@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>Balance Sheet Statements</title>
+    </head>
+
+    <div id="statements-main-content" layout:fragment="content">
+
+        <form id="statements-form" th:action="@{''}" th:object="${statements}" method="post">
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+
+                    <h1 id="page-title" class="govuk-heading-l">
+                        <span id="page-title-heading">Balance Sheet Statements</span>
+                    </h1>
+
+                    <div class="govuk-warning-text">
+                        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                        <strong id="statements-warning-text" class="govuk-warning-text__text">
+                            <span class="govuk-warning-text__assistive">Warning</span>
+                            The following statements about your accounts will be included on the public record.
+                        </strong>
+                    </div>
+
+                    <ul id="statements-list" class="govuk-list govuk-list--bullet">
+                        <li id="statements-section-477"><span th:text="*{section477}"></span></li>
+                        <li id="statements-audit-not-required-by-members"><span th:text="*{auditNotRequiredByMembers}"></span></li>
+                        <li id="statements-directors-responsibility"><span th:text="*{directorsResponsibility}"></span></li>
+                        <li id="statements-small-companies-regime"><span th:text="*{smallCompaniesRegime}"></span></li>
+                        <li id="statements-no-profit-and-loss"><span th:text="*{noProfitAndLoss}"></span></li>
+                    </ul>
+
+                    <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</html>
