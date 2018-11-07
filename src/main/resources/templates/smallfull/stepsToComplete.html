@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>File full accounts</title>
+    </head>
+    <body>
+        <div id="stepsToComplete-main-content" layout:fragment="content">
+
+            <form id="stepsToComplete-form" th:action="@{''}" class="form" method="post">
+
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds" id="accounts-start-page">
+
+                        <h1 id="page-title" class="govuk-heading-l">
+                            <span id="page-title-heading">File full accounts</span>
+                        </h1>
+
+                        <p id="stepsToComplete-overview" class="lede">
+                            Use this service to file prepared and approved full accounts.
+                        </p>
+
+                        <p class="warning-note warning-note-large" id="stepsToComplete-warning-note">
+                            If you can't finish your filing in one session, you can come back later to continue.
+                            You'll need to go to <a id="your-filings-warning-link" style="color: white" href="/user/transactions" class="piwik-event" data-event-id="Your filings body">'Your filings'</a>
+                        </p>
+
+                        <p id="stepsToComplete-heading">There are 5 steps to complete:</p>
+
+                        <ol class="govuk-list" id="stepsToComplete-list">
+                            <li><span class="circle-step-black">1</span>Balance sheet</li>
+                            <li><span class="circle-step-black">2</span>Balance sheet statements</li>
+                            <li><span class="circle-step-black">3</span>Balance sheet notes</li>
+                            <li><span class="circle-step-black">4</span>Check your answers</li>
+                            <li><span class="circle-step-black">5</span>Approval and submit</li>
+                        </ol>
+
+                        <div class="panel panel-border-wide">
+                            <p id="stepsToComplete-user-email-confirmation">
+                                Once we've received your accounts, you'll get a confirmation email (with a reference number) at <strong th:utext="${userEmail}"></strong>
+                            </p>
+                        </div>
+
+                        <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </body>
+</html>

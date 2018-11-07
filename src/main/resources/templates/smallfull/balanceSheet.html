@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>Balance Sheet</title>
+    </head>
+
+        <div id="balanceSheet-main-content" layout:fragment="content" class="two-column-accounts">
+
+            <form id="balanceSheet-form" th:action="@{''}" th:object="${balanceSheet}" class="form currency-included-within-inputs govuk-body" method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Balance sheet'
+                )">
+                </div>
+
+                <div class="left-indent">
+                    <div class="panel panel-border-wide">
+                        <p id="balanceSheet-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
+                    </div>
+
+                    <div class="govuk-grid-row" id="accounts-header">
+                        <div class="govuk-grid-column-one-half">
+                            &nbsp;
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <h2 class="govuk-heading-s">
+                                <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'></span>
+                                <!-- Hidden input for form binding -->
+                                <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
+                            </h2>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <h2 class="govuk-heading-s">
+                                <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'></span>
+                                <!-- Hidden input for form binding -->
+                                <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'calledUpShareCapitalNotPaid.currentAmount',
+                        previousField = 'calledUpShareCapitalNotPaid.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Called up share capital not paid
+                            <span class="govuk-hint">
+                                This should not be confused with ‘Called up share capital', which can be found under 'Capital and reserves' at the end of this Balance sheet
+                            </span>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'calledUpShareCapitalNotPaid.currentAmount',
+                                text = 'Called up share capital not paid current',
+                                class= 'govuk-input',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'calledUpShareCapitalNotPaid.previousAmount',
+                                text = 'Called up share capital not paid previous',
+                                class= 'govuk-input',
+                                )">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--Fixed Assets-->
+
+                    <h2 class="govuk-heading-m">Fixed assets</h2>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'fixedAssets.tangibleAssets.currentAmount',
+                        previousField = 'fixedAssets.tangibleAssets.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Tangible assets
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'fixedAssets.tangibleAssets.currentAmount',
+                                text = 'Tangible assets current',
+                                class = 'govuk-input current-fixed-assets-add',
+                                )">
+                            </div>
+                        </div>
+
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                   id = 'fixedAssets.tangibleAssets.previousAmount',
+                                   text = 'Tangible assets previous',
+                                   class= 'govuk-input previous-fixed-assets-add',
+                                   )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'fixedAssets.totalCurrentFixedAssets',
+                        previousField = 'fixedAssets.totalPreviousFixedAssets'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong>Total fixed assets</strong>
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+
+                                id = 'fixedAssets.totalCurrentFixedAssets',
+                                text = 'Total current fixed assets',
+                                class= 'govuk-input current-fixed-assets-total',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                   id = 'fixedAssets.totalPreviousFixedAssets',
+                                   text = 'Total previous fixed assets',
+                                   class= 'govuk-input previous-fixed-assets-total',
+                                   )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="form-group">
+                        <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
+                    </div>
+                </div>
+            </form>
+         </div>
+      </main>
+</html>
