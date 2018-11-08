@@ -21,4 +21,7 @@ public class BalanceSheet {
 
     @Valid
     private CurrentAssets currentAssets;
+
+    private CapitalAndReserves capitalAndReserves;
+
 }
