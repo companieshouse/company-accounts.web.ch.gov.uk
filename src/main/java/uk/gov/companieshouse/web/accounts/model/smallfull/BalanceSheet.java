@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
-import javax.validation.Valid;
-
 @Getter
 @Setter
 @ValidationModel
@@ -16,7 +14,7 @@ public class BalanceSheet {
     private CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
     private FixedAssets fixedAssets;
-    
+
     private CurrentAssets currentAssets;
 
     private CapitalAndReserves capitalAndReserves;
