@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class CalledUpShareCapitalNotPaidTransformerImplTests {
 
-    private static final Long CURRENT_CALLED_UP_SHARE_CAPITAL_NOT = 1L;
+    private static final Long CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID = 1L;
     private static final Long PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID = 10L;
 
     private Transformer transformer = new CalledUpShareCapitalNotPaidTransformerImpl();
@@ -23,7 +23,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
     void currentPeriodValueAddedToWebModel() {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setCalledUpShareCapitalNotPaid(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT);
+        balanceSheetApi.setCalledUpShareCapitalNotPaid(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
@@ -32,7 +32,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertNull(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
     void currentPeriodValueAddedToWebModelDoesNotAffectPreviousPeriodValue() {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setCalledUpShareCapitalNotPaid(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT);
+        balanceSheetApi.setCalledUpShareCapitalNotPaid(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setPreviousAmount(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
@@ -52,7 +52,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
 
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
     }
 
@@ -81,7 +81,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
         balanceSheetApi.setCalledUpShareCapitalNotPaid(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
-        calledUpShareCapitalNotPaid.setCurrentAmount(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT);
+        calledUpShareCapitalNotPaid.setCurrentAmount(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
@@ -91,7 +91,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
         assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
     void currentPeriodValueAddedToApiModel() {
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
-        calledUpShareCapitalNotPaid.setCurrentAmount(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT);
+        calledUpShareCapitalNotPaid.setCurrentAmount(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
@@ -112,7 +112,7 @@ public class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertNull(balanceSheetApi.getCurrentAssetsApi());
         assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
         assertNotNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT, balanceSheetApi.getCalledUpShareCapitalNotPaid());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
 
