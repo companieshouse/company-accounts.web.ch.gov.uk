@@ -75,7 +75,7 @@
 
                     </div>
 
-                    <!--Fixed Assets-->
+                    <!-- Start Fixed Assets -->
 
                     <h2 class="govuk-heading-m">Fixed assets</h2>
 
@@ -92,19 +92,18 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.tangibleAssets.currentAmount',
-                                 text = 'Tangible assets current',
-                                 class = 'govuk-input current-fixed-assets-add',
-                                 )">
+                                id = 'fixedAssets.tangibleAssets.currentAmount',
+                                text = 'Tangible assets current',
+                                class = 'govuk-input current-fixed-assets-add',
+                                )">
                             </div>
                         </div>
-
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.tangibleAssets.previousAmount',
-                                 text = 'Tangible assets previous',
-                                 class= 'govuk-input previous-fixed-assets-add',
-                                 )">
+                                id = 'fixedAssets.tangibleAssets.previousAmount',
+                                text = 'Tangible assets previous',
+                                class= 'govuk-input previous-fixed-assets-add',
+                                )">
                             </div>
                         </div>
                     </div>
@@ -119,26 +118,27 @@
                         <div class="govuk-grid-column-one-half">
                             <strong>Total fixed assets</strong>
                         </div>
-
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.currentTotal',
-                                 text = 'Total current fixed assets',
-                                 class= 'govuk-input current-fixed-assets-total',
-                                 )">
+                                id = 'fixedAssets.currentTotal',
+                                text = 'Total current fixed assets',
+                                class= 'govuk-input current-fixed-assets-total current-assets-less-current-liabilities-add'
+                                )">
                             </div>
                         </div>
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.previousTotal',
-                                 text = 'Total previous fixed assets',
-                                 class= 'govuk-input previous-fixed-assets-total',
-                                 )">
+                                id = 'fixedAssets.previousTotal',
+                                text = 'Total previous fixed assets',
+                                class= 'govuk-input previous-fixed-assets-total previous-assets-less-current-liabilities-add',
+                                )">
                             </div>
                         </div>
                     </div>
 
-                    <!--Current Assets-->
+                    <!-- End Fixed Assets -->
+
+                    <!-- Start Current Assets -->
 
                     <h2 class="govuk-heading-m">Current assets</h2>
 
@@ -247,7 +247,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'currentAssets.currentTotal',
                                 text = 'Total current current assets',
-                                class= 'govuk-input current-current-assets-total',
+                                class= 'govuk-input current-current-assets-total current-net-assets-add'
                                 )">
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.previousTotal',
                                  text = 'Total previous current assets',
-                                 class= 'govuk-input previous-current-assets-total',
+                                 class= 'govuk-input previous-current-assets-total previous-net-assets-add'
                                  )">
                             </div>
                         </div>

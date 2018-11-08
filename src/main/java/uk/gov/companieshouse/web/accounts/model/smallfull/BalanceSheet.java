@@ -13,15 +13,13 @@ public class BalanceSheet {
 
     private BalanceSheetHeadings balanceSheetHeadings;
 
-    @Valid
     private CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
-    @Valid
     private FixedAssets fixedAssets;
-
-    @Valid
+    
     private CurrentAssets currentAssets;
 
     private CapitalAndReserves capitalAndReserves;
 
+    private OtherLiabilitiesOrAssets otherLiabilitiesOrAssets;
 }
