@@ -258,12 +258,6 @@ public class FixedAssetsTransformerImplTests {
         return balanceSheetApi;
     }
 
-
-
-
-
-
-
     private void assertBothPeriodFieldsNotNull(BalanceSheet balanceSheet) {
         assertNestedModelsNotNull(balanceSheet);
         assertCurrentPeriodFieldsNotNull(balanceSheet);
@@ -311,10 +305,12 @@ public class FixedAssetsTransformerImplTests {
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-
+        assertEquals(CURRENT_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangibleApi());
+        assertEquals(CURRENT_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssetsApi().getTotal());
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-
+        assertEquals(PREVIOUS_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangibleApi());
+        assertEquals(PREVIOUS_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssetsApi().getTotal());
     }
 }
