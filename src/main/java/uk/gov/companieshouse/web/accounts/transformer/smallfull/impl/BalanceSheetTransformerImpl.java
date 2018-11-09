@@ -116,10 +116,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
 
         // Tangible assets
-        if (fixedAssetsApi.getTangibleApi() != null) {
+        if (fixedAssetsApi.getTangible() != null) {
 
             TangibleAssets tangibleAssets = createTangibleAssets(balanceSheet);
-            tangibleAssets.setCurrentAmount(fixedAssetsApi.getTangibleApi());
+            tangibleAssets.setCurrentAmount(fixedAssetsApi.getTangible());
         }
 
         // Total fixed assets
@@ -343,9 +343,9 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
 
         // Tangible assets
-        if (fixedAssetsApi.getTangibleApi() != null) {
+        if (fixedAssetsApi.getTangible() != null) {
             TangibleAssets tangibleAssets = createTangibleAssets(balanceSheet);
-            tangibleAssets.setPreviousAmount(fixedAssetsApi.getTangibleApi());
+            tangibleAssets.setPreviousAmount(fixedAssetsApi.getTangible());
         }
 
         // Total fixed assets
@@ -509,7 +509,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
-            fixedAssetsApi.setTangibleApi(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
+            fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getCurrentTotal());
 
             balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
@@ -542,11 +542,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
-            fixedAssetsApi.setTangibleApi(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
+            fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getPreviousTotal());
 
             balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
-
         }
 
         if (balanceSheet.getCalledUpShareCapitalNotPaid() != null) {
