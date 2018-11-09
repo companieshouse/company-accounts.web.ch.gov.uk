@@ -227,10 +227,8 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        LocalDate periodEndOn = LocalDate.now();
-
         NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodEndOn(periodEndOn);
+        nextAccounts.setPeriodEndOn(LocalDate.now());
 
         CompanyAccountApi companyAccount = new CompanyAccountApi();
         companyAccount.setNextAccounts(nextAccounts);

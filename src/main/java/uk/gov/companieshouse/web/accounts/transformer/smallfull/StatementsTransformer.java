@@ -6,7 +6,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 public interface StatementsTransformer {
 
     /**
-     * Get statements web model from a give statements api model
+     * Get statements web model from a given statements api model
      *
      * @param statementsApi API balance sheet statements model
      * @return a statements web model
