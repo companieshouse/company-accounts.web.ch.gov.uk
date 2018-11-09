@@ -20,7 +20,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
         if (hasCurrentPeriodFixedAssets(balanceSheet)) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
-            fixedAssetsApi.setTangibleApi(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
+            fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getCurrentTotal());
 
             balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
@@ -33,7 +33,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
         if (hasPreviousPeriodFixedAssets(balanceSheet)) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
-            fixedAssetsApi.setTangibleApi(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
+            fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getPreviousTotal());
 
             balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
@@ -48,10 +48,10 @@ public class FixedAssetsTransformerImpl implements Transformer {
         FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssetsApi();
 
         // Tangible assets
-        if (fixedAssetsApi.getTangibleApi() != null) {
+        if (fixedAssetsApi.getTangible() != null) {
 
             TangibleAssets tangibleAssets = createTangibleAssets(balanceSheet);
-            tangibleAssets.setCurrentAmount(fixedAssetsApi.getTangibleApi());
+            tangibleAssets.setCurrentAmount(fixedAssetsApi.getTangible());
         }
 
         // Total fixed assets
@@ -67,9 +67,9 @@ public class FixedAssetsTransformerImpl implements Transformer {
         FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssetsApi();
 
         // Tangible assets
-        if (fixedAssetsApi.getTangibleApi() != null) {
+        if (fixedAssetsApi.getTangible() != null) {
             TangibleAssets tangibleAssets = createTangibleAssets(balanceSheet);
-            tangibleAssets.setPreviousAmount(fixedAssetsApi.getTangibleApi());
+            tangibleAssets.setPreviousAmount(fixedAssetsApi.getTangible());
         }
 
         // Total fixed assets

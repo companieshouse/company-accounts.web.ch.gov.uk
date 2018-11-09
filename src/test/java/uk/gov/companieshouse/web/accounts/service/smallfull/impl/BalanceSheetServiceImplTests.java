@@ -13,9 +13,7 @@ import static org.mockito.Mockito.when;
 
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException;
-import com.google.api.client.util.DateTime;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -762,10 +760,7 @@ public class BalanceSheetServiceImplTests {
 
         when(transformer.getBalanceSheet(currentPeriodApi, null)).thenReturn(createFirstYearFilerBalanceSheetTestObject());
 
-
         when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(currentPeriodHeading);
-        when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
-
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -792,7 +787,6 @@ public class BalanceSheetServiceImplTests {
         when(transformer.getBalanceSheet(currentPeriodApi, previousPeriodApi)).thenReturn(createMultipleYearFilerBalanceSheetTestObject());
 
         when(accountsDatesHelper.generateBalanceSheetHeading(any(LocalDate.class), any(LocalDate.class), anyBoolean())).thenReturn(previousPeriodHeading, currentPeriodHeading);
-        when(accountsDatesHelper.convertDateToLocalDate(any(Date.class))).thenReturn(LocalDate.now());
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -894,8 +888,8 @@ public class BalanceSheetServiceImplTests {
     }
 
     private LastAccountsApi createPreviousPeriodObject() {
-        DateTime previousPeriodEnd = new DateTime("2018-01-01");
-        DateTime previousPeriodStart = new DateTime("2017-01-01");
+        LocalDate previousPeriodEnd = LocalDate.parse("2018-01-01");
+        LocalDate previousPeriodStart = LocalDate.parse("2017-01-01");
 
         LastAccountsApi lastAccounts = new LastAccountsApi();
         lastAccounts.setPeriodStartOn(previousPeriodStart);
@@ -904,8 +898,8 @@ public class BalanceSheetServiceImplTests {
     }
 
     private NextAccountsApi createCurrentPeriodObject() {
-        DateTime currentPeriodStart = new DateTime("2018-01-01");
-        DateTime currentPeriodEnd = new DateTime("2019-01-01");
+        LocalDate currentPeriodStart = LocalDate.parse("2018-01-01");
+        LocalDate currentPeriodEnd = LocalDate.parse("2019-01-01");
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodStartOn(currentPeriodStart);

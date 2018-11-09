@@ -225,7 +225,7 @@ public class FixedAssetsTransformerImplTests {
     private BalanceSheetApi mockBalanceSheetApiForCurrentPeriod() {
 
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
-        fixedAssetsApi.setTangibleApi(CURRENT_TANGIBLE_ASSETS);
+        fixedAssetsApi.setTangible(CURRENT_TANGIBLE_ASSETS);
         fixedAssetsApi.setTotal(CURRENT_TOTAL_FIXED_ASSETS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -237,7 +237,7 @@ public class FixedAssetsTransformerImplTests {
     private BalanceSheetApi mockBalanceSheetApiForPreviousPeriod() {
 
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
-        fixedAssetsApi.setTangibleApi(PREVIOUS_TANGIBLE_ASSETS);
+        fixedAssetsApi.setTangible(PREVIOUS_TANGIBLE_ASSETS);
         fixedAssetsApi.setTotal(PREVIOUS_TOTAL_FIXED_ASSETS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -289,16 +289,16 @@ public class FixedAssetsTransformerImplTests {
     private void assertApiModelFieldsNotNull(BalanceSheetApi balanceSheetApi) {
         assertNotNull(balanceSheetApi.getFixedAssetsApi());
         assertNotNull(balanceSheetApi.getFixedAssetsApi().getTotal());
-        assertNotNull(balanceSheetApi.getFixedAssetsApi().getTangibleApi());
+        assertNotNull(balanceSheetApi.getFixedAssetsApi().getTangible());
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(CURRENT_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangibleApi());
+        assertEquals(CURRENT_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangible());
         assertEquals(CURRENT_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssetsApi().getTotal());
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(PREVIOUS_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangibleApi());
+        assertEquals(PREVIOUS_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangible());
         assertEquals(PREVIOUS_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssetsApi().getTotal());
     }
 

@@ -24,8 +24,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class BalanceSheetTransformerImplTests {
 
-
-
     @Mock
     private Transformer calledUpShareCapitalNotPaidTransformer;
 

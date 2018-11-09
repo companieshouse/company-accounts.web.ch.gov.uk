@@ -13,8 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.google.api.client.util.DateTime;
-import java.util.Date;
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -101,7 +101,7 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodEndOn(periodEndOn);
@@ -163,7 +163,7 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodEndOn(periodEndOn);
@@ -177,7 +177,7 @@ public class StepsToCompleteControllerTests {
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         doThrow(ServiceException.class)
-                .when(companyAccountsService).createCompanyAccounts(anyString(), any(DateTime.class));
+                .when(companyAccountsService).createCompanyAccounts(anyString(), any(LocalDate.class));
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
@@ -190,7 +190,7 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodEndOn(periodEndOn);
@@ -203,7 +203,7 @@ public class StepsToCompleteControllerTests {
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
-        when(companyAccountsService.createCompanyAccounts(anyString(), any(DateTime.class))).thenReturn("company_accounts_id");
+        when(companyAccountsService.createCompanyAccounts(anyString(), any(LocalDate.class))).thenReturn("company_accounts_id");
 
         doThrow(ServiceException.class)
                 .when(smallFullService).createSmallFullAccounts(anyString(), anyString());
