@@ -118,7 +118,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-
         String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
         SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
 

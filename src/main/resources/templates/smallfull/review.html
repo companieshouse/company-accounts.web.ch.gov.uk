@@ -126,6 +126,80 @@
 
                     <!-- End Current Assets -->
 
+                    <!-- Start Other Liabilities and Assets -->
+
+                    <th:block th:if="*{balanceSheet?.fixedAssets?.currentTotal != null or balanceSheet?.fixedAssets?.previousTotal != null}">
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Prepayments and accrued income',
+                            identifier = 'prepayments-and-accrued-income',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.prepaymentsAndAccruedIncome?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.prepaymentsAndAccruedIncome?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Creditors - amounts falling due within one year',
+                            identifier = 'creditors-due-within-one-year',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsDueWithinOneYear?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsDueWithinOneYear?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Net current assets (liabilities)',
+                            identifier = 'net-current-assets',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.netCurrentAssets?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.netCurrentAssets?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Total assets less current liabilities',
+                            identifier = 'total-assets-less-current-liabilities',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalAssetsLessCurrentLiabilities?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalAssetsLessCurrentLiabilities?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Creditors - amounts falling due after more than one year',
+                            identifier = 'creditors-due-after-one-year',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsAfterOneYear?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsAfterOneYear?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Provision for liabilities',
+                            identifier = 'provision-for-liabilities',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.provisionForLiabilities?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.provisionForLiabilities?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Accruals and deferred income',
+                            identifier = 'accruals-and-deferred-income',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.accrualsAndDeferredIncome?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.accrualsAndDeferredIncome?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Total net assets (liabilities)',
+                            identifier = 'total-net-assets',
+                            currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.currentAmount},
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.previousAmount},
+                            isTotalRow = true
+                        )">
+                        </div>
+
+                    </th:block>
+
+                    <!-- End Other Liabilities and Assets -->
+
+
                 </dl>
 
                 <!-- End Balance Sheet -->
