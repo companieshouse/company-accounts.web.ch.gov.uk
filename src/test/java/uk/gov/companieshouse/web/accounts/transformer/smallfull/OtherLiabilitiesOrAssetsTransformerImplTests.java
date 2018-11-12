@@ -59,7 +59,7 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
         assertCurrentPeriodFieldsNotNull(balanceSheet);
         assertPreviousPeriodFieldsNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonOtherLiabilitiesOrAssetsFieldsNull(balanceSheet);
 
         assertCurrentPeriodValuesCorrect(balanceSheet);
     }
@@ -78,7 +78,7 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
 
         assertBothPeriodFieldsNotNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonOtherLiabilitiesOrAssetsFieldsNull(balanceSheet);
 
         assertCurrentPeriodValuesCorrect(balanceSheet);
         assertPreviousPeriodValuesCorrect(balanceSheet);
@@ -101,7 +101,7 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
         assertCurrentPeriodFieldsNull(balanceSheet);
         assertPreviousPeriodFieldsNotNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonOtherLiabilitiesOrAssetsFieldsNull(balanceSheet);
 
         assertPreviousPeriodValuesCorrect(balanceSheet);
     }
@@ -120,7 +120,7 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
 
         assertBothPeriodFieldsNotNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonOtherLiabilitiesOrAssetsFieldsNull(balanceSheet);
 
         assertCurrentPeriodValuesCorrect(balanceSheet);
         assertPreviousPeriodValuesCorrect(balanceSheet);
@@ -407,7 +407,7 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
         assertEquals(PREVIOUS_TOTAL_ASSETS_LESS_CURRENT_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getTotalAssetsLessCurrentLiabilities());
     }
 
-    private void assertOtherModelFieldsNull(BalanceSheet balanceSheet) {
+    private void assertNonOtherLiabilitiesOrAssetsFieldsNull(BalanceSheet balanceSheet) {
         assertNull(balanceSheet.getFixedAssets());
         assertNull(balanceSheet.getCurrentAssets());
         assertNull(balanceSheet.getCalledUpShareCapitalNotPaid());

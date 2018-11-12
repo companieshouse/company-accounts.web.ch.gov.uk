@@ -24,7 +24,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasCurrentPeriodFixedAssets(balanceSheet)) {
+        if (hasCurrentPeriodOtherLiabilitiesOrAssets(balanceSheet)) {
             OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
             OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
@@ -44,7 +44,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasPreviousPeriodFixedAssets(balanceSheet)) {
+        if (hasPreviousPeriodOtherLiabilitiesOrAssets(balanceSheet)) {
             OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
             OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
@@ -281,43 +281,31 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
         return totalNetAssets;
     }
 
-    private Boolean hasCurrentPeriodFixedAssets(BalanceSheet balanceSheet) {
+    private Boolean hasCurrentPeriodOtherLiabilitiesOrAssets(BalanceSheet balanceSheet) {
 
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
-        Boolean hasOtherLiabilitiesOrAssets = false;
-
-        if (Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getCurrentAmount(),
-                otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getCurrentAmount(),
-                otherLiabilitiesOrAssets.getNetCurrentAssets().getCurrentAmount(),
-                otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getCurrentAmount(),
-                otherLiabilitiesOrAssets.getCreditorsAfterOneYear().getCurrentAmount(),
-                otherLiabilitiesOrAssets.getProvisionForLiabilities().getCurrentAmount(),
-                otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getCurrentAmount())
-                .anyMatch(Objects::nonNull)) {
-            hasOtherLiabilitiesOrAssets = true;
-        }
-
-        return hasOtherLiabilitiesOrAssets;
+        return Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getCurrentAmount(),
+                    otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getCurrentAmount(),
+                    otherLiabilitiesOrAssets.getNetCurrentAssets().getCurrentAmount(),
+                    otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getCurrentAmount(),
+                    otherLiabilitiesOrAssets.getCreditorsAfterOneYear().getCurrentAmount(),
+                    otherLiabilitiesOrAssets.getProvisionForLiabilities().getCurrentAmount(),
+                    otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getCurrentAmount()).
+                anyMatch(Objects::nonNull);
     }
 
-    private Boolean hasPreviousPeriodFixedAssets(BalanceSheet balanceSheet) {
+    private Boolean hasPreviousPeriodOtherLiabilitiesOrAssets(BalanceSheet balanceSheet) {
 
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
-        Boolean hasOtherLiabilitiesOrAssets = false;
-
-        if (Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getPreviousAmount(),
-                otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getPreviousAmount(),
-                otherLiabilitiesOrAssets.getNetCurrentAssets().getPreviousAmount(),
-                otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getPreviousAmount(),
-                otherLiabilitiesOrAssets.getCreditorsAfterOneYear().getPreviousAmount(),
-                otherLiabilitiesOrAssets.getProvisionForLiabilities().getPreviousAmount(),
-                otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getPreviousAmount())
-                .anyMatch(Objects::nonNull)) {
-            hasOtherLiabilitiesOrAssets = true;
-        }
-
-        return hasOtherLiabilitiesOrAssets;
+        return Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getPreviousAmount(),
+                    otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getPreviousAmount(),
+                    otherLiabilitiesOrAssets.getNetCurrentAssets().getPreviousAmount(),
+                    otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getPreviousAmount(),
+                    otherLiabilitiesOrAssets.getCreditorsAfterOneYear().getPreviousAmount(),
+                    otherLiabilitiesOrAssets.getProvisionForLiabilities().getPreviousAmount(),
+                    otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getPreviousAmount()).
+                anyMatch(Objects::nonNull);
     }
 }

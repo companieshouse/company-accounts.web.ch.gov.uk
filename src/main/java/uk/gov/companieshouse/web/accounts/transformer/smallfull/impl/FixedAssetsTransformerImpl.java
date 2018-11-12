@@ -110,27 +110,17 @@ public class FixedAssetsTransformerImpl implements Transformer {
 
         FixedAssets fixedAssets = balanceSheet.getFixedAssets();
 
-        Boolean hasFixedAssets = false;
-
-        if (Stream.of(fixedAssets.getTangibleAssets().getCurrentAmount(),
-                fixedAssets.getCurrentTotal()).anyMatch(Objects::nonNull)) {
-            hasFixedAssets = true;
-        }
-
-        return hasFixedAssets;
+        return Stream.of(fixedAssets.getTangibleAssets().getCurrentAmount(),
+                    fixedAssets.getCurrentTotal()).
+                anyMatch(Objects::nonNull);
     }
 
     private Boolean hasPreviousPeriodFixedAssets(BalanceSheet balanceSheet) {
 
         FixedAssets fixedAssets = balanceSheet.getFixedAssets();
 
-        Boolean hasFixedAssets = false;
-
-        if (Stream.of(fixedAssets.getTangibleAssets().getPreviousAmount(),
-                fixedAssets.getPreviousTotal()).anyMatch(Objects::nonNull)) {
-            hasFixedAssets = true;
-        }
-
-        return hasFixedAssets;
+        return Stream.of(fixedAssets.getTangibleAssets().getPreviousAmount(),
+                    fixedAssets.getPreviousTotal()).
+                anyMatch(Objects::nonNull);
     }
 }
