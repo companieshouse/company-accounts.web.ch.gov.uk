@@ -46,7 +46,7 @@ public class CurrentAssetsTransformerImplTests {
         assertCurrentPeriodFieldsNotNull(balanceSheet);
         assertPreviousPeriodFieldsNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonCurrentAssetsFieldsNull(balanceSheet);
 
         assertCurrentPeriodValuesCorrect(balanceSheet);
     }
@@ -65,7 +65,7 @@ public class CurrentAssetsTransformerImplTests {
 
         assertBothPeriodFieldsNotNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonCurrentAssetsFieldsNull(balanceSheet);
 
         assertCurrentPeriodValuesCorrect(balanceSheet);
         assertPreviousPeriodValuesCorrect(balanceSheet);
@@ -88,7 +88,7 @@ public class CurrentAssetsTransformerImplTests {
         assertPreviousPeriodFieldsNotNull(balanceSheet);
         assertCurrentPeriodFieldsNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonCurrentAssetsFieldsNull(balanceSheet);
 
         assertPreviousPeriodValuesCorrect(balanceSheet);
     }
@@ -107,7 +107,7 @@ public class CurrentAssetsTransformerImplTests {
 
         assertBothPeriodFieldsNotNull(balanceSheet);
 
-        assertOtherModelFieldsNull(balanceSheet);
+        assertNonCurrentAssetsFieldsNull(balanceSheet);
 
         assertCurrentPeriodValuesCorrect(balanceSheet);
         assertPreviousPeriodValuesCorrect(balanceSheet);
@@ -339,7 +339,7 @@ public class CurrentAssetsTransformerImplTests {
         assertEquals(PREVIOUS_TOTAL, balanceSheetApi.getCurrentAssetsApi().getTotal());
     }
 
-    private void assertOtherModelFieldsNull(BalanceSheet balanceSheet) {
+    private void assertNonCurrentAssetsFieldsNull(BalanceSheet balanceSheet) {
         assertNull(balanceSheet.getFixedAssets());
         assertNull(balanceSheet.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheet.getCalledUpShareCapitalNotPaid());
