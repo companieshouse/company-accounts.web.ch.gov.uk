@@ -75,7 +75,7 @@
 
                     </div>
 
-                    <!--Fixed Assets-->
+                    <!-- Start Fixed Assets -->
 
                     <h2 class="govuk-heading-m">Fixed assets</h2>
 
@@ -92,19 +92,18 @@
 
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.tangibleAssets.currentAmount',
-                                 text = 'Tangible assets current',
-                                 class = 'govuk-input current-fixed-assets-add',
-                                 )">
+                                id = 'fixedAssets.tangibleAssets.currentAmount',
+                                text = 'Tangible assets current',
+                                class = 'govuk-input current-fixed-assets-add',
+                                )">
                             </div>
                         </div>
-
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.tangibleAssets.previousAmount',
-                                 text = 'Tangible assets previous',
-                                 class= 'govuk-input previous-fixed-assets-add',
-                                 )">
+                                id = 'fixedAssets.tangibleAssets.previousAmount',
+                                text = 'Tangible assets previous',
+                                class= 'govuk-input previous-fixed-assets-add',
+                                )">
                             </div>
                         </div>
                     </div>
@@ -119,26 +118,27 @@
                         <div class="govuk-grid-column-one-half">
                             <strong>Total fixed assets</strong>
                         </div>
-
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.currentTotal',
-                                 text = 'Total current fixed assets',
-                                 class= 'govuk-input current-fixed-assets-total',
-                                 )">
+                                id = 'fixedAssets.currentTotal',
+                                text = 'Total current fixed assets',
+                                class= 'govuk-input current-fixed-assets-total current-assets-less-current-liabilities-add'
+                                )">
                             </div>
                         </div>
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                 id = 'fixedAssets.previousTotal',
-                                 text = 'Total previous fixed assets',
-                                 class= 'govuk-input previous-fixed-assets-total',
-                                 )">
+                                id = 'fixedAssets.previousTotal',
+                                text = 'Total previous fixed assets',
+                                class= 'govuk-input previous-fixed-assets-total previous-assets-less-current-liabilities-add',
+                                )">
                             </div>
                         </div>
                     </div>
 
-                    <!--Current Assets-->
+                    <!-- End Fixed Assets -->
+
+                    <!-- Start Current Assets -->
 
                     <h2 class="govuk-heading-m">Current assets</h2>
 
@@ -247,7 +247,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'currentAssets.currentTotal',
                                 text = 'Total current current assets',
-                                class= 'govuk-input current-current-assets-total',
+                                class= 'govuk-input current-current-assets-total current-net-assets-add'
                                 )">
                             </div>
                         </div>
@@ -255,11 +255,248 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.previousTotal',
                                  text = 'Total previous current assets',
-                                 class= 'govuk-input previous-current-assets-total',
+                                 class= 'govuk-input previous-current-assets-total previous-net-assets-add'
                                  )">
                             </div>
                         </div>
                     </div>
+
+                    <!-- End Current Assets -->
+
+                    <!-- Start Other Libabilities and Assets -->
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Prepayments and accrued income
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.currentAmount',
+                                text = 'Prepayments and accrued income current',
+                                class = 'govuk-input current-net-assets-add'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                   id = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.previousAmount',
+                                   text = 'Tangible assets previous',
+                                   class= 'govuk-input previous-net-assets-add'
+                                   )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Creditors - amounts falling due within one year
+                            <span class="govuk-hint">
+                                Enter this number as a positive value and we'll calculate your net current assets
+                            </span>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.currentAmount',
+                                text = 'Creditors - amounts falling due within one year current',
+                                class= 'govuk-input current-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.previousAmount',
+                                text = 'Creditors - amounts falling due within one year previous',
+                                class= 'govuk-input previous-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.netCurrentAssets.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.netCurrentAssets.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong>Net current assets (liabilities)</strong>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.netCurrentAssets.currentAmount',
+                                text = 'Net current assets (liabilities) current',
+                                class= 'govuk-input current-net-assets-total current-assets-less-current-liabilities-add'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.netCurrentAssets.previousAmount',
+                                text = 'Net current assets (liabilities) previous',
+                                class= 'govuk-input previous-net-assets-total previous-assets-less-current-liabilities-add'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.totalAssetsLessCurrentLiabilities.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.totalAssetsLessCurrentLiabilities.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong>Total assets less current liabilities</strong>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.totalAssetsLessCurrentLiabilities.currentAmount',
+                                text = 'Total assets less current liabilities current',
+                                class= 'govuk-input current-assets-less-current-liabilities-total current-total-net-assets-add'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.totalAssetsLessCurrentLiabilities.previousAmount',
+                                text = 'Total assets less current liabilities previous',
+                                class= 'govuk-input previous-assets-less-current-liabilities-total previous-total-net-assets-add'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Creditors - amounts falling due after more than one year
+                            <span class="govuk-hint">
+                                Enter this number as a positive value and we'll calculate your net current assets
+                            </span>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.currentAmount',
+                                text = 'Creditors - amounts falling due after more than one year current',
+                                class= 'govuk-input current-total-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.previousAmount',
+                                text = 'Creditors - amounts falling due after more than one year previous',
+                                class= 'govuk-input previous-total-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.provisionForLiabilities.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.provisionForLiabilities.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Provision for liabilities
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.provisionForLiabilities.currentAmount',
+                                text = 'Provision for liabilities current',
+                                class= 'govuk-input current-total-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.provisionForLiabilities.previousAmount',
+                                text = 'Provision for liabilities previous',
+                                class= 'govuk-input previous-total-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Accruals and deferred income
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.currentAmount',
+                                text = 'Accruals and deferred income current',
+                                class= 'govuk-input current-total-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.previousAmount',
+                                text = 'Accruals and deferred income previous',
+                                class= 'govuk-input previous-total-net-assets-subtract'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'otherLiabilitiesOrAssets.totalNetAssets.currentAmount',
+                        previousField = 'otherLiabilitiesOrAssets.totalNetAssets.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong>Total net assets (liabilities)</strong>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.totalNetAssets.currentAmount',
+                                text = 'Total net assets (liabilities) current',
+                                class= 'govuk-input current-total-net-assets-total'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'otherLiabilitiesOrAssets.totalNetAssets.previousAmount',
+                                text = 'Total net assets (liabilities) previous',
+                                class= 'govuk-input previous-total-net-assets-total'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End Other Libabilities and Assets -->
 
                     <br>
 
