@@ -138,7 +138,7 @@ public class ValidationContext {
 
         String modelPath = mappings.get(path);
         if (StringUtils.isBlank(modelPath)) {
-            throw new MissingValidationMappingException("No validation mapping found for API JSON error path: \" + path");
+            throw new MissingValidationMappingException("No validation mapping found for API JSON error path: " + path);
         }
 
         return modelPath;

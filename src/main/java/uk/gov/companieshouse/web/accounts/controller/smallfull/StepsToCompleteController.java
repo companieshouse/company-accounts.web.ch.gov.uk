@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import com.google.api.client.util.DateTime;
+import java.time.LocalDate;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,7 +60,7 @@ public class StepsToCompleteController extends BaseController {
             String transactionId = transactionService.createTransaction(companyNumber);
 
             CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
-            DateTime periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+            LocalDate periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
 
             String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId, periodEndOn);
 
