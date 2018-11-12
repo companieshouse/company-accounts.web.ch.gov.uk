@@ -285,8 +285,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
 
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
-        Boolean hasOtherLiabilitiesOrAssets = false;
-
         if (Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getCurrentAmount(),
                 otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getCurrentAmount(),
                 otherLiabilitiesOrAssets.getNetCurrentAssets().getCurrentAmount(),
@@ -295,17 +293,15 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
                 otherLiabilitiesOrAssets.getProvisionForLiabilities().getCurrentAmount(),
                 otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getCurrentAmount())
                 .anyMatch(Objects::nonNull)) {
-            hasOtherLiabilitiesOrAssets = true;
+            return true;
         }
 
-        return hasOtherLiabilitiesOrAssets;
+        return false;
     }
 
     private Boolean hasPreviousPeriodOtherLiabilitiesOrAssets(BalanceSheet balanceSheet) {
 
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
-
-        Boolean hasOtherLiabilitiesOrAssets = false;
 
         if (Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getPreviousAmount(),
                 otherLiabilitiesOrAssets.getCreditorsDueWithinOneYear().getPreviousAmount(),
@@ -315,9 +311,9 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
                 otherLiabilitiesOrAssets.getProvisionForLiabilities().getPreviousAmount(),
                 otherLiabilitiesOrAssets.getAccrualsAndDeferredIncome().getPreviousAmount())
                 .anyMatch(Objects::nonNull)) {
-            hasOtherLiabilitiesOrAssets = true;
+            return true;
         }
 
-        return hasOtherLiabilitiesOrAssets;
+        return false;
     }
 }
