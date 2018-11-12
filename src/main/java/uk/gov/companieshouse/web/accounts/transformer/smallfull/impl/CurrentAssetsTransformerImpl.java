@@ -165,27 +165,21 @@ public class CurrentAssetsTransformerImpl implements Transformer {
 
         CurrentAssets currentAssets = balanceSheet.getCurrentAssets();
 
-        if (Stream.of(currentAssets.getStocks().getCurrentAmount(),
-                currentAssets.getDebtors().getCurrentAmount(),
-                currentAssets.getCashAtBankAndInHand().getCurrentAmount(),
-                currentAssets.getCurrentTotal()).anyMatch(Objects::nonNull)) {
-            return true;
-        }
-
-        return false;
+        return Stream.of(currentAssets.getStocks().getCurrentAmount(),
+                    currentAssets.getDebtors().getCurrentAmount(),
+                    currentAssets.getCashAtBankAndInHand().getCurrentAmount(),
+                    currentAssets.getCurrentTotal()).
+                anyMatch(Objects::nonNull);
     }
 
     private Boolean hasPreviousPeriodCurrentAssets(BalanceSheet balanceSheet) {
 
         CurrentAssets currentAssets = balanceSheet.getCurrentAssets();
 
-        if (Stream.of(currentAssets.getStocks().getPreviousAmount(),
-                currentAssets.getDebtors().getPreviousAmount(),
-                currentAssets.getCashAtBankAndInHand().getPreviousAmount(),
-                currentAssets.getPreviousTotal()).anyMatch(Objects::nonNull)) {
-            return true;
-        }
-
-        return false;
+        return Stream.of(currentAssets.getStocks().getPreviousAmount(),
+                    currentAssets.getDebtors().getPreviousAmount(),
+                    currentAssets.getCashAtBankAndInHand().getPreviousAmount(),
+                    currentAssets.getPreviousTotal()).
+                anyMatch(Objects::nonNull);
     }
 }
