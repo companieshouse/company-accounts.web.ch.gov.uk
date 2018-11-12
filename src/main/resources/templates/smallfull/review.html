@@ -128,7 +128,7 @@
 
                     <!-- Start Other Liabilities and Assets -->
 
-                    <th:block th:if="*{balanceSheet?.fixedAssets?.currentTotal != null or balanceSheet?.fixedAssets?.previousTotal != null}">
+                    <th:block th:if="*{balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.currentAmount != null or balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.previousAmount != null}">
 
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Prepayments and accrued income',
