@@ -14,7 +14,7 @@ public class BalanceSheet {
     private CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
     private FixedAssets fixedAssets;
-    
+
     private CurrentAssets currentAssets;
 
     private OtherLiabilitiesOrAssets otherLiabilitiesOrAssets;
