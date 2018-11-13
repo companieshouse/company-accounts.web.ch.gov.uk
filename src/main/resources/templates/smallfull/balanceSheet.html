@@ -502,6 +502,12 @@
 
                     <h2 class="govuk-heading-m">Capital and reserves</h2>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.calledUpShareCapital.currentAmount',
+                        previousField = 'capitalAndReserves.calledUpShareCapital.previousAmount'
+                        )">
+                    </div>
+
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half">
                             Called up share capital
@@ -523,6 +529,12 @@
                                 )">
                             </div>
                         </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.sharePremiumAccount.currentAmount',
+                        previousField = 'capitalAndReserves.sharePremiumAccount.previousAmount'
+                        )">
                     </div>
 
                     <div class="govuk-grid-row">
@@ -548,6 +560,12 @@
                         </div>
                     </div>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.otherReserves.currentAmount',
+                        previousField = 'capitalAndReserves.otherReserves.previousAmount'
+                        )">
+                    </div>
+
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half">
                                     Other reserves
@@ -570,6 +588,12 @@
                                 )">
                             </div>
                         </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.profitAndLossAccount.currentAmount',
+                        previousField = 'capitalAndReserves.profitAndLossAccount.previousAmount'
+                        )">
                     </div>
 
                     <div class="govuk-grid-row">
@@ -597,13 +621,19 @@
                         </div>
                     </div>
 
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.totalShareholdersFunds.currentAmount',
+                        previousField = 'capitalAndReserves.totalShareholdersFunds.previousAmount'
+                        )">
+                    </div>
+
                     <div class="govuk-grid-row accounts-total">
                         <div class="govuk-grid-column-one-half">
                             <strong>Total shareholders' funds</strong>
                         </div>
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'capitalAndReserves.totalShareholdersFund.currentAmount',
+                                id = 'capitalAndReserves.totalShareholdersFunds.currentAmount',
                                 text = 'Total shareholders fund current',
                                 class= 'govuk-input total-shareholders-funds-current-total'
                                 )">
@@ -611,7 +641,7 @@
                         </div>
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'capitalAndReserves.totalShareholdersFund.previousAmount',
+                                id = 'capitalAndReserves.totalShareholdersFunds.previousAmount',
                                 text = 'Total shareholders fund previous',
                                 class= 'govuk-input total-shareholders-funds-previous-total'
                                 )">
