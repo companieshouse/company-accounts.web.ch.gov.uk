@@ -120,7 +120,7 @@ public class AccountingPoliciesServiceImplTests {
 
         when(accountingPoliciesResourceHandler.get(ACCOUNTING_POLICIES_URI)).thenReturn(accountingPoliciesGet);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not found", new HttpHeaders()).build();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         when(accountingPoliciesGet.execute()).thenThrow(apiErrorResponseException);
