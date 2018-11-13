@@ -3,7 +3,14 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CapitalAndReservesApi;
-import uk.gov.companieshouse.web.accounts.model.smallfull.*;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CapitalAndReserves;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TotalShareholdersFunds;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapital;
+import uk.gov.companieshouse.web.accounts.model.smallfull.ProfitAndLossAccount;
+import uk.gov.companieshouse.web.accounts.model.smallfull.SharePremiumAccount;
+import uk.gov.companieshouse.web.accounts.model.smallfull.OtherReserves;
+
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
 @Component("capitalAndReservesTransformer")
@@ -39,7 +46,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
-        CapitalAndReserves capitalAndReserves = createCapitalAndReserves(balanceSheet);
+        createCapitalAndReserves(balanceSheet);
         CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReservesApi();
 
         // Share capital
@@ -76,7 +83,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
-        CapitalAndReserves capitalAndReserves = createCapitalAndReserves(balanceSheet);
+        createCapitalAndReserves(balanceSheet);
         CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReservesApi();
 
         // Share capital

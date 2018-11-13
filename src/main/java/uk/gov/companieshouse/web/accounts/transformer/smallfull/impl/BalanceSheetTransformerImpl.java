@@ -127,5 +127,4 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             capitalAndReservesTransformer.addPreviousPeriodToWebModel(balanceSheet, balanceSheetApi);
         }
     }
-
 }
