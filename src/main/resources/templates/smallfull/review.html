@@ -199,6 +199,54 @@
 
                     <!-- End Other Liabilities and Assets -->
 
+                    <!-- Start Capital and Reserves -->
+
+                    <th:block th:if="*{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.currentAmount != null or balanceSheet?.capitalAndReserves?.totalShareholdersFund?.previousAmount != null}">
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Called up share capital',
+                            identifier = 'called-up-share-capital',
+                            currentAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.currentAmount},
+                            previousAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Share premium account',
+                            identifier = 'share-premium-account',
+                            currentAmount = *{balanceSheet?.capitalAndReserves?.sharePremiumAccount?.currentAmount},
+                            previousAmount = *{balanceSheet?.capitalAndReserves?.sharePremiumAccount?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Other reserves',
+                            identifier = 'other-reserves',
+                            currentAmount = *{balanceSheet?.capitalAndReserves?.otherReserves?.currentAmount},
+                            previousAmount = *{balanceSheet?.capitalAndReserves?.otherReserves?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Profit and loss account',
+                            identifier = 'profit-and-loss-account',
+                            currentAmount = *{balanceSheet?.capitalAndReserves?.profitAndLossAccount?.currentAmount},
+                            previousAmount = *{balanceSheet?.capitalAndReserves?.profitAndLossAccount?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Total shareholders' funds',
+                            identifier = 'total-shareholders-funds',
+                            currentAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.currentAmount},
+                            previousAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.previousAmount},
+                            isTotalRow = true
+                        )">
+                        </div>
+
+                    </th:block>
+
+                    <!-- End Capital and Reserves -->
 
                 </dl>
 
