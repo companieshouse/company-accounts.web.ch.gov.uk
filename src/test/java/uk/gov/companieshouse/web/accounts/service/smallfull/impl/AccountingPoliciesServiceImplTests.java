@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -182,7 +183,7 @@ public class AccountingPoliciesServiceImplTests {
         when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
                 .thenReturn(accountingPoliciesCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(accountingPoliciesCreate.execute()).thenThrow(apiErrorResponseException);
 
@@ -205,7 +206,7 @@ public class AccountingPoliciesServiceImplTests {
         when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
                 .thenReturn(accountingPoliciesCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(accountingPoliciesCreate.execute()).thenThrow(apiErrorResponseException);
 
@@ -273,7 +274,7 @@ public class AccountingPoliciesServiceImplTests {
         when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
                 .thenReturn(accountingPoliciesUpdate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(accountingPoliciesUpdate.execute()).thenThrow(apiErrorResponseException);
 
@@ -296,7 +297,7 @@ public class AccountingPoliciesServiceImplTests {
         when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
                 .thenReturn(accountingPoliciesUpdate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(accountingPoliciesUpdate.execute()).thenThrow(apiErrorResponseException);
 
