@@ -19,7 +19,7 @@ public enum ValidationMessage {
     DATE_CANNOT_BE_FUTURE("date_cannot_be_in_future", "validation.date.cannotBeFuture", true),
     DATE_INVALID("date_is_invalid", "validation.date.invalid", false),
     MAX_LENGTH_EXCEEDED("max_length_exceeded", "validation.length.maxExceeded", false),
-    SHAREHOLDER_FUND_MISMATCH("shareholder_funds_mismatch", "shareholderFunds.mismatch", true);
+    SHAREHOLDER_FUND_MISMATCH("shareholder_funds_mismatch", "validation.shareholderFunds.mismatch", false);
 
     private String messageKey;
     private String apiError;
