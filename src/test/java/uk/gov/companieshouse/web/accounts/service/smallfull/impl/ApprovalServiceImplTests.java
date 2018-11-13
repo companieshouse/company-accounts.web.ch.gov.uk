@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,9 +12,10 @@ import static org.mockito.Mockito.when;
 
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -34,6 +36,7 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.links.SmallFullLinkType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
+import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
@@ -90,8 +93,19 @@ public class ApprovalServiceImplTests {
     private static final String APPROVAL_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
                                                 COMPANY_ACCOUNTS_ID + "/small-full/approval";
 
-    @BeforeEach
-    void setUp() throws ServiceException {
+    private static final String APPROVAL_DATE_ERROR_LOCATION = ".approval.date";
+
+    private static final String DATE_MISSING = "validation.date.missing" + APPROVAL_DATE_ERROR_LOCATION;
+
+    private static final String DATE_INCOMPLETE = "validation.date.incomplete" + APPROVAL_DATE_ERROR_LOCATION;
+
+    private static final String DATE_FORMAT_INVALID = "validation.date.format" + APPROVAL_DATE_ERROR_LOCATION;
+
+    private static final String DATE_INVALID = "validation.date.nonExistent";
+
+    @Test
+    @DisplayName("Submit Approval - POST - Success Path")
+    void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -103,11 +117,6 @@ public class ApprovalServiceImplTests {
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-    }
-
-    @Test
-    @DisplayName("Submit Approval - POST - Success Path")
-    void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         Approval approval = new Approval();
 
@@ -132,7 +141,19 @@ public class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Submit Approval - POST - URIValidationException Thrown")
-    void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException {
+    void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
+                ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
         Approval approval = new Approval();
 
@@ -157,6 +178,17 @@ public class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - POST - ApiErrorResponseException Thrown - Validation Errors")
     void createApprovalThrowsApiErrorResponseExceptionWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
         Approval approval = new Approval();
 
@@ -190,7 +222,18 @@ public class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - POST - ApiErrorResponseException Thrown - No Validation Errors")
     void createApprovalThrowsApiErrorResponseExceptionWithoutValidationErrors()
-            throws ApiErrorResponseException, URIValidationException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
         Approval approval = new Approval();
 
@@ -222,7 +265,18 @@ public class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - POST - Generic ApiErrorResponseException Thrown")
     void createApprovalThrowsGenericApiErrorResponseException()
-            throws ApiErrorResponseException, URIValidationException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
         Approval approval = new Approval();
 
@@ -247,6 +301,17 @@ public class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - PUT - Success Path")
     void updateApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
         Approval approval = new Approval();
 
         ApprovalApi approvalApi = new ApprovalApi();
@@ -270,7 +335,19 @@ public class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Submit Approval - PUT - URIValidationException Thrown")
-    void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+    void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException,
+                    ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
         Approval approval = new Approval();
 
@@ -295,6 +372,17 @@ public class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - PUT - ApiErrorResponseException Thrown - Validation Errors")
     void updateApprovalThrowsApiErrorResponseExceptionWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
         Approval approval = new Approval();
 
@@ -330,6 +418,17 @@ public class ApprovalServiceImplTests {
     void updateApprovalThrowsApiErrorResponseExceptionWithoutValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
         Approval approval = new Approval();
 
         ApprovalApi approvalApi = new ApprovalApi();
@@ -360,7 +459,18 @@ public class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - PUT - Generic ApiErrorResponseException Thrown")
     void updateApprovalThrowsGenericApiErrorResponseException()
-            throws ApiErrorResponseException, URIValidationException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
         Approval approval = new Approval();
 
@@ -379,6 +489,173 @@ public class ApprovalServiceImplTests {
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
 
         verify(approvalUpdate, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - No Fields Provided")
+    void validateApprovalDateNoFieldsProvided() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_MISSING, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Day Not Provided")
+    void validateApprovalDateDayNotProvided() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setMonth("12");
+        approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Month Not Provided")
+    void validateApprovalDateMonthNotProvided() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Year Not Provided")
+    void validateApprovalDateYearNotProvided() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setMonth("12");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Invalid Day Format")
+    void validateApprovalDateInvalidDayFormat() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("1st");
+        approvalDate.setMonth("3");
+        approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Invalid Month Format")
+    void validateApprovalDateInvalidMonthFormat() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setMonth("Mar");
+        approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Invalid Year Format")
+    void validateApprovalDateInvalidYearFormat() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setMonth("3");
+        approvalDate.setYear("18");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Invalid Date")
+    void validateApprovalDateInvalidDate() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setMonth("13");
+        approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        when(approvalTransformer.getApprovalDate(approval)).thenThrow(DateTimeParseException.class);
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertNotNull(validationErrors);
+        assertEquals(1, validationErrors.size());
+        assertEquals(DATE_INVALID, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate Approval Date - Valid Date")
+    void validateApprovalDateValidDate() {
+
+        ApprovalDate approvalDate = new ApprovalDate();
+        approvalDate.setDay("12");
+        approvalDate.setMonth("10");
+        approvalDate.setYear("2018");
+
+        Approval approval = new Approval();
+        approval.setDate(approvalDate);
+
+        when(approvalTransformer.getApprovalDate(approval)).thenReturn(LocalDate.now());
+
+        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+
+        assertEquals(0, validationErrors.size());
     }
 
 }

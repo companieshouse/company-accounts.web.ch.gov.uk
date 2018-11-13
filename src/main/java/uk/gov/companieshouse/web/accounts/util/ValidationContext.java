@@ -49,6 +49,8 @@ public class ValidationContext {
 
     private static final String PATH_DELIMITER = ".";
 
+    private static final String ERROR_PREFIX = "$";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAME_SPACE);
 
     private int depth = 0;
@@ -119,7 +121,14 @@ public class ValidationContext {
         return apiErrors.stream().map(apiError -> {
             ValidationError validationError = new ValidationError();
             validationError.setFieldPath(getModelPathForErrorPath(apiError.getLocation()));
-            validationError.setMessageKey(ValidationMessage.getMessageKeyForApiError(apiError.getError()));
+
+            ValidationMessage validationMessage = ValidationMessage.getMessageForApiError(apiError.getError());
+            String messageKey = validationMessage.getMessageKey();
+            if (!validationMessage.isGenericError()) {
+                messageKey += apiError.getLocation().replace(ERROR_PREFIX, "");
+            }
+            validationError.setMessageKey(messageKey);
+
             validationError.setMessageArguments(apiError.getErrorValues());
             return validationError;
         }).collect(Collectors.toList());

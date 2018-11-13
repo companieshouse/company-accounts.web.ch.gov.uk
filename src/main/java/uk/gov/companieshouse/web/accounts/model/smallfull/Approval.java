@@ -14,5 +14,5 @@ public class Approval {
     private String directorName;
 
     @ValidationMapping("$.approval.date")
-    private ApprovalDate approvalDate;
+    private ApprovalDate date;
 }

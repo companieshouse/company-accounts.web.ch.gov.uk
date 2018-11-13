@@ -38,7 +38,7 @@ public class ApprovalTransformerImplTests {
         approvalDate.setMonth(APPROVAL_MONTH);
         approvalDate.setYear(APPROVAL_YEAR);
 
-        approval.setApprovalDate(approvalDate);
+        approval.setDate(approvalDate);
 
         ApprovalApi approvalApi = approvalTransformer.getApprovalApi(approval);
 
