@@ -8,6 +8,9 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.AccountingPolici
 @Component
 public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTransformer {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BasisOfPreparation getBasisOfPreparation(AccountingPoliciesApi accountingPoliciesApi) {
 
@@ -29,6 +32,9 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
         return basisOfPreparation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setBasisOfPreparation(BasisOfPreparation basisOfPreparation,
             AccountingPoliciesApi accountingPoliciesApi) {

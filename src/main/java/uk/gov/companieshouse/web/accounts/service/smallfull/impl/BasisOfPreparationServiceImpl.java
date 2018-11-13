@@ -20,6 +20,9 @@ public class BasisOfPreparationServiceImpl implements BasisOfPreparationService 
     @Autowired
     private AccountingPoliciesTransformer transformer;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BasisOfPreparation getBasisOfPreparation(String transactionId, String companyAccountsId)
             throws ServiceException {
@@ -30,6 +33,9 @@ public class BasisOfPreparationServiceImpl implements BasisOfPreparationService 
         return transformer.getBasisOfPreparation(accountingPoliciesApi);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ValidationError> submitBasisOfPreparation(String transactionId, String companyAccountsId,
             BasisOfPreparation basisOfPreparation) throws ServiceException {

@@ -30,6 +30,9 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
 
     private static final String INVALID_URI_MESSAGE = "Invalid URI for accounting policies resource";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AccountingPoliciesApi getAccountingPoliciesApi(String transactionId, String companyAccountsId)
                         throws ServiceException {
@@ -50,6 +53,9 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ValidationError> createAccountingPoliciesApi(String transactionId, String companyAccountsId,
                         AccountingPoliciesApi accountingPoliciesApi) throws ServiceException {
@@ -76,6 +82,9 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
         return new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ValidationError> updateAccountingPoliciesApi(String transactionId, String companyAccountsId,
             AccountingPoliciesApi accountingPoliciesApi) throws ServiceException {
