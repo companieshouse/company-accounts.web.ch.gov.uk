@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.AccountingPoliciesTransformer;
 
 @Component
@@ -43,6 +44,33 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
             accountingPoliciesApi.setBasisOfMeasurementAndPreparation(basisOfPreparation.getPreparedStatement());
         } else {
             accountingPoliciesApi.setBasisOfMeasurementAndPreparation(basisOfPreparation.getCustomStatement());
+        }
+    }
+
+    @Override
+    public TurnoverPolicy getTurnoverPolicy(AccountingPoliciesApi accountingPoliciesApi) {
+
+        TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
+        if (accountingPoliciesApi == null) {
+            return turnoverPolicy;
+        }
+
+        if (accountingPoliciesApi.getTurnoverPolicy() != null) {
+            turnoverPolicy.setIsIncludeTurnoverSelected(true);
+            turnoverPolicy.setTurnoverPolicyDetails(accountingPoliciesApi.getTurnoverPolicy());
+        }
+
+        return turnoverPolicy;
+    }
+
+    @Override
+    public void setTurnoverPolicy(TurnoverPolicy turnoverPolicy,
+        AccountingPoliciesApi accountingPoliciesApi) {
+
+        if (turnoverPolicy.getIsIncludeTurnoverSelected()) {
+            accountingPoliciesApi.setTurnoverPolicy(turnoverPolicy.getTurnoverPolicyDetails());
+        } else {
+            accountingPoliciesApi.setTurnoverPolicy(null);
         }
     }
 }
