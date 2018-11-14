@@ -8,4 +8,6 @@ import lombok.Setter;
 public class Review {
 
     BalanceSheet balanceSheet;
+
+    Statements statements;
 }
