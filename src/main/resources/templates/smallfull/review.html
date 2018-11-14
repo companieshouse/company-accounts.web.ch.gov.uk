@@ -203,6 +203,11 @@
 
                     <th:block th:if="*{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.currentAmount != null or balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.previousAmount != null}">
 
+                        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                            description = 'Capital and reserves'
+                        )">
+                        </div>
+
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Called up share capital',
                             identifier = 'called-up-share-capital',
