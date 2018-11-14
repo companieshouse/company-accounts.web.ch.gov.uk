@@ -326,7 +326,7 @@ public class CapitalAndReservesTransformerImplTests {
         assertNotNull(balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
         assertNotNull(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
         assertNotNull(balanceSheet.getCapitalAndReserves().getOtherReserves().getPreviousAmount());
-        assertNotNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
+        assertNotNull(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
         assertNotNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
     }
 
