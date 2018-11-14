@@ -113,7 +113,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
         // Shareholder funds
         if (capitalAndReservesApi.getTotalShareholdersFunds() != null) {
             TotalShareholdersFunds totalShareholdersFunds = createTotalShareholdersFund(balanceSheet);
-            totalShareholdersFunds.setPreviousAmount(totalShareholdersFunds.getPreviousAmount());
+            totalShareholdersFunds.setPreviousAmount(capitalAndReservesApi.getTotalShareholdersFunds());
         }
     }
 
