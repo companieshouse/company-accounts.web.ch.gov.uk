@@ -201,13 +201,13 @@
 
                     <!-- Start Capital and Reserves -->
 
-                    <th:block th:if="*{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.currentAmount != null or balanceSheet?.capitalAndReserves?.totalShareholdersFund?.previousAmount != null}">
+                    <th:block th:if="*{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.currentAmount != null or balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.previousAmount != null}">
 
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Called up share capital',
                             identifier = 'called-up-share-capital',
-                            currentAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.currentAmount},
-                            previousAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.previousAmount}
+                            currentAmount = *{balanceSheet?.capitalAndReserves?.calledUpShareCapital?.currentAmount},
+                            previousAmount = *{balanceSheet?.capitalAndReserves?.calledUpShareCapital?.previousAmount}
                         )">
                         </div>
 
@@ -236,10 +236,10 @@
                         </div>
 
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
-                            description = 'Total shareholders' funds',
+                            description = 'Total shareholders\' funds',
                             identifier = 'total-shareholders-funds',
-                            currentAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.currentAmount},
-                            previousAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFund?.previousAmount},
+                            currentAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.currentAmount},
+                            previousAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.previousAmount},
                             isTotalRow = true
                         )">
                         </div>
