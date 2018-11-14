@@ -139,7 +139,7 @@ public class CapitalAndReservesTransformerImplTests {
 
     @Test
     @DisplayName("Current period value always added to balance sheet API model")
-    void currentPeriodValueNotAddedToApiModel() {
+    void currentPeriodValueAlwaysAddedToApiModel() {
 
         CapitalAndReserves capitalAndReserves = new CapitalAndReserves();
         capitalAndReserves.setCalledUpShareCapital(new CalledUpShareCapital());
@@ -185,7 +185,7 @@ public class CapitalAndReservesTransformerImplTests {
 
     @Test
     @DisplayName("Previous period value always added to balance sheet API model")
-    void previousPeriodValueNotAddedToApiModel() {
+    void previousPeriodValueAlwaysAddedToApiModel() {
 
         CapitalAndReserves capitalAndReserves = new CapitalAndReserves();
         capitalAndReserves.setCalledUpShareCapital(new CalledUpShareCapital());
