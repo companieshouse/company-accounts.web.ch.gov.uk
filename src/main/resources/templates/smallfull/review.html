@@ -224,6 +224,28 @@
 
                 </dl>
 
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                    description = 'Basis of preparation',
+                    identifier= 'basis-of-preparation',
+                    resource = 'basis-of-preparation',
+                    marginTop = true
+                    )">
+                </div>
+
+                <dl class="app-check-your-answers app-check-your-answers--short">
+
+                    <div class="app-check-your-answers__contents">
+                        <dt class="app-check-your-answers__answer">
+                            <p id="review-basisOfPreparation"
+                               th:text="*{basisOfPreparation.isPreparedInAccordanceWithStandards} ?
+                                        *{basisOfPreparation.preparedStatement} :
+                                        *{basisOfPreparation.customStatement}">
+                            </p>
+                        </dt>
+                    </div>
+
+                </dl>
+
                 <!-- End Balance Sheet -->
 
                 <div class="govuk-form-group">
