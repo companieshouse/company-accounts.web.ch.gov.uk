@@ -15,7 +15,5 @@ public class CapitalAndReserves {
 
     private ProfitAndLossAccount profitAndLossAccount;
 
-    private TotalShareholdersFund totalShareholdersFund;
-
-
+    private TotalShareholdersFunds totalShareholdersFunds;
 }
