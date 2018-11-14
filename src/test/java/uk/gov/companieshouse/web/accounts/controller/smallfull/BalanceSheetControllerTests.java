@@ -56,10 +56,10 @@ public class BalanceSheetControllerTests {
                                                      "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                      "/small-full/balance-sheet";
 
-    private static final String REVIEW_PATH = "/company/" + COMPANY_NUMBER +
+    private static final String STATEMENTS_PATH = "/company/" + COMPANY_NUMBER +
                                                "/transaction/" + TRANSACTION_ID +
                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                               "/small-full/review";
+                                               "/small-full/balance-sheet-statements";
 
     private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
 
@@ -114,7 +114,7 @@ public class BalanceSheetControllerTests {
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + STATEMENTS_PATH));
     }
 
     @Test
