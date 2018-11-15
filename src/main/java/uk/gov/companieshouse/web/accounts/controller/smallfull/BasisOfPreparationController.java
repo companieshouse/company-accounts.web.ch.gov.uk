@@ -81,7 +81,6 @@ public class BasisOfPreparationController extends BaseController {
         }
 
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
-
     }
 
     @Override
