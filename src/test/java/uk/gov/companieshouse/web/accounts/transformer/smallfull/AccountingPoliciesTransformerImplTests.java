@@ -20,14 +20,14 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.AccountingP
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AccountingPoliciesTransformerImplTests {
 
-    private AccountingPoliciesTransformer transformer = new AccountingPoliciesTransformerImpl();
-
     private static final String BASIS_OF_PREPARATION_PREPARED_STATEMENT =
-            "These financial statements have been prepared in accordance with the provisions of "
-                    + "Section 1A (Small Entities) of Financial Reporting Standard 102";
+        "These financial statements have been prepared in accordance with the provisions of "
+            + "Section 1A (Small Entities) of Financial Reporting Standard 102";
 
     private static final String BASIS_OF_PREPARATION_CUSTOM_STATEMENT = "customStatement";
     private static final String TURNOVER_POLICY_DETAILS = "Turnover policy details";
+
+    private AccountingPoliciesTransformer transformer = new AccountingPoliciesTransformerImpl();
 
     @Test
     @DisplayName("Get Basis of Preparation - Null AccountingPoliciesApi")
@@ -98,8 +98,8 @@ public class AccountingPoliciesTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Get TurnoverPolicy when accountingPoliciesApi is null")
-    void shouldGetTurnoverPolicyWhenAccountingPoliciesApiIsNull() {
+    @DisplayName("Returned empty turnover policy object when accounting policies api is null")
+    void shouldCreateTurnoverPolicyObjectWhenAccountingPoliciesApiIsNull() {
 
         TurnoverPolicy turnoverPolicy = transformer.getTurnoverPolicy(null);
 
@@ -109,7 +109,7 @@ public class AccountingPoliciesTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Get TurnoverPolicy when accountingPoliciesApi is set and turnoverPolicy is null")
+    @DisplayName("Returned empty turnover policy object when turnover policy is null within accounting policies api")
     void shouldGetTurnoverPolicyWhenAccountingPoliciesApiIsSetAndTurnoverPolicyIsNull() {
 
         TurnoverPolicy turnoverPolicy = transformer.getTurnoverPolicy(new AccountingPoliciesApi());
@@ -120,7 +120,7 @@ public class AccountingPoliciesTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Get TurnoverPolicy when accountingPoliciesApi is set and turnoverPolicy is set")
+    @DisplayName("Returned turnover policy contains values from turnover policy within accounting policies api")
     void shouldGetTurnoverPolicyWhenAccountingPolicyApiAndTurnoverPolicySet() {
 
         TurnoverPolicy turnoverPolicy = transformer.getTurnoverPolicy(createAccountingPoliciesApi());
@@ -131,7 +131,7 @@ public class AccountingPoliciesTransformerImplTests {
     }
 
     @Test
-    @DisplayName("TurnoverPolicyAPI is set successfully when include turnover is selected")
+    @DisplayName("Turnover policy values are populated to the turnover policy within accounting policies api when turnover selected")
     void shouldSetTurnoverPolicyAPIWhenIncludeTurnoverSelected() {
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
@@ -144,7 +144,7 @@ public class AccountingPoliciesTransformerImplTests {
     }
 
     @Test
-    @DisplayName("TurnoverPolicyAPI is not set when include turnover is not selected")
+    @DisplayName("Turnover policy values are populated to the turnover policy within accounting policies api when turnover not selected")
     void shouldNotSetTurnoverPolicyAPIWhenIncludeTurnoverNotSelected() {
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
@@ -162,10 +162,10 @@ public class AccountingPoliciesTransformerImplTests {
         return accountingPoliciesApi;
     }
 
-    private TurnoverPolicy createTurnOverPolicy(boolean IsIncludeTurnoverSelected) {
+    private TurnoverPolicy createTurnOverPolicy(boolean isToIncludeTurnoverPolicy) {
         TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
 
-        turnoverPolicy.setIsIncludeTurnoverSelected(IsIncludeTurnoverSelected);
+        turnoverPolicy.setIsIncludeTurnoverSelected(isToIncludeTurnoverPolicy);
         turnoverPolicy.setTurnoverPolicyDetails(TURNOVER_POLICY_DETAILS);
 
         return  turnoverPolicy;
