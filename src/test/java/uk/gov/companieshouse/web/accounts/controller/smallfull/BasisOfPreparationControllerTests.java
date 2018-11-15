@@ -49,15 +49,14 @@ public class BasisOfPreparationControllerTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String BASIS_OF_PREPARATION_PATH = "/company/" + COMPANY_NUMBER +
-                                                            "/transaction/" + TRANSACTION_ID +
-                                                            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                            "/small-full/basis-of-preparation";
+    private static final String SMALL_FULL_PATH = "/company/" + COMPANY_NUMBER +
+                                                    "/transaction/" + TRANSACTION_ID +
+                                                    "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                                                    "/small-full";
 
-    private static final String REVIEW_PATH = "/company/" + COMPANY_NUMBER +
-                                                "/transaction/" + TRANSACTION_ID +
-                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                "/small-full/review";
+    private static final String BASIS_OF_PREPARATION_PATH = SMALL_FULL_PATH + "/basis-of-preparation";
+
+    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
