@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TurnoverPolicy {
-    @NotNull
+    @NotNull(message = "{turnoverPolicy.selectionNotMade}")
     private Boolean isIncludeTurnoverSelected;
 
     private String turnoverPolicyDetails;
