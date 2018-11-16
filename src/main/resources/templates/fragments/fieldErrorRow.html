@@ -7,7 +7,7 @@
         <div th:fragment="fieldErrorRow">
             <div class="grid-row" th:classappend="${#fields.hasErrors('__${currentField}__') || #fields.hasErrors('__${previousField}__')} ? '' : 'error-hidden'">
                 <div class="govuk-grid-column-one-half">&nbsp;</div>
-                <div class="govuk-grid-column-one-quarter">
+                <div class="govuk-grid-column-one-quarter current-col">
                     <span th:if="${#fields.hasErrors('__${currentField}__')}"
                           th:id="${currentField} + '-errorId'"
                           th:each="e : ${#fields.errors('__${currentField}__')}"
@@ -16,7 +16,7 @@
                     </span>
                     <span th:if="${!#fields.hasErrors('__${currentField}__')}">&nbsp;</span>
                 </div>
-                <div class="govuk-grid-column-one-quarter">
+                <div class="govuk-grid-column-one-quarter previous-col">
                     <span th:if="${#fields.hasErrors('__${previousField}__')}"
                           th:id="${previousField} + '-errorId'"
                           th:each="e : ${#fields.errors('__${previousField}__')}"
