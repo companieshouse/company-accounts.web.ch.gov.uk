@@ -23,6 +23,7 @@
                           th:text="${e}"
                           class="govuk-error-message">
                     </span>
+                    <span th:if="${!#fields.hasErrors('__${currentField}__')}">&nbsp;</span>
                 </div>
             </div>
         </div>
