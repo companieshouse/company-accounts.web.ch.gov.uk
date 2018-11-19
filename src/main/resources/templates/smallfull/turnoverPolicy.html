@@ -68,6 +68,12 @@
 
               <div class="govuk-form-group" th:classappend="${#fields.hasErrors('turnoverPolicyDetails')} ? 'govuk-form-group--error' : ''">
 
+                  <span class="govuk-error-message"
+                        id="customStatement-errorId"
+                        th:if="${#fields.hasErrors('turnoverPolicyDetails')}"
+                        th:each="e : ${#fields.errors('turnoverPolicyDetails')}" th:text="${e}" >
+                  </span>
+
                 <label class="govuk-label govuk-visually-hidden" for="turnover-policy-details">
                   Enter your 'turnover' policy
                 </label>
@@ -88,8 +94,7 @@
         </div>
 
         <div class="govuk-form-group">
-          <input id="next-button" class="govuk-button" type="submit" role="button"
-                 value="Save and continue"/>
+          <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
         </div>
 
       </form>

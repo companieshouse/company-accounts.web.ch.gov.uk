@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @NextController(ApprovalController.class)
-@PreviousController(BasisOfPreparationController.class)
+@PreviousController(TurnoverPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/review")
 public class ReviewController extends BaseController {
 

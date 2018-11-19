@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(TurnoverPolicyController.class)
 @PreviousController(StatementsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/basis-of-preparation")
 public class BasisOfPreparationController extends BaseController {
