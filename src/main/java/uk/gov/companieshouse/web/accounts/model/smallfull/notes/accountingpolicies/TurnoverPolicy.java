@@ -15,20 +15,4 @@ public class TurnoverPolicy {
 
     @ValidationMapping("$.accounting_policies.turnover_policy")
     private String turnoverPolicyDetails;
-
-    public Boolean getIsIncludeTurnoverSelected() {
-        return isIncludeTurnoverSelected;
-    }
-
-    public void setIsIncludeTurnoverSelected(Boolean isIncludeTurnoverSelected) {
-        this.isIncludeTurnoverSelected = isIncludeTurnoverSelected;
-    }
-
-    public String getTurnoverPolicyDetails() {
-        return turnoverPolicyDetails;
-    }
-
-    public void setTurnoverPolicyDetails(String turnoverPolicyDetails) {
-        this.turnoverPolicyDetails = turnoverPolicyDetails;
-    }
 }
