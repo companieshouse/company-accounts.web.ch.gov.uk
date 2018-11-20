@@ -12,8 +12,10 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,6 +37,9 @@ public class ReviewServiceImplTests {
     @Mock
     private StatementsService statementsService;
 
+    @Mock
+    private TurnoverPolicyService turnoverPolicyService;
+
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
 
@@ -43,15 +48,21 @@ public class ReviewServiceImplTests {
     void getReview() throws ServiceException {
 
         BalanceSheet mockBalanceSheet = new BalanceSheet();
-        when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
+        when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+            .thenReturn(mockBalanceSheet);
 
         Statements mockStatements = new Statements();
         when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(mockStatements);
+
+        TurnoverPolicy mockTurnoverPolicy = new TurnoverPolicy();
+        when(turnoverPolicyService.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenReturn(mockTurnoverPolicy);
 
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(review);
         assertEquals(mockBalanceSheet, review.getBalanceSheet());
         assertEquals(mockStatements, review.getStatements());
+        assertEquals(mockTurnoverPolicy, review.getTurnoverPolicy());
     }
 }
