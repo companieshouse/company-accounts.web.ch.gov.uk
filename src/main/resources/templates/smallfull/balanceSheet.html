@@ -280,7 +280,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.currentAmount',
                                 text = 'Prepayments and accrued income current',
-                                class = 'govuk-input current-net-assets-add'
+                                class = 'govuk-input current current-net-assets-add'
                                 )">
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                    id = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.previousAmount',
                                    text = 'Tangible assets previous',
-                                   class= 'govuk-input previous-net-assets-add'
+                                   class= 'govuk-input previous previous-net-assets-add'
                                    )">
                             </div>
                         </div>
@@ -311,7 +311,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.currentAmount',
                                 text = 'Creditors - amounts falling due within one year current',
-                                class= 'govuk-input current-net-assets-subtract'
+                                class= 'govuk-input current current-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -319,7 +319,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.previousAmount',
                                 text = 'Creditors - amounts falling due within one year previous',
-                                class= 'govuk-input previous-net-assets-subtract'
+                                class= 'govuk-input previous previous-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -339,7 +339,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.netCurrentAssets.currentAmount',
                                 text = 'Net current assets (liabilities) current',
-                                class= 'govuk-input current-net-assets-total current-assets-less-current-liabilities-add'
+                                class= 'govuk-input current current-net-assets-total current-assets-less-current-liabilities-add'
                                 )">
                             </div>
                         </div>
@@ -347,7 +347,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.netCurrentAssets.previousAmount',
                                 text = 'Net current assets (liabilities) previous',
-                                class= 'govuk-input previous-net-assets-total previous-assets-less-current-liabilities-add'
+                                class= 'govuk-input previous previous-net-assets-total previous-assets-less-current-liabilities-add'
                                 )">
                             </div>
                         </div>
@@ -367,7 +367,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.totalAssetsLessCurrentLiabilities.currentAmount',
                                 text = 'Total assets less current liabilities current',
-                                class= 'govuk-input current-assets-less-current-liabilities-total current-total-net-assets-add'
+                                class= 'govuk-input current current-assets-less-current-liabilities-total current-total-net-assets-add'
                                 )">
                             </div>
                         </div>
@@ -375,7 +375,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.totalAssetsLessCurrentLiabilities.previousAmount',
                                 text = 'Total assets less current liabilities previous',
-                                class= 'govuk-input previous-assets-less-current-liabilities-total previous-total-net-assets-add'
+                                class= 'govuk-input previous previous-assets-less-current-liabilities-total previous-total-net-assets-add'
                                 )">
                             </div>
                         </div>
@@ -398,7 +398,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.currentAmount',
                                 text = 'Creditors - amounts falling due after more than one year current',
-                                class= 'govuk-input current-total-net-assets-subtract'
+                                class= 'govuk-input current current-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -406,7 +406,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.previousAmount',
                                 text = 'Creditors - amounts falling due after more than one year previous',
-                                class= 'govuk-input previous-total-net-assets-subtract'
+                                class= 'govuk-input previous previous-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -426,7 +426,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.provisionForLiabilities.currentAmount',
                                 text = 'Provision for liabilities current',
-                                class= 'govuk-input current-total-net-assets-subtract'
+                                class= 'govuk-input current current-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -434,7 +434,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.provisionForLiabilities.previousAmount',
                                 text = 'Provision for liabilities previous',
-                                class= 'govuk-input previous-total-net-assets-subtract'
+                                class= 'govuk-input previous previous-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -454,7 +454,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.currentAmount',
                                 text = 'Accruals and deferred income current',
-                                class= 'govuk-input current-total-net-assets-subtract'
+                                class= 'govuk-input current current-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -462,7 +462,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.previousAmount',
                                 text = 'Accruals and deferred income previous',
-                                class= 'govuk-input previous-total-net-assets-subtract'
+                                class= 'govuk-input previous previous-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -482,7 +482,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.totalNetAssets.currentAmount',
                                 text = 'Total net assets (liabilities) current',
-                                class= 'govuk-input current-total-net-assets-total'
+                                class= 'govuk-input current current-total-net-assets-total'
                                 )">
                             </div>
                         </div>
@@ -490,7 +490,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.totalNetAssets.previousAmount',
                                 text = 'Total net assets (liabilities) previous',
-                                class= 'govuk-input previous-total-net-assets-total'
+                                class= 'govuk-input previous previous-total-net-assets-total'
                                 )">
                             </div>
                         </div>
