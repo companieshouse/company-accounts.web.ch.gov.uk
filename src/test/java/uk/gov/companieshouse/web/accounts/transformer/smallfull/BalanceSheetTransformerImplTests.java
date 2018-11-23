@@ -47,12 +47,12 @@ public class BalanceSheetTransformerImplTests {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
         balanceSheetApi.setCalledUpShareCapitalNotPaid(CALLED_UP_SHARE_CAPITAL_NOT_PAID);
-        balanceSheetApi.setFixedAssetsApi(new FixedAssetsApi());
-        balanceSheetApi.setCurrentAssetsApi(new CurrentAssetsApi());
-        balanceSheetApi.setOtherLiabilitiesOrAssetsApi(new OtherLiabilitiesOrAssetsApi());
+        balanceSheetApi.setFixedAssets(new FixedAssetsApi());
+        balanceSheetApi.setCurrentAssets(new CurrentAssetsApi());
+        balanceSheetApi.setOtherLiabilitiesOrAssets(new OtherLiabilitiesOrAssetsApi());
 
         CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
-        currentPeriodApi.setBalanceSheetApi(balanceSheetApi);
+        currentPeriodApi.setBalanceSheet(balanceSheetApi);
 
         BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriodApi, null);
 
@@ -71,12 +71,12 @@ public class BalanceSheetTransformerImplTests {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
         balanceSheetApi.setCalledUpShareCapitalNotPaid(CALLED_UP_SHARE_CAPITAL_NOT_PAID);
-        balanceSheetApi.setFixedAssetsApi(new FixedAssetsApi());
-        balanceSheetApi.setCurrentAssetsApi(new CurrentAssetsApi());
-        balanceSheetApi.setOtherLiabilitiesOrAssetsApi(new OtherLiabilitiesOrAssetsApi());
+        balanceSheetApi.setFixedAssets(new FixedAssetsApi());
+        balanceSheetApi.setCurrentAssets(new CurrentAssetsApi());
+        balanceSheetApi.setOtherLiabilitiesOrAssets(new OtherLiabilitiesOrAssetsApi());
 
         CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
-        currentPeriodApi.setBalanceSheetApi(balanceSheetApi);
+        currentPeriodApi.setBalanceSheet(balanceSheetApi);
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
         previousPeriodApi.setBalanceSheet(balanceSheetApi);
