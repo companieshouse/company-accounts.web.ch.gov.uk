@@ -23,7 +23,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getCurrentTotal());
 
-            balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
+            balanceSheetApi.setFixedAssets(fixedAssetsApi);
         }
     }
 
@@ -36,7 +36,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getPreviousTotal());
 
-            balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
+            balanceSheetApi.setFixedAssets(fixedAssetsApi);
         }
     }
 
@@ -45,7 +45,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
-        FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssetsApi();
+        FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssets();
 
         // Tangible assets
         if (fixedAssetsApi.getTangible() != null) {
@@ -64,7 +64,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
-        FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssetsApi();
+        FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssets();
 
         // Tangible assets
         if (fixedAssetsApi.getTangible() != null) {

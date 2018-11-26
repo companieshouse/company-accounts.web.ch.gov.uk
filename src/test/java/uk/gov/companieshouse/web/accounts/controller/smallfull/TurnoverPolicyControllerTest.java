@@ -100,7 +100,6 @@ public class TurnoverPolicyControllerTest {
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
-
     @Test
     @DisplayName("Post Turnover Policy call is successful")
     void shouldPostTurnoverPolicy() throws Exception {
@@ -168,7 +167,6 @@ public class TurnoverPolicyControllerTest {
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
     }
-
 
     /**
      * Add the information to the post request. Where the parameter will control if data to be set

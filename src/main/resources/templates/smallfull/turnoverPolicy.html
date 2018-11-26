@@ -22,7 +22,8 @@
 
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
               legendText = 'Do your prepared accounts include a \'turnover\' policy?',
-              boxLabelText = 'If yes, enter your \'turnover\' policy',
+              boxLabelTextJavaScriptOn = 'Give details of your \'turnover\' policy',
+              boxLabelTextJavaScriptOff = 'If yes, enter your \'turnover\' policy javascript off',
               radioButtonsFieldName = 'isIncludeTurnoverSelected',
               textBoxFieldName = 'turnoverPolicyDetails',
               dataTargetTextFieldName = 'turnover-policy-text-box',

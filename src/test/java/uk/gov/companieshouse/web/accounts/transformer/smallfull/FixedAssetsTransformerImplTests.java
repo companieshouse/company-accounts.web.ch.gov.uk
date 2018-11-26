@@ -117,8 +117,8 @@ public class FixedAssetsTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -140,9 +140,9 @@ public class FixedAssetsTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
@@ -156,8 +156,8 @@ public class FixedAssetsTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -179,9 +179,9 @@ public class FixedAssetsTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
@@ -229,7 +229,7 @@ public class FixedAssetsTransformerImplTests {
         fixedAssetsApi.setTotal(CURRENT_TOTAL_FIXED_ASSETS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
+        balanceSheetApi.setFixedAssets(fixedAssetsApi);
 
         return balanceSheetApi;
     }
@@ -241,7 +241,7 @@ public class FixedAssetsTransformerImplTests {
         fixedAssetsApi.setTotal(PREVIOUS_TOTAL_FIXED_ASSETS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setFixedAssetsApi(fixedAssetsApi);
+        balanceSheetApi.setFixedAssets(fixedAssetsApi);
 
         return balanceSheetApi;
     }
@@ -287,19 +287,19 @@ public class FixedAssetsTransformerImplTests {
     }
 
     private void assertApiModelFieldsNotNull(BalanceSheetApi balanceSheetApi) {
-        assertNotNull(balanceSheetApi.getFixedAssetsApi());
-        assertNotNull(balanceSheetApi.getFixedAssetsApi().getTotal());
-        assertNotNull(balanceSheetApi.getFixedAssetsApi().getTangible());
+        assertNotNull(balanceSheetApi.getFixedAssets());
+        assertNotNull(balanceSheetApi.getFixedAssets().getTotal());
+        assertNotNull(balanceSheetApi.getFixedAssets().getTangible());
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(CURRENT_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangible());
-        assertEquals(CURRENT_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssetsApi().getTotal());
+        assertEquals(CURRENT_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssets().getTangible());
+        assertEquals(CURRENT_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssets().getTotal());
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(PREVIOUS_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssetsApi().getTangible());
-        assertEquals(PREVIOUS_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssetsApi().getTotal());
+        assertEquals(PREVIOUS_TANGIBLE_ASSETS, balanceSheetApi.getFixedAssets().getTangible());
+        assertEquals(PREVIOUS_TOTAL_FIXED_ASSETS, balanceSheetApi.getFixedAssets().getTotal());
     }
 
     private void assertNonFixedAssetsFieldsNull(BalanceSheet balanceSheet) {
