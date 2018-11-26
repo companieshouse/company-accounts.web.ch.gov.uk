@@ -36,7 +36,6 @@ public class TurnoverPolicyServiceImplTest {
     private static final String TURNOVER_POLICY_DETAILS_FIELD_PATH = "turnoverPolicyDetails";
     private static final String INVALID_STRING_SIZE_ERROR_MESSAGE = "validation.length.minInvalid.accounting_policies.turnover_policy";
 
-
     @Mock
     private AccountingPoliciesTransformer accountingPoliciesTransformerMock;
     @Mock
