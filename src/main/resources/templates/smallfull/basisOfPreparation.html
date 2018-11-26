@@ -21,7 +21,7 @@
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h1 class="govuk-heading-l govuk-!-margin-bottom-0">How did you prepare your accounts?</h1>
+              <h1 id="page-title-heading" class="govuk-heading-l govuk-!-margin-bottom-0">How did you prepare your accounts?</h1>
             </legend>
             <details class="govuk-details" role="group">
               <summary class="govuk-details__summary" role="button" aria-controls="basisOfPreparation-help-text" aria-expanded="false">
@@ -45,14 +45,14 @@
 
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id="basisOfPreparation-prepared-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="1">
-                <label class="govuk-label govuk-radios__label" for="basisOfPreparation-prepared-statement">
+                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-prepared-statement-label" for="basisOfPreparation-prepared-statement">
                   These financial statements have been prepared in accordance with the provisions of Section 1A (Small Entities) of Financial Reporting Standard 102
                 </label>
               </div>
 
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input show-text" id="basisOfPreparation-custom-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="0">
-                <label class="govuk-label govuk-radios__label" for="basisOfPreparation-custom-statement">
+                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-custom-statement-label" for="basisOfPreparation-custom-statement">
                   These accounts have been prepared in accordance with another standard
                 </label>
               </div>
