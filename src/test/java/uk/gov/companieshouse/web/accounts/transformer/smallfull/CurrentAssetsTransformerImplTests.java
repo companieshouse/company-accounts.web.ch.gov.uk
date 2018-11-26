@@ -123,8 +123,8 @@ public class CurrentAssetsTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -148,9 +148,9 @@ public class CurrentAssetsTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
@@ -164,8 +164,8 @@ public class CurrentAssetsTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -189,9 +189,9 @@ public class CurrentAssetsTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
@@ -243,7 +243,7 @@ public class CurrentAssetsTransformerImplTests {
         currentAssetsApi.setTotal(CURRENT_TOTAL);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
+        balanceSheetApi.setCurrentAssets(currentAssetsApi);
 
         return balanceSheetApi;
     }
@@ -257,7 +257,7 @@ public class CurrentAssetsTransformerImplTests {
         currentAssetsApi.setTotal(PREVIOUS_TOTAL);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
+        balanceSheetApi.setCurrentAssets(currentAssetsApi);
 
         return balanceSheetApi;
     }
@@ -318,25 +318,25 @@ public class CurrentAssetsTransformerImplTests {
     }
 
     private void assertApiModelFieldsNotNull(BalanceSheetApi balanceSheetApi) {
-        assertNotNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNotNull(balanceSheetApi.getCurrentAssetsApi().getCashAtBankAndInHand());
-        assertNotNull(balanceSheetApi.getCurrentAssetsApi().getDebtors());
-        assertNotNull(balanceSheetApi.getCurrentAssetsApi().getStocks());
-        assertNotNull(balanceSheetApi.getCurrentAssetsApi().getTotal());
+        assertNotNull(balanceSheetApi.getCurrentAssets());
+        assertNotNull(balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
+        assertNotNull(balanceSheetApi.getCurrentAssets().getDebtors());
+        assertNotNull(balanceSheetApi.getCurrentAssets().getStocks());
+        assertNotNull(balanceSheetApi.getCurrentAssets().getTotal());
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssetsApi().getCashAtBankAndInHand());
-        assertEquals(CURRENT_DEBTORS, balanceSheetApi.getCurrentAssetsApi().getDebtors());
-        assertEquals(CURRENT_STOCKS, balanceSheetApi.getCurrentAssetsApi().getStocks());
-        assertEquals(CURRENT_TOTAL, balanceSheetApi.getCurrentAssetsApi().getTotal());
+        assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
+        assertEquals(CURRENT_DEBTORS, balanceSheetApi.getCurrentAssets().getDebtors());
+        assertEquals(CURRENT_STOCKS, balanceSheetApi.getCurrentAssets().getStocks());
+        assertEquals(CURRENT_TOTAL, balanceSheetApi.getCurrentAssets().getTotal());
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssetsApi().getCashAtBankAndInHand());
-        assertEquals(PREVIOUS_DEBTORS, balanceSheetApi.getCurrentAssetsApi().getDebtors());
-        assertEquals(PREVIOUS_STOCKS, balanceSheetApi.getCurrentAssetsApi().getStocks());
-        assertEquals(PREVIOUS_TOTAL, balanceSheetApi.getCurrentAssetsApi().getTotal());
+        assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
+        assertEquals(PREVIOUS_DEBTORS, balanceSheetApi.getCurrentAssets().getDebtors());
+        assertEquals(PREVIOUS_STOCKS, balanceSheetApi.getCurrentAssets().getStocks());
+        assertEquals(PREVIOUS_TOTAL, balanceSheetApi.getCurrentAssets().getTotal());
     }
 
     private void assertNonCurrentAssetsFieldsNull(BalanceSheet balanceSheet) {

@@ -136,8 +136,8 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getCurrentAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -155,9 +155,9 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
@@ -171,8 +171,8 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getCurrentAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -190,9 +190,9 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
@@ -266,7 +266,7 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
         otherLiabilitiesOrAssetsApi.setTotalAssetsLessCurrentLiabilities(CURRENT_TOTAL_ASSETS_LESS_CURRENT_LIABILITIES);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setOtherLiabilitiesOrAssetsApi(otherLiabilitiesOrAssetsApi);
+        balanceSheetApi.setOtherLiabilitiesOrAssets(otherLiabilitiesOrAssetsApi);
 
         return balanceSheetApi;
     }
@@ -284,7 +284,7 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
         otherLiabilitiesOrAssetsApi.setTotalAssetsLessCurrentLiabilities(PREVIOUS_TOTAL_ASSETS_LESS_CURRENT_LIABILITIES);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setOtherLiabilitiesOrAssetsApi(otherLiabilitiesOrAssetsApi);
+        balanceSheetApi.setOtherLiabilitiesOrAssets(otherLiabilitiesOrAssetsApi);
 
         return balanceSheetApi;
     }
@@ -374,37 +374,37 @@ public class OtherLiabilitiesOrAssetsTransformerImplTests {
     }
 
     private void assertApiModelFieldsNotNull(BalanceSheetApi balanceSheetApi) {
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getPrepaymentsAndAccruedIncome());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getCreditorsDueWithinOneYear());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getCreditorsAfterOneYear());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getAccrualsAndDeferredIncome());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getNetCurrentAssets());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getProvisionForLiabilities());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getTotalNetAssets());
-        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getTotalAssetsLessCurrentLiabilities());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getPrepaymentsAndAccruedIncome());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getAccrualsAndDeferredIncome());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getNetCurrentAssets());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getProvisionForLiabilities());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getTotalNetAssets());
+        assertNotNull(balanceSheetApi.getOtherLiabilitiesOrAssets().getTotalAssetsLessCurrentLiabilities());
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(CURRENT_PREPAYMENTS_AND_ACCRUED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getPrepaymentsAndAccruedIncome());
-        assertEquals(CURRENT_CREDITORS_DUE_WITHIN_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getCreditorsDueWithinOneYear());
-        assertEquals(CURRENT_CREDITORS_AFTER_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getCreditorsAfterOneYear());
-        assertEquals(CURRENT_ACCRUALS_AND_DEFERRED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getAccrualsAndDeferredIncome());
-        assertEquals(CURRENT_NET_CURRENT_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getNetCurrentAssets());
-        assertEquals(CURRENT_PROVISION_FOR_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getProvisionForLiabilities());
-        assertEquals(CURRENT_TOTAL_NET_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getTotalNetAssets());
-        assertEquals(CURRENT_TOTAL_ASSETS_LESS_CURRENT_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getTotalAssetsLessCurrentLiabilities());
+        assertEquals(CURRENT_PREPAYMENTS_AND_ACCRUED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssets().getPrepaymentsAndAccruedIncome());
+        assertEquals(CURRENT_CREDITORS_DUE_WITHIN_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear());
+        assertEquals(CURRENT_CREDITORS_AFTER_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear());
+        assertEquals(CURRENT_ACCRUALS_AND_DEFERRED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssets().getAccrualsAndDeferredIncome());
+        assertEquals(CURRENT_NET_CURRENT_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssets().getNetCurrentAssets());
+        assertEquals(CURRENT_PROVISION_FOR_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssets().getProvisionForLiabilities());
+        assertEquals(CURRENT_TOTAL_NET_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssets().getTotalNetAssets());
+        assertEquals(CURRENT_TOTAL_ASSETS_LESS_CURRENT_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssets().getTotalAssetsLessCurrentLiabilities());
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(PREVIOUS_PREPAYMENTS_AND_ACCRUED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getPrepaymentsAndAccruedIncome());
-        assertEquals(PREVIOUS_CREDITORS_DUE_WITHIN_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getCreditorsDueWithinOneYear());
-        assertEquals(PREVIOUS_CREDITORS_AFTER_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getCreditorsAfterOneYear());
-        assertEquals(PREVIOUS_ACCRUALS_AND_DEFERRED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getAccrualsAndDeferredIncome());
-        assertEquals(PREVIOUS_NET_CURRENT_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getNetCurrentAssets());
-        assertEquals(PREVIOUS_PROVISION_FOR_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getProvisionForLiabilities());
-        assertEquals(PREVIOUS_TOTAL_NET_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getTotalNetAssets());
-        assertEquals(PREVIOUS_TOTAL_ASSETS_LESS_CURRENT_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssetsApi().getTotalAssetsLessCurrentLiabilities());
+        assertEquals(PREVIOUS_PREPAYMENTS_AND_ACCRUED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssets().getPrepaymentsAndAccruedIncome());
+        assertEquals(PREVIOUS_CREDITORS_DUE_WITHIN_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear());
+        assertEquals(PREVIOUS_CREDITORS_AFTER_ONE_YEAR, balanceSheetApi.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear());
+        assertEquals(PREVIOUS_ACCRUALS_AND_DEFERRED_INCOME, balanceSheetApi.getOtherLiabilitiesOrAssets().getAccrualsAndDeferredIncome());
+        assertEquals(PREVIOUS_NET_CURRENT_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssets().getNetCurrentAssets());
+        assertEquals(PREVIOUS_PROVISION_FOR_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssets().getProvisionForLiabilities());
+        assertEquals(PREVIOUS_TOTAL_NET_ASSETS, balanceSheetApi.getOtherLiabilitiesOrAssets().getTotalNetAssets());
+        assertEquals(PREVIOUS_TOTAL_ASSETS_LESS_CURRENT_LIABILITIES, balanceSheetApi.getOtherLiabilitiesOrAssets().getTotalAssetsLessCurrentLiabilities());
     }
 
     private void assertNonOtherLiabilitiesOrAssetsFieldsNull(BalanceSheet balanceSheet) {
