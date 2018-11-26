@@ -93,8 +93,6 @@ public class TurnoverPolicyServiceImplTest {
 
         verify(accountingPoliciesServiceMock, times(1))
             .getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-
-
     }
 
     @Test
