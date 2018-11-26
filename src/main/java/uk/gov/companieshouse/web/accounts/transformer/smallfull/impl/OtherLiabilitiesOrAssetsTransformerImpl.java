@@ -37,7 +37,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
             otherLiabilitiesOrAssetsApi.setTotalNetAssets(otherLiabilitiesOrAssets.getTotalNetAssets().getCurrentAmount());
             otherLiabilitiesOrAssetsApi.setTotalAssetsLessCurrentLiabilities(otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getCurrentAmount());
 
-            balanceSheetApi.setOtherLiabilitiesOrAssetsApi(otherLiabilitiesOrAssetsApi);
+            balanceSheetApi.setOtherLiabilitiesOrAssets(otherLiabilitiesOrAssetsApi);
         }
     }
 
@@ -57,7 +57,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
             otherLiabilitiesOrAssetsApi.setTotalNetAssets(otherLiabilitiesOrAssets.getTotalNetAssets().getPreviousAmount());
             otherLiabilitiesOrAssetsApi.setTotalAssetsLessCurrentLiabilities(otherLiabilitiesOrAssets.getTotalAssetsLessCurrentLiabilities().getPreviousAmount());
 
-            balanceSheetApi.setOtherLiabilitiesOrAssetsApi(otherLiabilitiesOrAssetsApi);
+            balanceSheetApi.setOtherLiabilitiesOrAssets(otherLiabilitiesOrAssetsApi);
         }
     }
 
@@ -65,7 +65,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         createOtherLiabilitiesOrAssets(balanceSheet);
-        OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = balanceSheetApi.getOtherLiabilitiesOrAssetsApi();
+        OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = balanceSheetApi.getOtherLiabilitiesOrAssets();
 
         if (otherLiabilitiesOrAssetsApi.getAccrualsAndDeferredIncome() != null) {
             AccrualsAndDeferredIncome accrualsAndDeferredIncome = createAccrualsAndDeferredIncome(balanceSheet);
@@ -112,7 +112,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         createOtherLiabilitiesOrAssets(balanceSheet);
-        OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = balanceSheetApi.getOtherLiabilitiesOrAssetsApi();
+        OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = balanceSheetApi.getOtherLiabilitiesOrAssets();
 
         if (otherLiabilitiesOrAssetsApi.getAccrualsAndDeferredIncome() != null) {
             AccrualsAndDeferredIncome accrualsAndDeferredIncome = createAccrualsAndDeferredIncome(balanceSheet);
