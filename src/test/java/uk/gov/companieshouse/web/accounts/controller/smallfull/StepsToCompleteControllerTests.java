@@ -33,6 +33,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +53,9 @@ public class StepsToCompleteControllerTests {
 
     @Mock
     private SmallFullService smallFullService;
+
+    @Mock
+    private StatementsService statementsService;
 
     @InjectMocks
     private StepsToCompleteController controller;
@@ -118,6 +122,8 @@ public class StepsToCompleteControllerTests {
 
         doNothing().when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
+        doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + BALANCE_SHEET_PATH));
@@ -129,6 +135,8 @@ public class StepsToCompleteControllerTests {
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID, periodEndOn);
 
         verify(smallFullService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -207,6 +215,35 @@ public class StepsToCompleteControllerTests {
 
         doThrow(ServiceException.class)
                 .when(smallFullService).createSmallFullAccounts(anyString(), anyString());
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post steps to complete failure path for create statements resource")
+    void postRequestStatementsServiceCreateStatementsFailure() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodEndOn(LocalDate.now());
+
+        CompanyAccountApi companyAccount = new CompanyAccountApi();
+        companyAccount.setNextAccounts(nextAccounts);
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        companyProfile.setAccounts(companyAccount);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyAccountsService.createCompanyAccounts(anyString(), any(LocalDate.class))).thenReturn("company_accounts_id");
+
+        doNothing().when(smallFullService).createSmallFullAccounts(anyString(), anyString());
+
+        doThrow(ServiceException.class)
+                .when(statementsService).createBalanceSheetStatementsResource(anyString(), anyString());
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())

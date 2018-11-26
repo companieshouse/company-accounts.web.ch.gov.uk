@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>Balance Sheet Statements</title>
+    </head>
+
+    <div id="statements-main-content" layout:fragment="content">
+
+        <form id="statements-form" th:action="@{''}" th:object="${statements}" method="post">
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+
+                    <h1 id="page-title" class="govuk-heading-l">
+                        <span id="page-title-heading">Balance Sheet Statements</span>
+                    </h1>
+
+                    <div class="govuk-warning-text">
+                        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                        <strong class="govuk-warning-text__text">
+                            <span class="govuk-warning-text__assistive">Warning</span>
+                            <span id="statements-warning-text">The following statements about your accounts will be included on the public record.</span>
+                        </strong>
+                    </div>
+
+                    <ul id="statements-list" class="govuk-list govuk-list--bullet">
+                        <li id="statements-section-477" th:text="*{section477}"></li>
+                        <li id="statements-audit-not-required-by-members" th:text="*{auditNotRequiredByMembers}"></li>
+                        <li id="statements-directors-responsibility" th:text="*{directorsResponsibility}"></li>
+                        <li id="statements-small-companies-regime" th:text="*{smallCompaniesRegime}"></li>
+                        <li id="statements-no-profit-and-loss" th:text="*{noProfitAndLoss}"></li>
+                    </ul>
+
+                    <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</html>

@@ -202,6 +202,28 @@
 
                 </dl>
 
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                    description = 'Balance sheet statements',
+                    marginTop = true
+                    )">
+                </div>
+
+                <dl class="app-check-your-answers app-check-your-answers--short">
+
+                    <div class="app-check-your-answers__contents">
+                        <dt class="app-check-your-answers__answer">
+                            <ul class="govuk-list govuk-list--bullet">
+                                <li id="review-statements-section-477"><span th:text="*{statements.section477}"></span></li>
+                                <li id="review-statements-audit-not-required-by-members"><span th:text="*{statements.auditNotRequiredByMembers}"></span></li>
+                                <li id="review-statements-directors-responsibility"><span th:text="*{statements.directorsResponsibility}"></span></li>
+                                <li id="review-statements-small-companies-regime"><span th:text="*{statements.smallCompaniesRegime}"></span></li>
+                                <li id="review-statements-no-profit-and-loss"><span th:text="*{statements.noProfitAndLoss}"></span></li>
+                            </ul>
+                        </dt>
+                    </div>
+
+                </dl>
+
                 <!-- End Balance Sheet -->
 
                 <div class="govuk-form-group">

@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,23 +12,20 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
-import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Controller
-@NextController(ApprovalController.class)
-@PreviousController(StatementsController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/review")
-public class ReviewController extends BaseController {
+@NextController(ReviewController.class)
+@PreviousController(BalanceSheetController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet-statements")
+public class StatementsController extends BaseController {
 
     @Autowired
-    ReviewService reviewService;
+    private StatementsService statementsService;
 
     @GetMapping
-    public String getReviewPage(@PathVariable String companyNumber,
+    public String getStatements(@PathVariable String companyNumber,
                                 @PathVariable String transactionId,
                                 @PathVariable String companyAccountsId,
                                 Model model,
@@ -36,13 +34,7 @@ public class ReviewController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            Review review = reviewService.getReview(transactionId, companyAccountsId, companyNumber);
-
-            model.addAttribute("review", review);
-            model.addAttribute("companyNumber", companyNumber);
-            model.addAttribute("transactionId", transactionId);
-            model.addAttribute("companyAccountsId", companyAccountsId);
-
+            model.addAttribute("statements", statementsService.getBalanceSheetStatements(transactionId, companyAccountsId));
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -53,15 +45,24 @@ public class ReviewController extends BaseController {
     }
 
     @PostMapping
-    public String postReviewPage(@PathVariable String companyNumber,
-                                 @PathVariable String transactionId,
-                                 @PathVariable String companyAccountsId) {
+    public String acceptStatements(@PathVariable String companyNumber,
+                                   @PathVariable String transactionId,
+                                   @PathVariable String companyAccountsId,
+                                   HttpServletRequest request) {
+
+        try {
+            statementsService.acceptBalanceSheetStatements(transactionId, companyAccountsId);
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override
     protected String getTemplateName() {
-        return "smallfull/review";
+        return "smallfull/statements";
     }
 }

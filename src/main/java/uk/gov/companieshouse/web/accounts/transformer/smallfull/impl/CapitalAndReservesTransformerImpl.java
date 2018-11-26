@@ -25,7 +25,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
         capitalAndReservesApi.setProfitAndLoss(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
         capitalAndReservesApi.setSharePremiumAccount(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
         capitalAndReservesApi.setTotalShareholdersFunds(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getCurrentAmount());
-        balanceSheetApi.setCapitalAndReservesApi(capitalAndReservesApi);
+        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
 
     }
 
@@ -39,7 +39,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
         capitalAndReservesApi.setSharePremiumAccount(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
         capitalAndReservesApi.setTotalShareholdersFunds(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
 
-        balanceSheetApi.setCapitalAndReservesApi(capitalAndReservesApi);
+        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
 
     }
 
@@ -47,7 +47,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         createCapitalAndReserves(balanceSheet);
-        CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReservesApi();
+        CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReserves();
 
         // Share capital
         if (capitalAndReservesApi.getCalledUpShareCapital() != null) {
@@ -84,7 +84,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         createCapitalAndReserves(balanceSheet);
-        CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReservesApi();
+        CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReserves();
 
         // Share capital
         if (capitalAndReservesApi.getCalledUpShareCapital() != null) {
