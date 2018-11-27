@@ -178,8 +178,8 @@ public class TurnoverPolicyControllerTest {
     private MockHttpServletRequestBuilder createPostRequestWithParam(boolean addInvalidData) {
 
         String beanElement = "isIncludeTurnoverSelected";
-        String validData = addInvalidData ? null : "1";
+        String data = addInvalidData ? null : "1";
 
-        return post(TURNOVER_POLICY_PATH).param(beanElement, validData);
+        return post(TURNOVER_POLICY_PATH).param(beanElement, data);
     }
 }

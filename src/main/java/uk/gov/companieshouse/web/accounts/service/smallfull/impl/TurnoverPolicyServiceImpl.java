@@ -70,8 +70,7 @@ public class TurnoverPolicyServiceImpl implements TurnoverPolicyService {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (turnoverPolicy.getIsIncludeTurnoverSelected() &&
-            IsRequiredFieldEmpty(turnoverPolicy.getTurnoverPolicyDetails())) {
+        if (isTurnoverPolicyDetailsEmpty(turnoverPolicy)) {
 
             ValidationError error = new ValidationError();
             error.setFieldPath(TURNOVER_POLICY_DETAILS_FIELD_PATH);
@@ -83,13 +82,15 @@ public class TurnoverPolicyServiceImpl implements TurnoverPolicyService {
     }
 
     /**
-     * Check if field contains invalid information when it is not null: empty or contain empty
-     * characters.
+     * Check if turnoverPolicy's required field does not contains invalid information: empty or
+     * contain empty characters.
      *
-     * @param turnoverPolicyDetails the string field that needs to be assessed
+     * @param turnoverPolicy the turnover policy information
      * @return
      */
-    private boolean IsRequiredFieldEmpty(String turnoverPolicyDetails) {
-        return turnoverPolicyDetails != null && StringUtils.trim(turnoverPolicyDetails).isEmpty();
+    private boolean isTurnoverPolicyDetailsEmpty(TurnoverPolicy turnoverPolicy) {
+        return turnoverPolicy.getIsIncludeTurnoverSelected()
+            && turnoverPolicy.getTurnoverPolicyDetails() != null
+            && StringUtils.trim(turnoverPolicy.getTurnoverPolicyDetails()).isEmpty();
     }
 }

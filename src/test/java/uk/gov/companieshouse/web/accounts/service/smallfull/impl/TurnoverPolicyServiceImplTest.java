@@ -96,6 +96,30 @@ public class TurnoverPolicyServiceImplTest {
     }
 
     @Test
+    @DisplayName("Post a turnoverPolicy containing the valid information, turnover policy details is null)")
+    void shouldPostTurnoverPolicyWhenPolicyDetailsIsNull() throws ServiceException {
+
+        when(accountingPoliciesServiceMock
+            .getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenReturn(accountingPoliciesApiMock);
+
+        TurnoverPolicy turnoverPolicy = createTurnOverPolicy(null);
+
+        doNothing()
+            .when(accountingPoliciesTransformerMock)
+            .setTurnoverPolicy(turnoverPolicy, accountingPoliciesApiMock);
+
+        turnoverPolicyService
+            .postTurnoverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, turnoverPolicy);
+
+        verify(accountingPoliciesTransformerMock, times(1))
+            .setTurnoverPolicy(turnoverPolicy, accountingPoliciesApiMock);
+
+        verify(accountingPoliciesServiceMock, times(1))
+            .getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
+    @Test
     @DisplayName("Post a turnoverPolicy fails as turnoverPolicyDetails is empty")
     void shouldFailAsTurnoverPolicyDetailsIsEmpty() throws ServiceException {
 
