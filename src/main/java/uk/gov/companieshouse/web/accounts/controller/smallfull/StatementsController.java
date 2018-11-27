@@ -16,7 +16,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(BasisOfPreparationController.class)
 @PreviousController(BalanceSheetController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet-statements")
 public class StatementsController extends BaseController {

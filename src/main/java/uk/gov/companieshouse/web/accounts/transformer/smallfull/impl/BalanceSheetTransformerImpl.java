@@ -79,6 +79,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
         previousPeriodApi.setBalanceSheet(balanceSheetApi);
+
         return previousPeriodApi;
     }
 
