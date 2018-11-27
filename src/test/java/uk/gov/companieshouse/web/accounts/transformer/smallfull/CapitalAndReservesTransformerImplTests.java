@@ -127,9 +127,9 @@ public class CapitalAndReservesTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -155,12 +155,12 @@ public class CapitalAndReservesTransformerImplTests {
 
         transformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves());
     }
 
     @Test
@@ -173,9 +173,9 @@ public class CapitalAndReservesTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
         assertApiModelFieldsNotNull(balanceSheetApi);
@@ -201,12 +201,12 @@ public class CapitalAndReservesTransformerImplTests {
 
         transformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
-        assertNull(balanceSheetApi.getCurrentAssetsApi());
-        assertNull(balanceSheetApi.getFixedAssetsApi());
-        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssetsApi());
+        assertNull(balanceSheetApi.getCurrentAssets());
+        assertNull(balanceSheetApi.getFixedAssets());
+        assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves());
     }
 
     private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
@@ -264,7 +264,7 @@ public class CapitalAndReservesTransformerImplTests {
         capitalAndReservesApi.setTotalShareholdersFunds(CURRENT_TOTAL_SHAREHOLDERS_FUNDS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setCapitalAndReservesApi(capitalAndReservesApi);
+        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
 
         return balanceSheetApi;
     }
@@ -279,7 +279,7 @@ public class CapitalAndReservesTransformerImplTests {
         capitalAndReservesApi.setTotalShareholdersFunds(PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
-        balanceSheetApi.setCapitalAndReservesApi(capitalAndReservesApi);
+        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
 
         return balanceSheetApi;
     }
@@ -347,28 +347,28 @@ public class CapitalAndReservesTransformerImplTests {
     }
 
     private void assertApiModelFieldsNotNull(BalanceSheetApi balanceSheetApi) {
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi());
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi().getCalledUpShareCapital());
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi().getSharePremiumAccount());
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi().getOtherReserves());
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi().getProfitAndLoss());
-        assertNotNull(balanceSheetApi.getCapitalAndReservesApi().getTotalShareholdersFunds());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves().getCalledUpShareCapital());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves().getSharePremiumAccount());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves().getOtherReserves());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves().getProfitAndLoss());
+        assertNotNull(balanceSheetApi.getCapitalAndReserves().getTotalShareholdersFunds());
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, balanceSheetApi.getCapitalAndReservesApi().getCalledUpShareCapital());
-        assertEquals(CURRENT_SHARE_PREMIUM_ACCOUNT, balanceSheetApi.getCapitalAndReservesApi().getSharePremiumAccount());
-        assertEquals(CURRENT_OTHER_RESERVES, balanceSheetApi.getCapitalAndReservesApi().getOtherReserves());
-        assertEquals(CURRENT_PROFIT_AND_LOSS_ACCOUNT, balanceSheetApi.getCapitalAndReservesApi().getProfitAndLoss());
-        assertEquals(CURRENT_TOTAL_SHAREHOLDERS_FUNDS, balanceSheetApi.getCapitalAndReservesApi().getTotalShareholdersFunds());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, balanceSheetApi.getCapitalAndReserves().getCalledUpShareCapital());
+        assertEquals(CURRENT_SHARE_PREMIUM_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getSharePremiumAccount());
+        assertEquals(CURRENT_OTHER_RESERVES, balanceSheetApi.getCapitalAndReserves().getOtherReserves());
+        assertEquals(CURRENT_PROFIT_AND_LOSS_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getProfitAndLoss());
+        assertEquals(CURRENT_TOTAL_SHAREHOLDERS_FUNDS, balanceSheetApi.getCapitalAndReserves().getTotalShareholdersFunds());
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL, balanceSheetApi.getCapitalAndReservesApi().getCalledUpShareCapital());
-        assertEquals(PREVIOUS_SHARE_PREMIUM_ACCOUNT, balanceSheetApi.getCapitalAndReservesApi().getSharePremiumAccount());
-        assertEquals(PREVIOUS_OTHER_RESERVES, balanceSheetApi.getCapitalAndReservesApi().getOtherReserves());
-        assertEquals(PREVIOUS_PROFIT_AND_LOSS_ACCOUNT, balanceSheetApi.getCapitalAndReservesApi().getProfitAndLoss());
-        assertEquals(PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS, balanceSheetApi.getCapitalAndReservesApi().getTotalShareholdersFunds());
+        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL, balanceSheetApi.getCapitalAndReserves().getCalledUpShareCapital());
+        assertEquals(PREVIOUS_SHARE_PREMIUM_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getSharePremiumAccount());
+        assertEquals(PREVIOUS_OTHER_RESERVES, balanceSheetApi.getCapitalAndReserves().getOtherReserves());
+        assertEquals(PREVIOUS_PROFIT_AND_LOSS_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getProfitAndLoss());
+        assertEquals(PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS, balanceSheetApi.getCapitalAndReserves().getTotalShareholdersFunds());
     }
 
     private void assertNonCapitalAndReservesFieldsNull(BalanceSheet balanceSheet) {
