@@ -4,7 +4,9 @@
         <title>Section Header</title>
     </head>
     <body>
-        <h2 th:fragment="sectionHeader" class="govuk-heading-m" th:classappend="${marginTop} ? 'govuk-!-margin-top-8' : ''"><th:block th:text="${description}"></th:block>
+        <h2 th:fragment="sectionHeader" class="govuk-heading-m"
+            th:classappend="${marginTop} ? 'govuk-!-margin-top-8' : ''"
+            th:id="'review-' + ${identifier} + '-heading'"><th:block th:text="${description}"></th:block>
             <a th:if="${resource != null}"
                th:attr="id=${identifier != null} ? 'review-' + ${identifier} + '-change-link' : null"
                th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/${resource}|}"

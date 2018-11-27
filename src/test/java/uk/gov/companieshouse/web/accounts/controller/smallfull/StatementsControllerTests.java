@@ -47,10 +47,10 @@ public class StatementsControllerTests {
                                                     "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                     "/small-full/balance-sheet-statements";
 
-    private static final String REVIEW_PATH = "/company/" + COMPANY_NUMBER +
-                                                "/transaction/" + TRANSACTION_ID +
-                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                "/small-full/review";
+    private static final String BASIS_OF_PREPARATION_PATH = "/company/" + COMPANY_NUMBER +
+                                                            "/transaction/" + TRANSACTION_ID +
+                                                            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                                                            "/small-full/basis-of-preparation";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
@@ -103,7 +103,7 @@ public class StatementsControllerTests {
 
         this.mockMvc.perform(post(STATEMENTS_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + BASIS_OF_PREPARATION_PATH));
     }
 
     @Test
