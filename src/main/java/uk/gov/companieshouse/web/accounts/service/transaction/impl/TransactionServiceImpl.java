@@ -12,14 +12,18 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     ApiClientService apiClientService;
 
-    private static final UriTemplate CLOSE_TRANSACTIONS_URI =
-            new UriTemplate("/transactions/{transactionId}");
+    private static final String RESUME_LINK = "resume";
+
+    private static final UriTemplate TRANSACTIONS_URI = new UriTemplate("/transactions/{transactionId}");
 
     /**
      * {@inheritDoc}
@@ -53,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void closeTransaction(String transactionId) throws ServiceException {
 
-        String uri = CLOSE_TRANSACTIONS_URI.expand(transactionId).toString();
+        String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
         try {
             Transaction transaction = apiClientService.getApiClient().transactions().get(uri).execute();
@@ -65,6 +69,31 @@ public class TransactionServiceImpl implements TransactionService {
         } catch (URIValidationException e) {
 
             throw new ServiceException("Invalid URI for transactions resource", e);
+        }
+    }
+
+    @Override
+    public void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
+
+        String uri = TRANSACTIONS_URI.expand(transactionId).toString();
+
+        String resumeLink = "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/small-full/resume";
+
+        Map<String, String> links = new HashMap<>();
+        links.put(RESUME_LINK, resumeLink);
+
+        Transaction transaction = new Transaction();
+        transaction.setLinks(links);
+
+        try {
+            apiClientService.getApiClient().transactions().update(uri, transaction).execute();
+
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException("Error updating transaction", e);
+        } catch (URIValidationException e) {
+
+            throw new ServiceException("Invalid URI for updating transactions resource", e);
         }
     }
 }
