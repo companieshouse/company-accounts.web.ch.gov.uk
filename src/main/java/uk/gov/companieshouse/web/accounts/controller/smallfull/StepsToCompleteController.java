@@ -43,9 +43,6 @@ public class StepsToCompleteController extends BaseController {
     @Autowired
     private StatementsService statementsService;
 
-    @Autowired
-    private ResumeService resumeService;
-
     @Override
     protected String getTemplateName() {
         return "smallfull/stepsToComplete";
