@@ -72,6 +72,9 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
 
@@ -87,7 +90,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         try {
             apiClientService.getApiClient().transactions().update(uri, transaction).execute();
-
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error updating transaction", e);

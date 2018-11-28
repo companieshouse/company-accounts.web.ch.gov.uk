@@ -24,10 +24,10 @@ public interface TransactionService {
     /**
      * Add a resume link to the transaction for resuming the web journey at
      * a later time.
-
-     * @param companyNumber The company number
-     * @param transactionId The ID of the transaction to update
-     * @param companyAccountsId The company accounts ID of the transaction to update
+     *
+     * @param companyNumber     the company number
+     * @param transactionId     the ID of the transaction to update
+     * @param companyAccountsId the company accounts ID of the transaction to update
      * @throws ServiceException
      */
     void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException;
