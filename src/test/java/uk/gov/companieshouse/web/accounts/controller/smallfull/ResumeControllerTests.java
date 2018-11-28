@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
 import static org.mockito.Mockito.times;
@@ -32,6 +33,8 @@ public class ResumeControllerTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String MOCK_REDIRECT = "mockRedirect";
+
+    private static final String MOCK_CHS_ENV = "mockChsEnv";
 
     private static final String RESUME_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
@@ -56,11 +59,11 @@ public class ResumeControllerTests {
     @DisplayName("Get resume redirect success path")
     void getRequestSuccess() throws Exception {
 
-        when(resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT);
+        when(resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_CHS_ENV + MOCK_REDIRECT);
 
         this.mockMvc.perform(get(RESUME_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_CHS_ENV + MOCK_REDIRECT));
 
         verify(resumeService, times(1)).getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
