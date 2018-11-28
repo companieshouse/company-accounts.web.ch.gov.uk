@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/resume")
 public class ResumeController {
