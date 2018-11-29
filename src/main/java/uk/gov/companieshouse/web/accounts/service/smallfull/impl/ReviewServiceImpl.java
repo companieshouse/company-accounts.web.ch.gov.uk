@@ -7,10 +7,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -24,6 +26,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private BasisOfPreparationService basisOfPreparationService;
 
+    @Autowired
+    private TurnoverPolicyService turnoverPolicyService;
+
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
@@ -32,10 +37,13 @@ public class ReviewServiceImpl implements ReviewService {
 
         BasisOfPreparation basisOfPreparation = basisOfPreparationService.getBasisOfPreparation(transactionId, companyAccountsId);
 
+        TurnoverPolicy turnoverPolicy = turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId);
+
         Review review = new Review();
         review.setBalanceSheet(balanceSheet);
         review.setStatements(statements);
         review.setBasisOfPreparation(basisOfPreparation);
+        review.setTurnoverPolicy(turnoverPolicy);
 
         return review;
     }
