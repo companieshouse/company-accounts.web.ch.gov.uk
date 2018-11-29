@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
@@ -14,6 +16,8 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @Service
 public class TurnoverPolicyServiceImpl implements TurnoverPolicyService {
 
+    private static final String TURNOVER_POLICY_DETAILS_FIELD_PATH = "turnoverPolicyDetails";
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE = "validation.length.minInvalid.accounting_policies.turnover_policy";
     private final AccountingPoliciesService accountingPoliciesService;
     private final AccountingPoliciesTransformer accountingPoliciesTransformer;
 
@@ -39,6 +43,12 @@ public class TurnoverPolicyServiceImpl implements TurnoverPolicyService {
     public List<ValidationError> postTurnoverPolicy(String transactionId, String companyAccountsId,
         TurnoverPolicy turnoverPolicy) throws ServiceException {
 
+        List<ValidationError> validationErrors = validateTurnoverPolicyDetails(turnoverPolicy);
+
+        if (!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
+
         AccountingPoliciesApi accountingPoliciesApi =
             accountingPoliciesService.getAccountingPoliciesApi(transactionId, companyAccountsId);
 
@@ -47,6 +57,40 @@ public class TurnoverPolicyServiceImpl implements TurnoverPolicyService {
         return accountingPoliciesService
             .updateAccountingPoliciesApi(transactionId, companyAccountsId,
                 accountingPoliciesApi);
+    }
 
+    /**
+     * Validate the turnover policy details' length before calling the api. This string field should
+     * not be empty or contain empty characters.
+     *
+     * @param turnoverPolicy The turnover policy model that needs to be validated
+     * @return A list of validation errors. Or empty when turnoverPolicy contains valid information
+     */
+    private List<ValidationError> validateTurnoverPolicyDetails(TurnoverPolicy turnoverPolicy) {
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        if (isTurnoverPolicyDetailsEmpty(turnoverPolicy)) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(TURNOVER_POLICY_DETAILS_FIELD_PATH);
+            error.setMessageKey(INVALID_STRING_SIZE_ERROR_MESSAGE);
+            validationErrors.add(error);
+        }
+
+        return validationErrors;
+    }
+
+    /**
+     * Check if turnoverPolicy's required field does not contains invalid information: empty or
+     * contain empty characters.
+     *
+     * @param turnoverPolicy the turnover policy information
+     * @return
+     */
+    private boolean isTurnoverPolicyDetailsEmpty(TurnoverPolicy turnoverPolicy) {
+        return turnoverPolicy.getIsIncludeTurnoverSelected()
+            && turnoverPolicy.getTurnoverPolicyDetails() != null
+            && StringUtils.trim(turnoverPolicy.getTurnoverPolicyDetails()).isEmpty();
     }
 }
