@@ -44,7 +44,7 @@ public class TurnoverPolicyControllerTest {
         "/small-full";
 
     private static final String TURNOVER_POLICY_PATH = SMALL_FULL_PATH + "/turnover-policy";
-    private static final String INTANGIBLE_AMORTISATION_POLICY_PATH = SMALL_FULL_PATH + "/intangible-amortisation-policy";
+    private static final String INTANGIBLE_AMORTISATION_POLICY_PATH = SMALL_FULL_PATH + "/intangible-fixed-assets-amortisation";
 
     private static final String TURNOVER_POLICY_VIEW = "smallfull/turnoverPolicy";
     private static final String ERROR_VIEW = "error";
