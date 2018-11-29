@@ -302,6 +302,28 @@
 
                 <!-- End Balance Sheet -->
 
+                <!-- Start Accounting Policies -->
+                <div th:if="*{turnoverPolicy.turnoverPolicyDetails != null}">
+                    <div
+                        th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Turnover policy',
+                        identifier= 'turnover-policy',
+                        resource = 'turnover-policy',
+                        marginTop = true
+                        )">
+                    </div>
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-turnoverPolicy"
+                                   th:text="*{turnoverPolicy.turnoverPolicyDetails}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
+                <!-- End Accounting Policies -->
+
                 <div class="govuk-form-group">
                     <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
                 </div>
