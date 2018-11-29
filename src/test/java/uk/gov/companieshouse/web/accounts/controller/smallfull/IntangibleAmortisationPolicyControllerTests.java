@@ -67,6 +67,8 @@ public class IntangibleAmortisationPolicyControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
+    private static final String MODEL_ELEMENT = "includeIntangibleAmortisationPolicy";
+
     @BeforeEach
     private void setup() {
 
@@ -152,21 +154,18 @@ public class IntangibleAmortisationPolicyControllerTests {
 
     private MockHttpServletRequestBuilder postRequestWithValidData() {
 
-        String beanElement = "includeIntangibleAmortisationPolicy";
         // Mock boolean field input
         String validData = "1";
 
-        return post(INTANGIBLE_AMORTISATION_POLICY_PATH).param(beanElement, validData);
+        return post(INTANGIBLE_AMORTISATION_POLICY_PATH).param(MODEL_ELEMENT, validData);
     }
 
     private MockHttpServletRequestBuilder postRequestWithInvalidData() {
 
-        String beanElement = "includeIntangibleAmortisationPolicy";
         // Mock lack of boolean field input
         String invalidData = null;
 
-        return post(INTANGIBLE_AMORTISATION_POLICY_PATH).param(beanElement, invalidData);
+        return post(INTANGIBLE_AMORTISATION_POLICY_PATH).param(MODEL_ELEMENT, invalidData);
     }
-
 
 }
