@@ -44,7 +44,7 @@ public class TurnoverPolicyControllerTest {
         "/small-full";
 
     private static final String TURNOVER_POLICY_PATH = SMALL_FULL_PATH + "/turnover-policy";
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
+    private static final String INTANGIBLE_AMORTISATION_POLICY_PATH = SMALL_FULL_PATH + "/intangible-amortisation-policy";
 
     private static final String TURNOVER_POLICY_VIEW = "smallfull/turnoverPolicy";
     private static final String ERROR_VIEW = "error";
@@ -113,7 +113,7 @@ public class TurnoverPolicyControllerTest {
         this.mockMvc.perform(createPostRequestWithParam(false))
             .andExpect(status().is3xxRedirection())
             .andExpect(
-                view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH))
+                view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + INTANGIBLE_AMORTISATION_POLICY_PATH))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
