@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.BasisOfPreparationController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
@@ -56,7 +55,7 @@ public class BasisOfPreparationControllerTests {
 
     private static final String BASIS_OF_PREPARATION_PATH = SMALL_FULL_PATH + "/basis-of-preparation";
 
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
+    private static final String TURNOVER_POLICY_PATH = SMALL_FULL_PATH + "/turnover-policy";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
@@ -111,7 +110,7 @@ public class BasisOfPreparationControllerTests {
 
         this.mockMvc.perform(postRequestWithValidData())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + TURNOVER_POLICY_PATH));
     }
 
     @Test
