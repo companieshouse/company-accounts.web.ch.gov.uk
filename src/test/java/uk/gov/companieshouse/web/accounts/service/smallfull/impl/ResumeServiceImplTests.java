@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.environment.EnvironmentReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,22 +22,33 @@ public class ResumeServiceImplTests {
     @InjectMocks
     private ResumeServiceImpl resumeService = new ResumeServiceImpl();
 
-    private static final String MOCK_CHS_ENV = "mockChsEnv";
+    private static final String CHS_ENV_VAR = "CHS_URL";
+
+    private static final String MOCK_CHS_ENV_VAR = "mockChsEnv";
+
+    private static final String COMPANY_NUMBER = "company_number";
+
+    private static final String TRANSACTION_ID = "transaction_id";
+
+    private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
+
 
     @Test
     @DisplayName("Get resume redirect success path")
     void getResumeRedirect() {
 
-        String companyNumber = "company_number";
-        String transactionId = "transaction_id";
-        String companyAccountsId = "company_accounts_id";
+        when(environmentReader.getMandatoryString(CHS_ENV_VAR)).thenReturn(MOCK_CHS_ENV_VAR);
 
-        when(environmentReader.getMandatoryString("CHS_URL")).thenReturn(MOCK_CHS_ENV);
+        String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        String redirect = resumeService.getResumeRedirect(companyNumber, transactionId, companyAccountsId);
-
-        String expectedRedirect = "redirect:" + MOCK_CHS_ENV + "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/small-full/balance-sheet";
+        String expectedRedirect = "redirect:" + MOCK_CHS_ENV_VAR +
+                "/company/" + COMPANY_NUMBER +
+                "/transaction/" + TRANSACTION_ID +
+                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                "/small-full/balance-sheet";
 
         assertEquals(redirect, expectedRedirect);
+
+        verify(environmentReader, times(1)).getMandatoryString(CHS_ENV_VAR);
     }
 }

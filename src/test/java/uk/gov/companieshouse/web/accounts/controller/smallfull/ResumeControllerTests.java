@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
 import static org.mockito.Mockito.times;
@@ -44,10 +43,10 @@ public class ResumeControllerTests {
     @Mock
     ResumeService resumeService;
 
-    private MockMvc mockMvc;
-
     @InjectMocks
     private ResumeController controller;
+
+    private MockMvc mockMvc;
 
     @BeforeEach
     private void setup() {
