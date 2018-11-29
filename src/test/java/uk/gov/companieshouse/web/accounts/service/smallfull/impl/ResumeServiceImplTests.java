@@ -31,8 +31,7 @@ public class ResumeServiceImplTests {
     private static final String TRANSACTION_ID = "transaction_id";
 
     private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
-
-
+    
     @Test
     @DisplayName("Get resume redirect success path")
     void getResumeRedirect() {
