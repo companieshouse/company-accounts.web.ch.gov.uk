@@ -1,27 +1,22 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title></title>
 </head>
 <body>
 <fieldset class="govuk-fieldset" th:fragment="inlineYesNoRadioButtons">
-
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     <h1 class="govuk-fieldset__heading">
-      <span th:text=${legendText}></span>
+      <span th:id="page-title-heading" th:text=${legendText}></span>
     </h1>
   </legend>
-
   <span class="govuk-error-message"
         th:id="${radioButtonsFieldName} + '-errorId'"
         th:if="${#fields.hasErrors('__${radioButtonsFieldName}__')}"
         th:each="e : ${#fields.errors('__${radioButtonsFieldName}__')}" th:text="${e}">
             </span>
-
-  <!-- Radio Buttons-->
+  <!-- Radio Buttons -->
   <div class="govuk-radios govuk-radios--inline" data-module="radios">
-
     <div class="govuk-radios__item">
       <input class="govuk-radios__input show-text"
              id="yesButton"
@@ -31,12 +26,10 @@
              th:field="*{__${radioButtonsFieldName}__}"
              th:errorclass="govuk-error-message"
              th:data-target-text-field="${dataTargetTextFieldName}"/>
-
       <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
         Yes
       </label>
     </div>
-
     <div class="govuk-radios__item">
       <input class="govuk-radios__input"
              id="noButton"
@@ -46,42 +39,39 @@
              th:field="*{__${radioButtonsFieldName}__}"
              th:errorclass="govuk-error-message"
              th:data-target-text-field="${dataTargetTextFieldName}"/>
-
       <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
         No
       </label>
     </div>
   </div>
-
   <!-- Text Box Field -->
   <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
        th:id="${dataTargetTextFieldName}">
-
     <div class="govuk-form-group"
          th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
-
-      <span class="govuk-error-message"
-            th:id="${textBoxFieldName} + '-errorId'"
-            th:if="${#fields.hasErrors('__${textBoxFieldName}__')}"
-            th:each="e : ${#fields.errors('__${textBoxFieldName}__')}" th:text="${e}">
+       <span class="govuk-error-message"
+             th:id="${textBoxFieldName} + '-errorId'"
+             th:if="${#fields.hasErrors('__${textBoxFieldName}__')}"
+             th:each="e : ${#fields.errors('__${textBoxFieldName}__')}" th:text="${e}">
       </span>
-
+      <!--label text will be different based on javascript switched on or off-->
       <label class="govuk-label" th:id="${textBoxFieldName} + '-label'"
-             th:for="${textBoxFieldName}"
-             th:if="${boxLabelText != null}" th:text="${boxLabelText}">
+             th:for="${textBoxFieldName}">
+         <span th:if="${boxLabelTextJavaScriptOn != null}"
+               th:id="${textBoxFieldName} + '-javascript-on-span'" hidden="true" class="onlyJS"
+               th:text="${boxLabelTextJavaScriptOn}"></span>
+        <span th:if="${boxLabelTextJavaScriptOff != null}"
+              th:id="${textBoxFieldName} + '-javascript-off-span'" class="hideWhenOnlyJS"
+              th:text="${boxLabelTextJavaScriptOff}"></span>
       </label>
-
       <textarea th:class="${textAreaClassName}"
                 th:id="${textBoxFieldName}"
                 name="${textBoxFieldName}"
                 rows="5"
-                th:field="*{__${textBoxFieldName}__}"
-                th:errorclass="govuk-error-message">
+                th:field="*{__${textBoxFieldName}__}">
       </textarea>
-
     </div>
   </div>
-
 </fieldset>
 </body>
 </html>

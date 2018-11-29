@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -16,22 +17,22 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(TangibleDepreciationPolicyController.class)
-@PreviousController(BasisOfPreparationController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/turnover-policy")
-public class TurnoverPolicyController extends BaseController {
+@NextController(ReviewController.class)
+@PreviousController(TurnoverPolicyController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/tangible-depreciation-policy")
+public class TangibleDepreciationPolicyController extends BaseController {
 
     @Autowired
-    private TurnoverPolicyService turnoverPolicyService;
+    private TangibleDepreciationPolicyService tangibleDepreciationPolicyService;
 
     @GetMapping
-    public String getTurnoverPolicy(@PathVariable String companyNumber,
+    public String getTangibleDepreciationPolicy(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
         Model model,
@@ -40,10 +41,11 @@ public class TurnoverPolicyController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("turnoverPolicy",
-                turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId));
-
+            model.addAttribute("tangibleDepreciationPolicy",
+                tangibleDepreciationPolicyService
+                    .getTangibleDepreciationPolicy(transactionId, companyAccountsId));
         } catch (ServiceException e) {
+
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -52,10 +54,10 @@ public class TurnoverPolicyController extends BaseController {
     }
 
     @PostMapping
-    public String postTurnoverPolicy(@PathVariable String companyNumber,
+    public String submitTangibleDepreciationPolicy(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
-        @ModelAttribute("turnoverPolicy") @Valid TurnoverPolicy turnoverPolicy,
+        @ModelAttribute("tangibleDepreciationPolicy") @Valid TangibleDepreciationPolicy tangiblePolicy,
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
@@ -67,15 +69,17 @@ public class TurnoverPolicyController extends BaseController {
         }
 
         try {
-            List<ValidationError> validationErrors = turnoverPolicyService
-                .postTurnoverPolicy(transactionId, companyAccountsId, turnoverPolicy);
+            List<ValidationError> validationErrors =
+                tangibleDepreciationPolicyService
+                    .postTangibleDepreciationPolicy(transactionId, companyAccountsId,
+                        tangiblePolicy);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
-
         } catch (ServiceException e) {
+
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -84,10 +88,9 @@ public class TurnoverPolicyController extends BaseController {
             companyAccountsId);
     }
 
-
     @Override
-    protected String getTemplateName() {
-        return "smallfull/turnoverPolicy";
-    }
 
+    protected String getTemplateName() {
+        return "smallfull/tangibleDepreciationPolicy";
+    }
 }

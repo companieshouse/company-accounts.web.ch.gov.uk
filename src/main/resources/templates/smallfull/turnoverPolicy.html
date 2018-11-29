@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-
 <html
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
     layout:decorate="~{layouts/baseLayout}">
-
 <head>
   <title>
     Do your prepared accounts include a 'turnover' policy?
@@ -14,30 +12,24 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="statements-form" class="form" th:action="@{''}" th:object="${turnoverPolicy}"
             method="post">
-
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
-
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('isIncludeTurnoverSelected')} ? 'govuk-form-group--error' : ''">
-
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
               legendText = 'Do your prepared accounts include a \'turnover\' policy?',
-              boxLabelText = 'If yes, enter your \'turnover\' policy',
+              boxLabelTextJavaScriptOn = 'Give details of your \'turnover\' policy',
+              boxLabelTextJavaScriptOff = 'If yes, enter your \'turnover\' policy',
               radioButtonsFieldName = 'isIncludeTurnoverSelected',
               textBoxFieldName = 'turnoverPolicyDetails',
               dataTargetTextFieldName = 'turnover-policy-text-box',
               textAreaClassName = 'govuk-textarea'
               )">
           </div>
-
-
         </div>
-
         <div class="govuk-form-group">
           <input id="next-button" class="govuk-button" type="submit" role="button"
                  value="Save and continue"/>
         </div>
-
       </form>
     </div>
   </div>
