@@ -14,7 +14,8 @@
                           th:text="${e}"
                           class="govuk-error-message">
                     </span>
-                    <span th:if="${!#fields.hasErrors('__${currentField}__')}">&nbsp;</span>
+                    <span class="govuk-error-message current-error hidden"></span>
+                    <span th:if="${!#fields.hasErrors('__${currentField}__')}" class="spacer">&nbsp;</span>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <span th:if="${#fields.hasErrors('__${previousField}__')}"
@@ -23,6 +24,7 @@
                           th:text="${e}"
                           class="govuk-error-message">
                     </span>
+                    <span class="govuk-error-message previous-error hidden"></span>
                 </div>
             </div>
         </div>

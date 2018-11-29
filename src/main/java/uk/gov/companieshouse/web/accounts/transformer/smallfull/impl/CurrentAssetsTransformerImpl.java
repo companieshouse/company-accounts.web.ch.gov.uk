@@ -26,7 +26,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
             currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
             currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentTotal());
 
-            balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
+            balanceSheetApi.setCurrentAssets(currentAssetsApi);
         }
     }
 
@@ -40,7 +40,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
             currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
             currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getPreviousTotal());
 
-            balanceSheetApi.setCurrentAssetsApi(currentAssetsApi);
+            balanceSheetApi.setCurrentAssets(currentAssetsApi);
         }
     }
 
@@ -48,7 +48,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
-        CurrentAssetsApi currentAssetsApi = balanceSheetApi.getCurrentAssetsApi();
+        CurrentAssetsApi currentAssetsApi = balanceSheetApi.getCurrentAssets();
 
         // Stocks
         if (currentAssetsApi.getStocks() != null) {
@@ -78,7 +78,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
 
         CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
-        CurrentAssetsApi currentAssetsApi = balanceSheetApi.getCurrentAssetsApi();
+        CurrentAssetsApi currentAssetsApi = balanceSheetApi.getCurrentAssets();
 
         // Stocks
         if (currentAssetsApi.getStocks() != null) {

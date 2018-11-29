@@ -60,7 +60,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.currentAmount',
                                 text = 'Called up share capital not paid current',
-                                class= 'govuk-input',
+                                class= 'govuk-input current',
                                 )">
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.previousAmount',
                                 text = 'Called up share capital not paid previous',
-                                class= 'govuk-input',
+                                class= 'govuk-input previous',
                                 )">
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'fixedAssets.tangibleAssets.currentAmount',
                                 text = 'Tangible assets current',
-                                class = 'govuk-input current-fixed-assets-add',
+                                class = 'govuk-input current current-fixed-assets-add',
                                 )">
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'fixedAssets.tangibleAssets.previousAmount',
                                 text = 'Tangible assets previous',
-                                class= 'govuk-input previous-fixed-assets-add',
+                                class= 'govuk-input previous previous-fixed-assets-add',
                                 )">
                             </div>
                         </div>
@@ -157,7 +157,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.stocks.currentAmount',
                                  text = 'Stocks current',
-                                 class = 'govuk-input current-current-assets-add',
+                                 class = 'govuk-input current current-current-assets-add',
                                  )">
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.stocks.previousAmount',
                                  text = 'Stocks previous',
-                                 class= 'govuk-input previous-current-assets-add',
+                                 class= 'govuk-input previous previous-current-assets-add',
                                  )">
                             </div>
                         </div>
@@ -187,7 +187,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.debtors.currentAmount',
                                  text = 'Debtors current',
-                                 class = 'govuk-input current-current-assets-add',
+                                 class = 'govuk-input current current-current-assets-add',
                                  )">
                             </div>
                         </div>
@@ -196,7 +196,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.debtors.previousAmount',
                                  text = 'Debtors previous',
-                                 class= 'govuk-input previous-current-assets-add',
+                                 class= 'govuk-input previous previous-current-assets-add',
                                  )">
                             </div>
                         </div>
@@ -217,7 +217,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.cashAtBankAndInHand.currentAmount',
                                  text = 'Cash at bank and in hand current',
-                                 class = 'govuk-input current-current-assets-add',
+                                 class = 'govuk-input current current-current-assets-add',
                                  )">
                             </div>
                         </div>
@@ -226,7 +226,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.cashAtBankAndInHand.previousAmount',
                                  text = 'Cash at bank and in hand previous',
-                                 class= 'govuk-input previous-current-assets-add',
+                                 class= 'govuk-input previous previous-current-assets-add',
                                  )">
                             </div>
                         </div>
@@ -280,7 +280,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.currentAmount',
                                 text = 'Prepayments and accrued income current',
-                                class = 'govuk-input current-net-assets-add'
+                                class = 'govuk-input current current-net-assets-add'
                                 )">
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                    id = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.previousAmount',
                                    text = 'Tangible assets previous',
-                                   class= 'govuk-input previous-net-assets-add'
+                                   class= 'govuk-input previous previous-net-assets-add'
                                    )">
                             </div>
                         </div>
@@ -311,7 +311,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.currentAmount',
                                 text = 'Creditors - amounts falling due within one year current',
-                                class= 'govuk-input current-net-assets-subtract'
+                                class= 'govuk-input current current-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -319,7 +319,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsDueWithinOneYear.previousAmount',
                                 text = 'Creditors - amounts falling due within one year previous',
-                                class= 'govuk-input previous-net-assets-subtract'
+                                class= 'govuk-input previous previous-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -398,7 +398,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.currentAmount',
                                 text = 'Creditors - amounts falling due after more than one year current',
-                                class= 'govuk-input current-total-net-assets-subtract'
+                                class= 'govuk-input current current-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -406,7 +406,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.creditorsAfterOneYear.previousAmount',
                                 text = 'Creditors - amounts falling due after more than one year previous',
-                                class= 'govuk-input previous-total-net-assets-subtract'
+                                class= 'govuk-input previous previous-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -426,7 +426,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.provisionForLiabilities.currentAmount',
                                 text = 'Provision for liabilities current',
-                                class= 'govuk-input current-total-net-assets-subtract'
+                                class= 'govuk-input current current-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -434,7 +434,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.provisionForLiabilities.previousAmount',
                                 text = 'Provision for liabilities previous',
-                                class= 'govuk-input previous-total-net-assets-subtract'
+                                class= 'govuk-input previous previous-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -454,7 +454,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.currentAmount',
                                 text = 'Accruals and deferred income current',
-                                class= 'govuk-input current-total-net-assets-subtract'
+                                class= 'govuk-input current current-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -462,7 +462,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherLiabilitiesOrAssets.accrualsAndDeferredIncome.previousAmount',
                                 text = 'Accruals and deferred income previous',
-                                class= 'govuk-input previous-total-net-assets-subtract'
+                                class= 'govuk-input previous previous-total-net-assets-subtract'
                                 )">
                             </div>
                         </div>
@@ -497,6 +497,159 @@
                     </div>
 
                     <!-- End Other Libabilities and Assets -->
+
+                    <!-- Start Capital and Reservces -->
+
+                    <h2 class="govuk-heading-m">Capital and reserves</h2>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.calledUpShareCapital.currentAmount',
+                        previousField = 'capitalAndReserves.calledUpShareCapital.previousAmount'
+                        )">
+                     </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Called up share capital
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.calledUpShareCapital.currentAmount',
+                                text = 'Called up share capital current',
+                                class = 'govuk-input current range-from-one total-shareholders-funds-current-add'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.calledUpShareCapital.previousAmount',
+                                text = 'Called up share capital previous',
+                                class = 'govuk-input previous range-from-one total-shareholders-funds-previous-add'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.sharePremiumAccount.currentAmount',
+                        previousField = 'capitalAndReserves.sharePremiumAccount.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                                Share premium account
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.sharePremiumAccount.currentAmount',
+                                text = 'Share premium account current',
+                                class = 'govuk-input current total-shareholders-funds-current-add'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.sharePremiumAccount.previousAmount',
+                                text = 'Share premium account previous',
+                                class = 'govuk-input previous total-shareholders-funds-previous-add'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.otherReserves.currentAmount',
+                        previousField = 'capitalAndReserves.otherReserves.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                                    Other reserves
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.otherReserves.currentAmount',
+                                text = 'Other reserves current',
+                                class = 'govuk-input current range-from-minus total-shareholders-funds-current-add'
+                                )">
+                            </div>
+                        </div>
+
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.otherReserves.previousAmount',
+                                text = 'Other reserves previous',
+                                class = 'govuk-input previous range-from-minus total-shareholders-funds-previous-add'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.profitAndLossAccount.currentAmount',
+                        previousField = 'capitalAndReserves.profitAndLossAccount.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                               Profit and loss account
+                            <span class="govuk-hint">Also known as 'retained earnings'</span>
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.profitAndLossAccount.currentAmount',
+                                text = 'Profit and loss account current',
+                                class = 'govuk-input current range-from-minus total-shareholders-funds-current-add'
+                                )">
+                            </div>
+                        </div>
+
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.profitAndLossAccount.previousAmount',
+                                text = 'Profit and loss account previous',
+                                class = 'govuk-input previous range-from-minus total-shareholders-funds-previous-add'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'capitalAndReserves.totalShareholdersFunds.currentAmount',
+                        previousField = 'capitalAndReserves.totalShareholdersFunds.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong>Total shareholders' funds</strong>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.totalShareholdersFunds.currentAmount',
+                                text = 'Total shareholders fund current',
+                                class= 'govuk-input total-shareholders-funds-current-total'
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'capitalAndReserves.totalShareholdersFunds.previousAmount',
+                                text = 'Total shareholders fund previous',
+                                class= 'govuk-input total-shareholders-funds-previous-total'
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
                     <br>
 

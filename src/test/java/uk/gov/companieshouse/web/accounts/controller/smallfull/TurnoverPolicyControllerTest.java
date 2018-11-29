@@ -100,7 +100,6 @@ public class TurnoverPolicyControllerTest {
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
-
     @Test
     @DisplayName("Post Turnover Policy call is successful")
     void shouldPostTurnoverPolicy() throws Exception {
@@ -169,7 +168,6 @@ public class TurnoverPolicyControllerTest {
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
     }
 
-
     /**
      * Add the information to the post request. Where the parameter will control if data to be set
      * needs to be valid or invalid
@@ -180,8 +178,8 @@ public class TurnoverPolicyControllerTest {
     private MockHttpServletRequestBuilder createPostRequestWithParam(boolean addInvalidData) {
 
         String beanElement = "isIncludeTurnoverSelected";
-        String validData = addInvalidData ? null : "1";
+        String data = addInvalidData ? null : "1";
 
-        return post(TURNOVER_POLICY_PATH).param(beanElement, validData);
+        return post(TURNOVER_POLICY_PATH).param(beanElement, data);
     }
 }

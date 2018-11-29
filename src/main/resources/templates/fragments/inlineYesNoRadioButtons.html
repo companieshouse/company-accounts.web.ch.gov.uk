@@ -15,6 +15,7 @@
         th:if="${#fields.hasErrors('__${radioButtonsFieldName}__')}"
         th:each="e : ${#fields.errors('__${radioButtonsFieldName}__')}" th:text="${e}">
             </span>
+
   <!-- Radio Buttons -->
   <div class="govuk-radios govuk-radios--inline" data-module="radios">
     <div class="govuk-radios__item">
@@ -54,16 +55,20 @@
              th:if="${#fields.hasErrors('__${textBoxFieldName}__')}"
              th:each="e : ${#fields.errors('__${textBoxFieldName}__')}" th:text="${e}">
       </span>
+
       <!--label text will be different based on javascript switched on or off-->
       <label class="govuk-label" th:id="${textBoxFieldName} + '-label'"
              th:for="${textBoxFieldName}">
-         <span th:if="${boxLabelTextJavaScriptOn != null}"
-               th:id="${textBoxFieldName} + '-javascript-on-span'" hidden="true" class="onlyJS"
-               th:text="${boxLabelTextJavaScriptOn}"></span>
+
+        <span th:if="${boxLabelTextJavaScriptOn != null}"
+              th:id="${textBoxFieldName} + '-javascript-on-span'" hidden="true" class="onlyJS"
+              th:text="${boxLabelTextJavaScriptOn}"></span>
+
         <span th:if="${boxLabelTextJavaScriptOff != null}"
               th:id="${textBoxFieldName} + '-javascript-off-span'" class="hideWhenOnlyJS"
               th:text="${boxLabelTextJavaScriptOff}"></span>
       </label>
+
       <textarea th:class="${textAreaClassName}"
                 th:id="${textBoxFieldName}"
                 name="${textBoxFieldName}"

@@ -17,5 +17,7 @@ public class BalanceSheet {
 
     private CurrentAssets currentAssets;
 
+    private CapitalAndReserves capitalAndReserves;
+
     private OtherLiabilitiesOrAssets otherLiabilitiesOrAssets;
 }
