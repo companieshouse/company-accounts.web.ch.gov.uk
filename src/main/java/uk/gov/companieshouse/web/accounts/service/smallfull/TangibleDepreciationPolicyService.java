@@ -28,7 +28,7 @@ public interface TangibleDepreciationPolicyService {
      * @return A list of validation errors, or an empty array list if none are present
      * @throws ServiceException if there's an error on submission
      */
-    List<ValidationError> postTangibleDepreciationPolicy(String transactionId,
+    List<ValidationError> submitTangibleDepreciationPolicy(String transactionId,
         String companyAccountsId, TangibleDepreciationPolicy tangibleDepreciationPolicy)
         throws ServiceException;
 

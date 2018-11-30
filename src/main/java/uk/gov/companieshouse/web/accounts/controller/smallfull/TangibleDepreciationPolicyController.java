@@ -54,7 +54,7 @@ public class TangibleDepreciationPolicyController extends BaseController {
     }
 
     @PostMapping
-    public String submitTangibleDepreciationPolicy(@PathVariable String companyNumber,
+    public String postTangibleDepreciationPolicy(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
         @ModelAttribute("tangibleDepreciationPolicy") @Valid TangibleDepreciationPolicy tangiblePolicy,
@@ -71,7 +71,7 @@ public class TangibleDepreciationPolicyController extends BaseController {
         try {
             List<ValidationError> validationErrors =
                 tangibleDepreciationPolicyService
-                    .postTangibleDepreciationPolicy(transactionId, companyAccountsId,
+                    .submitTangibleDepreciationPolicy(transactionId, companyAccountsId,
                         tangiblePolicy);
 
             if (!validationErrors.isEmpty()) {

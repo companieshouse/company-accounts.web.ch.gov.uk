@@ -43,7 +43,7 @@ public class TangibleDepreciationPolicyServiceImpl implements TangibleDepreciati
      * {@inheritDoc}
      */
     @Override
-    public List<ValidationError> postTangibleDepreciationPolicy(String transactionId,
+    public List<ValidationError> submitTangibleDepreciationPolicy(String transactionId,
         String companyAccountsId, TangibleDepreciationPolicy tangibleDepreciationPolicy)
         throws ServiceException {
         List<ValidationError> validationErrors = validateTangibleDepreciationPolicy(
