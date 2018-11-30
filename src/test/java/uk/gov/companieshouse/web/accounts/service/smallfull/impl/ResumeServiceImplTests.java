@@ -26,11 +26,11 @@ public class ResumeServiceImplTests {
 
     private static final String MOCK_CHS_ENV_VAR = "mockChsEnv";
 
-    private static final String COMPANY_NUMBER = "company_number";
+    private static final String COMPANY_NUMBER = "companyNumber";
 
-    private static final String TRANSACTION_ID = "transaction_id";
+    private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     
     @Test
     @DisplayName("Get resume redirect success path")
