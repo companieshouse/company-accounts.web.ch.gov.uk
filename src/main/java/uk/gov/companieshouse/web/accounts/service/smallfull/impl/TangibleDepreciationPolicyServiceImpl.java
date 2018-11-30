@@ -60,7 +60,7 @@ public class TangibleDepreciationPolicyServiceImpl implements TangibleDepreciati
     }
 
     /**
-     * Validate a submitted intangible amortisation policy
+     * Validate a submitted tangible depreciation policy
      *
      * @param tangibleDepreciationPolicy The policy to validate
      * @return a list of validation errors, or an empty array list if none are present
