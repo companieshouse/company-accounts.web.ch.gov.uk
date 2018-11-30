@@ -33,8 +33,6 @@ public class ResumeControllerTests {
 
     private static final String MOCK_REDIRECT = "mockRedirect";
 
-    private static final String MOCK_CHS_ENV = "mockChsEnv";
-
     private static final String RESUME_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
@@ -58,11 +56,11 @@ public class ResumeControllerTests {
     @DisplayName("Get resume redirect success path")
     void getRequestSuccess() throws Exception {
 
-        when(resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_CHS_ENV + MOCK_REDIRECT);
+        when(resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT);
 
         this.mockMvc.perform(get(RESUME_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_CHS_ENV + MOCK_REDIRECT));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT));
 
         verify(resumeService, times(1)).getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
