@@ -8,6 +8,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
+import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
@@ -20,6 +21,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     ApiClientService apiClientService;
+
+    @Autowired
+    EnvironmentReader environmentReader;
+
+    private static final String CHS_URL = "CHS_URL";
 
     private static final String RESUME_LINK = "resume";
 
@@ -80,7 +86,11 @@ public class TransactionServiceImpl implements TransactionService {
 
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
-        String resumeLink = "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/small-full/resume";
+        String resumeLink = environmentReader.getMandatoryString(CHS_URL) +
+                "/company/" + companyNumber +
+                "/transaction/" + transactionId +
+                "/company-accounts/" + companyAccountsId +
+                "/small-full/resume";
 
         Map<String, String> links = new HashMap<>();
         links.put(RESUME_LINK, resumeLink);
