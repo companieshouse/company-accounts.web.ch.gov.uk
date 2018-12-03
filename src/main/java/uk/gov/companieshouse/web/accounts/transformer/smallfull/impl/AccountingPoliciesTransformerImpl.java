@@ -5,6 +5,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.AccountingPoliciesTransformer;
 
 @Component
@@ -116,5 +117,41 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
             accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(null);
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ValuationInformationPolicy getValuationInformationPolicy(
+            AccountingPoliciesApi accountingPoliciesApi) {
+
+        ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
+
+        if (accountingPoliciesApi.getValuationInformationAndPolicy() != null) {
+
+            valuationInformationPolicy.setIncludeValuationInformationPolicy(true);
+            valuationInformationPolicy.setValuationInformationPolicyDetails(
+                    accountingPoliciesApi.getValuationInformationAndPolicy());
+        }
+
+        return valuationInformationPolicy;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setValuationInformationPolicy(ValuationInformationPolicy valuationInformationPolicy,
+            AccountingPoliciesApi accountingPoliciesApi) {
+
+        if (valuationInformationPolicy.getIncludeValuationInformationPolicy()) {
+
+            accountingPoliciesApi.setValuationInformationAndPolicy(
+                    valuationInformationPolicy.getValuationInformationPolicyDetails());
+        } else {
+
+            accountingPoliciesApi.setValuationInformationAndPolicy(null);
+        }
     }
 }
