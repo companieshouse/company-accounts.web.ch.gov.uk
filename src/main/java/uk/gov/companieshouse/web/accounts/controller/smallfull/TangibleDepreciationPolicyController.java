@@ -89,7 +89,6 @@ public class TangibleDepreciationPolicyController extends BaseController {
     }
 
     @Override
-
     protected String getTemplateName() {
         return "smallfull/tangibleDepreciationPolicy";
     }
