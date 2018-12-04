@@ -17,10 +17,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,8 +42,12 @@ public class ReviewServiceImplTests {
 
     @Mock
     private BasisOfPreparationService basisOfPreparationService;
+
     @Mock
     private TurnoverPolicyService turnoverPolicyService;
+
+    @Mock
+    private ValuationInformationPolicyService valuationInformationPolicyService;
 
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
@@ -64,6 +70,9 @@ public class ReviewServiceImplTests {
         when(turnoverPolicyService.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(mockTurnoverPolicy);
 
+        ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
+        when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenReturn(valuationInformationPolicy);
 
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -72,5 +81,6 @@ public class ReviewServiceImplTests {
         assertEquals(mockStatements, review.getStatements());
         assertEquals(mockBasisOfPreparation, review.getBasisOfPreparation());
         assertEquals(mockTurnoverPolicy, review.getTurnoverPolicy());
+        assertEquals(valuationInformationPolicy, review.getValuationInformationPolicy());
     }
 }

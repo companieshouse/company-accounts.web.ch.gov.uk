@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 
 @Getter
 @Setter
@@ -16,4 +17,6 @@ public class Review {
     BasisOfPreparation basisOfPreparation;
 
     TurnoverPolicy turnoverPolicy;
+
+    ValuationInformationPolicy valuationInformationPolicy;
 }
