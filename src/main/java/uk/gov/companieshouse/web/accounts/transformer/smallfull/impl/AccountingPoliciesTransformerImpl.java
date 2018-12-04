@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.AccountingPoliciesTransformer;
 
@@ -48,6 +49,9 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TurnoverPolicy getTurnoverPolicy(AccountingPoliciesApi accountingPoliciesApi) {
 
@@ -64,6 +68,9 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
         return turnoverPolicy;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setTurnoverPolicy(TurnoverPolicy turnoverPolicy,
         AccountingPoliciesApi accountingPoliciesApi) {
@@ -73,6 +80,43 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
         } else {
             accountingPoliciesApi.setTurnoverPolicy(null);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IntangibleAmortisationPolicy getIntangibleAmortisationPolicy(
+            AccountingPoliciesApi accountingPoliciesApi) {
+
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
+
+        if (accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy() != null) {
+
+            intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(true);
+            intangibleAmortisationPolicy.setIntangibleAmortisationPolicyDetails(
+                    accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy());
+        }
+
+        return intangibleAmortisationPolicy;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setIntangibleAmortisationPolicy(IntangibleAmortisationPolicy intangibleAmortisationPolicy,
+            AccountingPoliciesApi accountingPoliciesApi) {
+
+        if (intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy()) {
+
+            accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(
+                    intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails());
+        } else {
+
+            accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(null);
+        }
+
     }
 
     /**
