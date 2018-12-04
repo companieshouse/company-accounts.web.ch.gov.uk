@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 
@@ -57,5 +58,22 @@ public interface AccountingPoliciesTransformer {
      */
     void setTangibleDepreciationPolicy(TangibleDepreciationPolicy tangibleDepreciationPolicy,
         AccountingPoliciesApi accountingPoliciesApi);
+
+    /**
+     * Gets the intangible amortisation policy from the accounting policies API resource
+     *
+     * @param accountingPoliciesApi The accounting policies API resource
+     * @return {@link IntangibleAmortisationPolicy}
+     */
+    IntangibleAmortisationPolicy getIntangibleAmortisationPolicy(AccountingPoliciesApi accountingPoliciesApi);
+
+    /**
+     * Updates the intangible amortisation policy on the accounting policies API resource
+     *
+     * @param intangibleAmortisationPolicy Intangible amortisation policy details
+     * @param accountingPoliciesApi The accounting policies API resource
+     */
+    void setIntangibleAmortisationPolicy(IntangibleAmortisationPolicy intangibleAmortisationPolicy,
+            AccountingPoliciesApi accountingPoliciesApi);
 
 }

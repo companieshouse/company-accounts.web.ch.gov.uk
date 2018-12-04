@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.AccountingPoliciesTransformerImpl;
 
@@ -25,7 +26,8 @@ public class AccountingPoliciesTransformerImplTests {
             + "Section 1A (Small Entities) of Financial Reporting Standard 102";
 
     private static final String BASIS_OF_PREPARATION_CUSTOM_STATEMENT = "customStatement";
-    private static final String TURNOVER_POLICY_DETAILS = "Turnover policy details";
+    private static final String TURNOVER_POLICY_DETAILS = "turnoverPolicyDetails";
+    private static final String INTANGIBLE_AMORTISATION_POLICY_DETAILS = "intangibleAmortisationPolicyDetails";
 
     private AccountingPoliciesTransformer transformer = new AccountingPoliciesTransformerImpl();
 
@@ -72,8 +74,7 @@ public class AccountingPoliciesTransformerImplTests {
     @DisplayName("Set Basis of Preparation - Selected prepared statement")
     void setBasisOfPreparationSelectedPreparedStatement() {
 
-        BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
-        basisOfPreparation.setIsPreparedInAccordanceWithStandards(true);
+        BasisOfPreparation basisOfPreparation = createBasisOfPreparation(true);
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
 
@@ -86,9 +87,7 @@ public class AccountingPoliciesTransformerImplTests {
     @DisplayName("Set Basis of Preparation - Custom statement")
     void setBasisOfPreparationCustomStatement() {
 
-        BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
-        basisOfPreparation.setIsPreparedInAccordanceWithStandards(false);
-        basisOfPreparation.setCustomStatement(BASIS_OF_PREPARATION_CUSTOM_STATEMENT);
+        BasisOfPreparation basisOfPreparation = createBasisOfPreparation(false);
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
 
@@ -123,7 +122,10 @@ public class AccountingPoliciesTransformerImplTests {
     @DisplayName("Returned turnover policy contains values from turnover policy within accounting policies api")
     void shouldGetTurnoverPolicyWhenAccountingPolicyApiAndTurnoverPolicySet() {
 
-        TurnoverPolicy turnoverPolicy = transformer.getTurnoverPolicy(createAccountingPoliciesApi());
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+        accountingPoliciesApi.setTurnoverPolicy(TURNOVER_POLICY_DETAILS);
+
+        TurnoverPolicy turnoverPolicy = transformer.getTurnoverPolicy(accountingPoliciesApi);
 
         assertNotNull(turnoverPolicy);
         assertTrue(turnoverPolicy.getIsIncludeTurnoverSelected());
@@ -155,20 +157,91 @@ public class AccountingPoliciesTransformerImplTests {
         assertNull(accountingPoliciesApi.getTurnoverPolicy());
     }
 
-    private AccountingPoliciesApi createAccountingPoliciesApi() {
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setTurnoverPolicy(TURNOVER_POLICY_DETAILS);
+    @Test
+    @DisplayName("Get intangible amortisation policy - no data in API model")
+    void getIntangibleAmortisationPolicyNoDataInApiModel() {
 
-        return accountingPoliciesApi;
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy =
+                transformer.getIntangibleAmortisationPolicy(new AccountingPoliciesApi());
+
+        assertNotNull(intangibleAmortisationPolicy);
+        assertNull(intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails());
+        assertNull(intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy());
     }
 
-    private TurnoverPolicy createTurnOverPolicy(boolean isToIncludeTurnoverPolicy) {
+    @Test
+    @DisplayName("Get intangible amortisation policy - data present in API model")
+    void getIntangibleAmortisationPolicyDataPresentInApiModel() {
+
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+        accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(INTANGIBLE_AMORTISATION_POLICY_DETAILS);
+
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy =
+                transformer.getIntangibleAmortisationPolicy(accountingPoliciesApi);
+
+        assertNotNull(intangibleAmortisationPolicy);
+        assertEquals(INTANGIBLE_AMORTISATION_POLICY_DETAILS, intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails());
+        assertTrue(intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy());
+    }
+
+    @Test
+    @DisplayName("Set intangible amortisation policy - details not provided")
+    void setIntangibleAmortisationPolicyDetailsNotProvided() {
+
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+        accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(INTANGIBLE_AMORTISATION_POLICY_DETAILS);
+
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy = createIntangibleAmortisationPolicy(false);
+
+        transformer.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy, accountingPoliciesApi);
+
+        assertNull(accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy());
+    }
+
+    @Test
+    @DisplayName("Set intangible amortisation policy - details provided")
+    void setIntangibleAmortisationPolicyDetailsProvided() {
+
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy = createIntangibleAmortisationPolicy(true);
+
+        transformer.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy, accountingPoliciesApi);
+
+        assertEquals(INTANGIBLE_AMORTISATION_POLICY_DETAILS, accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy());
+    }
+
+    private BasisOfPreparation createBasisOfPreparation(boolean isPreparedInAccordanceWithStandards) {
+
+        BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
+        basisOfPreparation.setIsPreparedInAccordanceWithStandards(isPreparedInAccordanceWithStandards);
+        if (!isPreparedInAccordanceWithStandards) {
+            basisOfPreparation.setCustomStatement(BASIS_OF_PREPARATION_CUSTOM_STATEMENT);
+        }
+        return basisOfPreparation;
+    }
+
+    private TurnoverPolicy createTurnOverPolicy(boolean includePolicy) {
+
         TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
+        turnoverPolicy.setIsIncludeTurnoverSelected(includePolicy);
+        if (includePolicy) {
+            turnoverPolicy.setTurnoverPolicyDetails(TURNOVER_POLICY_DETAILS);
+        }
 
-        turnoverPolicy.setIsIncludeTurnoverSelected(isToIncludeTurnoverPolicy);
-        turnoverPolicy.setTurnoverPolicyDetails(TURNOVER_POLICY_DETAILS);
+        return turnoverPolicy;
+    }
 
-        return  turnoverPolicy;
+    private IntangibleAmortisationPolicy createIntangibleAmortisationPolicy(boolean includePolicy) {
+
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
+        intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(includePolicy);
+        if (includePolicy) {
+            intangibleAmortisationPolicy
+                    .setIntangibleAmortisationPolicyDetails(INTANGIBLE_AMORTISATION_POLICY_DETAILS);
+        }
+
+        return intangibleAmortisationPolicy;
     }
 
 }
