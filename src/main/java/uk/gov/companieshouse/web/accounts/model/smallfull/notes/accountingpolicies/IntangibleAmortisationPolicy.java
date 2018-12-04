@@ -9,10 +9,11 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 @Getter
 @Setter
 @ValidationModel
-public class TurnoverPolicy {
-    @NotNull(message = "{turnoverPolicy.selectionNotMade}")
-    private Boolean isIncludeTurnoverSelected;
+public class IntangibleAmortisationPolicy {
 
-    @ValidationMapping("$.accounting_policies.turnover_policy")
-    private String turnoverPolicyDetails;
+    @NotNull(message = "{intangibleAmortisationPolicy.selectionNotMade}")
+    private Boolean includeIntangibleAmortisationPolicy;
+
+    @ValidationMapping("$.accounting_policies.intangible_fixed_assets_amortisation_policy")
+    private String intangibleAmortisationPolicyDetails;
 }
