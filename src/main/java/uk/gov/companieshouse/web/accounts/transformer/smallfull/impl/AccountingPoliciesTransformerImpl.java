@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.AccountingPoliciesTransformer;
 
@@ -116,5 +117,33 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
             accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(null);
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OtherAccountingPolicy getOtherAccountingPolicy(
+        AccountingPoliciesApi accountingPoliciesApi) {
+        OtherAccountingPolicy otherAccountingPolicy = new OtherAccountingPolicy();
+        if (accountingPoliciesApi.getOtherAccountingPolicy() != null) {
+            otherAccountingPolicy.setHasOtherAccountingPolicySelected(true);
+            otherAccountingPolicy.setOtherAccountingPolicyDetails(
+                accountingPoliciesApi.getOtherAccountingPolicy());
+        }
+        return otherAccountingPolicy;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOtherAccountingPolicy(OtherAccountingPolicy otherAccountingPolicy,
+        AccountingPoliciesApi accountingPoliciesApi) {
+        if (otherAccountingPolicy.getHasOtherAccountingPolicySelected()) {
+            accountingPoliciesApi.setOtherAccountingPolicy(
+                otherAccountingPolicy.getOtherAccountingPolicyDetails());
+        } else {
+            accountingPoliciesApi.setOtherAccountingPolicy(null);
+        }
     }
 }
