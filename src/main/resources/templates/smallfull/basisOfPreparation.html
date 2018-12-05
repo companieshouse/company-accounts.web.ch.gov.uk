@@ -45,9 +45,7 @@
 
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id="basisOfPreparation-prepared-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="1">
-                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-prepared-statement-label" for="basisOfPreparation-prepared-statement">
-                  These financial statements have been prepared in accordance with the provisions of Section 1A (Small Entities) of Financial Reporting Standard 102
-                </label>
+                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-prepared-statement-label" for="basisOfPreparation-prepared-statement" th:text="*{preparedStatement}"></label>
               </div>
 
               <div class="govuk-radios__item">

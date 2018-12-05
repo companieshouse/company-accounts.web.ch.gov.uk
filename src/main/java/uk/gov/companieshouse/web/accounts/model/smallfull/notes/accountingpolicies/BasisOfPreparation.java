@@ -17,8 +17,5 @@ public class BasisOfPreparation {
     @ValidationMapping("$.accounting_policies.basis_of_measurement_and_preparation")
     private String customStatement;
 
-    private String preparedStatement =
-            "These financial statements have been prepared in accordance with the provisions of "
-                    + "Section 1A (Small Entities) of Financial Reporting Standard 102";
-
+    private String preparedStatement = "These financial statements have been prepared in accordance with section 396 of the Companies Act";
 }
