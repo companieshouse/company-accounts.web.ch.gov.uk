@@ -32,8 +32,8 @@ public class OtherAccountingPolicyController extends BaseController {
 
     @GetMapping
     public String getOtherAccountingPolicy(@PathVariable String companyNumber,
-        @PathVariable String transactionId, @PathVariable String companyAccountsId,
-        Model model, HttpServletRequest request) {
+        @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model,
+        HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
