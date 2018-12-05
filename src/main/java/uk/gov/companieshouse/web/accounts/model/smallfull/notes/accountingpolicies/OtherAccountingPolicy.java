@@ -13,6 +13,7 @@ public class OtherAccountingPolicy {
 
     @NotNull(message = "{otherAccountingPolicy.selectionNotMade}")
     private Boolean hasOtherAccountingPolicySelected;
+
     @ValidationMapping("$.accounting_policies.other_accounting_policy")
     private String otherAccountingPolicyDetails;
 }
