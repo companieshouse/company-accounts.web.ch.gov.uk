@@ -22,8 +22,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.AccountingP
 public class AccountingPoliciesTransformerImplTests {
 
     private static final String BASIS_OF_PREPARATION_PREPARED_STATEMENT =
-        "These financial statements have been prepared in accordance with the provisions of "
-            + "Section 1A (Small Entities) of Financial Reporting Standard 102";
+        "These financial statements have been prepared in accordance with section 396 of the Companies Act";
 
     private static final String BASIS_OF_PREPARATION_CUSTOM_STATEMENT = "customStatement";
     private static final String TURNOVER_POLICY_DETAILS = "turnoverPolicyDetails";
