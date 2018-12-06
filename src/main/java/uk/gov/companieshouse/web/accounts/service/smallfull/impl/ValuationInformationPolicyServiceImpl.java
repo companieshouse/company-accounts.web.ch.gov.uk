@@ -64,11 +64,6 @@ public class ValuationInformationPolicyServiceImpl implements ValuationInformati
                 .updateAccountingPoliciesApi(transactionId, companyAccountsId, accountingPoliciesApi);
     }
 
-    /**
-     * Validate a submitted valuation information policy
-     * @param valuationInformationPolicy The policy to validate
-     * @return a list of validation errors, or an empty array list if none are present
-     */
     private List<ValidationError> validateValuationInformationPolicy(ValuationInformationPolicy valuationInformationPolicy) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
@@ -83,11 +78,6 @@ public class ValuationInformationPolicyServiceImpl implements ValuationInformati
         return validationErrors;
     }
 
-    /**
-     * Check whether a valuation information has not been provided
-     * @param valuationInformationPolicy The policy to check
-     * @return true if the 'include policy' boolean is set to true, but no details are provided
-     */
     private boolean valuationInformationPolicyNotProvided(ValuationInformationPolicy valuationInformationPolicy) {
 
         return valuationInformationPolicy.getIncludeValuationInformationPolicy() &&

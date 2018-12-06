@@ -80,7 +80,7 @@ public class ValuationInformationPolicyServiceImplTests {
     }
 
     @Test
-    @DisplayName("Submit  valuation information policy not provided")
+    @DisplayName("Submit valuation information policy not provided")
     void submitValuationInformationPolicyNotProvided() throws ServiceException {
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
@@ -140,10 +140,6 @@ public class ValuationInformationPolicyServiceImplTests {
                 .updateAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi);
     }
 
-    /**
-     * Creates a valuation information policy with 'include policy' set to true, but without policy details
-     * @return
-     */
     private ValuationInformationPolicy createInvalidValuationInformationPolicy() {
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
