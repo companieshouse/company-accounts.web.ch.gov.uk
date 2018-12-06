@@ -68,7 +68,7 @@ public class ValuationInformationPolicyServiceImpl implements ValuationInformati
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (valuationInformationPolicyNotProvided(valuationInformationPolicy)) {
+        if (isValuationInformationPolicyNotProvided(valuationInformationPolicy)) {
             ValidationError validationError = new ValidationError();
             validationError.setFieldPath(VALUATION_INFORMATION_POLICY_FIELD_PATH);
             validationError.setMessageKey(INVALID_STRING_SIZE_ERROR_MESSAGE);
@@ -78,7 +78,7 @@ public class ValuationInformationPolicyServiceImpl implements ValuationInformati
         return validationErrors;
     }
 
-    private boolean valuationInformationPolicyNotProvided(ValuationInformationPolicy valuationInformationPolicy) {
+    private boolean isValuationInformationPolicyNotProvided(ValuationInformationPolicy valuationInformationPolicy) {
 
         return valuationInformationPolicy.getIncludeValuationInformationPolicy() &&
                 StringUtils.isBlank(valuationInformationPolicy.getValuationInformationPolicyDetails());
