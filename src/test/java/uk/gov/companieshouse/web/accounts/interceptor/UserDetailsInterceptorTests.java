@@ -69,7 +69,7 @@ public class UserDetailsInterceptorTests {
 
         when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
-        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer(NON_RESUME_REQUEST_URL));
+        when(httpServletRequest.getRequestURI()).thenReturn(new StringBuffer(NON_RESUME_REQUEST_URL));
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
@@ -118,7 +118,7 @@ public class UserDetailsInterceptorTests {
 
         when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
-        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer(NON_RESUME_REQUEST_URL));
+        when(httpServletRequest.getRequestURI()).thenReturn(new StringBuffer(NON_RESUME_REQUEST_URL));
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
@@ -130,7 +130,7 @@ public class UserDetailsInterceptorTests {
     void postHandleForResumeRequestIgnored() throws Exception {
 
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
-        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer(RESUME_REQUEST_URL));
+        when(httpServletRequest.getRequestURI()).thenReturn(new StringBuffer(RESUME_REQUEST_URL));
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
