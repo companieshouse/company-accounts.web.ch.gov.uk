@@ -32,7 +32,8 @@ public class UserDetailsInterceptorTests {
     private static final String SIGN_IN_KEY = "signin_info";
     private static final String USER_PROFILE_KEY = "user_profile";
     private static final String EMAIL_KEY = "email";
-
+    private static final String NON_RESUME_REQUEST_URL = "requestUrl";
+    private static final String RESUME_REQUEST_URL = "/resume";
     private static final String TEST_EMAIL_ADDRESS = "test_email_address";
 
     @Mock
@@ -68,6 +69,7 @@ public class UserDetailsInterceptorTests {
 
         when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
+        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer(NON_RESUME_REQUEST_URL));
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
@@ -116,6 +118,19 @@ public class UserDetailsInterceptorTests {
 
         when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
+        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer(NON_RESUME_REQUEST_URL));
+
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+
+        verify(modelAndView, never()).addObject(anyString(), any());
+    }
+
+    @Test
+    @DisplayName("Tests the interceptor does not add the user email to the model for resume requests")
+    void postHandleForResumeRequestIgnored() throws Exception {
+
+        when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
+        when(httpServletRequest.getRequestURL()).thenReturn(new StringBuffer(RESUME_REQUEST_URL));
 
         userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
