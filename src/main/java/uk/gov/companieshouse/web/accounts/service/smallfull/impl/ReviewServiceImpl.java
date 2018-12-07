@@ -7,10 +7,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
@@ -32,6 +34,9 @@ public class ReviewServiceImpl implements ReviewService {
     private TurnoverPolicyService turnoverPolicyService;
 
     @Autowired
+    private IntangibleAmortisationPolicyService intangibleAmortisationPolicyService;
+
+    @Autowired
     private ValuationInformationPolicyService valuationInformationPolicyService;
 
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
@@ -44,6 +49,9 @@ public class ReviewServiceImpl implements ReviewService {
 
         TurnoverPolicy turnoverPolicy = turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId);
 
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy =
+                intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(transactionId, companyAccountsId);
+
         ValuationInformationPolicy valuationInformationPolicy =
                 valuationInformationPolicyService.getValuationInformationPolicy(transactionId, companyAccountsId);
 
@@ -52,6 +60,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setStatements(statements);
         review.setBasisOfPreparation(basisOfPreparation);
         review.setTurnoverPolicy(turnoverPolicy);
+        review.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
         review.setValuationInformationPolicy(valuationInformationPolicy);
 
         return review;
