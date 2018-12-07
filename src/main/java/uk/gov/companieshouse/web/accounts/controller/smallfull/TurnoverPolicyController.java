@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(IntangibleAmortisationPolicyController.class)
 @PreviousController(BasisOfPreparationController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/turnover-policy")
 public class TurnoverPolicyController extends BaseController {
