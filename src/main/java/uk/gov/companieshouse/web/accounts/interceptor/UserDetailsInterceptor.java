@@ -50,7 +50,7 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean isResumeRequest(HttpServletRequest request) {
-        return request.getRequestURL().toString().endsWith(RESUME_PATH);
+        return request.getRequestURI().endsWith(RESUME_PATH);
     }
 
     private void addUserDetailsToModelAndView(ModelAndView modelAndView) {
