@@ -4,6 +4,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 
 public interface AccountingPoliciesTransformer {
 
@@ -58,4 +59,20 @@ public interface AccountingPoliciesTransformer {
     void setIntangibleAmortisationPolicy(IntangibleAmortisationPolicy intangibleAmortisationPolicy,
             AccountingPoliciesApi accountingPoliciesApi);
 
+    /**
+     * Gets the valuation information policy from the accounting policies API resource
+     *
+     * @param accountingPoliciesApi The accounting policies API resource
+     * @return {@link ValuationInformationPolicy}
+     */
+    ValuationInformationPolicy getValuationInformationPolicy(AccountingPoliciesApi accountingPoliciesApi);
+
+    /**
+     * Updates the valuation information policy on the accounting policies API resource
+     *
+     * @param valuationInformationPolicy Valuation information policy details
+     * @param accountingPoliciesApi The accounting policies API resource
+     */
+    void setValuationInformationPolicy(ValuationInformationPolicy valuationInformationPolicy,
+            AccountingPoliciesApi accountingPoliciesApi);
 }
