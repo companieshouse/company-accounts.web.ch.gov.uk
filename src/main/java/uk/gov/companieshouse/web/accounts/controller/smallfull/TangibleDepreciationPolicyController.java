@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(IntangibleAmortisationPolicyController.class)
 @PreviousController(TurnoverPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/tangible-depreciation-policy")
 public class TangibleDepreciationPolicyController extends BaseController {
