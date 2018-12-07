@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Intangible fixed assets amortisation
+  </title>
+</head>
+<div id="intangibleAmortisationPolicy-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="intangibleAmortisationPolicy-form" class="form" th:action="@{''}" th:object="${intangibleAmortisationPolicy}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('includeIntangibleAmortisationPolicy')} ? 'govuk-form-group--error' : ''">
+
+          <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+              legendText = 'Do your prepared accounts include an \'intangible fixed assets amortisation\' policy?',
+              boxLabelTextJavaScriptOn = 'Give details of your \'intangible fixed assets amortisation\' policy',
+              boxLabelTextJavaScriptOff = 'If yes, enter your \'intangible fixed assets amortisation\' policy',
+              radioButtonsFieldName = 'includeIntangibleAmortisationPolicy',
+              textBoxFieldName = 'intangibleAmortisationPolicyDetails',
+              dataTargetTextFieldName = 'intangibleAmortisationPolicy-text-box',
+              textAreaClassName = 'govuk-textarea'
+              )">
+          </div>
+        </div>
+
+        <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

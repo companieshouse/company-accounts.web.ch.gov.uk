@@ -48,7 +48,8 @@ public class TangibleDepreciationPolicyControllerTest {
         "/small-full";
     private static final String TANGIBLE_DEPRECIATION_POLICY_PATH =
         SMALL_FULL_PATH + "/tangible-depreciation-policy";
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
+    private static final String INTANGIBLE_AMORTISATION_POLICY_PATH =
+        SMALL_FULL_PATH + "/intangible-fixed-assets-amortisation";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String TANGIBLE_DEPRECIATION_POLICY_MODEL_ATTR = "tangibleDepreciationPolicy";
@@ -89,12 +90,15 @@ public class TangibleDepreciationPolicyControllerTest {
     @Test
     @DisplayName("Submit tangible depreciation policy - success path")
     void postRequestSuccess() throws Exception {
-        when(tangibleDepreciationPolicyService.submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(TangibleDepreciationPolicy.class)))
-                .thenReturn(validationErrors);
+        when(tangibleDepreciationPolicyService
+            .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                any(TangibleDepreciationPolicy.class)))
+            .thenReturn(validationErrors);
         when(validationErrors.isEmpty()).thenReturn(true);
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+            .andExpect(view().name(
+                UrlBasedViewResolver.REDIRECT_URL_PREFIX + INTANGIBLE_AMORTISATION_POLICY_PATH));
     }
 
     @Test

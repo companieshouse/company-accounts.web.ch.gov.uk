@@ -278,6 +278,8 @@
 
                 </dl>
 
+                <!-- Start Accounting Policies -->
+
                 <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                     description = 'Basis of preparation',
                     identifier= 'basis-of-preparation',
@@ -300,9 +302,6 @@
 
                 </dl>
 
-                <!-- End Balance Sheet -->
-
-                <!-- Start Accounting Policies -->
                 <div th:if="*{turnoverPolicy.turnoverPolicyDetails != null}">
                     <div
                         th:replace="fragments/review/sectionHeader :: sectionHeader (
@@ -312,6 +311,7 @@
                         marginTop = true
                         )">
                     </div>
+
                     <dl class="app-check-your-answers app-check-your-answers--short">
                         <div class="app-check-your-answers__contents">
                             <dt class="app-check-your-answers__answer">
@@ -337,6 +337,27 @@
                             <dt class="app-check-your-answers__answer">
                                 <p id="review-tangibleDepreciationPolicy"
                                    th:text="*{tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
+
+                <div th:if="*{intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails != null}">
+                    <div
+                        th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Intangible fixed assets amortisation policy',
+                        identifier= 'intangible-amortisation-policy',
+                        resource = 'intangible-fixed-assets-amortisation',
+                        marginTop = true
+                        )">
+                    </div>
+
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-intangibleAmortisationPolicy"
+                                   th:text="*{intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails}">
                                 </p>
                             </dt>
                         </div>
