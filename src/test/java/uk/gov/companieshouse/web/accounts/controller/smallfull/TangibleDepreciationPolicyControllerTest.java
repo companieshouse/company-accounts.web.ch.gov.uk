@@ -24,25 +24,21 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
-import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
+import uk.gov.companieshouse.web.accounts.service.smallfull.impl.TangibleDepreciationPolicyServiceImpl;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class OtherAccountingPolicyControllerTest {
+public class TangibleDepreciationPolicyControllerTest {
 
     private MockMvc mockMvc;
-
     @Mock
     private List<ValidationError> validationErrors;
-
     @Mock
-    private OtherAccountingPolicyService otherAccountingPolicyService;
-
+    private TangibleDepreciationPolicyServiceImpl tangibleDepreciationPolicyService;
     @InjectMocks
-    private OtherAccountingPolicyController controller;
-
+    private TangibleDepreciationPolicyController controller;
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String TRANSACTION_ID = "transactionId";
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
@@ -50,15 +46,16 @@ public class OtherAccountingPolicyControllerTest {
         "/transaction/" + TRANSACTION_ID +
         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
         "/small-full";
-    private static final String OTHER_ACCOUNTING_POLICY_PATH =
-        SMALL_FULL_PATH + "/other-accounting-policies";
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
+    private static final String TANGIBLE_DEPRECIATION_POLICY_PATH =
+        SMALL_FULL_PATH + "/tangible-depreciation-policy";
+    private static final String INTANGIBLE_AMORTISATION_POLICY_PATH =
+        SMALL_FULL_PATH + "/intangible-fixed-assets-amortisation";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-    private static final String OTHER_ACCOUNTING_POLICY_MODEL_ATTR = "otherAccountingPolicy";
-    private static final String OTHER_ACCOUNTING_POLICY_VIEW = "smallfull/otherAccountingPolicy";
+    private static final String TANGIBLE_DEPRECIATION_POLICY_MODEL_ATTR = "tangibleDepreciationPolicy";
+    private static final String TANGIBLE_DEPRECIATION_POLICY_VIEW = "smallfull/tangibleDepreciationPolicy";
     private static final String ERROR_VIEW = "error";
-    private static final String MODEL_ELEMENT = "hasOtherAccountingPolicySelected";
+    private static final String MODEL_ELEMENT = "hasTangibleDepreciationPolicySelected";
 
     @BeforeEach
     private void setup() {
@@ -66,70 +63,71 @@ public class OtherAccountingPolicyControllerTest {
     }
 
     @Test
-    @DisplayName("Get other accounting policy view - success path")
+    @DisplayName("Get tangible depreciation policy view - success path")
     void getRequestSuccess() throws Exception {
-        when(otherAccountingPolicyService
-            .getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(new OtherAccountingPolicy());
-        this.mockMvc.perform(get(OTHER_ACCOUNTING_POLICY_PATH))
+        when(tangibleDepreciationPolicyService
+            .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenReturn(new TangibleDepreciationPolicy());
+        this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH))
             .andExpect(status().isOk())
-            .andExpect(view().name(OTHER_ACCOUNTING_POLICY_VIEW))
+            .andExpect(view().name(TANGIBLE_DEPRECIATION_POLICY_VIEW))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(OTHER_ACCOUNTING_POLICY_MODEL_ATTR));
+            .andExpect(model().attributeExists(TANGIBLE_DEPRECIATION_POLICY_MODEL_ATTR));
     }
 
     @Test
-    @DisplayName("Get other accounting policy view - other accounting policy service exception")
-    void getRequestOtherAccountingPolicyServiceException() throws Exception {
-        when(otherAccountingPolicyService
-            .getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+    @DisplayName("Get tangible depreciation policy view - tangible depreciation policy service exception")
+    void getRequestTangibleDepreciationPolicyServiceException() throws Exception {
+        when(tangibleDepreciationPolicyService
+            .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenThrow(ServiceException.class);
-        this.mockMvc.perform(get(OTHER_ACCOUNTING_POLICY_PATH))
+        this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
-    @DisplayName("Submit other accounting policy - success path")
+    @DisplayName("Submit tangible depreciation policy - success path")
     void postRequestSuccess() throws Exception {
-        when(otherAccountingPolicyService
-            .submitOtherAccountingPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                OtherAccountingPolicy.class)))
+        when(tangibleDepreciationPolicyService
+            .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                any(TangibleDepreciationPolicy.class)))
             .thenReturn(validationErrors);
         when(validationErrors.isEmpty()).thenReturn(true);
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+            .andExpect(view().name(
+                UrlBasedViewResolver.REDIRECT_URL_PREFIX + INTANGIBLE_AMORTISATION_POLICY_PATH));
     }
 
     @Test
-    @DisplayName("Submit other accounting policy - binding result errors")
+    @DisplayName("Submit tangible depreciation policy - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
         this.mockMvc.perform(postRequestWithInvalidData())
             .andExpect(status().isOk())
-            .andExpect(view().name(OTHER_ACCOUNTING_POLICY_VIEW));
+            .andExpect(view().name(TANGIBLE_DEPRECIATION_POLICY_VIEW));
     }
 
     @Test
-    @DisplayName("Submit other accounting policy - validation errors")
+    @DisplayName("Submit tangible depreciation policy - validation errors")
     void postRequestWithValidationErrors() throws Exception {
-        when(otherAccountingPolicyService
-            .submitOtherAccountingPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(OtherAccountingPolicy.class)))
+        when(tangibleDepreciationPolicyService
+            .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                any(TangibleDepreciationPolicy.class)))
             .thenReturn(validationErrors);
         when(validationErrors.isEmpty()).thenReturn(false);
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().isOk())
-            .andExpect(view().name(OTHER_ACCOUNTING_POLICY_VIEW));
+            .andExpect(view().name(TANGIBLE_DEPRECIATION_POLICY_VIEW));
     }
 
     @Test
-    @DisplayName("Submit other accounting policy - other accounting policy service exception")
-    void postRequestOtherAccountingPolicyServiceException() throws Exception {
-        when(otherAccountingPolicyService
-            .submitOtherAccountingPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(OtherAccountingPolicy.class)))
+    @DisplayName("Submit tangible depreciation policy - tangible depreciation policy service exception")
+    void postRequestTangibleDepreciationPolicyServiceException() throws Exception {
+        when(tangibleDepreciationPolicyService
+            .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                any(TangibleDepreciationPolicy.class)))
             .thenThrow(ServiceException.class);
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().isOk())
@@ -139,12 +137,12 @@ public class OtherAccountingPolicyControllerTest {
     private MockHttpServletRequestBuilder postRequestWithValidData() {
         // Mock boolean field input
         String validData = "1";
-        return post(OTHER_ACCOUNTING_POLICY_PATH).param(MODEL_ELEMENT, validData);
+        return post(TANGIBLE_DEPRECIATION_POLICY_PATH).param(MODEL_ELEMENT, validData);
     }
 
     private MockHttpServletRequestBuilder postRequestWithInvalidData() {
         // Mock lack of boolean field input
         String invalidData = null;
-        return post(OTHER_ACCOUNTING_POLICY_PATH).param(MODEL_ELEMENT, invalidData);
+        return post(TANGIBLE_DEPRECIATION_POLICY_PATH).param(MODEL_ELEMENT, invalidData);
     }
 }

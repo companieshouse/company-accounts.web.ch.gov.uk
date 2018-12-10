@@ -9,11 +9,12 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 @Getter
 @Setter
 @ValidationModel
-public class OtherAccountingPolicy {
+public class TangibleDepreciationPolicy {
 
-    @NotNull(message = "{otherAccountingPolicy.selectionNotMade}")
-    private Boolean hasOtherAccountingPolicySelected;
+    @NotNull(message = "{tangibleDepreciationPolicy.selectionNotMade}")
+    private Boolean hasTangibleDepreciationPolicySelected;
 
-    @ValidationMapping("$.accounting_policies.other_accounting_policy")
-    private String otherAccountingPolicyDetails;
+    @ValidationMapping("$.accounting_policies.tangible_fixed_assets_depreciation_policy")
+    private String tangibleDepreciationPolicyDetails;
+
 }

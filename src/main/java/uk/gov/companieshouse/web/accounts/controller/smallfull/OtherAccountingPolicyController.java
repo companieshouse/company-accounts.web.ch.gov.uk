@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
 @NextController(ReviewController.class)
-@PreviousController(TurnoverPolicyController.class)
+@PreviousController(IntangibleAmortisationPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/other-accounting-policies")
 public class OtherAccountingPolicyController extends BaseController {
 
@@ -32,8 +32,8 @@ public class OtherAccountingPolicyController extends BaseController {
 
     @GetMapping
     public String getOtherAccountingPolicy(@PathVariable String companyNumber,
-        @PathVariable String transactionId, @PathVariable String companyAccountsId,
-        Model model, HttpServletRequest request) {
+        @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model,
+        HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -50,16 +50,16 @@ public class OtherAccountingPolicyController extends BaseController {
 
     @PostMapping
     public String postOtherAccountingPolicy(@PathVariable String companyNumber,
-        @PathVariable String transactionId,
-        @PathVariable String companyAccountsId,
+        @PathVariable String transactionId, @PathVariable String companyAccountsId,
         @ModelAttribute("otherAccountingPolicy") @Valid OtherAccountingPolicy otherAccountingPolicy,
-        BindingResult bindingResult,
-        Model model,
-        HttpServletRequest request) {
+        BindingResult bindingResult, Model model, HttpServletRequest request) {
+
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
+
         try {
             List<ValidationError> validationErrors =
                 otherAccountingPolicyService
@@ -73,6 +73,7 @@ public class OtherAccountingPolicyController extends BaseController {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
+
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
