@@ -42,6 +42,8 @@
 
         <company-accounts-library.version>1.0.0-rc2</company-accounts-library.version>
 
+        <environment-reader-library.version>1.2.0-rc1</environment-reader-library.version>
+
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
 
@@ -126,6 +128,30 @@
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>company-accounts-library</artifactId>
             <version>${company-accounts-library.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.gov.companieshouse</groupId>
+            <artifactId>environment-reader-library</artifactId>
+            <version>${environment-reader-library.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.10.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.10.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.10.5</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Security dependencies -->

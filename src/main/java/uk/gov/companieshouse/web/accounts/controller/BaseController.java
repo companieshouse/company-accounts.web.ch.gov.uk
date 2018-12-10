@@ -1,11 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
+import uk.gov.companieshouse.web.accounts.model.state.State;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -21,6 +23,8 @@ public abstract class BaseController {
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
     protected static final String ERROR_VIEW = "error";
+
+    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsState";
 
     protected BaseController() {
     }
@@ -77,5 +81,25 @@ public abstract class BaseController {
                         getValidationArgs(error.getMessageArguments()),
                         null)
         );
+    }
+
+    /**
+     * Retrieve the client's {@link State} from the request session
+     * @param request The request
+     * @return the client's {@link State}
+     */
+    protected State getStateFromRequest(HttpServletRequest request) {
+
+        return (State) request.getSession().getAttribute(COMPANY_ACCOUNTS_STATE);
+    }
+
+    /**
+     * Update the client's {@link State} on the request session
+     * @param request The request
+     * @param state The client's {@link State}
+     */
+    protected void updateStateOnRequest(HttpServletRequest request, State state) {
+
+        request.getSession().setAttribute(COMPANY_ACCOUNTS_STATE, state);
     }
 }
