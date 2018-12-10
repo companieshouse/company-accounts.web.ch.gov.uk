@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
@@ -41,6 +42,23 @@ public interface AccountingPoliciesTransformer {
      * @param accountingPoliciesApi The accounting policies API resource
      */
     void setTurnoverPolicy(TurnoverPolicy turnoverPolicy,
+        AccountingPoliciesApi accountingPoliciesApi);
+
+    /**
+     * Gets the tangible depreciation policy from the accounting policies API resource
+     *
+     * @param accountingPoliciesApi The accounting policies API resource
+     * @return {@link TangibleDepreciationPolicy}
+     */
+    TangibleDepreciationPolicy getTangibleDepreciationPolicy(AccountingPoliciesApi accountingPoliciesApi);
+
+    /**
+     * Updates the tangible depreciation policy on the accounting policies API resource
+     *
+     * @param tangibleDepreciationPolicy Tangible depreciation policy details
+     * @param accountingPoliciesApi The accounting policies API resource
+     */
+    void setTangibleDepreciationPolicy(TangibleDepreciationPolicy tangibleDepreciationPolicy,
         AccountingPoliciesApi accountingPoliciesApi);
 
     /**

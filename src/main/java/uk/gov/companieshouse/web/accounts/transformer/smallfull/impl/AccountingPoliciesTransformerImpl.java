@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
@@ -87,6 +88,36 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
      * {@inheritDoc}
      */
     @Override
+    public TangibleDepreciationPolicy getTangibleDepreciationPolicy(
+        AccountingPoliciesApi accountingPoliciesApi) {
+        TangibleDepreciationPolicy tangibleDepreciationPolicy = new TangibleDepreciationPolicy();
+        if (accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy() != null) {
+            tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(true);
+            tangibleDepreciationPolicy.setTangibleDepreciationPolicyDetails(
+                accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy());
+        }
+        return tangibleDepreciationPolicy;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTangibleDepreciationPolicy(TangibleDepreciationPolicy tangibleDepreciationPolicy,
+        AccountingPoliciesApi accountingPoliciesApi) {
+
+        if (tangibleDepreciationPolicy.getHasTangibleDepreciationPolicySelected()) {
+            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(
+                tangibleDepreciationPolicy.getTangibleDepreciationPolicyDetails());
+        } else {
+            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(null);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public IntangibleAmortisationPolicy getIntangibleAmortisationPolicy(
             AccountingPoliciesApi accountingPoliciesApi) {
 
@@ -124,34 +155,6 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
      * {@inheritDoc}
      */
     @Override
-    public OtherAccountingPolicy getOtherAccountingPolicy(
-        AccountingPoliciesApi accountingPoliciesApi) {
-        OtherAccountingPolicy otherAccountingPolicy = new OtherAccountingPolicy();
-        if (accountingPoliciesApi.getOtherAccountingPolicy() != null) {
-            otherAccountingPolicy.setHasOtherAccountingPolicySelected(true);
-            otherAccountingPolicy.setOtherAccountingPolicyDetails(
-                accountingPoliciesApi.getOtherAccountingPolicy());
-        }
-        return otherAccountingPolicy;
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setOtherAccountingPolicy(OtherAccountingPolicy otherAccountingPolicy,
-        AccountingPoliciesApi accountingPoliciesApi) {
-        if (otherAccountingPolicy.getHasOtherAccountingPolicySelected()) {
-            accountingPoliciesApi.setOtherAccountingPolicy(
-                otherAccountingPolicy.getOtherAccountingPolicyDetails());
-        } else {
-            accountingPoliciesApi.setOtherAccountingPolicy(null);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public ValuationInformationPolicy getValuationInformationPolicy(
             AccountingPoliciesApi accountingPoliciesApi) {
 
@@ -181,6 +184,34 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
         } else {
 
             accountingPoliciesApi.setValuationInformationAndPolicy(null);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OtherAccountingPolicy getOtherAccountingPolicy(
+            AccountingPoliciesApi accountingPoliciesApi) {
+        OtherAccountingPolicy otherAccountingPolicy = new OtherAccountingPolicy();
+        if (accountingPoliciesApi.getOtherAccountingPolicy() != null) {
+            otherAccountingPolicy.setHasOtherAccountingPolicySelected(true);
+            otherAccountingPolicy.setOtherAccountingPolicyDetails(
+                    accountingPoliciesApi.getOtherAccountingPolicy());
+        }
+        return otherAccountingPolicy;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOtherAccountingPolicy(OtherAccountingPolicy otherAccountingPolicy,
+            AccountingPoliciesApi accountingPoliciesApi) {
+        if (otherAccountingPolicy.getHasOtherAccountingPolicySelected()) {
+            accountingPoliciesApi.setOtherAccountingPolicy(
+                    otherAccountingPolicy.getOtherAccountingPolicyDetails());
+        } else {
+            accountingPoliciesApi.setOtherAccountingPolicy(null);
         }
     }
 }
