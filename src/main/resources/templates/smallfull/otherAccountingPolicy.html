@@ -15,9 +15,9 @@
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasOtherAccountingPolicySelected')} ? 'govuk-form-group--error' : ''">
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include any other accounting policy?',
-              boxLabelTextJavaScriptOn = 'Give details of your other accounting policy',
-              boxLabelTextJavaScriptOff = 'If yes, enter your other accounting policy',
+              legendText = 'Do your prepared accounts include any other accounting policies?',
+              boxLabelTextJavaScriptOn = 'Give details of any other accounting policies',
+              boxLabelTextJavaScriptOff = 'If yes, enter your other accounting policies',
               radioButtonsFieldName = 'hasOtherAccountingPolicySelected',
               textBoxFieldName = 'otherAccountingPolicyDetails',
               dataTargetTextFieldName = 'other-accounting-policy-text-box',
