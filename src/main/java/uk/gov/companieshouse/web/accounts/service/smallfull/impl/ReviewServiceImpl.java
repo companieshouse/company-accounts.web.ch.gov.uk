@@ -10,6 +10,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
@@ -17,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -39,6 +41,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private IntangibleAmortisationPolicyService intangibleAmortisationPolicyService;
 
+    @Autowired
+    private ValuationInformationPolicyService valuationInformationPolicyService;
+
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
@@ -54,6 +59,9 @@ public class ReviewServiceImpl implements ReviewService {
         IntangibleAmortisationPolicy intangibleAmortisationPolicy =
                 intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(transactionId, companyAccountsId);
 
+        ValuationInformationPolicy valuationInformationPolicy =
+                valuationInformationPolicyService.getValuationInformationPolicy(transactionId, companyAccountsId);
+
         Review review = new Review();
         review.setBalanceSheet(balanceSheet);
         review.setStatements(statements);
@@ -61,6 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTurnoverPolicy(turnoverPolicy);
         review.setTangibleDepreciationPolicy(tangibleDepreciationPolicy);
         review.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
+        review.setValuationInformationPolicy(valuationInformationPolicy);
 
         return review;
     }
