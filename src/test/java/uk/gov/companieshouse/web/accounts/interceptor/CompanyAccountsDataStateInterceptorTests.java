@@ -59,28 +59,28 @@ public class CompanyAccountsDataStateInterceptorTests {
                                                 "/small-full/approval";
 
     @Mock
-    private HttpServletRequest httpServletRequest;
+    private HttpServletRequest mockRequest;
 
     @Mock
-    private HttpServletResponse httpServletResponse;
+    private HttpServletResponse mockResponse;
 
     @Mock
-    private HttpSession session;
+    private HttpSession mockSession;
 
     @Mock
-    private ModelAndView modelAndView;
+    private ModelAndView mockModelAndView;
 
     @Mock
-    private CompanyAccountsDataStates companyAccountsDataStates;
+    private CompanyAccountsDataStates mockCompanyAccountsDataStates;
 
     @Mock
-    private Map<String, CompanyAccountsDataState> companyAccountsStates;
+    private Map<String, CompanyAccountsDataState> mockCompanyAccountsStates;
 
     @Mock
-    private CompanyAccountsDataState companyAccountsDataState;
+    private CompanyAccountsDataState mockCompanyAccountsDataState;
 
     @Mock
-    private TokenManager tokenManager;
+    private TokenManager mockTokenManager;
 
     @InjectMocks
     private CompanyAccountsDataStateInterceptor companyAccountsDataStateInterceptor;
@@ -89,264 +89,276 @@ public class CompanyAccountsDataStateInterceptorTests {
     @DisplayName("State interceptor preHandle - request uri doesn't contain a company accounts id")
     void preHandleRequestPathDoesNotContainCompanyAccountsId() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(CRITERIA_URI);
+        when(mockRequest.getRequestURI()).thenReturn(CRITERIA_URI);
 
-        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
         // Ensure that the token manager is never called and the request session is never manipulated
-        verify(tokenManager, never()).decodeJWT(anyString(), any());
-        verify(httpServletRequest, never()).getSession();
+        verify(mockTokenManager, never()).decodeJWT(anyString(), any());
+        verify(mockRequest, never()).getSession();
     }
 
     @Test
     @DisplayName("State interceptor preHandle - no state cookie")
     void preHandleStateCookieDoesNotExist() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
-        when(httpServletRequest.getSession()).thenReturn(session);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getSession()).thenReturn(mockSession);
 
         Cookie[] cookies = new Cookie[]{};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
-        verify(tokenManager, never()).decodeJWT(anyString(), any());
-        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
+        verify(mockTokenManager, never()).decodeJWT(anyString(), any());
+        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
     }
 
     @Test
     @DisplayName("State interceptor preHandle - token manager exception")
     void preHandleTokenManagerException() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
-        when(httpServletRequest.getSession()).thenReturn(session);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getSession()).thenReturn(mockSession);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
 
-        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
-        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
     }
 
     @Test
     @DisplayName("State interceptor preHandle - state doesn't exist in map")
     void preHandleStateDoesNotExistInMap() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
-        when(httpServletRequest.getSession()).thenReturn(session);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getSession()).thenReturn(mockSession);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
-                companyAccountsDataStates);
-        when(companyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(companyAccountsStates);
-        when(companyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(null);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                mockCompanyAccountsDataStates);
+        when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
+                mockCompanyAccountsStates);
+        when(mockCompanyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
-        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
-        verify(companyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
-        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockCompanyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
+        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
     }
 
     @Test
     @DisplayName("State interceptor preHandle - state already exists")
     void preHandleStateAlreadyExists() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
-        when(httpServletRequest.getSession()).thenReturn(session);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getSession()).thenReturn(mockSession);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
-                companyAccountsDataStates);
-        when(companyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(companyAccountsStates);
-        when(companyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsDataState);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                mockCompanyAccountsDataStates);
+        when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
+                mockCompanyAccountsStates);
+        when(mockCompanyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(
+                mockCompanyAccountsDataState);
 
-        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
-        verify(companyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
-        verify(session, times(1)).setAttribute(STATE_REQUEST_ATTRIBUTE, companyAccountsDataState);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockCompanyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
+        verify(mockSession, times(1)).setAttribute(STATE_REQUEST_ATTRIBUTE,
+                mockCompanyAccountsDataState);
     }
 
     @Test
     @DisplayName("State interceptor postHandle - request uri doesn't contain a company accounts id")
     void postHandleRequestPathDoesNotContainCompanyAccountsId() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(CRITERIA_URI);
+        when(mockRequest.getRequestURI()).thenReturn(CRITERIA_URI);
 
         companyAccountsDataStateInterceptor
-                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+                .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
         // Ensure that the token manager is never called and the request session is never manipulated
-        verify(tokenManager, never()).decodeJWT(anyString(), any());
-        verify(httpServletRequest, never()).getSession();
+        verify(mockTokenManager, never()).decodeJWT(anyString(), any());
+        verify(mockRequest, never()).getSession();
     }
 
     @Test
     @DisplayName("State interceptor postHandle - no state cookie")
     void postHandleStateCookieDoesNotExist() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
+        when(mockRequest.getSession()).thenReturn(mockSession);
+        when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
+                mockCompanyAccountsDataState);
 
-        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
-        doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
+        doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
-                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+                .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(tokenManager, never()).decodeJWT(anyString(), any());
+        verify(mockTokenManager, never()).decodeJWT(anyString(), any());
 
-        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
+        verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
-        verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
+        verify(mockResponse, times(1)).addCookie(any(Cookie.class));
     }
 
     @Test
     @DisplayName("State interceptor postHandle - token manager signature exception")
     void postHandleTokenManagerSignatureException() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
 
-        when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
+        when(mockRequest.getSession()).thenReturn(mockSession);
+        when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
+                mockCompanyAccountsDataState);
 
-        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
-        doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
+        doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
-                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+                .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
+        verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
-        verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
+        verify(mockResponse, times(1)).addCookie(any(Cookie.class));
     }
 
     @Test
     @DisplayName("State interceptor postHandle - approval GET")
     void postHandleGetApproval() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(APPROVAL_URI);
-        when(httpServletRequest.getMethod()).thenReturn("GET");
+        when(mockRequest.getRequestURI()).thenReturn(APPROVAL_URI);
+        when(mockRequest.getMethod()).thenReturn("GET");
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
-                companyAccountsDataStates);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                mockCompanyAccountsDataStates);
 
-        when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
+        when(mockRequest.getSession()).thenReturn(mockSession);
+        when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
+                mockCompanyAccountsDataState);
 
-        when(companyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(companyAccountsStates);
-        when(companyAccountsStates.size()).thenReturn(1);
+        when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
+                mockCompanyAccountsStates);
+        when(mockCompanyAccountsStates.size()).thenReturn(1);
 
-        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
-        doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
+        doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
-                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+                .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(companyAccountsStates, times(1)).put(COMPANY_ACCOUNTS_ID, companyAccountsDataState);
+        verify(mockCompanyAccountsStates, times(1)).put(COMPANY_ACCOUNTS_ID,
+                mockCompanyAccountsDataState);
 
-        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
+        verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
-        verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
+        verify(mockResponse, times(1)).addCookie(any(Cookie.class));
     }
 
     @Test
     @DisplayName("State interceptor postHandle - approval POST")
     void postHandlePostApproval() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(APPROVAL_URI);
-        when(httpServletRequest.getMethod()).thenReturn("POST");
+        when(mockRequest.getRequestURI()).thenReturn(APPROVAL_URI);
+        when(mockRequest.getMethod()).thenReturn("POST");
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
-                companyAccountsDataStates);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                mockCompanyAccountsDataStates);
 
-        when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
+        when(mockRequest.getSession()).thenReturn(mockSession);
+        when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
+                mockCompanyAccountsDataState);
 
-        when(companyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(companyAccountsStates);
+        when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
+                mockCompanyAccountsStates);
 
-        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
-        doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
+        doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
-                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+                .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(companyAccountsStates, times(1)).remove(COMPANY_ACCOUNTS_ID);
+        verify(mockCompanyAccountsStates, times(1)).remove(COMPANY_ACCOUNTS_ID);
 
-        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
+        verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
-        verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
+        verify(mockResponse, times(1)).addCookie(any(Cookie.class));
     }
 
     @Test
     @DisplayName("State interceptor postHandle - more than 5 states exist in the JWT")
     void postHandleMoreThanFiveStatesExist() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
-                companyAccountsDataStates);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                mockCompanyAccountsDataStates);
 
-        when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
+        when(mockRequest.getSession()).thenReturn(mockSession);
+        when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
+                mockCompanyAccountsDataState);
 
         // Build a state map with keys numbered 1 to 5
         Map<String, CompanyAccountsDataState> companyAccountsStates = new HashMap<>();
         for (int i = 0; i < 5; i++) {
             companyAccountsStates.put(Integer.toString(i+1), new CompanyAccountsDataState());
         }
-        when(companyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(companyAccountsStates);
+        when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(companyAccountsStates);
 
-        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
-        doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
+        doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
-                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+                .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
+        verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
-        verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
+        verify(mockResponse, times(1)).addCookie(any(Cookie.class));
 
         // Assert that the entry of the map with key '1' was removed (as it was the oldest entry)
         assertFalse(companyAccountsStates.containsKey("1"));
@@ -358,31 +370,32 @@ public class CompanyAccountsDataStateInterceptorTests {
     @DisplayName("State interceptor postHandle - token manager json processing exception")
     void postHandleTokenManagerJsonProcessingException() throws Exception {
 
-        when(httpServletRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
+        when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
-        when(httpServletRequest.getCookies()).thenReturn(cookies);
+        when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
-                companyAccountsDataStates);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                mockCompanyAccountsDataStates);
 
-        when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
+        when(mockRequest.getSession()).thenReturn(mockSession);
+        when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
+                mockCompanyAccountsDataState);
 
-        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenThrow(JsonProcessingException.class);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenThrow(JsonProcessingException.class);
 
-        doNothing().when(httpServletResponse).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        doNothing().when(mockResponse).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         companyAccountsDataStateInterceptor
-                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+                .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
+        verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
-        verify(httpServletResponse, never()).addCookie(any(Cookie.class));
+        verify(mockResponse, never()).addCookie(any(Cookie.class));
 
-        verify(httpServletResponse, times(1)).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        verify(mockResponse, times(1)).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     private Cookie createStateCookie() {

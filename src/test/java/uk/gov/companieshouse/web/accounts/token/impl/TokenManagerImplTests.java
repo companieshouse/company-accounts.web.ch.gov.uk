@@ -23,7 +23,7 @@ public class TokenManagerImplTests {
     private static final String CHS_JWT_SECRET = "ZTljOTQ3MTdkN2Y0YmUwOTJjZDA0OTJmMTQ4OTMwODM=";
 
     @Mock
-    private EnvironmentReader environmentReader;
+    private EnvironmentReader mockEnvironmentReader;
 
     @InjectMocks
     private TokenManager tokenManager = new TokenManagerImpl();
@@ -31,7 +31,7 @@ public class TokenManagerImplTests {
     @Test
     void tokenManagerEncodeDecode() throws JsonProcessingException, SignatureException {
 
-        when(environmentReader.getMandatoryString(CHS_JWT_SECRET_ENV_VAR)).thenReturn(CHS_JWT_SECRET);
+        when(mockEnvironmentReader.getMandatoryString(CHS_JWT_SECRET_ENV_VAR)).thenReturn(CHS_JWT_SECRET);
 
         TestNestedClass testNestedClass = new TestNestedClass();
         testNestedClass.setTestNestedValue("testNestedValue");
