@@ -59,7 +59,7 @@ public class TurnoverPolicyControllerTest {
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String TURNOVER_POLICY_MODEL_ATTR = "turnoverPolicy";
 
-    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsState";
+    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
 
     private MockMvc mockMvc;
 
