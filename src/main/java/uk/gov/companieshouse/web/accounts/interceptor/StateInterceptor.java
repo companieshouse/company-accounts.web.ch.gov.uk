@@ -130,7 +130,6 @@ public class StateInterceptor extends HandlerInterceptorAdapter {
 
             } catch (JsonProcessingException e) {
                 response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-                return;
             }
         }
     }
@@ -169,13 +168,11 @@ public class StateInterceptor extends HandlerInterceptorAdapter {
     }
 
     private void removeOldestState(States states) {
-        String oldestState =
-                states.getCompanyAccountsStates().entrySet()
-                        .stream()
-                        .sorted((c1, c2) -> c1.getValue().getCreated().compareTo(c2.getValue().getCreated()))
-                        .findFirst()
-                        .get()
-                        .getKey();
-        states.getCompanyAccountsStates().remove(oldestState);
+
+        states.getCompanyAccountsStates().entrySet()
+                .stream()
+                .sorted((c1, c2) -> c1.getValue().getCreated().compareTo(c2.getValue().getCreated()))
+                .findFirst()
+                .ifPresent(oldestState -> states.getCompanyAccountsStates().remove(oldestState.getKey()));
     }
 }
