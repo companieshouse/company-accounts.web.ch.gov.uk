@@ -11,5 +11,5 @@ import lombok.Setter;
 public class CompanyAccountsDataStates {
 
     @JsonProperty("company_accounts_states")
-    private Map<String, CompanyAccountsDataState> companyAccountsStates = new HashMap<>();
+    private Map<String, CompanyAccountsDataState> companyAccountsDataStatesMap = new HashMap<>();
 }

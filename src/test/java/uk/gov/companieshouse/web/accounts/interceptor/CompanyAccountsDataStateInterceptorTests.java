@@ -32,13 +32,13 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataStates;
 import uk.gov.companieshouse.web.accounts.token.TokenManager;
 
 @ExtendWith(MockitoExtension.class)
-public class CompanyAccountsDataCompanyAccountsDataStateInterceptorTests {
+public class CompanyAccountsDataStateInterceptorTests {
 
     private static final String STATE_COOKIE_NAME = "__CAS";
 
     private static final String STATE_COOKIE_VALUE = "stateCookieValue";
 
-    private static final String STATE_REQUEST_ATTRIBUTE = "companyAccountsState";
+    private static final String STATE_REQUEST_ATTRIBUTE = "companyAccountsDataState";
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -144,7 +144,7 @@ public class CompanyAccountsDataCompanyAccountsDataStateInterceptorTests {
 
         when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
                 companyAccountsDataStates);
-        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsDataStatesMap()).thenReturn(companyAccountsStates);
         when(companyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
         companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
@@ -166,7 +166,7 @@ public class CompanyAccountsDataCompanyAccountsDataStateInterceptorTests {
 
         when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
                 companyAccountsDataStates);
-        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsDataStatesMap()).thenReturn(companyAccountsStates);
         when(companyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsDataState);
 
         companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
@@ -260,7 +260,7 @@ public class CompanyAccountsDataCompanyAccountsDataStateInterceptorTests {
         when(httpServletRequest.getSession()).thenReturn(session);
         when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
-        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsDataStatesMap()).thenReturn(companyAccountsStates);
         when(companyAccountsStates.size()).thenReturn(1);
 
         when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
@@ -295,7 +295,7 @@ public class CompanyAccountsDataCompanyAccountsDataStateInterceptorTests {
         when(httpServletRequest.getSession()).thenReturn(session);
         when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
-        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsDataStatesMap()).thenReturn(companyAccountsStates);
 
         when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
@@ -333,7 +333,7 @@ public class CompanyAccountsDataCompanyAccountsDataStateInterceptorTests {
         for (int i = 0; i < 5; i++) {
             companyAccountsStates.put(Integer.toString(i+1), new CompanyAccountsDataState());
         }
-        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsDataStatesMap()).thenReturn(companyAccountsStates);
 
         when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
