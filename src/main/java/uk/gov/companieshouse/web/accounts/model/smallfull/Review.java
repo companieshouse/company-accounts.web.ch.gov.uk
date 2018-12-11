@@ -6,6 +6,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 
 @Getter
 @Setter
@@ -20,6 +21,8 @@ public class Review {
     TurnoverPolicy turnoverPolicy;
 
     IntangibleAmortisationPolicy intangibleAmortisationPolicy;
+
+    ValuationInformationPolicy valuationInformationPolicy;
 
     OtherAccountingPolicy otherAccountingPolicy;
 }
