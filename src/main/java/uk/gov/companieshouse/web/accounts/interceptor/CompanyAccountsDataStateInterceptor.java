@@ -54,7 +54,7 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
                             tokenManager.decodeJWT(stateCookie.getValue(), CompanyAccountsDataStates.class);
 
                     // Get the state for the current company accounts id
-                    companyAccountsDataState = companyAccountsDataStates.getCompanyAccountsDataStatesMap().get(companyAccountsId);
+                    companyAccountsDataState = companyAccountsDataStates.getCompanyAccountsDataStateMap().get(companyAccountsId);
 
                     if (companyAccountsDataState == null) {
                         companyAccountsDataState = createNewState();
@@ -110,15 +110,15 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
 
             if (isApprovalSubmission(request)) {
                 // Remove the state for this company accounts id - it's not needed any more
-                companyAccountsDataStates.getCompanyAccountsDataStatesMap().remove(companyAccountsId);
+                companyAccountsDataStates.getCompanyAccountsDataStateMap().remove(companyAccountsId);
             } else {
                 // Remove the oldest 'state' if more than 5 are present to prevent bloating the JWT
-                if (companyAccountsDataStates.getCompanyAccountsDataStatesMap().size() >= 5) {
+                if (companyAccountsDataStates.getCompanyAccountsDataStateMap().size() >= 5) {
                     removeOldestState(companyAccountsDataStates);
                 }
                 // Update / insert the state object on the state map, using the company accounts id as the key
                 companyAccountsDataStates
-                        .getCompanyAccountsDataStatesMap().put(companyAccountsId, companyAccountsDataState);
+                        .getCompanyAccountsDataStateMap().put(companyAccountsId, companyAccountsDataState);
             }
 
             try {
@@ -175,10 +175,10 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
      */
     private void removeOldestState(CompanyAccountsDataStates companyAccountsDataStates) {
 
-        companyAccountsDataStates.getCompanyAccountsDataStatesMap().entrySet()
+        companyAccountsDataStates.getCompanyAccountsDataStateMap().entrySet()
                 .stream()
                 .sorted((c1, c2) -> c1.getValue().getCreated().compareTo(c2.getValue().getCreated()))
                 .findFirst()
-                .ifPresent(oldestState -> companyAccountsDataStates.getCompanyAccountsDataStatesMap().remove(oldestState.getKey()));
+                .ifPresent(oldestState -> companyAccountsDataStates.getCompanyAccountsDataStateMap().remove(oldestState.getKey()));
     }
 }
