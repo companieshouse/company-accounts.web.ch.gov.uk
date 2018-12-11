@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(OtherAccountingPolicyController.class)
+@NextController(ValuationInformationPolicyController.class)
 @PreviousController(TangibleDepreciationPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/intangible-fixed-assets-amortisation")
 public class IntangibleAmortisationPolicyController extends BaseController {

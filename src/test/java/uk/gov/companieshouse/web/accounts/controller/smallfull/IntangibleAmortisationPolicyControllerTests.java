@@ -55,7 +55,7 @@ public class IntangibleAmortisationPolicyControllerTests {
 
     private static final String INTANGIBLE_AMORTISATION_POLICY_PATH = SMALL_FULL_PATH + "/intangible-fixed-assets-amortisation";
 
-    private static final String OTHER_ACCOUNTING_POLICY_PATH = SMALL_FULL_PATH + "/other-accounting-policies";
+    private static final String VALUATION_INFOMATION_POLICY_PATH = SMALL_FULL_PATH + "/valuation-information";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
@@ -113,7 +113,7 @@ public class IntangibleAmortisationPolicyControllerTests {
 
         this.mockMvc.perform(postRequestWithValidData())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + OTHER_ACCOUNTING_POLICY_PATH));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + VALUATION_INFOMATION_POLICY_PATH));
     }
 
     @Test
