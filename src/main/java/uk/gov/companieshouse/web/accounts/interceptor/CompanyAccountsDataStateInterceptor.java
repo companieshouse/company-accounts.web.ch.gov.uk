@@ -169,6 +169,10 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
         return matcher.find() && request.getMethod().equalsIgnoreCase("POST");
     }
 
+    /**
+     * Removes the oldest state from the {@link CompanyAccountsDataStates} map to prevent bloating the JWT
+     * @param companyAccountsDataStates The {@link CompanyAccountsDataStates} object from which to remove the oldest state
+     */
     private void removeOldestState(CompanyAccountsDataStates companyAccountsDataStates) {
 
         companyAccountsDataStates.getCompanyAccountsDataStatesMap().entrySet()
