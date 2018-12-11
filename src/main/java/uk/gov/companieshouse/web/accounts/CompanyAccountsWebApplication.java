@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import uk.gov.companieshouse.web.accounts.interceptor.LoggingInterceptor;
-import uk.gov.companieshouse.web.accounts.interceptor.StateInterceptor;
+import uk.gov.companieshouse.web.accounts.interceptor.CompanyAccountsDataStateInterceptor;
 import uk.gov.companieshouse.web.accounts.interceptor.UserDetailsInterceptor;
 
 @SpringBootApplication
@@ -16,16 +16,16 @@ public class CompanyAccountsWebApplication implements WebMvcConfigurer {
 
     private UserDetailsInterceptor userDetailsInterceptor;
     private LoggingInterceptor loggingInterceptor;
-    private StateInterceptor stateInterceptor;
+    private CompanyAccountsDataStateInterceptor companyAccountsDataStateInterceptor;
 
     @Autowired
     public CompanyAccountsWebApplication(UserDetailsInterceptor userDetailsInterceptor,
                                          LoggingInterceptor loggingInterceptor,
-                                         StateInterceptor stateInterceptor) {
+                                         CompanyAccountsDataStateInterceptor companyAccountsDataStateInterceptor) {
 
         this.userDetailsInterceptor = userDetailsInterceptor;
         this.loggingInterceptor = loggingInterceptor;
-        this.stateInterceptor = stateInterceptor;
+        this.companyAccountsDataStateInterceptor = companyAccountsDataStateInterceptor;
     }
 
     public static void main(String[] args) {
@@ -37,6 +37,6 @@ public class CompanyAccountsWebApplication implements WebMvcConfigurer {
 
         registry.addInterceptor(loggingInterceptor);
         registry.addInterceptor(userDetailsInterceptor);
-        registry.addInterceptor(stateInterceptor);
+        registry.addInterceptor(companyAccountsDataStateInterceptor);
     }
 }

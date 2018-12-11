@@ -32,7 +32,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
-import uk.gov.companieshouse.web.accounts.model.state.State;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -70,7 +70,7 @@ public class TurnoverPolicyControllerTest {
     private TurnoverPolicyService turnoverPolicyServiceMock;
 
     @Mock
-    private State state;
+    private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
     private AccountingPolicies accountingPolicies;
@@ -109,9 +109,9 @@ public class TurnoverPolicyControllerTest {
                 .thenReturn(new TurnoverPolicy());
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(COMPANY_ACCOUNTS_STATE, state);
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(state.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
         when(accountingPolicies.getHasProvidedTurnoverPolicy()).thenReturn(false);
 
         this.mockMvc
@@ -122,7 +122,7 @@ public class TurnoverPolicyControllerTest {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
 
-        verify(state, times(1)).getAccountingPolicies();
+        verify(companyAccountsDataState, times(1)).getAccountingPolicies();
         verify(accountingPolicies, times(1)).getHasProvidedTurnoverPolicy();
     }
 
@@ -152,9 +152,9 @@ public class TurnoverPolicyControllerTest {
         when(validationErrorsMock.isEmpty()).thenReturn(true);
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute(COMPANY_ACCOUNTS_STATE, state);
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(state.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
 
         this.mockMvc.perform(createPostRequestWithParam(false).session(session))
             .andExpect(status().is3xxRedirection())

@@ -15,16 +15,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
-import uk.gov.companieshouse.web.accounts.model.state.State;
-import uk.gov.companieshouse.web.accounts.model.state.States;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataStates;
 import uk.gov.companieshouse.web.accounts.token.TokenManager;
 
 @Component
-public class StateInterceptor extends HandlerInterceptorAdapter {
+public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapter {
 
     private static final String STATE_COOKIE_NAME = "__CAS";
 
-    private static final String STATE_REQUEST_ATTRIBUTE = "companyAccountsState";
+    private static final String STATE_REQUEST_ATTRIBUTE = "companyAccountsDataState";
 
     private static final Pattern COMPANY_ACCOUNTS_REGEX = Pattern.compile("/company-accounts/([^/]*)");
 
@@ -44,30 +44,31 @@ public class StateInterceptor extends HandlerInterceptorAdapter {
             // Retrieve the state cookie
             Cookie stateCookie = getStateCookie(request);
 
-            State state;
+            CompanyAccountsDataState companyAccountsDataState;
 
             if (stateCookie != null) {
 
                 try {
                     // Fetch the States object from the JWT
-                    States states = tokenManager.decodeJWT(stateCookie.getValue(), States.class);
+                    CompanyAccountsDataStates companyAccountsDataStates =
+                            tokenManager.decodeJWT(stateCookie.getValue(), CompanyAccountsDataStates.class);
 
                     // Get the state for the current company accounts id
-                    state = states.getCompanyAccountsStates().get(companyAccountsId);
+                    companyAccountsDataState = companyAccountsDataStates.getCompanyAccountsStates().get(companyAccountsId);
 
-                    if (state == null) {
-                        state = createNewState();
+                    if (companyAccountsDataState == null) {
+                        companyAccountsDataState = createNewState();
                     }
                 } catch (SignatureException e) {
 
-                    state = createNewState();
+                    companyAccountsDataState = createNewState();
                 }
             } else {
-                state = createNewState();
+                companyAccountsDataState = createNewState();
             }
 
             // Set the state as an attribute on the request session
-            request.getSession().setAttribute(STATE_REQUEST_ATTRIBUTE, state);
+            request.getSession().setAttribute(STATE_REQUEST_ATTRIBUTE, companyAccountsDataState);
         }
         return true;
     }
@@ -83,7 +84,7 @@ public class StateInterceptor extends HandlerInterceptorAdapter {
             // Retrieve the state cookie
             Cookie stateCookie = getStateCookie(request);
 
-            States states;
+            CompanyAccountsDataStates companyAccountsDataStates;
 
             if (stateCookie == null) {
 
@@ -91,37 +92,38 @@ public class StateInterceptor extends HandlerInterceptorAdapter {
                 stateCookie = new Cookie(STATE_COOKIE_NAME, "");
 
                 // Instantiate the states object
-                states = new States();
+                companyAccountsDataStates = new CompanyAccountsDataStates();
             } else {
 
                 try {
                     // Fetch the States object from the JWT
-                    states = tokenManager.decodeJWT(stateCookie.getValue(), States.class);
+                    companyAccountsDataStates = tokenManager.decodeJWT(stateCookie.getValue(), CompanyAccountsDataStates.class);
                 } catch (SignatureException e) {
 
-                    states = new States();
+                    companyAccountsDataStates = new CompanyAccountsDataStates();
                 }
 
             }
 
             // Get the state from the request session
-            State state = (State) request.getSession().getAttribute(STATE_REQUEST_ATTRIBUTE);
+            CompanyAccountsDataState companyAccountsDataState = (CompanyAccountsDataState) request.getSession().getAttribute(STATE_REQUEST_ATTRIBUTE);
 
             if (isApprovalSubmission(request)) {
                 // Remove the state for this company accounts id - it's not needed any more
-                states.getCompanyAccountsStates().remove(companyAccountsId);
+                companyAccountsDataStates.getCompanyAccountsStates().remove(companyAccountsId);
             } else {
                 // Remove the oldest 'state' if more than 5 are present to prevent bloating the JWT
-                if (states.getCompanyAccountsStates().size() >= 5) {
-                    removeOldestState(states);
+                if (companyAccountsDataStates.getCompanyAccountsStates().size() >= 5) {
+                    removeOldestState(companyAccountsDataStates);
                 }
                 // Update / insert the state object on the state map, using the company accounts id as the key
-                states.getCompanyAccountsStates().put(companyAccountsId, state);
+                companyAccountsDataStates
+                        .getCompanyAccountsStates().put(companyAccountsId, companyAccountsDataState);
             }
 
             try {
                 // Convert the states object back to a JWT and set it on the cookie
-                String token = tokenManager.createJWT(states);
+                String token = tokenManager.createJWT(companyAccountsDataStates);
                 stateCookie.setValue(token);
                 stateCookie.setPath("/");
 
@@ -142,14 +144,14 @@ public class StateInterceptor extends HandlerInterceptorAdapter {
                 .orElse(null);
     }
 
-    private State createNewState() {
+    private CompanyAccountsDataState createNewState() {
 
-        State state = new State();
+        CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
-        state.setAccountingPolicies(accountingPolicies);
+        companyAccountsDataState.setAccountingPolicies(accountingPolicies);
 
-        return state;
+        return companyAccountsDataState;
     }
 
     private String getCompanyAccountsIdFromRequest(HttpServletRequest request) {
@@ -167,12 +169,12 @@ public class StateInterceptor extends HandlerInterceptorAdapter {
         return matcher.find() && request.getMethod().equalsIgnoreCase("POST");
     }
 
-    private void removeOldestState(States states) {
+    private void removeOldestState(CompanyAccountsDataStates companyAccountsDataStates) {
 
-        states.getCompanyAccountsStates().entrySet()
+        companyAccountsDataStates.getCompanyAccountsStates().entrySet()
                 .stream()
                 .sorted((c1, c2) -> c1.getValue().getCreated().compareTo(c2.getValue().getCreated()))
                 .findFirst()
-                .ifPresent(oldestState -> states.getCompanyAccountsStates().remove(oldestState.getKey()));
+                .ifPresent(oldestState -> companyAccountsDataStates.getCompanyAccountsStates().remove(oldestState.getKey()));
     }
 }

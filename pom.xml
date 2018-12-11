@@ -44,6 +44,12 @@
 
         <environment-reader-library.version>1.2.0-rc1</environment-reader-library.version>
 
+        <jjwt-api.version>0.10.5</jjwt-api.version>
+
+        <jjwt-impl.version>0.10.5</jjwt-impl.version>
+
+        <jjwt-jackson.version>0.10.5</jjwt-jackson.version>
+
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
 
@@ -136,21 +142,24 @@
             <version>${environment-reader-library.version}</version>
         </dependency>
 
+        <!-- JJWT dependencies -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.10.5</version>
+            <version>${jjwt-api.version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.10.5</version>
+            <version>${jjwt-impl.version}</version>
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.10.5</version>
+            <version>${jjwt-jackson.version}</version>
             <scope>runtime</scope>
         </dependency>
 

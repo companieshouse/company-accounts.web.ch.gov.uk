@@ -25,16 +25,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.ModelAndView;
-import uk.gov.companieshouse.web.accounts.model.state.State;
-import uk.gov.companieshouse.web.accounts.model.state.States;
-import uk.gov.companieshouse.web.accounts.session.SessionService;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataStates;
 import uk.gov.companieshouse.web.accounts.token.TokenManager;
 
 @ExtendWith(MockitoExtension.class)
-public class StateInterceptorTests {
+public class CompanyAccountsDataCompanyAccountsDataStateInterceptorTests {
 
     private static final String STATE_COOKIE_NAME = "__CAS";
 
@@ -73,19 +71,19 @@ public class StateInterceptorTests {
     private ModelAndView modelAndView;
 
     @Mock
-    private States states;
+    private CompanyAccountsDataStates companyAccountsDataStates;
 
     @Mock
-    private Map<String, State> companyAccountsStates;
+    private Map<String, CompanyAccountsDataState> companyAccountsStates;
 
     @Mock
-    private State state;
+    private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
     private TokenManager tokenManager;
 
     @InjectMocks
-    private StateInterceptor stateInterceptor;
+    private CompanyAccountsDataStateInterceptor companyAccountsDataStateInterceptor;
 
     @Test
     @DisplayName("State interceptor preHandle - request uri doesn't contain a company accounts id")
@@ -93,7 +91,7 @@ public class StateInterceptorTests {
 
         when(httpServletRequest.getRequestURI()).thenReturn(CRITERIA_URI);
 
-        stateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
 
         // Ensure that the token manager is never called and the request session is never manipulated
         verify(tokenManager, never()).decodeJWT(anyString(), any());
@@ -110,10 +108,10 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        stateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
 
         verify(tokenManager, never()).decodeJWT(anyString(), any());
-        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(State.class));
+        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
     }
 
     @Test
@@ -126,12 +124,12 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenThrow(SignatureException.class);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
 
-        stateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
-        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(State.class));
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
     }
 
     @Test
@@ -144,15 +142,16 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenReturn(states);
-        when(states.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                companyAccountsDataStates);
+        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
         when(companyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
-        stateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
         verify(companyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
-        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(State.class));
+        verify(session, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
     }
 
     @Test
@@ -165,15 +164,16 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenReturn(states);
-        when(states.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
-        when(companyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(state);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                companyAccountsDataStates);
+        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsStates.get(COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsDataState);
 
-        stateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
+        companyAccountsDataStateInterceptor.preHandle(httpServletRequest, httpServletResponse, new Object());
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
         verify(companyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
-        verify(session, times(1)).setAttribute(STATE_REQUEST_ATTRIBUTE, state);
+        verify(session, times(1)).setAttribute(STATE_REQUEST_ATTRIBUTE, companyAccountsDataState);
     }
 
     @Test
@@ -182,7 +182,8 @@ public class StateInterceptorTests {
 
         when(httpServletRequest.getRequestURI()).thenReturn(CRITERIA_URI);
 
-        stateInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        companyAccountsDataStateInterceptor
+                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
         // Ensure that the token manager is never called and the request session is never manipulated
         verify(tokenManager, never()).decodeJWT(anyString(), any());
@@ -199,17 +200,18 @@ public class StateInterceptorTests {
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
         when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(state);
+        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
-        when(tokenManager.createJWT(any(States.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
         doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
 
-        stateInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        companyAccountsDataStateInterceptor
+                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
         verify(tokenManager, never()).decodeJWT(anyString(), any());
 
-        verify(tokenManager, times(1)).createJWT(any(States.class));
+        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
         verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
     }
@@ -223,20 +225,21 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenThrow(SignatureException.class);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
 
         when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(state);
+        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
-        when(tokenManager.createJWT(any(States.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
         doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
 
-        stateInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        companyAccountsDataStateInterceptor
+                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(tokenManager, times(1)).createJWT(any(States.class));
+        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
         verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
     }
@@ -251,25 +254,27 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenReturn(states);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                companyAccountsDataStates);
 
         when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(state);
+        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
-        when(states.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
         when(companyAccountsStates.size()).thenReturn(1);
 
-        when(tokenManager.createJWT(any(States.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
         doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
 
-        stateInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        companyAccountsDataStateInterceptor
+                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(companyAccountsStates, times(1)).put(COMPANY_ACCOUNTS_ID, state);
+        verify(companyAccountsStates, times(1)).put(COMPANY_ACCOUNTS_ID, companyAccountsDataState);
 
-        verify(tokenManager, times(1)).createJWT(any(States.class));
+        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
         verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
     }
@@ -284,24 +289,26 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenReturn(states);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                companyAccountsDataStates);
 
         when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(state);
+        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
-        when(states.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
 
-        when(tokenManager.createJWT(any(States.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
         doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
 
-        stateInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        companyAccountsDataStateInterceptor
+                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
         verify(companyAccountsStates, times(1)).remove(COMPANY_ACCOUNTS_ID);
 
-        verify(tokenManager, times(1)).createJWT(any(States.class));
+        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
         verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
     }
@@ -315,27 +322,29 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenReturn(states);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                companyAccountsDataStates);
 
         when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(state);
+        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
         // Build a state map with keys numbered 1 to 5
-        Map<String, State> companyAccountsStates = new HashMap<>();
+        Map<String, CompanyAccountsDataState> companyAccountsStates = new HashMap<>();
         for (int i = 0; i < 5; i++) {
-            companyAccountsStates.put(Integer.toString(i+1), new State());
+            companyAccountsStates.put(Integer.toString(i+1), new CompanyAccountsDataState());
         }
-        when(states.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
+        when(companyAccountsDataStates.getCompanyAccountsStates()).thenReturn(companyAccountsStates);
 
-        when(tokenManager.createJWT(any(States.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
 
         doNothing().when(httpServletResponse).addCookie(any(Cookie.class));
 
-        stateInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        companyAccountsDataStateInterceptor
+                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(tokenManager, times(1)).createJWT(any(States.class));
+        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
         verify(httpServletResponse, times(1)).addCookie(any(Cookie.class));
 
@@ -354,20 +363,22 @@ public class StateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(httpServletRequest.getCookies()).thenReturn(cookies);
 
-        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, States.class)).thenReturn(states);
+        when(tokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+                companyAccountsDataStates);
 
         when(httpServletRequest.getSession()).thenReturn(session);
-        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(state);
+        when(session.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(companyAccountsDataState);
 
-        when(tokenManager.createJWT(any(States.class))).thenThrow(JsonProcessingException.class);
+        when(tokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenThrow(JsonProcessingException.class);
 
         doNothing().when(httpServletResponse).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-        stateInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        companyAccountsDataStateInterceptor
+                .postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
 
-        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, States.class);
+        verify(tokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
 
-        verify(tokenManager, times(1)).createJWT(any(States.class));
+        verify(tokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
         verify(httpServletResponse, never()).addCookie(any(Cookie.class));
 

@@ -8,8 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class States {
+public class CompanyAccountsDataStates {
 
     @JsonProperty("company_accounts_states")
-    private Map<String, State> companyAccountsStates = new HashMap<>();
+    private Map<String, CompanyAccountsDataState> companyAccountsStates = new HashMap<>();
 }

@@ -17,7 +17,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
-import uk.gov.companieshouse.web.accounts.model.state.State;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -105,8 +105,9 @@ public class TurnoverPolicyController extends BaseController {
      */
     private void setIsPolicyIncluded(HttpServletRequest request, TurnoverPolicy turnoverPolicy) {
 
-        State state = getStateFromRequest(request);
-        turnoverPolicy.setIsIncludeTurnoverSelected(state.getAccountingPolicies().getHasProvidedTurnoverPolicy());
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        turnoverPolicy.setIsIncludeTurnoverSelected(
+                companyAccountsDataState.getAccountingPolicies().getHasProvidedTurnoverPolicy());
     }
 
     /**
@@ -116,10 +117,10 @@ public class TurnoverPolicyController extends BaseController {
      */
     private void  cacheIsPolicyIncluded(HttpServletRequest request, TurnoverPolicy turnoverPolicy) {
 
-        State state = getStateFromRequest(request);
-        state.getAccountingPolicies().setHasProvidedTurnoverPolicy(turnoverPolicy.getIsIncludeTurnoverSelected());
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.getAccountingPolicies().setHasProvidedTurnoverPolicy(turnoverPolicy.getIsIncludeTurnoverSelected());
 
-        updateStateOnRequest(request, state);
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 
 }

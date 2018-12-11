@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class State implements Serializable {
+public class CompanyAccountsDataState implements Serializable {
 
     @JsonProperty("accounting_policies")
     private AccountingPolicies accountingPolicies;

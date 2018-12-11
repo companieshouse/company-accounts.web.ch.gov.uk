@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
-import uk.gov.companieshouse.web.accounts.model.state.State;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -24,7 +24,7 @@ public abstract class BaseController {
 
     protected static final String ERROR_VIEW = "error";
 
-    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsState";
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     protected BaseController() {
     }
@@ -84,22 +84,23 @@ public abstract class BaseController {
     }
 
     /**
-     * Retrieve the client's {@link State} from the request session
+     * Retrieve the client's {@link CompanyAccountsDataState} from the request session
      * @param request The request
-     * @return the client's {@link State}
+     * @return the client's {@link CompanyAccountsDataState}
      */
-    protected State getStateFromRequest(HttpServletRequest request) {
+    protected CompanyAccountsDataState getStateFromRequest(HttpServletRequest request) {
 
-        return (State) request.getSession().getAttribute(COMPANY_ACCOUNTS_STATE);
+        return (CompanyAccountsDataState) request.getSession().getAttribute(
+                COMPANY_ACCOUNTS_DATA_STATE);
     }
 
     /**
-     * Update the client's {@link State} on the request session
+     * Update the client's {@link CompanyAccountsDataState} on the request session
      * @param request The request
-     * @param state The client's {@link State}
+     * @param companyAccountsDataState The client's {@link CompanyAccountsDataState}
      */
-    protected void updateStateOnRequest(HttpServletRequest request, State state) {
+    protected void updateStateOnRequest(HttpServletRequest request, CompanyAccountsDataState companyAccountsDataState) {
 
-        request.getSession().setAttribute(COMPANY_ACCOUNTS_STATE, state);
+        request.getSession().setAttribute(COMPANY_ACCOUNTS_DATA_STATE, companyAccountsDataState);
     }
 }
