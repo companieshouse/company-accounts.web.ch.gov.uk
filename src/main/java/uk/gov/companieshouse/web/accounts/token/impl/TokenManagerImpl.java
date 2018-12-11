@@ -30,7 +30,7 @@ public class TokenManagerImpl implements TokenManager {
      * {@inheritDoc}
      */
     @Override
-    public <T> T decodeJWT(String token, Class<T> clazz) throws SignatureException {
+    public <T> T decodeJWT(String token, Class<T> clazz) {
 
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(getKey()).parseClaimsJws(token);
         return OBJECT_MAPPER.convertValue(claimsJws.getBody(), clazz);
