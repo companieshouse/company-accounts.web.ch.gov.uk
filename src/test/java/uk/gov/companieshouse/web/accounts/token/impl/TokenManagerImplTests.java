@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.security.SignatureException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,7 @@ public class TokenManagerImplTests {
     private TokenManager tokenManager = new TokenManagerImpl();
 
     @Test
+    @DisplayName("Token manager - encode an object to a JWT, decode it and ensure no data is lost")
     void tokenManagerEncodeDecode() throws JsonProcessingException, SignatureException {
 
         when(mockEnvironmentReader.getMandatoryString(CHS_JWT_SECRET_ENV_VAR)).thenReturn(CHS_JWT_SECRET);
