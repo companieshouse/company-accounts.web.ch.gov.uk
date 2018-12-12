@@ -18,6 +18,7 @@
     
 </head>
 <body>
+    <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header"></div>
         <div class="govuk-width-container">
