@@ -12,9 +12,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
@@ -85,11 +82,8 @@ public class TransactionServiceImpl implements TransactionService {
                 "/company-accounts/" + companyAccountsId +
                 "/small-full/resume";
 
-        Map<String, String> links = new HashMap<>();
-        links.put(RESUME_LINK, resumeLink);
-
         Transaction transaction = new Transaction();
-        transaction.setLinks(links);
+        transaction.setResumeJourneyUri(resumeLink);
 
         try {
             apiClientService.getApiClient().transactions().update(uri, transaction).execute();

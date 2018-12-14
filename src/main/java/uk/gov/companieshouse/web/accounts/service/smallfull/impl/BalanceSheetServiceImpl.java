@@ -245,11 +245,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         return lastAccountsApi != null && lastAccountsApi.getPeriodEndOn() != null;
     }
 
-    private boolean hasCurrentPeriod(SmallFullLinks links) {
-        return links.getCurrentPeriod() != null;
+    private boolean hasCurrentPeriod(SmallFullLinks smallFullLinks) {
+        return smallFullLinks.getCurrentPeriod() != null;
     }
 
-    private boolean hasPreviousPeriod(SmallFullLinks links) {
-        return links.getPreviousPeriod() != null;
+    private boolean hasPreviousPeriod(SmallFullLinks smallFullLinks) {
+        return smallFullLinks.getPreviousPeriod() != null;
     }
 }

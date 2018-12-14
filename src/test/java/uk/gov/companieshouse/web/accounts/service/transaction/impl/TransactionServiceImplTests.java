@@ -15,9 +15,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -59,6 +61,8 @@ public class TransactionServiceImplTests {
     private static final String COMPANY_NUMBER = "123456";
 
     private static final String TRANSACTION_ID = "111-222-333";
+
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String GET_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
 
@@ -197,5 +201,29 @@ public class TransactionServiceImplTests {
         doThrow(URIValidationException.class).when(transactionsUpdate).execute();
 
         assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+    }
+
+    @Test
+    @DisplayName("Create transaction resume link")
+    void createTransactionResumeLink() throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        Transaction transaction = new Transaction();
+        transaction.setId(TRANSACTION_ID);
+
+        when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
+
+        when(transactionsGet.execute()).thenReturn(transaction);
+
+        transactionService.createResumeLink(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        ArgumentCaptor<Transaction> transactionCaptor = ArgumentCaptor.forClass(Transaction.class);
+        verify(transactionsResourceHandler).update(anyString(), transactionCaptor.capture());
+
+        String expectedResumeJourneyUri = "/company/" + COMPANY_NUMBER +
+                "/transaction/" + TRANSACTION_ID +
+                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                "/small-full/resume";
+
+        assertEquals(expectedResumeJourneyUri, transactionCaptor.getValue().getResources());
     }
 }
