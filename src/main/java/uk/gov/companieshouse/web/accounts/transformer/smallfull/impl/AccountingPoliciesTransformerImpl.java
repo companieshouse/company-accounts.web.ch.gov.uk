@@ -4,7 +4,9 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.AccountingPoliciesTransformer;
 
 @Component
@@ -85,6 +87,36 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
      * {@inheritDoc}
      */
     @Override
+    public TangibleDepreciationPolicy getTangibleDepreciationPolicy(
+        AccountingPoliciesApi accountingPoliciesApi) {
+        TangibleDepreciationPolicy tangibleDepreciationPolicy = new TangibleDepreciationPolicy();
+        if (accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy() != null) {
+            tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(true);
+            tangibleDepreciationPolicy.setTangibleDepreciationPolicyDetails(
+                accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy());
+        }
+        return tangibleDepreciationPolicy;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTangibleDepreciationPolicy(TangibleDepreciationPolicy tangibleDepreciationPolicy,
+        AccountingPoliciesApi accountingPoliciesApi) {
+
+        if (tangibleDepreciationPolicy.getHasTangibleDepreciationPolicySelected()) {
+            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(
+                tangibleDepreciationPolicy.getTangibleDepreciationPolicyDetails());
+        } else {
+            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(null);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public IntangibleAmortisationPolicy getIntangibleAmortisationPolicy(
             AccountingPoliciesApi accountingPoliciesApi) {
 
@@ -116,5 +148,41 @@ public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTran
             accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(null);
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ValuationInformationPolicy getValuationInformationPolicy(
+            AccountingPoliciesApi accountingPoliciesApi) {
+
+        ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
+
+        if (accountingPoliciesApi.getValuationInformationAndPolicy() != null) {
+
+            valuationInformationPolicy.setIncludeValuationInformationPolicy(true);
+            valuationInformationPolicy.setValuationInformationPolicyDetails(
+                    accountingPoliciesApi.getValuationInformationAndPolicy());
+        }
+
+        return valuationInformationPolicy;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setValuationInformationPolicy(ValuationInformationPolicy valuationInformationPolicy,
+            AccountingPoliciesApi accountingPoliciesApi) {
+
+        if (valuationInformationPolicy.getIncludeValuationInformationPolicy()) {
+
+            accountingPoliciesApi.setValuationInformationAndPolicy(
+                    valuationInformationPolicy.getValuationInformationPolicyDetails());
+        } else {
+
+            accountingPoliciesApi.setValuationInformationAndPolicy(null);
+        }
     }
 }

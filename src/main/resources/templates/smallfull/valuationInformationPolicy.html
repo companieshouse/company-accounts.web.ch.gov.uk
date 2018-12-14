@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title>
+    Valuation information policy
+  </title>
+</head>
+<div id="valuationInformationPolicy-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="valuationInformationPolicy-form" class="form" th:action="@{''}" th:object="${valuationInformationPolicy}"
+            method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('includeValuationInformationPolicy')} ? 'govuk-form-group--error' : ''">
+
+          <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+              legendText = 'Do your prepared accounts include a \'valuation information\' policy?',
+              boxLabelTextJavaScriptOn = 'Give details of your \'valuation information\' policy',
+              boxLabelTextJavaScriptOff = 'If yes, enter your \'valuation information\' policy',
+              radioButtonsFieldName = 'includeValuationInformationPolicy',
+              textBoxFieldName = 'valuationInformationPolicyDetails',
+              dataTargetTextFieldName = 'valuationInformationPolicy-text-box',
+              textAreaClassName = 'govuk-textarea'
+              )">
+          </div>
+
+        </div>
+
+        <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

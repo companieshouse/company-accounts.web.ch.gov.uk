@@ -50,7 +50,7 @@ public class TurnoverPolicyControllerTest {
         "/small-full";
 
     private static final String TURNOVER_POLICY_PATH = SMALL_FULL_PATH + "/turnover-policy";
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
+    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/tangible-depreciation-policy";
 
     private static final String TURNOVER_POLICY_VIEW = "smallfull/turnoverPolicy";
     private static final String ERROR_VIEW = "error";
