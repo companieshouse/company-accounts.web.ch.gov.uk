@@ -19,7 +19,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -65,6 +64,8 @@ public class TransactionServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String GET_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
+
+    private static final String UPDATE_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
 
     @BeforeEach
     private void init() {
@@ -207,12 +208,10 @@ public class TransactionServiceImplTests {
     @DisplayName("Create transaction resume link")
     void createTransactionResumeLink() throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        Transaction transaction = new Transaction();
-        transaction.setId(TRANSACTION_ID);
+        when(transactionsResourceHandler.update(anyString(), any(Transaction.class)))
+                .thenReturn(transactionsUpdate);
 
-        when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
-
-        when(transactionsGet.execute()).thenReturn(transaction);
+        doNothing().when(transactionsUpdate).execute();
 
         transactionService.createResumeLink(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -224,6 +223,6 @@ public class TransactionServiceImplTests {
                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                 "/small-full/resume";
 
-        assertEquals(expectedResumeJourneyUri, transactionCaptor.getValue().getResources());
+        assertEquals(expectedResumeJourneyUri, transactionCaptor.getValue().getResumeJourneyUri());
     }
 }
