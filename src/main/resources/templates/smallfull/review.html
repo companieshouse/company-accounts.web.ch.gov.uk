@@ -383,6 +383,26 @@
                         </div>
                     </dl>
                 </div>
+
+                <div th:if="*{otherAccountingPolicy.otherAccountingPolicyDetails != null}">
+                    <div
+                        th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Other accounting policies',
+                        identifier= 'other-accounting-policies',
+                        resource = 'other-accounting-policies',
+                        marginTop = true
+                        )">
+                    </div>
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-otherAccountingPolicy"
+                                   th:text="*{otherAccountingPolicy.otherAccountingPolicyDetails}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
                 <!-- End Accounting Policies -->
 
                 <div class="govuk-form-group">
