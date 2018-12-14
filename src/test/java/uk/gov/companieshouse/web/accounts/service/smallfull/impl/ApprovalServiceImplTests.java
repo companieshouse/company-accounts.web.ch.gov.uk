@@ -15,7 +15,6 @@ import com.google.api.client.http.HttpResponseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,9 +31,9 @@ import uk.gov.companieshouse.api.handler.smallfull.approval.request.ApprovalCrea
 import uk.gov.companieshouse.api.handler.smallfull.approval.request.ApprovalUpdate;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.links.SmallFullLinkType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
@@ -75,7 +74,7 @@ public class ApprovalServiceImplTests {
     private SmallFullApi smallFullApi;
 
     @Mock
-    private Map<String, String> smallFullLinks;
+    private SmallFullLinks smallFullLinks;
 
     @Mock
     private ValidationContext validationContext;
@@ -103,6 +102,8 @@ public class ApprovalServiceImplTests {
 
     private static final String DATE_INVALID = "validation.date.nonExistent";
 
+    private static final String MOCK_APPROVAL_LINK = "mockApprovalLink";
+
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
     void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
@@ -126,8 +127,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(approvalCreate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(false);
+        when(smallFullLinks.getApproval()).thenReturn(null);
 
         when(approvalCreate.execute()).thenReturn(approvalApi);
 
@@ -163,8 +163,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(approvalCreate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(false);
+        when(smallFullLinks.getApproval()).thenReturn(null);
 
         when(approvalCreate.execute()).thenThrow(URIValidationException.class);
 
@@ -198,8 +197,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(approvalCreate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(false);
+        when(smallFullLinks.getApproval()).thenReturn(null);
 
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
@@ -243,8 +241,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(approvalCreate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(false);
+        when(smallFullLinks.getApproval()).thenReturn(null);
 
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
@@ -286,8 +283,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(approvalCreate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(false);
+        when(smallFullLinks.getApproval()).thenReturn(null);
 
         when(approvalCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
@@ -320,8 +316,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(approvalUpdate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(true);
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
         doNothing().when(approvalUpdate).execute();
 
@@ -357,8 +352,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(approvalUpdate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(true);
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
         doThrow(URIValidationException.class).when(approvalUpdate).execute();
 
@@ -392,8 +386,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(approvalUpdate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(true);
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
@@ -437,8 +430,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(approvalUpdate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(true);
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
@@ -480,8 +472,7 @@ public class ApprovalServiceImplTests {
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(approvalUpdate);
 
-        when(smallFullLinks.containsKey(SmallFullLinkType.APPROVAL.getLink()))
-                .thenReturn(true);
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
         doThrow(ApiErrorResponseException.class).when(approvalUpdate).execute();
 
