@@ -7,6 +7,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
@@ -17,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisati
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
 
@@ -34,6 +36,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private TurnoverPolicyService turnoverPolicyService;
+
+    @Autowired
+    private TangibleDepreciationPolicyService tangibleDepreciationPolicyService;
 
     @Autowired
     private IntangibleAmortisationPolicyService intangibleAmortisationPolicyService;
@@ -54,6 +59,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         TurnoverPolicy turnoverPolicy = turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId);
 
+        TangibleDepreciationPolicy tangibleDepreciationPolicy = tangibleDepreciationPolicyService.getTangibleDepreciationPolicy(transactionId, companyAccountsId);
+
         IntangibleAmortisationPolicy intangibleAmortisationPolicy =
                 intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(transactionId, companyAccountsId);
 
@@ -68,6 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setStatements(statements);
         review.setBasisOfPreparation(basisOfPreparation);
         review.setTurnoverPolicy(turnoverPolicy);
+        review.setTangibleDepreciationPolicy(tangibleDepreciationPolicy);
         review.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
         review.setValuationInformationPolicy(valuationInformationPolicy);
         review.setOtherAccountingPolicy(otherAccountingPolicy);

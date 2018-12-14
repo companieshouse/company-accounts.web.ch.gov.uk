@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
@@ -25,6 +26,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationSe
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
 
@@ -49,6 +51,9 @@ public class ReviewServiceImplTests {
 
     @Mock
     private TurnoverPolicyService turnoverPolicyService;
+
+    @Mock
+    private TangibleDepreciationPolicyService tangibleDepreciationPolicyService;
 
     @Mock
     private IntangibleAmortisationPolicyService intangibleAmortisationPolicyService;
@@ -80,6 +85,9 @@ public class ReviewServiceImplTests {
         when(turnoverPolicyService.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(mockTurnoverPolicy);
 
+        TangibleDepreciationPolicy mockTangibleDepreciationPolicy = new TangibleDepreciationPolicy();
+        when(tangibleDepreciationPolicyService.getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(mockTangibleDepreciationPolicy);
+
         IntangibleAmortisationPolicy mockIntangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
         when(intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(mockIntangibleAmortisationPolicy);
@@ -87,6 +95,7 @@ public class ReviewServiceImplTests {
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
         when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(valuationInformationPolicy);
+
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
         when(otherAccountingPolicyService.getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(mockOtherAccounting);
@@ -98,6 +107,7 @@ public class ReviewServiceImplTests {
         assertEquals(mockStatements, review.getStatements());
         assertEquals(mockBasisOfPreparation, review.getBasisOfPreparation());
         assertEquals(mockTurnoverPolicy, review.getTurnoverPolicy());
+        assertEquals(mockTangibleDepreciationPolicy, review.getTangibleDepreciationPolicy());
         assertEquals(mockIntangibleAmortisationPolicy, review.getIntangibleAmortisationPolicy());
         assertEquals(valuationInformationPolicy, review.getValuationInformationPolicy());
         assertEquals(mockOtherAccounting, review.getOtherAccountingPolicy());
