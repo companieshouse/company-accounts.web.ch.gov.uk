@@ -45,7 +45,7 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
             throw new ServiceException("Invalid URI for company accounts resource", e);
         }
 
-        String selfLink = companyAccounts.getLinks().get("self");
+        String selfLink = companyAccounts.getLinks().getSelf();
 
         Matcher matcher = COMPANY_ACCOUNTS_ID_MATCHER.matcher(selfLink);
         matcher.find();
