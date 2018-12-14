@@ -1,7 +1,10 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,12 +22,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.TangibleDepreciationPolicyServiceImpl;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -33,10 +39,19 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 public class TangibleDepreciationPolicyControllerTest {
 
     private MockMvc mockMvc;
+
     @Mock
     private List<ValidationError> validationErrors;
+
     @Mock
     private TangibleDepreciationPolicyServiceImpl tangibleDepreciationPolicyService;
+
+    @Mock
+    private CompanyAccountsDataState companyAccountsDataState;
+
+    @Mock
+    private AccountingPolicies accountingPolicies;
+
     @InjectMocks
     private TangibleDepreciationPolicyController controller;
     private static final String COMPANY_NUMBER = "companyNumber";
@@ -56,6 +71,8 @@ public class TangibleDepreciationPolicyControllerTest {
     private static final String TANGIBLE_DEPRECIATION_POLICY_VIEW = "smallfull/tangibleDepreciationPolicy";
     private static final String ERROR_VIEW = "error";
     private static final String MODEL_ELEMENT = "hasTangibleDepreciationPolicySelected";
+    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
+
 
     @BeforeEach
     private void setup() {
@@ -65,15 +82,44 @@ public class TangibleDepreciationPolicyControllerTest {
     @Test
     @DisplayName("Get tangible depreciation policy view - success path")
     void getRequestSuccess() throws Exception {
+
+        TangibleDepreciationPolicy tangibleDepreciationPolicy = new TangibleDepreciationPolicy();
+        tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(true);
         when(tangibleDepreciationPolicyService
             .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(new TangibleDepreciationPolicy());
+            .thenReturn(tangibleDepreciationPolicy);
+
         this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(TANGIBLE_DEPRECIATION_POLICY_VIEW))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(TANGIBLE_DEPRECIATION_POLICY_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get tangible depreciation policy view using state to determine whether policy is included - success path")
+    void getRequestSuccessUsingState() throws Exception {
+
+        when(tangibleDepreciationPolicyService
+                .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(new TangibleDepreciationPolicy());
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
+
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(accountingPolicies.getHasProvidedTangiblePolicy()).thenReturn(false);
+
+        this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH).session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name(TANGIBLE_DEPRECIATION_POLICY_VIEW))
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(TANGIBLE_DEPRECIATION_POLICY_MODEL_ATTR));
+
+        verify(companyAccountsDataState, times(1)).getAccountingPolicies();
+        verify(accountingPolicies, times(1)).getHasProvidedTangiblePolicy();
     }
 
     @Test
@@ -90,15 +136,25 @@ public class TangibleDepreciationPolicyControllerTest {
     @Test
     @DisplayName("Submit tangible depreciation policy - success path")
     void postRequestSuccess() throws Exception {
+
         when(tangibleDepreciationPolicyService
             .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
                 any(TangibleDepreciationPolicy.class)))
             .thenReturn(validationErrors);
+
         when(validationErrors.isEmpty()).thenReturn(true);
-        this.mockMvc.perform(postRequestWithValidData())
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
+
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+
+        this.mockMvc.perform(postRequestWithValidData().session(session))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(
                 UrlBasedViewResolver.REDIRECT_URL_PREFIX + INTANGIBLE_AMORTISATION_POLICY_PATH));
+
+        verify(accountingPolicies, times(1)).setHasProvidedTangiblePolicy(anyBoolean());
     }
 
     @Test

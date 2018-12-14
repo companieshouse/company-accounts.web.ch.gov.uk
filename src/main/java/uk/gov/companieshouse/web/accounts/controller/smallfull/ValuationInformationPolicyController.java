@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -42,9 +43,15 @@ public class ValuationInformationPolicyController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute(VALUATION_INFORMATION_POLICY,
+            ValuationInformationPolicy valuationInformationPolicy =
                     valuationInformationPolicyService
-                            .getValuationInformationPolicy(transactionId, companyAccountsId));
+                            .getValuationInformationPolicy(transactionId, companyAccountsId);
+
+            if (valuationInformationPolicy.getIncludeValuationInformationPolicy() == null) {
+                setIsPolicyIncluded(request, valuationInformationPolicy);
+            }
+
+            model.addAttribute(VALUATION_INFORMATION_POLICY, valuationInformationPolicy);
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -84,11 +91,39 @@ public class ValuationInformationPolicyController extends BaseController {
             return ERROR_VIEW;
         }
 
+        cacheIsPolicyIncluded(request, valuationInformationPolicy);
+
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override
     protected String getTemplateName() {
         return "smallfull/valuationInformationPolicy";
+    }
+
+    /**
+     * Sets the 'include valuation information policy' boolean according to the cached state
+     * @param request The request
+     * @param valuationInformationPolicy The valuation information policy model on which to set the boolean
+     */
+    private void setIsPolicyIncluded(HttpServletRequest request, ValuationInformationPolicy valuationInformationPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        valuationInformationPolicy.setIncludeValuationInformationPolicy(
+                companyAccountsDataState.getAccountingPolicies().getHasProvidedValuationInformationPolicy());
+    }
+
+    /**
+     * Cache the 'include valuation information policy' boolean within the client's state
+     * @param request The request
+     * @param valuationInformationPolicy The intangible amortisation policy for which to cache data
+     */
+    private void  cacheIsPolicyIncluded(HttpServletRequest request, ValuationInformationPolicy valuationInformationPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.getAccountingPolicies().setHasProvidedValuationInformationPolicy(
+                valuationInformationPolicy.getIncludeValuationInformationPolicy());
+
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 }

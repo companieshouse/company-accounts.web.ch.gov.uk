@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -32,15 +33,23 @@ public class OtherAccountingPolicyController extends BaseController {
 
     @GetMapping
     public String getOtherAccountingPolicy(@PathVariable String companyNumber,
-        @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model,
-        HttpServletRequest request) {
+                                           @PathVariable String transactionId,
+                                           @PathVariable String companyAccountsId,
+                                           Model model,
+                                           HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("otherAccountingPolicy",
-                otherAccountingPolicyService
-                    .getOtherAccountingPolicy(transactionId, companyAccountsId));
+            OtherAccountingPolicy otherAccountingPolicy =
+                    otherAccountingPolicyService
+                            .getOtherAccountingPolicy(transactionId, companyAccountsId);
+
+            if (otherAccountingPolicy.getHasOtherAccountingPolicySelected() == null) {
+                setIsPolicyIncluded(request, otherAccountingPolicy);
+            }
+
+            model.addAttribute("otherAccountingPolicy", otherAccountingPolicy);
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -50,9 +59,12 @@ public class OtherAccountingPolicyController extends BaseController {
 
     @PostMapping
     public String postOtherAccountingPolicy(@PathVariable String companyNumber,
-        @PathVariable String transactionId, @PathVariable String companyAccountsId,
-        @ModelAttribute("otherAccountingPolicy") @Valid OtherAccountingPolicy otherAccountingPolicy,
-        BindingResult bindingResult, Model model, HttpServletRequest request) {
+                                            @PathVariable String transactionId,
+                                            @PathVariable String companyAccountsId,
+                                            @ModelAttribute("otherAccountingPolicy") @Valid OtherAccountingPolicy otherAccountingPolicy,
+                                            BindingResult bindingResult,
+                                            Model model,
+                                            HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -74,6 +86,8 @@ public class OtherAccountingPolicyController extends BaseController {
             return ERROR_VIEW;
         }
 
+        cacheIsPolicyIncluded(request, otherAccountingPolicy);
+
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
@@ -81,5 +95,31 @@ public class OtherAccountingPolicyController extends BaseController {
     @Override
     protected String getTemplateName() {
         return "smallfull/otherAccountingPolicy";
+    }
+
+    /**
+     * Sets the 'include other accounting policy' boolean according to the cached state
+     * @param request The request
+     * @param otherAccountingPolicy The other accounting policy model on which to set the boolean
+     */
+    private void setIsPolicyIncluded(HttpServletRequest request, OtherAccountingPolicy otherAccountingPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        otherAccountingPolicy.setHasOtherAccountingPolicySelected(
+                companyAccountsDataState.getAccountingPolicies().getHasProvidedOtherAccountingPolicy());
+    }
+
+    /**
+     * Cache the 'include other accounting policy' boolean within the client's state
+     * @param request The request
+     * @param otherAccountingPolicy The other accounting policy for which to cache data
+     */
+    private void  cacheIsPolicyIncluded(HttpServletRequest request, OtherAccountingPolicy otherAccountingPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.getAccountingPolicies().setHasProvidedOtherAccountingPolicy(
+                otherAccountingPolicy.getHasOtherAccountingPolicySelected());
+
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 }
