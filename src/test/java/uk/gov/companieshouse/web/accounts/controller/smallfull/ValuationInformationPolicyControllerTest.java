@@ -42,7 +42,7 @@ public class ValuationInformationPolicyControllerTest {
                                                     "/small-full";
 
     private static final String VALUATION_INFORMATION_POLICY_PATH = SMALL_FULL_PATH + "/valuation-information";
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
+    private static final String OTHER_ACCOUNTING_POLICIES_PATH = SMALL_FULL_PATH + "/other-accounting-policies";
 
     private static final String VALUATION_INFORMATION_POLICY_VIEW = "smallfull/valuationInformationPolicy";
     private static final String ERROR_VIEW = "error";
@@ -109,7 +109,7 @@ public class ValuationInformationPolicyControllerTest {
 
         this.mockMvc.perform(createPostRequestWithParam(true))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + OTHER_ACCOUNTING_POLICIES_PATH));
     }
 
     @Test
