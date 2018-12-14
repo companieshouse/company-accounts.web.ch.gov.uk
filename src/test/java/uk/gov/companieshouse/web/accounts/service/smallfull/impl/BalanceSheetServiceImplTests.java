@@ -41,6 +41,7 @@ import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
@@ -812,7 +813,7 @@ public class BalanceSheetServiceImplTests {
 
     private SmallFullApi createSmallFullAccountForPost() {
         SmallFullApi smallFullApi = new SmallFullApi();
-        smallFullApi.setLinks(new HashMap<>());
+        smallFullApi.setLinks(new SmallFullLinks());
         return smallFullApi;
     }
 
@@ -829,9 +830,10 @@ public class BalanceSheetServiceImplTests {
     private SmallFullApi createSmallFullAccountForPut() {
         SmallFullApi smallFullApi = new SmallFullApi();
 
-        Map<String, String> links = new HashMap<>();
-        links.put(SmallFullLinkType.CURRENT_PERIOD.getLink(), "CURRENT_PERIOD_LINK");
-        smallFullApi.setLinks(links);
+        SmallFullLinks smallFullLinks = new SmallFullLinks();
+        smallFullLinks.setCurrentPeriod("CURRENT_PERIOD_LINK");
+
+        smallFullApi.setLinks(smallFullLinks);
 
         return smallFullApi;
     }
@@ -844,7 +846,9 @@ public class BalanceSheetServiceImplTests {
 
     private void createMultipleYearFilerSmallFullAccountPut() throws ApiErrorResponseException, URIValidationException {
         SmallFullApi smallFullApi = createSmallFullAccountForPut();
-        smallFullApi.getLinks().put(SmallFullLinkType.PREVIOUS_PERIOD.getLink(), "PREVIOUS_PERIOD_LINK");
+
+        smallFullApi.getLinks().setPreviousPeriod("PREVIOUS_PERIOD_LINK");
+
         mockSmallFullAccountGet(smallFullApi);
     }
 

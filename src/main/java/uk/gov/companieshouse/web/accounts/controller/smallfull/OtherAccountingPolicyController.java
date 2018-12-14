@@ -16,49 +16,43 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
+import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(TangibleDepreciationPolicyController.class)
-@PreviousController(BasisOfPreparationController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/turnover-policy")
-public class TurnoverPolicyController extends BaseController {
+@NextController(ReviewController.class)
+@PreviousController(ValuationInformationPolicyController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/other-accounting-policies")
+public class OtherAccountingPolicyController extends BaseController {
 
     @Autowired
-    private TurnoverPolicyService turnoverPolicyService;
+    private OtherAccountingPolicyService otherAccountingPolicyService;
 
     @GetMapping
-    public String getTurnoverPolicy(@PathVariable String companyNumber,
-        @PathVariable String transactionId,
-        @PathVariable String companyAccountsId,
-        Model model,
+    public String getOtherAccountingPolicy(@PathVariable String companyNumber,
+        @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model,
         HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("turnoverPolicy",
-                turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId));
-
+            model.addAttribute("otherAccountingPolicy",
+                otherAccountingPolicyService
+                    .getOtherAccountingPolicy(transactionId, companyAccountsId));
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
-
         return getTemplateName();
     }
 
     @PostMapping
-    public String postTurnoverPolicy(@PathVariable String companyNumber,
-        @PathVariable String transactionId,
-        @PathVariable String companyAccountsId,
-        @ModelAttribute("turnoverPolicy") @Valid TurnoverPolicy turnoverPolicy,
-        BindingResult bindingResult,
-        Model model,
-        HttpServletRequest request) {
+    public String postOtherAccountingPolicy(@PathVariable String companyNumber,
+        @PathVariable String transactionId, @PathVariable String companyAccountsId,
+        @ModelAttribute("otherAccountingPolicy") @Valid OtherAccountingPolicy otherAccountingPolicy,
+        BindingResult bindingResult, Model model, HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -67,14 +61,14 @@ public class TurnoverPolicyController extends BaseController {
         }
 
         try {
-            List<ValidationError> validationErrors = turnoverPolicyService
-                .postTurnoverPolicy(transactionId, companyAccountsId, turnoverPolicy);
-
+            List<ValidationError> validationErrors =
+                otherAccountingPolicyService
+                    .submitOtherAccountingPolicy(transactionId, companyAccountsId,
+                        otherAccountingPolicy);
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
-
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -84,10 +78,8 @@ public class TurnoverPolicyController extends BaseController {
             companyAccountsId);
     }
 
-
     @Override
     protected String getTemplateName() {
-        return "smallfull/turnoverPolicy";
+        return "smallfull/otherAccountingPolicy";
     }
-
 }
