@@ -15,7 +15,7 @@ public enum ValidationMessage {
     INVALID_CHARACTER("invalid_character", "validation.character.invalid", true),
     INVALID_INPUT_LENGTH("invalid_input_length", "validation.length.invalidInputLength", false),
     INCORRECT_TOTAL("incorrect_total", "validation.total.invalid", true),
-    INVALID_CHARACTERS_ENTERED("invalid_characters_entered", "validation.characters.invalid", false),
+    INVALID_CHARACTERS_ENTERED("invalid_character", "validation.characters.invalid", false),
     MANDATORY_ELEMENT_MISSING("mandatory_element_missing", "validation.element.missing", false),
     DATE_CANNOT_BE_FUTURE("date_cannot_be_in_future", "validation.date.cannotBeFuture", true),
     DATE_INVALID("date_is_invalid", "validation.date.invalid", false),
