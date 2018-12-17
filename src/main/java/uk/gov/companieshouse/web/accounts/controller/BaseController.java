@@ -1,11 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -21,6 +23,8 @@ public abstract class BaseController {
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
     protected static final String ERROR_VIEW = "error";
+
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     protected BaseController() {
     }
@@ -77,5 +81,26 @@ public abstract class BaseController {
                         getValidationArgs(error.getMessageArguments()),
                         null)
         );
+    }
+
+    /**
+     * Retrieve the client's {@link CompanyAccountsDataState} from the request session
+     * @param request The request
+     * @return the client's {@link CompanyAccountsDataState}
+     */
+    protected CompanyAccountsDataState getStateFromRequest(HttpServletRequest request) {
+
+        return (CompanyAccountsDataState) request.getSession().getAttribute(
+                COMPANY_ACCOUNTS_DATA_STATE);
+    }
+
+    /**
+     * Update the client's {@link CompanyAccountsDataState} on the request session
+     * @param request The request
+     * @param companyAccountsDataState The client's {@link CompanyAccountsDataState}
+     */
+    protected void updateStateOnRequest(HttpServletRequest request, CompanyAccountsDataState companyAccountsDataState) {
+
+        request.getSession().setAttribute(COMPANY_ACCOUNTS_DATA_STATE, companyAccountsDataState);
     }
 }

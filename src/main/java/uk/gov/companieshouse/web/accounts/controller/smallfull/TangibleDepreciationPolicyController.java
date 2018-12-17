@@ -18,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -41,9 +42,15 @@ public class TangibleDepreciationPolicyController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("tangibleDepreciationPolicy",
-                tangibleDepreciationPolicyService
-                    .getTangibleDepreciationPolicy(transactionId, companyAccountsId));
+            TangibleDepreciationPolicy tangibleDepreciationPolicy =
+                    tangibleDepreciationPolicyService
+                            .getTangibleDepreciationPolicy(transactionId, companyAccountsId);
+
+            if (tangibleDepreciationPolicy.getHasTangibleDepreciationPolicySelected() == null) {
+                setIsPolicyIncluded(request, tangibleDepreciationPolicy);
+            }
+
+            model.addAttribute("tangibleDepreciationPolicy", tangibleDepreciationPolicy);
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -84,6 +91,8 @@ public class TangibleDepreciationPolicyController extends BaseController {
             return ERROR_VIEW;
         }
 
+        cacheIsPolicyIncluded(request, tangiblePolicy);
+
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
@@ -91,5 +100,31 @@ public class TangibleDepreciationPolicyController extends BaseController {
     @Override
     protected String getTemplateName() {
         return "smallfull/tangibleDepreciationPolicy";
+    }
+
+    /**
+     * Sets the 'include tangible depreciation policy' boolean according to the cached state
+     * @param request The request
+     * @param tangibleDepreciationPolicy The tangible depreciation policy model on which to set the boolean
+     */
+    private void setIsPolicyIncluded(HttpServletRequest request, TangibleDepreciationPolicy tangibleDepreciationPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(
+                companyAccountsDataState.getAccountingPolicies().getHasProvidedTangiblePolicy());
+    }
+
+    /**
+     * Cache the 'include tangible depreciation policy' boolean within the client's state
+     * @param request The request
+     * @param tangibleDepreciationPolicy The tangible depreciation policy for which to cache data
+     */
+    private void  cacheIsPolicyIncluded(HttpServletRequest request, TangibleDepreciationPolicy tangibleDepreciationPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.getAccountingPolicies().setHasProvidedTangiblePolicy(
+                tangibleDepreciationPolicy.getHasTangibleDepreciationPolicySelected());
+
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 }
