@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -60,7 +61,11 @@ public class TransactionServiceImplTests {
 
     private static final String TRANSACTION_ID = "111-222-333";
 
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
     private static final String GET_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
+
+    private static final String UPDATE_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
 
     @BeforeEach
     private void init() {
@@ -197,5 +202,27 @@ public class TransactionServiceImplTests {
         doThrow(URIValidationException.class).when(transactionsUpdate).execute();
 
         assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+    }
+
+    @Test
+    @DisplayName("Create transaction resume link")
+    void createTransactionResumeLink() throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(transactionsResourceHandler.update(anyString(), any(Transaction.class)))
+                .thenReturn(transactionsUpdate);
+
+        doNothing().when(transactionsUpdate).execute();
+
+        transactionService.createResumeLink(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        ArgumentCaptor<Transaction> transactionCaptor = ArgumentCaptor.forClass(Transaction.class);
+        verify(transactionsResourceHandler).update(anyString(), transactionCaptor.capture());
+
+        String expectedResumeJourneyUri = "/company/" + COMPANY_NUMBER +
+                "/transaction/" + TRANSACTION_ID +
+                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                "/small-full/resume";
+
+        assertEquals(expectedResumeJourneyUri, transactionCaptor.getValue().getResumeJourneyUri());
     }
 }
