@@ -51,8 +51,8 @@ public class ValidationContextTest {
     private static final String JSON_PATH = "json.path";
     private static final String FIELD_PATH = "mockString";
     private static final String NESTED_FIELD_PATH = "mockValidationModel.mockString";
-    private static final String MESSAGE_KEY = "invalid_character";
-    private static final String WEB_ERROR_MESSAGE = "validation.character.invalid";
+    private static final String MESSAGE_KEY = "incorrect_total";
+    private static final String WEB_ERROR_MESSAGE = "validation.total.invalid";
     private static final String ERROR = "error";
     private static final Map<String, String> MESSAGE_ARGUMENTS = new HashMap<>();
 
