@@ -39,6 +39,7 @@
     <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/autocalculate-input-fields.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/balancesheet-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.prototype.includes,modernizr:es5array|always"></script>
     <div th:replace="fragments/piwik :: piwik"></div>
 </body>
 </html>
