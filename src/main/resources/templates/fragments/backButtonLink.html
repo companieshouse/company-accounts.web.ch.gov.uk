@@ -4,7 +4,8 @@
         <title></title>
     </head>
         <body>
-            <a th:fragment="backButtonLink"
+            <a id="back-button-link"
+               th:fragment="backButtonLink"
                th:if="${backButton != null}"
                th:href="${backButton}"
                class="govuk-back-link">

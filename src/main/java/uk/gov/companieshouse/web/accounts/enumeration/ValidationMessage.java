@@ -1,10 +1,6 @@
 package uk.gov.companieshouse.web.accounts.enumeration;
 
-import org.apache.commons.lang.StringUtils;
 import uk.gov.companieshouse.web.accounts.exception.MissingMessageKeyException;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -15,46 +11,50 @@ import java.util.Map;
 public enum ValidationMessage {
 
     // API validation error to message key mappings
-    VALUE_OUTSIDE_RANGE("value_outside_range", "validation.range.outside"),
-    INVALID_CHARACTER("invalid_character", "validation.character.invalid"),
-    INCORRECT_TOTAL("incorrect_total", "validation.total.invalid");
+    VALUE_OUTSIDE_RANGE("value_outside_range", "validation.range.outside", true),
+    INVALID_CHARACTER("invalid_character", "validation.character.invalid", true),
+    INVALID_INPUT_LENGTH("invalid_input_length", "validation.length.invalidInputLength", false),
+    INCORRECT_TOTAL("incorrect_total", "validation.total.invalid", true),
+    INVALID_CHARACTERS_ENTERED("invalid_characters_entered", "validation.characters.invalid", false),
+    MANDATORY_ELEMENT_MISSING("mandatory_element_missing", "validation.element.missing", false),
+    DATE_CANNOT_BE_FUTURE("date_cannot_be_in_future", "validation.date.cannotBeFuture", true),
+    DATE_INVALID("date_is_invalid", "validation.date.invalid", false),
+    MAX_LENGTH_EXCEEDED("max_length_exceeded", "validation.length.maxExceeded", false),
+    SHAREHOLDER_FUND_MISMATCH("shareholder_funds_mismatch", "validation.shareholderFunds.mismatch", false);
 
     private String messageKey;
     private String apiError;
+    private boolean genericError;
 
-    private static Map<String, String> mapping = initializeMapping();
-
-    ValidationMessage(String apiError, String messageKey) {
+    ValidationMessage(String apiError, String messageKey, boolean genericError) {
         this.apiError = apiError;
         this.messageKey = messageKey;
+        this.genericError = genericError;
     }
 
     /**
-     * Returns a message key associated with the {@code apiError} parameter
+     * Returns a {@code ValidationMessage} associated with the {@code apiError} parameter
      * for use when binding API validation errors to model object fields.
      *
      * @param apiError the api validation error string
      * @return         the message key
      */
-    public static String getMessageKeyForApiError(String apiError) {
-        String key = mapping.get(apiError);
-        if (StringUtils.isBlank(key)) {
-            throw new MissingMessageKeyException("No message key mapping for API validation error: " + apiError);
-        }
-        return key;
-    }
+    public static ValidationMessage getMessageForApiError(String apiError) {
 
-    /**
-     * Returns a map of API validation error strings mapped to message keys.
-     *
-     * @return a map of validation errors mapped to message keys
-     */
-    private static Map<String, String> initializeMapping() {
-        HashMap<String, String> mapping = new HashMap<>();
         for (ValidationMessage validationMessage : ValidationMessage.values()) {
-            mapping.put(validationMessage.apiError, validationMessage.messageKey);
+            if (validationMessage.apiError.equals(apiError)) {
+                return validationMessage;
+            }
         }
-        return mapping;
+
+        throw new MissingMessageKeyException("No message key mapping for API validation error: " + apiError);
     }
 
+    public String getMessageKey() {
+        return messageKey;
+    }
+
+    public boolean isGenericError() {
+        return genericError;
+    }
 }

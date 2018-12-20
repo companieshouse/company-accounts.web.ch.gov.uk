@@ -10,16 +10,114 @@
 <body>
 <div id="approval-main-content" layout:fragment="content">
 
-  <form id="approval-form" th:action="@{''}" class="form" method="post">
+  <form id="approval-form" th:action="@{''}" th:object="${approval}" class="form" method="post">
 
-    <div th:replace="fragments/numberedHeading :: numberedHeading (
-                    number = '5',
-                    headingText = 'Approve your accounts'
-                )">
-    </div>
+    <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
-    <div class="form-group">
-      <input id="next-button" class="button" type="submit" role="button" value="Submit your full accounts"/>
+    <div class="govuk-grid-row">
+
+      <div class="govuk-grid-column-two-thirds">
+
+        <fieldset class="govuk-fieldset">
+
+          <legend id="page-title" class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            Approve your accounts
+          </legend>
+
+          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('directorName')} ? 'govuk-form-group--error' : ''">
+            <label id="approval-director-heading" class="govuk-label govuk-label--m" for="approval-director">
+              Which director approved the accounts?
+            </label>
+
+            <span id="approval-director-hint" class="govuk-hint">
+              If the company has two or more directors, give the name of the director acting on their behalf.
+            </span>
+
+            <span class="govuk-error-message"
+                  id="directorName-errorId"
+                  th:if="${#fields.hasErrors('directorName')}"
+                  th:each="e : ${#fields.errors('directorName')}" th:text="${e}">
+            </span>
+
+            <input class="govuk-input"
+                   id="approval-director"
+                   th:field="*{directorName}"
+                   th:errorclass="govuk-input--error"
+                   type="text">
+          </div>
+
+          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('date')} ? 'govuk-form-group--error' : ''">
+            <fieldset class="govuk-fieldset" aria-describedby="approval-date-hint" role="group">
+
+              <legend id="approval-date-heading" class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                When were the accounts approved?
+              </legend>
+
+              <span id="approval-date-hint" class="govuk-hint">
+                  <p class="govuk-hint">This is the date the accounts were approved by the director.<br>
+                    For example, 31 3 2017</p>
+              </span>
+
+              <span class="govuk-error-message"
+                    id="date-errorId"
+                    th:if="${#fields.hasErrors('date')}"
+                    th:each="e : ${#fields.errors('date')}" th:text="${e}">
+              </span>
+
+              <div class="govuk-date-input" id="approval-date">
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="approval-date-day">
+                      Day
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-day"
+                           th:field="*{date.day}"
+                           type="text">
+                  </div>
+                </div>
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="approval-date-month">
+                      Month
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-month"
+                           th:field="*{date.month}"
+                           type="text">
+                  </div>
+                </div>
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="approval-date-year">
+                      Year
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-year"
+                           th:field="*{date.year}"
+                           type="text">
+                  </div>
+                </div>
+
+              </div>
+            </fieldset>
+
+          </div>
+
+        </fieldset>
+
+        <input id="next-button" class="govuk-button" type="submit" role="button" value="Submit your accounts"/>
+
+      </div>
     </div>
 
   </form>

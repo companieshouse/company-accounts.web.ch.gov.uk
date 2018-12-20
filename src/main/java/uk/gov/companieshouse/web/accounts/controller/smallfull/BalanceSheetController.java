@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.util.Navigator;
 import java.util.List;
 
 @Controller
-@NextController(ApprovalController.class)
+@NextController(StatementsController.class)
 @PreviousController(StepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController extends BaseController {
@@ -62,9 +62,12 @@ public class BalanceSheetController extends BaseController {
                                    @PathVariable String companyAccountsId,
                                    @ModelAttribute("balanceSheet") @Valid BalanceSheet balanceSheet,
                                    BindingResult bindingResult,
+                                   Model model,
                                    HttpServletRequest request) {
 
-        if(bindingResult.hasErrors()) {
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
 

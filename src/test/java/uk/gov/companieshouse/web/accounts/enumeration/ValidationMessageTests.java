@@ -20,7 +20,7 @@ public class ValidationMessageTests {
     public void testValidationMessageMappingSuccess() {
 
         Assertions.assertAll(() ->
-                ValidationMessage.getMessageKeyForApiError(KNOWN_ERROR_STRING));
+                ValidationMessage.getMessageForApiError(KNOWN_ERROR_STRING));
     }
 
     @Test
@@ -28,6 +28,6 @@ public class ValidationMessageTests {
     public void testValidationMessageMappingFailure() {
 
         assertThrows(MissingMessageKeyException.class, () ->
-                ValidationMessage.getMessageKeyForApiError(UNKNOWN_ERROR_STRING));
+                ValidationMessage.getMessageForApiError(UNKNOWN_ERROR_STRING));
     }
 }

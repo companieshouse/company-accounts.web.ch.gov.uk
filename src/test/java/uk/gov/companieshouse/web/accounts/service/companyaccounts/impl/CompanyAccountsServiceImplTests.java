@@ -4,12 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.google.api.client.util.DateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,10 +22,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.companyaccount.CompanyAccountsResourceHandler;
 import uk.gov.companieshouse.api.handler.companyaccount.request.CompanyAccountsCreate;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
-import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
-import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullCreate;
 import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
-import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
@@ -47,13 +41,7 @@ public class CompanyAccountsServiceImplTests {
     private CompanyAccountsResourceHandler companyAccountsResourceHandler;
 
     @Mock
-    private SmallFullResourceHandler smallFullResourceHandler;
-
-    @Mock
     private CompanyAccountsCreate companyAccountsCreate;
-
-    @Mock
-    private SmallFullCreate smallFullCreate;
 
     @InjectMocks
     private CompanyAccountsService companyAccountsService = new CompanyAccountsServiceImpl();
@@ -61,9 +49,6 @@ public class CompanyAccountsServiceImplTests {
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String CREATE_COMPANY_ACCOUNTS_URI = "/transactions/" + TRANSACTION_ID +
-                                                                "/company-accounts";
 
     @BeforeEach
     private void init() {
@@ -77,7 +62,7 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
         Map<String, String> links = new HashMap<>();
@@ -101,7 +86,7 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);
@@ -119,7 +104,7 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);
@@ -129,53 +114,5 @@ public class CompanyAccountsServiceImplTests {
 
         assertThrows(ServiceException.class, () ->
                 companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn));
-    }
-
-    @Test
-    @DisplayName("Create Small Full Accounts - Success Path")
-    void createSmallFullSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
-                .thenReturn(smallFullCreate);
-
-        when(smallFullCreate.execute()).thenReturn(new SmallFullApi());
-
-        companyAccountsService.createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-
-        verify(smallFullCreate, times(1)).execute();
-    }
-
-    @Test
-    @DisplayName("Create Small Full Accounts - Throws ApiErrorResponseException")
-    void createSmallFullApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
-                .thenReturn(smallFullCreate);
-
-        when(smallFullCreate.execute())
-                .thenThrow(ApiErrorResponseException.class);
-
-        assertThrows(ServiceException.class, () ->
-                companyAccountsService.createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("Create Small Full Accounts - Throws URIValidationException")
-    void createSmallFullURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
-                .thenReturn(smallFullCreate);
-
-        when(smallFullCreate.execute())
-                .thenThrow(URIValidationException.class);
-
-        assertThrows(ServiceException.class, () ->
-                companyAccountsService.createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }

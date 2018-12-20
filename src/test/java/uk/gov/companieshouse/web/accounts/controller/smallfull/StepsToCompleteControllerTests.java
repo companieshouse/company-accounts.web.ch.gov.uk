@@ -13,8 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.google.api.client.util.DateTime;
-import java.util.Date;
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +32,8 @@ import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,6 +50,12 @@ public class StepsToCompleteControllerTests {
 
     @Mock
     private CompanyAccountsService companyAccountsService;
+
+    @Mock
+    private SmallFullService smallFullService;
+
+    @Mock
+    private StatementsService statementsService;
 
     @InjectMocks
     private StepsToCompleteController controller;
@@ -97,7 +105,7 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodEndOn(periodEndOn);
@@ -112,7 +120,9 @@ public class StepsToCompleteControllerTests {
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn)).thenReturn(COMPANY_ACCOUNTS_ID);
 
-        doNothing().when(companyAccountsService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        doNothing().when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -124,7 +134,9 @@ public class StepsToCompleteControllerTests {
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID, periodEndOn);
 
-        verify(companyAccountsService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(smallFullService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -159,7 +171,7 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodEndOn(periodEndOn);
@@ -173,7 +185,7 @@ public class StepsToCompleteControllerTests {
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         doThrow(ServiceException.class)
-                .when(companyAccountsService).createCompanyAccounts(anyString(), any(DateTime.class));
+                .when(companyAccountsService).createCompanyAccounts(anyString(), any(LocalDate.class));
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
@@ -186,7 +198,7 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        DateTime periodEndOn = new DateTime(new Date());
+        LocalDate periodEndOn = LocalDate.now();
 
         NextAccountsApi nextAccounts = new NextAccountsApi();
         nextAccounts.setPeriodEndOn(periodEndOn);
@@ -199,10 +211,39 @@ public class StepsToCompleteControllerTests {
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
-        when(companyAccountsService.createCompanyAccounts(anyString(), any(DateTime.class))).thenReturn("company_accounts_id");
+        when(companyAccountsService.createCompanyAccounts(anyString(), any(LocalDate.class))).thenReturn("company_accounts_id");
 
         doThrow(ServiceException.class)
-                .when(companyAccountsService).createSmallFullAccounts(anyString(), anyString());
+                .when(smallFullService).createSmallFullAccounts(anyString(), anyString());
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post steps to complete failure path for create statements resource")
+    void postRequestStatementsServiceCreateStatementsFailure() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
+
+        NextAccountsApi nextAccounts = new NextAccountsApi();
+        nextAccounts.setPeriodEndOn(LocalDate.now());
+
+        CompanyAccountApi companyAccount = new CompanyAccountApi();
+        companyAccount.setNextAccounts(nextAccounts);
+
+        CompanyProfileApi companyProfile = new CompanyProfileApi();
+        companyProfile.setAccounts(companyAccount);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyAccountsService.createCompanyAccounts(anyString(), any(LocalDate.class))).thenReturn("company_accounts_id");
+
+        doNothing().when(smallFullService).createSmallFullAccounts(anyString(), anyString());
+
+        doThrow(ServiceException.class)
+                .when(statementsService).createBalanceSheetStatementsResource(anyString(), anyString());
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
