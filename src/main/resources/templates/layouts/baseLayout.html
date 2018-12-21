@@ -18,6 +18,7 @@
     
 </head>
 <body>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js" defer async></script>
     <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header"></div>
@@ -32,7 +33,6 @@
         <div class="push"></div>
     </div>
     <div th:replace="fragments/footer :: footer"></div>
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.prototype.includes,modernizr:es5array|always" defer async></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-1.12.4.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
