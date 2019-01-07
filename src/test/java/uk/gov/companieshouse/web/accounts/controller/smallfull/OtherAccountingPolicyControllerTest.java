@@ -64,7 +64,7 @@ public class OtherAccountingPolicyControllerTest {
         "/small-full";
     private static final String OTHER_ACCOUNTING_POLICY_PATH =
         SMALL_FULL_PATH + "/other-accounting-policies";
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
+    private static final String DEBTORS_PATH = SMALL_FULL_PATH + "/debtors";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String OTHER_ACCOUNTING_POLICY_MODEL_ATTR = "otherAccountingPolicy";
@@ -150,7 +150,7 @@ public class OtherAccountingPolicyControllerTest {
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + DEBTORS_PATH));
 
         verify(accountingPolicies, times(1)).setHasProvidedOtherAccountingPolicy(anyBoolean());
     }
