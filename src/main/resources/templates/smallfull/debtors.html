@@ -1,18 +1,214 @@
 <!DOCTYPE html>
 
 <html
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.w3.org/1999/xhtml"
         layout:decorate="~{layouts/baseLayout}">
 
 <head>
-    <title>
-        Debtors
-    </title>
+    <title>Debtors</title>
 </head>
-<div id="debtors-main-content" layout:fragment="content">
-    <div th:replace="fragments/numberedHeading :: numberedHeading (
+
+<div id="debtors-main-content" layout:fragment="content" class="two-column-accounts">
+
+    <form id="balanceSheet-form" th:action="@{''}" th:object="${debtors}" class="form currency-included-within-inputs govuk-body" method="post">
+
+        <div th:replace="fragments/numberedHeading :: numberedHeading (
                     headingText = 'Debtors'
                 )">
-    </div>
+        </div>
+
+        <div class="left-indent">
+            <div class="panel panel-border-wide">
+                <p id="debtors-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
+            </div>
+
+            <div class="govuk-grid-row" id="accounts-header">
+                <div class="govuk-grid-column-one-half">
+                    &nbsp;
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <h2 class="govuk-heading-s">
+                        <span id="currentPeriodHeading">Current Period</span>
+                        <!-- Hidden input for form binding -->
+                        <input type="hidden">
+                    </h2>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <h2 class="govuk-heading-s">
+                        <span id="previousPeriodHeading">Previous Period</span>
+                        <!-- Hidden input for form binding -->
+                        <input type="hidden">
+                    </h2>
+                </div>
+            </div>
+
+            <!-- Start Trade Debtors-->
+
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentPeriod.tradeDebtors',
+                        previousField = 'previousPeriod.tradeDebtors'
+                        )">
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    Trade Debtors
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'currentPeriod.tradeDebtors',
+                                text = 'Trade debtors current',
+                                class= 'govuk-input current',
+                                )">
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'previousPeriod.tradeDebtors',
+                                text = 'Trade debtors previous',
+                                class= 'govuk-input previous',
+                                )">
+                    </div>
+                </div>
+            </div>
+
+            <!--End Trade Debtors-->
+
+            <!--Start Prepayments and Accrued Income-->
+
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentPeriod.prepaymentsAndAccruedIncome',
+                        previousField = 'previousPeriod.prepaymentsAndAccruedIncome'
+                        )">
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    Prepayments and accrued income
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'currentPeriod.prepaymentsAndAccruedIncome',
+                                text = 'Prepayments and accrued income current',
+                                class= 'govuk-input current',
+                                )">
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'previousPeriod.prepaymentsAndAccruedIncome',
+                                text = 'Prepayments and accrued income previous',
+                                class= 'govuk-input previous',
+                                )">
+                    </div>
+                </div>
+            </div>
+
+            <!--End Prepayments and Accrued Income-->
+
+            <!--Start Other Debtors-->
+
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentPeriod.otherDebtors',
+                        previousField = 'previousPeriod.otherDebtors'
+                        )">
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    Other debtors
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'currentPeriod.otherDebtors',
+                                text = 'Other debtors current',
+                                class= 'govuk-input current',
+                                )">
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'previousPeriod.otherDebtors',
+                                text = 'Other debtors previous',
+                                class= 'govuk-input previous',
+                                )">
+                    </div>
+                </div>
+            </div>
+
+            <!--End Other Debtors-->
+
+            <!--Start Total-->
+
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentPeriod.total',
+                        previousField = 'previousPeriod.total'
+                        )">
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    <strong>Total</strong>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'currentPeriod.total',
+                                text = 'Total current',
+                                class= 'govuk-input current',
+                                )">
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'previousPeriod.total',
+                                text = 'Total previous',
+                                class= 'govuk-input previous',
+                                )">
+                    </div>
+                </div>
+            </div>
+
+            <!--End Total-->
+
+            <!--Start Debtors After More Than One Year-->
+
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentPeriod.greaterThanOneYear',
+                        previousField = 'previousPeriod.greaterThanOneYear'
+                        )">
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    Debtors after more than one year
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'currentPeriod.greaterThanOneYear',
+                                text = 'Debtors after more than one year current',
+                                class= 'govuk-input current',
+                                )">
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'previousPeriod.greaterThanOneYear',
+                                text = 'Debtors after more than one year previous',
+                                class= 'govuk-input previous',
+                                )">
+                    </div>
+                </div>
+            </div>
+
+            <!--End Debtors After More Than One Year-->
+
+            <div th:replace="fragments/additionalInformation :: additionalInformation (
+                                id = 'debtors-note-additional-info',
+                                dropDownText = 'Add additional information about your \'debtors\' note?',
+                                helpText = 'Enter details of any other \'debtors\' information not already covered'
+                                )">
+            </div>
+
+            <div class="form-group">
+                <input id="next-button" class="govuk-button piwik-event" data-event-id="Debtors - Save and continue" type="submit" role="button" value="Save and continue"/>
+            </div>
+        </div>
+    </form>
 </div>
 </html>
