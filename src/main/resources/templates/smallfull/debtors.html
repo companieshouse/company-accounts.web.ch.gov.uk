@@ -46,8 +46,8 @@
             <!-- Start Trade Debtors-->
 
             <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'currentPeriod.tradeDebtors',
-                        previousField = 'previousPeriod.tradeDebtors'
+                        currentField = 'currentTradeDebtors',
+                        previousField = 'previousTradeDebtors'
                         )">
             </div>
             <div class="govuk-grid-row">
@@ -56,7 +56,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'currentPeriod.tradeDebtors',
+                                id = 'currentTradeDebtors',
                                 text = 'Trade debtors current',
                                 class= 'govuk-input current',
                                 )">
@@ -64,7 +64,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'previousPeriod.tradeDebtors',
+                                id = 'previousTradeDebtors',
                                 text = 'Trade debtors previous',
                                 class= 'govuk-input previous',
                                 )">
@@ -77,8 +77,8 @@
             <!--Start Prepayments and Accrued Income-->
 
             <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'currentPeriod.prepaymentsAndAccruedIncome',
-                        previousField = 'previousPeriod.prepaymentsAndAccruedIncome'
+                        currentField = 'currentPrepaymentsAndAccruedIncome',
+                        previousField = 'previousPrepaymentsAndAccruedIncome'
                         )">
             </div>
             <div class="govuk-grid-row">
@@ -87,7 +87,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'currentPeriod.prepaymentsAndAccruedIncome',
+                                id = 'currentPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income current',
                                 class= 'govuk-input current',
                                 )">
@@ -95,7 +95,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'previousPeriod.prepaymentsAndAccruedIncome',
+                                id = 'previousPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income previous',
                                 class= 'govuk-input previous',
                                 )">
@@ -108,8 +108,8 @@
             <!--Start Other Debtors-->
 
             <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'currentPeriod.otherDebtors',
-                        previousField = 'previousPeriod.otherDebtors'
+                        currentField = 'currentOtherDebtors',
+                        previousField = 'previousOtherDebtors'
                         )">
             </div>
             <div class="govuk-grid-row">
@@ -118,7 +118,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'currentPeriod.otherDebtors',
+                                id = 'currentOtherDebtors',
                                 text = 'Other debtors current',
                                 class= 'govuk-input current',
                                 )">
@@ -126,7 +126,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'previousPeriod.otherDebtors',
+                                id = 'previousOtherDebtors',
                                 text = 'Other debtors previous',
                                 class= 'govuk-input previous',
                                 )">
@@ -139,8 +139,8 @@
             <!--Start Total-->
 
             <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'currentPeriod.total',
-                        previousField = 'previousPeriod.total'
+                        currentField = 'currentTotal',
+                        previousField = 'previousTotal'
                         )">
             </div>
             <div class="govuk-grid-row">
@@ -149,7 +149,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'currentPeriod.total',
+                                id = 'currentTotal',
                                 text = 'Total current',
                                 class= 'govuk-input current',
                                 )">
@@ -157,7 +157,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'previousPeriod.total',
+                                id = 'previousTotal',
                                 text = 'Total previous',
                                 class= 'govuk-input previous',
                                 )">
@@ -170,8 +170,8 @@
             <!--Start Debtors After More Than One Year-->
 
             <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
-                        currentField = 'currentPeriod.greaterThanOneYear',
-                        previousField = 'previousPeriod.greaterThanOneYear'
+                        currentField = 'currentGreaterThanOneYear',
+                        previousField = 'previousGreaterThanOneYear'
                         )">
             </div>
             <div class="govuk-grid-row">
@@ -180,7 +180,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'currentPeriod.greaterThanOneYear',
+                                id = 'currentGreaterThanOneYear',
                                 text = 'Debtors after more than one year current',
                                 class= 'govuk-input current',
                                 )">
@@ -188,7 +188,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'previousPeriod.greaterThanOneYear',
+                                id = 'previousGreaterThanOneYear',
                                 text = 'Debtors after more than one year previous',
                                 class= 'govuk-input previous',
                                 )">
