@@ -37,6 +37,11 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
 
     @Override
     public void setDebtors(Debtors debtors, DebtorsApi debtorsApi) {
+
+        if (debtorsApi == null) {
+            debtorsApi = new DebtorsApi();
+        }
+
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
         currentPeriod.setDetails(debtors.getDetails());

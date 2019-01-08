@@ -38,15 +38,15 @@ public class DebtorsServiceImpl implements DebtorsService {
 
     @Override
     public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId, Debtors debtors, String companyNumber) throws ServiceException {
-//        ApiClient apiClient = apiClientService.getApiClient();
-//
-//        List<ValidationError> validationErrors = new ArrayList<>();
-//
-//        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
-//        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
-//
-//        transformer.setDebtors(debtors, debtorsApi);
-          return null;
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
+
+        transformer.setDebtors(debtors, debtorsApi);
+        return validationErrors;
     }
 
     private DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
