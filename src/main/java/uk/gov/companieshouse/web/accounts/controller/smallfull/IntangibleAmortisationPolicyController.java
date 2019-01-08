@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -42,8 +43,14 @@ public class IntangibleAmortisationPolicyController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute(INTANGIBLE_AMORTISATION_POLICY,
-                    intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(transactionId, companyAccountsId));
+            IntangibleAmortisationPolicy intangibleAmortisationPolicy =
+                    intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(transactionId, companyAccountsId);
+
+            if (intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy() == null) {
+                setIsPolicyIncluded(request, intangibleAmortisationPolicy);
+            }
+
+            model.addAttribute(INTANGIBLE_AMORTISATION_POLICY, intangibleAmortisationPolicy);
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -82,11 +89,39 @@ public class IntangibleAmortisationPolicyController extends BaseController {
             return ERROR_VIEW;
         }
 
+        cacheIsPolicyIncluded(request, intangibleAmortisationPolicy);
+
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override
     protected String getTemplateName() {
         return "smallfull/intangibleAmortisationPolicy";
+    }
+
+    /**
+     * Sets the 'include intangible amortisation policy' boolean according to the cached state
+     * @param request The request
+     * @param intangibleAmortisationPolicy The intangible amortisation policy model on which to set the boolean
+     */
+    private void setIsPolicyIncluded(HttpServletRequest request, IntangibleAmortisationPolicy intangibleAmortisationPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(
+                companyAccountsDataState.getAccountingPolicies().getHasProvidedIntangiblePolicy());
+    }
+
+    /**
+     * Cache the 'include intangible amortisation policy' boolean within the client's state
+     * @param request The request
+     * @param intangibleAmortisationPolicy The intangible amortisation policy for which to cache data
+     */
+    private void  cacheIsPolicyIncluded(HttpServletRequest request, IntangibleAmortisationPolicy intangibleAmortisationPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.getAccountingPolicies().setHasProvidedIntangiblePolicy(
+                intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy());
+
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 }

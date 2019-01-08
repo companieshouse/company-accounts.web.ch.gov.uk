@@ -1,9 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,12 +24,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -53,6 +59,8 @@ public class TurnoverPolicyControllerTest {
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String TURNOVER_POLICY_MODEL_ATTR = "turnoverPolicy";
 
+    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
+
     private MockMvc mockMvc;
 
     @Mock
@@ -60,6 +68,12 @@ public class TurnoverPolicyControllerTest {
 
     @Mock
     private TurnoverPolicyService turnoverPolicyServiceMock;
+
+    @Mock
+    private CompanyAccountsDataState companyAccountsDataState;
+
+    @Mock
+    private AccountingPolicies accountingPolicies;
 
     @InjectMocks
     private TurnoverPolicyController turnoverPolicyController;
@@ -73,8 +87,10 @@ public class TurnoverPolicyControllerTest {
     @DisplayName("Get the Include Turnover Policy view")
     void shouldGetTurnoverPolicy() throws Exception {
 
+        TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
+        turnoverPolicy.setIsIncludeTurnoverSelected(true);
         when(turnoverPolicyServiceMock.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(new TurnoverPolicy());
+            .thenReturn(turnoverPolicy);
 
         this.mockMvc
             .perform(get(TURNOVER_POLICY_PATH))
@@ -83,6 +99,31 @@ public class TurnoverPolicyControllerTest {
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get the Include Turnover Policy view using the state to determine whether the policy is included")
+    void shouldGetTurnoverPolicyUsingState() throws Exception {
+
+        when(turnoverPolicyServiceMock.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(new TurnoverPolicy());
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
+
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(accountingPolicies.getHasProvidedTurnoverPolicy()).thenReturn(false);
+
+        this.mockMvc
+                .perform(get(TURNOVER_POLICY_PATH).session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name(TURNOVER_POLICY_VIEW))
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
+
+        verify(companyAccountsDataState, times(1)).getAccountingPolicies();
+        verify(accountingPolicies, times(1)).getHasProvidedTurnoverPolicy();
     }
 
     @Test
@@ -110,13 +151,20 @@ public class TurnoverPolicyControllerTest {
 
         when(validationErrorsMock.isEmpty()).thenReturn(true);
 
-        this.mockMvc.perform(createPostRequestWithParam(false))
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
+
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+
+        this.mockMvc.perform(createPostRequestWithParam(false).session(session))
             .andExpect(status().is3xxRedirection())
             .andExpect(
                 view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
+
+        verify(accountingPolicies, times(1)).setHasProvidedTurnoverPolicy(anyBoolean());
     }
 
     @Test

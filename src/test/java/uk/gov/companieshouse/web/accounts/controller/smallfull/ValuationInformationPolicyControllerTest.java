@@ -1,7 +1,10 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,12 +22,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -51,6 +57,8 @@ public class ValuationInformationPolicyControllerTest {
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String VALUATION_INFORMATION_POLICY_MODEL_ATTR = "valuationInformationPolicy";
 
+    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
+
     private MockMvc mockMvc;
 
     @Mock
@@ -58,6 +66,12 @@ public class ValuationInformationPolicyControllerTest {
 
     @Mock
     private ValuationInformationPolicyService valuationInformationPolicyService;
+
+    @Mock
+    private CompanyAccountsDataState companyAccountsDataState;
+
+    @Mock
+    private AccountingPolicies accountingPolicies;
 
     @InjectMocks
     private ValuationInformationPolicyController controller;
@@ -71,8 +85,10 @@ public class ValuationInformationPolicyControllerTest {
     @DisplayName("Get valuation information policy view - success path")
     void getRequestSuccess() throws Exception {
 
+        ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
+        valuationInformationPolicy.setIncludeValuationInformationPolicy(true);
         when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(new ValuationInformationPolicy());
+            .thenReturn(valuationInformationPolicy);
 
         this.mockMvc
             .perform(get(VALUATION_INFORMATION_POLICY_PATH))
@@ -81,6 +97,31 @@ public class ValuationInformationPolicyControllerTest {
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(VALUATION_INFORMATION_POLICY_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get valuation information policy view using state to determine whether policy is provided - success path")
+    void getRequestSuccessUsingState() throws Exception {
+
+        when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(new ValuationInformationPolicy());
+
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
+
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(accountingPolicies.getHasProvidedValuationInformationPolicy()).thenReturn(false);
+
+        this.mockMvc
+                .perform(get(VALUATION_INFORMATION_POLICY_PATH).session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name(VALUATION_INFORMATION_POLICY_VIEW))
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(VALUATION_INFORMATION_POLICY_MODEL_ATTR));
+
+        verify(companyAccountsDataState, times(1)).getAccountingPolicies();
+        verify(accountingPolicies, times(1)).getHasProvidedValuationInformationPolicy();
     }
 
     @Test
@@ -107,9 +148,16 @@ public class ValuationInformationPolicyControllerTest {
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        this.mockMvc.perform(createPostRequestWithParam(true))
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
+
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+
+        this.mockMvc.perform(createPostRequestWithParam(true).session(session))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + OTHER_ACCOUNTING_POLICIES_PATH));
+
+        verify(accountingPolicies, times(1)).setHasProvidedValuationInformationPolicy(anyBoolean());
     }
 
     @Test
