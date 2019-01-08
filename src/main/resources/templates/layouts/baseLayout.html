@@ -19,7 +19,7 @@
 </head>
 <body>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js" defer async ></script>
-    <script th:src="@{{cdnUrl}/javascripts/lib/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <div class="entire-wrapper">
         <div th:replace="fragments/header :: header"></div>
