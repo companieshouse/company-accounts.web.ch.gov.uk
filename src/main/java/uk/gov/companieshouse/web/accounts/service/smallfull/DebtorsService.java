@@ -2,7 +2,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull;
 
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.Debtors;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;

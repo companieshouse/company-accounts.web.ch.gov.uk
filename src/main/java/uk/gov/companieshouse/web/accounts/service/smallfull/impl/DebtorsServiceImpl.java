@@ -10,7 +10,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -56,6 +56,12 @@ public class DebtorsServiceImpl implements DebtorsService {
 
     @Override
     public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId, Debtors debtors, String companyNumber) throws ServiceException {
+//        ApiClient apiClient = apiClientService.getApiClient();
+//
+//        List<ValidationError> validationErrors = new ArrayList<>();
+//
+//        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+//        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
         return null;
     }
 }
