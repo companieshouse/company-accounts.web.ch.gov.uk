@@ -15,6 +15,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,7 +37,19 @@ public class DebtorsServiceImpl implements DebtorsService {
     }
 
     @Override
-    public DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
+    public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId, Debtors debtors, String companyNumber) throws ServiceException {
+//        ApiClient apiClient = apiClientService.getApiClient();
+//
+//        List<ValidationError> validationErrors = new ArrayList<>();
+//
+//        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+//        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
+//
+//        transformer.setDebtors(debtors, debtorsApi);
+          return null;
+    }
+
+    private DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
@@ -52,16 +65,5 @@ public class DebtorsServiceImpl implements DebtorsService {
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for debtors resource", e);
         }
-    }
-
-    @Override
-    public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId, Debtors debtors, String companyNumber) throws ServiceException {
-//        ApiClient apiClient = apiClientService.getApiClient();
-//
-//        List<ValidationError> validationErrors = new ArrayList<>();
-//
-//        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
-//        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
-        return null;
     }
 }

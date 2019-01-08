@@ -21,17 +21,6 @@ public interface DebtorsService {
         throws ServiceException;
 
     /**
-     * Fetch debtors api resource
-     *
-     * @param transactionId The id of the CHS transaction
-     * @param companyAccountsId The company accounts identifier
-     * @return the debtors api resource
-     * @throws ServiceException if there's an error when retrieving the debtors note
-     */
-    DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId)
-        throws ServiceException;
-
-    /**
      * Submit the debtors note
      *
      * @param transactionId The id of the CHS transaction
