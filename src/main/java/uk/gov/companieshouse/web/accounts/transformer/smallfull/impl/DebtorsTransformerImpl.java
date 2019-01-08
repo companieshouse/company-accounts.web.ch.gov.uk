@@ -1,7 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.springframework.stereotype.Component;
+import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.Debtors;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 
@@ -19,6 +21,7 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
             debtors.setCurrentPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome());
             debtors.setCurrentOtherDebtors(debtorsApi.getDebtorsCurrentPeriod().getOtherDebtors());
             debtors.setCurrentTotal(debtorsApi.getDebtorsCurrentPeriod().getTotal());
+            debtors.setCurrentGreaterThanOneYear(debtorsApi.getDebtorsCurrentPeriod().getGreaterThanOneYear());
         }
 
         if (debtorsApi != null && debtorsApi.getDebtorsPreviousPeriod() != null) {
@@ -26,8 +29,33 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
             debtors.setCurrentPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome());
             debtors.setCurrentOtherDebtors(debtorsApi.getDebtorsPreviousPeriod().getOtherDebtors());
             debtors.setCurrentTotal(debtorsApi.getDebtorsPreviousPeriod().getTotal());
+            debtors.setCurrentGreaterThanOneYear(debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear());
         }
 
         return debtors;
+    }
+
+    @Override
+    public void setDebtors(Debtors debtors, DebtorsApi debtorsApi) {
+        CurrentPeriod currentPeriod = new CurrentPeriod();
+
+        currentPeriod.setDetails(debtors.getDetails());
+        currentPeriod.setTradeDebtors(debtors.getCurrentTradeDebtors());
+        currentPeriod.setPrepaymentsAndAccruedIncome(debtors.getCurrentPrepaymentsAndAccruedIncome());
+        currentPeriod.setOtherDebtors(debtors.getCurrentOtherDebtors());
+        currentPeriod.setTotal(debtors.getCurrentTotal());
+        currentPeriod.setGreaterThanOneYear(debtors.getCurrentGreaterThanOneYear());
+
+        debtorsApi.setDebtorsCurrentPeriod(currentPeriod);
+
+        PreviousPeriod previousPeriod = new PreviousPeriod();
+
+        previousPeriod.setTradeDebtors(debtors.getPreviousTradeDebtors());
+        previousPeriod.setPrepaymentsAndAccruedIncome(debtors.getPreviousPrepaymentsAndAccruedIncome());
+        previousPeriod.setOtherDebtors(debtors.getPreviousOtherDebtors());
+        previousPeriod.setTotal(debtors.getPreviousTotal());
+        previousPeriod.setGreaterThanOneYear(debtors.getPreviousGreaterThanOneYear());
+
+        debtorsApi.setDebtorsPreviousPeriod(previousPeriod);
     }
 }

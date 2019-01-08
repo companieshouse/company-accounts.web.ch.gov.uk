@@ -6,4 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.Debtors;
 public interface DebtorsTransformer {
 
     Debtors getDebtors(DebtorsApi debtorsApi);
+
+    void setDebtors(Debtors debtors, DebtorsApi debtorsApi);
 }
