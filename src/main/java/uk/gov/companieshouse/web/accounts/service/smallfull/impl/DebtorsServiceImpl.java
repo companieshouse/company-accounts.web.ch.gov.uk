@@ -13,6 +13,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -27,8 +28,14 @@ public class DebtorsServiceImpl implements DebtorsService {
     @Autowired
     private DebtorsTransformer transformer;
 
+    @Autowired
+    private ValidationContext validationContext;
+
     private static final UriTemplate DEBTORS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/debtors");
+
+    private static final String INVALID_URI_MESSAGE = "Invalid URI for debtors resource";
+
 
     @Override
     public Debtors getDebtors(String transactionId, String companyAccountsId) throws ServiceException {
@@ -37,17 +44,35 @@ public class DebtorsServiceImpl implements DebtorsService {
     }
 
     @Override
-    public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId, Debtors debtors, String companyNumber) throws ServiceException {
+    public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId,
+            Debtors debtors, String companyNumber) throws ServiceException {
+
         ApiClient apiClient = apiClientService.getApiClient();
-
-        List<ValidationError> validationErrors = new ArrayList<>();
-
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
         DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
+        if (debtorsApi == null) {
+            debtorsApi = new DebtorsApi();
+            transformer.setDebtors(debtors, debtorsApi);
+        }
 
-        transformer.setDebtors(debtors, debtorsApi);
-        return validationErrors;
+        try {
+            apiClient.smallFull().debtors().create(uri, debtorsApi).execute();
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
+                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
+                if (validationErrors.isEmpty()) {
+                    throw new ServiceException("Bad request when creating debtors resource", e);
+                }
+                return validationErrors;
+            }
+            throw new ServiceException("Error creating debtors resource", e);
+        }
+
+        return new ArrayList<>();
     }
+
 
     private DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
@@ -66,4 +91,5 @@ public class DebtorsServiceImpl implements DebtorsService {
             throw new ServiceException("Invalid URI for debtors resource", e);
         }
     }
+
 }
