@@ -45,7 +45,7 @@ public class DebtorsController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("debtors", debtorsService.getDebtors(transactionId, companyAccountsId));
+            model.addAttribute("debtors", debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber));
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;

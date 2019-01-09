@@ -2,10 +2,13 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes;
 
 import lombok.Getter;
 import lombok.Setter;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 
 @Getter
 @Setter
 public class Debtors {
+
+    private BalanceSheetHeadings balanceSheetHeadings;
 
     private String details;
 

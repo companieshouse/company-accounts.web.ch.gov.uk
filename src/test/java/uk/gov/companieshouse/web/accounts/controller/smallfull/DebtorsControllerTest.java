@@ -77,7 +77,7 @@ public class DebtorsControllerTest {
     @DisplayName("Get debtors view success path")
     void getRequestSuccess() throws Exception {
 
-        when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Debtors());
+        when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
@@ -86,7 +86,7 @@ public class DebtorsControllerTest {
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
-        verify(mockDebtorsService, times(1)).getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(mockDebtorsService, times(1)).getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class DebtorsControllerTest {
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockDebtorsService).getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+            .when(mockDebtorsService).getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
