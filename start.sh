@@ -27,6 +27,4 @@ else
     source "${APP_DIR}/app_env"
 fi
 
-#exec java ${JAVA_MEM_ARGS} -jar -Dserver.port="${PORT}" "${APP_DIR}/company-accounts.web.ch.gov.uk.jar"
-
-exec java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=21098 -jar -Dserver.port="${PORT}" "${APP_DIR}/company-accounts.web.ch.gov.uk.jar"
+exec java ${JAVA_MEM_ARGS} -jar -Dserver.port="${PORT}" "${APP_DIR}/company-accounts.web.ch.gov.uk.jar"
