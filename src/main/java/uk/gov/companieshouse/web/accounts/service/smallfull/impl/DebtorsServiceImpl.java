@@ -8,9 +8,13 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.Debtors;
+import uk.gov.companieshouse.web.accounts.service.helper.AccountsDatesHelperService;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -31,15 +35,29 @@ public class DebtorsServiceImpl implements DebtorsService {
     @Autowired
     private DebtorsTransformer transformer;
 
+    @Autowired
+    private AccountsDatesHelperService accountsDatesHelperService;
+
+    @Autowired
+    private CompanyService companyService;
+
     private static final UriTemplate DEBTORS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/debtors");
 
     private static final String INVALID_URI_MESSAGE = "Invalid URI for debtors resource";
 
     @Override
-    public Debtors getDebtors(String transactionId, String companyAccountsId) throws ServiceException {
+    public Debtors getDebtors(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
         DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
-        return transformer.getDebtors(debtorsApi);
+
+        CompanyProfileApi companyProfileApi = companyService.getCompanyProfile(companyNumber);;
+
+        BalanceSheetHeadings balanceSheetHeadings = accountsDatesHelperService.getBalanceSheetHeadings(companyProfileApi);
+
+        Debtors debtors = transformer.getDebtors(debtorsApi);
+        debtors.setBalanceSheetHeadings(balanceSheetHeadings);
+
+        return debtors;
     }
 
     @Override
@@ -87,7 +105,7 @@ public class DebtorsServiceImpl implements DebtorsService {
             }
             throw new ServiceException("Error when retrieving debtors", e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for debtors resource", e);
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
         }
     }
 }

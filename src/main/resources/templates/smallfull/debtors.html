@@ -29,14 +29,14 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="currentPeriodHeading">Current Period</span>
+                        <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
                         <!-- Hidden input for form binding -->
                         <input type="hidden">
                     </h2>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="previousPeriodHeading">Previous Period</span>
+                        <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
                         <!-- Hidden input for form binding -->
                         <input type="hidden">
                     </h2>

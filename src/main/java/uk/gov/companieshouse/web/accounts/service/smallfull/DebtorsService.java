@@ -14,10 +14,11 @@ public interface DebtorsService {
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
+     * @param companyNumber The company identifier
      * @return the debtros note
      * @throws ServiceException if there's an error when retrieving the debtors note
      */
-    Debtors getDebtors(String transactionId, String companyAccountsId)
+    Debtors getDebtors(String transactionId, String companyAccountsId, String companyNumber)
         throws ServiceException;
 
     /**
