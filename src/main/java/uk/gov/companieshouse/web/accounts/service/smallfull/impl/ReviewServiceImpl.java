@@ -75,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
         OtherAccountingPolicy otherAccountingPolicy =
                 otherAccountingPolicyService.getOtherAccountingPolicy(transactionId, companyAccountsId);
 
-        Debtors debtors = debtorsService.getDebtors(transactionId,companyAccountsId);
+        Debtors debtors = debtorsService.getDebtors(transactionId,companyAccountsId, companyNumber);
 
         Review review = new Review();
         review.setBalanceSheet(balanceSheet);
