@@ -299,7 +299,6 @@
                             </p>
                         </dt>
                     </div>
-
                 </dl>
 
                 <div th:if="*{turnoverPolicy.turnoverPolicyDetails != null}">
@@ -404,6 +403,88 @@
                     </dl>
                 </div>
                 <!-- End Accounting Policies -->
+
+                <!-- Debtors Note -->
+                <div id="cya-small-full-debtors-note">
+
+                    <div th:if="*{debtors != null}">
+                        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Debtors note',
+                            identifier= 'debtors-note',
+                            resource = 'debtors',
+                            marginTop = true
+                            )">
+                        </div>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question"></dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Trade debtors',
+                                identifier = 'trade-debtors',
+                                currentAmount = *{debtors?.tradeDebtors.currentAmount},
+                                previousAmount = *{debtors?.tradeDebtors.previousAmount}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Prepayments and accrued income',
+                                identifier = 'prepayments=and-accrued-income',
+                                currentAmount = *{debtors?.prepaymentsAndAccruedIncome.currentAmount},
+                                previousAmount = *{debtors?.prepaymentsAndAccruedIncome.previousAmount}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Other debtors',
+                                identifier = 'other-debtors',
+                                currentAmount = *{debtors?.otherDebtors.currentAmount},
+                                previousAmount = *{debtors?.otherDebtors.previousAmount}
+
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Total',
+                                identifier = 'total',
+                                currentAmount = *{debtors?.total.currentAmount},
+                                previousAmount = *{debtors?.total.previousAmount},
+                                isTotalRow = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Debtors after more than one year',
+                                identifier = 'debtors-after-more-than-one-year',
+                                currentAmount = *{debtors?.greaterThanOneYear.currentAmount},
+                                previousAmount = *{debtors?.greaterThanOneYear.previousAmount}
+                            )">
+                            </div>
+                        </dl>
+
+                        <div th:if="*{debtors.details != null}">
+                            <dl class="app-check-your-answers app-check-your-answers--short">
+                                <div class="app-check-your-answers__contents">
+                                    <dt class="app-check-your-answers__question">Additional information</dt>
+                                    <dd class="app-check-your-answers__answer">
+                                        <p id="review-debtors-details"
+                                           th:text="*{debtors?.details}">
+                                        </p>
+                                    <dd class="app-check-your-answers__change"></dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="govuk-form-group">
                     <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>

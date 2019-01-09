@@ -12,6 +12,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 
@@ -25,6 +26,9 @@ public class ReviewController extends BaseController {
 
     @Autowired
     ReviewService reviewService;
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
     @GetMapping
     public String getReviewPage(@PathVariable String companyNumber,
@@ -42,6 +46,7 @@ public class ReviewController extends BaseController {
             model.addAttribute("companyNumber", companyNumber);
             model.addAttribute("transactionId", transactionId);
             model.addAttribute("companyAccountsId", companyAccountsId);
+            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
 
         } catch (ServiceException e) {
 

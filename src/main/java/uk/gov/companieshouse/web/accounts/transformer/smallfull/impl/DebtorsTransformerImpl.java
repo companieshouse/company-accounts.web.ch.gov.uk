@@ -25,11 +25,11 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
         }
 
         if (debtorsApi != null && debtorsApi.getDebtorsPreviousPeriod() != null) {
-            debtors.setCurrentTradeDebtors(debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors());
-            debtors.setCurrentPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome());
-            debtors.setCurrentOtherDebtors(debtorsApi.getDebtorsPreviousPeriod().getOtherDebtors());
-            debtors.setCurrentTotal(debtorsApi.getDebtorsPreviousPeriod().getTotal());
-            debtors.setCurrentGreaterThanOneYear(debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear());
+            debtors.setPreviousTradeDebtors(debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors());
+            debtors.setPreviousPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome());
+            debtors.setPreviousOtherDebtors(debtorsApi.getDebtorsPreviousPeriod().getOtherDebtors());
+            debtors.setPreviousTotal(debtorsApi.getDebtorsPreviousPeriod().getTotal());
+            debtors.setPreviousGreaterThanOneYear(debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear());
         }
 
         return debtors;

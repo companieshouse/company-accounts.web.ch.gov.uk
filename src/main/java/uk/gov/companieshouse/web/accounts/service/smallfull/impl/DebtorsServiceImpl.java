@@ -49,6 +49,8 @@ public class DebtorsServiceImpl implements DebtorsService {
 
         ApiClient apiClient = apiClientService.getApiClient();
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+
+
         DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
         if (debtorsApi == null) {
             debtorsApi = new DebtorsApi();
