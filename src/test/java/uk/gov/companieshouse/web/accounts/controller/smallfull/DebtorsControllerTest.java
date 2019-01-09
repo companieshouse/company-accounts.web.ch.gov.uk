@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -67,6 +67,8 @@ public class DebtorsControllerTest {
     private static final String DEBTORS_VIEW = "smallfull/debtors";
 
     private static final String ERROR_VIEW = "error";
+
+    private static final String TEST_PATH = "tradeDebtors.currentTradeDebtors";
 
     @BeforeEach
     private void setup() {
@@ -131,7 +133,7 @@ public class DebtorsControllerTest {
     void postRequestFailureWithApiValidationErrors() throws Exception {
 
         ValidationError validationError = new ValidationError();
-        validationError.setFieldPath("currentTradeDebtors");
+        validationError.setFieldPath(TEST_PATH);
         validationError.setMessageKey("invalid_character");
 
         List<ValidationError> errors = new ArrayList<>();
@@ -148,7 +150,7 @@ public class DebtorsControllerTest {
     @DisplayName("Post debtors with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        String beanElement = "currentTradeDebtors";
+        String beanElement = TEST_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
 
