@@ -71,7 +71,9 @@ public class DebtorsServiceImpl implements DebtorsService {
         Debtors debtors, String companyNumber) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
+
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+
         DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
 
         String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
