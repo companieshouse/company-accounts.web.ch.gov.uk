@@ -10,13 +10,10 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-import uk.gov.companieshouse.web.accounts.service.helper.AccountsDatesHelperService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -38,9 +35,6 @@ public class DebtorsServiceImpl implements DebtorsService {
     private DebtorsTransformer transformer;
 
     @Autowired
-    private AccountsDatesHelperService accountsDatesHelperService;
-
-    @Autowired
     private CompanyService companyService;
 
     private static final UriTemplate SMALL_FULL_URI =
@@ -54,15 +48,7 @@ public class DebtorsServiceImpl implements DebtorsService {
     public Debtors getDebtors(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
         DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
 
-        CompanyProfileApi companyProfileApi = companyService.getCompanyProfile(companyNumber);
-        ;
-
-        BalanceSheetHeadings balanceSheetHeadings = accountsDatesHelperService.getBalanceSheetHeadings(companyProfileApi);
-
-        Debtors debtors = transformer.getDebtors(debtorsApi);
-        debtors.setBalanceSheetHeadings(balanceSheetHeadings);
-
-        return debtors;
+        return transformer.getDebtors(debtorsApi);
     }
 
     @Override
