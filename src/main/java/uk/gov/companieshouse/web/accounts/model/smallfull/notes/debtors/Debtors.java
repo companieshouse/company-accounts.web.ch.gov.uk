@@ -11,8 +11,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 @ValidationModel
 public class Debtors {
 
-    private BalanceSheetHeadings balanceSheetHeadings;
-
     @ValidationMapping("$.debtors.current_period.details")
     private String details;
 
