@@ -64,7 +64,12 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        currentPeriod.setDetails(debtors.getDetails());
+        if (debtors.getDetails().equals("")) {
+            currentPeriod.setDetails(null);
+        } else {
+            currentPeriod.setDetails(debtors.getDetails());
+        }
+
         currentPeriod.setTradeDebtors(debtors.getTradeDebtors().getCurrentTradeDebtors());
         currentPeriod.setPrepaymentsAndAccruedIncome(debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome());
         currentPeriod.setOtherDebtors(debtors.getOtherDebtors().getCurrentOtherDebtors());
