@@ -14,6 +14,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -31,6 +32,9 @@ public class DebtorsController extends BaseController {
     @Autowired
     private DebtorsService debtorsService;
 
+    @Autowired
+    private BalanceSheetService balanceSheetService;
+
     @Override
     protected String getTemplateName() {
         return "smallfull/debtors";
@@ -46,6 +50,8 @@ public class DebtorsController extends BaseController {
 
         try {
             model.addAttribute("debtors", debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber));
+            model.addAttribute("currentBalanceSheetHeading", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getCurrentPeriodHeading());
+            model.addAttribute("previousBalanceSheetHeading", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getPreviousPeriodHeading());
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;

@@ -13,6 +13,8 @@
 
     <form id="balanceSheet-form" th:action="@{''}" th:object="${debtors}" class="form currency-included-within-inputs govuk-body" method="post">
 
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
         <div th:replace="fragments/numberedHeading :: numberedHeading (
                     headingText = 'Debtors'
                 )">
@@ -29,14 +31,14 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
+                        <span id="currentPeriodHeading" th:text='${currentBalanceSheetHeading}'>Current Period</span>
                         <!-- Hidden input for form binding -->
                         <input type="hidden">
                     </h2>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
+                        <span id="previousPeriodHeading" th:text='${previousBalanceSheetHeading}'>Previous Period</span>
                         <!-- Hidden input for form binding -->
                         <input type="hidden">
                     </h2>
@@ -58,7 +60,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.currentTradeDebtors',
                                 text = 'Trade debtors current',
-                                class= 'govuk-input current',
+                                class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
                 </div>
@@ -66,7 +68,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.previousTradeDebtors',
                                 text = 'Trade debtors previous',
-                                class= 'govuk-input previous',
+                                class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
                 </div>
@@ -89,7 +91,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income current',
-                                class= 'govuk-input current',
+                                class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
                 </div>
@@ -97,7 +99,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income previous',
-                                class= 'govuk-input previous',
+                                class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
                 </div>
@@ -120,7 +122,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.currentOtherDebtors',
                                 text = 'Other debtors current',
-                                class= 'govuk-input current',
+                                class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
                 </div>
@@ -128,7 +130,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.previousOtherDebtors',
                                 text = 'Other debtors previous',
-                                class= 'govuk-input previous',
+                                class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
                 </div>
@@ -151,7 +153,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.currentTotal',
                                 text = 'Total current',
-                                class= 'govuk-input current',
+                                class= 'govuk-input current current-debtors-total',
                                 )">
                     </div>
                 </div>
@@ -159,7 +161,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
                                 text = 'Total previous',
-                                class= 'govuk-input previous',
+                                class= 'govuk-input previous previous-debtors-total',
                                 )">
                     </div>
                 </div>
