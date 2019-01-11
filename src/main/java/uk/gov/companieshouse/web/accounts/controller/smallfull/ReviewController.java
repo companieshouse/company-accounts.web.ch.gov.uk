@@ -27,9 +27,6 @@ public class ReviewController extends BaseController {
     @Autowired
     ReviewService reviewService;
 
-    @Autowired
-    private BalanceSheetService balanceSheetService;
-
     @GetMapping
     public String getReviewPage(@PathVariable String companyNumber,
                                 @PathVariable String transactionId,
@@ -46,7 +43,6 @@ public class ReviewController extends BaseController {
             model.addAttribute("companyNumber", companyNumber);
             model.addAttribute("transactionId", transactionId);
             model.addAttribute("companyAccountsId", companyAccountsId);
-            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
 
         } catch (ServiceException e) {
 
