@@ -65,8 +65,9 @@ public class DebtorsServiceImpl implements DebtorsService {
         SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
         if (debtorsApi == null) {
             debtorsApi = new DebtorsApi();
-            transformer.setDebtors(debtors, debtorsApi);
         }
+
+        transformer.setDebtors(debtors, debtorsApi);
 
         boolean isCreated = hasDebtors(smallFullApi.getLinks());
 
