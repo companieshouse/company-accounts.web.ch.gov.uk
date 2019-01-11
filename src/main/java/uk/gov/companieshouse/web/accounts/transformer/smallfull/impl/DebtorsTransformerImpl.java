@@ -28,7 +28,10 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
 
 
         if (debtorsApi != null && debtorsApi.getDebtorsCurrentPeriod() != null) {
-            debtors.setDetails(debtorsApi.getDebtorsCurrentPeriod().getDetails());
+
+            if (debtorsApi.getDebtorsCurrentPeriod().getDetails() != null) {
+                debtors.setDetails(debtorsApi.getDebtorsCurrentPeriod().getDetails());
+            }
 
             tradeDebtors.setCurrentTradeDebtors(debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors());
             prepaymentsAndAccruedIncome.setCurrentPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome());
@@ -64,7 +67,9 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        currentPeriod.setDetails(debtors.getDetails());
+        if (!debtors.getDetails().isEmpty()|| debtors.getDetails()!= null || debtors.getDetails() != "") {
+            currentPeriod.setDetails(debtors.getDetails());
+        }
         currentPeriod.setTradeDebtors(debtors.getTradeDebtors().getCurrentTradeDebtors());
         currentPeriod.setPrepaymentsAndAccruedIncome(debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome());
         currentPeriod.setOtherDebtors(debtors.getOtherDebtors().getCurrentOtherDebtors());
