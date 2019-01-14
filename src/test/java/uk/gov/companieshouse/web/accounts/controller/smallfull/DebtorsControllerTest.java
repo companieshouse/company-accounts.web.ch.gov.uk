@@ -69,10 +69,6 @@ public class DebtorsControllerTest {
 
     private static final String DEBTORS_MODEL_ATTR = "debtors";
 
-    private static final String CURRENT_BALANCESHEET_HEADING_ATTR = "currentBalanceSheetHeading";
-
-    private static final String PREVIOUS_BALANCESHEET_HEADING_ATTR = "previousBalanceSheetHeading";
-
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
@@ -91,18 +87,14 @@ public class DebtorsControllerTest {
     @Test
     @DisplayName("Get debtors view success path")
     void getRequestSuccess() throws Exception {
-        BalanceSheet balanceSheet = getMockBalanceSheet();
 
         when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
-
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(DEBTORS_VIEW))
             .andExpect(model().attributeExists(DEBTORS_MODEL_ATTR))
-            .andExpect(model().attributeExists(CURRENT_BALANCESHEET_HEADING_ATTR))
-            .andExpect(model().attributeExists(PREVIOUS_BALANCESHEET_HEADING_ATTR))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
