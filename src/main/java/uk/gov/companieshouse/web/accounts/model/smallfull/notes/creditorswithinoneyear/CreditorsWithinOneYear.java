@@ -2,7 +2,7 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithin
 
 import lombok.Getter;
 import lombok.Setter;
-
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
@@ -10,6 +10,8 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 @Setter
 @ValidationModel
 public class CreditorsWithinOneYear {
+	
+    private BalanceSheetHeadings balanceSheetHeadings;
 
     @ValidationMapping("$.creditors_within_one_year.current_period.details")
     private String details;
