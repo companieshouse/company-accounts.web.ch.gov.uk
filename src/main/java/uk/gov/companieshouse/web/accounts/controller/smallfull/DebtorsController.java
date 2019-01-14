@@ -13,6 +13,7 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
@@ -49,9 +50,10 @@ public class DebtorsController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("debtors", debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber));
-            model.addAttribute("currentBalanceSheetHeading", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getCurrentPeriodHeading());
-            model.addAttribute("previousBalanceSheetHeading", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getPreviousPeriodHeading());
+            Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
+            setBalanceSheetHeadings(debtors, transactionId, companyAccountsId, companyNumber);
+
+            model.addAttribute("debtors", debtors);
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -90,5 +92,19 @@ public class DebtorsController extends BaseController {
         }
 
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+    }
+
+    private void setBalanceSheetHeadings(Debtors debtors, String transactionId,
+                                         String companyAccountsId, String companyNumber) throws ServiceException {
+
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+
+        balanceSheetHeadings.setCurrentPeriodHeading(balanceSheetService.getBalanceSheet(
+            transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getCurrentPeriodHeading());
+
+        balanceSheetHeadings.setPreviousPeriodHeading(balanceSheetService.getBalanceSheet(
+            transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getPreviousPeriodHeading());
+
+        debtors.setBalanceSheetHeadings(balanceSheetHeadings);
     }
 }
