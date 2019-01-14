@@ -6,4 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.Tangibl
 public interface TangibleAssetsTransformer {
 
     TangibleAssets getTangibleAssets(TangibleApi tangibleApi);
+
+    TangibleApi getTangibleApi(TangibleAssets tangibleAssets);
 }

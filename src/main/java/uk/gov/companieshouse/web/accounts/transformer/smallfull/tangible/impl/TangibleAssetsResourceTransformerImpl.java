@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl;
 
+import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssetsColumns;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssetsCost;
@@ -231,4 +232,19 @@ public abstract class TangibleAssetsResourceTransformerImpl {
 
         return previousPeriod;
     }
+
+    protected abstract boolean hasCostResources(TangibleAssets tangibleAssets);
+
+    protected abstract boolean hasDepreciationResources(TangibleAssets tangibleAssets);
+
+    protected abstract boolean hasNetBookValueResources(TangibleAssets tangibleAssets);
+
+    protected abstract void mapCostResources(TangibleAssets tangibleAssets,
+                                            TangibleAssetsResource tangibleAssetsResource);
+
+    protected abstract void mapDepreciationResources(TangibleAssets tangibleAssets,
+                                                    TangibleAssetsResource tangibleAssetsResource);
+
+    protected abstract void mapNetBookValueResources(TangibleAssets tangibleAssets,
+                                                    TangibleAssetsResource tangibleAssetsResource);
 }

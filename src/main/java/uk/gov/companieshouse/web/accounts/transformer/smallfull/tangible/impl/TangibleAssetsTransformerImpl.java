@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl;
 
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
@@ -78,5 +79,25 @@ public class TangibleAssetsTransformerImpl implements TangibleAssetsTransformer 
         }
 
         return tangibleAssets;
+    }
+
+    @Override
+    public TangibleApi getTangibleApi(TangibleAssets tangibleAssets) {
+
+        TangibleApi tangibleApi = new TangibleApi();
+        tangibleApi.setAdditionalInformation(tangibleAssets.getAdditionalInformation());
+
+        Stream.of(TangibleAssetsResource.values()).forEach(tangibleAssetsResource -> {
+
+            TangibleAssetsResourceTransformer resourceTransformer =
+                    factory.getResourceTransformer(tangibleAssetsResource);
+
+            if (resourceTransformer.hasTangibleAssetsToMapToApiResource(tangibleAssets)) {
+
+                resourceTransformer.mapTangibleAssetsToApiResource(tangibleAssets, tangibleApi);
+            }
+        });
+
+        return tangibleApi;
     }
 }
