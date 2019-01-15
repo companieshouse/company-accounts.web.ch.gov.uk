@@ -135,7 +135,7 @@ public class TangibleAssetsFixturesAndFittingsTransformerImpl extends TangibleAs
 
         Cost cost = new Cost();
         cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getFixturesAndFittings());
-        cost.setAdditions(tangibleAssets.getCost().getAtPeriodStart().getFixturesAndFittings());
+        cost.setAdditions(tangibleAssets.getCost().getAdditions().getFixturesAndFittings());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getFixturesAndFittings());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getFixturesAndFittings());
         cost.setTransfers(tangibleAssets.getCost().getTransfers().getFixturesAndFittings());
