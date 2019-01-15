@@ -141,6 +141,19 @@ public class DebtorsControllerTest {
     }
 
     @Test
+    @DisplayName("Post debtors failure path when retrieving balancesheet")
+    void postRequestFailureRetreivingBalanceSheet() throws Exception {
+
+        when(mockBalanceSheetService.getBalanceSheet(
+            TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(post(DEBTORS_PATH))
+            .andExpect(status().isOk())
+            .andExpect(view().name(ERROR_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
     @DisplayName("Post debtors failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
 
