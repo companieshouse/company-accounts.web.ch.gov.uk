@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -88,7 +87,7 @@ public class OtherAccountingPolicyController extends BaseController {
 
         cacheIsPolicyIncluded(request, otherAccountingPolicy);
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
 

@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
+import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -41,6 +42,9 @@ public class ApprovalControllerTests {
 
     @Mock
     private TransactionService transactionService;
+
+    @Mock
+    private Navigator navigator;
 
     @InjectMocks
     private ApprovalController approvalController;
@@ -69,8 +73,11 @@ public class ApprovalControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
     @BeforeEach
     private void setup() {
+        when(navigator.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(approvalController).build();
     }
 

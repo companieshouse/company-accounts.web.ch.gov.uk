@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,7 +56,7 @@ public class ReviewController extends BaseController {
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId) {
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override

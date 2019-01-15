@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,6 +33,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.TangibleDepreciationPolicyServiceImpl;
+import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +54,9 @@ public class TangibleDepreciationPolicyControllerTest {
     @Mock
     private AccountingPolicies accountingPolicies;
 
+    @Mock
+    Navigator navigator;
+
     @InjectMocks
     private TangibleDepreciationPolicyController controller;
     private static final String COMPANY_NUMBER = "companyNumber";
@@ -63,8 +68,6 @@ public class TangibleDepreciationPolicyControllerTest {
         "/small-full";
     private static final String TANGIBLE_DEPRECIATION_POLICY_PATH =
         SMALL_FULL_PATH + "/tangible-depreciation-policy";
-    private static final String INTANGIBLE_AMORTISATION_POLICY_PATH =
-        SMALL_FULL_PATH + "/intangible-fixed-assets-amortisation";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String TANGIBLE_DEPRECIATION_POLICY_MODEL_ATTR = "tangibleDepreciationPolicy";
@@ -72,7 +75,7 @@ public class TangibleDepreciationPolicyControllerTest {
     private static final String ERROR_VIEW = "error";
     private static final String MODEL_ELEMENT = "hasTangibleDepreciationPolicySelected";
     private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
-
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
     private void setup() {
@@ -88,6 +91,8 @@ public class TangibleDepreciationPolicyControllerTest {
         when(tangibleDepreciationPolicyService
             .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(tangibleDepreciationPolicy);
+
+        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH))
             .andExpect(status().isOk())
@@ -110,6 +115,8 @@ public class TangibleDepreciationPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
         when(accountingPolicies.getHasProvidedTangiblePolicy()).thenReturn(false);
+
+        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH).session(session))
                 .andExpect(status().isOk())
@@ -149,10 +156,11 @@ public class TangibleDepreciationPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
 
+        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
         this.mockMvc.perform(postRequestWithValidData().session(session))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(
-                UrlBasedViewResolver.REDIRECT_URL_PREFIX + INTANGIBLE_AMORTISATION_POLICY_PATH));
+            .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(accountingPolicies, times(1)).setHasProvidedTangiblePolicy(anyBoolean());
     }
