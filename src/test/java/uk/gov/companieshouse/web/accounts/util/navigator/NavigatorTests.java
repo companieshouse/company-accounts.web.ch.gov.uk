@@ -96,4 +96,14 @@ public class NavigatorTests {
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
     }
+
+    @Test
+    public void successfulPathReturnedWithSingleConditionalControllerInChain() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
+
+        String redirect = navigator.getPreviousControllerPath(MockSuccessJourneyControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertEquals("/mock-success-journey-controller-one", redirect);
+    }
 }
