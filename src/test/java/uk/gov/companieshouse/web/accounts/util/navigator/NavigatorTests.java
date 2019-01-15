@@ -64,6 +64,22 @@ public class NavigatorTests {
     }
 
     @Test
+    public void missingRequestMappingValueOnNextController() {
+        Throwable exception = assertThrows(MissingAnnotationException.class, () ->
+                navigator.getNextControllerRedirect(MockControllerFive.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
+        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.util.navigator.MockControllerSix", exception.getMessage());
+    }
+
+    @Test
+    public void missingRequestMappingValueOnPreviousController() {
+        Throwable exception = assertThrows(MissingAnnotationException.class, () ->
+                navigator.getPreviousControllerPath(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
+        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.util.navigator.MockControllerSix", exception.getMessage());
+    }
+
+    @Test
     public void missingExpectedNumberOfPathVariablesForMandatoryController() {
 
         String redirect = navigator.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER);
