@@ -16,7 +16,8 @@ import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
 
 /**
  * The {@code Navigator} class provides support methods for handling
- * navigation between controllers.
+ * navigation between controllers when generating redirects or retrieving
+ * @{link RequestMapping} paths.
  *
  * @see NextController
  * @see PreviousController
@@ -30,12 +31,13 @@ public class Navigator {
     private static final int EXPECTED_PATH_VAR_COUNT = 3;
 
     /**
-     * Searches the controller chain for a controller of the specified class in the
-     * desired direction.
+     * Searches the controller chain for the next or previous controller in the
+     * web journey. The controller search begins at the controller {@code clazz}
+     * in the chain and the scan will be performed in the direction specified.
      *
-     * @param clazz     the desired controller class to find
-     * @param direction the direction in the controller chain to follow when searching
-     * @return
+     * @param  clazz     the controller class in the chain to begin the scan at
+     * @param  direction the direction to follow when scanning the controller chain
+     * @return the next or previous controller class in the chain dependent on {@code direction}
      */
     private Class getControllerClass(Class clazz, Direction direction) {
 
@@ -50,6 +52,13 @@ public class Navigator {
         return controllerClass;
     }
 
+    /**
+     * Returns the class of the next controller in the chain that follows
+     * the controller class {@code clazz}.
+     *
+     * @param  clazz the controller class in the chain to begin the scan at
+     * @return the next controller class in the chain
+     */
     private Class getNextControllerClass(Class clazz) {
         Annotation nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
         if (nextControllerAnnotation == null) {
@@ -59,6 +68,13 @@ public class Navigator {
         return ((NextController) nextControllerAnnotation).value();
     }
 
+    /**
+     * Returns the class of the previous controller in the chain that preceedes
+     * the controller class {@code clazz}.
+     *
+     * @param  clazz the controller class in the chain to begin the scan at
+     * @return the previous controller class in the chain
+     */
     private Class getPreviousControllerClass(Class clazz) {
         Annotation previousControllerAnnotation = AnnotationUtils.findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
@@ -69,15 +85,16 @@ public class Navigator {
     }
 
     /**
-     * Returns true if {@code clazz} implements the {@code ConditionalController}
-     * interface, otherwise returns false.
+     * Searches the controller chain to determine which controller is next
+     * in the journey, ignoring any conditional controllers that signal they
+     * will not be rendered.
+     * <p>
+     * The controller search begins at the controller {@code clazz}
+     * in the chain and the scan will be performed in the direction specified.
      *
-     * @return true if {@code clazz} implements the {@code ConditionalController} interface
+     * @param  clazz the controller class in the chain to begin the scan at
+     * @return the previous controller class in the chain
      */
-    private boolean isConditionalController(Class clazz) {
-        return ConditionalController.class.isAssignableFrom(clazz);
-    }
-
     private Class findControllerClass(Class clazz, Direction direction, String... pathVars) {
 
         Class controllerClass = getControllerClass(clazz, direction);
@@ -107,6 +124,18 @@ public class Navigator {
         return controllerClass;
     }
 
+    /**
+     * Searches the controller chain for the next controller, taking into
+     * consideration any conditional controllers that may not have data to
+     * render, and returns a string comprising of the redirect prefix and
+     * {@link RequestMapping} path of the next controller after populating
+     * with the path variables specified.
+     *
+     * @param  clazz    the controller class in the chain to begin the scan at
+     * @param  pathVars a variable number of strings representing any path variables
+     * @return a string comprising redirect prefix and {@link RequestMapping}
+     *         path of the next controller
+     */
     public String getNextControllerRedirect(Class clazz, String... pathVars) {
 
         Class nextControllerClass = findControllerClass(clazz, Direction.FORWARD, pathVars);
@@ -124,6 +153,17 @@ public class Navigator {
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[0]).expand((Object[]) pathVars);
     }
 
+    /**
+     * Searches the controller chain for the previous controller, taking into
+     * consideration any conditional controllers that may not have data to
+     * render, and returns a string comprising the {@link RequestMapping} path
+     * of the previous controller populated with the path variables specified.
+     *
+     * @param  clazz    the controller class in the chain to begin the scan at
+     * @param  pathVars a variable number of strings representing any path variables
+     * @return a string comprising the {@link RequestMapping} path from the
+     *         previous controller
+     */
     public String getPreviousControllerPath(Class clazz, String... pathVars) {
 
         Class previousControllerClass = findControllerClass(clazz, Direction.BACKWARD, pathVars);
@@ -140,6 +180,17 @@ public class Navigator {
 
         return new UriTemplate(mappings[0]).expand((Object[]) pathVars).toString();
     }
+
+    /**
+     * Returns true if {@code clazz} implements the {@link ConditionalController}
+     * interface, otherwise returns false.
+     *
+     * @return true if {@code clazz} implements the {@link ConditionalController} interface
+     */
+    private boolean isConditionalController(Class clazz) {
+        return ConditionalController.class.isAssignableFrom(clazz);
+    }
+
 
     private enum Direction {
         FORWARD,
