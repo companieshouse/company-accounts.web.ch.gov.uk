@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 
@@ -56,5 +57,13 @@ public class NavigatorTests {
                 navigator.getPreviousControllerPath(MockControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
         assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.util.navigator.MockControllerOne", exception.getMessage());
+    }
+
+    @Test
+    public void missingExpectedNumberOfPathVariablesForMandatoryController() {
+
+        String redirect = navigator.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER);
+
+        assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-controller-five", redirect);
     }
 }
