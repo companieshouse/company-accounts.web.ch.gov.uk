@@ -91,10 +91,8 @@ public class DebtorsControllerTest {
     @Test
     @DisplayName("Get debtors view success path")
     void getRequestSuccess() throws Exception {
-        BalanceSheet balanceSheet = getMockBalanceSheet();
 
         when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
-
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
