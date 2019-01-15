@@ -91,11 +91,11 @@ public class Navigator {
 
         boolean foundController = false;
 
-        while (!foundController) {
+        while (foundController == false) {
 
             if (isConditionalController(controllerClass)) {
                 ConditionalController conditionalController = (ConditionalController) applicationContext.getBean(controllerClass);
-                if (!conditionalController.willRender(companyNumber, transactionId, companyAccountsId)) {
+                if (conditionalController.willRender(companyNumber, transactionId, companyAccountsId) == false) {
                     controllerClass = getControllerClass(controllerClass, direction);
                     continue;
                 }
