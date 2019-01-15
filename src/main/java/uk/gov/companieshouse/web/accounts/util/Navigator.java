@@ -53,11 +53,7 @@ public class Navigator {
     private Class getNextControllerClass(Class clazz) {
         Annotation nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
         if (nextControllerAnnotation == null) {
-            throw new MissingAnnotationException("Missing @NextController annotation on class " + clazz.toString());
-        }
-
-        if (((NextController) nextControllerAnnotation).value() == null) {
-            throw new MissingAnnotationException("Missing @NextController value on class " + clazz.toString());
+            throw new MissingAnnotationException("Missing @NextController annotation on " + clazz.toString());
         }
 
         return ((NextController) nextControllerAnnotation).value();
@@ -66,11 +62,7 @@ public class Navigator {
     private Class getPreviousControllerClass(Class clazz) {
         Annotation previousControllerAnnotation = AnnotationUtils.findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
-            throw new MissingAnnotationException("Missing @PreviousController annotation on class " + clazz.toString());
-        }
-
-        if (((PreviousController) previousControllerAnnotation).value() == null) {
-            throw new MissingAnnotationException("Missing @PreviousController value on class " + clazz.toString());
+            throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz.toString());
         }
 
         return ((PreviousController) previousControllerAnnotation).value();
@@ -121,12 +113,12 @@ public class Navigator {
 
         Annotation requestMappingAnnotation = AnnotationUtils.findAnnotation(nextControllerClass, RequestMapping.class);
         if (requestMappingAnnotation == null) {
-            throw new MissingAnnotationException("Missing @RequestMapping annotation on class " + nextControllerClass.toString());
+            throw new MissingAnnotationException("Missing @RequestMapping annotation on " + nextControllerClass.toString());
         }
 
         String[] mappings = ((RequestMapping) requestMappingAnnotation).value();
         if (mappings.length <= 0) {
-            throw new MissingAnnotationException("Missing @RequestMapping value on class " + nextControllerClass.toString());
+            throw new MissingAnnotationException("Missing @RequestMapping value on " + nextControllerClass.toString());
         }
 
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[0]).expand((Object[]) pathVars);
@@ -138,12 +130,12 @@ public class Navigator {
 
         Annotation requestMappingAnnotation = AnnotationUtils.findAnnotation(previousControllerClass, RequestMapping.class);
         if (requestMappingAnnotation == null) {
-            throw new MissingAnnotationException("Missing @RequestMapping annotation on class " + previousControllerClass.toString());
+            throw new MissingAnnotationException("Missing @RequestMapping annotation on " + previousControllerClass.toString());
         }
 
         String[] mappings = ((RequestMapping) requestMappingAnnotation).value();
         if (mappings.length <= 0) {
-            throw new MissingAnnotationException("Missing @RequestMapping value on class " + previousControllerClass.toString());
+            throw new MissingAnnotationException("Missing @RequestMapping value on " + previousControllerClass.toString());
         }
 
         return new UriTemplate(mappings[0]).expand((Object[]) pathVars).toString();
