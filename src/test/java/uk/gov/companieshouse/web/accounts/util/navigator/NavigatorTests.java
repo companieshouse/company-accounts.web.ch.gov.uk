@@ -11,6 +11,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerFive;
+import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerFour;
+import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerOne;
+import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerSeven;
+import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerThree;
+import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerTwo;
+import uk.gov.companieshouse.web.accounts.util.navigator.success.MockSuccessJourneyControllerOne;
+import uk.gov.companieshouse.web.accounts.util.navigator.success.MockSuccessJourneyControllerThree;
+import uk.gov.companieshouse.web.accounts.util.navigator.success.MockSuccessJourneyControllerTwo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,7 +45,7 @@ public class NavigatorTests {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigator.getNextControllerRedirect(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @NextController annotation on class uk.gov.companieshouse.web.accounts.util.navigator.MockControllerThree", exception.getMessage());
+        assertEquals("Missing @NextController annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerThree", exception.getMessage());
     }
 
     @Test
@@ -44,7 +53,7 @@ public class NavigatorTests {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigator.getPreviousControllerPath(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @PreviousController annotation on class uk.gov.companieshouse.web.accounts.util.navigator.MockControllerThree", exception.getMessage());
+        assertEquals("Missing @PreviousController annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerThree", exception.getMessage());
     }
 
     @Test
@@ -52,7 +61,7 @@ public class NavigatorTests {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigator.getNextControllerRedirect(MockControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.util.navigator.MockControllerTwo", exception.getMessage());
+        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerTwo", exception.getMessage());
     }
 
     @Test
@@ -60,7 +69,23 @@ public class NavigatorTests {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigator.getPreviousControllerPath(MockControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.util.navigator.MockControllerOne", exception.getMessage());
+        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerOne", exception.getMessage());
+    }
+
+    @Test
+    public void missingRequestMappingValueOnNextController() {
+        Throwable exception = assertThrows(MissingAnnotationException.class, () ->
+                navigator.getNextControllerRedirect(MockControllerFive.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
+        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerSix", exception.getMessage());
+    }
+
+    @Test
+    public void missingRequestMappingValueOnPreviousController() {
+        Throwable exception = assertThrows(MissingAnnotationException.class, () ->
+                navigator.getPreviousControllerPath(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
+        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerSix", exception.getMessage());
     }
 
     @Test
@@ -79,5 +104,15 @@ public class NavigatorTests {
         String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
+    }
+
+    @Test
+    public void successfulPathReturnedWithSingleConditionalControllerInChain() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
+
+        String redirect = navigator.getPreviousControllerPath(MockSuccessJourneyControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertEquals("/mock-success-journey-controller-one", redirect);
     }
 }
