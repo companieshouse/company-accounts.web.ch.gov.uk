@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.debtors.DebtorsResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsCreate;
@@ -27,6 +28,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;
@@ -68,6 +70,9 @@ public class DebtorsServiceImplTests {
     @Mock
     private DebtorsTransformer mockDebtorsTransformer;
 
+    @Mock
+    private ValidationContext mockValidationContext;
+
     @InjectMocks
     private DebtorsService debtorsService = new DebtorsServiceImpl();
 
@@ -102,6 +107,62 @@ public class DebtorsServiceImplTests {
     }
 
     @Test
+    @DisplayName("GET - Debtors successful path when http status not found")
+    void getDebtorsSuccessHttpStatusNotFound() throws Exception {
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.get(DEBTORS_URI)).thenReturn(mockDebtorsGet);
+        when(mockDebtorsGet.execute()).thenThrow(apiErrorResponseException);
+
+        when(mockDebtorsTransformer.getDebtors(null)).thenReturn(createDebtors());
+
+        Debtors debtors = debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertNotNull(debtors);
+        assertNotNull(debtors.getTradeDebtors());
+        assertNotNull(debtors.getTradeDebtors().getCurrentTradeDebtors());
+        assertNotNull(debtors.getTotal());
+        assertNotNull(debtors.getTotal().getCurrentTotal());
+    }
+
+    @Test
+    @DisplayName("GET - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
+    void getDebtorsApiResponseException() throws Exception {
+
+        DebtorsApi debtorsApi = new DebtorsApi();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.get(DEBTORS_URI)).thenReturn(mockDebtorsGet);
+        when(mockDebtorsGet.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockDebtorsGet.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.getDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("GET - Debtors throws ServiceExcepiton due to URIValidationException")
+    void getDebtorsURIValidationException() throws Exception {
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.get(DEBTORS_URI)).thenReturn(mockDebtorsGet);
+        when(mockDebtorsGet.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockDebtorsGet.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.getDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            COMPANY_NUMBER));
+    }
+
+    @Test
     @DisplayName("POST - Debtors successful path")
     void postDebtorsSuccess() throws Exception {
 
@@ -121,8 +182,8 @@ public class DebtorsServiceImplTests {
     }
 
     @Test
-    @DisplayName("POST - Debtors ApiErrorResponseException")
-    void postDebtorsApiErrorResponseException() throws Exception {
+    @DisplayName("POST - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
+    void postDebtorsApiErrorResponseExceptionNotFound() throws Exception {
 
         DebtorsApi debtorsApi = new DebtorsApi();
         getMockDebtorsApi(debtorsApi);
@@ -136,11 +197,84 @@ public class DebtorsServiceImplTests {
         getMockDebtorsResourceHandler();
         when(mockDebtorsResourceHandler.create(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Bad Request",new HttpHeaders()).build();
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockDebtorsCreate.execute()).thenThrow(apiErrorResponseException);
 
         assertThrows(ApiErrorResponseException.class, () -> mockDebtorsCreate.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            debtors,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
+    void postDebtorsApiErrorResponseExceptionBadRequest() throws Exception {
+
+        DebtorsApi debtorsApi = new DebtorsApi();
+        getMockDebtorsApi(debtorsApi);
+
+        Debtors debtors = createDebtors();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        getMockSmallFullApi(smallFullApi);
+        setLinksWithoutDebtors(smallFullApi);
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.create(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsCreate);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockDebtorsCreate.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockDebtorsCreate.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            debtors,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - Debtors throws ServiceExcepiton due to ApiErrorResponseException Getting Smallfull data")
+    void postDebtorsGetSmallFullDataApiResponseException() throws Exception {
+
+        DebtorsApi debtorsApi = new DebtorsApi();
+        getMockDebtorsApi(debtorsApi);
+
+        Debtors debtors = createDebtors();
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        getMockSmallFullResourceHandler();
+        when(mockSmallFullResourceHandler.get(BASE_SMALL_FULL_URI)).thenReturn(mockSmallFullGet);
+        when(mockSmallFullGet.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockSmallFullGet.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            debtors,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - Debtors throws ServiceExcepiton due to URIValidationException Getting Smallfull data")
+    void postDebtorsGetSmallFullDataURIValidationException() throws Exception {
+
+        DebtorsApi debtorsApi = new DebtorsApi();
+        getMockDebtorsApi(debtorsApi);
+
+        Debtors debtors = createDebtors();
+
+        getMockSmallFullResourceHandler();
+        when(mockSmallFullResourceHandler.get(BASE_SMALL_FULL_URI)).thenReturn(mockSmallFullGet);
+        when(mockSmallFullGet.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockSmallFullGet.execute());
         assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -165,6 +299,32 @@ public class DebtorsServiceImplTests {
             COMPANY_ACCOUNTS_ID, createDebtors(), COMPANY_NUMBER);
 
         assertEquals(0, validationErrors.size());
+    }
+
+    @Test
+    @DisplayName("PUT - Debtors throws ServiceExcepiton due to URIValidationException")
+    void putDebtorsURIValidationException() throws Exception {
+
+        DebtorsApi debtorsApi = new DebtorsApi();
+        getMockDebtorsApi(debtorsApi);
+
+        Debtors debtors = createDebtors();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        getMockSmallFullApi(smallFullApi);
+        setLinksWithDebtors(smallFullApi);
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.update(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsUpdate);
+
+        when(mockDebtorsUpdate.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockDebtorsUpdate.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            debtors,
+            COMPANY_NUMBER));
     }
 
     private void getMockSmallFullResourceHandler() {
