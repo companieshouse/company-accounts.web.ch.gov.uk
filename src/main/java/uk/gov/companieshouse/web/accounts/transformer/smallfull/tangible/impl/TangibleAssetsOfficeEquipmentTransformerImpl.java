@@ -135,7 +135,7 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
 
         Cost cost = new Cost();
         cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getOfficeEquipment());
-        cost.setAdditions(tangibleAssets.getCost().getAtPeriodStart().getOfficeEquipment());
+        cost.setAdditions(tangibleAssets.getCost().getAdditions().getOfficeEquipment());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getOfficeEquipment());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getOfficeEquipment());
         cost.setTransfers(tangibleAssets.getCost().getTransfers().getOfficeEquipment());

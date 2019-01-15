@@ -135,7 +135,7 @@ public class TangibleAssetsTotalTransformerImpl extends TangibleAssetsResourceTr
 
         Cost cost = new Cost();
         cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getTotal());
-        cost.setAdditions(tangibleAssets.getCost().getAtPeriodStart().getTotal());
+        cost.setAdditions(tangibleAssets.getCost().getAdditions().getTotal());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getTotal());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getTotal());
         cost.setTransfers(tangibleAssets.getCost().getTransfers().getTotal());

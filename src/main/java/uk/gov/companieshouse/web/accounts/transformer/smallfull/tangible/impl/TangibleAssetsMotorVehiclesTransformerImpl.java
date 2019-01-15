@@ -135,7 +135,7 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
 
         Cost cost = new Cost();
         cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getMotorVehicles());
-        cost.setAdditions(tangibleAssets.getCost().getAtPeriodStart().getMotorVehicles());
+        cost.setAdditions(tangibleAssets.getCost().getAdditions().getMotorVehicles());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getMotorVehicles());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getMotorVehicles());
         cost.setTransfers(tangibleAssets.getCost().getTransfers().getMotorVehicles());

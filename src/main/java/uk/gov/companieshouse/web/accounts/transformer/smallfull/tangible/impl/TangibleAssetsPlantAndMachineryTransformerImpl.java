@@ -135,7 +135,7 @@ public class TangibleAssetsPlantAndMachineryTransformerImpl extends TangibleAsse
 
         Cost cost = new Cost();
         cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getPlantAndMachinery());
-        cost.setAdditions(tangibleAssets.getCost().getAtPeriodStart().getPlantAndMachinery());
+        cost.setAdditions(tangibleAssets.getCost().getAdditions().getPlantAndMachinery());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getPlantAndMachinery());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getPlantAndMachinery());
         cost.setTransfers(tangibleAssets.getCost().getTransfers().getPlantAndMachinery());

@@ -135,7 +135,7 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
 
         Cost cost = new Cost();
         cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getLandAndBuildings());
-        cost.setAdditions(tangibleAssets.getCost().getAtPeriodStart().getLandAndBuildings());
+        cost.setAdditions(tangibleAssets.getCost().getAdditions().getLandAndBuildings());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getLandAndBuildings());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getLandAndBuildings());
         cost.setTransfers(tangibleAssets.getCost().getTransfers().getLandAndBuildings());
