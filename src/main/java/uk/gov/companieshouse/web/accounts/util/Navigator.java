@@ -91,7 +91,7 @@ public class Navigator {
 
         boolean foundController = false;
 
-        while (foundController == false) {
+        while (!foundController) {
 
             if (isConditionalController(controllerClass)) {
                 ConditionalController conditionalController = (ConditionalController) applicationContext.getBean(controllerClass);
