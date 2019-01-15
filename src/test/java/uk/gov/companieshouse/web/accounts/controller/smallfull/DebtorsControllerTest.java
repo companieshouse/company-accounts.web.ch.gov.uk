@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -22,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -69,9 +71,7 @@ public class DebtorsControllerTest {
 
     private static final String DEBTORS_MODEL_ATTR = "debtors";
 
-    private static final String CURRENT_BALANCESHEET_HEADING_ATTR = "currentBalanceSheetHeading";
-
-    private static final String PREVIOUS_BALANCESHEET_HEADING_ATTR = "previousBalanceSheetHeading";
+    private static final String BALANCESHEET_ATTR = "balanceSheet";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
@@ -101,8 +101,7 @@ public class DebtorsControllerTest {
             .andExpect(status().isOk())
             .andExpect(view().name(DEBTORS_VIEW))
             .andExpect(model().attributeExists(DEBTORS_MODEL_ATTR))
-            .andExpect(model().attributeExists(CURRENT_BALANCESHEET_HEADING_ATTR))
-            .andExpect(model().attributeExists(PREVIOUS_BALANCESHEET_HEADING_ATTR))
+            .andExpect(model().attributeExists(BALANCESHEET_ATTR))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
@@ -113,8 +112,7 @@ public class DebtorsControllerTest {
     @DisplayName("Get debtors view failure path due to error on debtors retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
-        doThrow(ServiceException.class)
-            .when(mockDebtorsService).getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
