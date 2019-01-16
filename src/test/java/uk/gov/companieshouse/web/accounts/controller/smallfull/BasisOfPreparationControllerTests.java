@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +40,9 @@ public class BasisOfPreparationControllerTests {
 
     @Mock
     private BasisOfPreparationService basisOfPreparationService;
+
+    @Mock
+    private Navigator navigator;
 
     @InjectMocks
     private BasisOfPreparationController controller;
@@ -55,8 +60,6 @@ public class BasisOfPreparationControllerTests {
 
     private static final String BASIS_OF_PREPARATION_PATH = SMALL_FULL_PATH + "/basis-of-preparation";
 
-    private static final String TURNOVER_POLICY_PATH = SMALL_FULL_PATH + "/turnover-policy";
-
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
@@ -67,9 +70,11 @@ public class BasisOfPreparationControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
     @BeforeEach
     private void setup() {
-
+        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -107,10 +112,11 @@ public class BasisOfPreparationControllerTests {
         when(basisOfPreparationService.submitBasisOfPreparation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(BasisOfPreparation.class)))
                 .thenReturn(validationErrors);
         when(validationErrors.isEmpty()).thenReturn(true);
+        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + TURNOVER_POLICY_PATH));
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test

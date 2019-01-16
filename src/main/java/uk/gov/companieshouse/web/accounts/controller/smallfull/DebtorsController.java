@@ -90,7 +90,7 @@ public class DebtorsController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
                 companyAccountsId);
     }
 }

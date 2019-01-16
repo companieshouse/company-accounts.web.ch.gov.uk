@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
+import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -40,6 +41,9 @@ public class ResumeControllerTests {
 
     @Mock
     ResumeService resumeService;
+
+    @Mock
+    Navigator navigator;
 
     @InjectMocks
     private ResumeController controller;
