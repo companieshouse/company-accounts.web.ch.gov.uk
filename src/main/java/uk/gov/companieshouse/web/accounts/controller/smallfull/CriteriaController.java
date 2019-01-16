@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 @Controller
 @NextController(StepsToCompleteController.class)
@@ -46,6 +45,6 @@ public class CriteriaController extends BaseController {
             return getTemplateName();
         }
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber);
+        return navigator.getNextControllerRedirect(this.getClass(), companyNumber);
     }
 }

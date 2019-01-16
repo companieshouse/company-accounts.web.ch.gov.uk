@@ -18,7 +18,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 import java.util.List;
 
@@ -84,6 +83,6 @@ public class BalanceSheetController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 }
