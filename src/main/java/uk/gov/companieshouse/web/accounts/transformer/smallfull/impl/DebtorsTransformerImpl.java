@@ -18,6 +18,10 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     @Override
     public Debtors getDebtors(DebtorsApi debtorsApi) {
 
+        if (debtorsApi == null) {
+            return new Debtors();
+        }
+
         Debtors debtors = new Debtors();
 
         TradeDebtors tradeDebtors = new TradeDebtors();
@@ -43,7 +47,7 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     private void getDebtorsPreviousPeriodForWeb(DebtorsApi debtorsApi, TradeDebtors tradeDebtors,
             PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome, OtherDebtors otherDebtors,
             Total total, GreaterThanOneYear greaterThanOneYear) {
-        if (debtorsApi != null && debtorsApi.getDebtorsPreviousPeriod() != null) {
+        if (debtorsApi.getDebtorsPreviousPeriod() != null) {
 
             tradeDebtors.setPreviousTradeDebtors(debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors());
             prepaymentsAndAccruedIncome.setPreviousPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome());
@@ -56,7 +60,7 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     private void getDebtorsCurrentPeriodForWeb(DebtorsApi debtorsApi, Debtors debtors,
             TradeDebtors tradeDebtors, PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome,
             OtherDebtors otherDebtors, Total total, GreaterThanOneYear greaterThanOneYear) {
-        if (debtorsApi != null && debtorsApi.getDebtorsCurrentPeriod() != null) {
+        if (debtorsApi.getDebtorsCurrentPeriod() != null) {
             debtors.setDetails(debtorsApi.getDebtorsCurrentPeriod().getDetails());
 
             tradeDebtors.setCurrentTradeDebtors(debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors());
