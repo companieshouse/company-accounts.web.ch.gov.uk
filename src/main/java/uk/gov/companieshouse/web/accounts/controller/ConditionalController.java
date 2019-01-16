@@ -4,7 +4,7 @@ package uk.gov.companieshouse.web.accounts.controller;
  * The {@code ConditionalController} interface defines a single method that
  * should be implemented in controller classes whose template is rendered
  * conditionally (i.e. the controller will only render its template
- * dependent on some condition, such as the preseence or absence of data).
+ * dependent on some condition, such as the presence or absence of data).
  * <p>
  * The {@code willRender} implementation should return boolean true to
  * indicate that the template will be rendered, otherwise false.
