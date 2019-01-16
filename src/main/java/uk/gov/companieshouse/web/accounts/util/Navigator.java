@@ -88,7 +88,7 @@ public class Navigator {
      * Searches the controller chain to determine which controller is next
      * in the journey, ignoring any conditional controllers that signal they
      * will not be rendered (i.e. any controller that returns boolean false
-     * to {@code willRender}.
+     * to {@code willRender}).
      * <p>
      * The controller search begins at the controller {@code clazz}
      * in the chain and the scan will be performed in the direction specified.
