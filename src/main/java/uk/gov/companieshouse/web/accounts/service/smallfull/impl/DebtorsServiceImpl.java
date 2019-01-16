@@ -42,10 +42,8 @@ public class DebtorsServiceImpl implements DebtorsService {
     @Autowired
     private SmallFullService smallFullService;
 
-    private static final UriTemplate SMALL_FULL_URI =
-        new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
-
-    private static final UriTemplate DEBTORS_URI = new UriTemplate(SMALL_FULL_URI.toString() + "/notes/debtors");
+    private static final UriTemplate DEBTORS_URI =
+        new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/debtors");
 
     private static final String INVALID_URI_MESSAGE = "Invalid URI for debtors resource";
 
