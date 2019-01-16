@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -91,7 +90,7 @@ public class IntangibleAmortisationPolicyController extends BaseController {
 
         cacheIsPolicyIncluded(request, intangibleAmortisationPolicy);
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override

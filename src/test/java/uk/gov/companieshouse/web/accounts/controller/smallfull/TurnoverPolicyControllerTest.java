@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,6 +35,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
+import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,6 +63,8 @@ public class TurnoverPolicyControllerTest {
 
     private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
 
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
     private MockMvc mockMvc;
 
     @Mock
@@ -75,11 +79,15 @@ public class TurnoverPolicyControllerTest {
     @Mock
     private AccountingPolicies accountingPolicies;
 
+    @Mock
+    Navigator navigator;
+
     @InjectMocks
     private TurnoverPolicyController turnoverPolicyController;
 
     @BeforeEach
     private void setupBeforeEach() {
+        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(turnoverPolicyController).build();
     }
 
@@ -91,6 +99,8 @@ public class TurnoverPolicyControllerTest {
         turnoverPolicy.setIsIncludeTurnoverSelected(true);
         when(turnoverPolicyServiceMock.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(turnoverPolicy);
+
+        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
             .perform(get(TURNOVER_POLICY_PATH))
@@ -156,10 +166,12 @@ public class TurnoverPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
 
+        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
         this.mockMvc.perform(createPostRequestWithParam(false).session(session))
             .andExpect(status().is3xxRedirection())
             .andExpect(
-                view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH))
+                view().name(MOCK_CONTROLLER_PATH))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
