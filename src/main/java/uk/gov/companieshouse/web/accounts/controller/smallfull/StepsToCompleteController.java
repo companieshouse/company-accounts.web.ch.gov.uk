@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccount
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 @Controller
 @NextController(BalanceSheetController.class)
@@ -74,7 +73,7 @@ public class StepsToCompleteController extends BaseController {
 
             transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
 
-            return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+            return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
         } catch (ServiceException e) {
 

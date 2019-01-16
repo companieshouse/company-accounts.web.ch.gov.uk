@@ -18,8 +18,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     ApiClientService apiClientService;
 
-    private static final String RESUME_LINK = "resume";
-
     private static final UriTemplate TRANSACTIONS_URI = new UriTemplate("/transactions/{transactionId}");
 
     /**
