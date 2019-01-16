@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -33,9 +32,6 @@ public class DebtorsController extends BaseController {
     @Autowired
     private DebtorsService debtorsService;
 
-    @Autowired
-    private BalanceSheetService balanceSheetService;
-
     @Override
     protected String getTemplateName() {
         return "smallfull/debtors";
@@ -52,8 +48,7 @@ public class DebtorsController extends BaseController {
         try {
             Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId,
                     companyNumber);
-            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId,
-                    companyAccountsId, companyNumber));
+
             model.addAttribute("debtors", debtors);
 
         } catch (ServiceException e) {
@@ -76,15 +71,6 @@ public class DebtorsController extends BaseController {
             HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
-        try {
-            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId,
-                    companyAccountsId, companyNumber));
-        } catch (ServiceException e) {
-
-            LOGGER.errorRequest(request, e.getMessage(), e);
-            return ERROR_VIEW;
-        }
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

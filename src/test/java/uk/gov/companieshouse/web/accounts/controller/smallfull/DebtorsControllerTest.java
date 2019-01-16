@@ -46,9 +46,6 @@ public class DebtorsControllerTest {
     @Mock
     private BalanceSheetService mockBalanceSheetService;
 
-    @Mock
-    private BalanceSheet mockBalanceSheet;
-
     @InjectMocks
     private DebtorsController controller;
 
@@ -68,8 +65,6 @@ public class DebtorsControllerTest {
     private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
 
     private static final String DEBTORS_MODEL_ATTR = "debtors";
-
-    private static final String BALANCESHEET_ATTR = "balanceSheet";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
@@ -91,13 +86,11 @@ public class DebtorsControllerTest {
     void getRequestSuccess() throws Exception {
 
         when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(DEBTORS_VIEW))
             .andExpect(model().attributeExists(DEBTORS_MODEL_ATTR))
-            .andExpect(model().attributeExists(BALANCESHEET_ATTR))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
@@ -133,19 +126,6 @@ public class DebtorsControllerTest {
 
         doThrow(ServiceException.class)
             .when(mockDebtorsService).submitDebtors(anyString(), anyString(), any(Debtors.class), anyString());
-
-        this.mockMvc.perform(post(DEBTORS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
-    }
-
-    @Test
-    @DisplayName("Post debtors failure path when retrieving balancesheet")
-    void postRequestFailureRetreivingBalanceSheet() throws Exception {
-
-        when(mockBalanceSheetService.getBalanceSheet(
-            TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().isOk())

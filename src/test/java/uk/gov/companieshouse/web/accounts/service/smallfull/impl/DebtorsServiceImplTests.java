@@ -25,9 +25,12 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -75,6 +78,12 @@ public class DebtorsServiceImplTests {
     @Mock
     private ValidationContext mockValidationContext;
 
+    @Mock
+    private BalanceSheetService mockBalanceSheetService;
+
+    @Mock
+    private BalanceSheet mockBalanceSheet;
+
     @InjectMocks
     private DebtorsService debtorsService = new DebtorsServiceImpl();
 
@@ -98,6 +107,8 @@ public class DebtorsServiceImplTests {
         getMockDebtorsApi(debtorsApi);
 
         when(mockDebtorsTransformer.getDebtors(debtorsApi)).thenReturn(createDebtors());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
+        when(mockBalanceSheet.getBalanceSheetHeadings()).thenReturn(new BalanceSheetHeadings());
 
         Debtors debtors = debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -118,6 +129,7 @@ public class DebtorsServiceImplTests {
         getMockDebtorsResourceHandler();
         when(mockDebtorsResourceHandler.get(DEBTORS_URI)).thenReturn(mockDebtorsGet);
         when(mockDebtorsGet.execute()).thenThrow(apiErrorResponseException);
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
 
         when(mockDebtorsTransformer.getDebtors(null)).thenReturn(createDebtors());
 
@@ -379,13 +391,19 @@ public class DebtorsServiceImplTests {
         TradeDebtors tradeDebtors = new TradeDebtors();
         Total total = new Total();
 
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+
         tradeDebtors.setCurrentTradeDebtors((long) 5);
         tradeDebtors.setPreviousTradeDebtors((long) 5);
         total.setCurrentTotal((long) 5);
         total.setPreviousTotal((long) 5);
 
+        balanceSheetHeadings.setCurrentPeriodHeading("");
+        balanceSheetHeadings.setPreviousPeriodHeading("");
+
         debtors.setTradeDebtors(tradeDebtors);
         debtors.setTotal(total);
+        debtors.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return debtors;
     }
