@@ -68,14 +68,14 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     }
 
     @Override
-    public void setDebtors(Debtors debtors, DebtorsApi debtorsApi) {
+    public DebtorsApi getDebtorsApi(Debtors debtors) {
 
-        if (debtorsApi == null) {
-            debtorsApi = new DebtorsApi();
-        }
+        DebtorsApi debtorsApi = new DebtorsApi();
 
         setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
         setPreviousPeriodDebtorsOnApiModel(debtors, debtorsApi);
+
+        return debtorsApi;
 
     }
 

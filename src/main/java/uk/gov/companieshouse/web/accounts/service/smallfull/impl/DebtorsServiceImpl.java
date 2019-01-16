@@ -60,20 +60,15 @@ public class DebtorsServiceImpl implements DebtorsService {
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
 
-        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
-
         String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
         SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
-        if (debtorsApi == null) {
-            debtorsApi = new DebtorsApi();
-        }
 
-        transformer.setDebtors(debtors, debtorsApi);
+        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
 
-        boolean isCreated = hasDebtors(smallFullApi.getLinks());
+        boolean debtorsResourceExists = hasDebtors(smallFullApi.getLinks());
 
         try {
-            if (!isCreated) {
+            if (!debtorsResourceExists) {
                 apiClient.smallFull().debtors().create(uri, debtorsApi).execute();
             } else {
                 apiClient.smallFull().debtors().update(uri, debtorsApi).execute();

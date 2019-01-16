@@ -1,15 +1,10 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDebtors;
@@ -17,21 +12,24 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.DebtorsTransformerImpl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 
 public class DebtorsTransformerImplTests {
 
-    public static final long TRADE_DEBTORS_CURRENT = 1L;
-    public static final long PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT = 2L;
-    public static final long OTHER_DEBTORS_CURRENT = 3L;
-    public static final long GREATER_THAN_ONE_YEAR_CURRENT = 4L;
-    public static final long TOTAL_CURRENT = 6L;
+    private static final long TRADE_DEBTORS_CURRENT = 1L;
+    private static final long PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT = 2L;
+    private static final long OTHER_DEBTORS_CURRENT = 3L;
+    private static final long GREATER_THAN_ONE_YEAR_CURRENT = 4L;
+    private static final long TOTAL_CURRENT = 6L;
 
-    public static final long TRADE_DEBTORS_PREVIOUS = 10L;
-    public static final long PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS = 20L;
-    public static final long OTHER_DEBTORS_PREVIOUS= 30L;
-    public static final long GREATER_THAN_ONE_YEAR_PREVIOUS = 40L;
-    public static final long TOTAL_PREVIOUS = 60L;
-    public static final String DETAILS = "DETAILS";
+    private static final long TRADE_DEBTORS_PREVIOUS = 10L;
+    private static final long PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS = 20L;
+    private static final long OTHER_DEBTORS_PREVIOUS= 30L;
+    private static final long GREATER_THAN_ONE_YEAR_PREVIOUS = 40L;
+    private static final long TOTAL_PREVIOUS = 60L;
+    private static final String DETAILS = "DETAILS";
     private DebtorsTransformer transformer = new DebtorsTransformerImpl();
 
     @Test
@@ -125,9 +123,7 @@ public class DebtorsTransformerImplTests {
         total.setCurrentTotal(TOTAL_CURRENT);
         debtors.setTotal(total);
 
-        DebtorsApi debtorsApi = new DebtorsApi();
-
-        transformer.setDebtors(debtors, debtorsApi);
+        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
 
         assertNull(debtorsApi.getDebtorsCurrentPeriod().getDetails());
         assertNull(debtorsApi.getDebtorsCurrentPeriod().getGreaterThanOneYear());
@@ -161,9 +157,7 @@ public class DebtorsTransformerImplTests {
         total.setPreviousTotal(TOTAL_PREVIOUS);
         debtors.setTotal(total);
 
-        DebtorsApi debtorsApi = new DebtorsApi();
-
-        transformer.setDebtors(debtors, debtorsApi);
+        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
 
         assertEquals(TRADE_DEBTORS_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors().longValue());
         assertEquals(GREATER_THAN_ONE_YEAR_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear().longValue());
