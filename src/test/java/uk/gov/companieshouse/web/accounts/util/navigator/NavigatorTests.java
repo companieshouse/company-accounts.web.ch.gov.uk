@@ -97,11 +97,39 @@ public class NavigatorTests {
     }
 
     @Test
-    public void successfulRedirectWithSingleConditionalControllerInChain() {
+    public void successfulRedirectStartingFromMandatoryControllerWithExpectedNumberOfPathVariables() {
         when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
         String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
+    }
+
+    @Test
+    public void successfulRedirectStartingFromMandatoryControllerWithMissingPathVariables() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
+
+        String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER);
+
+        assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-two", redirect);
+    }
+
+    @Test
+    public void successfulRedirectStartingFromConditionalControllerWithExpectedNumberOfPathVariables() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
+
+        String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
+    }
+
+    @Test
+    public void successfulRedirectStartingFromConditionalControllerWithMissingPathVariables() {
+        when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
+
+        String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER);
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
     }

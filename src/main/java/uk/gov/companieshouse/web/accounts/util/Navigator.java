@@ -16,8 +16,8 @@ import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
 
 /**
  * The {@code Navigator} class provides support methods for handling
- * navigation between controllers when generating redirects or retrieving
- * @{link RequestMapping} paths.
+ * navigation between controllers and for generating redirects or retrieving
+ * controller @{link RequestMapping} paths.
  *
  * @see NextController
  * @see PreviousController
@@ -87,7 +87,8 @@ public class Navigator {
     /**
      * Searches the controller chain to determine which controller is next
      * in the journey, ignoring any conditional controllers that signal they
-     * will not be rendered.
+     * will not be rendered (i.e. any controller that returns boolean false
+     * to {@code willRender}).
      * <p>
      * The controller search begins at the controller {@code clazz}
      * in the chain and the scan will be performed in the direction specified.
@@ -112,7 +113,7 @@ public class Navigator {
 
             if (isConditionalController(controllerClass)) {
                 ConditionalController conditionalController = (ConditionalController) applicationContext.getBean(controllerClass);
-                if (conditionalController.willRender(companyNumber, transactionId, companyAccountsId) == false) {
+                if (!conditionalController.willRender(companyNumber, transactionId, companyAccountsId)) {
                     controllerClass = getControllerClass(controllerClass, direction);
                     continue;
                 }
@@ -190,7 +191,6 @@ public class Navigator {
     private boolean isConditionalController(Class clazz) {
         return ConditionalController.class.isAssignableFrom(clazz);
     }
-
 
     private enum Direction {
         FORWARD,
