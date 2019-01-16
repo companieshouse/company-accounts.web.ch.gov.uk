@@ -113,7 +113,7 @@ public class Navigator {
 
             if (isConditionalController(controllerClass)) {
                 ConditionalController conditionalController = (ConditionalController) applicationContext.getBean(controllerClass);
-                if (conditionalController.willRender(companyNumber, transactionId, companyAccountsId) == false) {
+                if (!conditionalController.willRender(companyNumber, transactionId, companyAccountsId)) {
                     controllerClass = getControllerClass(controllerClass, direction);
                     continue;
                 }
