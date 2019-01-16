@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,14 +15,20 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -45,6 +52,9 @@ public class DebtorsControllerTest {
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
+
+    @Mock
+    private Navigator mockNavigator;
 
     @InjectMocks
     private DebtorsController controller;
@@ -76,6 +86,8 @@ public class DebtorsControllerTest {
 
     private static final String TEST_PATH = "tradeDebtors.currentTradeDebtors";
 
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
     @BeforeEach
     private void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -85,6 +97,7 @@ public class DebtorsControllerTest {
     @DisplayName("Get debtors view success path")
     void getRequestSuccess() throws Exception {
 
+        when(mockNavigator.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
@@ -113,11 +126,12 @@ public class DebtorsControllerTest {
     @DisplayName("Post debtors success path")
     void postRequestSuccess() throws Exception {
 
+        when(mockNavigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockDebtorsService.submitDebtors(anyString(), anyString(), any(Debtors.class), anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+            .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test
@@ -152,6 +166,36 @@ public class DebtorsControllerTest {
     }
 
     @Test
+    @DisplayName("Test will render with Debtors present on balancesheet")
+    void willRenderDebtorsPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertTrue(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will render with Debtors not present on balancesheet")
+    void willRenderDebtorsNotPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoDebtors());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will render with Debtors not present on balancesheet")
+    void willRenderDebtorsServiceException() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    @Test
     @DisplayName("Post debtors with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
@@ -169,11 +213,34 @@ public class DebtorsControllerTest {
     private BalanceSheet getMockBalanceSheet() {
         BalanceSheet balanceSheet = new BalanceSheet();
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        CurrentAssets currentAssets = new CurrentAssets();
+        uk.gov.companieshouse.web.accounts.model.smallfull.Debtors debtors = new uk.gov.companieshouse.web.accounts.model.smallfull.Debtors();
+
+        debtors.setCurrentAmount(1L);
+        debtors.setPreviousAmount(2L);
+
+        currentAssets.setDebtors(debtors);
 
         balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
         balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
 
+        balanceSheet.setCurrentAssets(currentAssets);
+
         balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+        return balanceSheet;
+    }
+
+    private BalanceSheet getMockBalanceSheetNoDebtors() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        FixedAssets fixedAssets = new FixedAssets();
+
+        TangibleAssets tangibleAssets = new TangibleAssets();
+
+        tangibleAssets.setCurrentAmount(1L);
+        tangibleAssets.setPreviousAmount(1L);
+
+        fixedAssets.setTangibleAssets(tangibleAssets);
+        balanceSheet.setFixedAssets(fixedAssets);
         return balanceSheet;
     }
 }
