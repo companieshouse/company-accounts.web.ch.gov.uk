@@ -46,7 +46,7 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
     private static final UriTemplate CREDITORS_WITHIN_ONE_YEAR_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/creditors-within-one-year");
 
-    private static final String INVALID_URI_MESSAGE = "Invalid URI for debtors resource";
+    private static final String INVALID_URI_MESSAGE = "Invalid URI for creditors within one year resource";
 
     @Override
     public CreditorsWithinOneYear getCreditorsWithinOneYear(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
@@ -84,11 +84,11 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
                 List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
                 if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request when creating debtors resource", e);
+                    throw new ServiceException("Bad request when creating creditors within one year resource", e);
                 }
                 return validationErrors;
             }
-            throw new ServiceException("Error creating debtors resource", e);
+            throw new ServiceException("Error creating creditors within one year resource", e);
         }
 
         return new ArrayList<>();
