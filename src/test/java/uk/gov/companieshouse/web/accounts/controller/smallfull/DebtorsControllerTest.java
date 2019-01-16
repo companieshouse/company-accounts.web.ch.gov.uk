@@ -54,9 +54,6 @@ public class DebtorsControllerTest {
     private BalanceSheetService mockBalanceSheetService;
 
     @Mock
-    private BalanceSheet mockBalanceSheet;
-
-    @Mock
     private Navigator mockNavigator;
 
     @InjectMocks
@@ -78,8 +75,6 @@ public class DebtorsControllerTest {
     private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
 
     private static final String DEBTORS_MODEL_ATTR = "debtors";
-
-    private static final String BALANCESHEET_ATTR = "balanceSheet";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
@@ -104,13 +99,11 @@ public class DebtorsControllerTest {
 
         when(mockNavigator.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(DEBTORS_VIEW))
             .andExpect(model().attributeExists(DEBTORS_MODEL_ATTR))
-            .andExpect(model().attributeExists(BALANCESHEET_ATTR))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 

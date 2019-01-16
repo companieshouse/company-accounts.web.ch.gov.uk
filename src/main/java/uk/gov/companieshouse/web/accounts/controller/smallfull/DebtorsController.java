@@ -53,8 +53,7 @@ public class DebtorsController extends BaseController implements ConditionalCont
         try {
             Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId,
                     companyNumber);
-            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId,
-                    companyAccountsId, companyNumber));
+
             model.addAttribute("debtors", debtors);
 
         } catch (ServiceException e) {
@@ -77,15 +76,6 @@ public class DebtorsController extends BaseController implements ConditionalCont
             HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
-        try {
-            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId,
-                    companyAccountsId, companyNumber));
-        } catch (ServiceException e) {
-
-            LOGGER.errorRequest(request, e.getMessage(), e);
-            return ERROR_VIEW;
-        }
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

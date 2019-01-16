@@ -7,5 +7,5 @@ public interface DebtorsTransformer {
 
     Debtors getDebtors(DebtorsApi debtorsApi);
 
-    void setDebtors(Debtors debtors, DebtorsApi debtorsApi);
+    DebtorsApi getDebtorsApi(Debtors debtors);
 }

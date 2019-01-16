@@ -31,16 +31,16 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="currentPeriodHeading" th:text='${balanceSheet.balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
+                        <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
                         <!-- Hidden input for form binding -->
-                        <input type="hidden">
+                        <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
                     </h2>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="previousPeriodHeading" th:text='${balanceSheet.balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
+                        <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
                         <!-- Hidden input for form binding -->
-                        <input type="hidden">
+                        <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
                     </h2>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                                 )">
                     </div>
                 </div>
-                <div th:unless="${#strings.isEmpty(balanceSheet.balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.previousTradeDebtors',
                                 text = 'Trade debtors previous',
@@ -95,7 +95,7 @@
                                 )">
                     </div>
                 </div>
-                <div th:unless="${#strings.isEmpty(balanceSheet.balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income previous',
@@ -126,7 +126,7 @@
                                 )">
                     </div>
                 </div>
-                <div th:unless="${#strings.isEmpty(balanceSheet.balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.previousOtherDebtors',
                                 text = 'Other debtors previous',
@@ -157,7 +157,7 @@
                                 )">
                     </div>
                 </div>
-                <div th:unless="${#strings.isEmpty(balanceSheet.balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
                                 text = 'Total previous',
@@ -188,7 +188,7 @@
                                 )">
                     </div>
                 </div>
-                <div th:unless="${#strings.isEmpty(balanceSheet.balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'greaterThanOneYear.previousGreaterThanOneYear',
                                 text = 'Debtors after more than one year previous',

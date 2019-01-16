@@ -12,8 +12,10 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -37,6 +39,9 @@ public class DebtorsServiceImpl implements DebtorsService {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private BalanceSheetService balanceSheetService;
+
     private static final UriTemplate SMALL_FULL_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
 
@@ -47,8 +52,13 @@ public class DebtorsServiceImpl implements DebtorsService {
     @Override
     public Debtors getDebtors(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
         DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
+        Debtors debtors = transformer.getDebtors(debtorsApi);
 
-        return transformer.getDebtors(debtorsApi);
+        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings();
+
+        debtors.setBalanceSheetHeadings(balanceSheetHeadings);
+
+        return debtors;
     }
 
     @Override
@@ -60,20 +70,15 @@ public class DebtorsServiceImpl implements DebtorsService {
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
 
-        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
-
         String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
         SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
-        if (debtorsApi == null) {
-            debtorsApi = new DebtorsApi();
-        }
 
-        transformer.setDebtors(debtors, debtorsApi);
+        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
 
-        boolean isCreated = hasDebtors(smallFullApi.getLinks());
+        boolean debtorsResourceExists = hasDebtors(smallFullApi.getLinks());
 
         try {
-            if (!isCreated) {
+            if (!debtorsResourceExists) {
                 apiClient.smallFull().debtors().create(uri, debtorsApi).execute();
             } else {
                 apiClient.smallFull().debtors().update(uri, debtorsApi).execute();
