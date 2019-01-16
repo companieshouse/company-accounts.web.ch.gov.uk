@@ -14,10 +14,9 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -32,8 +31,8 @@ import java.util.List;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/creditors-within-one-year")
 public class CreditorsWithinOneYearController extends BaseController {
 
-	//@Autowired
-	//private CreditorsWithinOneYearService creditorsWithinOneYearService;
+	@Autowired
+	private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
 	@Autowired
 	private BalanceSheetService balanceSheetService;
@@ -52,10 +51,8 @@ public class CreditorsWithinOneYearController extends BaseController {
 		addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
 		try {
-			//CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
-			CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
-			setBalanceSheetHeadings(creditorsWithinOneYear, transactionId, companyAccountsId, companyNumber);
-
+			CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
+			
 			model.addAttribute("creditorsWithinOneYear", creditorsWithinOneYear);
 		} catch (ServiceException e) {
 			LOGGER.errorRequest(request, e.getMessage(), e);
@@ -79,10 +76,10 @@ public class CreditorsWithinOneYearController extends BaseController {
 			return getTemplateName();
 		}
 
-		/*
+		
 		try {
 			List<ValidationError> validationErrors =
-					creditorsWithinOneYearService.submitcreditorsWithinOneYear(transactionId, companyAccountsId,
+					creditorsWithinOneYearService.submitCreditorsWithinOneYear(transactionId, companyAccountsId,
 							creditorsWithinOneYear, companyNumber);
 
 			if (!validationErrors.isEmpty()) {
@@ -93,22 +90,7 @@ public class CreditorsWithinOneYearController extends BaseController {
 			LOGGER.errorRequest(request, e.getMessage(), e);
 			return ERROR_VIEW;
 		}
-		*/
 
 		return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
-	}
-
-	private void setBalanceSheetHeadings(CreditorsWithinOneYear creditorsWithinOneYear, String transactionId,
-			String companyAccountsId, String companyNumber) throws ServiceException {
-
-		BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
-
-		balanceSheetHeadings.setCurrentPeriodHeading(balanceSheetService.getBalanceSheet(
-				transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getCurrentPeriodHeading());
-
-		balanceSheetHeadings.setPreviousPeriodHeading(balanceSheetService.getBalanceSheet(
-				transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings().getPreviousPeriodHeading());
-
-		creditorsWithinOneYear.setBalanceSheetHeadings(balanceSheetHeadings);
 	}
 }
