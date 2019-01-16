@@ -12,8 +12,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
@@ -49,6 +51,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private OtherAccountingPolicyService otherAccountingPolicyService;
 
+    @Autowired
+    private DebtorsService debtorsService;
+
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
@@ -70,6 +75,8 @@ public class ReviewServiceImpl implements ReviewService {
         OtherAccountingPolicy otherAccountingPolicy =
                 otherAccountingPolicyService.getOtherAccountingPolicy(transactionId, companyAccountsId);
 
+        Debtors debtors = debtorsService.getDebtors(transactionId,companyAccountsId, companyNumber);
+
         Review review = new Review();
         review.setBalanceSheet(balanceSheet);
         review.setStatements(statements);
@@ -79,6 +86,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
         review.setValuationInformationPolicy(valuationInformationPolicy);
         review.setOtherAccountingPolicy(otherAccountingPolicy);
+        review.setDebtors(debtors);
 
         return review;
     }

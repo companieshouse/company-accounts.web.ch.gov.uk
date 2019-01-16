@@ -60,9 +60,8 @@ public class DebtorsServiceImpl implements DebtorsService {
     }
 
     @Override
-    public List<ValidationError> submitDebtors(
-        String transactionId, String companyAccountsId,
-        Debtors debtors, String companyNumber) throws ServiceException {
+    public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId,
+            Debtors debtors, String companyNumber) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
