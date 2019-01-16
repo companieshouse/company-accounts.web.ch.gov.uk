@@ -7,7 +7,8 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface TangibleAssetsNoteService {
 
-    TangibleAssets getTangibleAssets(String transactionId, String companyAccountsId, String companyNumber)
+    TangibleAssets getTangibleAssets(String transactionId, String companyAccountsId,
+        String companyNumber)
         throws ServiceException;
 
     List<ValidationError> postTangibleAssets(String transactionId, String companyAccountsId,

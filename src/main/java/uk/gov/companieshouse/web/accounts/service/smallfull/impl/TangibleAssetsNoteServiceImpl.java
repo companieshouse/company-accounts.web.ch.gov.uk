@@ -33,10 +33,11 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
     private TangibleAssetsTransformer tangibleAssetsTransformer;
 
     private static final UriTemplate SMALL_FULL_URI =
-        new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
+        new UriTemplate(
+            "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
 
 
-    private static final UriTemplate TANGILBLE_ASSET_NOTE =
+    private static final UriTemplate TANGIBLE_ASSET_NOTE =
         new UriTemplate(
             "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/tangible-assets");
 
@@ -48,7 +49,7 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        String uri = TANGILBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
+        String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
 
         TangibleApi tangibleApi;
 
@@ -76,7 +77,7 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        String uri = TANGILBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
+        String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
 
         String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
         SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
@@ -102,7 +103,7 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
                 }
                 return validationErrors;
             }
-            throw new ServiceException("Error creating tangilble assets note resource", e);
+            throw new ServiceException("Error creating tangible assets note resource", e);
         }
 
         return new ArrayList<>();

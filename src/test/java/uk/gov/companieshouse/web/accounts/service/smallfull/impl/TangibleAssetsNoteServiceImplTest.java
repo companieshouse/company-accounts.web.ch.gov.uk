@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.transformer.smallfull;
+package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,7 +36,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.impl.TangibleAssetsNoteServiceImpl;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -92,14 +91,8 @@ public class TangibleAssetsNoteServiceImplTest {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
-    private static final String BASE_SMALL_FULL_URI = "/transactions/" + TRANSACTION_ID +
-        "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-        "/small-full";
-
-    private static final String TANGIBLE_URI = BASE_SMALL_FULL_URI + "/notes/tangible-assets";
-
     @BeforeEach
-    private void setup() {
+    private void setUp() {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleResourceHandler);
