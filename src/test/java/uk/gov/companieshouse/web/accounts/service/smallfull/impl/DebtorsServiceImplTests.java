@@ -32,10 +32,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,6 +79,9 @@ public class DebtorsServiceImplTests {
 
     @Mock
     private ValidationContext mockValidationContext;
+
+    @Mock
+    private SmallFullService smallFullService;
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
@@ -184,7 +189,7 @@ public class DebtorsServiceImplTests {
         DebtorsApi debtorsApi = createDebtorsApi();
 
         SmallFullApi smallFullApi = new SmallFullApi();
-        getMockSmallFullApi(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         setLinksWithoutDebtors(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
@@ -207,8 +212,9 @@ public class DebtorsServiceImplTests {
         DebtorsApi debtorsApi = createDebtorsApi();
 
         SmallFullApi smallFullApi = new SmallFullApi();
-        getMockSmallFullApi(smallFullApi);
         setLinksWithoutDebtors(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
         when(mockDebtorsResourceHandler.create(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsCreate);
@@ -235,8 +241,9 @@ public class DebtorsServiceImplTests {
         DebtorsApi debtorsApi = createDebtorsApi();
 
         SmallFullApi smallFullApi = new SmallFullApi();
-        getMockSmallFullApi(smallFullApi);
         setLinksWithoutDebtors(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
         when(mockDebtorsResourceHandler.create(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsCreate);
@@ -254,37 +261,13 @@ public class DebtorsServiceImplTests {
     }
 
     @Test
-    @DisplayName("POST - Debtors throws ServiceExcepiton due to ApiErrorResponseException Getting Smallfull data")
+    @DisplayName("POST - Debtors throws ServiceExcepiton getting Smallfull data")
     void postDebtorsGetSmallFullDataApiResponseException() throws Exception {
 
         Debtors debtors = createDebtors();
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
-        getMockSmallFullResourceHandler();
-        when(mockSmallFullResourceHandler.get(BASE_SMALL_FULL_URI)).thenReturn(mockSmallFullGet);
-        when(mockSmallFullGet.execute()).thenThrow(apiErrorResponseException);
-
-        assertThrows(ApiErrorResponseException.class, () -> mockSmallFullGet.execute());
-        assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
-            TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID,
-            debtors,
-            COMPANY_NUMBER));
-    }
-
-    @Test
-    @DisplayName("POST - Debtors throws ServiceExcepiton due to URIValidationException Getting Smallfull data")
-    void postDebtorsGetSmallFullDataURIValidationException() throws Exception {
-
-        Debtors debtors = createDebtors();
-
-        getMockSmallFullResourceHandler();
-        when(mockSmallFullResourceHandler.get(BASE_SMALL_FULL_URI)).thenReturn(mockSmallFullGet);
-        when(mockSmallFullGet.execute()).thenThrow(URIValidationException.class);
-
-        assertThrows(URIValidationException.class, () -> mockSmallFullGet.execute());
         assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -300,8 +283,9 @@ public class DebtorsServiceImplTests {
         DebtorsApi debtorsApi = new DebtorsApi();
 
         SmallFullApi smallFullApi = new SmallFullApi();
-        getMockSmallFullApi(smallFullApi);
         setLinksWithDebtors(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
         debtorsUpdate(debtorsApi);
@@ -320,8 +304,9 @@ public class DebtorsServiceImplTests {
         Debtors debtors = createDebtors();
 
         SmallFullApi smallFullApi = new SmallFullApi();
-        getMockSmallFullApi(smallFullApi);
         setLinksWithDebtors(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
 

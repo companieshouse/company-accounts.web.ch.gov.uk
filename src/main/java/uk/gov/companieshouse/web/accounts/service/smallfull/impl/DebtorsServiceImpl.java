@@ -14,9 +14,9 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -37,10 +37,10 @@ public class DebtorsServiceImpl implements DebtorsService {
     private DebtorsTransformer transformer;
 
     @Autowired
-    private CompanyService companyService;
+    private BalanceSheetService balanceSheetService;
 
     @Autowired
-    private BalanceSheetService balanceSheetService;
+    private SmallFullService smallFullService;
 
     private static final UriTemplate SMALL_FULL_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
@@ -70,8 +70,7 @@ public class DebtorsServiceImpl implements DebtorsService {
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
 
-        String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
-        SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(transactionId, companyAccountsId);
 
         DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
 
@@ -114,17 +113,6 @@ public class DebtorsServiceImpl implements DebtorsService {
             throw new ServiceException("Error when retrieving debtors", e);
         } catch (URIValidationException e) {
             throw new ServiceException(INVALID_URI_MESSAGE, e);
-        }
-    }
-
-    private SmallFullApi getSmallFullData(ApiClient apiClient, String smallFullUri)
-        throws ServiceException {
-        try {
-            return apiClient.smallFull().get(smallFullUri).execute();
-        } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error retrieving small full data", e);
-        } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for small full resource", e);
         }
     }
 
