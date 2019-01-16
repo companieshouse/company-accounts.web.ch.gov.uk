@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
@@ -29,7 +31,7 @@ import java.util.List;
 @NextController(ReviewController.class)
 @PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/creditors-within-one-year")
-public class CreditorsWithinOneYearController extends BaseController {
+public class CreditorsWithinOneYearController extends BaseController implements ConditionalController {
 
 	@Autowired
 	private CreditorsWithinOneYearService creditorsWithinOneYearService;
@@ -91,6 +93,18 @@ public class CreditorsWithinOneYearController extends BaseController {
 			return ERROR_VIEW;
 		}
 
-		return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+		return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+	}
+	
+	@Override
+	public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+	    try {
+	        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
+	                transactionId, companyAccountsId, companyNumber);
+	        
+	        return balanceSheet.getOtherLiabilitiesOrAssets() != null && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() != null;
+	    } catch (ServiceException e) {
+	        return false;
+	    }
 	}
 }
