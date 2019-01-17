@@ -67,7 +67,7 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
         ApiClient apiClient = apiClientService.getApiClient();
         String uri = CREDITORS_WITHIN_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
 
-        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.setCreditorsWithinOneYear(creditorsWithinOneYear);
+        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear);
 
         boolean creditorsWithinOneYearResourceExists = hasCreditorsWithinOneYear(transactionId, companyAccountsId);
         try {

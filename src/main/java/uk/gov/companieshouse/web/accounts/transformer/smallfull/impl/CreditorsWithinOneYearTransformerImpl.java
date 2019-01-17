@@ -97,7 +97,7 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
     }
     
     @Override
-    public CreditorsWithinOneYearApi setCreditorsWithinOneYear(CreditorsWithinOneYear creditorsWithinOneYear) {
+    public CreditorsWithinOneYearApi getCreditorsWithinOneYearApi(CreditorsWithinOneYear creditorsWithinOneYear) {
 
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
 

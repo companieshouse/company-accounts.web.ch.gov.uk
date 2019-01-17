@@ -7,5 +7,5 @@ public interface CreditorsWithinOneYearTransformer {
 
 	CreditorsWithinOneYear getCreditorsWithinOneYear(CreditorsWithinOneYearApi creditorsWithinOneYearApi);
 
-	CreditorsWithinOneYearApi setCreditorsWithinOneYear(CreditorsWithinOneYear creditorsWithinOneYear);
+	CreditorsWithinOneYearApi getCreditorsWithinOneYearApi(CreditorsWithinOneYear creditorsWithinOneYear);
 }
