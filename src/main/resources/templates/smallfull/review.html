@@ -407,7 +407,7 @@
                 <!-- Debtors Note -->
                 <div id="cya-small-full-debtors-note">
 
-                    <div th:if="*{debtors != null}">
+                    <div th:if="*{debtors.total != null}">
                         <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Debtors note',
                             identifier= 'debtors-note',

@@ -53,7 +53,6 @@ public class DebtorsServiceImpl implements DebtorsService {
         Debtors debtors = transformer.getDebtors(debtorsApi);
 
         BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings();
-
         debtors.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return debtors;
@@ -93,6 +92,23 @@ public class DebtorsServiceImpl implements DebtorsService {
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public void deleteDebtors(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().debtors().delete(uri).execute();
+        } catch (URIValidationException e) {
+
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException("Error creating debtors resource", e);
+        }
     }
 
     private DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
