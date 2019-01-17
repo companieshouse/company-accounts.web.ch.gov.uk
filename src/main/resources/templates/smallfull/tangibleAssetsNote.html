@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title>Tangible assets note</title>
+</head>
+
+
+
+<div id="tangible-assets-note-main-content" layout:fragment="content" class="two-column-accounts">
+
+  <form id="tangible-assets-note-form" th:action="@{''}" th:object="${tangibleAssets}" class="form currency-included-within-inputs govuk-body" method="post">
+
+
+    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+    <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Tangible assets note'
+                )">
+    </div>
+
+    <p class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
+    <h2 class="govuk-heading-m">Cost</h2>
+
+    <div class="govuk-grid-row" id="accounts-header-cost">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Land &amp; buildings<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Plant &amp; machinery<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Fixtures &amp; fittings<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
+      </div>
+    </div>
+
+
+    <!--Start Cost at start-->
+    <div class="govuk-grid-row accounts-row-spacer">
+      <div class="column-fifth">Cost at 1 April 2017
+        <!-- <details> <summary> <span class="summary">-->
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets at the start of this accounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodStart.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodStart.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodStart.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodStart.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodStart.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodStart.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Cost at start-->
+    <!--Start Additions -->
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Additions
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets aquired during this accounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Additions-->
+    <!--Start Disposals-->
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Disposals
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of tangible assets disposed of in this acccounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Disposals=-->
+    <!--Start Revaluations-->
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!-- <details> <summary> <span class="summary">-->Revaluations
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> Valuation of any assets revalued during this accounting period. </p> <p> If the revaluation reduces the value of the asset, then enter a negative figure. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Revaluations=-->
+    <!--Start Transfers-->
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Transfers
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost or valuation of any tangible assets that you've transferred during this accounting period. If the asset is being transferred out, enter a negative figure. </p> </div>
+        </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Transfers-->
+    <!--Start Cost at end-->
+    <div class="govuk-grid-row accounts-total">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->
+        <strong>Cost at  DATE GOES HERE</strong>
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+
+
+      <br>
+
+    </div>
+
+    <h2 class="govuk-heading-m">Depreciation</h2>
+
+    <div class="govuk-grid-row" id="accounts-header-depreciation">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Land &amp; buildings<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Plant &amp; machinery<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Fixtures &amp; fittings<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
+      </div>
+    </div>
+
+
+    <!--Start Depreciation at start-->
+    <div class="govuk-grid-row accounts-row-spacer">
+      <div class="column-fifth">Cost at 1 April 2017
+        <!-- <details> <summary> <span class="summary">-->
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets at the start of this accounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodStart.landAndBuildings',
+                                text = 'Depreciation Start Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodStart.plantAndMachinery',
+                                text = 'Depreciation Start Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodStart.fixturesAndFittings',
+                                text = 'Depreciation Start Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodStart.officeEquipment',
+                                text = 'Depreciation Start Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodStart.motorVehicles',
+                                text = 'Depreciation Start Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodStart.total',
+                                text = 'Depreciation Start Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Cost at start-->
+    <!--Start Additions -->
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Additions
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets aquired during this accounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.chargeForYear.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.chargeForYear.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.chargeForYear.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.chargeForYear.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.chargeForYear.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.chargeForYear.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Additions-->
+    <!--Start Disposals-->
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Disposals
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of tangible assets disposed of in this acccounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.onDisposals.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.onDisposals.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.onDisposals.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.onDisposals.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.onDisposals.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.onDisposals.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+      </div>
+    </div>
+    <!--End Disposals=-->
+    <!--Start Revaluations-->
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!-- <details> <summary> <span class="summary">-->Revaluations
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> Valuation of any assets revalued during this accounting period. </p> <p> If the revaluation reduces the value of the asset, then enter a negative figure. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.otherAdjustments.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.otherAdjustments.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.otherAdjustments.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.otherAdjustments.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.otherAdjustments.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.otherAdjustments.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Revaluations=-->
+    <!--Start Cost at end-->
+    <div class="govuk-grid-row accounts-total">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->
+        <strong>Depreciation DATE GOES HERE</strong>
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodEnd.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodEnd.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodEnd.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodEnd.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodEnd.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'depreciation.atPeriodEnd.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+
+
+      <br>
+
+    </div>
+
+
+    <h2 class="govuk-heading-m">Net Book Value</h2>
+
+    <div class="govuk-grid-row" id="accounts-header-net-book-value">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Land &amp; buildings<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Plant &amp; machinery<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Fixtures &amp; fittings<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
+      </div>
+    </div>
+
+    <!--Net Book Value End-->
+    <div class="govuk-grid-row accounts-total accounts-row-spacer">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->
+        <strong>Net book value at DATE GOES HERE</strong>
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+
+
+      <br>
+
+    </div>
+    <!--Net Book Value Start-->
+    <div class="govuk-grid-row accounts-total">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->
+        <strong>Net book value at DATE GOES HERE</strong>
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.landAndBuildings',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.plantAndMachinery',
+                                text = 'Cost Land and Buildings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.fixturesAndFittings',
+                                text = 'Cost Fixtures and Fittings',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.officeEquipment',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.motorVehicles',
+                                text = 'Cost Office Equipment',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.total',
+                                text = 'Totals',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+
+
+      <br>
+
+    </div>
+
+
+
+    <div class="form-group">
+      <input id="next-button" class="govuk-button piwik-event" data-event-id="Tangible assets note - Save and continue" type="submit" role="button" value="Save and continue"/>
+    </div>
+
+  </form>
+</div>
+</html>
