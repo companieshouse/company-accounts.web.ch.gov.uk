@@ -127,6 +127,9 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
                 stateCookie.setValue(token);
                 stateCookie.setPath("/");
 
+                //Set expiration of cookie to 10 years in the future
+                stateCookie.setMaxAge(60 * 60 * 24 * 365 * 10);
+
                 // Add the cookie to the response to save it
                 response.addCookie(stateCookie);
 
