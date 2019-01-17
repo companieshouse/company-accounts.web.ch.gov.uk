@@ -138,7 +138,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         String currentPeriodUri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
         createCurrentPeriod(apiClient, smallFullApi, currentPeriodUri, currentPeriod, validationErrors);
 
-        checkConditionalNotes(balanceSheet, smallFullApi.getLinks(), transactionId, companyAccountsId);
+        checkConditionalNotes(companyProfileApi, balanceSheet, smallFullApi.getLinks(), transactionId, companyAccountsId);
 
         return validationErrors;
 
@@ -270,15 +270,34 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
      * @param companyAccountsId The company accounts identifier
      * @throws ServiceException if there's an error on submission
      */
-    private void checkConditionalNotes(
+    private void checkConditionalNotes(CompanyProfileApi companyProfileApi,
         BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
         String transactionId, String companyAccountsId) throws ServiceException {
 
-        if ((balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == null ||
-            balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == null) &&
-            smallFullLinks.getDebtorsNote() != null) {
+        if (isSameYearFiler(companyProfileApi)) {
 
-            debtorsService.deleteDebtors(transactionId, companyAccountsId);
+            if ((isDebtorsCurrentAmountNull(balanceSheet) && smallFullLinks.getDebtorsNote() != null)) {
+                debtorsService.deleteDebtors(transactionId, companyAccountsId);
+            }
         }
+
+        if (isMultipleYearFiler(companyProfileApi)) {
+
+            if ((isDebtorsCurrentAmountNull(balanceSheet) || isDebtorsPreviousAmountNull(balanceSheet))
+                && smallFullLinks.getDebtorsNote() != null) {
+
+                debtorsService.deleteDebtors(transactionId, companyAccountsId);
+            }
+        }
+    }
+
+    private boolean isDebtorsCurrentAmountNull(BalanceSheet balanceSheet) {
+        return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null
+            && balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == null;
+    }
+
+    private boolean isDebtorsPreviousAmountNull(BalanceSheet balanceSheet) {
+        return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null
+            && balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == null;
     }
 }
