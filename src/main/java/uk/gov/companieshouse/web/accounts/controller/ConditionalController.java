@@ -15,7 +15,7 @@ public interface ConditionalController {
 
     /**
      * Returns a boolean value indicating whether the template associated
-     * with a controller will be rendered or not. Any {@code ServiceException}
+     * with a controller will be rendered or not. Any {@link ServiceException}
      * generated when determining whether the controller should render or
      * not should be thrown from this method and will be handled by the
      * navigation service and result in an error page being returned to the
