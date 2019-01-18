@@ -114,7 +114,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -150,7 +150,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -184,7 +184,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -228,7 +228,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -270,7 +270,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -303,7 +303,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -339,7 +339,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -373,7 +373,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -417,7 +417,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -459,7 +459,7 @@ public class ApprovalServiceImplTests {
 
         when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
