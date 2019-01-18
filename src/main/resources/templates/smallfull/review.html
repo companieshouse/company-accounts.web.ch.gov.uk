@@ -432,7 +432,8 @@
                                 description = 'Trade debtors',
                                 identifier = 'trade-debtors',
                                 currentAmount = *{debtors?.tradeDebtors.currentTradeDebtors},
-                                previousAmount = *{debtors?.tradeDebtors.previousTradeDebtors}
+                                previousAmount = *{debtors?.tradeDebtors.previousTradeDebtors},
+                                isBoldLegend = true
                             )">
                             </div>
 
@@ -440,7 +441,8 @@
                                 description = 'Prepayments and accrued income',
                                 identifier = 'prepayments=and-accrued-income',
                                 currentAmount = *{debtors?.prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome},
-                                previousAmount = *{debtors?.prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome}
+                                previousAmount = *{debtors?.prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome},
+                                isBoldLegend = true
                             )">
                             </div>
 
@@ -448,7 +450,8 @@
                                 description = 'Other debtors',
                                 identifier = 'other-debtors',
                                 currentAmount = *{debtors?.otherDebtors.currentOtherDebtors},
-                                previousAmount = *{debtors?.otherDebtors.previousOtherDebtors}
+                                previousAmount = *{debtors?.otherDebtors.previousOtherDebtors},
+                                isBoldLegend = true
 
                             )">
                             </div>
@@ -466,7 +469,8 @@
                                 description = 'Debtors after more than one year',
                                 identifier = 'debtors-after-more-than-one-year',
                                 currentAmount = *{debtors?.greaterThanOneYear.currentGreaterThanOneYear},
-                                previousAmount = *{debtors?.greaterThanOneYear.previousGreaterThanOneYear}
+                                previousAmount = *{debtors?.greaterThanOneYear.previousGreaterThanOneYear},
+                                isBoldLegend = true
                             )">
                             </div>
                         </dl>
