@@ -30,6 +30,9 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
 
     private static final Pattern APPROVAL_REGEX = Pattern.compile("/approval$");
 
+    //Used to expire the cookie 10 years in the future, therefore it's "never expiring"
+    private static final Integer COOKIE_EXPIRY = 60 * 60 * 24 * 365 * 10;
+
     @Autowired
     private TokenManager tokenManager;
 
@@ -126,9 +129,7 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
                 String token = tokenManager.createJWT(companyAccountsDataStates);
                 stateCookie.setValue(token);
                 stateCookie.setPath("/");
-
-                //Set expiration of cookie to 10 years in the future
-                stateCookie.setMaxAge(60 * 60 * 24 * 365 * 10);
+                stateCookie.setMaxAge(COOKIE_EXPIRY);
 
                 // Add the cookie to the response to save it
                 response.addCookie(stateCookie);
