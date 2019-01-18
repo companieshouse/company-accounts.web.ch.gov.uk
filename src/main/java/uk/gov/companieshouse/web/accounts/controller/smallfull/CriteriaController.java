@@ -45,6 +45,6 @@ public class CriteriaController extends BaseController {
             return getTemplateName();
         }
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
     }
 }

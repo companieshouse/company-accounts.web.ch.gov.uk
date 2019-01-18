@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+
 /**
  * The {@code ConditionalController} interface defines a single method that
  * should be implemented in controller classes whose template is rendered
@@ -21,5 +23,5 @@ public interface ConditionalController {
      *
      * @return true if the template for a controller will be rendered
      */
-    boolean willRender(String companyNumber, String transactionId, String companyAccountsId);
+    boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException;
 }

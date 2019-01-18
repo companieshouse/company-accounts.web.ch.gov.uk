@@ -35,7 +35,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,14 +80,14 @@ public class TurnoverPolicyControllerTest {
     private AccountingPolicies accountingPolicies;
 
     @Mock
-    Navigator navigator;
+    NavigatorService navigatorService;
 
     @InjectMocks
     private TurnoverPolicyController turnoverPolicyController;
 
     @BeforeEach
     private void setupBeforeEach() {
-        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(turnoverPolicyController).build();
     }
 
@@ -100,7 +100,7 @@ public class TurnoverPolicyControllerTest {
         when(turnoverPolicyServiceMock.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(turnoverPolicy);
 
-        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
             .perform(get(TURNOVER_POLICY_PATH))
@@ -166,7 +166,7 @@ public class TurnoverPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
 
-        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(createPostRequestWithParam(false).session(session))
             .andExpect(status().is3xxRedirection())

@@ -87,7 +87,7 @@ public class OtherAccountingPolicyController extends BaseController {
 
         cacheIsPolicyIncluded(request, otherAccountingPolicy);
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
 
