@@ -7,8 +7,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +21,7 @@ import uk.gov.companieshouse.api.handler.companyaccount.CompanyAccountsResourceH
 import uk.gov.companieshouse.api.handler.companyaccount.request.CompanyAccountsCreate;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
+import uk.gov.companieshouse.api.model.accounts.CompanyAccountsLinks;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
@@ -64,11 +63,11 @@ public class CompanyAccountsServiceImplTests {
 
         LocalDate periodEndOn = LocalDate.now();
 
-        CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
-        Map<String, String> links = new HashMap<>();
-        links.put("self", "/company-accounts/" + COMPANY_ACCOUNTS_ID);
+        CompanyAccountsLinks companyAccountsLinks = new CompanyAccountsLinks();
+        companyAccountsLinks.setSelf("/company-accounts/" + COMPANY_ACCOUNTS_ID);
 
-        companyAccounts.setLinks(links);
+        CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
+        companyAccounts.setLinks(companyAccountsLinks);
 
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);

@@ -72,6 +72,8 @@ public class StepsToCompleteController extends BaseController {
 
             statementsService.createBalanceSheetStatementsResource(transactionId, companyAccountsId);
 
+            transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
+
             return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
         } catch (ServiceException e) {

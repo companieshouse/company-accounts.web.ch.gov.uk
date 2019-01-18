@@ -17,12 +17,13 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(TangibleDepreciationPolicyController.class)
 @PreviousController(BasisOfPreparationController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/turnover-policy")
 public class TurnoverPolicyController extends BaseController {
@@ -40,8 +41,14 @@ public class TurnoverPolicyController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("turnoverPolicy",
-                turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId));
+            TurnoverPolicy turnoverPolicy =
+                    turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId);
+
+            if (turnoverPolicy.getIsIncludeTurnoverSelected() == null) {
+                setIsPolicyIncluded(request, turnoverPolicy);
+            }
+
+            model.addAttribute("turnoverPolicy", turnoverPolicy);
 
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -80,14 +87,40 @@ public class TurnoverPolicyController extends BaseController {
             return ERROR_VIEW;
         }
 
+        cacheIsPolicyIncluded(request, turnoverPolicy);
+
         return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
 
-
     @Override
     protected String getTemplateName() {
         return "smallfull/turnoverPolicy";
+    }
+
+    /**
+     * Sets the 'include turnover policy' boolean according to the cached state
+     * @param request The request
+     * @param turnoverPolicy The turnover policy model on which to set the boolean
+     */
+    private void setIsPolicyIncluded(HttpServletRequest request, TurnoverPolicy turnoverPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        turnoverPolicy.setIsIncludeTurnoverSelected(
+                companyAccountsDataState.getAccountingPolicies().getHasProvidedTurnoverPolicy());
+    }
+
+    /**
+     * Cache the 'include turnover policy' boolean within the client's state
+     * @param request The request
+     * @param turnoverPolicy The turnover policy for which to cache data
+     */
+    private void  cacheIsPolicyIncluded(HttpServletRequest request, TurnoverPolicy turnoverPolicy) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.getAccountingPolicies().setHasProvidedTurnoverPolicy(turnoverPolicy.getIsIncludeTurnoverSelected());
+
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 
 }

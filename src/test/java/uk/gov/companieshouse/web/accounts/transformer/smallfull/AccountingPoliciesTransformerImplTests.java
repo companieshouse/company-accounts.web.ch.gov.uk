@@ -15,6 +15,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.AccountingPoliciesTransformerImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +29,7 @@ public class AccountingPoliciesTransformerImplTests {
     private static final String BASIS_OF_PREPARATION_CUSTOM_STATEMENT = "customStatement";
     private static final String TURNOVER_POLICY_DETAILS = "turnoverPolicyDetails";
     private static final String INTANGIBLE_AMORTISATION_POLICY_DETAILS = "intangibleAmortisationPolicyDetails";
+    private static final String VALUATION_INFORMATION_POLICY_DETAILS = "valuationInformationPolicyDetails";
 
     private AccountingPoliciesTransformer transformer = new AccountingPoliciesTransformerImpl();
 
@@ -211,6 +213,60 @@ public class AccountingPoliciesTransformerImplTests {
         assertEquals(INTANGIBLE_AMORTISATION_POLICY_DETAILS, accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy());
     }
 
+    @Test
+    @DisplayName("Get valuation information policy - no data in API model")
+    void getValuationInformationPolicyNoDataInApiModel() {
+
+        ValuationInformationPolicy valuationInformationPolicy =
+                transformer.getValuationInformationPolicy(new AccountingPoliciesApi());
+
+        assertNotNull(valuationInformationPolicy);
+        assertNull(valuationInformationPolicy.getIncludeValuationInformationPolicy());
+        assertNull(valuationInformationPolicy.getValuationInformationPolicyDetails());
+    }
+
+    @Test
+    @DisplayName("Get valuation information policy - data present in API model")
+    void getValuationInformationPolicyDataPresentInApiModel() {
+
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+        accountingPoliciesApi.setValuationInformationAndPolicy(VALUATION_INFORMATION_POLICY_DETAILS);
+
+        ValuationInformationPolicy valuationInformationPolicy =
+                transformer.getValuationInformationPolicy(accountingPoliciesApi);
+
+        assertNotNull(valuationInformationPolicy);
+        assertEquals(VALUATION_INFORMATION_POLICY_DETAILS, valuationInformationPolicy.getValuationInformationPolicyDetails());
+        assertTrue(valuationInformationPolicy.getIncludeValuationInformationPolicy());
+    }
+
+    @Test
+    @DisplayName("Set valuation information policy - details not provided")
+    void setValuationInformationPolicyDetailsNotProvided() {
+
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+        accountingPoliciesApi.setValuationInformationAndPolicy(VALUATION_INFORMATION_POLICY_DETAILS);
+
+        ValuationInformationPolicy valuationInformationPolicy = createValuationInformationPolicy(false);
+
+        transformer.setValuationInformationPolicy(valuationInformationPolicy, accountingPoliciesApi);
+
+        assertNull(accountingPoliciesApi.getValuationInformationAndPolicy());
+    }
+
+    @Test
+    @DisplayName("Set valuation information policy - details provided")
+    void setValuationInformationPolicyDetailsProvided() {
+
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+
+        ValuationInformationPolicy valuationInformationPolicy = createValuationInformationPolicy(true);
+
+        transformer.setValuationInformationPolicy(valuationInformationPolicy, accountingPoliciesApi);
+
+        assertEquals(VALUATION_INFORMATION_POLICY_DETAILS, accountingPoliciesApi.getValuationInformationAndPolicy());
+    }
+
     private BasisOfPreparation createBasisOfPreparation(boolean isPreparedInAccordanceWithStandards) {
 
         BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
@@ -242,6 +298,18 @@ public class AccountingPoliciesTransformerImplTests {
         }
 
         return intangibleAmortisationPolicy;
+    }
+
+    private ValuationInformationPolicy createValuationInformationPolicy(boolean includePolicy) {
+
+        ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
+        valuationInformationPolicy.setIncludeValuationInformationPolicy(includePolicy);
+        if (includePolicy) {
+            valuationInformationPolicy
+                    .setValuationInformationPolicyDetails(VALUATION_INFORMATION_POLICY_DETAILS);
+        }
+
+        return valuationInformationPolicy;
     }
 
 }

@@ -12,18 +12,18 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.links.SmallFullLinkType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullResourceService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
-public class ApprovalServiceImpl extends SmallFullResourceService implements ApprovalService {
+public class ApprovalServiceImpl implements ApprovalService {
 
     @Autowired
     private ApiClientService apiClientService;
@@ -33,6 +33,9 @@ public class ApprovalServiceImpl extends SmallFullResourceService implements App
 
     @Autowired
     private ApprovalTransformer transformer;
+
+    @Autowired
+    private SmallFullService smallFullService;
 
     private static final UriTemplate APPROVAL_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval");
@@ -67,7 +70,9 @@ public class ApprovalServiceImpl extends SmallFullResourceService implements App
         ApprovalApi approvalApi = transformer.getApprovalApi(approval);
 
         try {
-            if (smallFullResourceExists(transactionId, companyAccountsId, SmallFullLinkType.APPROVAL)) {
+            SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(transactionId, companyAccountsId);
+
+            if (smallFullApi.getLinks().getApproval() != null) {
                 apiClient.smallFull().approval().update(uri, approvalApi).execute();
             } else {
                 apiClient.smallFull().approval().create(uri, approvalApi).execute();

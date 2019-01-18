@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,12 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.links.SmallFullLinkType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
@@ -246,15 +245,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         return lastAccountsApi != null && lastAccountsApi.getPeriodEndOn() != null;
     }
 
-    private boolean hasCurrentPeriod(Map<String, String> links) {
-        return isCreated(links, SmallFullLinkType.CURRENT_PERIOD);
+    private boolean hasCurrentPeriod(SmallFullLinks smallFullLinks) {
+        return smallFullLinks.getCurrentPeriod() != null;
     }
 
-    private boolean hasPreviousPeriod(Map<String, String> links) {
-        return isCreated(links, SmallFullLinkType.PREVIOUS_PERIOD);
-    }
-
-    private boolean isCreated(Map<String, String> links, SmallFullLinkType linkType) {
-        return links.containsKey(linkType.getLink());
+    private boolean hasPreviousPeriod(SmallFullLinks smallFullLinks) {
+        return smallFullLinks.getPreviousPeriod() != null;
     }
 }

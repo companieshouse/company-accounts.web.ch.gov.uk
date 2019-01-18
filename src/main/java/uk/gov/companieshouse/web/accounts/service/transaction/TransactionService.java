@@ -20,4 +20,15 @@ public interface TransactionService {
      * @throws ServiceException
      */
     void closeTransaction(String transactionId) throws ServiceException;
+
+    /**
+     * Add a resume link to the transaction for resuming the web journey at
+     * a later time.
+     *
+     * @param companyNumber     the company number
+     * @param transactionId     the ID of the transaction to update
+     * @param companyAccountsId the company accounts ID of the transaction to update
+     * @throws ServiceException
+     */
+    void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException;
 }

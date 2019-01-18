@@ -278,6 +278,8 @@
 
                 </dl>
 
+                <!-- Start Accounting Policies -->
+
                 <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                     description = 'Basis of preparation',
                     identifier= 'basis-of-preparation',
@@ -300,9 +302,6 @@
 
                 </dl>
 
-                <!-- End Balance Sheet -->
-
-                <!-- Start Accounting Policies -->
                 <div th:if="*{turnoverPolicy.turnoverPolicyDetails != null}">
                     <div
                         th:replace="fragments/review/sectionHeader :: sectionHeader (
@@ -312,11 +311,93 @@
                         marginTop = true
                         )">
                     </div>
+
                     <dl class="app-check-your-answers app-check-your-answers--short">
                         <div class="app-check-your-answers__contents">
                             <dt class="app-check-your-answers__answer">
                                 <p id="review-turnoverPolicy"
                                    th:text="*{turnoverPolicy.turnoverPolicyDetails}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
+
+                <div th:if="*{tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails != null}">
+                    <div
+                        th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Tangible fixed assets depreciation policy',
+                        identifier= 'tangible-depreciation-policy',
+                        resource = 'tangible-depreciation-policy',
+                        marginTop = true
+                        )">
+                    </div>
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-tangibleDepreciationPolicy"
+                                   th:text="*{tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
+
+                <div th:if="*{intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails != null}">
+                    <div
+                        th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Intangible fixed assets amortisation policy',
+                        identifier= 'intangible-amortisation-policy',
+                        resource = 'intangible-fixed-assets-amortisation',
+                        marginTop = true
+                        )">
+                    </div>
+
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-intangibleAmortisationPolicy"
+                                   th:text="*{intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
+
+                <div th:if="*{valuationInformationPolicy.valuationInformationPolicyDetails != null}">
+                    <div
+                        th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Valuation information policy',
+                        identifier = 'valuation-information-policy',
+                        resource = 'valuation-information',
+                        marginTop = true
+                        )">
+                    </div>
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-valuationInformationPolicy"
+                                   th:text="*{valuationInformationPolicy.valuationInformationPolicyDetails}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
+
+                <div th:if="*{otherAccountingPolicy.otherAccountingPolicyDetails != null}">
+                    <div
+                        th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Other accounting policies',
+                        identifier= 'other-accounting-policies',
+                        resource = 'other-accounting-policies',
+                        marginTop = true
+                        )">
+                    </div>
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-otherAccountingPolicy"
+                                   th:text="*{otherAccountingPolicy.otherAccountingPolicyDetails}">
                                 </p>
                             </dt>
                         </div>
