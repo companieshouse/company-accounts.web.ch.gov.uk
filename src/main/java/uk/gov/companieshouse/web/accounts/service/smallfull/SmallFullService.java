@@ -17,7 +17,7 @@ public interface SmallFullService {
     /**
      * Retrieve a small full resource
      *
-     * @param apiClient
+     * @param apiClient The api client with which to execute the get request
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
      * @return the small full resource
