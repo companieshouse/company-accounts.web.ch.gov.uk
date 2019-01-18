@@ -15,11 +15,18 @@ public interface ConditionalController {
 
     /**
      * Returns a boolean value indicating whether the template associated
-     * with a controller will be rendered or not.
+     * with a controller will be rendered or not. Any {@code ServiceException}
+     * generated when determining whether the controller should render or
+     * not should be thrown from this method and will be handled by the
+     * navigation service and result in an error page being returned to the
+     * user agent.
      *
      * @param companyNumber     the company number
      * @param transactionId     the transaction identifier
      * @param companyAccountsId the company accounts identifier
+     *
+     * @see uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService
+     * @see uk.gov.companieshouse.web.accounts.exception.NavigationException
      *
      * @return true if the template for a controller will be rendered
      */
