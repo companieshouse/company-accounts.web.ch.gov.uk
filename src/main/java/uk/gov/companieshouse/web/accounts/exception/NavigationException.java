@@ -18,6 +18,6 @@ public class NavigationException extends RuntimeException {
      * @param cause the cause
      */
     public NavigationException(String message, Throwable cause) {
-        super(cause);
+        super(message, cause);
     }
 }
