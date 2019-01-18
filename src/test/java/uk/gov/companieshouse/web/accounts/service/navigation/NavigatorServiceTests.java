@@ -10,6 +10,8 @@ import org.mockito.quality.Strictness;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
+import uk.gov.companieshouse.web.accounts.exception.NavigationException;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerEight;
 import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerFive;
 import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerFour;
 import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerOne;
@@ -141,5 +143,14 @@ public class NavigatorServiceTests {
         String redirect = navigatorService.getPreviousControllerPath(MockSuccessJourneyControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals("/mock-success-journey-controller-one", redirect);
+    }
+
+    @Test
+    public void navigationExceptionThrownWhenWillRenderThrowsServiceException() {
+        when(applicationContext.getBean(MockControllerSeven.class)).thenReturn(new MockControllerSeven());
+        when(applicationContext.getBean(MockControllerEight.class)).thenReturn(new MockControllerEight());
+
+        assertThrows(NavigationException.class, () -> navigatorService.getNextControllerRedirect(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
     }
 }
