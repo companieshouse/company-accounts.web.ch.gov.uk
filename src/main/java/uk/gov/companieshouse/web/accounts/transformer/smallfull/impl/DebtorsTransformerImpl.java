@@ -82,8 +82,10 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
 
         DebtorsApi debtorsApi = new DebtorsApi();
         if (debtors.getTotal().getCurrentTotal() != null) {
+
             setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
         }
+        
         if (debtors.getTotal().getPreviousTotal() != null) {
 
             setPreviousPeriodDebtorsOnApiModel(debtors, debtorsApi);
