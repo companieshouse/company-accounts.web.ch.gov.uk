@@ -1,19 +1,25 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
+import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDebtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.PrepaymentsAndAccruedIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 
 @Component
 public class DebtorsTransformerImpl implements DebtorsTransformer {
+
+    @Autowired
+    CompanyService companyService;
 
     @Override
     public Debtors getDebtors(DebtorsApi debtorsApi) {
@@ -75,10 +81,13 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     public DebtorsApi getDebtorsApi(Debtors debtors) {
 
         DebtorsApi debtorsApi = new DebtorsApi();
+        if (debtors.getTotal().getCurrentTotal() != null) {
+            setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
+        }
+        if (debtors.getTotal().getPreviousTotal() != null) {
 
-        setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
-        setPreviousPeriodDebtorsOnApiModel(debtors, debtorsApi);
-
+            setPreviousPeriodDebtorsOnApiModel(debtors, debtorsApi);
+        }
         return debtorsApi;
 
     }
