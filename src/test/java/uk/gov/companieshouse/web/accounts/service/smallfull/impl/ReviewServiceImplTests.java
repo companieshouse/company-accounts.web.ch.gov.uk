@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
@@ -21,8 +22,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -63,6 +66,9 @@ public class ReviewServiceImplTests {
 
     @Mock
     private OtherAccountingPolicyService otherAccountingPolicyService;
+    
+    @Mock
+    private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
@@ -99,6 +105,10 @@ public class ReviewServiceImplTests {
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
         when(otherAccountingPolicyService.getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(mockOtherAccounting);
+        
+        CreditorsWithinOneYear mockCreditorsWithinOneYear = new CreditorsWithinOneYear();
+        when(creditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+            .thenReturn(mockCreditorsWithinOneYear);
 
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -111,5 +121,6 @@ public class ReviewServiceImplTests {
         assertEquals(mockIntangibleAmortisationPolicy, review.getIntangibleAmortisationPolicy());
         assertEquals(valuationInformationPolicy, review.getValuationInformationPolicy());
         assertEquals(mockOtherAccounting, review.getOtherAccountingPolicy());
+        assertEquals(mockCreditorsWithinOneYear, review.getCreditorsWithinOneYear());
     }
 }

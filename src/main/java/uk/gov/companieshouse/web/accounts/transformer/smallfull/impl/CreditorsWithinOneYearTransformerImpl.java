@@ -178,6 +178,14 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
             previousPeriod.setTradeCreditors(creditorsWithinOneYear.getTradeCreditors().getPreviousTradeCreditors());
         }
         
-        creditorsWithinOneYearApi.setCreditorsWithinOneYearPreviousPeriod(previousPeriod);
+        if (previousPeriod.getAccrualsAndDeferredIncome() != null ||
+                previousPeriod.getBankLoansAndOverdrafts() != null ||
+                previousPeriod.getFinanceLeasesAndHirePurchaseContracts() != null ||
+                previousPeriod.getOtherCreditors() != null ||
+                previousPeriod.getTaxationAndSocialSecurity() != null ||
+                previousPeriod.getTotal() != null ||
+                previousPeriod.getTradeCreditors() != null) {
+            creditorsWithinOneYearApi.setCreditorsWithinOneYearPreviousPeriod(previousPeriod);
+        }
     }
 }

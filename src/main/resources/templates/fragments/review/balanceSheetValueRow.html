@@ -5,7 +5,7 @@
 </head>
     <body>
         <div th:fragment="balanceSheetValueRow" th:if="${currentAmount != null || previousAmount != null}" class="app-check-your-answers__contents">
-            <dt class="app-check-your-answers__question" th:text="${description}" th:classappend="${isTotalRow} == null ? 'govuk-!-font-weight-regular' : ''"></dt>
+            <dt class="app-check-your-answers__question" th:text="${description}" th:classappend="${isTotalRow == null && isBoldLegend == null} ? 'govuk-!-font-weight-regular' : ''"></dt>
 
             <dd th:attr="id=${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
                 th:text="${currentAmount != null ? '£' + #numbers.formatInteger(currentAmount, 0, 'COMMA') : '£0'}" class="app-check-your-answers__answer"

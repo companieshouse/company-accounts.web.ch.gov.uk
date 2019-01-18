@@ -197,4 +197,12 @@ public class CreditorsWithinOneYearTransformerImplTests {
         assertEquals(TRADE_CREDITORS_PREVIOUS, previousPeriod.getTradeCreditors());
         assertEquals(TOTAL_PREVIOUS, previousPeriod.getTotal());
     }
+    
+    @Test
+    @DisplayName("No previous period added to creditors within one year API model when no previous values present")
+    void previousPeriodValueNotAddedToCreditorsWithinOneYearApiModel() {
+        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.getCreditorsWithinOneYearApi(new CreditorsWithinOneYear());
+
+        assertNull(creditorsWithinOneYearApi.getCreditorsWithinOneYearPreviousPeriod());
+    }
 }

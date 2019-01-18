@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
@@ -12,8 +13,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
@@ -48,6 +51,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private OtherAccountingPolicyService otherAccountingPolicyService;
+    
+    @Autowired
+    private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
@@ -69,6 +75,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         OtherAccountingPolicy otherAccountingPolicy =
                 otherAccountingPolicyService.getOtherAccountingPolicy(transactionId, companyAccountsId);
+        
+        CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
 
         Review review = new Review();
         review.setBalanceSheet(balanceSheet);
@@ -79,6 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
         review.setValuationInformationPolicy(valuationInformationPolicy);
         review.setOtherAccountingPolicy(otherAccountingPolicy);
+        review.setCreditorsWithinOneYear(creditorsWithinOneYear);
 
         return review;
     }

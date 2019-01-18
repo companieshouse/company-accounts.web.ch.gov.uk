@@ -405,6 +405,112 @@
                 </div>
                 <!-- End Accounting Policies -->
 
+                <!-- Creditors Within One Year Note -->
+                <div id="cya-small-full-creditors-within-one-year-note">
+
+                    <div th:if="*{creditorsWithinOneYear != null}">
+                        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Creditors - amounts falling due within one year note',
+                            identifier= 'creditors-within-one-year-note',
+                            resource = 'creditors-within-one-year',
+                            marginTop = true
+                            )">
+                        </div>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question"></dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Bank loans and overdrafts',
+                                identifier = 'bank-loans-and-overdrafts',
+                                currentAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
+                                previousAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
+                                isBoldLegend = true
+                            )">
+                            </div>
+                            
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Amounts due under finance leases and hire purchase contracts',
+                                identifier = 'finance-leases-and-hire-purchase-contracts',
+                                currentAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts.currentFinanceLeasesAndHirePurchaseContracts},
+                                previousAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts.previousFinanceLeasesAndHirePurchaseContracts},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Trade creditors',
+                                identifier = 'trade-creditors',
+                                currentAmount = *{creditorsWithinOneYear?.tradeCreditors.currentTradeCreditors},
+                                previousAmount = *{creditorsWithinOneYear?.tradeCreditors.previousTradeCreditors},
+                                isBoldLegend = true
+                            )">
+                            </div> 
+                                   
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Taxation and social security',
+                                identifier = 'taxation-and-social-security',
+                                currentAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity.currentTaxationAndSocialSecurity},
+                                previousAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity.previousTaxationAndSocialSecurity},
+                                isBoldLegend = true
+                            )">
+                            </div>                                               
+                            
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Accruals and deferred income',
+                                identifier = 'accruals-and-deferred-income',
+                                currentAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome.currentAccrualsAndDeferredIncome},
+                                previousAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome.previousAccrualsAndDeferredIncome},
+                                isBoldLegend = true
+                            )">
+                            </div>
+                                  
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Other creditors',
+                                identifier = 'other-creditors',
+                                currentAmount = *{creditorsWithinOneYear?.otherCreditors.currentOtherCreditors},
+                                previousAmount = *{creditorsWithinOneYear?.otherCreditors.previousOtherCreditors},
+                                isBoldLegend = true
+                            )">
+                            </div> 
+                                                                              
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Total',
+                                identifier = 'total',
+                                currentAmount = *{creditorsWithinOneYear?.total.currentTotal},
+                                previousAmount = *{creditorsWithinOneYear?.total.previousTotal},
+                                isTotalRow = true
+                            )">
+                            </div>                             
+
+                        </dl>
+  
+                        <div th:if="*{creditorsWithinOneYear.details != null}">
+                            <dl class="app-check-your-answers app-check-your-answers--short">
+                                <div class="app-check-your-answers__contents">
+                                    <dt class="app-check-your-answers__question">Additional information</dt>
+                                    <dd class="app-check-your-answers__answer">
+                                        <p id="review-creditors-within-one-year-details"
+                                           th:text="*{creditorsWithinOneYear?.details}">
+                                        </p>
+                                    <dd class="app-check-your-answers__change"></dd>
+                                </div>
+                            </dl>
+                        </div>
+                        
+                    </div>
+                </div>
+                <!-- End Creditors Within One Year Note -->
+                
                 <div class="govuk-form-group">
                     <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
                 </div>

@@ -8,6 +8,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 
 @Getter
 @Setter
@@ -28,4 +29,6 @@ public class Review {
     ValuationInformationPolicy valuationInformationPolicy;
 
     OtherAccountingPolicy otherAccountingPolicy;
+    
+    CreditorsWithinOneYear creditorsWithinOneYear;
 }
