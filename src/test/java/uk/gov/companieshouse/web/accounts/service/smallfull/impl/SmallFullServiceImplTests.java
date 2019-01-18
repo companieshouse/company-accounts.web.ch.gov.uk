@@ -56,14 +56,14 @@ public class SmallFullServiceImplTests {
     @BeforeEach
     private void setUp() {
 
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
     }
 
     @Test
     @DisplayName("Create Small Full Accounts - Success Path")
     void createSmallFullSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
                 .thenReturn(smallFullCreate);
@@ -79,6 +79,8 @@ public class SmallFullServiceImplTests {
     @DisplayName("Create Small Full Accounts - Throws ApiErrorResponseException")
     void createSmallFullApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
         when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
                 .thenReturn(smallFullCreate);
 
@@ -91,6 +93,8 @@ public class SmallFullServiceImplTests {
     @Test
     @DisplayName("Create Small Full Accounts - Throws URIValidationException")
     void createSmallFullURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
                 .thenReturn(smallFullCreate);
@@ -109,7 +113,7 @@ public class SmallFullServiceImplTests {
 
         when(smallFullGet.execute()).thenReturn(new SmallFullApi());
 
-        assertNotNull(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertNotNull(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
         verify(smallFullGet, times(1)).execute();
     }
@@ -123,7 +127,7 @@ public class SmallFullServiceImplTests {
         when(smallFullGet.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
-                smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -135,6 +139,6 @@ public class SmallFullServiceImplTests {
         when(smallFullGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
-                smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
