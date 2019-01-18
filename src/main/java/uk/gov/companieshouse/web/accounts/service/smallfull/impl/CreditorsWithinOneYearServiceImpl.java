@@ -69,7 +69,7 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
 
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear);
 
-        boolean creditorsWithinOneYearResourceExists = hasCreditorsWithinOneYear(transactionId, companyAccountsId);
+        boolean creditorsWithinOneYearResourceExists = hasCreditorsWithinOneYear(apiClient, transactionId, companyAccountsId);
         try {
             if (!creditorsWithinOneYearResourceExists) {
                 apiClient.smallFull().creditorsWithinOneYear().create(uri, creditorsWithinOneYearApi).execute();
@@ -113,8 +113,8 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
         }
     }
 
-    private boolean hasCreditorsWithinOneYear(String transactionId, String companyAccountsId) throws ServiceException {
-        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(transactionId, companyAccountsId);
+    private boolean hasCreditorsWithinOneYear(ApiClient apiClient, String transactionId, String companyAccountsId) throws ServiceException {
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
         return smallFullApi.getLinks().getCreditorsWithinOneYearNote() != null;
     }
 }

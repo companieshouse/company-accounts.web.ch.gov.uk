@@ -189,7 +189,7 @@ public class CreditorsWithinOneYearServiceImplTest {
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = createCreditorsWithinOneYearApi();
 
         SmallFullApi smallFullApi = new SmallFullApi();
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         setLinksWithoutCreditorsWithinOneYear(smallFullApi);
 
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
@@ -214,7 +214,7 @@ public class CreditorsWithinOneYearServiceImplTest {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithoutCreditorsWithinOneYear(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
         when(mockCreditorsWithinOneYearResourceHandler.create(CREDITORS_WITHIN_ONE_YEAR_URI, creditorsWithinOneYearApi)).thenReturn(mockCreditorsWithinOneYearCreate);
@@ -243,7 +243,7 @@ public class CreditorsWithinOneYearServiceImplTest {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithoutCreditorsWithinOneYear(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
         when(mockCreditorsWithinOneYearResourceHandler.create(CREDITORS_WITHIN_ONE_YEAR_URI, creditorsWithinOneYearApi)).thenReturn(mockCreditorsWithinOneYearCreate);
@@ -266,7 +266,8 @@ public class CreditorsWithinOneYearServiceImplTest {
 
         CreditorsWithinOneYear creditorsWithinOneYear = createCreditorsWithinOneYear();
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> creditorsWithinOneYearService.submitCreditorsWithinOneYear(
             TRANSACTION_ID,
@@ -285,7 +286,7 @@ public class CreditorsWithinOneYearServiceImplTest {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithCreditorsWithinOneYear(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
         creditorsWithinOneYearUpdate(creditorsWithinOneYearApi);
@@ -306,7 +307,7 @@ public class CreditorsWithinOneYearServiceImplTest {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithCreditorsWithinOneYear(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
 
