@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
+import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
+import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.util.Navigator;
@@ -37,6 +43,21 @@ public class TangibleAssetsNoteControllerTest {
 
     @Mock
     private TransactionService transactionService;
+
+    @Mock
+    private CompanyService companyService;
+
+    @Mock
+    private CompanyProfileApi companyProfile;
+
+    @Mock
+    private CompanyAccountApi companyAccountApi;
+
+    @Mock
+    private LastAccountsApi lastAccountsApi;
+
+    @Mock
+    private NextAccountsApi nextAccountsApi;
 
     @Mock
     private TangibleAssets tangibleAssets;
@@ -66,16 +87,30 @@ public class TangibleAssetsNoteControllerTest {
 
     private static final String MODEL_ATTR_ASSET = "tangibleAssets";
 
+    private static final String MODEL_ATTR_LAST_ACCOUNT_PERIOD_END = "lastAccountsPeriodEndOn";
+
+    private static final String MODEL_ATTR_NEXT_ACCOUNT_PERIOD_START = "nextAccountsPeriodStartOn";
+
+    private static final String MODEL_ATTR_NEXT_ACCOUNT_PERIOD_END = "nextAccountsPeriodEndOn";
+
     private static final String MOCK_CONTROLLER_PATH_NEXT = "nextControllerPath";
 
     private static final String MOCK_CONTROLLER_PATH_PREVIOUS = "previousControllerPath";
 
     @BeforeEach
-    private void setUp() {
+    private void setUp() throws Exception {
         when(navigator
             .getPreviousControllerPath(tangibleAssetsNoteController.getClass(), COMPANY_NUMBER,
                 TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+        when(companyProfile.getAccounts()).thenReturn(companyAccountApi);
+        when(companyAccountApi.getLastAccounts()).thenReturn(lastAccountsApi);
+        when(companyAccountApi.getNextAccounts()).thenReturn(nextAccountsApi);
+        when(lastAccountsApi.getPeriodEndOn()).thenReturn(LocalDate.parse("2016-01-01"));
+        when(nextAccountsApi.getPeriodStartOn()).thenReturn(LocalDate.parse("2017-01-01"));
+        when(nextAccountsApi.getPeriodEndOn()).thenReturn(LocalDate.parse("2018-01-01"));
         this.mockMvc = MockMvcBuilders.standaloneSetup(tangibleAssetsNoteController).build();
+
     }
 
     @Test
@@ -90,6 +125,9 @@ public class TangibleAssetsNoteControllerTest {
             .andExpect(view().name(TANGIBLE_VIEW))
             .andExpect(model().attributeExists(MODEL_ATTR_BACK_PAGE))
             .andExpect(model().attributeExists(MODEL_ATTR_TEMPLATE))
+            .andExpect(model().attributeExists(MODEL_ATTR_LAST_ACCOUNT_PERIOD_END))
+            .andExpect(model().attributeExists(MODEL_ATTR_NEXT_ACCOUNT_PERIOD_START))
+            .andExpect(model().attributeExists(MODEL_ATTR_NEXT_ACCOUNT_PERIOD_END))
             .andExpect(model().attributeExists(MODEL_ATTR_ASSET));
     }
 
@@ -107,6 +145,9 @@ public class TangibleAssetsNoteControllerTest {
 
         this.mockMvc.perform(post(TANGIBLE_PATH))
             .andExpect(status().isOk())
+            .andExpect(model().attributeExists(MODEL_ATTR_LAST_ACCOUNT_PERIOD_END))
+            .andExpect(model().attributeExists(MODEL_ATTR_NEXT_ACCOUNT_PERIOD_START))
+            .andExpect(model().attributeExists(MODEL_ATTR_NEXT_ACCOUNT_PERIOD_END))
             .andExpect(view().name(MOCK_CONTROLLER_PATH_NEXT));
     }
 }
