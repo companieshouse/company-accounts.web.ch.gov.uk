@@ -49,9 +49,10 @@ public class TangibleAssetsNoteController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
+            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
             model.addAttribute("tangibleAssets", tangibleAssetsNoteService
                 .getTangibleAssets(transactionId, companyAccountsId, companyNumber));
-            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
+
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -76,10 +77,10 @@ public class TangibleAssetsNoteController extends BaseController {
         }
 
         try {
+            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
             List<ValidationError> validationErrors = tangibleAssetsNoteService
                 .postTangibleAssets(transactionId, companyAccountsId, tangibleAssets,
                     companyNumber);
-            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
