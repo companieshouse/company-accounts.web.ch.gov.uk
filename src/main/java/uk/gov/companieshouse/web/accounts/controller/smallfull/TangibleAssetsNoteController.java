@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.time.LocalDate;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -95,9 +94,12 @@ public class TangibleAssetsNoteController extends BaseController {
             companyAccountsId);
     }
 
-    private void addDatesToModel(Model model, CompanyProfileApi companyProfile){
-        model.addAttribute("lastAccountsPeriodEndOn", companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
-        model.addAttribute("nextAccountsPeriodStartOn", companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        model.addAttribute("nextAccountsPeriodEndOn", companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
+    private void addDatesToModel(Model model, CompanyProfileApi companyProfile) {
+        model.addAttribute("lastAccountsPeriodEndOn",
+            companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
+        model.addAttribute("nextAccountsPeriodStartOn",
+            companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+        model.addAttribute("nextAccountsPeriodEndOn",
+            companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
 }
