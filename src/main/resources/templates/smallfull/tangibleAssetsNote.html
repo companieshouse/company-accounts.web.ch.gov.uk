@@ -50,9 +50,9 @@
 
     <!--Start Cost at start-->
     <div class="govuk-grid-row accounts-row-spacer">
-      <div class="column-fifth">Cost at 1 April 2017
-        <!-- <details> <summary> <span class="summary">-->
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets at the start of this accounting period. </p> </div> </details>-->
+      <div class="column-fifth">
+        <div th:text="'Cost at ' +${#temporals.format(nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="code.nextAccountsPeriodStartOn"></div>
+        <span th:id="cost.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -362,9 +362,8 @@
     <!--Start Cost at end-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <!--<details> <summary> <span class="summary">-->
-        <strong>Cost at  DATE GOES HERE</strong>
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+        <strong><div th:text="'Cost at ' +${#temporals.format(nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodEndOn"></div></strong>
+        <span th:id="cost.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -453,9 +452,9 @@
 
     <!--Start Depreciation at start-->
     <div class="govuk-grid-row accounts-row-spacer">
-      <div class="column-fifth">Cost at 1 April 2017
-        <!-- <details> <summary> <span class="summary">-->
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets at the start of this accounting period. </p> </div> </details>-->
+      <div class="column-fifth">
+        <div th:text="'Depreciation at ' +${#temporals.format(nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodStartOn"></div>
+        <span th:id="depreciation.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -697,9 +696,8 @@
     <!--Start Cost at end-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <!--<details> <summary> <span class="summary">-->
-        <strong>Depreciation DATE GOES HERE</strong>
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+        <strong><div th:text="'Depreciation at ' +${#temporals.format(nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodEndOn"></div></strong>
+        <span th:id="depreciation.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -789,9 +787,8 @@
     <!--Net Book Value End-->
     <div class="govuk-grid-row accounts-total accounts-row-spacer">
       <div class="column-fifth">
-        <!--<details> <summary> <span class="summary">-->
-        <strong>Net book value at DATE GOES HERE</strong>
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+        <strong><div th:text="'Net book value at ' +${#temporals.format(nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodStartOn"></div></strong>
+        <span th:id="netBookValue.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -855,9 +852,8 @@
     <!--Net Book Value Start-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <!--<details> <summary> <span class="summary">-->
-        <strong>Net book value at DATE GOES HERE</strong>
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> <strong>Calculation:</strong> 'Cost at 1 April 2017' plus 'additions', plus 'revaluations' plus 'transfers' minus 'disposals'. </p> </div> </details>-->
+        <strong><div th:text="'Net book value at ' +${#temporals.format(lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
+        <span th:id="lastAccountsPeriodEndOn.lastAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -920,6 +916,12 @@
     </div>
 
 
+    <div th:replace="fragments/additionalInformation :: additionalInformation (
+                                id = 'additionalInformation',
+                                dropDownText = 'Add additional information about your \'tangible assets\' note?',
+                                helpText = 'Enter details of any other \'tangible assets\' information not already covered'
+                                )">
+    </div>
 
     <div class="form-group">
       <input id="next-button" class="govuk-button piwik-event" data-event-id="Tangible assets note - Save and continue" type="submit" role="button" value="Save and continue"/>

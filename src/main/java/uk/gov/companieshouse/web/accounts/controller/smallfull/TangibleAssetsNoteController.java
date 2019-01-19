@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.time.LocalDate;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -12,12 +13,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -31,7 +33,7 @@ public class TangibleAssetsNoteController extends BaseController {
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @Autowired
-    private BalanceSheetService balanceSheetService;
+    private CompanyService companyService;
 
     @Override
     protected String getTemplateName() {
@@ -50,6 +52,7 @@ public class TangibleAssetsNoteController extends BaseController {
         try {
             model.addAttribute("tangibleAssets", tangibleAssetsNoteService
                 .getTangibleAssets(transactionId, companyAccountsId, companyNumber));
+            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -77,7 +80,7 @@ public class TangibleAssetsNoteController extends BaseController {
             List<ValidationError> validationErrors = tangibleAssetsNoteService
                 .postTangibleAssets(transactionId, companyAccountsId, tangibleAssets,
                     companyNumber);
-
+            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
@@ -90,5 +93,11 @@ public class TangibleAssetsNoteController extends BaseController {
 
         return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
+    }
+
+    private void addDatesToModel(Model model, CompanyProfileApi companyProfile){
+        model.addAttribute("lastAccountsPeriodEndOn", companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
+        model.addAttribute("nextAccountsPeriodStartOn", companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+        model.addAttribute("nextAccountsPeriodEndOn", companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
 }
