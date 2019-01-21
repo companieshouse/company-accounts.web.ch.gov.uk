@@ -9,7 +9,7 @@ import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.Map;
 public abstract class BaseController {
 
     @Autowired
-    protected Navigator navigator;
+    protected NavigatorService navigatorService;
 
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
@@ -64,7 +64,7 @@ public abstract class BaseController {
 
     protected void addBackPageAttributeToModel(Model model, String... pathVars) {
 
-        model.addAttribute("backButton", navigator.getPreviousControllerPath(this.getClass(), pathVars));
+        model.addAttribute("backButton", navigatorService.getPreviousControllerPath(this.getClass(), pathVars));
     }
 
     /**
