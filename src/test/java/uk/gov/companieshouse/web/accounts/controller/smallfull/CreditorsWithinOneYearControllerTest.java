@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -20,15 +19,14 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -55,7 +53,7 @@ public class CreditorsWithinOneYearControllerTest {
     private BalanceSheetService mockBalanceSheetService;
 
     @Mock
-    private Navigator mockNavigator;
+    private NavigatorService mockNavigatorService;
 
     @InjectMocks
     private CreditorsWithinOneYearController controller;
@@ -96,7 +94,7 @@ public class CreditorsWithinOneYearControllerTest {
     @DisplayName("Get creditors within one year view success path")
     void getRequestSuccess() throws Exception {
 
-        when(mockNavigator.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockCreditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new CreditorsWithinOneYear());
 
         this.mockMvc.perform(get(CREDITORS_WITHIN_ONE_YEAR_PATH))
@@ -125,7 +123,7 @@ public class CreditorsWithinOneYearControllerTest {
     @DisplayName("Post creditors within one year success path")
     void postRequestSuccess() throws Exception {
 
-        when(mockNavigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockCreditorsWithinOneYearService.submitCreditorsWithinOneYear(anyString(), anyString(), any(CreditorsWithinOneYear.class), anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(CREDITORS_WITHIN_ONE_YEAR_PATH))
@@ -186,12 +184,11 @@ public class CreditorsWithinOneYearControllerTest {
 
     @Test
     @DisplayName("Test will not render when there is a service exception")
-    void willRenderWithCreditorsWithinOneYearServiceException() throws Exception {
+    void willRenderWithCreditorsWithinOneYearServiceException() throws ServiceException {
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-
-        assertFalse(renderPage);
+        assertThrows(ServiceException.class,
+            () -> controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test

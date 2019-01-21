@@ -28,7 +28,7 @@ import java.util.List;
 @PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/creditors-within-one-year")
 public class CreditorsWithinOneYearController extends BaseController implements
-    ConditionalController {
+  ConditionalController {
 
   @Autowired
   private CreditorsWithinOneYearService creditorsWithinOneYearService;
@@ -88,21 +88,17 @@ public class CreditorsWithinOneYearController extends BaseController implements
       LOGGER.errorRequest(request, e.getMessage(), e);
       return ERROR_VIEW;
     }
-
-    return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+    
+    return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
         companyAccountsId);
   }
 
   @Override
-  public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
-    try {
-      BalanceSheet balanceSheet =
-          balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
+  public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
+    BalanceSheet balanceSheet =
+        balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
 
-      return balanceSheet.getOtherLiabilitiesOrAssets() != null
-          && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() != null;
-    } catch (ServiceException e) {
-      return false;
-    }
+    return balanceSheet.getOtherLiabilitiesOrAssets() != null
+        && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() != null;
   }
 }
