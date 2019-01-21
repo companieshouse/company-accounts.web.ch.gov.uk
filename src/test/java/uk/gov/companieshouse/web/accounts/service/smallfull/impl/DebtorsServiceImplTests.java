@@ -189,7 +189,7 @@ public class DebtorsServiceImplTests {
         DebtorsApi debtorsApi = createDebtorsApi();
 
         SmallFullApi smallFullApi = new SmallFullApi();
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         setLinksWithoutDebtors(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
@@ -214,7 +214,7 @@ public class DebtorsServiceImplTests {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithoutDebtors(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
         when(mockDebtorsResourceHandler.create(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsCreate);
@@ -243,7 +243,7 @@ public class DebtorsServiceImplTests {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithoutDebtors(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
         when(mockDebtorsResourceHandler.create(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsCreate);
@@ -265,8 +265,9 @@ public class DebtorsServiceImplTests {
     void postDebtorsGetSmallFullDataApiResponseException() throws Exception {
 
         Debtors debtors = createDebtors();
+        when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> debtorsService.submitDebtors(
             TRANSACTION_ID,
@@ -285,7 +286,7 @@ public class DebtorsServiceImplTests {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithDebtors(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
         debtorsUpdate(debtorsApi);
@@ -306,7 +307,7 @@ public class DebtorsServiceImplTests {
         SmallFullApi smallFullApi = new SmallFullApi();
         setLinksWithDebtors(smallFullApi);
 
-        when(smallFullService.getSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
 
         when(mockDebtorsTransformer.getDebtorsApi(debtors)).thenReturn(debtorsApi);
 

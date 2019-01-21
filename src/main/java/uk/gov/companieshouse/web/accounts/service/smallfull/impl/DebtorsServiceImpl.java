@@ -66,7 +66,7 @@ public class DebtorsServiceImpl implements DebtorsService {
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
 
-        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(transactionId, companyAccountsId);
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
 
