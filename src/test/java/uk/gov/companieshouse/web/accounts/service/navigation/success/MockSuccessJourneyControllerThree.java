@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.util.navigator.success;
+package uk.gov.companieshouse.web.accounts.service.navigation.success;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;

@@ -1,15 +1,15 @@
-package uk.gov.companieshouse.web.accounts.util.navigator.failure;
+package uk.gov.companieshouse.web.accounts.service.navigation.failure;
 
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.util.navigator.NavigatorTests;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTests;
 
 /**
  * Mock controller class for testing missing navigation annotation {@code RequestMapping}
  * when attempting to obtain the next controller in the journey.
  *
- * @see NavigatorTests
+ * @see NavigatorServiceTests
  */
 @NextController(MockControllerThree.class)
 @PreviousController(MockControllerOne.class)

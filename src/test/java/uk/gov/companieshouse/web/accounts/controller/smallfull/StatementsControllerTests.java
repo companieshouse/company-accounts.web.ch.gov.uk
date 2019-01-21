@@ -25,7 +25,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -37,7 +37,7 @@ public class StatementsControllerTests {
     private StatementsService statementsService;
 
     @Mock
-    Navigator navigator;
+    NavigatorService navigatorService;
 
     @InjectMocks
     private StatementsController controller;
@@ -78,7 +78,7 @@ public class StatementsControllerTests {
         when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(new Statements());
 
-        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(STATEMENTS_PATH))
                 .andExpect(status().isOk())
@@ -106,7 +106,7 @@ public class StatementsControllerTests {
 
         doNothing().when(statementsService).acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(STATEMENTS_PATH))
                 .andExpect(status().is3xxRedirection())

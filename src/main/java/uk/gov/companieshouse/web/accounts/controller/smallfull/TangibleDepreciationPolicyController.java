@@ -92,7 +92,7 @@ public class TangibleDepreciationPolicyController extends BaseController {
 
         cacheIsPolicyIncluded(request, tangiblePolicy);
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
 
