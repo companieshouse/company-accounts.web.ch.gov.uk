@@ -56,7 +56,7 @@ public class ReviewController extends BaseController {
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId) {
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override
