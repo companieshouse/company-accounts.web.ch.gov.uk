@@ -49,9 +49,12 @@ public class TangibleAssetsNoteController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
-            model.addAttribute("tangibleAssets", tangibleAssetsNoteService
-                .getTangibleAssets(transactionId, companyAccountsId, companyNumber));
+            TangibleAssets tangibleAssets = tangibleAssetsNoteService
+                .getTangibleAssets(transactionId, companyAccountsId, companyNumber);
+
+            addDatesToFormObject(tangibleAssets, companyService.getCompanyProfile(companyNumber));
+
+            model.addAttribute("tangibleAssets", tangibleAssets);
 
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -77,7 +80,6 @@ public class TangibleAssetsNoteController extends BaseController {
         }
 
         try {
-            addDatesToModel(model, companyService.getCompanyProfile(companyNumber));
             List<ValidationError> validationErrors = tangibleAssetsNoteService
                 .postTangibleAssets(transactionId, companyAccountsId, tangibleAssets,
                     companyNumber);
@@ -95,12 +97,9 @@ public class TangibleAssetsNoteController extends BaseController {
             companyAccountsId);
     }
 
-    private void addDatesToModel(Model model, CompanyProfileApi companyProfile) {
-        model.addAttribute("lastAccountsPeriodEndOn",
-            companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
-        model.addAttribute("nextAccountsPeriodStartOn",
-            companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        model.addAttribute("nextAccountsPeriodEndOn",
-            companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
+    private void addDatesToFormObject(TangibleAssets tangibleAssets, CompanyProfileApi companyProfile) {
+        tangibleAssets.setLastAccountsPeriodEndOn(companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
+        tangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+        tangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
 }

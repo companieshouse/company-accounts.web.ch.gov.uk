@@ -22,6 +22,10 @@
                 )">
     </div>
 
+    <input th:field="*{lastAccountsPeriodEndOn}" type="hidden">
+    <input th:field="*{nextAccountsPeriodStartOn}" type="hidden">
+    <input th:field="*{nextAccountsPeriodEndOn}" type="hidden">
+
     <p class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
     <h2 class="govuk-heading-m">Cost</h2>
 
@@ -51,8 +55,8 @@
     <!--Start Cost at start-->
     <div class="govuk-grid-row accounts-row-spacer">
       <div class="column-fifth">
-        <div th:text="'Cost at ' +${#temporals.format(nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="code.nextAccountsPeriodStartOn"></div>
-        <span th:id="cost.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodStartOn"></div>
+        <span th:id="cost.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -362,8 +366,8 @@
     <!--Start Cost at end-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <strong><div th:text="'Cost at ' +${#temporals.format(nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodEndOn"></div></strong>
-        <span th:id="cost.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong><div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodEndOn"></div></strong>
+        <span th:id="cost.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -453,8 +457,8 @@
     <!--Start Depreciation at start-->
     <div class="govuk-grid-row accounts-row-spacer">
       <div class="column-fifth">
-        <div th:text="'Depreciation at ' +${#temporals.format(nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodStartOn"></div>
-        <span th:id="depreciation.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <div th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodStartOn"></div>
+        <span th:id="depreciation.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -696,8 +700,8 @@
     <!--Start Cost at end-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <strong><div th:text="'Depreciation at ' +${#temporals.format(nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodEndOn"></div></strong>
-        <span th:id="depreciation.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong><div th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodEndOn"></div></strong>
+        <span th:id="depreciation.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -787,8 +791,8 @@
     <!--Net Book Value End-->
     <div class="govuk-grid-row accounts-total accounts-row-spacer">
       <div class="column-fifth">
-        <strong><div th:text="'Net book value at ' +${#temporals.format(nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodStartOn"></div></strong>
-        <span th:id="netBookValue.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong><div th:text="'Net book value at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodEndOn"></div></strong>
+        <span th:id="netBookValue.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -852,8 +856,8 @@
     <!--Net Book Value Start-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <strong><div th:text="'Net book value at ' +${#temporals.format(lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
-        <span th:id="lastAccountsPeriodEndOn.lastAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(lastAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong><div th:text="'Net book value at ' +${#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
+        <span th:id="netBookValue.lastAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
