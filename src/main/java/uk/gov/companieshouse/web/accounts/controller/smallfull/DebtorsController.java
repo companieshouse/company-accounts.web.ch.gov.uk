@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -37,9 +36,6 @@ public class DebtorsController extends BaseController implements ConditionalCont
 
     @Autowired
     private BalanceSheetService balanceSheetService;
-
-    @Autowired
-    private NavigatorService navigatorService;
 
     @Override
     protected String getTemplateName() {
