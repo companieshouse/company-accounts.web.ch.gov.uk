@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,78 +32,78 @@ import java.util.List;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/creditors-within-one-year")
 public class CreditorsWithinOneYearController extends BaseController implements ConditionalController {
 
-	@Autowired
-	private CreditorsWithinOneYearService creditorsWithinOneYearService;
+    @Autowired
+    private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
-	@Autowired
-	private BalanceSheetService balanceSheetService;
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
-	@Override
-	protected String getTemplateName() {
-		return "smallfull/creditorsWithinOneYear";
-	}
+    @Override
+    protected String getTemplateName() {
+        return "smallfull/creditorsWithinOneYear";
+    }
 
-	@GetMapping
-	public String getCreditorsWithinOneYear(@PathVariable String companyNumber,
-			@PathVariable String transactionId,
-			@PathVariable String companyAccountsId,
-			Model model, HttpServletRequest request) {
+    @GetMapping
+    public String getCreditorsWithinOneYear(@PathVariable String companyNumber,
+            @PathVariable String transactionId,
+            @PathVariable String companyAccountsId,
+            Model model, HttpServletRequest request) {
 
-		addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-		try {
-			CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
-			
-			model.addAttribute("creditorsWithinOneYear", creditorsWithinOneYear);
-		} catch (ServiceException e) {
-			LOGGER.errorRequest(request, e.getMessage(), e);
-			return ERROR_VIEW;
-		}
-		return getTemplateName();
-	}
+        try {
+            CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
 
-	@PostMapping
-	public String postCreditorsWithinOneYear(@PathVariable String companyNumber,
-			@PathVariable String transactionId,
-			@PathVariable String companyAccountsId,
-			@ModelAttribute("creditorsWithinOneYear") @Valid CreditorsWithinOneYear creditorsWithinOneYear,
-			BindingResult bindingResult,
-			Model model,
-			HttpServletRequest request) {
+            model.addAttribute("creditorsWithinOneYear", creditorsWithinOneYear);
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
+        return getTemplateName();
+    }
 
-		addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+    @PostMapping
+    public String postCreditorsWithinOneYear(@PathVariable String companyNumber,
+            @PathVariable String transactionId,
+            @PathVariable String companyAccountsId,
+            @ModelAttribute("creditorsWithinOneYear") @Valid CreditorsWithinOneYear creditorsWithinOneYear,
+            BindingResult bindingResult,
+            Model model,
+            HttpServletRequest request) {
 
-		if (bindingResult.hasErrors()) {
-			return getTemplateName();
-		}
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-		
-		try {
-			List<ValidationError> validationErrors =
-					creditorsWithinOneYearService.submitCreditorsWithinOneYear(transactionId, companyAccountsId,
-							creditorsWithinOneYear, companyNumber);
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
 
-			if (!validationErrors.isEmpty()) {
-				bindValidationErrors(bindingResult, validationErrors);
-				return getTemplateName();
-			}
-		} catch (ServiceException e) {
-			LOGGER.errorRequest(request, e.getMessage(), e);
-			return ERROR_VIEW;
-		}
 
-		return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
-	}
-	
-	@Override
-	public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
-	    try {
-	        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
-	                transactionId, companyAccountsId, companyNumber);
-	        
-	        return balanceSheet.getOtherLiabilitiesOrAssets() != null && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() != null;
-	    } catch (ServiceException e) {
-	        return false;
-	    }
-	}
+        try {
+            List<ValidationError> validationErrors =
+                    creditorsWithinOneYearService.submitCreditorsWithinOneYear(transactionId, companyAccountsId,
+                            creditorsWithinOneYear, companyNumber);
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
+
+        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+    }
+
+    @Override
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+        try {
+            BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
+                    transactionId, companyAccountsId, companyNumber);
+
+            return balanceSheet.getOtherLiabilitiesOrAssets() != null && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() != null;
+        } catch (ServiceException e) {
+            return false;
+        }
+    }
 }
