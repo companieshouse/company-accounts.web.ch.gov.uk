@@ -196,6 +196,16 @@ public class DebtorsControllerTest {
     }
 
     @Test
+    @DisplayName("Test will not render with 0 values in debtors on balance sheet")
+    void willNotRenderDebtorsZeroValues() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    @Test
     @DisplayName("Post debtors with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
@@ -241,6 +251,27 @@ public class DebtorsControllerTest {
 
         fixedAssets.setTangibleAssets(tangibleAssets);
         balanceSheet.setFixedAssets(fixedAssets);
+        return balanceSheet;
+    }
+
+
+    private BalanceSheet getMockBalanceSheetZeroValues() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        CurrentAssets currentAssets = new CurrentAssets();
+        uk.gov.companieshouse.web.accounts.model.smallfull.Debtors debtors = new uk.gov.companieshouse.web.accounts.model.smallfull.Debtors();
+
+        debtors.setCurrentAmount(0L);
+        debtors.setPreviousAmount(0L);
+
+        currentAssets.setDebtors(debtors);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setCurrentAssets(currentAssets);
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
         return balanceSheet;
     }
 }

@@ -100,13 +100,46 @@ public class DebtorsController extends BaseController implements ConditionalCont
     }
 
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+    public boolean willRender(String companyNumber, String transactionId,
+            String companyAccountsId) {
         try {
             BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
-                transactionId, companyAccountsId, companyNumber);
-            return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null;
+                    transactionId, companyAccountsId, companyNumber);
+            return shouldDebtorsNoteRender(balanceSheet);
         } catch (ServiceException e) {
             return false;
         }
+    }
+
+    /**
+     *
+     * Only render debtors note if debtors balance sheet values are not both null or 0
+     * @param balanceSheet
+     * @return boolean
+     */
+    private boolean shouldDebtorsNoteRender(BalanceSheet balanceSheet) {
+        if (balanceSheet.getCurrentAssets() != null && (balanceSheet.getCurrentAssets().getDebtors() != null)) {
+
+
+            if (balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == null &&
+                    balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != null &&
+                    balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != 0) {
+                return true;
+            }
+
+            if (balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == null &&
+                    balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != null &&
+                    balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != 0) {
+                return true;
+            }
+
+            if (balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != null &&
+                    balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != null &&
+                    (balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != 0 ||
+                    balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != 0)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
