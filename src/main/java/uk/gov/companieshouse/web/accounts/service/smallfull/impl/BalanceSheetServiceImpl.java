@@ -321,11 +321,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private boolean isDebtorsCurrentAmountNull(BalanceSheet balanceSheet) {
         return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null
-                && (balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == null || balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != (0));
+                && (balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == null || balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == (0));
     }
 
     private boolean isDebtorsPreviousAmountNull(BalanceSheet balanceSheet) {
         return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null
-                && (balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == null || balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != (0));
+                && (balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == null || balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == (0));
     }
 }
