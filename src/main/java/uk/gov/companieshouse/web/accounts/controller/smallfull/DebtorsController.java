@@ -112,34 +112,25 @@ public class DebtorsController extends BaseController implements ConditionalCont
     }
 
     /**
-     *
      * Only render debtors note if debtors balance sheet values are not both null or 0
+     *
      * @param balanceSheet
      * @return boolean
      */
     private boolean shouldDebtorsNoteRender(BalanceSheet balanceSheet) {
-        if (balanceSheet.getCurrentAssets() != null && (balanceSheet.getCurrentAssets().getDebtors() != null)) {
+        if (balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null) {
 
+            Long previousAmount = balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount();
+            Long currentAmount = balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount();
 
-            if (balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == null &&
-                    balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != null &&
-                    balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != 0) {
-                return true;
-            }
+            return valuePresent(previousAmount) || valuePresent(currentAmount);
 
-            if (balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == null &&
-                    balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != null &&
-                    balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != 0) {
-                return true;
-            }
-
-            if (balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != null &&
-                    balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != null &&
-                    (balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() != 0 ||
-                    balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() != 0)) {
-                return true;
-            }
         }
         return false;
+    }
+
+
+    private boolean valuePresent(Long value) {
+        return value != null && value != 0;
     }
 }
