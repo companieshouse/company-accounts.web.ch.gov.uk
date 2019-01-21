@@ -32,7 +32,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,7 +54,7 @@ public class IntangibleAmortisationPolicyControllerTests {
     private AccountingPolicies accountingPolicies;
 
     @Mock
-    private Navigator navigator;
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private IntangibleAmortisationPolicyController controller;
@@ -102,7 +102,7 @@ public class IntangibleAmortisationPolicyControllerTests {
         intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(true);
         when(intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(intangibleAmortisationPolicy);
-        when(navigator.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH))
                 .andExpect(status().isOk())
@@ -124,7 +124,7 @@ public class IntangibleAmortisationPolicyControllerTests {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
         when(accountingPolicies.getHasProvidedIntangiblePolicy()).thenReturn(false);
-        when(navigator.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH).session(session))
                 .andExpect(status().isOk())
@@ -163,7 +163,7 @@ public class IntangibleAmortisationPolicyControllerTests {
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
-        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
                 .andExpect(status().is3xxRedirection())

@@ -73,7 +73,7 @@ public class StepsToCompleteController extends BaseController {
 
             transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
 
-            return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
         } catch (ServiceException e) {
 

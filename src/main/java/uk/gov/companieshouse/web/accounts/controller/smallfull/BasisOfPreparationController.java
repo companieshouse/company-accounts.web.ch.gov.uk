@@ -79,7 +79,7 @@ public class BasisOfPreparationController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override

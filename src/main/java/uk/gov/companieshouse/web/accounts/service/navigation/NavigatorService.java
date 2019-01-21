@@ -1,11 +1,11 @@
-package uk.gov.companieshouse.web.accounts.util;
+package uk.gov.companieshouse.web.accounts.service.navigation;
 
 import java.lang.annotation.Annotation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
@@ -13,17 +13,19 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
+import uk.gov.companieshouse.web.accounts.exception.NavigationException;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 /**
- * The {@code Navigator} class provides support methods for handling
+ * The {@code NavigatorService} class provides support methods for handling
  * navigation between controllers and for generating redirects or retrieving
  * controller @{link RequestMapping} paths.
  *
  * @see NextController
  * @see PreviousController
  */
-@Component
-public class Navigator {
+@Service
+public class NavigatorService {
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -113,9 +115,15 @@ public class Navigator {
 
             if (isConditionalController(controllerClass)) {
                 ConditionalController conditionalController = (ConditionalController) applicationContext.getBean(controllerClass);
-                if (!conditionalController.willRender(companyNumber, transactionId, companyAccountsId)) {
-                    controllerClass = getControllerClass(controllerClass, direction);
-                    continue;
+
+                try {
+                    if (!conditionalController.willRender(companyNumber, transactionId, companyAccountsId)) {
+                        controllerClass = getControllerClass(controllerClass, direction);
+                        continue;
+                    }
+                } catch (ServiceException e) {
+
+                    throw new NavigationException("Error when determining whether to render conditional controller " + conditionalController.getClass().toString(), e);
                 }
             }
 

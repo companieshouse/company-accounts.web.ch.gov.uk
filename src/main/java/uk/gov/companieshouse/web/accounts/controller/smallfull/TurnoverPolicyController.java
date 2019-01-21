@@ -88,7 +88,7 @@ public class TurnoverPolicyController extends BaseController {
 
         cacheIsPolicyIncluded(request, turnoverPolicy);
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
 

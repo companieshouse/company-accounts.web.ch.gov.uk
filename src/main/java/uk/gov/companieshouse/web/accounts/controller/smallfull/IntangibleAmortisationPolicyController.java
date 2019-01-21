@@ -90,7 +90,7 @@ public class IntangibleAmortisationPolicyController extends BaseController {
 
         cacheIsPolicyIncluded(request, intangibleAmortisationPolicy);
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override

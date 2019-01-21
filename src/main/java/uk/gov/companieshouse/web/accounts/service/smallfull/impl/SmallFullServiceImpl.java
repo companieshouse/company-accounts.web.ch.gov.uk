@@ -45,10 +45,8 @@ public class SmallFullServiceImpl implements SmallFullService {
      * {@inheritDoc}
      */
     @Override
-    public SmallFullApi getSmallFullAccounts(String transactionId, String companyAccountsId)
-            throws ServiceException {
-
-        ApiClient apiClient = apiClientService.getApiClient();
+    public SmallFullApi getSmallFullAccounts(ApiClient apiClient, String transactionId,
+            String companyAccountsId) throws ServiceException {
 
         String uri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
 
