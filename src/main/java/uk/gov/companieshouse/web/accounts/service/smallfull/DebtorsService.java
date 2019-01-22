@@ -32,4 +32,13 @@ public interface DebtorsService {
         */
     List<ValidationError> submitDebtors(String transactionId, String companyAccountsId, Debtors debtors, String companyNumber)
         throws ServiceException;
+
+    /**
+     * Delete the debtors note
+     *
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteDebtors(String transactionId, String companyAccountsId) throws ServiceException;
 }
