@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolic
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(DebtorsController.class)
 @PreviousController(ValuationInformationPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/other-accounting-policies")
 public class OtherAccountingPolicyController extends BaseController {
