@@ -24,7 +24,6 @@ import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
-import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.TangibleResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleCreate;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleGet;
@@ -35,6 +34,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -74,10 +74,10 @@ public class TangibleAssetsNoteServiceImplTest {
     private TangibleUpdate tangibleUpdate;
 
     @Mock
-    private SmallFullGet smallFullGet;
+    private SmallFullApi smallFullApi;
 
     @Mock
-    private SmallFullApi smallFullApi;
+    private SmallFullService smallFullService;
 
     @Mock
     private SmallFullLinks smallFullLinks;
@@ -90,6 +90,8 @@ public class TangibleAssetsNoteServiceImplTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String SMALL_FULL_URI = "/transactions/transactionId/company-accounts/companyAccountsId/small-full";
 
     @BeforeEach
     private void setUp() {
@@ -149,8 +151,8 @@ public class TangibleAssetsNoteServiceImplTest {
     @DisplayName("POST - Tangible successful path create")
     void postTangibleSuccessCreate() throws Exception {
 
-        when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
-        when(smallFullGet.execute()).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, SMALL_FULL_URI))
+            .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn(null);
@@ -174,8 +176,8 @@ public class TangibleAssetsNoteServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
-        when(smallFullGet.execute()).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, SMALL_FULL_URI))
+            .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn("");
