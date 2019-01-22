@@ -46,7 +46,7 @@ public class DebtorsController extends BaseController implements ConditionalCont
     public String getDebtors(@PathVariable String companyNumber,
             @PathVariable String transactionId,
             @PathVariable String companyAccountsId,
-            Model model, HttpServletRequest request) throws ServiceException {
+            Model model, HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
