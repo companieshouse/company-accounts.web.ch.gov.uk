@@ -94,11 +94,30 @@ public class CreditorsWithinOneYearController extends BaseController implements
   }
 
   @Override
-  public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
-    BalanceSheet balanceSheet =
-        balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
+  public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
+      throws ServiceException {
+    return shouldNoteRender(balanceSheetService.getBalanceSheet(transactionId, companyAccountsId,
+        companyNumber));
+  }
 
-    return balanceSheet.getOtherLiabilitiesOrAssets() != null
-        && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() != null;
+  private boolean shouldNoteRender(BalanceSheet balanceSheet) {
+
+    if (balanceSheet.getOtherLiabilitiesOrAssets() != null
+        && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() != null) {
+
+      Long previousAmount =
+          balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear()
+              .getPreviousAmount();
+      Long currentAmount =
+          balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear()
+              .getCurrentAmount();
+
+      return valuePresent(previousAmount) || valuePresent(currentAmount);
+    }
+    return false;
+  }
+
+  private boolean valuePresent(Long value) {
+    return value != null && value != 0;
   }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsDueWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
@@ -167,9 +168,7 @@ public class CreditorsWithinOneYearControllerTest {
     void willRenderCreditorsWithinOneYearPresent() throws Exception {
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetWithCreditorsWithinOneYear());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-
-        assertTrue(renderPage);
+        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -177,9 +176,15 @@ public class CreditorsWithinOneYearControllerTest {
     void willRenderWhenCreditorsWithinOneYearNotPresent() throws Exception {
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetWithoutCreditorsWithinOneYear());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+    
+    @Test
+    @DisplayName("Test will not render with Creditors Within One Year zero from balancesheet")
+    void willRenderWhenCreditorsWithinOneYearZero() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetWithZeroCreditorsWithinOneYear());
 
-        assertFalse(renderPage);
+        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -210,7 +215,7 @@ public class CreditorsWithinOneYearControllerTest {
         BalanceSheet balanceSheet = new BalanceSheet();
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = new OtherLiabilitiesOrAssets();
-        uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsDueWithinOneYear creditorsWithinOneYear = new uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsDueWithinOneYear();
+        CreditorsDueWithinOneYear creditorsWithinOneYear = new CreditorsDueWithinOneYear();
 
         creditorsWithinOneYear.setCurrentAmount(1L);
         creditorsWithinOneYear.setPreviousAmount(2L);
@@ -239,4 +244,18 @@ public class CreditorsWithinOneYearControllerTest {
         balanceSheet.setFixedAssets(fixedAssets);
         return balanceSheet;
     }
+    
+    private BalanceSheet getMockBalanceSheetWithZeroCreditorsWithinOneYear() {
+      BalanceSheet balanceSheet = new BalanceSheet();
+      OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = new OtherLiabilitiesOrAssets();
+      CreditorsDueWithinOneYear creditorsWithinOneYear = new CreditorsDueWithinOneYear();
+
+      creditorsWithinOneYear.setCurrentAmount(0L);
+      creditorsWithinOneYear.setPreviousAmount(0L);
+
+      otherLiabilitiesOrAssets.setCreditorsDueWithinOneYear(creditorsWithinOneYear);
+
+      balanceSheet.setOtherLiabilitiesOrAssets(otherLiabilitiesOrAssets);
+      return balanceSheet;
+  }
 }

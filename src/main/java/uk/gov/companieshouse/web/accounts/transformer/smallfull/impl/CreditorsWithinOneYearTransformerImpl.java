@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CurrentPeriod;
@@ -23,6 +25,10 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
 
     CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
 
+    if (creditorsWithinOneYearApi == null) {
+      return creditorsWithinOneYear;
+    }
+      
     AccrualsAndDeferredIncome accrualsAndDeferredIncome = new AccrualsAndDeferredIncome();
     BankLoansAndOverdrafts bankLoansAndOverdrafts = new BankLoansAndOverdrafts();
     FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts =
@@ -32,21 +38,17 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
     Total total = new Total();
     TradeCreditors tradeCreditors = new TradeCreditors();
 
-    if (creditorsWithinOneYearApi != null) {
+    populateCurrentPeriodForWeb(creditorsWithinOneYearApi, creditorsWithinOneYear,
+        accrualsAndDeferredIncome, bankLoansAndOverdrafts, financeLeasesAndHirePurchaseContracts,
+        otherCreditors, taxationAndSocialSecurity, total, tradeCreditors);
 
-      populateCurrentPeriodForWeb(creditorsWithinOneYearApi, creditorsWithinOneYear,
-          accrualsAndDeferredIncome, bankLoansAndOverdrafts, financeLeasesAndHirePurchaseContracts,
-          otherCreditors, taxationAndSocialSecurity, total, tradeCreditors);
-
-      populatePreviousPeriodForWeb(creditorsWithinOneYearApi, accrualsAndDeferredIncome,
-          bankLoansAndOverdrafts, financeLeasesAndHirePurchaseContracts, otherCreditors,
-          taxationAndSocialSecurity, total, tradeCreditors);
-    }
-
+    populatePreviousPeriodForWeb(creditorsWithinOneYearApi, accrualsAndDeferredIncome,
+        bankLoansAndOverdrafts, financeLeasesAndHirePurchaseContracts, otherCreditors,
+        taxationAndSocialSecurity, total, tradeCreditors);
+    
     creditorsWithinOneYear.setAccrualsAndDeferredIncome(accrualsAndDeferredIncome);
     creditorsWithinOneYear.setBankLoansAndOverdrafts(bankLoansAndOverdrafts);
-    creditorsWithinOneYear
-        .setFinanceLeasesAndHirePurchaseContracts(financeLeasesAndHirePurchaseContracts);
+    creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(financeLeasesAndHirePurchaseContracts);
     creditorsWithinOneYear.setOtherCreditors(otherCreditors);
     creditorsWithinOneYear.setTaxationAndSocialSecurity(taxationAndSocialSecurity);
     creditorsWithinOneYear.setTotal(total);
@@ -233,13 +235,18 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
           .getPreviousTradeCreditors());
     }
 
-    if (previousPeriod.getAccrualsAndDeferredIncome() != null
-        || previousPeriod.getBankLoansAndOverdrafts() != null
-        || previousPeriod.getFinanceLeasesAndHirePurchaseContracts() != null
-        || previousPeriod.getOtherCreditors() != null
-        || previousPeriod.getTaxationAndSocialSecurity() != null
-        || previousPeriod.getTotal() != null || previousPeriod.getTradeCreditors() != null) {
+    if (isPreviousPeriodPopulated(previousPeriod)) {
       creditorsWithinOneYearApi.setCreditorsWithinOneYearPreviousPeriod(previousPeriod);
     }
+  }
+  
+  private boolean isPreviousPeriodPopulated(PreviousPeriod period) {
+    return Stream.of(period.getAccrualsAndDeferredIncome(),
+        period.getBankLoansAndOverdrafts(),
+        period.getFinanceLeasesAndHirePurchaseContracts(),
+        period.getOtherCreditors(),
+        period.getTaxationAndSocialSecurity(),
+        period.getTotal(),
+        period.getTradeCreditors()).anyMatch(Objects::nonNull);
   }
 }
