@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.PrepaymentsAndAccruedIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDebtors;
@@ -110,29 +111,19 @@ public class DebtorsTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Current period value added to debtors API model when present")
-    void currentPeriodValueAddedToApiModel() {
-
+    @DisplayName("Current period value added to debtors API model when all present - Details blanks string")
+    void currentPeriodValueAddedToApiModelDetailsBlank() {
         Debtors debtors = new Debtors();
+        debtors.setDetails("");
+        createFullCurrentDebtors(debtors);
+    }
 
-        TradeDebtors tradeDebtors = new TradeDebtors();
-        tradeDebtors.setCurrentTradeDebtors(TRADE_DEBTORS_CURRENT);
-        debtors.setTradeDebtors(tradeDebtors);
-
-        Total total = new Total();
-        total.setCurrentTotal(TOTAL_CURRENT);
-        debtors.setTotal(total);
-
-        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
-
-        assertNull(debtorsApi.getDebtorsCurrentPeriod().getDetails());
-        assertNull(debtorsApi.getDebtorsCurrentPeriod().getGreaterThanOneYear());
-        assertNull(debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome());
-        assertNull(debtorsApi.getDebtorsCurrentPeriod().getOtherDebtors());
-
-        assertEquals(TRADE_DEBTORS_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors().longValue());
-        assertEquals(TOTAL_CURRENT, debtors.getTotal().getCurrentTotal().longValue());
-
+    @Test
+    @DisplayName("Current period value added to debtors API model when all present - Details present")
+    void currentPeriodValueAddedToApiModelDetailsPresent() {
+        Debtors debtors = new Debtors();
+        debtors.setDetails(DETAILS);
+        createFullCurrentDebtors(debtors);
     }
 
     @Test
@@ -149,6 +140,10 @@ public class DebtorsTransformerImplTests {
         otherDebtors.setPreviousOtherDebtors(OTHER_DEBTORS_PREVIOUS);
         debtors.setOtherDebtors(otherDebtors);
 
+        PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
+        prepaymentsAndAccruedIncome.setPreviousPrepaymentsAndAccruedIncome(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS);
+        debtors.setPrepaymentsAndAccruedIncome(prepaymentsAndAccruedIncome);
+
         GreaterThanOneYear greaterThanOneYear = new GreaterThanOneYear();
         greaterThanOneYear.setPreviousGreaterThanOneYear(GREATER_THAN_ONE_YEAR_PREVIOUS);
         debtors.setGreaterThanOneYear(greaterThanOneYear);
@@ -161,9 +156,38 @@ public class DebtorsTransformerImplTests {
 
         assertEquals(TRADE_DEBTORS_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors().longValue());
         assertEquals(GREATER_THAN_ONE_YEAR_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear().longValue());
+        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome().longValue());
         assertEquals(OTHER_DEBTORS_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getOtherDebtors().longValue());
         assertEquals(TOTAL_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getTotal().longValue());
+    }
 
-        assertNull(debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome());
+    private void createFullCurrentDebtors(Debtors debtors) {
+        TradeDebtors tradeDebtors = new TradeDebtors();
+        tradeDebtors.setCurrentTradeDebtors(TRADE_DEBTORS_CURRENT);
+        debtors.setTradeDebtors(tradeDebtors);
+
+        PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
+        prepaymentsAndAccruedIncome.setCurrentPrepaymentsAndAccruedIncome(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT);
+        debtors.setPrepaymentsAndAccruedIncome(prepaymentsAndAccruedIncome);
+
+        GreaterThanOneYear greaterThanOneYear = new GreaterThanOneYear();
+        greaterThanOneYear.setCurrentGreaterThanOneYear(GREATER_THAN_ONE_YEAR_CURRENT);
+        debtors.setGreaterThanOneYear(greaterThanOneYear);
+
+        OtherDebtors otherDebtors = new OtherDebtors();
+        otherDebtors.setCurrentOtherDebtors(OTHER_DEBTORS_CURRENT);
+        debtors.setOtherDebtors(otherDebtors);
+
+        Total total = new Total();
+        total.setCurrentTotal(TOTAL_CURRENT);
+        debtors.setTotal(total);
+
+        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
+
+        assertEquals(TRADE_DEBTORS_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors().longValue());
+        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome().longValue());
+        assertEquals(GREATER_THAN_ONE_YEAR_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getGreaterThanOneYear().longValue());
+        assertEquals(OTHER_DEBTORS_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getOtherDebtors().longValue());
+        assertEquals(TOTAL_CURRENT, debtors.getTotal().getCurrentTotal().longValue());
     }
 }

@@ -1,20 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException;
-import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -48,13 +35,30 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -107,6 +111,9 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private ValidationContext validationContext;
+
+    @Mock
+    private DebtorsService debtorsService;
 
     @InjectMocks
     private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
@@ -863,9 +870,15 @@ public class BalanceSheetServiceImplTests {
 
         FixedAssets fixedAssets = new FixedAssets();
         TangibleAssets tangibleAssets = new TangibleAssets();
+        CurrentAssets currentAssets = new CurrentAssets();
+        Debtors debtors = new Debtors();
         tangibleAssets.setCurrentAmount((long)1000);
         fixedAssets.setTangibleAssets(tangibleAssets);
         balanceSheet.setFixedAssets(fixedAssets);
+
+        debtors.setCurrentAmount((long)1000);
+        currentAssets.setDebtors(debtors);
+        balanceSheet.setCurrentAssets(currentAssets);
 
         return balanceSheet;
     }

@@ -46,7 +46,7 @@ public class DebtorsController extends BaseController implements ConditionalCont
     public String getDebtors(@PathVariable String companyNumber,
             @PathVariable String transactionId,
             @PathVariable String companyAccountsId,
-            Model model, HttpServletRequest request) throws ServiceException {
+            Model model, HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -95,18 +95,42 @@ public class DebtorsController extends BaseController implements ConditionalCont
             return ERROR_VIEW;
         }
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
                 companyAccountsId);
     }
 
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+    public boolean willRender(String companyNumber, String transactionId,
+            String companyAccountsId) {
         try {
             BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
-                transactionId, companyAccountsId, companyNumber);
-            return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null;
+                    transactionId, companyAccountsId, companyNumber);
+            return shouldDebtorsNoteRender(balanceSheet);
         } catch (ServiceException e) {
             return false;
         }
+    }
+
+    /**
+     * Only render debtors note if debtors balance sheet values are not both null or 0
+     *
+     * @param balanceSheet
+     * @return boolean
+     */
+    private boolean shouldDebtorsNoteRender(BalanceSheet balanceSheet) {
+        if (balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null) {
+
+            Long previousAmount = balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount();
+            Long currentAmount = balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount();
+
+            return valuePresent(previousAmount) || valuePresent(currentAmount);
+
+        }
+        return false;
+    }
+
+
+    private boolean valuePresent(Long value) {
+        return value != null && value != 0;
     }
 }

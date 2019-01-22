@@ -19,9 +19,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class DebtorsControllerTest {
     private BalanceSheetService mockBalanceSheetService;
 
     @Mock
-    private Navigator mockNavigator;
+    private NavigatorService mockNavigatorService;
 
     @InjectMocks
     private DebtorsController controller;
@@ -97,7 +97,7 @@ public class DebtorsControllerTest {
     @DisplayName("Get debtors view success path")
     void getRequestSuccess() throws Exception {
 
-        when(mockNavigator.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
@@ -126,7 +126,7 @@ public class DebtorsControllerTest {
     @DisplayName("Post debtors success path")
     void postRequestSuccess() throws Exception {
 
-        when(mockNavigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockDebtorsService.submitDebtors(anyString(), anyString(), any(Debtors.class), anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(DEBTORS_PATH))
@@ -196,6 +196,16 @@ public class DebtorsControllerTest {
     }
 
     @Test
+    @DisplayName("Test will not render with 0 values in debtors on balance sheet")
+    void willNotRenderDebtorsZeroValues() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    @Test
     @DisplayName("Post debtors with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
@@ -241,6 +251,27 @@ public class DebtorsControllerTest {
 
         fixedAssets.setTangibleAssets(tangibleAssets);
         balanceSheet.setFixedAssets(fixedAssets);
+        return balanceSheet;
+    }
+
+
+    private BalanceSheet getMockBalanceSheetZeroValues() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        CurrentAssets currentAssets = new CurrentAssets();
+        uk.gov.companieshouse.web.accounts.model.smallfull.Debtors debtors = new uk.gov.companieshouse.web.accounts.model.smallfull.Debtors();
+
+        debtors.setCurrentAmount(0L);
+        debtors.setPreviousAmount(0L);
+
+        currentAssets.setDebtors(debtors);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setCurrentAssets(currentAssets);
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
         return balanceSheet;
     }
 }

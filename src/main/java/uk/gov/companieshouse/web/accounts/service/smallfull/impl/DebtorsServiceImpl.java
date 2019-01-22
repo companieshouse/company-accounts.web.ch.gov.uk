@@ -53,7 +53,6 @@ public class DebtorsServiceImpl implements DebtorsService {
         Debtors debtors = transformer.getDebtors(debtorsApi);
 
         BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings();
-
         debtors.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return debtors;
@@ -67,7 +66,7 @@ public class DebtorsServiceImpl implements DebtorsService {
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
 
-        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(transactionId, companyAccountsId);
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
 
