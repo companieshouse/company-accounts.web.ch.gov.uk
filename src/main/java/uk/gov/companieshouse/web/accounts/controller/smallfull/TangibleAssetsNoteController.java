@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalLong;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,12 @@ import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -26,13 +31,16 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @NextController(ReviewController.class)
 @PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/tangible-assets")
-public class TangibleAssetsNoteController extends BaseController {
+public class TangibleAssetsNoteController extends BaseController implements ConditionalController {
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
     @Override
     protected String getTemplateName() {
@@ -93,7 +101,7 @@ public class TangibleAssetsNoteController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
 
@@ -102,4 +110,26 @@ public class TangibleAssetsNoteController extends BaseController {
         tangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
         tangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
+
+    @Override
+    public boolean willRender(String companyNumber, String transactionId,
+        String companyAccountsId) {
+
+        try {
+            BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
+                transactionId, companyAccountsId, companyNumber);
+
+            Long currentTangible = Optional.ofNullable(
+                balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount()).orElse(0L);
+            Long previousTangible = Optional.ofNullable(
+                balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount()).orElse(0L);
+
+            return (currentTangible.equals(0L) && previousTangible.equals(0L));
+
+        } catch (ServiceException e) {
+            return false;
+        }
+    }
+
+
 }
