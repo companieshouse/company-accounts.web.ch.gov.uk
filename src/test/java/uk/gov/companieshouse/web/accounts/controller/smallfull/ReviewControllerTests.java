@@ -19,7 +19,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -65,7 +65,7 @@ public class ReviewControllerTests {
     ReviewService reviewService;
 
     @Mock
-    Navigator navigator;
+    NavigatorService navigatorService;
 
     private MockMvc mockMvc;
 
@@ -113,7 +113,7 @@ public class ReviewControllerTests {
     @DisplayName("Post review page success path")
     void postRequestSuccess() throws Exception {
 
-        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(REVIEW_PATH))
                 .andExpect(status().is3xxRedirection())

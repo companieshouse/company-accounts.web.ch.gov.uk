@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.util.navigator;
+package uk.gov.companieshouse.web.accounts.service.navigation;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,16 +10,17 @@ import org.mockito.quality.Strictness;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
-import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerFive;
-import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerFour;
-import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerOne;
-import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerSeven;
-import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerThree;
-import uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerTwo;
-import uk.gov.companieshouse.web.accounts.util.navigator.success.MockSuccessJourneyControllerOne;
-import uk.gov.companieshouse.web.accounts.util.navigator.success.MockSuccessJourneyControllerThree;
-import uk.gov.companieshouse.web.accounts.util.navigator.success.MockSuccessJourneyControllerTwo;
+import uk.gov.companieshouse.web.accounts.exception.NavigationException;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerEight;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerFive;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerFour;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerOne;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerSeven;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerThree;
+import uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerTwo;
+import uk.gov.companieshouse.web.accounts.service.navigation.success.MockSuccessJourneyControllerOne;
+import uk.gov.companieshouse.web.accounts.service.navigation.success.MockSuccessJourneyControllerThree;
+import uk.gov.companieshouse.web.accounts.service.navigation.success.MockSuccessJourneyControllerTwo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,13 +29,13 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class NavigatorTests {
+public class NavigatorServiceTests {
 
     @Mock
     private ApplicationContext applicationContext;
 
     @InjectMocks
-    private Navigator navigator;
+    private NavigatorService navigatorService;
 
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String TRANSACTION_ID = "transactionId";
@@ -43,55 +44,55 @@ public class NavigatorTests {
     @Test
     public void missingNextControllerAnnotation() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
-                navigator.getNextControllerRedirect(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                navigatorService.getNextControllerRedirect(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @NextController annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerThree", exception.getMessage());
+        assertEquals("Missing @NextController annotation on class uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerThree", exception.getMessage());
     }
 
     @Test
     public void missingPreviousControllerAnnotation() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
-                navigator.getPreviousControllerPath(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                navigatorService.getPreviousControllerPath(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @PreviousController annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerThree", exception.getMessage());
+        assertEquals("Missing @PreviousController annotation on class uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerThree", exception.getMessage());
     }
 
     @Test
     public void missingRequestMappingAnnotationOnNextController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
-                navigator.getNextControllerRedirect(MockControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                navigatorService.getNextControllerRedirect(MockControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerTwo", exception.getMessage());
+        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerTwo", exception.getMessage());
     }
 
     @Test
     public void missingRequestMappingAnnotationOnPreviousController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
-                navigator.getPreviousControllerPath(MockControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                navigatorService.getPreviousControllerPath(MockControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerOne", exception.getMessage());
+        assertEquals("Missing @RequestMapping annotation on class uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerOne", exception.getMessage());
     }
 
     @Test
     public void missingRequestMappingValueOnNextController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
-                navigator.getNextControllerRedirect(MockControllerFive.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                navigatorService.getNextControllerRedirect(MockControllerFive.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerSix", exception.getMessage());
+        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerSix", exception.getMessage());
     }
 
     @Test
     public void missingRequestMappingValueOnPreviousController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
-                navigator.getPreviousControllerPath(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                navigatorService.getPreviousControllerPath(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
-        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.util.navigator.failure.MockControllerSix", exception.getMessage());
+        assertEquals("Missing @RequestMapping value on class uk.gov.companieshouse.web.accounts.service.navigation.failure.MockControllerSix", exception.getMessage());
     }
 
     @Test
     public void missingExpectedNumberOfPathVariablesForMandatoryController() {
 
-        String redirect = navigator.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER);
+        String redirect = navigatorService.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER);
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-controller-five", redirect);
     }
@@ -101,7 +102,7 @@ public class NavigatorTests {
         when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
-        String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        String redirect = navigatorService.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
     }
@@ -111,7 +112,7 @@ public class NavigatorTests {
         when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
-        String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER);
+        String redirect = navigatorService.getNextControllerRedirect(MockSuccessJourneyControllerOne.class, COMPANY_NUMBER);
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-two", redirect);
     }
@@ -120,7 +121,7 @@ public class NavigatorTests {
     public void successfulRedirectStartingFromConditionalControllerWithExpectedNumberOfPathVariables() {
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
-        String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        String redirect = navigatorService.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
     }
@@ -129,7 +130,7 @@ public class NavigatorTests {
     public void successfulRedirectStartingFromConditionalControllerWithMissingPathVariables() {
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
-        String redirect = navigator.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER);
+        String redirect = navigatorService.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER);
 
         assertEquals(UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/mock-success-journey-controller-three", redirect);
     }
@@ -139,8 +140,17 @@ public class NavigatorTests {
         when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
-        String redirect = navigator.getPreviousControllerPath(MockSuccessJourneyControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        String redirect = navigatorService.getPreviousControllerPath(MockSuccessJourneyControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals("/mock-success-journey-controller-one", redirect);
+    }
+
+    @Test
+    public void navigationExceptionThrownWhenWillRenderThrowsServiceException() {
+        when(applicationContext.getBean(MockControllerSeven.class)).thenReturn(new MockControllerSeven());
+        when(applicationContext.getBean(MockControllerEight.class)).thenReturn(new MockControllerEight());
+
+        assertThrows(NavigationException.class, () -> navigatorService.getNextControllerRedirect(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
     }
 }
