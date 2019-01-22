@@ -67,14 +67,14 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        CurrentPeriodApi currentPeriodApi = getCurrentPeriod(apiClient, CURRENT_PERIOD_URI,
+        CurrentPeriodApi currentPeriodApi = getCurrentPeriod(apiClient,
                 transactionId, companyAccountsId);
         PreviousPeriodApi previousPeriodApi = null;
 
         CompanyProfileApi companyProfileApi = getCompanyProfile(companyNumber);
 
         if (isMultipleYearFiler(companyProfileApi)) {
-            previousPeriodApi = getPreviousPeriod(apiClient, PREVIOUS_PERIOD_URI, transactionId,
+            previousPeriodApi = getPreviousPeriod(apiClient, transactionId,
                     companyAccountsId);
         }
 
@@ -88,11 +88,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         return balanceSheet;
     }
 
-    private CurrentPeriodApi getCurrentPeriod(ApiClient apiClient, UriTemplate uri,
+    private CurrentPeriodApi getCurrentPeriod(ApiClient apiClient,
             String transactionId, String companyAccountsId) throws ServiceException {
 
         try {
-            return apiClient.smallFull().currentPeriod().get(uri.expand(transactionId,
+            return apiClient.smallFull().currentPeriod().get(CURRENT_PERIOD_URI.expand(transactionId,
                     companyAccountsId).toString()).execute();
         } catch (ApiErrorResponseException e) {
 
@@ -107,11 +107,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         }
     }
 
-    private PreviousPeriodApi getPreviousPeriod(ApiClient apiClient, UriTemplate uri,
+    private PreviousPeriodApi getPreviousPeriod(ApiClient apiClient,
             String transactionId, String companyAccountsId) throws ServiceException {
 
         try {
-            return apiClient.smallFull().previousPeriod().get(uri.expand(transactionId,
+            return apiClient.smallFull().previousPeriod().get(PREVIOUS_PERIOD_URI.expand(transactionId,
                     companyAccountsId).toString()).execute();
         } catch (ApiErrorResponseException e) {
 
