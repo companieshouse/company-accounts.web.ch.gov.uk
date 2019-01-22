@@ -17,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,9 +31,9 @@ import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -65,7 +66,7 @@ public class TangibleAssetsNoteControllerTest {
     private TangibleAssets tangibleAssets;
 
     @Mock
-    private Navigator navigator;
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private TangibleAssetsNoteController tangibleAssetsNoteController;
@@ -97,10 +98,7 @@ public class TangibleAssetsNoteControllerTest {
 
     @BeforeEach
     private void setUp() throws Exception {
-        when(navigator
-            .getPreviousControllerPath(tangibleAssetsNoteController.getClass(), COMPANY_NUMBER,
-                TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
-
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
         this.mockMvc = MockMvcBuilders.standaloneSetup(tangibleAssetsNoteController).build();
 
     }
@@ -131,9 +129,7 @@ public class TangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Post tangible asset note success path")
     void postRequestSuccess() throws Exception {
-        when(navigator
-            .getNextControllerRedirect(tangibleAssetsNoteController.getClass(), COMPANY_NUMBER,
-                TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
 
         when(
             tangibleAssetsNoteService.postTangibleAssets(anyString(), anyString(), any(
