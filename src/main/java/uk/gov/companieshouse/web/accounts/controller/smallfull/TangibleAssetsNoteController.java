@@ -124,7 +124,7 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
             Long previousTangible = Optional.ofNullable(
                 balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount()).orElse(0L);
 
-            return (currentTangible.equals(0L) && previousTangible.equals(0L));
+            return !(currentTangible.equals(0L) && previousTangible.equals(0L));
 
         } catch (ServiceException e) {
             return false;
