@@ -15,6 +15,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.debtors.DebtorsResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsCreate;
+import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsDelete;
 import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsGet;
 import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
@@ -70,6 +71,9 @@ public class DebtorsServiceImplTests {
 
     @Mock
     private DebtorsUpdate mockDebtorsUpdate;
+
+    @Mock
+    private DebtorsDelete mockDebtorsDelete;
 
     @Mock
     private SmallFullGet mockSmallFullGet;
@@ -322,6 +326,68 @@ public class DebtorsServiceImplTests {
             COMPANY_ACCOUNTS_ID,
             debtors,
             COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("DELETE - Debtors successful delete path")
+    void deleteDebtors() throws Exception {
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
+        doNothing().when(mockDebtorsDelete).execute();
+
+        List<ValidationError> validationErrors = debtorsService.deleteDebtors(TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID);
+
+        assertEquals(0, validationErrors.size());
+    }
+
+    @Test
+    @DisplayName("DELETE - Debtors throws ServiceExcepiton due to URIValidationException")
+    void deleteDebtorsUriValidationException() throws Exception {
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
+        when(mockDebtorsDelete.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockDebtorsDelete.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.deleteDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
+    void deleteDebtorsApiErrorResponseExceptionBadRequest() throws Exception {
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockDebtorsDelete.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockDebtorsDelete.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.deleteDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
+    void deleteDebtorsApiErrorResponseExceptionNotFound() throws Exception {
+
+        getMockDebtorsResourceHandler();
+        when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockDebtorsDelete.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockDebtorsDelete.execute());
+        assertThrows(ServiceException.class, () -> debtorsService.deleteDebtors(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
     }
 
     private void getMockSmallFullResourceHandler() {

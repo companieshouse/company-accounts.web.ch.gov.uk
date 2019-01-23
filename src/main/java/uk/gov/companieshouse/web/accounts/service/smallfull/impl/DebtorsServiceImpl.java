@@ -95,7 +95,7 @@ public class DebtorsServiceImpl implements DebtorsService {
     }
 
     @Override
-    public void deleteDebtors(String transactionId, String companyAccountsId) throws ServiceException {
+    public List<ValidationError> deleteDebtors(String transactionId, String companyAccountsId) throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
@@ -106,9 +106,17 @@ public class DebtorsServiceImpl implements DebtorsService {
 
             throw new ServiceException(INVALID_URI_MESSAGE, e);
         } catch (ApiErrorResponseException e) {
-
-            throw new ServiceException("Error creating debtors resource", e);
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
+                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
+                if (validationErrors.isEmpty()) {
+                    throw new ServiceException("Bad request when deleting debtors resource", e);
+                }
+                return validationErrors;
+            }
+            throw new ServiceException("Error deleting debtors resource", e);
         }
+
+        return new ArrayList<>();
     }
 
     private DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
