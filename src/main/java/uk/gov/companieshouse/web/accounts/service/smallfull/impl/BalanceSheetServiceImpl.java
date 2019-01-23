@@ -30,6 +30,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BalanceSheetServiceImpl implements BalanceSheetService {
@@ -320,13 +321,18 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     private boolean isDebtorsCurrentAmountNull(BalanceSheet balanceSheet) {
-        return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null
-            && (balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == null || balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount() == (0));
+        Long currentDebtors =
+            Optional.ofNullable(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount())
+                .orElse(0L);
+
+        return currentDebtors.equals(0L);
     }
 
     private boolean isDebtorsPreviousAmountNull(BalanceSheet balanceSheet) {
-        return balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getDebtors() != null
-            && (balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == null || balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount() == (0));
-    }
+        Long previousDebtors =
+            Optional.ofNullable(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount())
+            .orElse(0L);
 
+        return previousDebtors.equals(0L);
+    }
 }
