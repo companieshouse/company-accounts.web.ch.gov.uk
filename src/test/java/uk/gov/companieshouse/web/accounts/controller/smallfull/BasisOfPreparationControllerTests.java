@@ -26,7 +26,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +42,7 @@ public class BasisOfPreparationControllerTests {
     private BasisOfPreparationService basisOfPreparationService;
 
     @Mock
-    private Navigator navigator;
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private BasisOfPreparationController controller;
@@ -74,7 +74,7 @@ public class BasisOfPreparationControllerTests {
 
     @BeforeEach
     private void setup() {
-        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -112,7 +112,7 @@ public class BasisOfPreparationControllerTests {
         when(basisOfPreparationService.submitBasisOfPreparation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(BasisOfPreparation.class)))
                 .thenReturn(validationErrors);
         when(validationErrors.isEmpty()).thenReturn(true);
-        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData())
                 .andExpect(status().is3xxRedirection())

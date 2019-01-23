@@ -29,7 +29,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class BalanceSheetControllerTests {
     private BalanceSheetService balanceSheetService;
 
     @Mock
-    private Navigator navigator;
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private BalanceSheetController controller;
@@ -75,7 +75,7 @@ public class BalanceSheetControllerTests {
 
     @BeforeEach
     private void setup() {
-        when(navigator.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -112,7 +112,7 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
-        when(navigator.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))

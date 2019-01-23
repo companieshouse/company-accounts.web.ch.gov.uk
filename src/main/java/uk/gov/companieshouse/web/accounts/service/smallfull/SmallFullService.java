@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull;
 
+import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
@@ -15,10 +16,13 @@ public interface SmallFullService {
 
     /**
      * Retrieve a small full resource
+     *
+     * @param apiClient The api client with which to execute the get request
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
      * @return the small full resource
      * @throws ServiceException or retrieval failure
      */
-    SmallFullApi getSmallFullAccounts(String transactionId, String companyAccountsId) throws ServiceException;
+    SmallFullApi getSmallFullAccounts(ApiClient apiClient,
+            String transactionId, String companyAccountsId) throws ServiceException;
 }

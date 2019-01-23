@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @NextController(ApprovalController.class)
-@PreviousController(OtherAccountingPolicyController.class)
+@PreviousController(DebtorsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/review")
 public class ReviewController extends BaseController {
 
@@ -56,7 +56,7 @@ public class ReviewController extends BaseController {
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId) {
 
-        return navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override
