@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title></title>
+  <title></title>
 </head>
 <body>
 
 <div th:fragment="additionalInformation" class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <details class="govuk-details" role="group"
-                 th:attrappend="open=${#fields.hasErrors('__${id}__')} ? 'open' : ''">
-            <summary class="govuk-details__summary" role="button" aria-controls="details-content"
-                     aria-expanded="false">
-                <span class="govuk-details__summary-text" th:text="${dropDownText}"></span>
-            </summary>
-            <div class="govuk-govuk-form-group" id="details-content" aria-hidden="true"
-                 th:classappend="${#fields.hasErrors('__${id}__')} ? 'govuk-form-group--error' : ''">
-                <label class="govuk-visually-hidden" th:for="${id}" th:text="${dropDownText}"></label>
+  <div class="govuk-grid-column-two-thirds">
+    <details class="govuk-details" role="group"
+             th:attrappend="open=${#fields.hasErrors('__${id}__')} ? 'open' : ''">
+      <summary class="govuk-details__summary" role="button" aria-controls="details-content"
+               aria-expanded="false">
+        <span class="govuk-details__summary-text" th:text="${dropDownText}"></span>
+      </summary>
+      <div class="govuk-govuk-form-group" id="details-content" aria-hidden="true"
+           th:classappend="${#fields.hasErrors('__${id}__')} ? 'govuk-form-group--error' : ''">
+        <label class="govuk-visually-hidden" th:for="${id}" th:text="${dropDownText}"></label>
 
-                <span class="govuk-error-message"
-                      id="additional-information-errorId"
-                      th:if="${#fields.hasErrors('__${id}__')}"
-                      th:each="e : ${#fields.errors('__${id}__')}" th:text="${e}">
+        <span class="govuk-error-message"
+              id="additional-information-errorId"
+              th:if="${#fields.hasErrors('__${id}__')}"
+              th:each="e : ${#fields.errors('__${id}__')}" th:text="${e}">
         </span>
 
-                <span id="more-detail-hint" class="govuk-hint" th:text="${helpText}"></span>
-                <textarea class="govuk-textarea" th:id="${id}" th:name="${id}" th:field="*{__${id}__}"
-                          th:value="${id}"
-                          rows="5" aria-describedby="more-detail-hint"
-                          th:classappend="${#fields.hasErrors('__${id}__')} ? 'govuk-textarea--error' : ''"></textarea>
-            </div>
-        </details>
-    </div>
+        <span id="more-detail-hint" class="govuk-hint" th:text="${helpText}"></span>
+        <textarea class="govuk-textarea" th:id="${id}" th:name="${id}" th:field="*{__${id}__}"
+                  th:value="${id}"
+                  rows="5" aria-describedby="more-detail-hint"
+                  th:classappend="${#fields.hasErrors('__${id}__')} ? 'govuk-textarea--error' : ''"></textarea>
+      </div>
+    </details>
+  </div>
 </div>
 
 </body>

@@ -15,6 +15,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -27,15 +28,14 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
     private ApiClientService apiClientService;
 
     @Autowired
+    private SmallFullService smallFullService;
+
+
+    @Autowired
     private ValidationContext validationContext;
 
     @Autowired
     private TangibleAssetsTransformer tangibleAssetsTransformer;
-
-    private static final UriTemplate SMALL_FULL_URI =
-        new UriTemplate(
-            "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
-
 
     private static final UriTemplate TANGIBLE_ASSET_NOTE =
         new UriTemplate(
@@ -79,8 +79,8 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
 
         String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
 
-        String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
-        SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
+        SmallFullApi smallFullApi = smallFullService
+            .getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         TangibleApi tangibleApi = tangibleAssetsTransformer.getTangibleApi(tangibleAssets);
 
@@ -107,17 +107,6 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
         }
 
         return new ArrayList<>();
-    }
-
-    private SmallFullApi getSmallFullData(ApiClient apiClient, String smallFullUri)
-        throws ServiceException {
-        try {
-            return apiClient.smallFull().get(smallFullUri).execute();
-        } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error retrieving small full data", e);
-        } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for small full resource", e);
-        }
     }
 
     private boolean hasTangibleAssetNote(SmallFullLinks smallFullLinks) {
