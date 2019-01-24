@@ -493,7 +493,7 @@
                 <!-- Creditors Within One Year Note -->
                 <div id="cya-small-full-creditors-within-one-year-note">
 
-                    <div th:if="*{creditorsWithinOneYear != null}">
+                    <div th:if="*{creditorsWithinOneYear.total != null}">
                         <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Creditors - amounts falling due within one year note',
                             identifier= 'creditors-within-one-year-note',
