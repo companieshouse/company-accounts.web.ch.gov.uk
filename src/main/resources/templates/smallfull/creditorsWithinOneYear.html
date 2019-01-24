@@ -6,7 +6,7 @@
         layout:decorate="~{layouts/baseLayout}">
 
 <head>
-    <title>Debtors</title>
+    <title>Creditors - amounts falling due within one year note</title>
 </head>
 
 <div id="creditors-within-one-year-main-content" layout:fragment="content" class="two-column-accounts">
@@ -22,7 +22,7 @@
 
         <div class="left-indent">
             <div class="panel panel-border-wide">
-                <p id="debtors-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
+                <p id="creditors-within-one-year-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
             </div>
 
             <div class="govuk-grid-row" id="accounts-header">
@@ -54,7 +54,7 @@
             </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
-                    Bank Loans And Overdrafts
+                    Bank loans And overdrafts
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
