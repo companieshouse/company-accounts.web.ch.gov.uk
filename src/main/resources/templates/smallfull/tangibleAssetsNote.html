@@ -9,10 +9,10 @@
 </head>
 
 
-
 <div id="tangible-assets-note-main-content" layout:fragment="content" class="two-column-accounts">
 
-  <form id="tangible-assets-note-form" th:action="@{''}" th:object="${tangibleAssets}" class="form currency-included-within-inputs govuk-body" method="post">
+  <form id="tangible-assets-note-form" th:action="@{''}" th:object="${tangibleAssets}"
+        class="form currency-included-within-inputs govuk-body" method="post">
 
 
     <div th:replace="fragments/globalErrors :: globalErrors"></div>
@@ -26,7 +26,8 @@
     <input th:field="*{nextAccountsPeriodStartOn}" type="hidden">
     <input th:field="*{nextAccountsPeriodEndOn}" type="hidden">
 
-    <p class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
+    <p class="warning-note warning-note-large">You only need to enter items included in your
+      prepared accounts.</p>
     <h2 class="govuk-heading-m">Cost</h2>
 
     <div class="govuk-grid-row" id="accounts-header-cost">
@@ -52,11 +53,53 @@
     </div>
 
 
+    <div class="govuk-grid-row accounts-row-spacer">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.atPeriodStart.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.atPeriodStart.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.atPeriodStart.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.atPeriodStart.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.atPeriodStart.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+
+
+    </div>
     <!--Start Cost at start-->
     <div class="govuk-grid-row accounts-row-spacer">
       <div class="column-fifth">
-        <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodStartOn"></div>
-        <span th:id="cost.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <div
+            th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}"
+            id="cost.nextAccountsPeriodStartOn"></div>
+        <span th:id="cost.nextAccountsPeriodStartOn-mobile-label"
+              th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}"
+              class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -366,8 +409,14 @@
     <!--Start Cost at end-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <strong><div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodEndOn"></div></strong>
-        <span th:id="cost.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong>
+          <div
+              th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              id="cost.nextAccountsPeriodEndOn"></div>
+        </strong>
+        <span th:id="cost.nextAccountsPeriodEndOn-mobile-label"
+              th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -457,8 +506,12 @@
     <!--Start Depreciation at start-->
     <div class="govuk-grid-row accounts-row-spacer">
       <div class="column-fifth">
-        <div th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodStartOn"></div>
-        <span th:id="depreciation.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <div
+            th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}"
+            id="depreciation.nextAccountsPeriodStartOn"></div>
+        <span th:id="depreciation.nextAccountsPeriodStartOn-mobile-label"
+              th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}"
+              class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -700,8 +753,14 @@
     <!--Start Cost at end-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <strong><div th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodEndOn"></div></strong>
-        <span th:id="depreciation.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong>
+          <div
+              th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              id="depreciation.nextAccountsPeriodEndOn"></div>
+        </strong>
+        <span th:id="depreciation.nextAccountsPeriodEndOn-mobile-label"
+              th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -791,8 +850,14 @@
     <!--Net Book Value End-->
     <div class="govuk-grid-row accounts-total accounts-row-spacer">
       <div class="column-fifth">
-        <strong><div th:text="'Net book value at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodEndOn"></div></strong>
-        <span th:id="netBookValue.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong>
+          <div
+              th:text="'Net book value at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              id="netBookValue.nextAccountsPeriodEndOn"></div>
+        </strong>
+        <span th:id="netBookValue.nextAccountsPeriodEndOn-mobile-label"
+              th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -856,8 +921,14 @@
     <!--Net Book Value Start-->
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
-        <strong><div th:text="'Net book value at ' +${#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
-        <span th:id="netBookValue.lastAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
+        <strong>
+          <div
+              th:text="'Net book value at ' +${#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              id="netBookValue.lastAccountsPeriodEndOn"></div>
+        </strong>
+        <span th:id="netBookValue.lastAccountsPeriodEndOn-mobile-label"
+              th:text="${#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}"
+              class="mobile-only-label"></span>
       </div>
       <div class="column-sixth">
         <div th:replace="fragments/numberInput :: numberInput (
@@ -928,8 +999,11 @@
     </div>
 
     <div class="form-group">
-      <input id="next-button" class="govuk-button piwik-event" data-event-id="Tangible assets note - Save and continue" type="submit" role="button" value="Save and continue"/>
+      <input id="next-button" class="govuk-button piwik-event"
+             data-event-id="Tangible assets note - Save and continue" type="submit" role="button"
+             value="Save and continue"/>
     </div>
+    <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/tangible-note-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 
   </form>
 </div>

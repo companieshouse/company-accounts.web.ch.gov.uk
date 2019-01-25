@@ -21,6 +21,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -119,10 +120,17 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
             BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
                 transactionId, companyAccountsId, companyNumber);
 
-            Long currentTangible = Optional.ofNullable(
-                balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount()).orElse(0L);
-            Long previousTangible = Optional.ofNullable(
-                balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount()).orElse(0L);
+            Long currentTangible = Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getTangibleAssets)
+                .map(uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getCurrentAmount)
+                .orElse(0L);
+
+            Long previousTangible = Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getTangibleAssets)
+                .map(uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getPreviousAmount)
+                .orElse(0L);
 
             return !(currentTangible.equals(0L) && previousTangible.equals(0L));
 
@@ -130,6 +138,4 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
             return false;
         }
     }
-
-
 }

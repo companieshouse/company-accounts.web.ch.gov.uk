@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title></title>
+</head>
+<body>
+<div th:fragment="fieldError">
+  <span th:id="${errorField} + '-errorId'" class="govuk-error-message api"></span>
+  <span th:if="${!#fields.hasErrors('__${errorField}__')}" class="spacer">&nbsp;</span>
+
+
+  <label th:for="${errorField}">
+    <span th:id="${errorField} + '-mobile-label'" th:text="${text}" class="mobile-only-label"></span>
+    <input th:field="*{__${errorField}__}"
+           th:id="${errorField}"
+           th:name="${errorField}"
+           th:class="${errorField}"
+           type="text">
+  </label>
+</div>
+</body>
+</html>
