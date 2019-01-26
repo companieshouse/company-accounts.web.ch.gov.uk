@@ -70,8 +70,6 @@ public class CreditorsAfterOneYearControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
-
-
     @Test
     @DisplayName("Get creditors after one year view success path")
     void getRequestSuccess() throws Exception {
