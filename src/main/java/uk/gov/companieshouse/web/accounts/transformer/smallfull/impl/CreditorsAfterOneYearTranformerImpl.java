@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOn
 @Component
 public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYearTransformer {
 
-
     @Override
     public CreditorsAfterOneYear getCreditorsAfterOneYear(CreditorsAfterOneYearApi creditorsAfterOneYearApi) {
 
@@ -31,10 +30,12 @@ public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYea
         Total total = new Total();
 
         populateCurrentPeriodForWeb(creditorsAfterOneYearApi, creditorsAfterOneYear,
-                bankLoansAndOverdrafts, otherCreditors, total, financeLeasesAndHirePurchaseContracts);
+                bankLoansAndOverdrafts, otherCreditors, total,
+                financeLeasesAndHirePurchaseContracts);
 
-        populatePreviousPeriodForWeb(creditorsAfterOneYearApi, creditorsAfterOneYear,
-                bankLoansAndOverdrafts, otherCreditors, total, financeLeasesAndHirePurchaseContracts);
+        populatePreviousPeriodForWeb(creditorsAfterOneYearApi,
+                bankLoansAndOverdrafts, otherCreditors, total,
+                financeLeasesAndHirePurchaseContracts);
 
         creditorsAfterOneYear.setBankLoansAndOverdrafts(bankLoansAndOverdrafts);
         creditorsAfterOneYear.setFinanceLeasesAndHirePurchaseContracts(financeLeasesAndHirePurchaseContracts);
@@ -44,11 +45,11 @@ public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYea
         return creditorsAfterOneYear;
     }
 
-
     private void populateCurrentPeriodForWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi,
             CreditorsAfterOneYear creditorsAfterOneYear,
             BankLoansAndOverdrafts bankLoansAndOverdrafts, OtherCreditors otherCreditors,
-            Total total, FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts) {
+            Total total,
+            FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts) {
 
         CurrentPeriod currentPeriod =
                 creditorsAfterOneYearApi.getCurrentPeriod();
@@ -67,8 +68,9 @@ public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYea
     }
 
     private void populatePreviousPeriodForWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi,
-    BankLoansAndOverdrafts bankLoansAndOverdrafts, OtherCreditors otherCreditors,
-    Total total, FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts)  {
+            BankLoansAndOverdrafts bankLoansAndOverdrafts, OtherCreditors otherCreditors,
+            Total total,
+            FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts) {
 
         PreviousPeriod previousPeriod =
                 creditorsAfterOneYearApi.getPreviousPeriod();
@@ -82,7 +84,6 @@ public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYea
             total.setPreviousTotal(previousPeriod.getTotal());
         }
     }
-
 
     @Override
     public CreditorsAfterOneYearApi getCreditorsAfterOneYearApi(CreditorsAfterOneYear creditorsAfterOneYear) {

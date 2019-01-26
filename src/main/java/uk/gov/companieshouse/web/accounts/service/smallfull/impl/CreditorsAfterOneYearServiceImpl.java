@@ -22,7 +22,8 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
 
     private static final UriTemplate CREDITORS_AFTER_ONE_YEAR_URI =
             new UriTemplate(
-                    "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/creditors-after-more-than-one-year");
+                    "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small" +
+                            "-full/notes/creditors-after-more-than-one-year");
 
     private static final String INVALID_URI_MESSAGE =
             "Invalid URI for creditors after one year resource";
@@ -45,7 +46,8 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
                 transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
 
         BalanceSheet balanceSheet =
-                balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
+                balanceSheetService.getBalanceSheet(transactionId, companyAccountsId,
+                        companyNumber);
         BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
         creditorsAfterOneYear.setBalanceSheetHeadings(balanceSheetHeadings);
 
@@ -56,7 +58,8 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
             String companyAccountsId) throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
 
-        String uri = CREDITORS_AFTER_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
+        String uri =
+                CREDITORS_AFTER_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
             return apiClient.smallFull().creditorsAfterOnerYear().get(uri).execute();

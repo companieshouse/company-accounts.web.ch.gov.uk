@@ -18,7 +18,8 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 @Controller
 @NextController(ReviewController.class)
 @PreviousController(DebtorsController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/creditors-after-more-than-one-year")
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
+        "/{companyAccountsId}/small-full/creditors-after-more-than-one-year")
 public class CreditorsAfterOneYearController extends BaseController implements
         ConditionalController {
 
@@ -39,7 +40,8 @@ public class CreditorsAfterOneYearController extends BaseController implements
 
         try {
             CreditorsAfterOneYear creditorsAfterOneYear =
-                    creditorsAfterOneYearService.getCreditorsAfterOneYear(transactionId, companyAccountsId,
+                    creditorsAfterOneYearService.getCreditorsAfterOneYear(transactionId,
+                            companyAccountsId,
                             companyNumber);
 
             model.addAttribute("creditorsAfterOneYear", creditorsAfterOneYear);
