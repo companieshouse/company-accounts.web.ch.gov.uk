@@ -86,7 +86,7 @@ public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYea
 
 
     @Override
-    public CreditorsAfterOneYearApi getCreditorsWithinOneYearApi(CreditorsAfterOneYear creditorsAfterOneYear) {
+    public CreditorsAfterOneYearApi getCreditorsAfterOneYearApi(CreditorsAfterOneYear creditorsAfterOneYear) {
         return null;
     }
 }

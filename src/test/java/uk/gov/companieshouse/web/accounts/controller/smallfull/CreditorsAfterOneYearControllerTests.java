@@ -90,7 +90,7 @@ public class CreditorsAfterOneYearControllerTests {
     }
 
     @Test
-    @DisplayName("Get creditors after one year view failure path due to error on creditors within one year retrieval")
+    @DisplayName("Get creditors after one year view failure path due to error on creditors after one year retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
         when(mockService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);

@@ -5,7 +5,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteron
 
 public interface CreditorsAfterOneYearTransformer {
 
-    CreditorsAfterOneYear getCreditorsAfterOneYear(CreditorsAfterOneYearApi creditorsWithinOneYearApi);
+    CreditorsAfterOneYear getCreditorsAfterOneYear(CreditorsAfterOneYearApi creditorsAfterOneYearApi);
 
-    CreditorsAfterOneYearApi getCreditorsWithinOneYearApi(CreditorsAfterOneYear creditorsAfterOneYear);
+    CreditorsAfterOneYearApi getCreditorsAfterOneYearApi(CreditorsAfterOneYear creditorsAfterOneYear);
 }
