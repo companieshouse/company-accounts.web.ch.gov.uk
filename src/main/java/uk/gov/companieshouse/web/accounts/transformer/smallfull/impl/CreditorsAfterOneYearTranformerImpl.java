@@ -67,7 +67,6 @@ public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYea
     }
 
     private void populatePreviousPeriodForWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi,
-    CreditorsAfterOneYear creditorsAfterOneYear,
     BankLoansAndOverdrafts bankLoansAndOverdrafts, OtherCreditors otherCreditors,
     Total total, FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts)  {
 
