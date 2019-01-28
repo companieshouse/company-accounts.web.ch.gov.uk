@@ -45,7 +45,8 @@ public class CreditorsAfterOneYearControllerTests {
 
     private MockMvc mockMvc;
 
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -58,7 +59,8 @@ public class CreditorsAfterOneYearControllerTests {
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full";
 
-    private static final String CREDITORS_AFTER_ONE_YEAR_PATH = SMALL_FULL_PATH + "/creditors-after-more-than-one-year";
+    private static final String CREDITORS_AFTER_ONE_YEAR_PATH = SMALL_FULL_PATH + "/creditors" +
+            "-after-more-than-one-year";
 
     private static final String CREDITORS_AFTER_ONE_YEAR_MODEL_ATTR = "creditorsAfterOneYear";
 
@@ -75,7 +77,8 @@ public class CreditorsAfterOneYearControllerTests {
     void getRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new CreditorsAfterOneYear());
+        when(mockService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(new CreditorsAfterOneYear());
 
         this.mockMvc.perform(get(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())
@@ -84,14 +87,17 @@ public class CreditorsAfterOneYearControllerTests {
                 .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
-        verify(mockService, times(1)).getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        verify(mockService, times(1)).getCreditorsAfterOneYear(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
     }
 
     @Test
-    @DisplayName("Get creditors after one year view failure path due to error on creditors after one year retrieval")
+    @DisplayName("Get creditors after one year view failure path due to error on creditors after " +
+            "one year retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
-        when(mockService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
+        when(mockService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())

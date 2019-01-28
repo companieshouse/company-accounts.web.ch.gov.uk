@@ -25,7 +25,8 @@ public class CreditorsAfterOneYearTransformerTests {
 
     private static final String DETAILS = "DETAILS";
 
-    private CreditorsAfterOneYearTransformer transformer = new CreditorsAfterOneYearTransformerImpl();
+    private CreditorsAfterOneYearTransformer transformer =
+            new CreditorsAfterOneYearTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to creditors after one year web model")
@@ -43,11 +44,16 @@ public class CreditorsAfterOneYearTransformerTests {
 
         creditorsAfterOneYearApi.setCurrentPeriod(currentPeriod);
 
-        CreditorsAfterOneYear creditorsAfterOneYear = transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
+        CreditorsAfterOneYear creditorsAfterOneYear =
+                transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
 
-        assertEquals(BANK_LOANS_CURRENT, creditorsAfterOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
-        assertEquals(FINANCE_LEASES_CURRENT, creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts().getCurrentFinanceLeasesAndHirePurchaseContracts());
-        assertEquals(OTHER_CREDITORS_CURRENT, creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
+        assertEquals(BANK_LOANS_CURRENT,
+                creditorsAfterOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
+        assertEquals(FINANCE_LEASES_CURRENT,
+                creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts()
+                        .getCurrentFinanceLeasesAndHirePurchaseContracts());
+        assertEquals(OTHER_CREDITORS_CURRENT,
+                creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
         assertEquals(TOTAL_CURRENT, creditorsAfterOneYear.getTotal().getCurrentTotal());
         assertEquals(DETAILS, creditorsAfterOneYear.getDetails());
     }
@@ -66,11 +72,14 @@ public class CreditorsAfterOneYearTransformerTests {
 
         creditorsAfterOneYearApi.setCurrentPeriod(currentPeriod);
 
-        CreditorsAfterOneYear creditorsAfterOneYear = transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
+        CreditorsAfterOneYear creditorsAfterOneYear =
+                transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
 
-        assertEquals(OTHER_CREDITORS_CURRENT, creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
+        assertEquals(OTHER_CREDITORS_CURRENT,
+                creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
         assertNull(creditorsAfterOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
-        assertNull(creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts().getCurrentFinanceLeasesAndHirePurchaseContracts());
+        assertNull(creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts()
+                .getCurrentFinanceLeasesAndHirePurchaseContracts());
         assertEquals(TOTAL_CURRENT, creditorsAfterOneYear.getTotal().getCurrentTotal());
         assertEquals(DETAILS, creditorsAfterOneYear.getDetails());
     }
@@ -91,11 +100,16 @@ public class CreditorsAfterOneYearTransformerTests {
 
         creditorsAfterOneYearApi.setPreviousPeriod(previousPeriod);
 
-        CreditorsAfterOneYear creditorsAfterOneYear = transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
+        CreditorsAfterOneYear creditorsAfterOneYear =
+                transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
 
-        assertEquals(BANK_LOANS_PREVIOUS, creditorsAfterOneYear.getBankLoansAndOverdrafts().getPreviousBankLoansAndOverdrafts());
-        assertEquals(FINANCE_LEASES_PREVIOUS, creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts().getPreviousFinanceLeasesAndHirePurchaseContracts());
-        assertEquals(OTHER_CREDITORS_PREVIOUS, creditorsAfterOneYear.getOtherCreditors().getPreviousOtherCreditors());
+        assertEquals(BANK_LOANS_PREVIOUS,
+                creditorsAfterOneYear.getBankLoansAndOverdrafts().getPreviousBankLoansAndOverdrafts());
+        assertEquals(FINANCE_LEASES_PREVIOUS,
+                creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts()
+                        .getPreviousFinanceLeasesAndHirePurchaseContracts());
+        assertEquals(OTHER_CREDITORS_PREVIOUS,
+                creditorsAfterOneYear.getOtherCreditors().getPreviousOtherCreditors());
         assertEquals(TOTAL_PREVIOUS, creditorsAfterOneYear.getTotal().getPreviousTotal());
     }
 }

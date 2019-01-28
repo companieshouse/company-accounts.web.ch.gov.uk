@@ -149,9 +149,9 @@ public class CreditorsAfterOneYearServiceImplTests {
         assertThrows(ApiErrorResponseException.class, () -> mockCreditorsAfterOneYearGet.execute());
         assertThrows(ServiceException.class,
                 () -> mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                COMPANY_NUMBER));
+                        TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER));
     }
 
     @Test
@@ -167,9 +167,9 @@ public class CreditorsAfterOneYearServiceImplTests {
         assertThrows(URIValidationException.class, () -> mockCreditorsAfterOneYearGet.execute());
         assertThrows(ServiceException.class,
                 () -> mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(
-                TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID,
-                COMPANY_NUMBER));
+                        TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER));
     }
 
     private void getMockCreditorsAfterOneYearApi(CreditorsAfterOneYearApi creditorsAfterOneYearApi) throws Exception {

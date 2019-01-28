@@ -62,7 +62,9 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
             bankLoansAndOverdrafts.setCurrentBankLoansAndOverdrafts(currentPeriod
                     .getBankLoansAndOverdrafts());
             otherCreditors.setCurrentOtherCreditors(currentPeriod.getOtherCreditors());
-            financeLeasesAndHirePurchaseContracts.setCurrentFinanceLeasesAndHirePurchaseContracts(currentPeriod.getFinanceLeasesAndHirePurchaseContracts());
+            financeLeasesAndHirePurchaseContracts.
+                    setCurrentFinanceLeasesAndHirePurchaseContracts(currentPeriod.
+                            getFinanceLeasesAndHirePurchaseContracts());
             total.setCurrentTotal(currentPeriod.getTotal());
         }
     }
@@ -80,7 +82,9 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
             bankLoansAndOverdrafts.setPreviousBankLoansAndOverdrafts(previousPeriod
                     .getBankLoansAndOverdrafts());
             otherCreditors.setPreviousOtherCreditors(previousPeriod.getOtherCreditors());
-            financeLeasesAndHirePurchaseContracts.setPreviousFinanceLeasesAndHirePurchaseContracts(previousPeriod.getFinanceLeasesAndHirePurchaseContracts());
+            financeLeasesAndHirePurchaseContracts.
+                    setPreviousFinanceLeasesAndHirePurchaseContracts(previousPeriod
+                            .getFinanceLeasesAndHirePurchaseContracts());
             total.setPreviousTotal(previousPeriod.getTotal());
         }
     }
