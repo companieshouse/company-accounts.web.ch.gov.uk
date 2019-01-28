@@ -36,7 +36,8 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOn
 public class CreditorsAfterOneYearServiceImplTests {
 
     @InjectMocks
-    private CreditorsAfterOneYearService mockCreditorsAfterOneYearService = new CreditorsAfterOneYearServiceImpl();
+    private CreditorsAfterOneYearService mockCreditorsAfterOneYearService =
+            new CreditorsAfterOneYearServiceImpl();
 
     @Mock
     CreditorsAfterOneYearTransformer mockTransformer;
@@ -72,7 +73,8 @@ public class CreditorsAfterOneYearServiceImplTests {
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full";
 
-    private static final String CREDITORS_AFTER_ONE_YEAR_URI = BASE_SMALL_FULL_URI + "/notes/creditors-after-more-than-one-year";
+    private static final String CREDITORS_AFTER_ONE_YEAR_URI = BASE_SMALL_FULL_URI + "/notes" +
+            "/creditors-after-more-than-one-year";
 
 
     @Test
@@ -82,35 +84,46 @@ public class CreditorsAfterOneYearServiceImplTests {
         CreditorsAfterOneYearApi creditorsAfterOneYearApi = new CreditorsAfterOneYearApi();
         getMockCreditorsAfterOneYearApi(creditorsAfterOneYearApi);
 
-        when(mockTransformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi)).thenReturn(createCreditorsAfterOneYear());
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
+        when(mockTransformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi)).
+                thenReturn(createCreditorsAfterOneYear());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
         when(mockBalanceSheet.getBalanceSheetHeadings()).thenReturn(new BalanceSheetHeadings());
 
-        CreditorsAfterOneYear creditorsAfterOneYear = mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        CreditorsAfterOneYear creditorsAfterOneYear =
+                mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
-        assertNotNull(creditorsAfterOneYear);
-        assertNotNull(creditorsAfterOneYear.getOtherCreditors());
-        assertNotNull(creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
-        assertNotNull(creditorsAfterOneYear.getTotal());
-        assertNotNull(creditorsAfterOneYear.getTotal().getCurrentTotal());
+        validateCreditorsAfterOneYear(creditorsAfterOneYear);
     }
 
     @Test
     @DisplayName("GET - Creditors After One Year successful path when http status not found")
     void getCreditorsAfterOneYearSuccessHttpStatusNotFound() throws Exception {
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404, "Not" +
+                " Found", new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException =
+                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
-        getMockCreditorsAfterOneYearResourceHandler();
-        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearGet);
+        MockCreditorsAfterOneYearResourceHandler();
+        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI)).
+                thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenThrow(apiErrorResponseException);
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
 
-        when(mockTransformer.getCreditorsAfterOneYear(null)).thenReturn(createCreditorsAfterOneYear());
+        when(mockTransformer.getCreditorsAfterOneYear(null))
+                .thenReturn(createCreditorsAfterOneYear());
 
-        CreditorsAfterOneYear creditorsAfterOneYear = mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        CreditorsAfterOneYear creditorsAfterOneYear =
+                mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
+        validateCreditorsAfterOneYear(creditorsAfterOneYear);
+    }
+
+    private void validateCreditorsAfterOneYear(CreditorsAfterOneYear creditorsAfterOneYear) {
         assertNotNull(creditorsAfterOneYear);
         assertNotNull(creditorsAfterOneYear.getOtherCreditors());
         assertNotNull(creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
@@ -119,41 +132,50 @@ public class CreditorsAfterOneYearServiceImplTests {
     }
 
     @Test
-    @DisplayName("GET - Creditors After One Year throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
+    @DisplayName("GET - Creditors After One Year throws ServiceExcepiton due to " +
+            "ApiErrorResponseException - 400 Bad Request")
     void getCreditorsAfterOneYearApiResponseException() throws Exception {
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400, "Bad" +
+                " Request", new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException =
+                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
-        getMockCreditorsAfterOneYearResourceHandler();
-        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearGet);
+        MockCreditorsAfterOneYearResourceHandler();
+        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI))
+                .thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenThrow(apiErrorResponseException);
 
         assertThrows(ApiErrorResponseException.class, () -> mockCreditorsAfterOneYearGet.execute());
-        assertThrows(ServiceException.class, () -> mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(
+        assertThrows(ServiceException.class,
+                () -> mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
                 COMPANY_NUMBER));
     }
 
     @Test
-    @DisplayName("GET - Creditors After One Year throws ServiceExcepiton due to URIValidationException")
+    @DisplayName("GET - Creditors After One Year throws ServiceExcepiton due to " +
+            "URIValidationException")
     void getCreditorsAfterOneYearURIValidationException() throws Exception {
 
-        getMockCreditorsAfterOneYearResourceHandler();
-        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearGet);
+        MockCreditorsAfterOneYearResourceHandler();
+        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI))
+                .thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(URIValidationException.class, () -> mockCreditorsAfterOneYearGet.execute());
-        assertThrows(ServiceException.class, () -> mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(
+        assertThrows(ServiceException.class,
+                () -> mockCreditorsAfterOneYearService.getCreditorsAfterOneYear(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
                 COMPANY_NUMBER));
     }
 
     private void getMockCreditorsAfterOneYearApi(CreditorsAfterOneYearApi creditorsAfterOneYearApi) throws Exception {
-        getMockCreditorsAfterOneYearResourceHandler();
-        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearGet);
+        MockCreditorsAfterOneYearResourceHandler();
+        when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI))
+                .thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenReturn(creditorsAfterOneYearApi);
     }
 
@@ -179,12 +201,13 @@ public class CreditorsAfterOneYearServiceImplTests {
         return creditorsAfterOneYear;
     }
 
-    private void getMockCreditorsAfterOneYearResourceHandler() throws Exception {
-        getMockSmallFullResourceHandler();
-        when(mockSmallFullResourceHandler.creditorsAfterOnerYear()).thenReturn(mockCreditorsAfterOneYearResourceHandler);
+    private void MockCreditorsAfterOneYearResourceHandler() throws Exception {
+        MockSmallFullResourceHandler();
+        when(mockSmallFullResourceHandler.creditorsAfterOnerYear())
+                .thenReturn(mockCreditorsAfterOneYearResourceHandler);
     }
 
-    private void getMockSmallFullResourceHandler() {
+    private void MockSmallFullResourceHandler() {
         when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
         when(mockApiClient.smallFull()).thenReturn(mockSmallFullResourceHandler);
     }
