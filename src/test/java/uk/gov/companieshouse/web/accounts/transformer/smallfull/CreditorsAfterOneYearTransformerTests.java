@@ -9,7 +9,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CreditorsAfterOneYearTranformerImpl;
+import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CreditorsAfterOneYearTransformerImpl;
 
 public class CreditorsAfterOneYearTransformerTests {
 
@@ -25,7 +25,7 @@ public class CreditorsAfterOneYearTransformerTests {
 
     private static final String DETAILS = "DETAILS";
 
-    private CreditorsAfterOneYearTransformer transformer = new CreditorsAfterOneYearTranformerImpl();
+    private CreditorsAfterOneYearTransformer transformer = new CreditorsAfterOneYearTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to creditors after one year web model")

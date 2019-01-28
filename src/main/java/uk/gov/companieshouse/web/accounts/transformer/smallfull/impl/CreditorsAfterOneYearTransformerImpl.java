@@ -12,7 +12,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteron
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOneYearTransformer;
 
 @Component
-public class CreditorsAfterOneYearTranformerImpl implements CreditorsAfterOneYearTransformer {
+public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYearTransformer {
 
     @Override
     public CreditorsAfterOneYear getCreditorsAfterOneYear(CreditorsAfterOneYearApi creditorsAfterOneYearApi) {
