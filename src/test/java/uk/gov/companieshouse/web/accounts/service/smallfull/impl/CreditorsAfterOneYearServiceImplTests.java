@@ -106,7 +106,7 @@ public class CreditorsAfterOneYearServiceImplTests {
         ApiErrorResponseException apiErrorResponseException =
                 ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
-        MockCreditorsAfterOneYearResourceHandler();
+        mockCreditorsAfterOneYearResourceHandler();
         when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI)).
                 thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenThrow(apiErrorResponseException);
@@ -141,7 +141,7 @@ public class CreditorsAfterOneYearServiceImplTests {
         ApiErrorResponseException apiErrorResponseException =
                 ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
-        MockCreditorsAfterOneYearResourceHandler();
+        mockCreditorsAfterOneYearResourceHandler();
         when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI))
                 .thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenThrow(apiErrorResponseException);
@@ -159,7 +159,7 @@ public class CreditorsAfterOneYearServiceImplTests {
             "URIValidationException")
     void getCreditorsAfterOneYearURIValidationException() throws Exception {
 
-        MockCreditorsAfterOneYearResourceHandler();
+        mockCreditorsAfterOneYearResourceHandler();
         when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI))
                 .thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenThrow(URIValidationException.class);
@@ -173,7 +173,7 @@ public class CreditorsAfterOneYearServiceImplTests {
     }
 
     private void getMockCreditorsAfterOneYearApi(CreditorsAfterOneYearApi creditorsAfterOneYearApi) throws Exception {
-        MockCreditorsAfterOneYearResourceHandler();
+        mockCreditorsAfterOneYearResourceHandler();
         when(mockCreditorsAfterOneYearResourceHandler.get(CREDITORS_AFTER_ONE_YEAR_URI))
                 .thenReturn(mockCreditorsAfterOneYearGet);
         when(mockCreditorsAfterOneYearGet.execute()).thenReturn(creditorsAfterOneYearApi);
@@ -201,13 +201,13 @@ public class CreditorsAfterOneYearServiceImplTests {
         return creditorsAfterOneYear;
     }
 
-    private void MockCreditorsAfterOneYearResourceHandler() {
-        MockSmallFullResourceHandler();
+    private void mockCreditorsAfterOneYearResourceHandler() {
+        mockSmallFullResourceHandler();
         when(mockSmallFullResourceHandler.creditorsAfterOnerYear())
                 .thenReturn(mockCreditorsAfterOneYearResourceHandler);
     }
 
-    private void MockSmallFullResourceHandler() {
+    private void mockSmallFullResourceHandler() {
         when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
         when(mockApiClient.smallFull()).thenReturn(mockSmallFullResourceHandler);
     }
