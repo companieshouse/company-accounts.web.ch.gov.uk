@@ -17,7 +17,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CreditorsWithinOneYearTransformerImpl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreditorsWithinOneYearTransformerImplTests {
     
@@ -262,10 +262,10 @@ public class CreditorsWithinOneYearTransformerImplTests {
     }
     
     @Test
-    @DisplayName("When creditors within one year API model is null the returned web model is also null")
+    @DisplayName("When creditors within one year API model is null the returned web model is non null")
     void NullCreditorsWithinOneYearWebModelWhenNullAPIModel() {
         CreditorsWithinOneYear creditorsWithinOneYear = transformer.getCreditorsWithinOneYear(null);
 
-        assertNull(creditorsWithinOneYear);
+        assertNotNull(creditorsWithinOneYear);
     }
 }
