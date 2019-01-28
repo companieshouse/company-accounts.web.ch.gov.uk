@@ -132,7 +132,7 @@ public class CreditorsAfterOneYearServiceImplTests {
     }
 
     @Test
-    @DisplayName("GET - Creditors After One Year throws ServiceExcepiton due to " +
+    @DisplayName("GET - Creditors After One Year throws ServiceException due to " +
             "ApiErrorResponseException - 400 Bad Request")
     void getCreditorsAfterOneYearApiResponseException() throws Exception {
 
@@ -186,10 +186,10 @@ public class CreditorsAfterOneYearServiceImplTests {
 
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
 
-        otherCreditors.setCurrentOtherCreditors((long) 5);
-        otherCreditors.setPreviousOtherCreditors((long) 5);
-        total.setCurrentTotal((long) 5);
-        total.setPreviousTotal((long) 5);
+        otherCreditors.setCurrentOtherCreditors(5L);
+        otherCreditors.setPreviousOtherCreditors(5L);
+        total.setCurrentTotal(5L);
+        total.setPreviousTotal(5L);
 
         balanceSheetHeadings.setCurrentPeriodHeading("");
         balanceSheetHeadings.setPreviousPeriodHeading("");
@@ -201,7 +201,7 @@ public class CreditorsAfterOneYearServiceImplTests {
         return creditorsAfterOneYear;
     }
 
-    private void MockCreditorsAfterOneYearResourceHandler() throws Exception {
+    private void MockCreditorsAfterOneYearResourceHandler() {
         MockSmallFullResourceHandler();
         when(mockSmallFullResourceHandler.creditorsAfterOnerYear())
                 .thenReturn(mockCreditorsAfterOneYearResourceHandler);
