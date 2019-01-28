@@ -20,6 +20,8 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
@@ -322,7 +324,10 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private boolean isDebtorsCurrentAmountNull(BalanceSheet balanceSheet) {
         Long currentDebtors =
-            Optional.ofNullable(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount())
+            Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getDebtors)
+                .map(Debtors::getCurrentAmount)
                 .orElse(0L);
 
         return currentDebtors.equals(0L);
@@ -330,8 +335,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private boolean isDebtorsPreviousAmountNull(BalanceSheet balanceSheet) {
         Long previousDebtors =
-            Optional.ofNullable(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount())
-            .orElse(0L);
+            Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getDebtors)
+                .map(Debtors::getPreviousAmount)
+                .orElse(0L);
 
         return previousDebtors.equals(0L);
     }
