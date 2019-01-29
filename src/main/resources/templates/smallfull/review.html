@@ -595,6 +595,85 @@
                     </div>
                 </div>
                 <!-- End Creditors Within One Year Note -->
+
+                <!-- Creditors After One Year Note -->
+                <div id="cya-small-full-creditors-after-one-year-note">
+
+                    <div th:if="*{creditorsAfterOneYear.total != null}">
+                        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Creditors - amounts falling due after one year note',
+                            identifier= 'creditors-after-one-year-note',
+                            resource = 'creditors-after-one-year',
+
+                            marginTop = true
+                            )">
+                        </div>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question"></dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Bank loans and overdrafts',
+                                identifier = 'bank-loans-and-overdrafts',
+                                currentAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
+                                previousAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Amounts due under finance leases and hire purchase contracts',
+                                identifier = 'finance-leases-and-hire-purchase-contracts',
+                                currentAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.currentFinanceLeasesAndHirePurchaseContracts},
+                                previousAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.previousFinanceLeasesAndHirePurchaseContracts},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Other creditors',
+                                identifier = 'other-creditors',
+                                currentAmount = *{creditorsAfterOneYear?.otherCreditors.currentOtherCreditors},
+                                previousAmount = *{creditorsAfterOneYear?.otherCreditors.previousOtherCreditors},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Total',
+                                identifier = 'total',
+                                currentAmount = *{creditorsAfterOneYear?.total.currentTotal},
+                                previousAmount = *{creditorsAfterOneYear?.total.previousTotal},
+                                isTotalRow = true
+                            )">
+                            </div>
+
+                        </dl>
+
+                        <div th:if="*{creditorsAfterOneYear.details != null}">
+                            <dl class="app-check-your-answers app-check-your-answers--short">
+                                <div class="app-check-your-answers__contents">
+                                    <dt class="app-check-your-answers__question">Additional information</dt>
+                                    <dd class="app-check-your-answers__answer">
+                                        <p id="review-creditors-after-one-year-details"
+                                           th:text="*{creditorsAfterOneYear?.details}">
+                                        </p>
+                                    <dd class="app-check-your-answers__change"></dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Creditors After One Year Note -->
                 
                 <div class="govuk-form-group">
                     <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
