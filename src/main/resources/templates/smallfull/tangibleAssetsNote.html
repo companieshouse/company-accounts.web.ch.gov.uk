@@ -1,13 +1,49 @@
 <!DOCTYPE html>
-
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/baseLayout}">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Tangible assets note</title>
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title layout:title-pattern="$CONTENT_TITLE"></title>
+  <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
 
+  <link
+      th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      media="all" rel="stylesheet" type="text/css" />
+
+  <link
+      rel="icon"
+      th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      type="image/x-icon" />
+
+</head>
+<body>
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js" defer async ></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<div class="entire-wrapper">
+  <div class="govuk-width-container govuk-width-container-override">
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <header role="banner" id="global-header" class="govuk-header">
+      <div class="govuk-header__container govuk-width-container govuk-width-container-override">
+        <div class="header-global">
+          <div class="govuk-header__logo">
+            <a href="/" title="Go to the companies house homepage" id="logo" class="govuk-header__link govuk-header__link--homepage">
+              <span class="govuk-header__logotype-text"> Companies House </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="govuk-header__content">
+          <a id="proposition-name" href="/" class="govuk-header__link govuk-header__link--service-name"> File your company accounts </a>
+        </div>
+
+      </div>
+    </header>
+    <div th:replace="fragments/betaBanner :: betaBanner"></div>
+    <div th:replace="fragments/userBar :: userBar"></div>
+    <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
+    <main id="content" role="main" class="govuk-main-wrapper">
 
 <div id="tangible-assets-note-main-content" layout:fragment="content" class="two-column-accounts">
 
@@ -45,7 +81,7 @@
         <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
-        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Motor<br>vehicles<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
@@ -495,7 +531,7 @@
         <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
-        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Motor<br>vehicles<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
@@ -823,7 +859,7 @@
     </div>
 
 
-    <h2 class="govuk-heading-m">Net Book Value</h2>
+    <h2 class="govuk-heading-m">Net book value</h2>
 
     <div class="govuk-grid-row" id="accounts-header-net-book-value">
       <div class="column-fifth">&nbsp;</div>
@@ -840,7 +876,7 @@
         <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
-        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Motor<br>vehicles<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
@@ -1007,4 +1043,18 @@
 
   </form>
 </div>
+</main>
+</div>
+<div class="push"></div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/vendor/jquery-1.12.4.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/radio-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/autocalculate-input-fields.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/balancesheet-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<div th:replace="fragments/piwik :: piwik"></div>
+</body>
 </html>

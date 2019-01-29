@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,14 +101,19 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
             return ERROR_VIEW;
         }
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
-            companyAccountsId);
+        return navigatorService
+            .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+                companyAccountsId);
     }
 
-    private void addDatesToFormObject(TangibleAssets tangibleAssets, CompanyProfileApi companyProfile) {
-        tangibleAssets.setLastAccountsPeriodEndOn(companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
-        tangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        tangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
+    private void addDatesToFormObject(TangibleAssets tangibleAssets,
+        CompanyProfileApi companyProfile) {
+        tangibleAssets.setLastAccountsPeriodEndOn(
+            companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
+        tangibleAssets.setNextAccountsPeriodStartOn(
+            companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+        tangibleAssets.setNextAccountsPeriodEndOn(
+            companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
 
     @Override
@@ -123,13 +127,15 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
             Long currentTangible = Optional.of(balanceSheet)
                 .map(BalanceSheet::getFixedAssets)
                 .map(FixedAssets::getTangibleAssets)
-                .map(uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getCurrentAmount)
+                .map(
+                    uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getCurrentAmount)
                 .orElse(0L);
 
             Long previousTangible = Optional.of(balanceSheet)
                 .map(BalanceSheet::getFixedAssets)
                 .map(FixedAssets::getTangibleAssets)
-                .map(uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getPreviousAmount)
+                .map(
+                    uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getPreviousAmount)
                 .orElse(0L);
 
             return !(currentTangible.equals(0L) && previousTangible.equals(0L));
