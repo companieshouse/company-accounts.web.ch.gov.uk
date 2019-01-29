@@ -5,17 +5,12 @@
 </head>
 <body>
 <div th:fragment="fieldError">
-  <!--<span th:if="${!#fields.hasErrors('__${errorField}__')}" th:id="${errorField} + '-errorId'" class="govuk-error-message api"></span>
-  <span th:if="${!#fields.hasErrors('__${errorField}__')}" class="spacer">&nbsp;</span>-->
-
-
-
-    <span th:if="${!#fields.hasErrors('__${errorField}__')}" th:id="${errorField} + '-mobile-label'" th:text="${text}" class="mobile-only-label"></span>
-    <span th:field="*{__${errorField}__}"
-           th:id="${errorField}+'-errorId'"
-           th:name="${errorField}+'-errorId'"
-          class="govuk-error-message api"></span>
-
+    <span th:if="${!#fields.hasErrors('__${errorField}__')}" th:id="${errorField} + '-mobile-label'" class="mobile-only-label"></span>
+    <span th:if="${!#fields.hasErrors('__${errorField}__')}"
+          th:field="*{__${errorField}__}"
+          th:id="${errorField}+'-errorId'"
+          th:name="${errorField}+'-errorId'"
+          class="govuk-error-message"></span>
 </div>
 </body>
 </html>

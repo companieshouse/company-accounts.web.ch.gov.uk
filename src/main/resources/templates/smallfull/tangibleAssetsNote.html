@@ -21,6 +21,8 @@
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js" defer async ></script>
 <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <div class="entire-wrapper">
   <div class="govuk-width-container govuk-width-container-override">
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
@@ -88,8 +90,8 @@
       </div>
     </div>
 
-
-    <div class="govuk-grid-row" id="cost.atPeriodStart-error-row">
+    <!--Start Cost at start-->
+    <div class="govuk-grid-row hidden" id="cost.atPeriodStart-error-row">
       <div class="column-fifth">&nbsp;</div>
       <div class="column-sixth">
         <div th:replace="fragments/fieldError :: fieldError (
@@ -124,10 +126,9 @@
       <div class="column-sixth">
         <div>&nbsp;</div>
       </div>
-
-
     </div>
-    <!--Start Cost at start-->
+
+
     <div class="govuk-grid-row accounts-row-spacer">
       <div class="column-fifth">
         <div
@@ -141,7 +142,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-ps-add cost-lab-add nbv-cp-lab-add',
+                                class= 'govuk-input cost-ps-add cost-lab-add nbv-cp-lab-add validate',
                                 )">
 
         </div>
@@ -150,7 +151,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-ps-add cost-pam-add nbv-cp-pam-add',
+                                class= 'govuk-input cost-ps-add cost-pam-add nbv-cp-pam-add validate',
                                 )">
         </div>
 
@@ -159,7 +160,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input cost-ps-add cost-faf-add nbv-cp-faf-add',
+                                class= 'govuk-input cost-ps-add cost-faf-add nbv-cp-faf-add validate',
                                 )">
         </div>
 
@@ -168,7 +169,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-ps-add cost-oe-add nbv-cp-oe-add',
+                                class= 'govuk-input cost-ps-add cost-oe-add nbv-cp-oe-add validate',
                                 )">
         </div>
 
@@ -177,7 +178,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-ps-add cost-mv-add nbv-cp-mv-add',
+                                class= 'govuk-input cost-ps-add cost-mv-add nbv-cp-mv-add validate',
                                 )">
         </div>
 
@@ -192,8 +193,47 @@
 
       </div>
     </div>
+
     <!--End Cost at start-->
     <!--Start Additions -->
+    <div class="govuk-grid-row hidden" id="cost.additions-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.additions.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.additions.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.additions.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.additions.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.additions.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Additions
@@ -203,7 +243,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-a-add cost-lab-add',
+                                class= 'govuk-input cost-a-add cost-lab-add validate',
                                 )">
 
         </div>
@@ -212,7 +252,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-a-add cost-pam-add',
+                                class= 'govuk-input cost-a-add cost-pam-add validate',
                                 )">
         </div>
 
@@ -221,7 +261,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input cost-a-add cost-faf-add',
+                                class= 'govuk-input cost-a-add cost-faf-add validate',
                                 )">
         </div>
 
@@ -230,7 +270,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-a-add cost-oe-add',
+                                class= 'govuk-input cost-a-add cost-oe-add validate',
                                 )">
         </div>
 
@@ -239,7 +279,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-a-add cost-mv-add',
+                                class= 'govuk-input cost-a-add cost-mv-add validate',
                                 )">
         </div>
 
@@ -256,6 +296,43 @@
     </div>
     <!--End Additions-->
     <!--Start Disposals-->
+    <div class="govuk-grid-row hidden" id="cost.disposals-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.disposals.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.disposals.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.disposals.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.disposals.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.disposals.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Disposals
@@ -265,7 +342,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-d-add cost-lab-subtract',
+                                class= 'govuk-input cost-d-add cost-lab-subtract validate',
                                 )">
 
         </div>
@@ -274,7 +351,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-d-add cost-pam-subtract',
+                                class= 'govuk-input cost-d-add cost-pam-subtract validate',
                                 )">
         </div>
 
@@ -283,7 +360,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input cost-d-add cost-faf-subtract',
+                                class= 'govuk-input cost-d-add cost-faf-subtract validate',
                                 )">
         </div>
 
@@ -292,7 +369,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-d-add cost-oe-subtract',
+                                class= 'govuk-input cost-d-add cost-oe-subtract validate',
                                 )">
         </div>
 
@@ -301,7 +378,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-d-add cost-mv-subtract',
+                                class= 'govuk-input cost-d-add cost-mv-subtract validate',
                                 )">
         </div>
 
@@ -318,6 +395,43 @@
     </div>
     <!--End Disposals=-->
     <!--Start Revaluations-->
+    <div class="govuk-grid-row hidden" id="cost.revaluations-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.revaluations.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.revaluations.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.revaluations.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.revaluations.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.revaluations.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!-- <details> <summary> <span class="summary">-->Revaluations
@@ -327,7 +441,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-r-add cost-lab-add',
+                                class= 'govuk-input cost-r-add cost-lab-add validate',
                                 )">
 
         </div>
@@ -336,7 +450,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-r-add cost-pam-add',
+                                class= 'govuk-input cost-r-add cost-pam-add validate',
                                 )">
         </div>
 
@@ -345,7 +459,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input cost-r-add cost-faf-add',
+                                class= 'govuk-input cost-r-add cost-faf-add validate',
                                 )">
         </div>
 
@@ -354,7 +468,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-r-add cost-oe-add',
+                                class= 'govuk-input cost-r-add cost-oe-add validate',
                                 )">
         </div>
 
@@ -363,7 +477,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-r-add cost-mv-add',
+                                class= 'govuk-input cost-r-add cost-mv-add validate',
                                 )">
         </div>
 
@@ -380,6 +494,43 @@
     </div>
     <!--End Revaluations=-->
     <!--Start Transfers-->
+    <div class="govuk-grid-row hidden" id="cost.transfers-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.transfers.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.transfers.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.transfers.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.transfers.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'cost.transfers.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Transfers
@@ -390,7 +541,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-tr-add cost-lab-add',
+                                class= 'govuk-input cost-tr-add cost-lab-add validate',
                                 )">
 
         </div>
@@ -399,7 +550,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input cost-tr-add cost-pam-add',
+                                class= 'govuk-input cost-tr-add cost-pam-add validate',
                                 )">
         </div>
 
@@ -408,7 +559,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input cost-tr-add cost-faf-add',
+                                class= 'govuk-input cost-tr-add cost-faf-add validate',
                                 )">
         </div>
 
@@ -417,7 +568,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-tr-add cost-oe-add',
+                                class= 'govuk-input cost-tr-add cost-oe-add validate',
                                 )">
         </div>
 
@@ -426,7 +577,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input cost-tr-add cost-mv-add',
+                                class= 'govuk-input cost-tr-add cost-mv-add validate',
                                 )">
         </div>
 
@@ -435,7 +586,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.total',
                                 text = 'Totals',
-                                class= 'govuk-input cost-tr-total cost-t-add',
+                                class= 'govuk-input cost-tr-total cost-t-add validate',
                                 )">
         </div>
 
@@ -540,6 +691,43 @@
 
 
     <!--Start Depreciation at start-->
+    <div class="govuk-grid-row hidden" id="depreciation.atPeriodStart-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.atPeriodStart.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.atPeriodStart.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.atPeriodStart.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.atPeriodStart.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.atPeriodStart.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
     <div class="govuk-grid-row accounts-row-spacer">
       <div class="column-fifth">
         <div
@@ -553,7 +741,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.landAndBuildings',
                                 text = 'Depreciation Start Land and Buildings',
-                                class= 'govuk-input depreciation-ps-add depreciation-lab-add nbv-cp-lab-subtract',
+                                class= 'govuk-input depreciation-ps-add depreciation-lab-add nbv-cp-lab-subtract validate',
                                 )">
 
         </div>
@@ -562,7 +750,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.plantAndMachinery',
                                 text = 'Depreciation Start Land and Buildings',
-                                class= 'govuk-input depreciation-ps-add depreciation-pam-add nbv-cp-pam-subtract',
+                                class= 'govuk-input depreciation-ps-add depreciation-pam-add nbv-cp-pam-subtract validate',
                                 )">
         </div>
 
@@ -571,7 +759,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.fixturesAndFittings',
                                 text = 'Depreciation Start Fixtures and Fittings',
-                                class= 'govuk-input depreciation-ps-add depreciation-faf-add nbv-cp-faf-subtract',
+                                class= 'govuk-input depreciation-ps-add depreciation-faf-add nbv-cp-faf-subtract validate',
                                 )">
         </div>
 
@@ -580,7 +768,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.officeEquipment',
                                 text = 'Depreciation Start Office Equipment',
-                                class= 'govuk-input depreciation-ps-add depreciation-oe-add nbv-cp-oe-subtract',
+                                class= 'govuk-input depreciation-ps-add depreciation-oe-add nbv-cp-oe-subtract validate',
                                 )">
         </div>
 
@@ -589,7 +777,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.motorVehicles',
                                 text = 'Depreciation Start Office Equipment',
-                                class= 'govuk-input depreciation-ps-add depreciation-mv-add nbv-cp-mv-subtract',
+                                class= 'govuk-input depreciation-ps-add depreciation-mv-add nbv-cp-mv-subtract validate',
                                 )">
         </div>
 
@@ -606,6 +794,43 @@
     </div>
     <!--End Cost at start-->
     <!--Start Additions -->
+    <div class="govuk-grid-row hidden" id="depreciation.chargeForYear-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.chargeForYear.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.chargeForYear.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.chargeForYear.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.chargeForYear.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.chargeForYear.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Charge for year
@@ -615,7 +840,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input depreciation-cfy-add depreciation-lab-add',
+                                class= 'govuk-input depreciation-cfy-add depreciation-lab-add validate',
                                 )">
 
         </div>
@@ -624,7 +849,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input depreciation-cfy-add depreciation-pam-add',
+                                class= 'govuk-input depreciation-cfy-add depreciation-pam-add validate',
                                 )">
         </div>
 
@@ -633,7 +858,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input depreciation-cfy-add depreciation-faf-add',
+                                class= 'govuk-input depreciation-cfy-add depreciation-faf-add validate',
                                 )">
         </div>
 
@@ -642,7 +867,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input depreciation-cfy-add depreciation-oe-add',
+                                class= 'govuk-input depreciation-cfy-add depreciation-oe-add validate',
                                 )">
         </div>
 
@@ -651,7 +876,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input depreciation-cfy-add depreciation-mv-add',
+                                class= 'govuk-input depreciation-cfy-add depreciation-mv-add validate',
                                 )">
         </div>
 
@@ -668,6 +893,43 @@
     </div>
     <!--End Additions-->
     <!--Start Disposals-->
+    <div class="govuk-grid-row hidden" id="depreciation.onDisposals-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.onDisposals.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.onDisposals.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.onDisposals.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.onDisposals.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.onDisposals.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->On disposals
@@ -677,7 +939,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input depreciation-od-add depreciation-lab-subtract',
+                                class= 'govuk-input depreciation-od-add depreciation-lab-subtract validate',
                                 )">
 
         </div>
@@ -686,7 +948,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input depreciation-od-add depreciation-pam-subtract',
+                                class= 'govuk-input depreciation-od-add depreciation-pam-subtract validate',
                                 )">
         </div>
       </div>
@@ -694,7 +956,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input depreciation-od-add depreciation-faf-subtract',
+                                class= 'govuk-input depreciation-od-add depreciation-faf-subtract validate',
                                 )">
         </div>
       </div>
@@ -702,7 +964,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input depreciation-od-add depreciation-oe-subtract',
+                                class= 'govuk-input depreciation-od-add depreciation-oe-subtract validate',
                                 )">
         </div>
       </div>
@@ -710,7 +972,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input depreciation-od-add depreciation-mv-subtract',
+                                class= 'govuk-input depreciation-od-add depreciation-mv-subtract validate',
                                 )">
         </div>
       </div>
@@ -725,6 +987,43 @@
     </div>
     <!--End Disposals=-->
     <!--Start Revaluations-->
+    <div class="govuk-grid-row hidden" id="depreciation.otherAdjustments-error-row">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.otherAdjustments.landAndBuildings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.otherAdjustments.plantAndMachinery'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.otherAdjustments.fixturesAndFittings'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.otherAdjustments.officeEquipment'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/fieldError :: fieldError (
+                                 errorField = 'depreciation.otherAdjustments.motorVehicles'
+              )">
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div>&nbsp;</div>
+      </div>
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!-- <details> <summary> <span class="summary">-->Other adjustments
@@ -734,7 +1033,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input depreciation-oa-add depreciation-lab-add',
+                                class= 'govuk-input depreciation-oa-add depreciation-lab-add validate',
                                 )">
 
         </div>
@@ -743,7 +1042,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input depreciation-oa-add depreciation-pam-add',
+                                class= 'govuk-input depreciation-oa-add depreciation-pam-add validate',
                                 )">
         </div>
 
@@ -752,7 +1051,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input depreciation-oa-add depreciation-faf-add',
+                                class= 'govuk-input depreciation-oa-add depreciation-faf-add validate',
                                 )">
         </div>
 
@@ -761,7 +1060,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input depreciation-oa-add depreciation-oe-add',
+                                class= 'govuk-input depreciation-oa-add depreciation-oe-add validate',
                                 )">
         </div>
 
@@ -770,7 +1069,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input depreciation-oa-add depreciation-mv-add',
+                                class= 'govuk-input depreciation-oa-add depreciation-mv-add validate',
                                 )">
         </div>
 
@@ -1039,7 +1338,6 @@
              data-event-id="Tangible assets note - Save and continue" type="submit" role="button"
              value="Save and continue"/>
     </div>
-    <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/tangible-note-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 
   </form>
 </div>
@@ -1048,13 +1346,11 @@
 <div class="push"></div>
 </div>
 <div th:replace="fragments/footer :: footer"></div>
-<script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/vendor/jquery-1.12.4.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <script th:src="@{{cdnUrl}/javascripts/app/radio-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/autocalculate-input-fields.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/balancesheet-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/tangible-note-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 <div th:replace="fragments/piwik :: piwik"></div>
 </body>
 </html>
