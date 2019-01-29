@@ -20,7 +20,7 @@ public interface CreditorsAfterOneYearService {
             throws ServiceException;
 
     /**
-     * Submit the creditors within one year note
+     * Submit the creditors after one year note
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier

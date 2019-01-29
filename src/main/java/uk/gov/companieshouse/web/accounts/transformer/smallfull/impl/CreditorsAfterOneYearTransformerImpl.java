@@ -47,7 +47,6 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
         return creditorsAfterOneYear;
     }
 
-
     @Override
     public CreditorsAfterOneYearApi getCreditorsAfterOneYearApi(CreditorsAfterOneYear creditorsAfterOneYear) {
 

@@ -64,7 +64,7 @@ public class CreditorsAfterOneYearController extends BaseController implements
     }
 
     @PostMapping
-    public String postCreditorsWithinOneYear(
+    public String postCreditorsAfterOneYear(
             @PathVariable String companyNumber,
             @PathVariable String transactionId,
             @PathVariable String companyAccountsId,
@@ -82,7 +82,7 @@ public class CreditorsAfterOneYearController extends BaseController implements
                     creditorsAfterOneYearService.submitCreditorsAfterOneYear(transactionId,
                             companyAccountsId, creditorsAfterOneYear, companyNumber);
 
-            if (!validationErrors.isEmpty()) {
+            if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
@@ -91,14 +91,16 @@ public class CreditorsAfterOneYearController extends BaseController implements
             return ERROR_VIEW;
         }
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber,
+                transactionId,
                 companyAccountsId);
     }
 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-        return shouldNoteRender(balanceSheetService.getBalanceSheet(transactionId, companyAccountsId,
+        return shouldNoteRender(balanceSheetService.getBalanceSheet(transactionId,
+                companyAccountsId,
                 companyNumber));
     }
 
