@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalLong;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -28,7 +28,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteSe
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(DebtorsController.class)
 @PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/tangible-assets")
 public class TangibleAssetsNoteController extends BaseController implements ConditionalController {
@@ -96,8 +96,9 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
             return ERROR_VIEW;
         }
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
-            companyAccountsId);
+        return navigatorService
+            .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+                companyAccountsId);
     }
 
     @Override
@@ -108,10 +109,19 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
             BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
                 transactionId, companyAccountsId, companyNumber);
 
-            Long currentTangible = Optional.ofNullable(
-                balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount()).orElse(0L);
-            Long previousTangible = Optional.ofNullable(
-                balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount()).orElse(0L);
+            Long currentTangible = Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getTangibleAssets)
+                .map(
+                    uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getCurrentAmount)
+                .orElse(0L);
+
+            Long previousTangible = Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getTangibleAssets)
+                .map(
+                    uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets::getPreviousAmount)
+                .orElse(0L);
 
             return !(currentTangible.equals(0L) && previousTangible.equals(0L));
 

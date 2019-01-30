@@ -1,14 +1,49 @@
 <!DOCTYPE html>
-
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/baseLayout}">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Tangible assets note</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title layout:title-pattern="$CONTENT_TITLE"></title>
+  <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
+
+  <link
+      th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      media="all" rel="stylesheet" type="text/css" />
+
+  <link
+      rel="icon"
+      th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      type="image/x-icon" />
+
 </head>
+<body>
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js" defer async ></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<div class="entire-wrapper">
+  <div class="govuk-width-container govuk-width-container-override">
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <header role="banner" id="global-header" class="govuk-header">
+      <div class="govuk-header__container govuk-width-container govuk-width-container-override">
+        <div class="header-global">
+          <div class="govuk-header__logo">
+            <a href="/" title="Go to the companies house homepage" id="logo" class="govuk-header__link govuk-header__link--homepage">
+              <span class="govuk-header__logotype-text"> Companies House </span>
+            </a>
+          </div>
+        </div>
 
+        <div class="govuk-header__content">
+          <a id="proposition-name" href="/" class="govuk-header__link govuk-header__link--service-name"> File your company accounts </a>
+        </div>
 
+      </div>
+    </header>
+    <div th:replace="fragments/betaBanner :: betaBanner"></div>
+    <div th:replace="fragments/userBar :: userBar"></div>
+    <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
+    <main id="content" role="main" class="govuk-main-wrapper">
 
 <div id="tangible-assets-note-main-content" layout:fragment="content" class="two-column-accounts">
 
@@ -44,7 +79,7 @@
         <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
-        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Motor<br>vehicles<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
@@ -62,7 +97,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-ps-add cost-lab-add nbv-cp-lab-add',
                                 )">
 
         </div>
@@ -71,7 +106,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-ps-add cost-pam-add nbv-cp-pam-add',
                                 )">
         </div>
 
@@ -80,7 +115,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-ps-add cost-faf-add nbv-cp-faf-add',
                                 )">
         </div>
 
@@ -89,7 +124,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-ps-add cost-oe-add nbv-cp-oe-add',
                                 )">
         </div>
 
@@ -98,7 +133,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-ps-add cost-mv-add nbv-cp-mv-add',
                                 )">
         </div>
 
@@ -107,7 +142,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodStart.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-ps-total cost-t-add nbv-cp-t-add',
                                 )">
         </div>
 
@@ -124,7 +159,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-a-add cost-lab-add',
                                 )">
 
         </div>
@@ -133,7 +168,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-a-add cost-pam-add',
                                 )">
         </div>
 
@@ -142,7 +177,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-a-add cost-faf-add',
                                 )">
         </div>
 
@@ -151,7 +186,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-a-add cost-oe-add',
                                 )">
         </div>
 
@@ -160,7 +195,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-a-add cost-mv-add',
                                 )">
         </div>
 
@@ -169,7 +204,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-a-total cost-t-add',
                                 )">
         </div>
 
@@ -186,7 +221,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-d-add cost-lab-subtract',
                                 )">
 
         </div>
@@ -195,7 +230,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-d-add cost-pam-subtract',
                                 )">
         </div>
 
@@ -204,7 +239,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-d-add cost-faf-subtract',
                                 )">
         </div>
 
@@ -213,7 +248,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-d-add cost-oe-subtract',
                                 )">
         </div>
 
@@ -222,7 +257,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-d-add cost-mv-subtract',
                                 )">
         </div>
 
@@ -231,7 +266,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-d-total cost-t-subtract',
                                 )">
         </div>
 
@@ -248,7 +283,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-r-add cost-lab-add',
                                 )">
 
         </div>
@@ -257,7 +292,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-r-add cost-pam-add',
                                 )">
         </div>
 
@@ -266,7 +301,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-r-add cost-faf-add',
                                 )">
         </div>
 
@@ -275,7 +310,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-r-add cost-oe-add',
                                 )">
         </div>
 
@@ -284,7 +319,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-r-add cost-mv-add',
                                 )">
         </div>
 
@@ -293,7 +328,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-r-total cost-t-add',
                                 )">
         </div>
 
@@ -311,7 +346,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-tr-add cost-lab-add',
                                 )">
 
         </div>
@@ -320,7 +355,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-tr-add cost-pam-add',
                                 )">
         </div>
 
@@ -329,7 +364,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-tr-add cost-faf-add',
                                 )">
         </div>
 
@@ -338,7 +373,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-tr-add cost-oe-add',
                                 )">
         </div>
 
@@ -347,7 +382,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-tr-add cost-mv-add',
                                 )">
         </div>
 
@@ -356,7 +391,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-tr-total cost-t-add',
                                 )">
         </div>
 
@@ -373,7 +408,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-pe-add cost-lab-total nbv-pe-lab-add',
                                 )">
 
         </div>
@@ -382,7 +417,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-pe-add cost-pam-total nbv-pe-pam-add',
                                 )">
         </div>
 
@@ -391,7 +426,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-pe-add cost-faf-total nbv-pe-faf-add',
                                 )">
         </div>
 
@@ -400,7 +435,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-pe-add cost-oe-total nbv-pe-oe-add',
                                 )">
         </div>
 
@@ -409,7 +444,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-pe-add cost-mv-total nbv-pe-mv-add',
                                 )">
         </div>
 
@@ -418,7 +453,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input cost-pe-total cost-t-total nbv-pe-t-add',
                                 )">
         </div>
 
@@ -446,7 +481,7 @@
         <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
-        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Motor<br>vehicles<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
@@ -464,7 +499,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.landAndBuildings',
                                 text = 'Depreciation Start Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-ps-add depreciation-lab-add nbv-cp-lab-subtract',
                                 )">
 
         </div>
@@ -473,7 +508,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.plantAndMachinery',
                                 text = 'Depreciation Start Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-ps-add depreciation-pam-add nbv-cp-pam-subtract',
                                 )">
         </div>
 
@@ -482,7 +517,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.fixturesAndFittings',
                                 text = 'Depreciation Start Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-ps-add depreciation-faf-add nbv-cp-faf-subtract',
                                 )">
         </div>
 
@@ -491,7 +526,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.officeEquipment',
                                 text = 'Depreciation Start Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-ps-add depreciation-oe-add nbv-cp-oe-subtract',
                                 )">
         </div>
 
@@ -500,7 +535,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.motorVehicles',
                                 text = 'Depreciation Start Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-ps-add depreciation-mv-add nbv-cp-mv-subtract',
                                 )">
         </div>
 
@@ -509,7 +544,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodStart.total',
                                 text = 'Depreciation Start Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-ps-total depreciation-t-add nbv-cp-t-subtract',
                                 )">
         </div>
 
@@ -526,7 +561,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-cfy-add depreciation-lab-add',
                                 )">
 
         </div>
@@ -535,7 +570,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-cfy-add depreciation-pam-add',
                                 )">
         </div>
 
@@ -544,7 +579,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-cfy-add depreciation-faf-add',
                                 )">
         </div>
 
@@ -553,7 +588,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-cfy-add depreciation-oe-add',
                                 )">
         </div>
 
@@ -562,7 +597,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-cfy-add depreciation-mv-add',
                                 )">
         </div>
 
@@ -571,7 +606,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.chargeForYear.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-cfy-total depreciation-t-add',
                                 )">
         </div>
 
@@ -588,7 +623,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-od-add depreciation-lab-subtract',
                                 )">
 
         </div>
@@ -597,7 +632,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-od-add depreciation-pam-subtract',
                                 )">
         </div>
       </div>
@@ -605,7 +640,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-od-add depreciation-faf-subtract',
                                 )">
         </div>
       </div>
@@ -613,7 +648,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-od-add depreciation-oe-subtract',
                                 )">
         </div>
       </div>
@@ -621,7 +656,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-od-add depreciation-mv-subtract',
                                 )">
         </div>
       </div>
@@ -629,7 +664,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.onDisposals.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-od-total depreciation-t-subtract',
                                 )">
         </div>
       </div>
@@ -645,7 +680,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-oa-add depreciation-lab-add',
                                 )">
 
         </div>
@@ -654,7 +689,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-oa-add depreciation-pam-add',
                                 )">
         </div>
 
@@ -663,7 +698,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-oa-add depreciation-faf-add',
                                 )">
         </div>
 
@@ -672,7 +707,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-oa-add depreciation-oe-add',
                                 )">
         </div>
 
@@ -681,7 +716,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-oa-add depreciation-mv-add',
                                 )">
         </div>
 
@@ -690,7 +725,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.otherAdjustments.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-oa-total depreciation-t-add',
                                 )">
         </div>
 
@@ -707,7 +742,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodEnd.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-pe-add depreciation-lab-total nbv-pe-lab-subtract',
                                 )">
 
         </div>
@@ -716,7 +751,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodEnd.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-pe-add depreciation-pam-total nbv-pe-pam-subtract',
                                 )">
         </div>
 
@@ -725,7 +760,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodEnd.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-pe-add depreciation-faf-total nbv-pe-faf-subtract',
                                 )">
         </div>
 
@@ -734,7 +769,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodEnd.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-pe-add depreciation-oe-total nbv-pe-oe-subtract',
                                 )">
         </div>
 
@@ -743,7 +778,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodEnd.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-pe-add depreciation-mv-total nbv-pe-mv-subtract',
                                 )">
         </div>
 
@@ -752,7 +787,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'depreciation.atPeriodEnd.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input depreciation-pe-total depreciation-t-total nbv-pe-t-subtract',
                                 )">
         </div>
 
@@ -764,7 +799,7 @@
     </div>
 
 
-    <h2 class="govuk-heading-m">Net Book Value</h2>
+    <h2 class="govuk-heading-m">Net book value</h2>
 
     <div class="govuk-grid-row" id="accounts-header-net-book-value">
       <div class="column-fifth">&nbsp;</div>
@@ -781,7 +816,7 @@
         <h2 class="govuk-heading-s">Office equipment<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
-        <h2 class="govuk-heading-s">Motor vehicles<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Motor<br>vehicles<!--<br />£--></h2>
       </div>
       <div class="column-sixth">
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
@@ -798,7 +833,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-lab-total',
                                 )">
 
         </div>
@@ -807,7 +842,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-pam-total',
                                 )">
         </div>
 
@@ -816,7 +851,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-faf-total',
                                 )">
         </div>
 
@@ -825,7 +860,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-oe-total',
                                 )">
         </div>
 
@@ -834,7 +869,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-mv-total',
                                 )">
         </div>
 
@@ -843,7 +878,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-t-total',
                                 )">
         </div>
 
@@ -863,7 +898,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.landAndBuildings',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-lab-total',
                                 )">
 
         </div>
@@ -872,7 +907,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.plantAndMachinery',
                                 text = 'Cost Land and Buildings',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-pam-total',
                                 )">
         </div>
 
@@ -881,7 +916,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.fixturesAndFittings',
                                 text = 'Cost Fixtures and Fittings',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-faf-total',
                                 )">
         </div>
 
@@ -890,7 +925,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.officeEquipment',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-oe-total',
                                 )">
         </div>
 
@@ -899,7 +934,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.motorVehicles',
                                 text = 'Cost Office Equipment',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-mv-total',
                                 )">
         </div>
 
@@ -908,7 +943,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.total',
                                 text = 'Totals',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-t-total',
                                 )">
         </div>
 
@@ -933,4 +968,18 @@
 
   </form>
 </div>
+</main>
+</div>
+<div class="push"></div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/vendor/jquery-1.12.4.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/radio-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/autocalculate-input-fields.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/balancesheet-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<div th:replace="fragments/piwik :: piwik"></div>
+</body>
 </html>

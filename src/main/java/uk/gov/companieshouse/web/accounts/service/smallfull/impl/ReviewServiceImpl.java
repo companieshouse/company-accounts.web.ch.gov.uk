@@ -9,14 +9,16 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
@@ -53,6 +55,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private OtherAccountingPolicyService otherAccountingPolicyService;
+    
+    @Autowired
+    private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
     @Autowired
     private DebtorsService debtorsService;
@@ -80,6 +85,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         OtherAccountingPolicy otherAccountingPolicy =
                 otherAccountingPolicyService.getOtherAccountingPolicy(transactionId, companyAccountsId);
+        
+        CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
 
         Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
 
@@ -95,6 +102,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
         review.setValuationInformationPolicy(valuationInformationPolicy);
         review.setOtherAccountingPolicy(otherAccountingPolicy);
+        review.setCreditorsWithinOneYear(creditorsWithinOneYear);
         review.setDebtors(debtors);
         review.setTangibleAssets(tangibleAssets);
 
