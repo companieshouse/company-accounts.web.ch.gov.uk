@@ -89,7 +89,7 @@
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
       </div>
     </div>
-
+    <div class="govuk-grid-row accounts-row-spacer"></div>
     <!--Start Cost at start-->
     <div class="govuk-grid-row hidden" id="cost.atPeriodStart-error-row">
       <div class="column-fifth">&nbsp;</div>
@@ -129,7 +129,7 @@
     </div>
 
 
-    <div class="govuk-grid-row accounts-row-spacer">
+    <div class="govuk-grid-row">
       <div class="column-fifth">
         <div
             th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}"
@@ -689,7 +689,7 @@
       </div>
     </div>
 
-
+    <div class="govuk-grid-row accounts-row-spacer"></div>
     <!--Start Depreciation at start-->
     <div class="govuk-grid-row hidden" id="depreciation.atPeriodStart-error-row">
       <div class="column-fifth">&nbsp;</div>
@@ -728,7 +728,7 @@
       </div>
     </div>
 
-    <div class="govuk-grid-row accounts-row-spacer">
+    <div class="govuk-grid-row">
       <div class="column-fifth">
         <div
             th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}"

@@ -5,7 +5,6 @@
 </head>
 <body>
 <div th:fragment="fieldError">
-    <span th:if="${!#fields.hasErrors('__${errorField}__')}" th:id="${errorField} + '-mobile-label'" class="mobile-only-label"></span>
     <span th:if="${!#fields.hasErrors('__${errorField}__')}"
           th:field="*{__${errorField}__}"
           th:id="${errorField}+'-errorId'"
