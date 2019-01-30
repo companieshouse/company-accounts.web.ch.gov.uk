@@ -9,6 +9,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 
 @Getter
 @Setter
@@ -31,4 +32,6 @@ public class Review {
     OtherAccountingPolicy otherAccountingPolicy;
 
     Debtors debtors;
+
+    TangibleAssets tangibleAssets;
 }
