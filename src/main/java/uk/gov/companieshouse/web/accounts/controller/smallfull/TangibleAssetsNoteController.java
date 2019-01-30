@@ -28,7 +28,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteSe
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(DebtorsController.class)
 @PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/tangible-assets")
 public class TangibleAssetsNoteController extends BaseController implements ConditionalController {
