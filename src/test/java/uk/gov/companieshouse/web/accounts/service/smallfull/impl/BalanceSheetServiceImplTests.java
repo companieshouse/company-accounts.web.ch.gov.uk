@@ -290,6 +290,7 @@ public class BalanceSheetServiceImplTests {
         assertEquals(0, validationErrors.size());
         
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
     
     @Test
@@ -505,7 +506,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("Multiple Year Filer - POST - Balance sheet - Removed debtors value when debtors note present")
+    @DisplayName("Multiple Year Filer - POST - Balance sheet - Remove notes when corresponding values aren't present")
     void postMultipleYearFilerBalanceSheetSuccessDeleteDebtorsNote() throws ServiceException, URIValidationException, ApiErrorResponseException {
         mockApiClient();
         createMultipleYearFilerCompanyProfile();
@@ -528,6 +529,10 @@ public class BalanceSheetServiceImplTests {
             balanceSheet,
             "0064000");
         assertEquals(0, validationErrors.size());
+        
+        verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
     }
 
     @Test
