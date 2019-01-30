@@ -260,6 +260,31 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
+    @DisplayName("First Year Filer - POST - Balance Sheet - Success Path - Note Present to Delete")
+    void postFirstYearFilerBalanceSheetSuccessDebtorsNotePresentToDelete() throws ServiceException,
+        URIValidationException, ApiErrorResponseException {
+        mockApiClient();
+        createFirstYearFilerCompanyProfile();
+        createMultipleYearFilerSmallFullAccountPostNotesPresent();
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+
+        createBalanceSheetWithNullValues(balanceSheet);
+        CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
+        calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
+        balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
+
+        mockCurrentPeriodPost(balanceSheet);
+
+        List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            balanceSheet,
+            "0064000");
+        assertEquals(0, validationErrors.size());
+    }
+
+    @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Failure - Throws ServiceException due to ApiErrorResponseException - Bad Request")
     void postFirstYearFilerBalanceSheetFailureBadRequestWithNoValidationErrorsBadRequest() throws ApiErrorResponseException, URIValidationException, ServiceException {
         mockApiClient();
@@ -468,6 +493,32 @@ public class BalanceSheetServiceImplTests {
                                                         COMPANY_ACCOUNTS_ID,
                                                         balanceSheet,
                                                         "0064000");
+        assertEquals(0, validationErrors.size());
+    }
+
+    @Test
+    @DisplayName("Multiple Year Filer - POST - Balance sheet - Removed debtors value when debtors note present")
+    void postMultipleYearFilerBalanceSheetSuccessDeleteDebtorsNote() throws ServiceException, URIValidationException, ApiErrorResponseException {
+        mockApiClient();
+        createMultipleYearFilerCompanyProfile();
+        createMultipleYearFilerSmallFullAccountPostNotesPresent();
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+
+        createBalanceSheetWithNullValues(balanceSheet);
+        CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
+        calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
+        calledUpShareCapitalNotPaid.setPreviousAmount((long)1000);
+        balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
+
+        mockPreviousPeriodPost(balanceSheet);
+        mockCurrentPeriodPost(balanceSheet);
+
+        List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            balanceSheet,
+            "0064000");
         assertEquals(0, validationErrors.size());
     }
 
@@ -831,6 +882,14 @@ public class BalanceSheetServiceImplTests {
         mockSmallFullAccountGet(smallFullApi);
     }
 
+    private void createMultipleYearFilerSmallFullAccountPostNotesPresent() throws ApiErrorResponseException, URIValidationException {
+        SmallFullApi smallFullApi = createSmallFullAccountForPost();
+        SmallFullLinks smallFullLinks = new SmallFullLinks();
+        smallFullLinks.setDebtorsNote("DEBTORS_LINK");
+        smallFullApi.setLinks(smallFullLinks);
+        mockSmallFullAccountGet(smallFullApi);
+    }
+
     private SmallFullApi createSmallFullAccountForPut() {
         SmallFullApi smallFullApi = new SmallFullApi();
 
@@ -881,6 +940,27 @@ public class BalanceSheetServiceImplTests {
         balanceSheet.setCurrentAssets(currentAssets);
 
         return balanceSheet;
+    }
+
+    private void createBalanceSheetWithNullValues(BalanceSheet balanceSheet) {
+        CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
+        calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
+        calledUpShareCapitalNotPaid.setPreviousAmount((long)1000);
+        balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
+
+        CurrentAssets currentAssets = new CurrentAssets();
+        Debtors debtors = new Debtors();
+        debtors.setCurrentAmount(null);
+        debtors.setPreviousAmount(null);
+
+        currentAssets.setDebtors(debtors);
+        balanceSheet.setCurrentAssets(currentAssets);
+
+        FixedAssets fixedAssets = new FixedAssets();
+        TangibleAssets tangibleAssets = new TangibleAssets();
+        tangibleAssets.setCurrentAmount((long)1000);
+        fixedAssets.setTangibleAssets(tangibleAssets);
+        balanceSheet.setFixedAssets(fixedAssets);
     }
 
     private BalanceSheet createMultipleYearFilerBalanceSheetTestObject() {
