@@ -151,7 +151,7 @@ public class TangibleAssetsNoteServiceImplTest {
     @DisplayName("POST - Tangible successful path create")
     void postTangibleSuccessCreate() throws Exception {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, SMALL_FULL_URI))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -176,7 +176,7 @@ public class TangibleAssetsNoteServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, SMALL_FULL_URI))
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
