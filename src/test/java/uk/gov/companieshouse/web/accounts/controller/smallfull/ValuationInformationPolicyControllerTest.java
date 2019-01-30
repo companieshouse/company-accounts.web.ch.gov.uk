@@ -50,8 +50,6 @@ public class ValuationInformationPolicyControllerTest {
                                                     "/small-full";
 
     private static final String VALUATION_INFORMATION_POLICY_PATH = SMALL_FULL_PATH + "/valuation-information";
-    private static final String OTHER_ACCOUNTING_POLICIES_PATH = SMALL_FULL_PATH + "/other-accounting-policies";
-
     private static final String VALUATION_INFORMATION_POLICY_VIEW = "smallfull/valuationInformationPolicy";
     private static final String ERROR_VIEW = "error";
 

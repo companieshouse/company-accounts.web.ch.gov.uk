@@ -65,8 +65,6 @@ public class TransactionServiceImplTests {
 
     private static final String GET_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
 
-    private static final String UPDATE_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
-
     @BeforeEach
     private void init() {
 

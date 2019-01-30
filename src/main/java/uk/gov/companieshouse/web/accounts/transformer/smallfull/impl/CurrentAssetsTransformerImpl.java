@@ -160,7 +160,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
         return cashAtBankAndInHand;
     }
 
-
     private Boolean hasCurrentPeriodCurrentAssets(BalanceSheet balanceSheet) {
 
         CurrentAssets currentAssets = balanceSheet.getCurrentAssets();
