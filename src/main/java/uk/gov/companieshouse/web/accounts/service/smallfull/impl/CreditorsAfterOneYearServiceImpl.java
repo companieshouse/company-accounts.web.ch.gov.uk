@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,9 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOneYearTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearService {
@@ -100,6 +101,32 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
             }
             throw new ServiceException("Error creating creditors after one year resource", e);
         }
+
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<ValidationError> deleteCreditorsAfterOneYear(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = CREDITORS_AFTER_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().creditorsAfterOneYear().delete(uri).execute();
+        } catch (URIValidationException e) {
+
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
+                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
+                if (validationErrors.isEmpty()) {
+                    throw new ServiceException("Bad request when deleting creditors after one year note resource", e);
+                }
+                return validationErrors;
+            }
+            throw new ServiceException("Error deleting creditors after one year note resource", e);
+        }
+
 
         return new ArrayList<>();
     }

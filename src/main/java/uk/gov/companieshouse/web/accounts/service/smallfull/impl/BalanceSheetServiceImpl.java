@@ -20,10 +20,13 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -51,6 +54,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Autowired
     private DebtorsService debtorsService;
+
+    @Autowired
+    private CreditorsAfterOneYearService creditorsAfterOneYearService;
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
@@ -308,17 +314,18 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                        BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
                                        String transactionId, String companyAccountsId) throws ServiceException {
 
-        if (isMultipleYearFiler(companyProfileApi)) {
+        if ((isDebtorsCurrentAmountNull(balanceSheet)
+            && isDebtorsPreviousAmountNull(balanceSheet))
+            && smallFullLinks.getDebtorsNote() != null) {
 
-            if ((isDebtorsCurrentAmountNull(balanceSheet) || isDebtorsPreviousAmountNull(balanceSheet))
-                && smallFullLinks.getDebtorsNote() != null) {
+            debtorsService.deleteDebtors(transactionId, companyAccountsId);
+        }
 
-                debtorsService.deleteDebtors(transactionId, companyAccountsId);
-            }
-        } else {
-            if ((isDebtorsCurrentAmountNull(balanceSheet) && smallFullLinks.getDebtorsNote() != null)) {
-                debtorsService.deleteDebtors(transactionId, companyAccountsId);
-            }
+        if ((isCreditorsAfterOneYearCurrentAmountNull(balanceSheet)
+            && isCreditorsAfterOneYearPreviousAmountNull(balanceSheet))
+            && smallFullLinks.getCreditorsAfterMoreThanOneYearNote() != null) {
+
+            creditorsAfterOneYearService.deleteCreditorsAfterOneYear(transactionId, companyAccountsId);
         }
     }
 
@@ -342,5 +349,21 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .orElse(0L);
 
         return previousDebtors.equals(0L);
+    }
+
+    private boolean isCreditorsAfterOneYearCurrentAmountNull(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+            .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+            .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
+            .map(CreditorsAfterOneYear::getCurrentAmount)
+            .orElse(0L).equals(0L);
+    }
+
+    private boolean isCreditorsAfterOneYearPreviousAmountNull(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+            .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+            .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
+            .map(CreditorsAfterOneYear::getPreviousAmount)
+            .orElse(0L).equals(0L);
     }
 }
