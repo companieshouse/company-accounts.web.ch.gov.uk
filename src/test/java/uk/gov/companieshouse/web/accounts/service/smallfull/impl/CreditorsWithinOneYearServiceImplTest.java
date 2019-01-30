@@ -331,7 +331,7 @@ public class CreditorsWithinOneYearServiceImplTest {
 
     @Test
     @DisplayName("DELETE - Creditors Within One Year successful delete path")
-    void deleteDebtors() throws Exception {
+    void deleteCreditorsWithinOneYear() throws Exception {
 
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
@@ -345,7 +345,7 @@ public class CreditorsWithinOneYearServiceImplTest {
 
     @Test
     @DisplayName("DELETE - Creditors Within One Year throws ServiceExcepiton due to URIValidationException")
-    void deleteDebtorsUriValidationException() throws Exception {
+    void deleteCreditorsWithinOneYearUriValidationException() throws Exception {
 
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
@@ -359,7 +359,7 @@ public class CreditorsWithinOneYearServiceImplTest {
 
     @Test
     @DisplayName("DELETE - Creditors Within One Year throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
-    void deleteDebtorsApiErrorResponseExceptionBadRequest() throws Exception {
+    void deleteCreditorsWithinOneYearApiErrorResponseExceptionBadRequest() throws Exception {
 
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
@@ -376,7 +376,7 @@ public class CreditorsWithinOneYearServiceImplTest {
 
     @Test
     @DisplayName("DELETE - Creditors Within One Year throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
-    void deleteDebtorsApiErrorResponseExceptionNotFound() throws Exception {
+    void deleteCreditorsWithinOneYearApiErrorResponseExceptionNotFound() throws Exception {
 
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
