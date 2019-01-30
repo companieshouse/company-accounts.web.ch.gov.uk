@@ -37,11 +37,6 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
     @Autowired
     private TangibleAssetsTransformer tangibleAssetsTransformer;
 
-    private static final UriTemplate SMALL_FULL_URI =
-        new UriTemplate(
-            "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
-
-
     private static final UriTemplate TANGIBLE_ASSET_NOTE =
         new UriTemplate(
             "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/tangible-assets");
@@ -84,9 +79,8 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
 
         String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
 
-        String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
         SmallFullApi smallFullApi = smallFullService
-            .getSmallFullAccounts(apiClient, transactionId, smallFullUri);
+            .getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         TangibleApi tangibleApi = tangibleAssetsTransformer.getTangibleApi(tangibleAssets);
 
