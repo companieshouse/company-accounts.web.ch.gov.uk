@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @NextController(DebtorsController.class)
-@PreviousController(OtherAccountingPolicyController.class)
+@PreviousController(TangibleAssetsNoteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small" +
     "-full/stocks")
 public class StocksController extends BaseController {
