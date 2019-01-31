@@ -90,7 +90,9 @@
       </div>
     </div>
     <div class="govuk-grid-row accounts-row-spacer"></div>
+
     <!--Start Cost at start-->
+    <div th:if= "${tangibleAssets.lastAccountsPeriodEndOn != null}">
     <div class="govuk-grid-row hidden" id="cost.atPeriodStart-error-row">
       <div class="column-fifth">&nbsp;</div>
       <div class="column-sixth">
@@ -193,7 +195,7 @@
 
       </div>
     </div>
-
+    </div>
     <!--End Cost at start-->
     <!--Start Additions -->
     <div class="govuk-grid-row hidden" id="cost.additions-error-row">
@@ -691,6 +693,7 @@
 
     <div class="govuk-grid-row accounts-row-spacer"></div>
     <!--Start Depreciation at start-->
+    <div th:if= "${tangibleAssets.lastAccountsPeriodEndOn != null}">
     <div class="govuk-grid-row hidden" id="depreciation.atPeriodStart-error-row">
       <div class="column-fifth">&nbsp;</div>
       <div class="column-sixth">
@@ -791,6 +794,7 @@
         </div>
 
       </div>
+    </div>
     </div>
     <!--End Cost at start-->
     <!--Start Additions -->
@@ -1254,6 +1258,7 @@
 
     </div>
     <!--Net Book Value Start-->
+    <div th:if= "${tangibleAssets.lastAccountsPeriodEndOn != null}">
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
         <strong>
@@ -1324,7 +1329,7 @@
       <br>
 
     </div>
-
+    </div>
 
     <div th:replace="fragments/additionalInformation :: additionalInformation (
                                 id = 'additionalInformation',
