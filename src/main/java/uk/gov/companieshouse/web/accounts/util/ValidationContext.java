@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.util;
 
-import java.time.LocalDate;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
