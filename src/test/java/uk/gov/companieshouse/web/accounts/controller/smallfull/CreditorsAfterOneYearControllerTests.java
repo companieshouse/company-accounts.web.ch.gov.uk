@@ -129,7 +129,7 @@ public class CreditorsAfterOneYearControllerTests {
     void postRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockService.submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class), anyString())).thenReturn(new ArrayList<>());
+        when(mockService.submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -141,7 +141,7 @@ public class CreditorsAfterOneYearControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-                .when(mockService).submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class), anyString());
+                .when(mockService).submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class));
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())

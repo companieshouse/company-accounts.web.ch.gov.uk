@@ -80,7 +80,7 @@ public class CreditorsAfterOneYearController extends BaseController implements
         try {
             List<ValidationError> validationErrors =
                     creditorsAfterOneYearService.submitCreditorsAfterOneYear(transactionId,
-                            companyAccountsId, creditorsAfterOneYear, companyNumber);
+                            companyAccountsId, creditorsAfterOneYear);
 
             if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

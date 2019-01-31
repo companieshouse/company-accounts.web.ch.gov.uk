@@ -25,10 +25,9 @@ public interface CreditorsAfterOneYearService {
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
      * @param creditorsAfterOneYear note to submit
-     * @param companyNumber The company number
      * @return A list of validation errors, or an empty array list if none are present
      * @throws ServiceException if there's an error on submission
      */
-    List<ValidationError> submitCreditorsAfterOneYear(String transactionId, String companyAccountsId, CreditorsAfterOneYear creditorsAfterOneYear, String companyNumber)
+    List<ValidationError> submitCreditorsAfterOneYear(String transactionId, String companyAccountsId, CreditorsAfterOneYear creditorsAfterOneYear)
             throws ServiceException;
 }

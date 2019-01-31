@@ -219,7 +219,7 @@ public class CreditorsAfterOneYearServiceImplTests {
 
         List<ValidationError> validationErrors =
                 creditorsAfterOneYearService.submitCreditorsAfterOneYear(TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID, creditorsAfterOneYear, COMPANY_NUMBER);
+                COMPANY_ACCOUNTS_ID, creditorsAfterOneYear);
 
         assertEquals(0, validationErrors.size());
     }
@@ -256,8 +256,7 @@ public class CreditorsAfterOneYearServiceImplTests {
                 () -> creditorsAfterOneYearService.submitCreditorsAfterOneYear(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
-                creditorsAfterOneYear,
-                COMPANY_NUMBER));
+                creditorsAfterOneYear));
     }
 
     @Test
@@ -292,8 +291,7 @@ public class CreditorsAfterOneYearServiceImplTests {
                 () -> creditorsAfterOneYearService.submitCreditorsAfterOneYear(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
-                creditorsAfterOneYear,
-                COMPANY_NUMBER));
+                creditorsAfterOneYear));
     }
 
     @Test
@@ -310,8 +308,7 @@ public class CreditorsAfterOneYearServiceImplTests {
                 () -> creditorsAfterOneYearService.submitCreditorsAfterOneYear(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
-                creditorsAfterOneYear,
-                COMPANY_NUMBER));
+                creditorsAfterOneYear));
     }
 
     @Test
@@ -333,7 +330,7 @@ public class CreditorsAfterOneYearServiceImplTests {
 
         List<ValidationError> validationErrors =
                 creditorsAfterOneYearService.submitCreditorsAfterOneYear(TRANSACTION_ID,
-                COMPANY_ACCOUNTS_ID, creditorsAfterOneYear, COMPANY_NUMBER);
+                COMPANY_ACCOUNTS_ID, creditorsAfterOneYear);
 
         assertEquals(0, validationErrors.size());
     }
@@ -364,8 +361,7 @@ public class CreditorsAfterOneYearServiceImplTests {
         assertThrows(ServiceException.class, () -> creditorsAfterOneYearService.submitCreditorsAfterOneYear(
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
-                creditorsAfterOneYear,
-                COMPANY_NUMBER));
+                creditorsAfterOneYear));
     }
 
     private void creditorsAfterOneYearUpdate(CreditorsAfterOneYearApi creditorsAfterOneYearApi) throws Exception {
