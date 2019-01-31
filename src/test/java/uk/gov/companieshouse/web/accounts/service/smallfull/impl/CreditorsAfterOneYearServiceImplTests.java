@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -221,7 +222,7 @@ public class CreditorsAfterOneYearServiceImplTests {
                 creditorsAfterOneYearService.submitCreditorsAfterOneYear(TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID, creditorsAfterOneYear);
 
-        assertEquals(0, validationErrors.size());
+        assertTrue(validationErrors.isEmpty());
     }
 
     @Test
@@ -250,8 +251,6 @@ public class CreditorsAfterOneYearServiceImplTests {
                 ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockCreditorsAfterOneYearCreate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class,
-                () -> mockCreditorsAfterOneYearCreate.execute());
         assertThrows(ServiceException.class,
                 () -> creditorsAfterOneYearService.submitCreditorsAfterOneYear(
                 TRANSACTION_ID,
@@ -284,9 +283,7 @@ public class CreditorsAfterOneYearServiceImplTests {
         ApiErrorResponseException apiErrorResponseException =
                 ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockCreditorsAfterOneYearCreate.execute()).thenThrow(apiErrorResponseException);
-
-        assertThrows(ApiErrorResponseException.class,
-                () -> mockCreditorsAfterOneYearCreate.execute());
+        
         assertThrows(ServiceException.class,
                 () -> creditorsAfterOneYearService.submitCreditorsAfterOneYear(
                 TRANSACTION_ID,

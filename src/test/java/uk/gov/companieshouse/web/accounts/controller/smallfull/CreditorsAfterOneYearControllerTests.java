@@ -89,7 +89,7 @@ public class CreditorsAfterOneYearControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String TEST_PATH = "total.currentTotal";
+    private static final String CURRENT_TOTAL_PATH = "total.currentTotal";
 
     @Test
     @DisplayName("Get creditors after one year view success path")
@@ -152,7 +152,7 @@ public class CreditorsAfterOneYearControllerTests {
     @DisplayName("Post creditors after one year with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        String beanElement = TEST_PATH;
+        String beanElement = CURRENT_TOTAL_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
 
