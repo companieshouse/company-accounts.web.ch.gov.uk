@@ -38,7 +38,6 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StocksServiceImplTests {
 
-
     @Mock
     private ApiClientService mockApiClientService;
 
@@ -165,7 +164,6 @@ public class StocksServiceImplTests {
                 COMPANY_ACCOUNTS_ID,
                 COMPANY_NUMBER));
     }
-
 
     private void validateCreditorsAfterOneYear(StocksNote stocksNote) {
 

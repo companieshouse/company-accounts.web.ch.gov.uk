@@ -29,8 +29,6 @@ public class StocksServiceImpl implements StocksService {
     @Autowired
     private ApiClientService apiClientService;
 
-
-
     private static final UriTemplate STOCKS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/stocks");
 
@@ -50,7 +48,6 @@ public class StocksServiceImpl implements StocksService {
 
         return stocksNote;
     }
-
 
     private StocksApi getStocksApi(String transactionId, String companyAccountsId) throws ServiceException {
 

@@ -20,7 +20,6 @@ public class StocksTransformerImplTests {
     private static final Long STOCKS_VALUE = 10L;
     private static final Long TOTAL_VALUE = 15L;
 
-
     @Test
     @DisplayName("All current period values added to stock sheet web model")
     void transformStocksForCurrentPeriodApiToWeb() {
