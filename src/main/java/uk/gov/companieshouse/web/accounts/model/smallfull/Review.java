@@ -10,6 +10,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 
 @Getter
 @Setter
@@ -34,4 +35,6 @@ public class Review {
     CreditorsWithinOneYear creditorsWithinOneYear;
 
     Debtors debtors;
+    
+    StocksNote stocks;
 }

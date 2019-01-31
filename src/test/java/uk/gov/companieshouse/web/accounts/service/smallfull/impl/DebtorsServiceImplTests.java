@@ -38,7 +38,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransform
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -155,7 +154,6 @@ public class DebtorsServiceImplTests {
     @DisplayName("GET - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
     void getDebtorsApiResponseException() throws Exception {
 
-        DebtorsApi debtorsApi = new DebtorsApi();
         HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
@@ -416,12 +414,6 @@ public class DebtorsServiceImplTests {
         getMockDebtorsResourceHandler();
         when(mockDebtorsResourceHandler.update(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsUpdate);
         doNothing().when(mockDebtorsUpdate).execute();
-    }
-
-    private void getMockSmallFullApi(SmallFullApi smallFullApi) throws Exception {
-        getMockSmallFullResourceHandler();
-        when(mockSmallFullResourceHandler.get(BASE_SMALL_FULL_URI)).thenReturn(mockSmallFullGet);
-        when(mockSmallFullGet.execute()).thenReturn(smallFullApi);
     }
 
     private void setLinksWithDebtors(SmallFullApi smallFullApi) {
