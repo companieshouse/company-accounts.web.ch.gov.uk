@@ -204,13 +204,13 @@ public class CreditorsAfterOneYearControllerTests {
     void postRequestFailureWithApiValidationErrors() throws Exception {
 
         ValidationError validationError = new ValidationError();
-        validationError.setFieldPath(TEST_PATH);
+        validationError.setFieldPath(CURRENT_TOTAL_PATH);
         validationError.setMessageKey("invalid_character");
 
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockService.submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class), anyString())).thenReturn(errors);
+        when(mockService.submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class))).thenReturn(errors);
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())
