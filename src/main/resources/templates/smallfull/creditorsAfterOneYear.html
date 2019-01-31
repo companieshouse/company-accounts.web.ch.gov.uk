@@ -180,6 +180,7 @@
         <input id="next-button" class="govuk-button piwik-event" data-event-id="Creditors After More Than One Year - Save and continue" type="submit" role="button" value="Save and continue"/>
       </div>
     </div>
+    <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/balancesheet-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
   </form>
 </div>
 </html>
