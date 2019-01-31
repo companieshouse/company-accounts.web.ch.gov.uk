@@ -88,7 +88,13 @@
 
 
     <!--Start Cost at start-->
-    <div class="govuk-grid-row accounts-row-spacer">
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'cost.atPeriodStart',
+                      isTopRow = true
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
       <div class="column-fifth">
         <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodStartOn"></div>
         <span th:id="cost.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
@@ -150,6 +156,11 @@
     </div>
     <!--End Cost at start-->
     <!--Start Additions -->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'cost.additions'
+                      )">
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Additions
@@ -212,6 +223,11 @@
     </div>
     <!--End Additions-->
     <!--Start Disposals-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'cost.disposals'
+                      )">
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Disposals
@@ -274,6 +290,11 @@
     </div>
     <!--End Disposals=-->
     <!--Start Revaluations-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'cost.revaluations'
+                      )">
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!-- <details> <summary> <span class="summary">-->Revaluations
@@ -336,6 +357,11 @@
     </div>
     <!--End Revaluations=-->
     <!--Start Transfers-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'cost.transfers'
+                      )">
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Transfers
@@ -399,6 +425,11 @@
     </div>
     <!--End Transfers-->
     <!--Start Cost at end-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'cost.atPeriodEnd'
+                      )">
+    </div>
+
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
         <strong><div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodEndOn"></div></strong>
@@ -490,7 +521,13 @@
 
 
     <!--Start Depreciation at start-->
-    <div class="govuk-grid-row accounts-row-spacer">
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'depreciation.atPeriodStart',
+                      isTopRow = true
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
       <div class="column-fifth">
         <div th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodStartOn"></div>
         <span th:id="depreciation.nextAccountsPeriodStartOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
@@ -552,6 +589,11 @@
     </div>
     <!--End Cost at start-->
     <!--Start Additions -->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'depreciation.chargeForYear'
+                      )">
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->Charge for year
@@ -614,6 +656,11 @@
     </div>
     <!--End Additions-->
     <!--Start Disposals-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'depreciation.onDisposals'
+                      )">
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!--<details> <summary> <span class="summary">-->On disposals
@@ -671,6 +718,11 @@
     </div>
     <!--End Disposals=-->
     <!--Start Revaluations-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'depreciation.otherAdjustments'
+                      )">
+    </div>
+
     <div class="govuk-grid-row">
       <div class="column-fifth">
         <!-- <details> <summary> <span class="summary">-->Other adjustments
@@ -733,6 +785,11 @@
     </div>
     <!--End Revaluations=-->
     <!--Start Cost at end-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'depreciation.atPeriodEnd'
+                      )">
+    </div>
+
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
         <strong><div th:text="'Depreciation at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="depreciation.nextAccountsPeriodEndOn"></div></strong>
@@ -824,7 +881,13 @@
     </div>
 
     <!--Net Book Value End-->
-    <div class="govuk-grid-row accounts-total accounts-row-spacer">
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'netBookValue.currentPeriod',
+                      isTopRow = true
+                      )">
+    </div>
+
+    <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
         <strong><div th:text="'Net book value at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodEndOn"></div></strong>
         <span th:id="netBookValue.nextAccountsPeriodEndOn-mobile-label" th:text="${#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" class="mobile-only-label"></span>
@@ -889,6 +952,11 @@
 
     </div>
     <!--Net Book Value Start-->
+    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+                      row = 'netBookValue.previousPeriod'
+                      )">
+    </div>
+
     <div class="govuk-grid-row accounts-total">
       <div class="column-fifth">
         <strong><div th:text="'Net book value at ' +${#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
