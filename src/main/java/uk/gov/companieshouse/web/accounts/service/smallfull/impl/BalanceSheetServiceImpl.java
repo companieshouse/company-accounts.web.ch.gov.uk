@@ -20,6 +20,8 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
@@ -30,6 +32,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BalanceSheetServiceImpl implements BalanceSheetService {
@@ -153,6 +156,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
         createCurrentPeriod(apiClient, smallFullApi, currentPeriodUri, currentPeriod,
                 validationErrors);
+
+        checkConditionalNotes(companyProfileApi, balanceSheet, smallFullApi.getLinks(),
+            transactionId, companyAccountsId);
 
         return validationErrors;
 
@@ -286,5 +292,55 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private boolean hasPreviousPeriod(SmallFullLinks smallFullLinks) {
         return smallFullLinks.getPreviousPeriod() != null;
+    }
+
+    /**
+     * Checks whether a conditional note exists when there is no balancesheet value for it
+     * If there is, the note is then deleted
+     *
+     * @param balanceSheet the populated balancesheet
+     * @param smallFullLinks the links used to determine if notes are present
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on submission
+     */
+    private void checkConditionalNotes(CompanyProfileApi companyProfileApi,
+                                       BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
+                                       String transactionId, String companyAccountsId) throws ServiceException {
+
+        if (isMultipleYearFiler(companyProfileApi)) {
+
+            if ((isDebtorsCurrentAmountNull(balanceSheet) || isDebtorsPreviousAmountNull(balanceSheet))
+                && smallFullLinks.getDebtorsNote() != null) {
+
+                debtorsService.deleteDebtors(transactionId, companyAccountsId);
+            }
+        } else {
+            if ((isDebtorsCurrentAmountNull(balanceSheet) && smallFullLinks.getDebtorsNote() != null)) {
+                debtorsService.deleteDebtors(transactionId, companyAccountsId);
+            }
+        }
+    }
+
+    private boolean isDebtorsCurrentAmountNull(BalanceSheet balanceSheet) {
+        Long currentDebtors =
+            Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getDebtors)
+                .map(Debtors::getCurrentAmount)
+                .orElse(0L);
+
+        return currentDebtors.equals(0L);
+    }
+
+    private boolean isDebtorsPreviousAmountNull(BalanceSheet balanceSheet) {
+        Long previousDebtors =
+            Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getDebtors)
+                .map(Debtors::getPreviousAmount)
+                .orElse(0L);
+
+        return previousDebtors.equals(0L);
     }
 }

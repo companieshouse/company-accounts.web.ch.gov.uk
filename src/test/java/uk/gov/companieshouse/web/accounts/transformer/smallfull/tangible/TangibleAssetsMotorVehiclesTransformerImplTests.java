@@ -16,10 +16,22 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.Depreciation;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssetsColumns;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssetsCost;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssetsDepreciation;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssetsNetBookValue;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.Additions;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.CostAtPeriodEnd;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.CostAtPeriodStart;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.Disposals;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.Revaluations;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.TangibleAssetsCost;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.Transfers;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.ChargeForYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.DepreciationAtPeriodEnd;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.DepreciationAtPeriodStart;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.OnDisposals;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.OtherAdjustments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.TangibleAssetsDepreciation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.CurrentPeriod;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.TangibleAssetsNetBookValue;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.TangibleAssetsMotorVehiclesTransformerImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -252,27 +264,27 @@ public class TangibleAssetsMotorVehiclesTransformerImplTests {
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
 
-        TangibleAssetsColumns costAtPeriodStart = new TangibleAssetsColumns();
+        CostAtPeriodStart costAtPeriodStart = new CostAtPeriodStart();
         costAtPeriodStart.setOfficeEquipment(OTHER_COST_AT_PERIOD_START);
         tangibleAssetsCost.setAtPeriodStart(costAtPeriodStart);
 
-        TangibleAssetsColumns additions = new TangibleAssetsColumns();
+        Additions additions = new Additions();
         additions.setOfficeEquipment(OTHER_ADDITIONS);
         tangibleAssetsCost.setAdditions(additions);
 
-        TangibleAssetsColumns disposals = new TangibleAssetsColumns();
+        Disposals disposals = new Disposals();
         disposals.setOfficeEquipment(OTHER_DISPOSALS);
         tangibleAssetsCost.setDisposals(disposals);
 
-        TangibleAssetsColumns revaluations = new TangibleAssetsColumns();
+        Revaluations revaluations = new Revaluations();
         revaluations.setOfficeEquipment(OTHER_REVALUATIONS);
         tangibleAssetsCost.setRevaluations(revaluations);
 
-        TangibleAssetsColumns transfers = new TangibleAssetsColumns();
+        Transfers transfers = new Transfers();
         transfers.setOfficeEquipment(OTHER_TRANSFERS);
         tangibleAssetsCost.setTransfers(transfers);
 
-        TangibleAssetsColumns costAtPeriodEnd = new TangibleAssetsColumns();
+        CostAtPeriodEnd costAtPeriodEnd = new CostAtPeriodEnd();
         costAtPeriodEnd.setOfficeEquipment(OTHER_COST_AT_PERIOD_END);
         tangibleAssetsCost.setAtPeriodEnd(costAtPeriodEnd);
 
@@ -280,23 +292,23 @@ public class TangibleAssetsMotorVehiclesTransformerImplTests {
 
         TangibleAssetsDepreciation tangibleAssetsDepreciation = new TangibleAssetsDepreciation();
 
-        TangibleAssetsColumns depreciationAtPeriodStart = new TangibleAssetsColumns();
+        DepreciationAtPeriodStart depreciationAtPeriodStart = new DepreciationAtPeriodStart();
         depreciationAtPeriodStart.setOfficeEquipment(OTHER_DEPRECIATION_AT_PERIOD_START);
         tangibleAssetsDepreciation.setAtPeriodStart(depreciationAtPeriodStart);
 
-        TangibleAssetsColumns chargeForYear = new TangibleAssetsColumns();
+        ChargeForYear chargeForYear = new ChargeForYear();
         chargeForYear.setOfficeEquipment(OTHER_CHARGE_FOR_YEAR);
         tangibleAssetsDepreciation.setChargeForYear(chargeForYear);
 
-        TangibleAssetsColumns onDisposals = new TangibleAssetsColumns();
+        OnDisposals onDisposals = new OnDisposals();
         onDisposals.setOfficeEquipment(OTHER_ON_DISPOSALS);
         tangibleAssetsDepreciation.setOnDisposals(onDisposals);
 
-        TangibleAssetsColumns otherAdjustments = new TangibleAssetsColumns();
+        OtherAdjustments otherAdjustments = new OtherAdjustments();
         otherAdjustments.setOfficeEquipment(OTHER_OTHER_ADJUSTMENTS);
         tangibleAssetsDepreciation.setOtherAdjustments(otherAdjustments);
 
-        TangibleAssetsColumns depreciationAtPeriodEnd = new TangibleAssetsColumns();
+        DepreciationAtPeriodEnd depreciationAtPeriodEnd = new DepreciationAtPeriodEnd();
         depreciationAtPeriodEnd.setOfficeEquipment(OTHER_DEPRECIATION_AT_PERIOD_END);
         tangibleAssetsDepreciation.setAtPeriodEnd(depreciationAtPeriodEnd);
 
@@ -304,11 +316,11 @@ public class TangibleAssetsMotorVehiclesTransformerImplTests {
 
         TangibleAssetsNetBookValue tangibleAssetsNetBookValue = new TangibleAssetsNetBookValue();
 
-        TangibleAssetsColumns currentPeriod = new TangibleAssetsColumns();
+        CurrentPeriod currentPeriod = new CurrentPeriod();
         currentPeriod.setOfficeEquipment(OTHER_CURRENT_PERIOD);
         tangibleAssetsNetBookValue.setCurrentPeriod(currentPeriod);
 
-        TangibleAssetsColumns previousPeriod = new TangibleAssetsColumns();
+        PreviousPeriod previousPeriod = new PreviousPeriod();
         previousPeriod.setOfficeEquipment(OTHER_PREVIOUS_PERIOD);
         tangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
@@ -318,57 +330,57 @@ public class TangibleAssetsMotorVehiclesTransformerImplTests {
     }
 
     private TangibleAssets createTangibleAssetsWithMotorVehiclesResources(boolean includeCost,
-                                                                                boolean includeDepreciation,
-                                                                                boolean includeNetBookValue) {
+            boolean includeDepreciation,
+            boolean includeNetBookValue) {
 
         TangibleAssets tangibleAssets = new TangibleAssets();
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
         tangibleAssets.setCost(tangibleAssetsCost);
 
-        TangibleAssetsColumns costAtPeriodStart = new TangibleAssetsColumns();
+        CostAtPeriodStart costAtPeriodStart = new CostAtPeriodStart();
         tangibleAssetsCost.setAtPeriodStart(costAtPeriodStart);
 
-        TangibleAssetsColumns additions = new TangibleAssetsColumns();
+        Additions additions = new Additions();
         tangibleAssetsCost.setAdditions(additions);
 
-        TangibleAssetsColumns disposals = new TangibleAssetsColumns();
+        Disposals disposals = new Disposals();
         tangibleAssetsCost.setDisposals(disposals);
 
-        TangibleAssetsColumns revaluations = new TangibleAssetsColumns();
+        Revaluations revaluations = new Revaluations();
         tangibleAssetsCost.setRevaluations(revaluations);
 
-        TangibleAssetsColumns transfers = new TangibleAssetsColumns();
+        Transfers transfers = new Transfers();
         tangibleAssetsCost.setTransfers(transfers);
 
-        TangibleAssetsColumns costAtPeriodEnd = new TangibleAssetsColumns();
+        CostAtPeriodEnd costAtPeriodEnd = new CostAtPeriodEnd();
         tangibleAssetsCost.setAtPeriodEnd(costAtPeriodEnd);
 
         TangibleAssetsDepreciation tangibleAssetsDepreciation = new TangibleAssetsDepreciation();
         tangibleAssets.setDepreciation(tangibleAssetsDepreciation);
 
-        TangibleAssetsColumns depreciationAtPeriodStart = new TangibleAssetsColumns();
+        DepreciationAtPeriodStart depreciationAtPeriodStart = new DepreciationAtPeriodStart();
         tangibleAssetsDepreciation.setAtPeriodStart(depreciationAtPeriodStart);
 
-        TangibleAssetsColumns chargeForYear = new TangibleAssetsColumns();
+        ChargeForYear chargeForYear = new ChargeForYear();
         tangibleAssetsDepreciation.setChargeForYear(chargeForYear);
 
-        TangibleAssetsColumns onDisposals = new TangibleAssetsColumns();
+        OnDisposals onDisposals = new OnDisposals();
         tangibleAssetsDepreciation.setOnDisposals(onDisposals);
 
-        TangibleAssetsColumns otherAdjustments = new TangibleAssetsColumns();
+        OtherAdjustments otherAdjustments = new OtherAdjustments();
         tangibleAssetsDepreciation.setOtherAdjustments(otherAdjustments);
 
-        TangibleAssetsColumns depreciationAtPeriodEnd = new TangibleAssetsColumns();
+        DepreciationAtPeriodEnd depreciationAtPeriodEnd = new DepreciationAtPeriodEnd();
         tangibleAssetsDepreciation.setAtPeriodEnd(depreciationAtPeriodEnd);
 
         TangibleAssetsNetBookValue tangibleAssetsNetBookValue = new TangibleAssetsNetBookValue();
         tangibleAssets.setNetBookValue(tangibleAssetsNetBookValue);
 
-        TangibleAssetsColumns currentPeriod = new TangibleAssetsColumns();
+        CurrentPeriod currentPeriod = new CurrentPeriod();
         tangibleAssetsNetBookValue.setCurrentPeriod(currentPeriod);
 
-        TangibleAssetsColumns previousPeriod = new TangibleAssetsColumns();
+        PreviousPeriod previousPeriod = new PreviousPeriod();
         tangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         if (includeCost) {

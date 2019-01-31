@@ -25,8 +25,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@NextController(ReviewController.class)
-@PreviousController(OtherAccountingPolicyController.class)
+@NextController(CreditorsWithinOneYearController.class)
+@PreviousController(TangibleAssetsNoteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/debtors")
 public class DebtorsController extends BaseController implements ConditionalController {
