@@ -1,11 +1,13 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
@@ -22,6 +24,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisati
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
@@ -59,6 +62,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private DebtorsService debtorsService;
 
+    @Autowired
+    private TangibleAssetsNoteService tangibleAssetsNoteService;
+
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
@@ -82,7 +88,10 @@ public class ReviewServiceImpl implements ReviewService {
         
         CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
 
-        Debtors debtors = debtorsService.getDebtors(transactionId,companyAccountsId, companyNumber);
+        Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
+
+        TangibleAssets tangibleAssets =
+                tangibleAssetsNoteService.getTangibleAssets(transactionId, companyAccountsId, companyNumber);
 
         Review review = new Review();
         review.setBalanceSheet(balanceSheet);
@@ -95,6 +104,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setOtherAccountingPolicy(otherAccountingPolicy);
         review.setCreditorsWithinOneYear(creditorsWithinOneYear);
         review.setDebtors(debtors);
+        review.setTangibleAssets(tangibleAssets);
 
         return review;
     }
