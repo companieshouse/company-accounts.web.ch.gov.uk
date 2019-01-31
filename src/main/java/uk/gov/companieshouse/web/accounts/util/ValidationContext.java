@@ -16,6 +16,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -188,8 +189,8 @@ public class ValidationContext {
 
     /**
      * Returns {@code true} if the {@code Class} object is not a primitive,
-     * boxed primitive, collection or {@code String} and therefore likely
-     * to be a model class.
+     * boxed primitive, collection or {@code String} or {@code LocalDate}, 
+     * and therefore likely to be a model class.
      *
      * @param  clazz the {@code Class} object to test
      * @return       {@code true} if the class is not a primitive, boxed
@@ -220,6 +221,7 @@ public class ValidationContext {
         types.add(Boolean.class);
         types.add(Character.class);
         types.add(String.class);
+        types.add(LocalDate.class);
         return types;
     }
 }
