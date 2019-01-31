@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class StocksServiceImpl implements StocksService {
@@ -28,6 +32,9 @@ public class StocksServiceImpl implements StocksService {
 
     @Autowired
     private ApiClientService apiClientService;
+    
+    @Autowired
+    private ValidationContext validationContext;
 
     private static final UriTemplate STOCKS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/stocks");
@@ -65,5 +72,30 @@ public class StocksServiceImpl implements StocksService {
         } catch (URIValidationException e) {
             throw new ServiceException(INVALID_URI_MESSAGE, e);
         }
+    }
+    
+    @Override
+    public List<ValidationError> deleteStocks(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = STOCKS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().stocks().delete(uri).execute();
+        } catch (URIValidationException e) {
+
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
+                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
+                if (validationErrors.isEmpty()) {
+                    throw new ServiceException("Bad request when deleting stocks resource", e);
+                }
+                return validationErrors;
+            }
+            throw new ServiceException("Error deleting stocks resource", e);
+        }
+
+        return new ArrayList<>();
     }
 }
