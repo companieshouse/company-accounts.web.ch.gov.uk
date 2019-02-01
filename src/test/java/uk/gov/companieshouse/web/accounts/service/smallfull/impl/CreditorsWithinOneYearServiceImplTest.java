@@ -47,6 +47,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -337,10 +339,10 @@ public class CreditorsWithinOneYearServiceImplTest {
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
         doNothing().when(mockCreditorsWithinOneYearDelete).execute();
 
-        List<ValidationError> validationErrors = creditorsWithinOneYearService.deleteCreditorsWithinOneYear(TRANSACTION_ID,
+        creditorsWithinOneYearService.deleteCreditorsWithinOneYear(TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID);
 
-        assertEquals(0, validationErrors.size());
+        verify(mockCreditorsWithinOneYearDelete, times(1)).execute();
     }
 
     @Test

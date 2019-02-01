@@ -105,7 +105,7 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
   }
 
   @Override
-  public List<ValidationError> deleteCreditorsWithinOneYear(String transactionId, String companyAccountsId) throws ServiceException {
+  public void deleteCreditorsWithinOneYear(String transactionId, String companyAccountsId) throws ServiceException {
       ApiClient apiClient = apiClientService.getApiClient();
 
       String uri = CREDITORS_WITHIN_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
@@ -113,20 +113,10 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
       try {
           apiClient.smallFull().creditorsWithinOneYear().delete(uri).execute();
       } catch (URIValidationException e) {
-
           throw new ServiceException(INVALID_URI_MESSAGE, e);
       } catch (ApiErrorResponseException e) {
-          if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-              List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-              if (validationErrors.isEmpty()) {
-                  throw new ServiceException("Bad request when deleting creditors within one year note resource", e);
-              }
-              return validationErrors;
-          }
           throw new ServiceException("Error deleting creditors within one year note resource", e);
       }
-
-      return new ArrayList<>();
   }
   
   private CreditorsWithinOneYearApi getCreditorsWithinOneYearApi(String transactionId,
