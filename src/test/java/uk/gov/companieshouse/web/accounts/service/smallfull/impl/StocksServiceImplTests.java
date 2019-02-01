@@ -28,14 +28,13 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Total;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationContext;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import java.util.List;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -62,9 +61,6 @@ public class StocksServiceImplTests {
 
     @Mock
     private StocksTransformer mockStocksTransformer;
-    
-    @Mock
-    private ValidationContext mockValidationContext;
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
@@ -183,10 +179,10 @@ public class StocksServiceImplTests {
         when(mockStocksResourceHandler.delete(STOCKS_URI)).thenReturn(mockStocksDelete);
         doNothing().when(mockStocksDelete).execute();
 
-        List<ValidationError> validationErrors = stocksService.deleteStocks(TRANSACTION_ID,
+        stocksService.deleteStocks(TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID);
 
-        assertEquals(0, validationErrors.size());
+        verify(mockStocksDelete, times(1)).execute();
     }
 
     @Test
@@ -198,23 +194,6 @@ public class StocksServiceImplTests {
         when(mockStocksDelete.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(URIValidationException.class, () -> mockStocksDelete.execute());
-        assertThrows(ServiceException.class, () -> stocksService.deleteStocks(
-            TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("DELETE - stocks throws ServiceException due to ApiErrorResponseException - 400 Bad Request")
-    void deleteStocksApiErrorResponseExceptionBadRequest() throws Exception {
-
-        getMockStocksResourceHandler();
-        when(mockStocksResourceHandler.delete(STOCKS_URI)).thenReturn(mockStocksDelete);
-
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-        when(mockStocksDelete.execute()).thenThrow(apiErrorResponseException);
-
-        assertThrows(ApiErrorResponseException.class, () -> mockStocksDelete.execute());
         assertThrows(ServiceException.class, () -> stocksService.deleteStocks(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID));
