@@ -69,8 +69,8 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
 
     @Override
     public List<ValidationError> submitCreditorsAfterOneYear(String transactionId,
-            String companyAccountsId, CreditorsAfterOneYear creditorsAfterOneYear,
-            String companyNumber) throws ServiceException {
+            String companyAccountsId, CreditorsAfterOneYear creditorsAfterOneYear
+            ) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
         String uri = CREDITORS_AFTER_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();

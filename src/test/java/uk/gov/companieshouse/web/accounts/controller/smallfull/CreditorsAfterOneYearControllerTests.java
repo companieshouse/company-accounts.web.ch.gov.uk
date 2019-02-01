@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,9 +36,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -89,7 +92,7 @@ public class CreditorsAfterOneYearControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String TEST_PATH = "total.currentTotal";
+    private static final String CURRENT_TOTAL_PATH = "total.currentTotal";
 
     @Test
     @DisplayName("Get creditors after one year view success path")
@@ -129,7 +132,7 @@ public class CreditorsAfterOneYearControllerTests {
     void postRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockService.submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class), anyString())).thenReturn(new ArrayList<>());
+        when(mockService.submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -141,7 +144,7 @@ public class CreditorsAfterOneYearControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-                .when(mockService).submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class), anyString());
+                .when(mockService).submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class));
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())
@@ -152,7 +155,7 @@ public class CreditorsAfterOneYearControllerTests {
     @DisplayName("Post creditors after one year with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        String beanElement = TEST_PATH;
+        String beanElement = CURRENT_TOTAL_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
 
@@ -194,6 +197,24 @@ public class CreditorsAfterOneYearControllerTests {
 
         assertThrows(ServiceException.class,
                 () -> mockController.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Post creditors after one year failure path with API validation errors")
+    void postRequestFailureWithApiValidationErrors() throws Exception {
+
+        ValidationError validationError = new ValidationError();
+        validationError.setFieldPath(CURRENT_TOTAL_PATH);
+        validationError.setMessageKey("invalid_character");
+
+        List<ValidationError> errors = new ArrayList<>();
+        errors.add(validationError);
+
+        when(mockService.submitCreditorsAfterOneYear(anyString(), anyString(), any(CreditorsAfterOneYear.class))).thenReturn(errors);
+
+        this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(CREDITORS_AFTER_ONE_YEAR_VIEW));
     }
 
     private BalanceSheet mockBalanceSheetWithCreditorsAfterOneYear() {
