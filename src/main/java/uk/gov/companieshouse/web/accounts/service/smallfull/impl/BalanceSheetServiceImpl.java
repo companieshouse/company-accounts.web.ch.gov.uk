@@ -314,22 +314,22 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                        BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
                                        String transactionId, String companyAccountsId) throws ServiceException {
 
-        if ((isDebtorsCurrentAmountNull(balanceSheet)
-            && isDebtorsPreviousAmountNull(balanceSheet))
+        if ((isDebtorsCurrentAmountNullOrZero(balanceSheet)
+            && isDebtorsPreviousAmountNullOrZero(balanceSheet))
             && smallFullLinks.getDebtorsNote() != null) {
 
             debtorsService.deleteDebtors(transactionId, companyAccountsId);
         }
 
-        if ((isCreditorsAfterOneYearCurrentAmountNull(balanceSheet)
-            && isCreditorsAfterOneYearPreviousAmountNull(balanceSheet))
+        if ((isCreditorsAfterOneYearCurrentAmountNullOrZero(balanceSheet)
+            && isCreditorsAfterOneYearPreviousAmountNullOrZero(balanceSheet))
             && smallFullLinks.getCreditorsAfterMoreThanOneYearNote() != null) {
 
             creditorsAfterOneYearService.deleteCreditorsAfterOneYear(transactionId, companyAccountsId);
         }
     }
 
-    private boolean isDebtorsCurrentAmountNull(BalanceSheet balanceSheet) {
+    private boolean isDebtorsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
         Long currentDebtors =
             Optional.of(balanceSheet)
                 .map(BalanceSheet::getCurrentAssets)
@@ -340,7 +340,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         return currentDebtors.equals(0L);
     }
 
-    private boolean isDebtorsPreviousAmountNull(BalanceSheet balanceSheet) {
+    private boolean isDebtorsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
         Long previousDebtors =
             Optional.of(balanceSheet)
                 .map(BalanceSheet::getCurrentAssets)
@@ -351,7 +351,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         return previousDebtors.equals(0L);
     }
 
-    private boolean isCreditorsAfterOneYearCurrentAmountNull(BalanceSheet balanceSheet) {
+    private boolean isCreditorsAfterOneYearCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
             .map(BalanceSheet::getOtherLiabilitiesOrAssets)
             .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
@@ -359,7 +359,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             .orElse(0L).equals(0L);
     }
 
-    private boolean isCreditorsAfterOneYearPreviousAmountNull(BalanceSheet balanceSheet) {
+    private boolean isCreditorsAfterOneYearPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
             .map(BalanceSheet::getOtherLiabilitiesOrAssets)
             .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)

@@ -37,8 +37,7 @@ public interface CreditorsAfterOneYearService {
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
-     * @return A list of validation errors, or an empty array list if none are present
      * @throws ServiceException if there's an error on deletion
      */
-    List<ValidationError> deleteCreditorsAfterOneYear(String transactionId, String companyAccountsId) throws ServiceException;
+    void deleteCreditorsAfterOneYear(String transactionId, String companyAccountsId) throws ServiceException;
 }
