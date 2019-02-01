@@ -427,7 +427,7 @@
                                 <dd class="app-check-your-answers__change"></dd>
                             </div>
 
-                            <div th:if= "${tangibleAssets.lastAccountsPeriodEndOn != null}">
+                            <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
                             <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Cost at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-cost-at-period-start',
@@ -485,8 +485,8 @@
                                 <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
                                 <dd class="app-check-your-answers__change"></dd>
                             </div>
-                                           tangibleAssets.lastAccountsPeriodEndOn
-                            <div th:if= "${tangibleAssets.lastAccountsPeriodEndOn != null}">
+
+                            <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
                             <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Depreciation at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-depreciation-at-period-start',
@@ -545,7 +545,7 @@
                             )">
                             </div>
 
-                            <div th:if= "${tangibleAssets.lastAccountsPeriodEndOn != null}">
+                            <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
                             <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Net book value at ' + *{#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-net-book-value-previous-period',
@@ -553,6 +553,7 @@
                             )">
                             </div>
                             </div>
+
                         </dl>
 
                         <div th:if="*{tangibleAssets.additionalInformation != null}">
