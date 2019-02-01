@@ -5,7 +5,7 @@
 
     <groupId>uk.gov.companieshouse</groupId>
     <artifactId>company-accounts.web.ch.gov.uk</artifactId>
-    <version>unversioned</version>
+    <version>87e439f</version>
     <packaging>jar</packaging>
 
     <name>company-accounts-web</name>
@@ -32,7 +32,7 @@
 
         <java-session-handler.version>2.0.0-rc4</java-session-handler.version>
         
-        <api-sdk-java.version>3.13.15</api-sdk-java.version>
+        <api-sdk-java.version>3.13.17</api-sdk-java.version>
 
         <sdk-manager-java.version>1.3.0-rc3</sdk-manager-java.version>
 

@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CreditorsAfterOneYearApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -15,7 +18,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOneYearTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearService {
@@ -37,6 +43,12 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
     @Autowired
     private CreditorsAfterOneYearTransformer transformer;
 
+    @Autowired
+    private SmallFullService smallFullService;
+
+    @Autowired
+    private ValidationContext validationContext;
+
     @Override
     public CreditorsAfterOneYear getCreditorsAfterOneYear(String transactionId,
             String companyAccountsId, String companyNumber) throws ServiceException {
@@ -54,6 +66,44 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
         return creditorsAfterOneYear;
     }
 
+    @Override
+    public List<ValidationError> submitCreditorsAfterOneYear(String transactionId,
+            String companyAccountsId, CreditorsAfterOneYear creditorsAfterOneYear
+            ) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+        String uri = CREDITORS_AFTER_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
+
+        CreditorsAfterOneYearApi creditorsAfterOneYearApi =
+                transformer.getCreditorsAfterOneYearApi(creditorsAfterOneYear);
+
+        boolean creditorsAfterOneYearResourceExists = hasCreditorsAfterOneYear(apiClient, transactionId, companyAccountsId);
+        try {
+            if (!creditorsAfterOneYearResourceExists) {
+                apiClient.smallFull().creditorsAfterOneYear().create(uri, creditorsAfterOneYearApi)
+                        .execute();
+            } else {
+                apiClient.smallFull().creditorsAfterOneYear().update(uri, creditorsAfterOneYearApi)
+                        .execute();
+            }
+
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
+                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
+                if (validationErrors.isEmpty()) {
+                    throw new ServiceException(
+                            "Bad request when creating creditors after one year resource", e);
+                }
+                return validationErrors;
+            }
+            throw new ServiceException("Error creating creditors after one year resource", e);
+        }
+
+        return new ArrayList<>();
+    }
+
     private CreditorsAfterOneYearApi getCreditorsAfterOneYearApi(String transactionId,
             String companyAccountsId) throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
@@ -62,7 +112,7 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
                 CREDITORS_AFTER_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().creditorsAfterOnerYear().get(uri).execute();
+            return apiClient.smallFull().creditorsAfterOneYear().get(uri).execute();
 
         } catch (ApiErrorResponseException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
@@ -74,4 +124,10 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
         }
     }
 
+    private boolean hasCreditorsAfterOneYear(ApiClient apiClient, String transactionId,
+            String companyAccountsId) throws ServiceException {
+        SmallFullApi smallFullApi =
+                smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+        return smallFullApi.getLinks().getCreditorsAfterMoreThanOneYearNote() != null;
+    }
 }
