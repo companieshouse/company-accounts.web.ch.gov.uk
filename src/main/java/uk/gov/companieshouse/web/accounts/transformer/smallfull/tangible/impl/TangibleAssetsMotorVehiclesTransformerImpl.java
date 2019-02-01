@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.Depreciation;
@@ -114,31 +115,47 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
     @Override
     protected boolean hasCostResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getCost().getAtPeriodStart().getMotorVehicles(),
-                tangibleAssets.getCost().getAdditions().getMotorVehicles(),
-                tangibleAssets.getCost().getDisposals().getMotorVehicles(),
-                tangibleAssets.getCost().getRevaluations().getMotorVehicles(),
-                tangibleAssets.getCost().getTransfers().getMotorVehicles(),
-                tangibleAssets.getCost().getAtPeriodEnd().getMotorVehicles())
+        TangibleAssetsCost cost = tangibleAssets.getCost();
+
+        return Stream
+            .of(Optional.of(cost)
+                    .map(TangibleAssetsCost::getAtPeriodStart)
+                    .map(CostAtPeriodStart::getMotorVehicles)
+                    .orElse(null),
+                cost.getAdditions().getMotorVehicles(),
+                cost.getDisposals().getMotorVehicles(),
+                cost.getRevaluations().getMotorVehicles(),
+                cost.getTransfers().getMotorVehicles(),
+                cost.getAtPeriodEnd().getMotorVehicles())
                 .anyMatch(Objects::nonNull);
     }
 
     @Override
     protected boolean hasDepreciationResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getDepreciation().getAtPeriodStart().getMotorVehicles(),
-                tangibleAssets.getDepreciation().getChargeForYear().getMotorVehicles(),
-                tangibleAssets.getDepreciation().getOnDisposals().getMotorVehicles(),
-                tangibleAssets.getDepreciation().getOtherAdjustments().getMotorVehicles(),
-                tangibleAssets.getDepreciation().getAtPeriodEnd().getMotorVehicles())
+        TangibleAssetsDepreciation depreciation = tangibleAssets.getDepreciation();
+
+        return Stream.of(Optional.of(depreciation)
+                .map(TangibleAssetsDepreciation::getAtPeriodStart)
+                .map(DepreciationAtPeriodStart::getMotorVehicles)
+                .orElse(null),
+            depreciation.getChargeForYear().getMotorVehicles(),
+            depreciation.getOnDisposals().getMotorVehicles(),
+            depreciation.getOtherAdjustments().getMotorVehicles(),
+            depreciation.getAtPeriodEnd().getMotorVehicles())
                 .anyMatch(Objects::nonNull);
     }
 
     @Override
     protected boolean hasNetBookValueResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getNetBookValue().getCurrentPeriod().getMotorVehicles(),
-                tangibleAssets.getNetBookValue().getPreviousPeriod().getMotorVehicles())
+        TangibleAssetsNetBookValue netBookValue = tangibleAssets.getNetBookValue();
+
+        return Stream.of(Optional.of(netBookValue)
+                .map(TangibleAssetsNetBookValue::getPreviousPeriod)
+                .map(PreviousPeriod::getMotorVehicles)
+                .orElse(null),
+            netBookValue.getCurrentPeriod().getMotorVehicles())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -146,7 +163,11 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
     protected void mapCostResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
         Cost cost = new Cost();
-        cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getMotorVehicles());
+        cost.setAtPeriodStart(Optional.of(tangibleAssets)
+            .map(TangibleAssets::getCost)
+            .map(TangibleAssetsCost::getAtPeriodStart)
+            .map(CostAtPeriodStart::getMotorVehicles)
+            .orElse(0L));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getMotorVehicles());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getMotorVehicles());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getMotorVehicles());
@@ -159,7 +180,11 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
     protected void mapDepreciationResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
         Depreciation depreciation = new Depreciation();
-        depreciation.setAtPeriodStart(tangibleAssets.getDepreciation().getAtPeriodStart().getMotorVehicles());
+        depreciation.setAtPeriodStart( Optional.of(tangibleAssets)
+            .map(TangibleAssets::getDepreciation)
+            .map(TangibleAssetsDepreciation::getAtPeriodStart)
+            .map(DepreciationAtPeriodStart::getMotorVehicles)
+            .orElse(0L));
         depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getMotorVehicles());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getMotorVehicles());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getMotorVehicles());
@@ -170,9 +195,13 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
     @Override
     protected void mapNetBookValueResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
+        tangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
+            Optional.of(tangibleAssets)
+                .map(TangibleAssets::getNetBookValue)
+                .map(TangibleAssetsNetBookValue::getPreviousPeriod)
+                .map(PreviousPeriod::getMotorVehicles)
+                .orElse(0L));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getMotorVehicles());
-        tangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
-                tangibleAssets.getNetBookValue().getPreviousPeriod().getMotorVehicles());
     }
 }

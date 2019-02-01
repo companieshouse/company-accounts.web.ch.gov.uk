@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.Depreciation;
@@ -114,31 +115,48 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
     @Override
     protected boolean hasCostResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getCost().getAtPeriodStart().getLandAndBuildings(),
-                tangibleAssets.getCost().getAdditions().getLandAndBuildings(),
-                tangibleAssets.getCost().getDisposals().getLandAndBuildings(),
-                tangibleAssets.getCost().getRevaluations().getLandAndBuildings(),
-                tangibleAssets.getCost().getTransfers().getLandAndBuildings(),
-                tangibleAssets.getCost().getAtPeriodEnd().getLandAndBuildings())
-                .anyMatch(Objects::nonNull);
+        TangibleAssetsCost cost = tangibleAssets.getCost();
+
+        return Stream
+            .of(Optional.of(cost)
+                    .map(TangibleAssetsCost::getAtPeriodStart)
+                    .map(CostAtPeriodStart::getLandAndBuildings)
+                    .orElse(null),
+                cost.getAdditions().getLandAndBuildings(),
+                cost.getDisposals().getLandAndBuildings(),
+                cost.getRevaluations().getLandAndBuildings(),
+                cost.getTransfers().getLandAndBuildings(),
+                cost.getAtPeriodEnd().getLandAndBuildings())
+            .anyMatch(Objects::nonNull);
+
     }
 
     @Override
     protected boolean hasDepreciationResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getDepreciation().getAtPeriodStart().getLandAndBuildings(),
-                tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings(),
-                tangibleAssets.getDepreciation().getOnDisposals().getLandAndBuildings(),
-                tangibleAssets.getDepreciation().getOtherAdjustments().getLandAndBuildings(),
-                tangibleAssets.getDepreciation().getAtPeriodEnd().getLandAndBuildings())
+        TangibleAssetsDepreciation depreciation = tangibleAssets.getDepreciation();
+
+        return Stream.of(Optional.of(depreciation)
+                .map(TangibleAssetsDepreciation::getAtPeriodStart)
+                .map(DepreciationAtPeriodStart::getLandAndBuildings)
+                .orElse(null),
+            depreciation.getChargeForYear().getLandAndBuildings(),
+            depreciation.getOnDisposals().getLandAndBuildings(),
+            depreciation.getOtherAdjustments().getLandAndBuildings(),
+            depreciation.getAtPeriodEnd().getLandAndBuildings())
                 .anyMatch(Objects::nonNull);
     }
 
     @Override
     protected boolean hasNetBookValueResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getNetBookValue().getCurrentPeriod().getLandAndBuildings(),
-                tangibleAssets.getNetBookValue().getPreviousPeriod().getLandAndBuildings())
+        TangibleAssetsNetBookValue netBookValue = tangibleAssets.getNetBookValue();
+
+        return Stream.of(Optional.of(netBookValue)
+                .map(TangibleAssetsNetBookValue::getPreviousPeriod)
+                .map(PreviousPeriod::getLandAndBuildings)
+                .orElse(null),
+            netBookValue.getCurrentPeriod().getLandAndBuildings())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -146,7 +164,11 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
     protected void mapCostResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
         Cost cost = new Cost();
-        cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getLandAndBuildings());
+        cost.setAtPeriodStart(Optional.of(tangibleAssets)
+            .map(TangibleAssets::getCost)
+            .map(TangibleAssetsCost::getAtPeriodStart)
+            .map(CostAtPeriodStart::getLandAndBuildings)
+            .orElse(0L));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getLandAndBuildings());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getLandAndBuildings());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getLandAndBuildings());
@@ -159,8 +181,11 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
     protected void mapDepreciationResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
         Depreciation depreciation = new Depreciation();
-        depreciation.setAtPeriodStart(tangibleAssets.getDepreciation().getAtPeriodStart().getLandAndBuildings());
-        depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings());
+        depreciation.setAtPeriodStart( Optional.of(tangibleAssets)
+            .map(TangibleAssets::getDepreciation)
+            .map(TangibleAssetsDepreciation::getAtPeriodStart)
+            .map(DepreciationAtPeriodStart::getLandAndBuildings)
+            .orElse(0L));depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getLandAndBuildings());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getLandAndBuildings());
         depreciation.setAtPeriodEnd(tangibleAssets.getDepreciation().getAtPeriodEnd().getLandAndBuildings());
@@ -170,9 +195,13 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
     @Override
     protected void mapNetBookValueResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
+        tangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
+            Optional.of(tangibleAssets)
+                .map(TangibleAssets::getNetBookValue)
+                .map(TangibleAssetsNetBookValue::getPreviousPeriod)
+                .map(PreviousPeriod::getLandAndBuildings)
+                .orElse(0L));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getLandAndBuildings());
-        tangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
-                tangibleAssets.getNetBookValue().getPreviousPeriod().getLandAndBuildings());
     }
 }
