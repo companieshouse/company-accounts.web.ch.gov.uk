@@ -41,6 +41,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -59,6 +60,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -114,6 +117,9 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private DebtorsService debtorsService;
+    
+    @Mock
+    private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
     @InjectMocks
     private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
@@ -260,7 +266,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("First Year Filer - POST - Balance Sheet - Success Path - Note Present to Delete")
+    @DisplayName("First Year Filer - POST - Balance Sheet - Success Path - Notes Present to Delete")
     void postFirstYearFilerBalanceSheetSuccessDebtorsNotePresentToDelete() throws ServiceException,
         URIValidationException, ApiErrorResponseException {
         mockApiClient();
@@ -282,8 +288,11 @@ public class BalanceSheetServiceImplTests {
             balanceSheet,
             "0064000");
         assertEquals(0, validationErrors.size());
+        
+        verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
-
+    
     @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Failure - Throws ServiceException due to ApiErrorResponseException - Bad Request")
     void postFirstYearFilerBalanceSheetFailureBadRequestWithNoValidationErrorsBadRequest() throws ApiErrorResponseException, URIValidationException, ServiceException {
@@ -497,7 +506,7 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
-    @DisplayName("Multiple Year Filer - POST - Balance sheet - Removed debtors value when debtors note present")
+    @DisplayName("Multiple Year Filer - POST - Balance sheet - Remove notes when corresponding values aren't present")
     void postMultipleYearFilerBalanceSheetSuccessDeleteDebtorsNote() throws ServiceException, URIValidationException, ApiErrorResponseException {
         mockApiClient();
         createMultipleYearFilerCompanyProfile();
@@ -520,6 +529,10 @@ public class BalanceSheetServiceImplTests {
             balanceSheet,
             "0064000");
         assertEquals(0, validationErrors.size());
+        
+        verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
     }
 
     @Test
@@ -886,6 +899,7 @@ public class BalanceSheetServiceImplTests {
         SmallFullApi smallFullApi = createSmallFullAccountForPost();
         SmallFullLinks smallFullLinks = new SmallFullLinks();
         smallFullLinks.setDebtorsNote("DEBTORS_LINK");
+        smallFullLinks.setCreditorsWithinOneYearNote("CREDITORS_WITHIN_ONE_YEAR_LINK");
         smallFullApi.setLinks(smallFullLinks);
         mockSmallFullAccountGet(smallFullApi);
     }
