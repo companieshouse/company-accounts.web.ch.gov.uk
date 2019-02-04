@@ -395,23 +395,6 @@ public class CreditorsAfterOneYearServiceImplTests {
     }
 
     @Test
-    @DisplayName("DELETE - Creditors after more than one year throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
-    void deleteCreditorsAfterOneYearApiErrorResponseExceptionBadRequest() throws Exception {
-
-        getMockCreditorsAfterOneYearResourceHandler();
-        when(mockCreditorsAfterOneYearResourceHandler.delete(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearDelete);
-
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-        when(mockCreditorsAfterOneYearDelete.execute()).thenThrow(apiErrorResponseException);
-
-        assertThrows(ApiErrorResponseException.class, () -> mockCreditorsAfterOneYearDelete.execute());
-        assertThrows(ServiceException.class, () -> creditorsAfterOneYearService.deleteCreditorsAfterOneYear(
-            TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
     @DisplayName("DELETE - Creditors after more than one year throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
     void deleteCreditorsAfterOneYearApiErrorResponseExceptionNotFound() throws Exception {
 
