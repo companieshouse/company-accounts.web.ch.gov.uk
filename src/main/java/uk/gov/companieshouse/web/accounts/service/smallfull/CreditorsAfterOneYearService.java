@@ -1,9 +1,10 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull;
 
-import java.util.List;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
 
 public interface CreditorsAfterOneYearService {
 
@@ -30,4 +31,13 @@ public interface CreditorsAfterOneYearService {
      */
     List<ValidationError> submitCreditorsAfterOneYear(String transactionId, String companyAccountsId, CreditorsAfterOneYear creditorsAfterOneYear)
             throws ServiceException;
+
+    /**
+     * Delete the creditors after one year note
+     *
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteCreditorsAfterOneYear(String transactionId, String companyAccountsId) throws ServiceException;
 }

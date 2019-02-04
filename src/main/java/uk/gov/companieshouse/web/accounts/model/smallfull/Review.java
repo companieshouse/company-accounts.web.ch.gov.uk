@@ -9,6 +9,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 
 @Getter
@@ -32,6 +33,8 @@ public class Review {
     OtherAccountingPolicy otherAccountingPolicy;
     
     CreditorsWithinOneYear creditorsWithinOneYear;
+
+    CreditorsAfterOneYear creditorsAfterOneYear;
 
     Debtors debtors;
 }

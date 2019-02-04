@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.api.client.http.HttpHeaders;
@@ -23,6 +25,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.creditorsafteroneyear.CreditorsAfterOneYearResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.creditorsafteroneyear.request.CreditorsAfterOneYearCreate;
+import uk.gov.companieshouse.api.handler.smallfull.creditorsafteroneyear.request.CreditorsAfterOneYearDelete;
 import uk.gov.companieshouse.api.handler.smallfull.creditorsafteroneyear.request.CreditorsAfterOneYearGet;
 import uk.gov.companieshouse.api.handler.smallfull.creditorsafteroneyear.request.CreditorsAfterOneYearUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
@@ -85,6 +88,9 @@ public class CreditorsAfterOneYearServiceImplTests {
 
     @Mock
     private CreditorsAfterOneYearUpdate mockCreditorsAfterOneYearUpdate;
+
+    @Mock
+    private CreditorsAfterOneYearDelete mockCreditorsAfterOneYearDelete;
 
     @Mock
     private ValidationContext mockValidationContext;
@@ -359,6 +365,50 @@ public class CreditorsAfterOneYearServiceImplTests {
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
                 creditorsAfterOneYear));
+    }
+
+    @Test
+    @DisplayName("DELETE - Creditors after more than one year successful delete path")
+    void deleteCreditorsAfterOneYear() throws Exception {
+
+        getMockCreditorsAfterOneYearResourceHandler();
+        when(mockCreditorsAfterOneYearResourceHandler.delete(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearDelete);
+        doNothing().when(mockCreditorsAfterOneYearDelete).execute();
+
+        creditorsAfterOneYearService.deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(mockCreditorsAfterOneYearDelete, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("DELETE - Creditors after more than one year throws ServiceExcepiton due to URIValidationException")
+    void deleteCreditorsAfterOneYearUriValidationException() throws Exception {
+
+        getMockCreditorsAfterOneYearResourceHandler();
+        when(mockCreditorsAfterOneYearResourceHandler.delete(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearDelete);
+        when(mockCreditorsAfterOneYearDelete.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockCreditorsAfterOneYearDelete.execute());
+        assertThrows(ServiceException.class, () -> creditorsAfterOneYearService.deleteCreditorsAfterOneYear(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - Creditors after more than one year throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
+    void deleteCreditorsAfterOneYearApiErrorResponseExceptionNotFound() throws Exception {
+
+        getMockCreditorsAfterOneYearResourceHandler();
+        when(mockCreditorsAfterOneYearResourceHandler.delete(CREDITORS_AFTER_ONE_YEAR_URI)).thenReturn(mockCreditorsAfterOneYearDelete);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockCreditorsAfterOneYearDelete.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockCreditorsAfterOneYearDelete.execute());
+        assertThrows(ServiceException.class, () -> creditorsAfterOneYearService.deleteCreditorsAfterOneYear(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
     }
 
     private void creditorsAfterOneYearUpdate(CreditorsAfterOneYearApi creditorsAfterOneYearApi) throws Exception {
