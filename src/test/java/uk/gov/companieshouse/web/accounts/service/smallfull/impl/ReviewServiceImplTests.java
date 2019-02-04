@@ -22,10 +22,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
@@ -73,6 +75,9 @@ public class ReviewServiceImplTests {
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
     @Mock
+    private CreditorsAfterOneYearService creditorsAfterOneYearService;
+
+    @Mock
     private DebtorsService debtorsService;
 
     @InjectMocks
@@ -115,6 +120,10 @@ public class ReviewServiceImplTests {
         when(creditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(mockCreditorsWithinOneYear);
 
+        CreditorsAfterOneYear mockCreditorsAfterOneYear = new CreditorsAfterOneYear();
+        when(creditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+            .thenReturn(mockCreditorsAfterOneYear);
+
         Debtors mockDebtors = new Debtors();
         when(debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockDebtors);
 
@@ -130,5 +139,6 @@ public class ReviewServiceImplTests {
         assertEquals(valuationInformationPolicy, review.getValuationInformationPolicy());
         assertEquals(mockOtherAccounting, review.getOtherAccountingPolicy());
         assertEquals(mockCreditorsWithinOneYear, review.getCreditorsWithinOneYear());
+        assertEquals(mockCreditorsAfterOneYear, review.getCreditorsAfterOneYear());
     }
 }
