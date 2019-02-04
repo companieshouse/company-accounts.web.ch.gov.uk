@@ -32,4 +32,14 @@ public interface CreditorsWithinOneYearService {
         */
     List<ValidationError> submitCreditorsWithinOneYear(String transactionId, String companyAccountsId, CreditorsWithinOneYear creditorsWithinOneYear, String companyNumber)
         throws ServiceException;
+    
+    /**
+     * Delete the creditors within one year note
+     *
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteCreditorsWithinOneYear(String transactionId, String companyAccountsId) throws ServiceException;
+    
 }
