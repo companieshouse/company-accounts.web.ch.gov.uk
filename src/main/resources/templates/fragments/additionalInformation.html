@@ -11,7 +11,7 @@
              th:attrappend="open=${#fields.hasErrors('__${id}__')} ? 'open' : ''">
       <summary class="govuk-details__summary" role="button" aria-controls="details-content"
                aria-expanded="false">
-        <span class="govuk-details__summary-text" th:text="${dropDownText}"></span>
+        <span id="additional-information-title-text" class="govuk-details__summary-text" th:text="${dropDownText}"></span>
       </summary>
       <div class="govuk-govuk-form-group" id="details-content" aria-hidden="true"
            th:classappend="${#fields.hasErrors('__${id}__')} ? 'govuk-form-group--error' : ''">
