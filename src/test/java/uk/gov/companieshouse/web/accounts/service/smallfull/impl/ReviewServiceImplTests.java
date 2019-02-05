@@ -25,6 +25,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
@@ -33,6 +34,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
@@ -70,7 +72,7 @@ public class ReviewServiceImplTests {
 
     @Mock
     private OtherAccountingPolicyService otherAccountingPolicyService;
-    
+
     @Mock
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
@@ -79,6 +81,9 @@ public class ReviewServiceImplTests {
 
     @Mock
     private DebtorsService debtorsService;
+
+    @Mock
+    private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
@@ -115,7 +120,7 @@ public class ReviewServiceImplTests {
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
         when(otherAccountingPolicyService.getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(mockOtherAccounting);
-        
+
         CreditorsWithinOneYear mockCreditorsWithinOneYear = new CreditorsWithinOneYear();
         when(creditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(mockCreditorsWithinOneYear);
@@ -126,6 +131,10 @@ public class ReviewServiceImplTests {
 
         Debtors mockDebtors = new Debtors();
         when(debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockDebtors);
+
+        TangibleAssets mockTangibleAssets = new TangibleAssets();
+        when(tangibleAssetsNoteService.getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+                .thenReturn(mockTangibleAssets);
 
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -140,5 +149,6 @@ public class ReviewServiceImplTests {
         assertEquals(mockOtherAccounting, review.getOtherAccountingPolicy());
         assertEquals(mockCreditorsWithinOneYear, review.getCreditorsWithinOneYear());
         assertEquals(mockCreditorsAfterOneYear, review.getCreditorsAfterOneYear());
+        assertEquals(mockTangibleAssets, review.getTangibleAssets());
     }
 }
