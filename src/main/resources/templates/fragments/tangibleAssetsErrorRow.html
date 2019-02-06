@@ -19,7 +19,7 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-      <span th:id="${row} + '.landAndBuildings-error'" class="govuk-error-message api hidden"></span>
+      <span th:id="${row} + '.landAndBuildings-errorId'" class="govuk-error-message api hidden"></span>
       <span th:if="${!#fields.hasErrors('__${row}__' + '.landAndBuildings')}" class="spacer">&nbsp;</span>
     </div>
     <div class="column-sixth">
@@ -29,7 +29,7 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-      <span th:id="${row} + '.plantAndMachinery-error'" class="govuk-error-message api hidden"></span>
+      <span th:id="${row} + '.plantAndMachinery-errorId'" class="govuk-error-message api hidden"></span>
       <span th:if="${!#fields.hasErrors('__${row}__' + '.plantAndMachinery')}" class="spacer">&nbsp;</span>
     </div>
     <div class="column-sixth">
@@ -39,7 +39,7 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-      <span th:id="${row} + '.fixturesAndFittings-error'" class="govuk-error-message api hidden"></span>
+      <span th:id="${row} + '.fixturesAndFittings-errorId'" class="govuk-error-message api hidden"></span>
       <span th:if="${!#fields.hasErrors('__${row}__' + '.fixturesAndFittings')}" class="spacer">&nbsp;</span>
     </div>
     <div class="column-sixth">
@@ -49,7 +49,7 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-      <span th:id="${row} + '.officeEquipment-error'" class="govuk-error-message api hidden"></span>
+      <span th:id="${row} + '.officeEquipment-errorId'" class="govuk-error-message api hidden"></span>
       <span th:if="${!#fields.hasErrors('__${row}__' + '.officeEquipment')}" class="spacer">&nbsp;</span>
     </div>
     <div class="column-sixth">
@@ -59,7 +59,7 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-      <span th:id="${row} + '.motorVehicles-error'" class="govuk-error-message api hidden"></span>
+      <span th:id="${row} + '.motorVehicles-errorId'" class="govuk-error-message api hidden"></span>
       <span th:if="${!#fields.hasErrors('__${row}__' + '.motorVehicles')}" class="spacer">&nbsp;</span>
     </div>
     <div class="column-sixth">
@@ -69,7 +69,7 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-      <span th:id="${row} + '.total-error'" class="govuk-error-message api hidden"></span>
+      <span th:id="${row} + '.total-errorId'" class="govuk-error-message api hidden"></span>
       <span th:if="${!#fields.hasErrors('__${row}__' + '.total')}" class="spacer">&nbsp;</span>
     </div>
   </div>
