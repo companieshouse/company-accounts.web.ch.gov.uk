@@ -14,7 +14,12 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.stocks.StocksResourceHandler;
+import uk.gov.companieshouse.api.handler.smallfull.stocks.request.StocksCreate;
 import uk.gov.companieshouse.api.handler.smallfull.stocks.request.StocksGet;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
+import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.PreviousPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -25,8 +30,13 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Total;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -54,6 +64,9 @@ public class StocksServiceImplTests {
     private StocksGet mockStocksGet;
 
     @Mock
+    private StocksCreate mockStocksCreate;
+
+    @Mock
     private StocksTransformer mockStocksTransformer;
 
     @Mock
@@ -61,6 +74,12 @@ public class StocksServiceImplTests {
 
     @Mock
     private BalanceSheet mockBalanceSheet;
+
+    @Mock
+    private SmallFullService mockSmallFullService;
+
+    @Mock
+    private ValidationContext mockValidationContext;
 
     @InjectMocks
     private StocksService stocksService = new StocksServiceImpl();
@@ -165,6 +184,109 @@ public class StocksServiceImplTests {
                 COMPANY_NUMBER));
     }
 
+    @Test
+    @DisplayName("POST - stocks successful path")
+    void postStocksSuccess() throws Exception {
+
+        StocksNote stocksNote = createStocks();
+        StocksApi stocksApi = createStocksApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        when(mockSmallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenReturn(smallFullApi);
+        setLinksWithoutStocks(smallFullApi);
+
+        when(mockStocksTransformer.getStocksApi(stocksNote)).thenReturn(stocksApi);
+
+        stocksCreate(stocksApi);
+
+        List<ValidationError> validationErrors = stocksService.submitStocks(TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID, stocksNote, COMPANY_NUMBER);
+
+        assertEquals(0, validationErrors.size());
+    }
+
+    @Test
+    @DisplayName("POST - stocks throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
+    void postStocksApiErrorResponseExceptionNotFound() throws Exception {
+
+        getMockStocksResourceHandler();
+
+        StocksNote stocksNote = createStocks();
+        StocksApi stocksApi = createStocksApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        setLinksWithoutStocks(smallFullApi);
+
+        when(mockSmallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenReturn(smallFullApi);
+
+        when(mockStocksTransformer.getStocksApi(stocksNote)).thenReturn(stocksApi);
+        when(mockStocksResourceHandler.create(STOCKS_URI, stocksApi)).thenReturn(mockStocksCreate);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(
+            404,"Not Found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException =
+            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockStocksCreate.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockStocksCreate.execute());
+        assertThrows(ServiceException.class, () -> stocksService.submitStocks(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            stocksNote,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - stocks throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
+    void postStocksApiErrorResponseExceptionBadRequest() throws Exception {
+
+        getMockStocksResourceHandler();
+
+        StocksNote stocksNote = createStocks();
+        StocksApi stocksApi = createStocksApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        setLinksWithoutStocks(smallFullApi);
+
+        when(mockSmallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenReturn(smallFullApi);
+
+        when(mockStocksTransformer.getStocksApi(stocksNote)).thenReturn(stocksApi);
+        when(mockStocksResourceHandler.create(STOCKS_URI, stocksApi)).thenReturn(mockStocksCreate);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(
+            400,"Bad Request",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException =
+            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockStocksCreate.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockStocksCreate.execute());
+        assertThrows(ServiceException.class, () -> stocksService.submitStocks(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            stocksNote,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - stocks throws ServiceExcepiton getting Smallfull data")
+    void postStocksGetSmallFullDataApiResponseException() throws Exception {
+
+        StocksNote stocksNote = createStocks();
+        when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
+
+        when(mockSmallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+            .thenThrow(ServiceException.class);
+
+        assertThrows(ServiceException.class, () -> stocksService.submitStocks(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            stocksNote,
+            COMPANY_NUMBER));
+    }
+
     private void validateCreditorsAfterOneYear(StocksNote stocksNote) {
 
         assertNotNull(stocksNote);
@@ -192,6 +314,19 @@ public class StocksServiceImplTests {
         when(mockApiClient.smallFull()).thenReturn(mockSmallFullResourceHandler);
     }
 
+    private void stocksCreate(StocksApi stocksApi) throws Exception {
+        getMockStocksResourceHandler();
+        when(mockStocksResourceHandler.create(STOCKS_URI, stocksApi)).thenReturn(mockStocksCreate);
+        when(mockStocksCreate.execute()).thenReturn(stocksApi);
+    }
+
+    private void setLinksWithoutStocks(SmallFullApi smallFullApi) {
+        SmallFullLinks links = new SmallFullLinks();
+        links.setCreditorsAfterMoreThanOneYearNote("");
+
+        smallFullApi.setLinks(links);
+    }
+
     private StocksNote createStocks() {
 
         StocksNote stocksNote = new StocksNote();
@@ -217,5 +352,23 @@ public class StocksServiceImplTests {
         stocksNote.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return stocksNote;
+    }
+
+    private StocksApi createStocksApi() {
+
+        StocksApi stocksApi = new StocksApi();
+        CurrentPeriod currentPeriod = new CurrentPeriod();
+        PreviousPeriod previousPeriod = new PreviousPeriod();
+
+        currentPeriod.setStocks(5L);
+        currentPeriod.setTotal(5L);
+
+        previousPeriod.setStocks(5L);
+        previousPeriod.setTotal(5L);
+
+        stocksApi.setCurrentPeriod(currentPeriod);
+        stocksApi.setPreviousPeriod(previousPeriod);
+
+        return stocksApi;
     }
 }

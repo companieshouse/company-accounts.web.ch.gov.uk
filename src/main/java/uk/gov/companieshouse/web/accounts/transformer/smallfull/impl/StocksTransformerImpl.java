@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.springframework.stereotype.Component;
+import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.PreviousPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.PaymentsOnAccount;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Stocks;
@@ -32,6 +34,62 @@ public class StocksTransformerImpl implements StocksTransformer {
         stocksNote.setTotal(total);
 
         return stocksNote;
+    }
+
+    @Override
+    public StocksApi getStocksApi(StocksNote stocksNote) {
+
+        StocksApi stocksApi = new StocksApi();
+        if (stocksNote.getTotal().getCurrentTotal() != null) {
+
+            setCurrentPeriodDebtorsOnApiModel(stocksNote, stocksApi);
+        }
+
+        if (stocksNote.getTotal().getPreviousTotal() != null) {
+
+            setPreviousPeriodDebtorsOnApiModel(stocksNote, stocksApi);
+        }
+        return stocksApi;
+    }
+
+    private void setPreviousPeriodDebtorsOnApiModel(StocksNote stocksNote, StocksApi stocksApi) {
+
+        PreviousPeriod previousPeriod = new PreviousPeriod();
+
+        if (stocksNote.getPaymentsOnAccount() != null &&
+            stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount() != null) {
+            previousPeriod.setPaymentsOnAccount(stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
+        }
+
+        if (stocksNote.getStocks() != null && stocksNote.getStocks().getPreviousStocks() != null) {
+            previousPeriod.setStocks(stocksNote.getStocks().getPreviousStocks());
+        }
+
+        if (stocksNote.getTotal() != null && stocksNote.getTotal().getPreviousTotal() != null) {
+            previousPeriod.setTotal(stocksNote.getTotal().getPreviousTotal());
+        }
+
+        stocksApi.setPreviousPeriod(previousPeriod);
+    }
+
+    private void setCurrentPeriodDebtorsOnApiModel(StocksNote stocksNote, StocksApi stocksApi) {
+
+        CurrentPeriod currentPeriod = new CurrentPeriod();
+
+        if (stocksNote.getPaymentsOnAccount() != null &&
+            stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount() != null) {
+            currentPeriod.setPaymentsOnAccount(stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
+        }
+
+        if (stocksNote.getStocks() != null && stocksNote.getStocks().getCurrentStocks() != null) {
+            currentPeriod.setStocks(stocksNote.getStocks().getCurrentStocks());
+        }
+
+        if (stocksNote.getTotal() != null && stocksNote.getTotal().getCurrentTotal() != null) {
+            currentPeriod.setTotal(stocksNote.getTotal().getCurrentTotal());
+        }
+
+        stocksApi.setCurrentPeriod(currentPeriod);
     }
 
     private void getStocksPreviousPeriodForWeb(StocksApi stocksApi, PaymentsOnAccount paymentsOnAccount,
