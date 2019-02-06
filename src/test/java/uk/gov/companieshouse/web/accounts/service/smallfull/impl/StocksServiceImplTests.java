@@ -90,11 +90,9 @@ public class StocksServiceImplTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
-    private static final String BASE_SMALL_FULL_URI = "/transactions/" + TRANSACTION_ID +
+    private static final String STOCKS_URI = "/transactions/" + TRANSACTION_ID +
         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-        "/small-full";
-
-    private static final String STOCKS_URI = BASE_SMALL_FULL_URI + "/notes/stocks";
+        "/small-full/notes/stocks";
 
     private static final Long FIVE = 5L;
 
