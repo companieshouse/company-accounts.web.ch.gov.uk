@@ -131,7 +131,7 @@ public class StocksControllerTests {
         when(mockStocksService.submitStocks(anyString(), anyString(), any(StocksNote.class), anyString()))
             .thenReturn(new ArrayList<>());
 
-        this.mockMvc.perform(post(STOCKS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -143,7 +143,7 @@ public class StocksControllerTests {
         doThrow(ServiceException.class)
             .when(mockStocksService).submitStocks(anyString(), anyString(), any(StocksNote.class), anyString());
 
-        this.mockMvc.perform(post(STOCKS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -163,7 +163,7 @@ public class StocksControllerTests {
         when(mockStocksService.submitStocks(anyString(), anyString(), any(StocksNote.class), anyString()))
             .thenReturn(errors);
 
-        this.mockMvc.perform(post(STOCKS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(STOCKS_VIEW));
     }
@@ -212,7 +212,7 @@ public class StocksControllerTests {
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
 
-        this.mockMvc.perform(post(STOCKS_PATH)
+        this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH)
             .param(beanElement, invalidData))
             .andExpect(status().isOk())
             .andExpect(view().name(STOCKS_VIEW))
