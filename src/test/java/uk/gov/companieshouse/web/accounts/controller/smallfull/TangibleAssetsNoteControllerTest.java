@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,17 +22,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
-import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
-import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
-import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
-import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -43,24 +35,6 @@ public class TangibleAssetsNoteControllerTest {
 
     @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
-
-    @Mock
-    private TransactionService transactionService;
-
-    @Mock
-    private CompanyService companyService;
-
-    @Mock
-    private CompanyProfileApi companyProfile;
-
-    @Mock
-    private CompanyAccountApi companyAccountApi;
-
-    @Mock
-    private LastAccountsApi lastAccountsApi;
-
-    @Mock
-    private NextAccountsApi nextAccountsApi;
 
     @Mock
     private TangibleAssets tangibleAssets;
@@ -106,13 +80,6 @@ public class TangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Get tangible asset note view success path")
     void getRequestSuccess() throws Exception {
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
-        when(companyProfile.getAccounts()).thenReturn(companyAccountApi);
-        when(companyAccountApi.getLastAccounts()).thenReturn(lastAccountsApi);
-        when(companyAccountApi.getNextAccounts()).thenReturn(nextAccountsApi);
-        when(lastAccountsApi.getPeriodEndOn()).thenReturn(LocalDate.parse("2016-01-01"));
-        when(nextAccountsApi.getPeriodStartOn()).thenReturn(LocalDate.parse("2017-01-01"));
-        when(nextAccountsApi.getPeriodEndOn()).thenReturn(LocalDate.parse("2018-01-01"));
 
         when(tangibleAssetsNoteService
             .getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))

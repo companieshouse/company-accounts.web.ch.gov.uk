@@ -12,9 +12,11 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
@@ -30,6 +32,8 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
     @Autowired
     private SmallFullService smallFullService;
 
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private ValidationContext validationContext;
@@ -51,24 +55,28 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
 
         String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
 
-        TangibleApi tangibleApi;
+        TangibleAssets tangibleAssets;
 
         try {
-            tangibleApi = apiClient.smallFull().tangible().get(uri).execute();
+            TangibleApi tangibleApi = apiClient.smallFull().tangible().get(uri).execute();
+
+            tangibleAssets = tangibleAssetsTransformer.getTangibleAssets(tangibleApi);
+
         } catch (ApiErrorResponseException e) {
 
             if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return new TangibleAssets();
+                tangibleAssets = new TangibleAssets();
+            } else {
+                throw new ServiceException("Error retrieving tangible assets note resource", e);
             }
-
-            throw new ServiceException("Error retrieving tangible assets note resource", e);
         } catch (URIValidationException e) {
 
             throw new ServiceException(INVALID_URI_MESSAGE, e);
         }
 
-        return tangibleAssetsTransformer.getTangibleAssets(tangibleApi);
+        addCompanyDatesToTangibleAssets(tangibleAssets, getCompanyProfile(companyNumber));
 
+        return tangibleAssets;
     }
 
     @Override
@@ -111,5 +119,15 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
 
     private boolean hasTangibleAssetNote(SmallFullLinks smallFullLinks) {
         return smallFullLinks.getTangibleAssetsNote() != null;
+    }
+
+    private CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException {
+        return companyService.getCompanyProfile(companyNumber);
+    }
+
+    private void addCompanyDatesToTangibleAssets(TangibleAssets tangibleAssets, CompanyProfileApi companyProfile) {
+        tangibleAssets.setLastAccountsPeriodEndOn(companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
+        tangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+        tangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
 }
