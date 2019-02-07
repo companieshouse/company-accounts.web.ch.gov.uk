@@ -11,7 +11,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
 @Controller
 @PreviousController(MicroCriteriaController.class)
-@RequestMapping("/company/{companyNumber}/micro/criteria")
+@RequestMapping("/company/{companyNumber}/micro-entity/criteria")
 public class MicroCriteriaController extends BaseController {
 
     @Value("${micro-entity-accounts.uri}")

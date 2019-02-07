@@ -26,7 +26,7 @@ class MicroCriteriaControllerTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String MICRO_CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
-        "/micro/criteria";
+        "/micro-entity/criteria";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String MICRO_ENTITY_ACCOUNTS_URI_MODEL_ATTR = "microEntityAccountsUri";
     private static final String MICRO_ENTITY_ACCOUNTS_URI_MODEL_VALUE = "http://test.entity.accounts.uri";
