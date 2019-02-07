@@ -196,11 +196,11 @@ public class TangibleAssetsFixturesAndFittingsTransformerImpl extends
         TangibleAssetsResource tangibleAssetsResource) {
 
         Depreciation depreciation = new Depreciation();
-        depreciation.setAtPeriodStart( Optional.of(tangibleAssets)
-                .map(TangibleAssets::getDepreciation)
-                .map(TangibleAssetsDepreciation::getAtPeriodStart)
-                .map(DepreciationAtPeriodStart::getFixturesAndFittings)
-                .orElse(0L));
+        depreciation.setAtPeriodStart(Optional.of(tangibleAssets)
+            .map(TangibleAssets::getDepreciation)
+            .map(TangibleAssetsDepreciation::getAtPeriodStart)
+            .map(DepreciationAtPeriodStart::getFixturesAndFittings)
+            .orElse(0L));
         depreciation.setChargeForYear(
             tangibleAssets.getDepreciation().getChargeForYear().getFixturesAndFittings());
         depreciation.setOnDisposals(
