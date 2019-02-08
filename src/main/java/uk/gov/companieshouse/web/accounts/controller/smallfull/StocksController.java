@@ -27,8 +27,7 @@ import java.util.List;
 @Controller
 @NextController(DebtorsController.class)
 @PreviousController(TangibleAssetsNoteController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small" +
-    "-full/stocks")
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/stocks")
 public class StocksController extends BaseController implements ConditionalController {
 
     @Autowired
@@ -88,12 +87,6 @@ public class StocksController extends BaseController implements ConditionalContr
             this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
-    /**
-     * Only render stocks note if stocks balance sheet values are not both null or 0
-     *
-     * @param balanceSheet
-     * @return boolean
-     */
     private boolean shouldStocksNoteRender(BalanceSheet balanceSheet) {
         if (balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getStocks() != null) {
 
