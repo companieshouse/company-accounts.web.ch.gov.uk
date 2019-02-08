@@ -43,6 +43,7 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -120,6 +121,9 @@ public class BalanceSheetServiceImplTests {
     
     @Mock
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
+
+    @Mock
+    private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @InjectMocks
     private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
@@ -291,6 +295,7 @@ public class BalanceSheetServiceImplTests {
         
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -560,6 +565,7 @@ public class BalanceSheetServiceImplTests {
         
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
     }
 
@@ -928,6 +934,7 @@ public class BalanceSheetServiceImplTests {
         SmallFullLinks smallFullLinks = new SmallFullLinks();
         smallFullLinks.setDebtorsNote("DEBTORS_LINK");
         smallFullLinks.setCreditorsWithinOneYearNote("CREDITORS_WITHIN_ONE_YEAR_LINK");
+        smallFullLinks.setTangibleAssetsNote("TANGIBLE_ASSETS_LINK");
         smallFullApi.setLinks(smallFullLinks);
         mockSmallFullAccountGet(smallFullApi);
     }
@@ -997,12 +1004,6 @@ public class BalanceSheetServiceImplTests {
 
         currentAssets.setDebtors(debtors);
         balanceSheet.setCurrentAssets(currentAssets);
-
-        FixedAssets fixedAssets = new FixedAssets();
-        TangibleAssets tangibleAssets = new TangibleAssets();
-        tangibleAssets.setCurrentAmount((long)1000);
-        fixedAssets.setTangibleAssets(tangibleAssets);
-        balanceSheet.setFixedAssets(fixedAssets);
     }
 
     private BalanceSheet createMultipleYearFilerBalanceSheetTestObject() {
