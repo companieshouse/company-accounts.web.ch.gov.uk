@@ -292,7 +292,35 @@ public class BalanceSheetServiceImplTests {
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
-    
+
+    @Test
+    @DisplayName("First Year Filer - POST - Balance Sheet - Success Path - Notes Present to Delete")
+    void postFirstYearFilerBalanceSheetSuccessTangibleAssetssNotePresentToDelete() throws ServiceException,
+        URIValidationException, ApiErrorResponseException {
+        mockApiClient();
+        createFirstYearFilerCompanyProfile();
+        createMultipleYearFilerSmallFullAccountPostNotesPresent();
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+
+        createBalanceSheetWithNullValues(balanceSheet);
+        CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
+        calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
+        balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
+
+        mockCurrentPeriodPost(balanceSheet);
+
+        List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            balanceSheet,
+            "0064000");
+        assertEquals(0, validationErrors.size());
+
+        verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
     @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Failure - Throws ServiceException due to ApiErrorResponseException - Bad Request")
     void postFirstYearFilerBalanceSheetFailureBadRequestWithNoValidationErrorsBadRequest() throws ApiErrorResponseException, URIValidationException, ServiceException {
