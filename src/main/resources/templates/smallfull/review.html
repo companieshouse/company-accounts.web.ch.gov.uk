@@ -404,6 +404,169 @@
                 </div>
                 <!-- End Accounting Policies -->
 
+                <!-- Start Tangible Assets -->
+                <div id="cya-small-full-tangible-assets-note">
+
+                    <div th:if="*{tangibleAssets?.netBookValue?.currentPeriod?.total != null}">
+                        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Tangible assets note',
+                            identifier= 'tangible-assets-note',
+                            resource = 'note/tangible-assets',
+                            marginTop = true
+                            )">
+                        </div>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question">Cost</dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Cost at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
+                                identifier = 'tangible-assets-cost-at-period-start',
+                                row = *{tangibleAssets?.cost?.atPeriodStart}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Additions',
+                                identifier = 'tangible-assets-additions',
+                                row = *{tangibleAssets?.cost?.additions}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Disposals',
+                                identifier = 'tangible-assets-disposals',
+                                row = *{tangibleAssets?.cost?.disposals}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Revaluations',
+                                identifier = 'tangible-assets-revaluations',
+                                row = *{tangibleAssets?.cost?.revaluations}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Transfers',
+                                identifier = 'tangible-assets-transfers',
+                                row = *{tangibleAssets?.cost?.transfers}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Cost at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                identifier = 'tangible-assets-cost-at-period-end',
+                                row = *{tangibleAssets?.cost?.atPeriodEnd},
+                                isTotalRow = true
+                            )">
+                            </div>
+
+                        </dl>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question">Depreciation</dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Depreciation at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
+                                identifier = 'tangible-assets-depreciation-at-period-start',
+                                row = *{tangibleAssets?.depreciation?.atPeriodStart}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Charge for year',
+                                identifier = 'tangible-assets-charge-for-year',
+                                row = *{tangibleAssets?.depreciation?.chargeForYear}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'On disposals',
+                                identifier = 'tangible-assets-on-disposals',
+                                row = *{tangibleAssets?.depreciation?.onDisposals}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Other adjustments',
+                                identifier = 'tangible-assets-other-adjustments',
+                                row = *{tangibleAssets?.depreciation?.otherAdjustments}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Depreciation at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                identifier = 'tangible-assets-depreciation-at-period-end',
+                                row = *{tangibleAssets?.depreciation?.atPeriodEnd},
+                                isTotalRow = true
+                            )">
+                            </div>
+
+                        </dl>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question">Net book value</dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Net book value at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                identifier = 'tangible-assets-net-book-value-current-period',
+                                row = *{tangibleAssets?.netBookValue?.currentPeriod}
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                                description = 'Net book value at ' + *{#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                identifier = 'tangible-assets-net-book-value-previous-period',
+                                row = *{tangibleAssets?.netBookValue?.previousPeriod}
+                            )">
+                            </div>
+                        </dl>
+
+                        <div th:if="*{tangibleAssets.additionalInformation != null}">
+                            <dl class="app-check-your-answers app-check-your-answers--short">
+                                <div class="app-check-your-answers__contents">
+                                    <dt class="app-check-your-answers__question">Additional information</dt>
+                                    <dd class="app-check-your-answers__answer">
+                                        <p id="review-tangible-assets-additional-information"
+                                           th:text="*{tangibleAssets.additionalInformation}">
+                                        </p>
+                                    </dd>
+                                    <dd class="app-check-your-answers__change"></dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Tangible Assets -->
+
                 <!-- Debtors Note -->
                 <div id="cya-small-full-debtors-note">
 

@@ -3,9 +3,14 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.TangibleAssetsCost;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.TangibleAssetsDepreciation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.TangibleAssetsNetBookValue;
+import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @Getter
 @Setter
+@ValidationModel
 public class TangibleAssets {
 
     private TangibleAssetsCost cost;

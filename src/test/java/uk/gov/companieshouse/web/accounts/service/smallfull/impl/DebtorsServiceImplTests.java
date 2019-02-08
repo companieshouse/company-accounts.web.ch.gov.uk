@@ -38,7 +38,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransform
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,6 +45,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -155,7 +156,6 @@ public class DebtorsServiceImplTests {
     @DisplayName("GET - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
     void getDebtorsApiResponseException() throws Exception {
 
-        DebtorsApi debtorsApi = new DebtorsApi();
         HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
         ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
@@ -336,10 +336,9 @@ public class DebtorsServiceImplTests {
         when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
         doNothing().when(mockDebtorsDelete).execute();
 
-        List<ValidationError> validationErrors = debtorsService.deleteDebtors(TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID);
+        debtorsService.deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        assertEquals(0, validationErrors.size());
+        verify(mockDebtorsDelete, times(1)).execute();
     }
 
     @Test
@@ -351,23 +350,6 @@ public class DebtorsServiceImplTests {
         when(mockDebtorsDelete.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(URIValidationException.class, () -> mockDebtorsDelete.execute());
-        assertThrows(ServiceException.class, () -> debtorsService.deleteDebtors(
-            TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("DELETE - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
-    void deleteDebtorsApiErrorResponseExceptionBadRequest() throws Exception {
-
-        getMockDebtorsResourceHandler();
-        when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
-
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-        when(mockDebtorsDelete.execute()).thenThrow(apiErrorResponseException);
-
-        assertThrows(ApiErrorResponseException.class, () -> mockDebtorsDelete.execute());
         assertThrows(ServiceException.class, () -> debtorsService.deleteDebtors(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID));
@@ -416,12 +398,6 @@ public class DebtorsServiceImplTests {
         getMockDebtorsResourceHandler();
         when(mockDebtorsResourceHandler.update(DEBTORS_URI, debtorsApi)).thenReturn(mockDebtorsUpdate);
         doNothing().when(mockDebtorsUpdate).execute();
-    }
-
-    private void getMockSmallFullApi(SmallFullApi smallFullApi) throws Exception {
-        getMockSmallFullResourceHandler();
-        when(mockSmallFullResourceHandler.get(BASE_SMALL_FULL_URI)).thenReturn(mockSmallFullGet);
-        when(mockSmallFullGet.execute()).thenReturn(smallFullApi);
     }
 
     private void setLinksWithDebtors(SmallFullApi smallFullApi) {
