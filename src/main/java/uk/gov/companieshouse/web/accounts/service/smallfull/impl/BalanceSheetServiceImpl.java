@@ -20,10 +20,13 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsDueWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -51,6 +54,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Autowired
     private DebtorsService debtorsService;
+    
+    @Autowired
+    private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
@@ -295,10 +301,10 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     /**
-     * Checks whether a conditional note exists when there is no balancesheet value for it
+     * Checks whether a conditional note exists when there is no balance sheet value for it
      * If there is, the note is then deleted
      *
-     * @param balanceSheet the populated balancesheet
+     * @param balanceSheet the populated balance sheet
      * @param smallFullLinks the links used to determine if notes are present
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
@@ -308,39 +314,52 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                        BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
                                        String transactionId, String companyAccountsId) throws ServiceException {
 
-        if (isMultipleYearFiler(companyProfileApi)) {
-
-            if ((isDebtorsCurrentAmountNull(balanceSheet) || isDebtorsPreviousAmountNull(balanceSheet))
+        
+        if ((isDebtorsCurrentAmountNullOrZero(balanceSheet) 
+                && isDebtorsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getDebtorsNote() != null) {
 
-                debtorsService.deleteDebtors(transactionId, companyAccountsId);
-            }
-        } else {
-            if ((isDebtorsCurrentAmountNull(balanceSheet) && smallFullLinks.getDebtorsNote() != null)) {
-                debtorsService.deleteDebtors(transactionId, companyAccountsId);
-            }
+            debtorsService.deleteDebtors(transactionId, companyAccountsId);
         }
+        
+        if ((isCreditorsWithinOneYearCurrentAmountNullOrZero(balanceSheet) 
+                && isCreditorsWithinOneYearPreviousAmountNullOrZero(balanceSheet))
+                && smallFullLinks.getCreditorsWithinOneYearNote() != null) {
+
+            creditorsWithinOneYearService.deleteCreditorsWithinOneYear(transactionId, companyAccountsId);
+        }
+        
     }
 
-    private boolean isDebtorsCurrentAmountNull(BalanceSheet balanceSheet) {
-        Long currentDebtors =
-            Optional.of(balanceSheet)
+    private boolean isDebtorsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
                 .map(BalanceSheet::getCurrentAssets)
                 .map(CurrentAssets::getDebtors)
                 .map(Debtors::getCurrentAmount)
-                .orElse(0L);
-
-        return currentDebtors.equals(0L);
+                .orElse(0L).equals(0L);
     }
 
-    private boolean isDebtorsPreviousAmountNull(BalanceSheet balanceSheet) {
-        Long previousDebtors =
-            Optional.of(balanceSheet)
+    private boolean isDebtorsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
                 .map(BalanceSheet::getCurrentAssets)
                 .map(CurrentAssets::getDebtors)
                 .map(Debtors::getPreviousAmount)
-                .orElse(0L);
+                .orElse(0L).equals(0L);
+    }
+    
+    private boolean isCreditorsWithinOneYearCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+                .map(OtherLiabilitiesOrAssets::getCreditorsDueWithinOneYear)
+                .map(CreditorsDueWithinOneYear::getCurrentAmount)
+                .orElse(0L).equals(0L);
+    }
 
-        return previousDebtors.equals(0L);
+    private boolean isCreditorsWithinOneYearPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+                .map(OtherLiabilitiesOrAssets::getCreditorsDueWithinOneYear)
+                .map(CreditorsDueWithinOneYear::getPreviousAmount)
+                .orElse(0L).equals(0L);
     }
 }

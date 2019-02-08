@@ -37,9 +37,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @Autowired
-    private CompanyService companyService;
-
-    @Autowired
     private BalanceSheetService balanceSheetService;
 
     @Override
@@ -59,8 +56,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         try {
             TangibleAssets tangibleAssets = tangibleAssetsNoteService
                 .getTangibleAssets(transactionId, companyAccountsId, companyNumber);
-
-            addDatesToFormObject(tangibleAssets, companyService.getCompanyProfile(companyNumber));
 
             model.addAttribute("tangibleAssets", tangibleAssets);
 
@@ -104,16 +99,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         return navigatorService
             .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
                 companyAccountsId);
-    }
-
-    private void addDatesToFormObject(TangibleAssets tangibleAssets,
-        CompanyProfileApi companyProfile) {
-        tangibleAssets.setLastAccountsPeriodEndOn(
-            companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
-        tangibleAssets.setNextAccountsPeriodStartOn(
-            companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        tangibleAssets.setNextAccountsPeriodEndOn(
-            companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
 
     @Override

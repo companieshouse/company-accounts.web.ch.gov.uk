@@ -121,9 +121,16 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
 
     CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
 
-    setCurrentPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
-    setPreviousPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
-
+    if (creditorsWithinOneYear.getTotal() != null) {
+        if (creditorsWithinOneYear.getTotal().getCurrentTotal() != null) {
+            setCurrentPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
+        }
+    
+        if (creditorsWithinOneYear.getTotal().getPreviousTotal() != null) {
+            setPreviousPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
+        }
+    }
+    
     return creditorsWithinOneYearApi;
   }
 
