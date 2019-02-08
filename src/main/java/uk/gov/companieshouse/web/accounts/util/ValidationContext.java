@@ -12,7 +12,7 @@ import uk.gov.companieshouse.web.accounts.exception.MissingValidationMappingExce
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-import uk.gov.companieshouse.web.accounts.validation.ValidationPeriodMapping;
+import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -183,9 +183,9 @@ public class ValidationContext {
                 mappings.put(apiPath, webPath);
             }
 
-            Annotation validationPeriodMappingAnnotation = field.getAnnotation(ValidationPeriodMapping.class);
-            if (validationPeriodMappingAnnotation != null) {
-                String apiPath = ((ValidationPeriodMapping) validationPeriodMappingAnnotation).value();
+            Annotation validationParentMappingAnnotation = field.getAnnotation(ValidationParentMapping.class);
+            if (validationParentMappingAnnotation != null) {
+                String apiPath = ((ValidationParentMapping) validationParentMappingAnnotation).value();
                 mappings.put(apiPath, webPath);
             }
 
