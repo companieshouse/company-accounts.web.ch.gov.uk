@@ -171,7 +171,7 @@ public class ValidationContext {
 
         for (Field field : clazz.getDeclaredFields()) {
 
-        	if (field.isSynthetic()) {
+            if (field.isSynthetic()) {
                 continue;
             }
 
