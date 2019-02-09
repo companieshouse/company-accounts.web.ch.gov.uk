@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+</head>
+<body>
+<fieldset class="govuk-fieldset" th:fragment="inlineYesNoRadioButtonsNoTextBox">
+
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading">
+            <span th:id="page-title-heading" th:text=${legendText}></span>
+        </h1>
+    </legend>
+
+    <span class="govuk-error-message"
+          th:id="${radioButtonsFieldName} + '-errorId'"
+          th:if="${#fields.hasErrors('__${radioButtonsFieldName}__')}"
+          th:each="e : ${#fields.errors('__${radioButtonsFieldName}__')}" th:text="${e}">
+            </span>
+
+    <!-- Radio Buttons -->
+    <div class="govuk-radios govuk-radios--inline" data-module="radios">
+
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input show-text"
+                   id="yesButton"
+                   type="radio"
+                   value="1"
+                   name="${radioButtonsFieldName}"
+                   th:field="*{__${radioButtonsFieldName}__}"
+                   th:errorclass="govuk-error-message"/>
+
+            <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
+                Yes
+            </label>
+        </div>
+
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input"
+                   id="noButton"
+                   type="radio"
+                   value="0"
+                   name="${radioButtonsFieldName}"
+                   th:field="*{__${radioButtonsFieldName}__}"
+                   th:errorclass="govuk-error-message"/>
+
+            <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
+                No
+            </label>
+        </div>
+    </div>
+</fieldset>
+</body>
+</html>
