@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title>You’re about to start filing your accounts</title>
+</head>
+<body>
+<div id="criteria-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form id="criteria-form" th:action="${microEntityAccountsUri}" class="form" method="get">
+         <header>
+          <h1 id="page-title" class="govuk-heading-l">
+            File micro-entity accounts with Companies House
+          </h1>
+        </header>
+
+        <h2 class="govuk-heading-m" id="criteria-sub-heading">Criteria</h2>
+
+        <p id="criteria-list-heading">Check your prepared accounts to see if you meet the criteria.</p>
+
+        <ul class="govuk-list govuk-list--bullet" id="criteria-list">
+          <li>Turnover is no more than £632,000</li>
+          <li>Balance sheet total is no more than £316,000</li>
+          <li>Average number of employees is no more than 10</li>
+        </ul>
+          <div class="govuk-form-group">
+          <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
