@@ -167,7 +167,7 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
             .map(TangibleAssets::getCost)
             .map(TangibleAssetsCost::getAtPeriodStart)
             .map(CostAtPeriodStart::getMotorVehicles)
-            .orElse(0L));
+            .orElse(null));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getMotorVehicles());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getMotorVehicles());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getMotorVehicles());
@@ -184,7 +184,7 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
             .map(TangibleAssets::getDepreciation)
             .map(TangibleAssetsDepreciation::getAtPeriodStart)
             .map(DepreciationAtPeriodStart::getMotorVehicles)
-            .orElse(0L));
+            .orElse(null));
         depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getMotorVehicles());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getMotorVehicles());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getMotorVehicles());
@@ -200,7 +200,7 @@ public class TangibleAssetsMotorVehiclesTransformerImpl extends TangibleAssetsRe
                 .map(TangibleAssets::getNetBookValue)
                 .map(TangibleAssetsNetBookValue::getPreviousPeriod)
                 .map(PreviousPeriod::getMotorVehicles)
-                .orElse(0L));
+                .orElse(null));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getMotorVehicles());
     }

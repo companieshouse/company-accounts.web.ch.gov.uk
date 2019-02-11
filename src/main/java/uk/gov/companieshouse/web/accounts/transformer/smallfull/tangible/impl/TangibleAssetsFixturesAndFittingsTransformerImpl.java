@@ -182,7 +182,7 @@ public class TangibleAssetsFixturesAndFittingsTransformerImpl extends
             .map(TangibleAssets::getCost)
             .map(TangibleAssetsCost::getAtPeriodStart)
             .map(CostAtPeriodStart::getFixturesAndFittings)
-            .orElse(0L));
+            .orElse(null));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getFixturesAndFittings());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getFixturesAndFittings());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getFixturesAndFittings());
@@ -200,7 +200,7 @@ public class TangibleAssetsFixturesAndFittingsTransformerImpl extends
             .map(TangibleAssets::getDepreciation)
             .map(TangibleAssetsDepreciation::getAtPeriodStart)
             .map(DepreciationAtPeriodStart::getFixturesAndFittings)
-            .orElse(0L));
+            .orElse(null));
         depreciation.setChargeForYear(
             tangibleAssets.getDepreciation().getChargeForYear().getFixturesAndFittings());
         depreciation.setOnDisposals(
@@ -221,7 +221,7 @@ public class TangibleAssetsFixturesAndFittingsTransformerImpl extends
                 .map(TangibleAssets::getNetBookValue)
                 .map(TangibleAssetsNetBookValue::getPreviousPeriod)
                 .map(PreviousPeriod::getFixturesAndFittings)
-                .orElse(0L));
+                .orElse(null));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
             tangibleAssets.getNetBookValue().getCurrentPeriod().getFixturesAndFittings());
     }

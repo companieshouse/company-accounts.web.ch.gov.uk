@@ -167,7 +167,7 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
             .map(TangibleAssets::getCost)
             .map(TangibleAssetsCost::getAtPeriodStart)
             .map(CostAtPeriodStart::getOfficeEquipment)
-            .orElse(0L));
+            .orElse(null));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getOfficeEquipment());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getOfficeEquipment());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getOfficeEquipment());
@@ -184,7 +184,7 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
             .map(TangibleAssets::getDepreciation)
             .map(TangibleAssetsDepreciation::getAtPeriodStart)
             .map(DepreciationAtPeriodStart::getOfficeEquipment)
-            .orElse(0L));
+            .orElse(null));
         depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getOfficeEquipment());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getOfficeEquipment());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getOfficeEquipment());
@@ -200,7 +200,7 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
                 .map(TangibleAssets::getNetBookValue)
                 .map(TangibleAssetsNetBookValue::getPreviousPeriod)
                 .map(PreviousPeriod::getOfficeEquipment)
-                .orElse(0L));
+                .orElse(null));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getOfficeEquipment());
     }

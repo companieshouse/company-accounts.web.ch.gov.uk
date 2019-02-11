@@ -167,7 +167,7 @@ public class TangibleAssetsPlantAndMachineryTransformerImpl extends TangibleAsse
             .map(TangibleAssets::getCost)
             .map(TangibleAssetsCost::getAtPeriodStart)
             .map(CostAtPeriodStart::getPlantAndMachinery)
-            .orElse(0L));
+            .orElse(null));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getPlantAndMachinery());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getPlantAndMachinery());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getPlantAndMachinery());
@@ -184,7 +184,7 @@ public class TangibleAssetsPlantAndMachineryTransformerImpl extends TangibleAsse
             .map(TangibleAssets::getDepreciation)
             .map(TangibleAssetsDepreciation::getAtPeriodStart)
             .map(DepreciationAtPeriodStart::getPlantAndMachinery)
-            .orElse(0L));
+            .orElse(null));
         depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getPlantAndMachinery());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getPlantAndMachinery());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getPlantAndMachinery());
@@ -200,7 +200,7 @@ public class TangibleAssetsPlantAndMachineryTransformerImpl extends TangibleAsse
                 .map(TangibleAssets::getNetBookValue)
                 .map(TangibleAssetsNetBookValue::getPreviousPeriod)
                 .map(PreviousPeriod::getPlantAndMachinery)
-                .orElse(0L));
+                .orElse(null));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getPlantAndMachinery());
     }

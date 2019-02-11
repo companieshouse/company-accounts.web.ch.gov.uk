@@ -167,7 +167,7 @@ public class TangibleAssetsTotalTransformerImpl extends TangibleAssetsResourceTr
             .map(TangibleAssets::getCost)
             .map(TangibleAssetsCost::getAtPeriodStart)
             .map(CostAtPeriodStart::getTotal)
-            .orElse(0L));
+            .orElse(null));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getTotal());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getTotal());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getTotal());
@@ -184,7 +184,7 @@ public class TangibleAssetsTotalTransformerImpl extends TangibleAssetsResourceTr
             .map(TangibleAssets::getDepreciation)
             .map(TangibleAssetsDepreciation::getAtPeriodStart)
             .map(DepreciationAtPeriodStart::getTotal)
-            .orElse(0L));
+            .orElse(null));
         depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getTotal());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getTotal());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getTotal());
@@ -200,7 +200,7 @@ public class TangibleAssetsTotalTransformerImpl extends TangibleAssetsResourceTr
                 .map(TangibleAssets::getNetBookValue)
                 .map(TangibleAssetsNetBookValue::getPreviousPeriod)
                 .map(PreviousPeriod::getTotal)
-                .orElse(0L));
+                .orElse(null));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getTotal());
     }

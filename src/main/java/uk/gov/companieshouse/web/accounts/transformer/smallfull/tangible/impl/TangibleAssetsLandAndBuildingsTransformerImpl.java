@@ -168,7 +168,7 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
             .map(TangibleAssets::getCost)
             .map(TangibleAssetsCost::getAtPeriodStart)
             .map(CostAtPeriodStart::getLandAndBuildings)
-            .orElse(0L));
+            .orElse(null));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getLandAndBuildings());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getLandAndBuildings());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getLandAndBuildings());
@@ -185,7 +185,7 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
             .map(TangibleAssets::getDepreciation)
             .map(TangibleAssetsDepreciation::getAtPeriodStart)
             .map(DepreciationAtPeriodStart::getLandAndBuildings)
-            .orElse(0L));depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings());
+            .orElse(null));depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getLandAndBuildings());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getLandAndBuildings());
         depreciation.setAtPeriodEnd(tangibleAssets.getDepreciation().getAtPeriodEnd().getLandAndBuildings());
@@ -200,7 +200,7 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
                 .map(TangibleAssets::getNetBookValue)
                 .map(TangibleAssetsNetBookValue::getPreviousPeriod)
                 .map(PreviousPeriod::getLandAndBuildings)
-                .orElse(0L));
+                .orElse( null));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getLandAndBuildings());
     }
