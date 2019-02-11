@@ -120,4 +120,19 @@ public class StocksServiceImpl implements StocksService {
     private boolean hasStocks(SmallFullLinks smallFullLinks) {
         return smallFullLinks.getStocksNote() != null;
     }
+    
+    @Override
+    public void deleteStocks(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = STOCKS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().stocks().delete(uri).execute();
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            throw new ServiceException("Error deleting stocks resource", e);
+        }
+    }
 }
