@@ -28,42 +28,42 @@ import java.util.List;
 @Service
 public class EmployeesServiceImpl implements EmployeesService {
 
-  @Autowired
-  private ApiClientService apiClientService;
+    @Autowired
+    private ApiClientService apiClientService;
 
-  @Autowired
-  private EmployeesTransformer transformer;
+    @Autowired
+    private EmployeesTransformer transformer;
 
-  @Autowired
-  private BalanceSheetService balanceSheetService;
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
-  @Autowired
-  private ValidationContext validationContext;
+    @Autowired
+    private ValidationContext validationContext;
 
-  @Autowired
-  private SmallFullService smallFullService;
+    @Autowired
+    private SmallFullService smallFullService;
 
-  private static final UriTemplate EMPLOYEES_URI =
-      new UriTemplate(
-          "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/employees");
+    private static final UriTemplate EMPLOYEES_URI =
+        new UriTemplate(
+            "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/employees");
 
-  private static final String INVALID_URI_MESSAGE =
-      "Invalid URI for employees note resource";
+    private static final String INVALID_URI_MESSAGE =
+        "Invalid URI for employees note resource";
 
-  @Override
-  public Employees getEmployees(String transactionId,
-      String companyAccountsId, String companyNumber) throws ServiceException {
+    @Override
+    public Employees getEmployees(String transactionId, String companyAccountsId,
+        String companyNumber) throws ServiceException {
 
-      EmployeesApi employeesApi = getEmployeesApi(transactionId, companyAccountsId);
-      Employees employees = transformer.getEmployees(employeesApi);
+        EmployeesApi employeesApi = getEmployeesApi(transactionId, companyAccountsId);
+        Employees employees = transformer.getEmployees(employeesApi);
 
-      BalanceSheet balanceSheet =
-              balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
-          BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
-          employees.setBalanceSheetHeadings(balanceSheetHeadings);
+        BalanceSheet balanceSheet =
+            balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
+        BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
+        employees.setBalanceSheetHeadings(balanceSheetHeadings);
 
-    return employees;
-  }
+        return employees;
+    }
 
     @Override
     public List<ValidationError> submitEmployees(String transactionId, String companyAccountsId,
