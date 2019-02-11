@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title>Employees note</title>
+</head>
+
+<div id="employees-main-content" layout:fragment="content" class="two-column-accounts">
+
+    <form id="balanceSheet-form" th:action="@{''}" th:object="${employeesNote}" class="form currency-included-within-inputs govuk-body" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Employees note'
+                )">
+        </div>
+
+        <div class="left-indent">
+
+            <div class="govuk-grid-row" id="accounts-header">
+                <div class="govuk-grid-column-one-half">
+                    &nbsp;
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <h2 class="govuk-heading-s">
+                        <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
+                        <!-- Hidden input for form binding -->
+                        <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
+                    </h2>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <h2 class="govuk-heading-s">
+                        <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
+                        <!-- Hidden input for form binding -->
+                        <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
+                    </h2>
+                </div>
+            </div>
+
+            <!--Start Average Number Of Employees -->
+
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'averageNumberOfEmployees.currentAverageNumberOfEmployees',
+                        previousField = 'averageNumberOfEmployees.previousAverageNumberOfEmployees'
+                        )">
+            </div>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    Average number of employees
+                    <span class="govuk-hint">
+                    Enter the average number of people employed by the company in the period you're filing for.
+                    </span>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'averageNumberOfEmployees.currentAverageNumberOfEmployees',
+                                text = 'Average number of employees current',
+                                class= 'govuk-input current current-employees-add',
+                                )">
+                    </div>
+                </div>
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'averageNumberOfEmployees.previousAverageNumberOfEmployees',
+                                text = 'Average number of employees previous',
+                                class= 'govuk-input previous previous-employees-add',
+                                )">
+                    </div>
+                </div>
+            </div>
+
+            <!--End Average Number Of Employees -->
+
+
+            <div th:replace="fragments/additionalInformation :: additionalInformation (
+                                id = 'details',
+                                dropDownText = 'Add additional information about your \'employees\' note?',
+                                helpText = 'Enter details of any other \'employees\' information not already covered'
+                                )">
+            </div>
+
+            <div class="form-group">
+                <input id="next-button" class="govuk-button piwik-event" data-event-id="Employees - Save and continue" type="submit" role="button" value="Save and continue"/>
+            </div>
+        </div>
+    </form>
+</div>
+</html>
