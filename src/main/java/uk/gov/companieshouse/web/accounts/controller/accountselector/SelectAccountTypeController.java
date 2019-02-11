@@ -1,7 +1,6 @@
-package uk.gov.companieshouse.web.accounts.controller.accounts;
+package uk.gov.companieshouse.web.accounts.controller.accountselector;
 
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,14 +32,11 @@ public class SelectAccountTypeController extends BaseController {
     private static final UriTemplate ABRIDGED_ACCOUNTS_URI =
         new UriTemplate("/company/{companyNumber}");
 
-    @Value("${choose-account-type.back}")
-    private String backButtonUrl;
-
     @GetMapping
     public String getTypeOfAccounts(@PathVariable String companyNumber, Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
-//        model.addAttribute("backButton", backButtonUrl);
+        addBackPageAttributeToModel(model, companyNumber);
 
         return getTemplateName();
     }
@@ -51,7 +47,8 @@ public class SelectAccountTypeController extends BaseController {
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
 
-        /*model.addAttribute("backButton", backButtonUrl);*/
+        addBackPageAttributeToModel(model, companyNumber);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -60,6 +57,7 @@ public class SelectAccountTypeController extends BaseController {
     }
 
     private String getReDirectPageURL(String companyNumber, String selectedAccount) {
+
         if ("micros".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + MICRO_ENTITY_ACCOUNTS_URI
                 .expand(companyNumber).toString();
@@ -84,7 +82,6 @@ public class SelectAccountTypeController extends BaseController {
 
     @Override
     protected String getTemplateName() {
-        return "accounts/selectAccountType";
+        return "accountselector/selectAccountType";
     }
-
 }
