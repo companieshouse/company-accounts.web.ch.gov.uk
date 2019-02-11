@@ -567,6 +567,63 @@
                 </div>
                 <!-- End Tangible Assets -->
 
+                <!-- Stocks Note -->
+                <div id="cya-small-full-stocks-note">
+
+                    <div th:if="*{stocks.total != null}">
+                        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Stocks note',
+                            identifier= 'stocks-note',
+                            resource = 'stocks',
+                            marginTop = true
+                            )">
+                        </div>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question"></dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Stocks',
+                                identifier = 'stocks-note-stocks',
+                                currentAmount = *{stocks?.stocks.currentStocks},
+                                previousAmount = *{stocks?.stocks.previousStocks},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Payments on account',
+                                identifier = 'stocks-note-payments-on-account',
+                                currentAmount = *{stocks?.paymentsOnAccount.currentPaymentsOnAccount},
+                                previousAmount = *{stocks?.paymentsOnAccount.previousPaymentsOnAccount},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Total',
+                                identifier = 'total',
+                                currentAmount = *{stocks?.total.currentTotal},
+                                previousAmount = *{stocks?.total.previousTotal},
+                                isTotalRow = true
+                            )">
+                            </div>
+
+                        </dl>
+
+                    </div>
+                </div>
+                <!-- End Stocks Note -->
+
                 <!-- Debtors Note -->
                 <div id="cya-small-full-debtors-note">
 

@@ -25,11 +25,13 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsDueWithinOneY
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -62,6 +64,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Autowired
     private CreditorsAfterOneYearService creditorsAfterOneYearService;
+
+    @Autowired
+    private StocksService stocksService;
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
@@ -332,12 +337,19 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
             creditorsWithinOneYearService.deleteCreditorsWithinOneYear(transactionId, companyAccountsId);
         }
-
+        
         if ((isCreditorsAfterOneYearCurrentAmountNullOrZero(balanceSheet)
             && isCreditorsAfterOneYearPreviousAmountNullOrZero(balanceSheet))
             && smallFullLinks.getCreditorsAfterMoreThanOneYearNote() != null) {
 
             creditorsAfterOneYearService.deleteCreditorsAfterOneYear(transactionId, companyAccountsId);
+        }
+        
+        if ((isStocksCurrentAmountNullOrZero(balanceSheet) 
+                && isStocksPreviousAmountNullOrZero(balanceSheet))
+                && smallFullLinks.getStocksNote() != null) {
+
+            stocksService.deleteStocks(transactionId, companyAccountsId);
         }
     }
 
@@ -387,5 +399,21 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
             .map(CreditorsAfterOneYear::getPreviousAmount)
             .orElse(0L).equals(0L);
+    }
+
+    private boolean isStocksCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getStocks)
+                .map(Stocks::getCurrentAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isStocksPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getStocks)
+                .map(Stocks::getPreviousAmount)
+                .orElse(0L).equals(0L);
     }
 }
