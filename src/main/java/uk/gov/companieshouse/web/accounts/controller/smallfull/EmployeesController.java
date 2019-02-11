@@ -62,7 +62,7 @@ public class EmployeesController extends BaseController implements
       @PathVariable String companyNumber,
       @PathVariable String transactionId,
       @PathVariable String companyAccountsId,
-      @ModelAttribute("employees") @Valid Employees employees,
+      @ModelAttribute("employeesNote") @Valid Employees employees,
       BindingResult bindingResult, Model model) {
 
     addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
