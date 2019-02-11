@@ -1,23 +1,24 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
@@ -60,6 +61,9 @@ public class ReviewServiceImpl implements ReviewService {
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
     @Autowired
+    private CreditorsAfterOneYearService creditorsAfterOneYearService;
+
+    @Autowired
     private DebtorsService debtorsService;
 
     @Autowired
@@ -88,6 +92,8 @@ public class ReviewServiceImpl implements ReviewService {
         
         CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
 
+        CreditorsAfterOneYear creditorsAfterOneYear = creditorsAfterOneYearService.getCreditorsAfterOneYear(transactionId, companyAccountsId, companyNumber);
+
         Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
 
         TangibleAssets tangibleAssets =
@@ -103,6 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setValuationInformationPolicy(valuationInformationPolicy);
         review.setOtherAccountingPolicy(otherAccountingPolicy);
         review.setCreditorsWithinOneYear(creditorsWithinOneYear);
+        review.setCreditorsAfterOneYear(creditorsAfterOneYear);
         review.setDebtors(debtors);
         review.setTangibleAssets(tangibleAssets);
 
