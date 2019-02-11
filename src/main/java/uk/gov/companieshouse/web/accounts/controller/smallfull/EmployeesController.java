@@ -17,8 +17,11 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @NextController(ReviewController.class)
@@ -69,6 +72,20 @@ public class EmployeesController extends BaseController implements
 
     if (bindingResult.hasErrors()) {
       return getTemplateName();
+    }
+
+    try {
+      List<ValidationError> validationErrors =
+          employeesService.submitEmployees(transactionId, companyAccountsId,
+              employees, companyNumber);
+
+      if (! validationErrors.isEmpty()) {
+        bindValidationErrors(bindingResult, validationErrors);
+        return getTemplateName();
+      }
+    } catch (ServiceException e) {
+      LOGGER.errorRequest(request, e.getMessage(), e);
+      return ERROR_VIEW;
     }
     
     return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,

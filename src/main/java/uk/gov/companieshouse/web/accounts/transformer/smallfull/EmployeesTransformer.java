@@ -7,4 +7,5 @@ public interface EmployeesTransformer {
 
     Employees getEmployees(EmployeesApi employeesApi);
 
+    EmployeesApi getEmployeesApi(Employees employees);
 }
