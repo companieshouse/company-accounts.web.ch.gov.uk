@@ -4,4 +4,5 @@ weight: 910
 routes:
    1: /company/(.*)/small-full/
    2: /company/(.*)/transaction/(.*)/company-accounts/(.*)/small-full/
-   3: /company/(.*)/micro-entity/
+   3: /company/(.*)/dormant/
+   4: /company/(.*)/micro-entity/
