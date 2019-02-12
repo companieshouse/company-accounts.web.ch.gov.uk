@@ -35,16 +35,13 @@ public class CriteriaControllerTests {
     private CriteriaController controller;
 
     private static final String COMPANY_NUMBER = "companyNumber";
-
     private static final String CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
                                                     "/small-full/criteria";
-
     private static final String CRITERIA_MODEL_ATTR = "criteria";
-
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
     private static final String CRITERIA_VIEW = "smallfull/criteria";
-
+    private static final String ALTERNATIVE_FILING_PATH = "redirect:/company/" + COMPANY_NUMBER +
+                                                            "/submit-abridged-accounts/alternative-filing-options";
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
@@ -88,8 +85,8 @@ public class CriteriaControllerTests {
 
         this.mockMvc.perform(post(CRITERIA_PATH)
                 .param(beanElement, criteriaNotMet))
-                .andExpect(status().isOk())
-                .andExpect(view().name(CRITERIA_VIEW));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(ALTERNATIVE_FILING_PATH));
     }
 
     @Test
