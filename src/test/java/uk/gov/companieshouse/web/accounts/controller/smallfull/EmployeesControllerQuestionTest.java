@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.EmployeesQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class EmployeesControllerTest {
+public class EmployeesControllerQuestionTest {
 
     private MockMvc mockMvc;
 
@@ -50,7 +51,7 @@ public class EmployeesControllerTest {
     private MockHttpSession mockHttpSession;
 
     @InjectMocks
-    private EmployeesController controller;
+    private EmployeesQuestionController controller;
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -63,19 +64,19 @@ public class EmployeesControllerTest {
         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
         "/small-full";
 
-    private static final String EMPLOYEES_PATH = SMALL_FULL_PATH + "/employees";
+    private static final String EMPLOYEES_QUESTION_PATH = SMALL_FULL_PATH + "/employees-question";
 
-    private static final String EMPLOYEES_MODEL_ATTR = "employeesNote";
+    private static final String EMPLOYEES_QUESTION_MODEL_ATTR = "employeesQuestion";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
-    private static final String EMPLOYEES_VIEW = "smallfull/employees";
+    private static final String EMPLOYEES_QUESTION_VIEW = "smallfull/employeesQuestion";
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String TEST_PATH = "averageNumberOfEmployees.currentAverageNumberOfEmployees";
+    private static final String TEST_PATH = "hasSelectedEmployeesNote";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
@@ -87,16 +88,38 @@ public class EmployeesControllerTest {
     }
 
     @Test
-    @DisplayName("Get employees view success path")
-    void getRequestSuccess() throws Exception {
+    @DisplayName("Get employees question view success path without employees note")
+    void getRequestSuccessWithoutNote() throws Exception {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockEmployeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Employees());
-
-        this.mockMvc.perform(get(EMPLOYEES_PATH))
+        
+        this.mockMvc.perform(get(EMPLOYEES_QUESTION_PATH)
+            .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
             .andExpect(status().isOk())
-            .andExpect(view().name(EMPLOYEES_VIEW))
-            .andExpect(model().attributeExists(EMPLOYEES_MODEL_ATTR))
+            .andExpect(view().name(EMPLOYEES_QUESTION_VIEW))
+            .andExpect(model().attributeExists(EMPLOYEES_QUESTION_MODEL_ATTR))
+            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+
+        verify(mockEmployeesService, times(1)).getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+    }
+    
+    @Test
+    @DisplayName("Get employees question view success path with employees note")
+    void getRequestSuccessWithNote() throws Exception {
+        
+        Employees employees = new Employees();
+        employees.setDetails("test");
+
+        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockEmployeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(employees);
+        
+        this.mockMvc.perform(get(EMPLOYEES_QUESTION_PATH)
+            .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+            .andExpect(status().isOk())
+            .andExpect(view().name(EMPLOYEES_QUESTION_VIEW))
+            .andExpect(model().attributeExists(EMPLOYEES_QUESTION_MODEL_ATTR))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
@@ -104,12 +127,12 @@ public class EmployeesControllerTest {
     }
 
     @Test
-    @DisplayName("Get employees view failure path due to error on employees retrieval")
+    @DisplayName("Get employees question view failure path due to error on employees retrieval")
     void getRequestFailure() throws Exception {
 
         when(mockEmployeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
-        this.mockMvc.perform(get(EMPLOYEES_PATH))
+        this.mockMvc.perform(get(EMPLOYEES_QUESTION_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -120,8 +143,10 @@ public class EmployeesControllerTest {
     void postRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-
-        this.mockMvc.perform(post(EMPLOYEES_PATH))
+        
+        this.mockMvc.perform(post(EMPLOYEES_QUESTION_PATH)
+            .param(TEST_PATH, "1")
+            .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -130,41 +155,13 @@ public class EmployeesControllerTest {
     @DisplayName("Post employees with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        String beanElement = TEST_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
 
-        this.mockMvc.perform(post(EMPLOYEES_PATH)
-            .param(beanElement, invalidData))
+        this.mockMvc.perform(post(EMPLOYEES_QUESTION_PATH)
+            .param(TEST_PATH, invalidData))
             .andExpect(status().isOk())
-            .andExpect(view().name(EMPLOYEES_VIEW))
+            .andExpect(view().name(EMPLOYEES_QUESTION_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
-    }
-
-    @Test
-    @DisplayName("Test will render with selected employees note")
-    void willRenderWithSelectedEmployeesNote() throws Exception {
-        
-        CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
-        companyAccountsDataState.setHasSelectedEmployeesNote(true);
-        
-        when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
-        when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
-        .thenReturn(companyAccountsDataState);
-               
-        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("Test will not render with unselected employees note")
-    void willNotRenderWithUnselectedEmployeesNote() throws Exception {
-        CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
-        companyAccountsDataState.setHasSelectedEmployeesNote(false);
-        
-        when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
-        when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
-        .thenReturn(companyAccountsDataState);
-        
-        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
