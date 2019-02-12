@@ -121,6 +121,6 @@ public class EmployeesServiceImpl implements EmployeesService {
       }
 
     private boolean hasEmployees(SmallFullLinks smallFullLinks) {
-        return smallFullLinks.getDebtorsNote() != null;
+        return smallFullLinks.getEmployeesNote() != null;
     }
 }
