@@ -147,7 +147,7 @@ class SelectAccountTypeControllerTests {
         String expectedViewName) throws Exception {
 
         this.mockMvc.perform(
-            post(SELECT_ACCOUNT_TYPE_PATH).param("selectedTypeOfAccount", beanElementValue))
+            post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
             .andExpect(expectedStatus)
             .andExpect(view().name(expectedViewName))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))

@@ -53,7 +53,7 @@ public class SelectAccountTypeController extends BaseController {
             return getTemplateName();
         }
 
-        return getReDirectPageURL(companyNumber, typeOfAccounts.getSelectedTypeOfAccount());
+        return getReDirectPageURL(companyNumber, typeOfAccounts.getSelectedAccountTypeName());
     }
 
     private String getReDirectPageURL(String companyNumber, String selectedAccount) {

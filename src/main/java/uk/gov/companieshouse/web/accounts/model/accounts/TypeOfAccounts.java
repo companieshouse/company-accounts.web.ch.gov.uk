@@ -9,5 +9,5 @@ import lombok.Setter;
 public class TypeOfAccounts {
 
     @NotNull(message = "{typeOfAccounts.selectionNotMade}")
-    private String selectedTypeOfAccount;
+    private String selectedAccountTypeName;
 }

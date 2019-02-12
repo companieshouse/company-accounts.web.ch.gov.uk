@@ -21,16 +21,16 @@
 
         <p class="lede">If you’re not sure, you may want to ask an accountant.</p>
 
-        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('selectedTypeOfAccount')} ? 'govuk-form-group--error' : ''">
+        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('selectedAccountTypeName')} ? 'govuk-form-group--error' : ''">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-visually-hidden">
               Which type of accounts have you prepared?
             </legend>
 
             <span class="govuk-error-message"
-                  id="selectedTypeOfAccount-errorId"
-                  th:if="${#fields.hasErrors('selectedTypeOfAccount')}"
-                  th:each="e : ${#fields.errors('selectedTypeOfAccount')}" th:text="${e}" >
+                  id="selectedAccountTypeName-errorId"
+                  th:if="${#fields.hasErrors('selectedAccountTypeName')}"
+                  th:each="e : ${#fields.errors('selectedAccountTypeName')}" th:text="${e}" >
             </span>
 
             <div class="govuk-radios">
@@ -40,7 +40,7 @@
                        type="radio"
                        value="micros"
                        data-event-id="Micro-entity accounts"
-                       th:field="*{selectedTypeOfAccount}"
+                       th:field="*{selectedAccountTypeName}"
                        th:errorclass="govuk-error-message"/>
                 <label class="govuk-label govuk-radios__label" id="microEntityAccountsButton-label" for="microEntityAccountsButton" >
                   Micro-entity accounts
@@ -53,7 +53,7 @@
                      type="radio"
                      value="abridged"
                      data-event-id="Abridged accounts"
-                     th:field="*{selectedTypeOfAccount}"
+                     th:field="*{selectedAccountTypeName}"
                      th:errorclass="govuk-error-message"/>
                 <label class="govuk-label govuk-radios__label" id="abridgedAccountsButton-label" for="abridgedAccountsButton">
                   Abridged accounts
@@ -66,7 +66,7 @@
                        type="radio"
                        value="full"
                        data-event-id="Full accounts"
-                       th:field="*{selectedTypeOfAccount}"
+                       th:field="*{selectedAccountTypeName}"
                        th:errorclass="govuk-error-message"/>
                 <label class="govuk-label govuk-radios__label" id="fullAccountsButton-label" for="fullAccountsButton">
                   Full accounts
@@ -77,7 +77,7 @@
                        name="chooseAccountsRadio"
                        type="radio"
                        value="dormant"
-                       th:field="*{selectedTypeOfAccount}"
+                       th:field="*{selectedAccountTypeName}"
                        th:errorclass="govuk-error-message"
                        data-event-id="Micro-entity selected"/>
                 <label class="govuk-label govuk-radios__label" id="dormantCompanyAccountsButton-label" for="dormantCompanyAccountsButton">
