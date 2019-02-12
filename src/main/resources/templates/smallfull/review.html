@@ -762,7 +762,7 @@
                 <!-- Employees Note -->
                 <div id="cya-small-full-employees-note">
 
-
+                    <div th:if="*{employees != null}">
                         <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Employees',
                             identifier= 'employees-note',
@@ -787,20 +787,20 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Average number of employees',
                                 identifier = 'average-number-of-employees',
-                                currentAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
-                                previousAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
+                                currentAmount = *{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees},
+                                previousAmount = *{employees?.averageNumberOfEmployees.previousAverageNumberOfEmployees},
                                 isBoldLegend = true
                             )">
                             </div>
 
                         </dl>
 
-                    <div th:if="*{creditorsWithinOneYear.details != null}">
+                    <div th:if="*{employees.details != null}">
                         <dl class="app-check-your-answers app-check-your-answers--short">
                             <div class="app-check-your-answers__contents">
                                 <dt class="app-check-your-answers__question">Additional information</dt>
                                 <dd class="app-check-your-answers__answer">
-                                    <p id="review-employees-details" th:utext="*{#strings.replace(creditorsWithinOneYear?.details,'&#10;','&lt;br&gt;')}"></p>
+                                    <p id="review-employees-details" th:utext="*{#strings.replace(employees?.details,'&#10;','&lt;br&gt;')}"></p>
                                 <dd class="app-check-your-answers__change"></dd>
                             </div>
                         </dl>
