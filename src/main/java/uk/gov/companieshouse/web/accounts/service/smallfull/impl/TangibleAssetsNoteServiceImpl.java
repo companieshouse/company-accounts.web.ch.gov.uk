@@ -130,4 +130,18 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
         tangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
         tangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
+
+    public void deleteTangibleAssets(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().tangible().delete(uri).execute();
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            throw new ServiceException("Error deleting tangible assets note resource", e);
+        }
+    }
 }
