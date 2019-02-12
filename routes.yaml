@@ -5,3 +5,5 @@ routes:
    1: /company/(.*)/small-full/
    2: /company/(.*)/transaction/(.*)/company-accounts/(.*)/small-full/
    3: /company/(.*)/corporation-tax
+   4: /company/(.*)/dormant/
+   5: /company/(.*)/micro-entity/
