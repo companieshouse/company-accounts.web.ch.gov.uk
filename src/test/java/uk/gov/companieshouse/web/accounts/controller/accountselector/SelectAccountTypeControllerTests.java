@@ -44,7 +44,7 @@ class SelectAccountTypeControllerTests {
         "/company/" + COMPANY_NUMBER + "/select-account-type";
 
     private static final UriTemplate MICRO_ENTITY_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/micro/criteria");
+        new UriTemplate("/company/{companyNumber}/micro-entity/criteria");
 
     private static final UriTemplate DORMANT_ACCOUNTS_URI =
         new UriTemplate("/company/{companyNumber}/dormant/criteria");
@@ -53,7 +53,7 @@ class SelectAccountTypeControllerTests {
         new UriTemplate("/company/{companyNumber}/small-full/criteria");
 
     private static final UriTemplate ABRIDGED_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}");
+        new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
 
     private MockMvc mockMvc;
 
