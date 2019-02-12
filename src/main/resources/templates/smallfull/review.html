@@ -436,13 +436,12 @@
             <dd class="app-check-your-answers__change"></dd>
           </div>
 
-          <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+          <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}"
+               th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Cost at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-cost-at-period-start',
                                 row = *{tangibleAssets?.cost?.atPeriodStart}
                             )">
-            </div>
           </div>
 
           <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
@@ -495,13 +494,12 @@
             <dd class="app-check-your-answers__change"></dd>
           </div>
 
-          <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+          <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}"
+               th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                     description = 'Depreciation at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                     identifier = 'tangible-assets-depreciation-at-period-start',
                                     row = *{tangibleAssets?.depreciation?.atPeriodStart}
                                 )">
-            </div>
           </div>
 
           <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
@@ -554,14 +552,15 @@
                             )">
           </div>
 
-          <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+
+          <div th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}"
+                 th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Net book value at ' + *{#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-net-book-value-previous-period',
                                 row = *{tangibleAssets?.netBookValue?.previousPeriod}
                             )">
-            </div>
           </div>
+
 
         </dl>
 
