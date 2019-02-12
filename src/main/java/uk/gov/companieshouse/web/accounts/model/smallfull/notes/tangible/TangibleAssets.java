@@ -6,6 +6,7 @@ import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.TangibleAssetsCost;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.TangibleAssetsDepreciation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.TangibleAssetsNetBookValue;
+import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @Getter
@@ -19,6 +20,7 @@ public class TangibleAssets {
 
     private TangibleAssetsNetBookValue netBookValue;
 
+    @ValidationMapping("$.tangible_assets.additional_information")
     private String additionalInformation;
 
     private LocalDate lastAccountsPeriodEndOn;
