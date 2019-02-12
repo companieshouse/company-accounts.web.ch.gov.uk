@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.smallfull.CriteriaController;
@@ -33,8 +34,9 @@ public class CorporationTaxController extends BaseController {
             return getTemplateName();
         }
 
-        if (corporationTax.getFileChoice().equals(true)) {
-            return "redirect:" + "https://www.gov.uk/file-your-company-accounts-and-tax-return";
+        if (corporationTax.getFileChoice()) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                    "https://www.gov.uk/file-your-company-accounts-and-tax-return";
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
