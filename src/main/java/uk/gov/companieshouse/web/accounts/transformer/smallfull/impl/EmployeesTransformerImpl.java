@@ -29,19 +29,56 @@ public class EmployeesTransformerImpl implements EmployeesTransformer {
       
       return employees;
     }
-    
-    private void populateCurrentPeriodForWeb(EmployeesApi employeesApi, Employees employees, AverageNumberOfEmployees averageNumberOfEmployees) {     
-        CurrentPeriod currentPeriod = employeesApi.getCurrentPeriod();  
+
+    @Override
+    public EmployeesApi getEmployeesApi(Employees employees) {
+
+        EmployeesApi employeesApi = new EmployeesApi();
+
+        setCurrentPeriodEmployeesOnApiModel(employees, employeesApi);
+        setPreviousPeriodEmployeesOnApiModel(employees, employeesApi);
+
+        return employeesApi;
+    }
+
+    private void populateCurrentPeriodForWeb(EmployeesApi employeesApi, Employees employees, AverageNumberOfEmployees averageNumberOfEmployees) {
+        CurrentPeriod currentPeriod = employeesApi.getCurrentPeriod();
         if (currentPeriod != null) {
             employees.setDetails(currentPeriod.getDetails());
             averageNumberOfEmployees.setCurrentAverageNumberOfEmployees(currentPeriod.getAverageNumberOfEmployees());
         }
     }
-    
-    private void populatePreviousPeriodForWeb(EmployeesApi employeesApi, AverageNumberOfEmployees averageNumberOfEmployees) {     
-        PreviousPeriod previousPeriod = employeesApi.getPreviousPeriod();  
+
+    private void populatePreviousPeriodForWeb(EmployeesApi employeesApi, AverageNumberOfEmployees averageNumberOfEmployees) {
+        PreviousPeriod previousPeriod = employeesApi.getPreviousPeriod();
         if (previousPeriod != null) {
             averageNumberOfEmployees.setPreviousAverageNumberOfEmployees(previousPeriod.getAverageNumberOfEmployees());
         }
-    }    
+    }
+
+    private void setCurrentPeriodEmployeesOnApiModel(Employees employees, EmployeesApi employeesApi) {
+        CurrentPeriod currentPeriod = new CurrentPeriod();
+
+        if (employees.getDetails() != null && employees.getDetails().equals("")) {
+            currentPeriod.setDetails(null);
+        } else {
+            currentPeriod.setDetails(employees.getDetails());
+        }
+
+        if (employees.getAverageNumberOfEmployees() != null && employees.getAverageNumberOfEmployees().getCurrentAverageNumberOfEmployees() != null) {
+            currentPeriod.setAverageNumberOfEmployees(employees.getAverageNumberOfEmployees().getCurrentAverageNumberOfEmployees());
+        }
+
+        employeesApi.setCurrentPeriod(currentPeriod);
+    }
+
+    private void setPreviousPeriodEmployeesOnApiModel(Employees employees, EmployeesApi employeesApi) {
+        PreviousPeriod previousPeriod = new PreviousPeriod();
+
+        if (employees.getAverageNumberOfEmployees() != null && employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees() != null) {
+            previousPeriod.setAverageNumberOfEmployees(employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees());
+        }
+
+        employeesApi.setPreviousPeriod(previousPeriod);
+    }
 }
