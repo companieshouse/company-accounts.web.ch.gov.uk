@@ -93,7 +93,6 @@ public class EmployeesController extends BaseController implements
             companyAccountsId);
     }
 
-
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
         throws ServiceException {

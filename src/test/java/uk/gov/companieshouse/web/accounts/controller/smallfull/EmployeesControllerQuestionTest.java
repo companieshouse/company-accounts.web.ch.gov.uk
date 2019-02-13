@@ -76,7 +76,7 @@ public class EmployeesControllerQuestionTest {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String TEST_PATH = "hasSelectedEmployeesNote";
+    private static final String EMPLOYEES_RADIO_BUTTON = "hasSelectedEmployeesNote";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
@@ -145,7 +145,7 @@ public class EmployeesControllerQuestionTest {
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         
         this.mockMvc.perform(post(EMPLOYEES_QUESTION_PATH)
-            .param(TEST_PATH, "1")
+            .param(EMPLOYEES_RADIO_BUTTON, "1")
             .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
@@ -159,9 +159,33 @@ public class EmployeesControllerQuestionTest {
         String invalidData = "test";
 
         this.mockMvc.perform(post(EMPLOYEES_QUESTION_PATH)
-            .param(TEST_PATH, invalidData))
+            .param(EMPLOYEES_RADIO_BUTTON, invalidData))
             .andExpect(status().isOk())
             .andExpect(view().name(EMPLOYEES_QUESTION_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
+
+    @Test
+    @DisplayName("Test note deleted when no selected and employees resource present")
+    void deleteEmployeesNoteWhenNoSelected() throws Exception {
+
+        // Mock non-numeric input to trigger binding result errors
+        String invalidData = "test";
+
+        Employees employees = new Employees();
+        employees.setDetails("test details");
+
+        when(mockEmployeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(employees);
+
+
+            when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+            this.mockMvc.perform(post(EMPLOYEES_QUESTION_PATH)
+                    .param(EMPLOYEES_RADIO_BUTTON, "0")
+                    .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                    .andExpect(status().is3xxRedirection())
+                    .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+            verify(mockEmployeesService, times(1)).deleteEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        }
 }
