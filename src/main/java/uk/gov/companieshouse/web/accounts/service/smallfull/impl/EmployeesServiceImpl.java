@@ -123,4 +123,19 @@ public class EmployeesServiceImpl implements EmployeesService {
     private boolean hasEmployees(SmallFullLinks smallFullLinks) {
         return smallFullLinks.getEmployeesNote() != null;
     }
+
+    @Override
+    public void deleteEmployees(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = EMPLOYEES_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().employees().delete(uri).execute();
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            throw new ServiceException("Error deleting employees resource", e);
+        }
+    }
 }

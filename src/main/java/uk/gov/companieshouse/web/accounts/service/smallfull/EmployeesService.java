@@ -32,4 +32,13 @@ public interface EmployeesService {
      */
     List<ValidationError> submitEmployees(String transactionId, String companyAccountsId, Employees employees, String companyNumber)
         throws ServiceException;
+
+    /**
+     * Delete the employees note
+     *
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteEmployees(String transactionId, String companyAccountsId) throws ServiceException;
 }

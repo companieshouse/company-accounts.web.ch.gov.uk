@@ -762,11 +762,12 @@
                 <!-- Employees Note -->
                 <div id="cya-small-full-employees-note">
 
-                    <div th:if="*{employees != null}">
+                    <div th:if="*{employees?.details != null OR employees?.averageNumberOfEmployees !=null}">
+
                         <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Employees',
                             identifier= 'employees-note',
-                            resource = 'employees',
+                            resource = 'employees-question',
 
                             marginTop = true
                             )">
@@ -795,17 +796,17 @@
 
                         </dl>
 
-                    <div th:if="*{employees.details != null}">
-                        <dl class="app-check-your-answers app-check-your-answers--short">
-                            <div class="app-check-your-answers__contents">
-                                <dt class="app-check-your-answers__question">Additional information</dt>
-                                <dd class="app-check-your-answers__answer">
-                                    <p id="review-employees-details" th:utext="*{#strings.replace(employees?.details,'&#10;','&lt;br&gt;')}"></p>
-                                <dd class="app-check-your-answers__change"></dd>
-                            </div>
-                        </dl>
+                        <div th:if="*{employees.details != null}">
+                            <dl class="app-check-your-answers app-check-your-answers--short">
+                                <div class="app-check-your-answers__contents">
+                                    <dt class="app-check-your-answers__question">Additional information</dt>
+                                    <dd class="app-check-your-answers__answer">
+                                        <p id="review-employees-details" th:utext="*{#strings.replace(employees?.details,'&#10;','&lt;br&gt;')}"></p>
+                                    <dd class="app-check-your-answers__change"></dd>
+                                </div>
+                            </dl>
+                        </div>
                     </div>
-
                 </div>
 
                     <!-- Employees Note End -->
