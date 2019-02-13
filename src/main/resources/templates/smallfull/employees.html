@@ -51,10 +51,17 @@
             </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
-                    Average number of employees
-                    <span class="govuk-hint">
-                    Enter the average number of people employed by the company in the period you're filing for.
-                    </span>
+                    
+                    <details class="govuk-details" role="group">
+                        <summary class="govuk-details__summary" role="button" aria-controls="details-content"
+                            aria-expanded="false">
+                           <span id="additional-information-title-text" class="govuk-details__summary-text">Average number of employees</span>
+                        </summary>
+                        <div class="govuk-govuk-form-group" id="details-content" aria-hidden="true">
+                            <label class="govuk-visually-hidden" th:for="averageNumberOfEmployees.currentAverageNumberOfEmployees">Average number of employees</label>
+                            <span id="more-detail-hint" class="govuk-hint">Enter the average number of people employed by the company in the period you're filing for.</span>
+                        </div>
+                    </details>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (

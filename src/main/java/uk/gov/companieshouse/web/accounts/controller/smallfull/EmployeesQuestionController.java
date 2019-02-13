@@ -101,7 +101,7 @@ public class EmployeesQuestionController extends BaseController {
     }
 
     /**
-     * Sets the hasSelectedEmployeesNote Boolean according to the cached state
+     * Sets the hasSelectedEmployeesNote Boolean on the employeesQuestion model according to the cached state
      * @param request The request
      * @param employeesQuestion The employeesQuestion model on which to set the boolean
      */
