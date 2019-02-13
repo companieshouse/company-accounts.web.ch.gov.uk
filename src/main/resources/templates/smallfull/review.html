@@ -415,7 +415,7 @@
 
     <!-- Start Tangible Assets -->
     <div id="cya-small-full-tangible-assets-note">
-      <div th:if="*{tangibleAssets?.netBookValue?.currentPeriod.total != null}">
+      <div th:if="*{tangibleAssets?.netBookValue?.currentPeriod?.total != null}">
         <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Tangible assets note',
                             identifier= 'tangible-assets-note',
