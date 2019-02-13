@@ -5,7 +5,7 @@
 </head>
 <body>
 <div th:fragment="tangibleAssetsValueRow" class="app-check-your-answers__contents">
-  <dt class="app-check-your-answers__question  govuk-!-font-weight-regular" th:text="${description}"></dt>
+  <dt class="app-check-your-answers__question" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : 'govuk-!-font-weight-regular'" th:text="${description}"></dt>
 
   <dd th:attr="id='review-' + ${identifier} + '-land-and-buildings'"
       th:text="${row?.landAndBuildings != null ? '£' + #numbers.formatInteger(row.landAndBuildings, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
