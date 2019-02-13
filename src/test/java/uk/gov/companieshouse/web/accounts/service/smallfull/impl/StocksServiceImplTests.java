@@ -15,6 +15,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.stocks.StocksResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.stocks.request.StocksCreate;
+import uk.gov.companieshouse.api.handler.smallfull.stocks.request.StocksDelete;
 import uk.gov.companieshouse.api.handler.smallfull.stocks.request.StocksGet;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
@@ -41,7 +42,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -62,6 +66,9 @@ public class StocksServiceImplTests {
 
     @Mock
     private StocksGet mockStocksGet;
+    
+    @Mock
+    private StocksDelete mockStocksDelete;
 
     @Mock
     private StocksCreate mockStocksCreate;
@@ -285,6 +292,50 @@ public class StocksServiceImplTests {
             COMPANY_NUMBER));
     }
 
+    @DisplayName("DELETE - stocks successful delete path")
+    void deleteStocks() throws Exception {
+
+        getMockStocksResourceHandler();
+        when(mockStocksResourceHandler.delete(STOCKS_URI)).thenReturn(mockStocksDelete);
+        doNothing().when(mockStocksDelete).execute();
+
+        stocksService.deleteStocks(TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID);
+
+        verify(mockStocksDelete, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("DELETE - stocks throws ServiceException due to URIValidationException")
+    void deleteStocksUriValidationException() throws Exception {
+
+        getMockStocksResourceHandler();
+        when(mockStocksResourceHandler.delete(STOCKS_URI)).thenReturn(mockStocksDelete);
+        when(mockStocksDelete.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockStocksDelete.execute());
+        assertThrows(ServiceException.class, () -> stocksService.deleteStocks(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - stocks throws ServiceException due to ApiErrorResponseException - 404 Not Found")
+    void deleteStocksApiErrorResponseExceptionNotFound() throws Exception {
+
+        getMockStocksResourceHandler();
+        when(mockStocksResourceHandler.delete(STOCKS_URI)).thenReturn(mockStocksDelete);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockStocksDelete.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockStocksDelete.execute());
+        assertThrows(ServiceException.class, () -> stocksService.deleteStocks(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
+    }
+    
     private void validateCreditorsAfterOneYear(StocksNote stocksNote) {
 
         assertNotNull(stocksNote);
