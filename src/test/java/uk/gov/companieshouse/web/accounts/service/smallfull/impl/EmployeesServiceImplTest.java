@@ -16,6 +16,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.employees.EmployeesResourceHandler;
+import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesDelete;
 import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesGet;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
@@ -34,6 +35,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +58,9 @@ public class EmployeesServiceImplTest {
 
     @Mock
     private EmployeesGet mockEmployeesGet;
+
+    @Mock
+    private EmployeesDelete mockEmployeesDelete;
 
     @Mock
     private SmallFullGet mockSmallFullGet;
@@ -150,7 +157,7 @@ public class EmployeesServiceImplTest {
     }
 
     @Test
-    @DisplayName("GET - Employees throws ServiceExcepiton due to URIValidationException")
+    @DisplayName("GET - Employees throws ServiceException due to URIValidationException")
     void getEmployeesURIValidationException() throws Exception {
 
         getMockEmployeesResourceHandler();
@@ -163,6 +170,51 @@ public class EmployeesServiceImplTest {
             COMPANY_ACCOUNTS_ID,
             COMPANY_NUMBER));
     }
+
+    @Test
+    @DisplayName("DELETE - Employees successful delete path")
+    void deleteEmployees() throws Exception {
+
+        getMockEmployeesResourceHandler();
+        when(mockEmployeesResourceHandler.delete(EMPLOYEES_URI)).thenReturn(mockEmployeesDelete);
+        doNothing().when(mockEmployeesDelete).execute();
+
+        employeesService.deleteEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(mockEmployeesDelete, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("DELETE - Employees throws ServiceExcepiton due to URIValidationException")
+    void deleteEmployeesUriValidationException() throws Exception {
+
+        getMockEmployeesResourceHandler();
+        when(mockEmployeesResourceHandler.delete(EMPLOYEES_URI)).thenReturn(mockEmployeesDelete);
+        when(mockEmployeesDelete.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockEmployeesDelete.execute());
+        assertThrows(ServiceException.class, () -> employeesService.deleteEmployees(
+                TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - Employees throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
+    void deleteEmployeesApiErrorResponseExceptionNotFound() throws Exception {
+
+        getMockEmployeesResourceHandler();
+        when(mockEmployeesResourceHandler.delete(EMPLOYEES_URI)).thenReturn(mockEmployeesDelete);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockEmployeesDelete.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockEmployeesDelete.execute());
+        assertThrows(ServiceException.class, () -> employeesService.deleteEmployees(
+                TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
+    }
+
 
     private void getMockSmallFullResourceHandler() {
         when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
