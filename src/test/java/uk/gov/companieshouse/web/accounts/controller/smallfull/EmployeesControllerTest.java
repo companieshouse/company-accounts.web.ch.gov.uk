@@ -19,9 +19,16 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employ
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -127,6 +134,19 @@ public class EmployeesControllerTest {
     }
 
     @Test
+    @DisplayName("Post employees failure path")
+    void postRequestFailure() throws Exception {
+
+        doThrow(ServiceException.class)
+            .when(mockEmployeesService).submitEmployees(anyString(), anyString(), any(Employees.class), anyString());
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH))
+            .andExpect(status().isOk())
+            .andExpect(view().name(ERROR_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
     @DisplayName("Post employees with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
@@ -139,6 +159,24 @@ public class EmployeesControllerTest {
             .andExpect(status().isOk())
             .andExpect(view().name(EMPLOYEES_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Post creditors within one year failure path with API validation errors")
+    void postRequestFailureWithApiValidationErrors() throws Exception {
+
+        ValidationError validationError = new ValidationError();
+        validationError.setFieldPath(TEST_PATH);
+        validationError.setMessageKey("invalid_character");
+
+        List<ValidationError> errors = new ArrayList<>();
+        errors.add(validationError);
+
+        when(mockEmployeesService.submitEmployees(anyString(), anyString(), any(Employees.class), anyString())).thenReturn(errors);
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH))
+            .andExpect(status().isOk())
+            .andExpect(view().name(EMPLOYEES_VIEW));
     }
 
     @Test

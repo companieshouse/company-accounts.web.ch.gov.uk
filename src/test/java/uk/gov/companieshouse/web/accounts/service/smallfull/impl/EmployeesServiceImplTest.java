@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,15 +9,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.employees.EmployeesResourceHandler;
+import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesCreate;
 import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesGet;
+import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
+import uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
@@ -30,10 +34,15 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.EmployeesTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,6 +63,12 @@ public class EmployeesServiceImplTest {
 
     @Mock
     private EmployeesGet mockEmployeesGet;
+
+    @Mock
+    private EmployeesCreate mockEmployeesCreate;
+
+    @Mock
+    private EmployeesUpdate mockEmployeesUpdate;
 
     @Mock
     private SmallFullGet mockSmallFullGet;
@@ -164,6 +179,149 @@ public class EmployeesServiceImplTest {
             COMPANY_NUMBER));
     }
 
+    @Test
+    @DisplayName("POST - Employees successful path")
+    void postEmployeesSuccess() throws Exception {
+
+        Employees employees = createEmployees();
+        EmployeesApi employeesApi = createEmployeesApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        setLinksWithoutEmployees(smallFullApi);
+
+        when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
+
+        employeesCreate(employeesApi);
+
+        List<ValidationError> validationErrors = employeesService.submitEmployees(TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER);
+
+        assertEquals(0, validationErrors.size());
+    }
+
+    @Test
+    @DisplayName("POST - Employees throws ServiceException due to ApiErrorResponseException - 404 Not Found")
+    void postEmployeeesApiErrorResponseExceptionNotFound() throws Exception {
+
+        getMockEmployeesResourceHandler();
+
+        Employees employees = createEmployees();
+        EmployeesApi employeesApi = createEmployeesApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        setLinksWithoutEmployees(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+
+        when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
+        when(mockEmployeesResourceHandler.create(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesCreate);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockEmployeesCreate.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockEmployeesCreate.execute());
+        assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            employees,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - Employees throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
+    void postEmployeesApiErrorResponseExceptionBadRequest() throws Exception {
+
+        getMockEmployeesResourceHandler();
+
+        Employees employees = createEmployees();
+        EmployeesApi employeesApi = createEmployeesApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        setLinksWithoutEmployees(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+
+        when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
+        when(mockEmployeesResourceHandler.create(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesCreate);
+
+        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
+        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockEmployeesCreate.execute()).thenThrow(apiErrorResponseException);
+
+        assertThrows(ApiErrorResponseException.class, () -> mockEmployeesCreate.execute());
+        assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            employees,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - Employees throws ServiceExcepiton getting Smallfull data")
+    void postEmployeesGetSmallFullDataApiResponseException() throws Exception {
+
+        Employees employees = createEmployees();
+
+        when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+
+        assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            employees,
+            COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("PUT - Employees successful path")
+    void putEmployeesSuccess() throws Exception {
+
+        Employees employees = createEmployees();
+        EmployeesApi employeesApi = createEmployeesApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        setLinksWithEmployees(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+
+        when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
+        employeesUpdate(employeesApi);
+
+        List<ValidationError> validationErrors = employeesService.submitEmployees(TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER);
+
+        assertEquals(0, validationErrors.size());
+    }
+
+    @Test
+    @DisplayName("PUT - Employees throws ServiceExcepiton due to URIValidationException")
+    void putEmployeesURIValidationException() throws Exception {
+
+        Employees employees = createEmployees();
+        EmployeesApi employeesApi = createEmployeesApi();
+
+        SmallFullApi smallFullApi = new SmallFullApi();
+        setLinksWithEmployees(smallFullApi);
+
+        when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+
+        when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
+
+        getMockEmployeesResourceHandler();
+        when(mockEmployeesResourceHandler.update(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesUpdate);
+
+        when(mockEmployeesUpdate.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(URIValidationException.class, () -> mockEmployeesUpdate.execute());
+        assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID,
+            employees,
+            COMPANY_NUMBER));
+    }
+
     private void getMockSmallFullResourceHandler() {
         when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
         when(mockApiClient.smallFull()).thenReturn(mockSmallFullResourceHandler);
@@ -178,6 +336,18 @@ public class EmployeesServiceImplTest {
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.get(EMPLOYEES_URI)).thenReturn(mockEmployeesGet);
         when(mockEmployeesGet.execute()).thenReturn(employeesApi);
+    }
+
+    private void employeesCreate(EmployeesApi employeesApi) throws Exception {
+        getMockEmployeesResourceHandler();
+        when(mockEmployeesResourceHandler.create(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesCreate);
+        when(mockEmployeesCreate.execute()).thenReturn(employeesApi);
+    }
+
+    private void employeesUpdate(EmployeesApi employeesApi) throws Exception {
+        getMockEmployeesResourceHandler();
+        when(mockEmployeesResourceHandler.update(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesUpdate);
+        doNothing().when(mockEmployeesUpdate).execute();
     }
 
     private Employees createEmployees() {
@@ -197,5 +367,35 @@ public class EmployeesServiceImplTest {
         employees.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return employees;
+    }
+
+    private EmployeesApi createEmployeesApi() {
+        EmployeesApi employeesApi = new EmployeesApi();
+        CurrentPeriod currentPeriod = new CurrentPeriod();
+        PreviousPeriod previousPeriod = new PreviousPeriod();
+
+        currentPeriod.setAverageNumberOfEmployees(5L);
+        currentPeriod.setDetails("DETAILS");
+
+        previousPeriod.setAverageNumberOfEmployees(5L);
+
+        employeesApi.setCurrentPeriod(currentPeriod);
+        employeesApi.setPreviousPeriod(previousPeriod);
+
+        return employeesApi;
+    }
+
+    private void setLinksWithEmployees(SmallFullApi smallFullApi) {
+        SmallFullLinks links = new SmallFullLinks();
+        links.setEmployeesNote("");
+
+        smallFullApi.setLinks(links);
+    }
+
+    private void setLinksWithoutEmployees(SmallFullApi smallFullApi) {
+        SmallFullLinks links = new SmallFullLinks();
+        links.setDebtorsNote("");
+
+        smallFullApi.setLinks(links);
     }
 }
