@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
@@ -59,7 +60,7 @@ public class EmployeesTransformerImpl implements EmployeesTransformer {
     private void setCurrentPeriodEmployeesOnApiModel(Employees employees, EmployeesApi employeesApi) {
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        if (employees.getDetails() != null && employees.getDetails().equals("")) {
+        if (StringUtils.isBlank(employees.getDetails())) {
             currentPeriod.setDetails(null);
         } else {
             currentPeriod.setDetails(employees.getDetails());
