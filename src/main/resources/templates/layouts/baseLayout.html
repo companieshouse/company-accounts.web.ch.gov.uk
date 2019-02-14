@@ -18,7 +18,7 @@
     
 </head>
 <body>
-    <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.js?flags=gated&features=default" defer async ></script>
+    <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.js" defer async ></script>
     <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
