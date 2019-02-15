@@ -550,7 +550,8 @@
           <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Net book value at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-net-book-value-current-period',
-                                row = *{tangibleAssets?.netBookValue?.currentPeriod}
+                                row = *{tangibleAssets?.netBookValue?.currentPeriod},
+                                isTotalRow = true
                             )">
           </div>
 
@@ -559,7 +560,8 @@
                  th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Net book value at ' + *{#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-net-book-value-previous-period',
-                                row = *{tangibleAssets?.netBookValue?.previousPeriod}
+                                row = *{tangibleAssets?.netBookValue?.previousPeriod},
+                                isTotalRow = true
                             )">
           </div>
           </th:block>
