@@ -10,6 +10,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Total;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 @Component
 public class StocksTransformerImpl implements StocksTransformer {
 
@@ -40,15 +43,11 @@ public class StocksTransformerImpl implements StocksTransformer {
     public StocksApi getStocksApi(StocksNote stocksNote) {
 
         StocksApi stocksApi = new StocksApi();
-        if (stocksNote.getTotal().getCurrentTotal() != null) {
 
-            setCurrentPeriodDebtorsOnApiModel(stocksNote, stocksApi);
-        }
+        setCurrentPeriodDebtorsOnApiModel(stocksNote, stocksApi);
 
-        if (stocksNote.getTotal().getPreviousTotal() != null) {
+        setPreviousPeriodDebtorsOnApiModel(stocksNote, stocksApi);
 
-            setPreviousPeriodDebtorsOnApiModel(stocksNote, stocksApi);
-        }
         return stocksApi;
     }
 
@@ -70,7 +69,9 @@ public class StocksTransformerImpl implements StocksTransformer {
             previousPeriod.setTotal(stocksNote.getTotal().getPreviousTotal());
         }
 
-        stocksApi.setPreviousPeriod(previousPeriod);
+        if (isPreviousPeriodPopulated(previousPeriod)) {
+            stocksApi.setPreviousPeriod(previousPeriod);
+        }
     }
 
     private void setCurrentPeriodDebtorsOnApiModel(StocksNote stocksNote, StocksApi stocksApi) {
@@ -91,7 +92,9 @@ public class StocksTransformerImpl implements StocksTransformer {
             currentPeriod.setTotal(stocksNote.getTotal().getCurrentTotal());
         }
 
-        stocksApi.setCurrentPeriod(currentPeriod);
+        if (isCurrentPeriodPopulated(currentPeriod)) {
+            stocksApi.setCurrentPeriod(currentPeriod);
+        }
     }
 
     private void getStocksPreviousPeriodForWeb(StocksApi stocksApi,
@@ -116,5 +119,19 @@ public class StocksTransformerImpl implements StocksTransformer {
             stocks.setCurrentStocks(stocksApi.getCurrentPeriod().getStocks());
             total.setCurrentTotal(stocksApi.getCurrentPeriod().getTotal());
         }
+    }
+
+    private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
+
+        return Stream.of(currentPeriod.getPaymentsOnAccount(),
+                currentPeriod.getStocks(),
+                currentPeriod.getTotal()).anyMatch(Objects::nonNull);
+    }
+
+    private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
+
+        return Stream.of(previousPeriod.getPaymentsOnAccount(),
+                previousPeriod.getStocks(),
+                previousPeriod.getTotal()).anyMatch(Objects::nonNull);
     }
 }

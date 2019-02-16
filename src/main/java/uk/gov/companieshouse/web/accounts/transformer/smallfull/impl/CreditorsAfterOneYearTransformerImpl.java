@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
-import java.util.Objects;
-import java.util.stream.Stream;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CreditorsAfterOneYearApi;
@@ -13,6 +11,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteron
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.OtherCreditors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.Total;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOneYearTransformer;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYearTransformer {
@@ -53,15 +54,9 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
 
         CreditorsAfterOneYearApi creditorsAfterOneYearApi = new CreditorsAfterOneYearApi();
 
-        if (creditorsAfterOneYear.getTotal() != null) {
-            if (creditorsAfterOneYear.getTotal().getCurrentTotal() != null) {
-                setCurrentPeriodOnApiModel(creditorsAfterOneYear, creditorsAfterOneYearApi);
-            }
+        setCurrentPeriodOnApiModel(creditorsAfterOneYear, creditorsAfterOneYearApi);
 
-            if (creditorsAfterOneYear.getTotal().getPreviousTotal() != null) {
-                setPreviousPeriodOnApiModel(creditorsAfterOneYear, creditorsAfterOneYearApi);
-            }
-        }
+        setPreviousPeriodOnApiModel(creditorsAfterOneYear, creditorsAfterOneYearApi);
 
         return creditorsAfterOneYearApi;
     }
@@ -115,7 +110,7 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
         if (creditorsAfterOneYear.getDetails() != null
-                && StringUtils.isBlank(creditorsAfterOneYear.getDetails())){
+                && StringUtils.isBlank(creditorsAfterOneYear.getDetails())) {
             currentPeriod.setDetails(null);
         } else {
             currentPeriod.setDetails(creditorsAfterOneYear.getDetails());
@@ -146,7 +141,9 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
             currentPeriod.setTotal(creditorsAfterOneYear.getTotal().getCurrentTotal());
         }
 
-        creditorsAfterOneYearApi.setCurrentPeriod(currentPeriod);
+        if (isCurrentPeriodPopulated(currentPeriod)) {
+            creditorsAfterOneYearApi.setCurrentPeriod(currentPeriod);
+        }
     }
 
     private void setPreviousPeriodOnApiModel(CreditorsAfterOneYear creditorsAfterOneYear,
@@ -183,12 +180,19 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
         }
     }
 
-    private boolean isPreviousPeriodPopulated(PreviousPeriod period) {
-        return Stream.of(
-                period.getBankLoansAndOverdrafts(),
-                period.getFinanceLeasesAndHirePurchaseContracts(),
-                period.getOtherCreditors(),
-           period.getTotal()).anyMatch(Objects ::nonNull);
+    private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
+
+        return Stream.of(currentPeriod.getBankLoansAndOverdrafts(),
+                currentPeriod.getFinanceLeasesAndHirePurchaseContracts(),
+                currentPeriod.getOtherCreditors(),
+                currentPeriod.getTotal()).anyMatch(Objects::nonNull);
     }
 
+    private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
+
+        return Stream.of(previousPeriod.getBankLoansAndOverdrafts(),
+                previousPeriod.getFinanceLeasesAndHirePurchaseContracts(),
+                previousPeriod.getOtherCreditors(),
+                previousPeriod.getTotal()).anyMatch(Objects::nonNull);
+    }
 }
