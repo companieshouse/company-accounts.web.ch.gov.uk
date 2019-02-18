@@ -21,6 +21,7 @@ public class CriteriaController extends BaseController {
 
     private static final String COMPANY_PATH = "/company/";
     private static final String ALTERNATIVE_OPTIONS_PATH = "/submit-abridged-accounts/alternative-filing-options";
+    private static final String OTHER_OPTIONS_PATH = "/select-account-type";
 
     @GetMapping
     public String getCriteria(Model model) {
@@ -47,6 +48,9 @@ public class CriteriaController extends BaseController {
         if (criteria.getIsCriteriaMet().equalsIgnoreCase("noAlternativeFilingMethod")) {
 
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + COMPANY_PATH + companyNumber + ALTERNATIVE_OPTIONS_PATH;
+        } else if (criteria.getIsCriteriaMet().equalsIgnoreCase("noOtherAccounts")) {
+
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + COMPANY_PATH + companyNumber + OTHER_OPTIONS_PATH;
         }
 
         //TODO - update to proper link once What Type of Accounts has been built
