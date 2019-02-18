@@ -11,6 +11,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.controller.BranchController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.MissingAnnotationException;
 import uk.gov.companieshouse.web.accounts.exception.NavigationException;
@@ -67,7 +68,45 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @NextController annotation on " + clazz.toString());
         }
 
-        return ((NextController) nextControllerAnnotation).value();
+        Class[] classList = ((NextController) nextControllerAnnotation).value();
+
+        if (classList.length > 0) {
+
+            if (classList.length == 1) {
+                return ((NextController) nextControllerAnnotation).value()[0];
+            } else {
+
+                Class notImplementingBranch = null;
+
+                for (int i = 0, j = 0; i < classList.length; i++) {
+
+                    Class lookAtMe = classList[i];
+
+                    if (!isBranchController(lookAtMe)) {
+                        j++;
+                        notImplementingBranch = lookAtMe;
+
+                        if (j > 1) {
+                            throw new NavigationException("More than one default branch " + clazz.toString());
+                        }
+                    } else {
+                        BranchController hello = (BranchController)applicationContext.getBean(lookAtMe);
+
+                        if (hello.willRender()) {
+                            return hello.getClass();
+                        }
+                    }
+                }
+
+                if (notImplementingBranch != null) {
+                    return notImplementingBranch;
+                } else {
+                    throw new NavigationException("No default branch and no branch is valid " + clazz.toString());
+                }
+            }
+        } else {
+            throw new NavigationException("No next controller to navigate to " + clazz.toString());
+        }
     }
 
     /**
@@ -155,6 +194,7 @@ public class NavigatorService {
         }
 
         String[] mappings = ((RequestMapping) requestMappingAnnotation).value();
+
         if (mappings.length <= 0) {
             throw new MissingAnnotationException("Missing @RequestMapping value on " + nextControllerClass.toString());
         }
@@ -183,6 +223,7 @@ public class NavigatorService {
         }
 
         String[] mappings = ((RequestMapping) requestMappingAnnotation).value();
+
         if (mappings.length <= 0) {
             throw new MissingAnnotationException("Missing @RequestMapping value on " + previousControllerClass.toString());
         }
@@ -198,6 +239,10 @@ public class NavigatorService {
      */
     private boolean isConditionalController(Class clazz) {
         return ConditionalController.class.isAssignableFrom(clazz);
+    }
+
+    private boolean isBranchController(Class clazz) {
+        return BranchController.class.isAssignableFrom(clazz);
     }
 
     private enum Direction {

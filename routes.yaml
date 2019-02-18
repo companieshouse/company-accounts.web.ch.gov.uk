@@ -7,3 +7,4 @@ routes:
    3: /company/(.*)/select-account-type
    4: /company/(.*)/dormant/
    5: /company/(.*)/micro-entity/
+   6: /company/(.*)/test
