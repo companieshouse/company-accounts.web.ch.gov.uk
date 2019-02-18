@@ -2,6 +2,8 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CurrentPeriod;
@@ -132,10 +134,7 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
       CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
     CurrentPeriod currentPeriod = new CurrentPeriod();
 
-    if (creditorsWithinOneYear.getDetails() != null
-        && creditorsWithinOneYear.getDetails().equals("")) {
-      currentPeriod.setDetails(null);
-    } else {
+    if (StringUtils.isNotBlank(creditorsWithinOneYear.getDetails())) {
       currentPeriod.setDetails(creditorsWithinOneYear.getDetails());
     }
 

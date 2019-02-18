@@ -109,10 +109,7 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
             CreditorsAfterOneYearApi creditorsAfterOneYearApi) {
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        if (creditorsAfterOneYear.getDetails() != null
-                && StringUtils.isBlank(creditorsAfterOneYear.getDetails())) {
-            currentPeriod.setDetails(null);
-        } else {
+        if (StringUtils.isNotBlank(creditorsAfterOneYear.getDetails())) {
             currentPeriod.setDetails(creditorsAfterOneYear.getDetails());
         }
 

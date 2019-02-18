@@ -1,11 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
-import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDebtors;
@@ -123,9 +123,7 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     private void setCurrentPeriodDebtorsOnApiModel(Debtors debtors, DebtorsApi debtorsApi) {
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        if (debtors.getDetails() != null && debtors.getDetails().equals("")) {
-            currentPeriod.setDetails(null);
-        } else {
+        if (StringUtils.isNotBlank(debtors.getDetails())) {
             currentPeriod.setDetails(debtors.getDetails());
         }
 
