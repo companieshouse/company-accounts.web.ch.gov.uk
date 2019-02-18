@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,9 +26,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.TangibleResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleCreate;
+import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleDelete;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleGet;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleUpdate;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -79,6 +82,9 @@ public class TangibleAssetsNoteServiceImplTest {
 
     @Mock
     private TangibleUpdate tangibleUpdate;
+
+    @Mock
+    private TangibleDelete tangibleDelete;
 
     @Mock
     private SmallFullApi smallFullApi;
@@ -213,6 +219,40 @@ public class TangibleAssetsNoteServiceImplTest {
         verify(tangibleUpdate, times(1)).execute();
         assertTrue(testResult.isEmpty());
         assertNotNull(testResult);
+    }
+
+    @Test
+    @DisplayName("DELETE - Tangible successful path")
+    void deleteTangibleSuccess() {
+
+        when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
+
+        assertAll(() -> tangibleAssetsNoteService
+                .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - Tangible failure path due to a thrown ApiErrorResponseException")
+    void deleteTangibleApiErrorResponseException() throws Exception {
+
+        when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
+
+        doThrow(ApiErrorResponseException.class).when(tangibleDelete).execute();
+
+        assertThrows(ServiceException.class, () -> tangibleAssetsNoteService
+                .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - Tangible failure path due to a thrown URIValidationException")
+    void deleteTangibleURIValidationException() throws Exception {
+
+        when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
+
+        doThrow(URIValidationException.class).when(tangibleDelete).execute();
+
+        assertThrows(ServiceException.class, () -> tangibleAssetsNoteService
+                .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     private void assertCompanyDatesSetOnTangibleAssets(TangibleAssets tangibleAssets) {
