@@ -341,7 +341,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && smallFullLinks.getTangibleAssetsNote() != null) {
 
             tangibleAssetsNoteService.deleteTangibleAssets(transactionId, companyAccountsId);
-            debtorsService.deleteDebtors(transactionId, companyAccountsId);
         }
 
         if ((isStocksCurrentAmountNull(balanceSheet)

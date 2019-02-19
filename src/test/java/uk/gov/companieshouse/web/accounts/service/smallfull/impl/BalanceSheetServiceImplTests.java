@@ -982,12 +982,6 @@ public class BalanceSheetServiceImplTests {
 
         currentAssets.setDebtors(debtors);
         balanceSheet.setCurrentAssets(currentAssets);
-
-        FixedAssets fixedAssets = new FixedAssets();
-        TangibleAssets tangibleAssets = new TangibleAssets();
-        tangibleAssets.setCurrentAmount((long)1000);
-        fixedAssets.setTangibleAssets(tangibleAssets);
-        balanceSheet.setFixedAssets(fixedAssets);
     }
 
     private BalanceSheet createMultipleYearFilerBalanceSheetTestObject() {
