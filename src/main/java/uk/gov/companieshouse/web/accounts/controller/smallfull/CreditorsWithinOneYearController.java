@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(CreditorsAfterOneYearController.class)
 @PreviousController(DebtorsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/creditors-within-one-year")
 public class CreditorsWithinOneYearController extends BaseController implements

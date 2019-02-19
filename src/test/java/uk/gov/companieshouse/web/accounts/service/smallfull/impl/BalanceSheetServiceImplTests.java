@@ -41,6 +41,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
@@ -61,9 +62,9 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -122,6 +123,9 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
+
+    @Mock
+    private CreditorsAfterOneYearService creditorsAfterOneYearService;
 
     @Mock
     private StocksService stocksService;
@@ -283,7 +287,6 @@ public class BalanceSheetServiceImplTests {
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
-        createBalanceSheetWithNullValues(balanceSheet);
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
         balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
@@ -299,6 +302,7 @@ public class BalanceSheetServiceImplTests {
 
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
@@ -524,7 +528,6 @@ public class BalanceSheetServiceImplTests {
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
-        createBalanceSheetWithNullValues(balanceSheet);
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
         calledUpShareCapitalNotPaid.setPreviousAmount((long)1000);
@@ -542,8 +545,9 @@ public class BalanceSheetServiceImplTests {
 
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(stocksService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -911,6 +915,7 @@ public class BalanceSheetServiceImplTests {
         SmallFullLinks smallFullLinks = new SmallFullLinks();
         smallFullLinks.setDebtorsNote("DEBTORS_LINK");
         smallFullLinks.setCreditorsWithinOneYearNote("CREDITORS_WITHIN_ONE_YEAR_LINK");
+        smallFullLinks.setCreditorsAfterMoreThanOneYearNote("CREDITORS_AFTER_ONE_YEAR_LINK");
         smallFullLinks.setTangibleAssetsNote("TANGIBLE_ASSETS_LINK");
         smallFullLinks.setStocksNote("STOCKS_LINK");
         smallFullApi.setLinks(smallFullLinks);
@@ -968,7 +973,7 @@ public class BalanceSheetServiceImplTests {
 
         return balanceSheet;
     }
-
+  
     private void createBalanceSheetWithNullValues(BalanceSheet balanceSheet) {
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
