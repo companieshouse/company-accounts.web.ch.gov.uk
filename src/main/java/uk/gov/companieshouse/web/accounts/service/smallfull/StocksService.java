@@ -14,4 +14,14 @@ public interface StocksService {
      * @return the stocks note
      */
     StocksNote getStocks(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException;
+
+    /**
+     * Delete the stocks note
+     *
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteStocks(String transactionId, String companyAccountsId) throws ServiceException;
+
 }
