@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.controller.micro;
+package uk.gov.companieshouse.web.accounts.controller.dormant;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,22 +12,21 @@ import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccou
 
 @Controller
 @PreviousController(SelectAccountTypeController.class)
-@RequestMapping("/company/{companyNumber}/micro-entity/criteria")
-public class MicroCriteriaController extends BaseController {
+@RequestMapping("/company/{companyNumber}/dormant/criteria")
+public class DormantCriteriaController extends BaseController {
 
-    @Value("${micro-entity-accounts.uri}")
-    private String microEntityAccountsUri;
+    @Value("${dormant-accounts.uri}")
+    private String dormantAccountsUri;
 
     @GetMapping
     public String getCriteria(@PathVariable String companyNumber, Model model) {
         addBackPageAttributeToModel(model, companyNumber);
-        model.addAttribute("microEntityAccountsUri", microEntityAccountsUri);
-
+        model.addAttribute("dormantAccountsUri", dormantAccountsUri);
         return getTemplateName();
     }
 
     @Override
     protected String getTemplateName() {
-        return "micro/criteria";
+        return "dormant/criteria";
     }
 }
