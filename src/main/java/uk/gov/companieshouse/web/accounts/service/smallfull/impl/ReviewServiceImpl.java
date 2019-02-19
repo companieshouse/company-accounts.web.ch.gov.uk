@@ -7,6 +7,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
@@ -20,6 +21,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
@@ -63,6 +65,9 @@ public class ReviewServiceImpl implements ReviewService {
     private DebtorsService debtorsService;
 
     @Autowired
+    private EmployeesService employeesService;
+
+    @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
@@ -90,6 +95,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
 
+        Employees employees = employeesService.getEmployees(transactionId, companyAccountsId, companyNumber);
+
         TangibleAssets tangibleAssets =
                 tangibleAssetsNoteService.getTangibleAssets(transactionId, companyAccountsId, companyNumber);
 
@@ -104,6 +111,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setOtherAccountingPolicy(otherAccountingPolicy);
         review.setCreditorsWithinOneYear(creditorsWithinOneYear);
         review.setDebtors(debtors);
+        review.setEmployees(employees);
         review.setTangibleAssets(tangibleAssets);
 
         return review;

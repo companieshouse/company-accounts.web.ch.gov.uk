@@ -24,11 +24,13 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -78,6 +80,9 @@ public class ReviewServiceImplTests {
     private DebtorsService debtorsService;
 
     @Mock
+    private EmployeesService employeesService;
+
+    @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @InjectMocks
@@ -123,6 +128,9 @@ public class ReviewServiceImplTests {
         Debtors mockDebtors = new Debtors();
         when(debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockDebtors);
 
+        Employees mockEmployees = new Employees();
+        when(employeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockEmployees);
+
         TangibleAssets mockTangibleAssets = new TangibleAssets();
         when(tangibleAssetsNoteService.getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
                 .thenReturn(mockTangibleAssets);
@@ -140,5 +148,6 @@ public class ReviewServiceImplTests {
         assertEquals(mockOtherAccounting, review.getOtherAccountingPolicy());
         assertEquals(mockCreditorsWithinOneYear, review.getCreditorsWithinOneYear());
         assertEquals(mockTangibleAssets, review.getTangibleAssets());
+        assertEquals(mockEmployees, review.getEmployees());
     }
 }

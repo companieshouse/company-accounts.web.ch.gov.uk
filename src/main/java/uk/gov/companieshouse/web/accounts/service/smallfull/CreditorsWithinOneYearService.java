@@ -25,7 +25,7 @@ public interface CreditorsWithinOneYearService {
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
-     * @param creditors within one year note to submit
+     * @param creditorsWithinOneYear within one year note to submit
      * @param companyNumber The company number
      * @return A list of validation errors, or an empty array list if none are present
      * @throws ServiceException if there's an error on submission
