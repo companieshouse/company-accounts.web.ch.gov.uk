@@ -14,4 +14,7 @@ public interface TangibleAssetsNoteService {
     List<ValidationError> postTangibleAssets(String transactionId, String companyAccountsId,
         TangibleAssets tangibleAssets, String companyNumber) throws ServiceException;
 
+    void deleteTangibleAssets(String transactionId, String companyAccountsId)
+        throws ServiceException;
+
 }

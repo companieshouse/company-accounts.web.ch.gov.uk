@@ -12,6 +12,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 
 @Getter
 @Setter
@@ -40,4 +41,6 @@ public class Review {
     Debtors debtors;
 
     TangibleAssets tangibleAssets;
+
+    StocksNote stocks;
 }

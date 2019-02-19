@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+    <head>
+        <title id="page-title-heading">
+            Do you also want to file your corporation tax with HMRC now?
+        </title>
+    </head>
+
+    <body>
+        <div id="corporationTax-main-content" layout:fragment="content" class="govuk-main-wrapper" role="main">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <form id="corporationTax-form" class="form" th:action="@{''}" th:object="${corporationTax}" method="POST">
+                        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('fileChoice')} ? 'govuk-form-group--error' : ''">
+                            <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+                                  legendText = 'Do you also want to file your corporation tax with HMRC now?',
+                                  radioButtonsFieldName = 'fileChoice',
+                                  )">
+                            </div>
+                        </div>
+
+                        <input id="next-button" class="govuk-button" type="submit" role="button" value="Save and continue"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
