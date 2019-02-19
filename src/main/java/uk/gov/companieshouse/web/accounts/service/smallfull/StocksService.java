@@ -30,5 +30,15 @@ public interface StocksService {
      */
     List<ValidationError> submitStocks(String transactionId, String companyAccountsId, StocksNote stocksNote, String companyNumber)
         throws ServiceException;
+
+    /**
+     * Delete the stocks note
+     *
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteStocks(String transactionId, String companyAccountsId) throws ServiceException;
+
 }
 

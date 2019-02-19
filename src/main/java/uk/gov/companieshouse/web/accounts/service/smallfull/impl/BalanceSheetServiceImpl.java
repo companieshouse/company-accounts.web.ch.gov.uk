@@ -1,9 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,73 +25,73 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class BalanceSheetServiceImpl implements BalanceSheetService {
 
+    private static final UriTemplate SMALL_FULL_URI =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId" +
+                    "}/small-full");
+    private static final UriTemplate CURRENT_PERIOD_URI =
+            new UriTemplate(SMALL_FULL_URI.toString() + "/current-period");
+    private static final UriTemplate PREVIOUS_PERIOD_URI =
+            new UriTemplate(SMALL_FULL_URI.toString() + "/previous-period");
     @Autowired
     private BalanceSheetTransformer transformer;
-
     @Autowired
     private ApiClientService apiClientService;
-
     @Autowired
     private ValidationContext validationContext;
-
     @Autowired
     private CompanyService companyService;
-
     @Autowired
     private DebtorsService debtorsService;
-
+    @Autowired
+    private StocksService stocksService;
     @Autowired
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
-
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
-
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
-
-    private static final UriTemplate SMALL_FULL_URI =
-        new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId" +
-            "}/small-full");
-
-    private static final UriTemplate CURRENT_PERIOD_URI =
-        new UriTemplate(SMALL_FULL_URI.toString() + "/current-period");
-    private static final UriTemplate PREVIOUS_PERIOD_URI =
-        new UriTemplate(SMALL_FULL_URI.toString() + "/previous-period");
 
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId,
-        String companyNumber)
-        throws ServiceException {
+                                        String companyNumber)
+            throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
         CurrentPeriodApi currentPeriodApi = getCurrentPeriod(apiClient,
-            transactionId, companyAccountsId);
+                transactionId, companyAccountsId);
         PreviousPeriodApi previousPeriodApi = null;
 
         CompanyProfileApi companyProfileApi = getCompanyProfile(companyNumber);
 
         if (isMultipleYearFiler(companyProfileApi)) {
             previousPeriodApi = getPreviousPeriod(apiClient, transactionId,
-                companyAccountsId);
+                    companyAccountsId);
         }
 
         BalanceSheetHeadings balanceSheetHeadings = getBalanceSheetHeadings(companyProfileApi);
 
         BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriodApi,
-            previousPeriodApi);
+                previousPeriodApi);
 
         balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
 
@@ -103,11 +99,10 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     private CurrentPeriodApi getCurrentPeriod(ApiClient apiClient,
-        String transactionId, String companyAccountsId) throws ServiceException {
+                                              String transactionId, String companyAccountsId) throws ServiceException {
 
         try {
-            return apiClient.smallFull().currentPeriod()
-                .get(CURRENT_PERIOD_URI.expand(transactionId,
+            return apiClient.smallFull().currentPeriod().get(CURRENT_PERIOD_URI.expand(transactionId,
                     companyAccountsId).toString()).execute();
         } catch (ApiErrorResponseException e) {
 
@@ -123,12 +118,14 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     private PreviousPeriodApi getPreviousPeriod(ApiClient apiClient,
-        String transactionId, String companyAccountsId) throws ServiceException {
+                                                String transactionId,
+                                                String companyAccountsId)
+            throws ServiceException {
 
         try {
             return apiClient.smallFull().previousPeriod()
-                .get(PREVIOUS_PERIOD_URI.expand(transactionId,
-                    companyAccountsId).toString()).execute();
+                    .get(PREVIOUS_PERIOD_URI.expand(transactionId,
+                            companyAccountsId).toString()).execute();
         } catch (ApiErrorResponseException e) {
 
             if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
@@ -143,9 +140,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     @Override
-    public List<ValidationError> postBalanceSheet(String transactionId, String companyAccountsId,
-        BalanceSheet balanceSheet, String companyNumber)
-        throws ServiceException {
+    public List<ValidationError> postBalanceSheet(String transactionId,
+                                                  String companyAccountsId,
+                                                  BalanceSheet balanceSheet,
+                                                  String companyNumber)
+            throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
 
         List<ValidationError> validationErrors = new ArrayList<>();
@@ -158,27 +157,27 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
 
             String previousPeriodUri = PREVIOUS_PERIOD_URI.expand(transactionId,
-                companyAccountsId).toString();
+                    companyAccountsId).toString();
             createPreviousPeriod(apiClient, smallFullApi, previousPeriodUri, previousPeriodApi,
-                validationErrors);
+                    validationErrors);
         }
 
         CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
 
         String currentPeriodUri =
-            CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
+                CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
         createCurrentPeriod(apiClient, smallFullApi, currentPeriodUri, currentPeriod,
-            validationErrors);
+                validationErrors);
 
-        checkConditionalNotes(balanceSheet, smallFullApi.getLinks(), transactionId,
-            companyAccountsId);
+        checkConditionalNotes(companyProfileApi, balanceSheet, smallFullApi.getLinks(),
+                transactionId, companyAccountsId);
 
         return validationErrors;
 
     }
 
     private SmallFullApi getSmallFullData(ApiClient apiClient, String smallFullUri)
-        throws ServiceException {
+            throws ServiceException {
         try {
             return apiClient.smallFull().get(smallFullUri).execute();
         } catch (ApiErrorResponseException e) {
@@ -189,17 +188,17 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     private void createPreviousPeriod(ApiClient apiClient, SmallFullApi smallFullApi,
-        String previousPeriodUri, PreviousPeriodApi previousPeriodApi,
-        List<ValidationError> validationErrors)
-        throws ServiceException {
+                                      String previousPeriodUri, PreviousPeriodApi previousPeriodApi,
+                                      List<ValidationError> validationErrors)
+            throws ServiceException {
         boolean isCreated = hasPreviousPeriod(smallFullApi.getLinks());
         try {
             if (!isCreated) {
                 apiClient.smallFull().previousPeriod().create(previousPeriodUri,
-                    previousPeriodApi).execute();
+                        previousPeriodApi).execute();
             } else {
                 apiClient.smallFull().previousPeriod().update(previousPeriodUri,
-                    previousPeriodApi).execute();
+                        previousPeriodApi).execute();
             }
 
         } catch (ApiErrorResponseException e) {
@@ -207,11 +206,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 validationErrors.addAll(validationContext.getValidationErrors(e));
                 if (validationErrors.isEmpty()) {
                     throw new ServiceException("Bad request when submitting previous period " +
-                        "resource", e);
+                            "resource", e);
                 }
             } else {
                 throw new ServiceException("Bad request when submitting previous period resource"
-                    , e);
+                        , e);
             }
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for previous period resource", e);
@@ -219,17 +218,16 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     private void createCurrentPeriod(ApiClient apiClient, SmallFullApi smallFullApi,
-        String currentPeriodUri, CurrentPeriodApi currentPeriod,
-        List<ValidationError> validationErrors)
-        throws ServiceException {
+                                     String currentPeriodUri, CurrentPeriodApi currentPeriod,
+                                     List<ValidationError> validationErrors)
+            throws ServiceException {
+
         boolean isCreated = hasCurrentPeriod(smallFullApi.getLinks());
         try {
             if (!isCreated) {
-                apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod)
-                    .execute();
+                apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
             } else {
-                apiClient.smallFull().currentPeriod().update(currentPeriodUri, currentPeriod)
-                    .execute();
+                apiClient.smallFull().currentPeriod().update(currentPeriodUri, currentPeriod).execute();
             }
 
         } catch (ApiErrorResponseException e) {
@@ -237,11 +235,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 validationErrors.addAll(validationContext.getValidationErrors(e));
                 if (validationErrors.isEmpty()) {
                     throw new ServiceException("Bad request when submitting current period " +
-                        "resource", e);
+                            "resource", e);
                 }
             } else {
                 throw new ServiceException("Bad request when submitting current period resource",
-                    e);
+                        e);
             }
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for current period resource", e);
@@ -252,9 +250,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         boolean isSameYear = isSameYearFiler(companyProfile);
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         balanceSheetHeadings.setPreviousPeriodHeading(getPreviousPeriodHeading(companyProfile,
-            isSameYear));
+                isSameYear));
         balanceSheetHeadings.setCurrentPeriodHeading(getCurrentPeriodHeading(companyProfile,
-            isSameYear));
+                isSameYear));
         return balanceSheetHeadings;
     }
 
@@ -264,7 +262,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         LocalDate currentPeriodStartOn = nextAccountsApi.getPeriodStartOn();
 
         return accountsDatesHelper.generateBalanceSheetHeading(currentPeriodStartOn,
-            currentPeriodEndOn, isSameYear);
+                currentPeriodEndOn, isSameYear);
     }
 
     private String getPreviousPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
@@ -274,7 +272,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             LocalDate previousPeriodEndOn = lastAccountsApi.getPeriodEndOn();
 
             return accountsDatesHelper.generateBalanceSheetHeading(previousPeriodStartOn,
-                previousPeriodEndOn, isSameYear);
+                    previousPeriodEndOn, isSameYear);
         }
         return null;
     }
@@ -310,87 +308,110 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     }
 
     /**
-     * Checks whether a conditional note exists when there is no balance sheet value for it If there
-     * is, the note is then deleted
+     * Checks whether a conditional note exists when there is no balance sheet value for it
+     * If there is, the note is then deleted
      *
-     * @param balanceSheet the populated balance sheet
-     * @param smallFullLinks the links used to determine if notes are present
-     * @param transactionId The id of the CHS transaction
+     * @param balanceSheet      the populated balance sheet
+     * @param smallFullLinks    the links used to determine if notes are present
+     * @param transactionId     The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
      * @throws ServiceException if there's an error on submission
      */
-    private void checkConditionalNotes(BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
-        String transactionId, String companyAccountsId) throws ServiceException {
+    private void checkConditionalNotes(CompanyProfileApi companyProfileApi,
+                                       BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
+                                       String transactionId, String companyAccountsId) throws ServiceException {
 
         if ((isDebtorsCurrentAmountNullOrZero(balanceSheet)
-            && isDebtorsPreviousAmountNullOrZero(balanceSheet))
-            && smallFullLinks.getDebtorsNote() != null) {
+                && isDebtorsPreviousAmountNullOrZero(balanceSheet))
+                && smallFullLinks.getDebtorsNote() != null) {
 
             debtorsService.deleteDebtors(transactionId, companyAccountsId);
         }
 
         if ((isCreditorsWithinOneYearCurrentAmountNullOrZero(balanceSheet)
-            && isCreditorsWithinOneYearPreviousAmountNullOrZero(balanceSheet))
-            && smallFullLinks.getCreditorsWithinOneYearNote() != null) {
+                && isCreditorsWithinOneYearPreviousAmountNullOrZero(balanceSheet))
+                && smallFullLinks.getCreditorsWithinOneYearNote() != null) {
 
             creditorsWithinOneYearService
-                .deleteCreditorsWithinOneYear(transactionId, companyAccountsId);
+                    .deleteCreditorsWithinOneYear(transactionId, companyAccountsId);
         }
 
         if ((isTangibleAssetsCurrentAmountNullOrZero(balanceSheet)
-            && isTangibleAssetsPreviousAmountNullOrZero(balanceSheet))
-            && smallFullLinks.getTangibleAssetsNote() != null) {
+                && isTangibleAssetsPreviousAmountNullOrZero(balanceSheet))
+                && smallFullLinks.getTangibleAssetsNote() != null) {
 
             tangibleAssetsNoteService.deleteTangibleAssets(transactionId, companyAccountsId);
         }
 
+        if ((isStocksCurrentAmountNull(balanceSheet)
+                && isStocksPreviousAmountNull(balanceSheet))
+                && smallFullLinks.getStocksNote() != null) {
+
+            stocksService.deleteStocks(transactionId, companyAccountsId);
+        }
     }
 
     private boolean isDebtorsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
-            .map(BalanceSheet::getCurrentAssets)
-            .map(CurrentAssets::getDebtors)
-            .map(Debtors::getCurrentAmount)
-            .orElse(0L).equals(0L);
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getDebtors)
+                .map(Debtors::getCurrentAmount)
+                .orElse(0L).equals(0L);
     }
 
     private boolean isDebtorsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
-            .map(BalanceSheet::getCurrentAssets)
-            .map(CurrentAssets::getDebtors)
-            .map(Debtors::getPreviousAmount)
-            .orElse(0L).equals(0L);
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getDebtors)
+                .map(Debtors::getPreviousAmount)
+                .orElse(0L).equals(0L);
     }
 
     private boolean isCreditorsWithinOneYearCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
-            .map(BalanceSheet::getOtherLiabilitiesOrAssets)
-            .map(OtherLiabilitiesOrAssets::getCreditorsDueWithinOneYear)
-            .map(CreditorsDueWithinOneYear::getCurrentAmount)
-            .orElse(0L).equals(0L);
+                .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+                .map(OtherLiabilitiesOrAssets::getCreditorsDueWithinOneYear)
+                .map(CreditorsDueWithinOneYear::getCurrentAmount)
+                .orElse(0L).equals(0L);
     }
 
     private boolean isCreditorsWithinOneYearPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
-            .map(BalanceSheet::getOtherLiabilitiesOrAssets)
-            .map(OtherLiabilitiesOrAssets::getCreditorsDueWithinOneYear)
-            .map(CreditorsDueWithinOneYear::getPreviousAmount)
-            .orElse(0L).equals(0L);
+                .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+                .map(OtherLiabilitiesOrAssets::getCreditorsDueWithinOneYear)
+                .map(CreditorsDueWithinOneYear::getPreviousAmount)
+                .orElse(0L).equals(0L);
     }
 
     private boolean isTangibleAssetsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
-            .map(BalanceSheet::getFixedAssets)
-            .map(FixedAssets::getTangibleAssets)
-            .map(TangibleAssets::getCurrentAmount)
-            .orElse(0L).equals(0L);
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getTangibleAssets)
+                .map(TangibleAssets::getCurrentAmount)
+                .orElse(0L).equals(0L);
     }
 
     private boolean isTangibleAssetsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
-            .map(BalanceSheet::getFixedAssets)
-            .map(FixedAssets::getTangibleAssets)
-            .map(TangibleAssets::getPreviousAmount)
-            .orElse(0L).equals(0L);
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getTangibleAssets)
+                .map(TangibleAssets::getPreviousAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isStocksCurrentAmountNull(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getStocks)
+                .map(Stocks::getCurrentAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isStocksPreviousAmountNull(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getStocks)
+                .map(Stocks::getPreviousAmount)
+                .orElse(0L).equals(0L);
     }
 }
