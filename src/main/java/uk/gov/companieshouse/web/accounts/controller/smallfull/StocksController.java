@@ -59,7 +59,7 @@ public class StocksController extends BaseController implements ConditionalContr
     public String postStocks(@PathVariable String companyNumber,
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
-                              @ModelAttribute("stocks") @Valid StocksNote stocksNote,
+                              @ModelAttribute("stocksNote") @Valid StocksNote stocksNote,
                               BindingResult bindingResult,
                               Model model,
                               HttpServletRequest request) {
