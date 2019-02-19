@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.CriteriaController;
+import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccountTypeController;
 import uk.gov.companieshouse.web.accounts.model.corporationtax.CorporationTax;
 
 import javax.validation.Valid;
 
 @Controller
-@NextController(CriteriaController.class)
+@NextController(SelectAccountTypeController.class)
 @RequestMapping("/company/{companyNumber}/corporation-tax")
 public class CorporationTaxController extends BaseController {
 
