@@ -6,4 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 public interface StocksTransformer {
 
     StocksNote getStocks(StocksApi stocksApi);
+
+    StocksApi getStocksApi(StocksNote stocksNote);
 }

@@ -12,6 +12,7 @@ import uk.gov.companieshouse.web.accounts.exception.MissingValidationMappingExce
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -169,18 +170,29 @@ public class ValidationContext {
         }
 
         for (Field field : clazz.getDeclaredFields()) {
-        	if (!field.isSynthetic()) {
-	            Annotation annotation = field.getAnnotation(ValidationMapping.class);
-	            String webPath = basePath.isEmpty() ? field.getName() : basePath + PATH_DELIMITER + field.getName();
-	
-	            if (annotation != null) {
-	                String apiPath = ((ValidationMapping) annotation).value();
-	                mappings.put(apiPath, webPath);
-	            } else if (isCandidateModelClass(field.getType())) {
-	                depth = depth + 1;
-	                scanClassValidationMappings(field.getType(), webPath);
-	            }
-        	}
+
+            if (field.isSynthetic()) {
+                continue;
+            }
+
+            String webPath = basePath.isEmpty() ? field.getName() : basePath + PATH_DELIMITER + field.getName();
+
+            Annotation validationMappingAnnotation = field.getAnnotation(ValidationMapping.class);
+            if (validationMappingAnnotation != null) {
+                String apiPath = ((ValidationMapping) validationMappingAnnotation).value();
+                mappings.put(apiPath, webPath);
+            }
+
+            Annotation validationParentMappingAnnotation = field.getAnnotation(ValidationParentMapping.class);
+            if (validationParentMappingAnnotation != null) {
+                String apiPath = ((ValidationParentMapping) validationParentMappingAnnotation).value();
+                mappings.put(apiPath, webPath);
+            }
+
+            if (isCandidateModelClass(field.getType())) {
+                depth = depth + 1;
+                scanClassValidationMappings(field.getType(), webPath);
+            }
         }
 
         depth = depth - 1;

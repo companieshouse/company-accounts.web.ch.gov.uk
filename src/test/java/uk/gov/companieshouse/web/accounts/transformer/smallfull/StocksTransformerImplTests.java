@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.PreviousPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.PaymentsOnAccount;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Total;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.StocksTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -104,5 +107,107 @@ public class StocksTransformerImplTests {
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
         assertNull(stocksNote.getStocks().getPreviousStocks());
         assertEquals(TOTAL_VALUE, stocksNote.getTotal().getPreviousTotal());
+    }
+
+    @Test
+    @DisplayName("All Current period value added to stocks API model when all present")
+    void currentPeriodValueAddedToApiModel() {
+
+        StocksNote stocksNote = new StocksNote();
+        createFullCurrentDebtors(stocksNote);
+
+        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+
+        assertNotNull(stocksApi);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getCurrentPeriod().getPaymentsOnAccount());
+        assertEquals(STOCKS_VALUE, stocksApi.getCurrentPeriod().getStocks());
+        assertEquals(TOTAL_VALUE, stocksApi.getCurrentPeriod().getTotal());
+    }
+
+    @Test
+    @DisplayName("All previous period values added to stocks API model when present")
+    void previousPeriodValueAddedToApiModel() {
+
+        StocksNote stocksNote = new StocksNote();
+        createFullPreviousDebtors(stocksNote);
+
+        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+
+        assertNotNull(stocksApi);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getPreviousPeriod().getPaymentsOnAccount());
+        assertEquals(STOCKS_VALUE, stocksApi.getPreviousPeriod().getStocks());
+        assertEquals(TOTAL_VALUE, stocksApi.getPreviousPeriod().getTotal());
+    }
+
+    @Test
+    @DisplayName("Only populated current period values added to the Stocks API model when present")
+    void onlyPopulatedCurrentPeriodValuesAddedToApiModel() {
+
+        StocksNote stocksNote = new StocksNote();
+
+        PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
+        paymentsOnAccount.setCurrentPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksNote.setPaymentsOnAccount(paymentsOnAccount);
+
+        Total total = new Total();
+        total.setCurrentTotal(TOTAL_VALUE);
+        stocksNote.setTotal(total);
+
+        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+
+        assertNotNull(stocksApi);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getCurrentPeriod().getPaymentsOnAccount());
+        assertEquals(TOTAL_VALUE, stocksApi.getCurrentPeriod().getTotal());
+    }
+
+    @Test
+    @DisplayName("Only populated previous period values added to the Stocks API model when present")
+    void onlyPopulatedPreviousPeriodValuesAddedToApiModel() {
+
+        StocksNote stocksNote = new StocksNote();
+
+        PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
+        paymentsOnAccount.setPreviousPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksNote.setPaymentsOnAccount(paymentsOnAccount);
+
+        Total total = new Total();
+        total.setPreviousTotal(TOTAL_VALUE);
+        stocksNote.setTotal(total);
+
+        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+
+        assertNotNull(stocksApi);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getPreviousPeriod().getPaymentsOnAccount());
+        assertEquals(TOTAL_VALUE, stocksApi.getPreviousPeriod().getTotal());
+    }
+
+    private void createFullCurrentDebtors(StocksNote stocksNote) {
+
+        PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
+        paymentsOnAccount.setCurrentPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksNote.setPaymentsOnAccount(paymentsOnAccount);
+
+        Stocks stocks = new Stocks();
+        stocks.setCurrentStocks(STOCKS_VALUE);
+        stocksNote.setStocks(stocks);
+
+        Total total = new Total();
+        total.setCurrentTotal(TOTAL_VALUE);
+        stocksNote.setTotal(total);
+    }
+
+    private void createFullPreviousDebtors(StocksNote stocksNote) {
+
+        PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
+        paymentsOnAccount.setPreviousPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksNote.setPaymentsOnAccount(paymentsOnAccount);
+
+        Stocks stocks = new Stocks();
+        stocks.setPreviousStocks(STOCKS_VALUE);
+        stocksNote.setStocks(stocks);
+
+        Total total = new Total();
+        total.setPreviousTotal(TOTAL_VALUE);
+        stocksNote.setTotal(total);
     }
 }
