@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.Depreciation;
@@ -114,31 +115,47 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
     @Override
     protected boolean hasCostResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getCost().getAtPeriodStart().getOfficeEquipment(),
-                tangibleAssets.getCost().getAdditions().getOfficeEquipment(),
-                tangibleAssets.getCost().getDisposals().getOfficeEquipment(),
-                tangibleAssets.getCost().getRevaluations().getOfficeEquipment(),
-                tangibleAssets.getCost().getTransfers().getOfficeEquipment(),
-                tangibleAssets.getCost().getAtPeriodEnd().getOfficeEquipment())
+        TangibleAssetsCost cost = tangibleAssets.getCost();
+
+        return Stream
+            .of(Optional.of(cost)
+                    .map(TangibleAssetsCost::getAtPeriodStart)
+                    .map(CostAtPeriodStart::getOfficeEquipment)
+                    .orElse(null),
+                cost.getAdditions().getOfficeEquipment(),
+                cost.getDisposals().getOfficeEquipment(),
+                cost.getRevaluations().getOfficeEquipment(),
+                cost.getTransfers().getOfficeEquipment(),
+                cost.getAtPeriodEnd().getOfficeEquipment())
                 .anyMatch(Objects::nonNull);
     }
 
     @Override
     protected boolean hasDepreciationResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getDepreciation().getAtPeriodStart().getOfficeEquipment(),
-                tangibleAssets.getDepreciation().getChargeForYear().getOfficeEquipment(),
-                tangibleAssets.getDepreciation().getOnDisposals().getOfficeEquipment(),
-                tangibleAssets.getDepreciation().getOtherAdjustments().getOfficeEquipment(),
-                tangibleAssets.getDepreciation().getAtPeriodEnd().getOfficeEquipment())
+        TangibleAssetsDepreciation depreciation = tangibleAssets.getDepreciation();
+
+        return Stream.of(Optional.of(depreciation)
+                .map(TangibleAssetsDepreciation::getAtPeriodStart)
+                .map(DepreciationAtPeriodStart::getOfficeEquipment)
+                .orElse(null),
+            depreciation.getChargeForYear().getOfficeEquipment(),
+            depreciation.getOnDisposals().getOfficeEquipment(),
+            depreciation.getOtherAdjustments().getOfficeEquipment(),
+            depreciation.getAtPeriodEnd().getOfficeEquipment())
                 .anyMatch(Objects::nonNull);
     }
 
     @Override
     protected boolean hasNetBookValueResources(TangibleAssets tangibleAssets) {
 
-        return Stream.of(tangibleAssets.getNetBookValue().getCurrentPeriod().getOfficeEquipment(),
-                tangibleAssets.getNetBookValue().getPreviousPeriod().getOfficeEquipment())
+        TangibleAssetsNetBookValue netBookValue = tangibleAssets.getNetBookValue();
+
+        return Stream.of(Optional.of(netBookValue)
+                .map(TangibleAssetsNetBookValue::getPreviousPeriod)
+                .map(PreviousPeriod::getOfficeEquipment)
+                .orElse(null),
+            netBookValue.getCurrentPeriod().getOfficeEquipment())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -146,7 +163,11 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
     protected void mapCostResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
         Cost cost = new Cost();
-        cost.setAtPeriodStart(tangibleAssets.getCost().getAtPeriodStart().getOfficeEquipment());
+        cost.setAtPeriodStart(Optional.of(tangibleAssets)
+            .map(TangibleAssets::getCost)
+            .map(TangibleAssetsCost::getAtPeriodStart)
+            .map(CostAtPeriodStart::getOfficeEquipment)
+            .orElse(null));
         cost.setAdditions(tangibleAssets.getCost().getAdditions().getOfficeEquipment());
         cost.setDisposals(tangibleAssets.getCost().getDisposals().getOfficeEquipment());
         cost.setRevaluations(tangibleAssets.getCost().getRevaluations().getOfficeEquipment());
@@ -159,7 +180,11 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
     protected void mapDepreciationResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
         Depreciation depreciation = new Depreciation();
-        depreciation.setAtPeriodStart(tangibleAssets.getDepreciation().getAtPeriodStart().getOfficeEquipment());
+        depreciation.setAtPeriodStart( Optional.of(tangibleAssets)
+            .map(TangibleAssets::getDepreciation)
+            .map(TangibleAssetsDepreciation::getAtPeriodStart)
+            .map(DepreciationAtPeriodStart::getOfficeEquipment)
+            .orElse(null));
         depreciation.setChargeForYear(tangibleAssets.getDepreciation().getChargeForYear().getOfficeEquipment());
         depreciation.setOnDisposals(tangibleAssets.getDepreciation().getOnDisposals().getOfficeEquipment());
         depreciation.setOtherAdjustments(tangibleAssets.getDepreciation().getOtherAdjustments().getOfficeEquipment());
@@ -170,9 +195,13 @@ public class TangibleAssetsOfficeEquipmentTransformerImpl extends TangibleAssets
     @Override
     protected void mapNetBookValueResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
 
+        tangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
+            Optional.of(tangibleAssets)
+                .map(TangibleAssets::getNetBookValue)
+                .map(TangibleAssetsNetBookValue::getPreviousPeriod)
+                .map(PreviousPeriod::getOfficeEquipment)
+                .orElse(null));
         tangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
                 tangibleAssets.getNetBookValue().getCurrentPeriod().getOfficeEquipment());
-        tangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
-                tangibleAssets.getNetBookValue().getPreviousPeriod().getOfficeEquipment());
     }
 }
