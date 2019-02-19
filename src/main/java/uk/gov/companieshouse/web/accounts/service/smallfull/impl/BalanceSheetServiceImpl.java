@@ -410,4 +410,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             .map(TangibleAssets::getPreviousAmount)
             .orElse(0L).equals(0L);
     }
+
+    private void invalidateRequestScopedCache() {
+        cachedBalanceSheet = null;
+    }
 }
