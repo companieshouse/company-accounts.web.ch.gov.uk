@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -18,7 +17,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -36,9 +34,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -60,8 +55,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         try {
             TangibleAssets tangibleAssets = tangibleAssetsNoteService
                 .getTangibleAssets(transactionId, companyAccountsId, companyNumber);
-
-            addDatesToFormObject(tangibleAssets, companyService.getCompanyProfile(companyNumber));
 
             model.addAttribute("tangibleAssets", tangibleAssets);
 
@@ -105,16 +98,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         return navigatorService
             .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
                 companyAccountsId);
-    }
-
-    private void addDatesToFormObject(TangibleAssets tangibleAssets,
-        CompanyProfileApi companyProfile) {
-        tangibleAssets.setLastAccountsPeriodEndOn(
-            companyProfile.getAccounts().getLastAccounts().getPeriodEndOn());
-        tangibleAssets.setNextAccountsPeriodStartOn(
-            companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        tangibleAssets.setNextAccountsPeriodEndOn(
-            companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
     }
 
     @Override

@@ -46,12 +46,10 @@ public class StocksControllerTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
-    private static final String SMALL_FULL_PATH = "/company/" + COMPANY_NUMBER +
+    private static final String SMALL_FULL_STOCKS_PATH = "/company/" + COMPANY_NUMBER +
         "/transaction/" + TRANSACTION_ID +
         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-        "/small-full";
-
-    private static final String STOCKS_PATH = SMALL_FULL_PATH + "/stocks";
+        "/small-full/stocks";
 
     private static final String STOCKS_VIEW = "smallfull/stocks";
 
@@ -77,7 +75,7 @@ public class StocksControllerTests {
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockStocksService.getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new StocksNote());
 
-        this.mockMvc.perform(get(STOCKS_PATH))
+        this.mockMvc.perform(get(SMALL_FULL_STOCKS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(STOCKS_VIEW))
             .andExpect(model().attributeExists(STOCKS_MODEL_ATTR))
@@ -93,7 +91,7 @@ public class StocksControllerTests {
 
         when(mockStocksService.getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
-        this.mockMvc.perform(get(STOCKS_PATH))
+        this.mockMvc.perform(get(SMALL_FULL_STOCKS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));

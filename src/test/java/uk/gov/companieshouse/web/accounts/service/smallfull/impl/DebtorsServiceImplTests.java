@@ -45,6 +45,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -334,10 +336,9 @@ public class DebtorsServiceImplTests {
         when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
         doNothing().when(mockDebtorsDelete).execute();
 
-        List<ValidationError> validationErrors = debtorsService.deleteDebtors(TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID);
+        debtorsService.deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        assertEquals(0, validationErrors.size());
+        verify(mockDebtorsDelete, times(1)).execute();
     }
 
     @Test
@@ -349,23 +350,6 @@ public class DebtorsServiceImplTests {
         when(mockDebtorsDelete.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(URIValidationException.class, () -> mockDebtorsDelete.execute());
-        assertThrows(ServiceException.class, () -> debtorsService.deleteDebtors(
-            TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("DELETE - Debtors throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
-    void deleteDebtorsApiErrorResponseExceptionBadRequest() throws Exception {
-
-        getMockDebtorsResourceHandler();
-        when(mockDebtorsResourceHandler.delete(DEBTORS_URI)).thenReturn(mockDebtorsDelete);
-
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-        when(mockDebtorsDelete.execute()).thenThrow(apiErrorResponseException);
-
-        assertThrows(ApiErrorResponseException.class, () -> mockDebtorsDelete.execute());
         assertThrows(ServiceException.class, () -> debtorsService.deleteDebtors(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID));

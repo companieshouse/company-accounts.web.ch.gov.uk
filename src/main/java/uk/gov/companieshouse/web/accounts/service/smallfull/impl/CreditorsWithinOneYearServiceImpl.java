@@ -104,7 +104,21 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
     return new ArrayList<>();
   }
 
+  @Override
+  public void deleteCreditorsWithinOneYear(String transactionId, String companyAccountsId) throws ServiceException {
+      ApiClient apiClient = apiClientService.getApiClient();
 
+      String uri = CREDITORS_WITHIN_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
+
+      try {
+          apiClient.smallFull().creditorsWithinOneYear().delete(uri).execute();
+      } catch (URIValidationException e) {
+          throw new ServiceException(INVALID_URI_MESSAGE, e);
+      } catch (ApiErrorResponseException e) {
+          throw new ServiceException("Error deleting creditors within one year note resource", e);
+      }
+  }
+  
   private CreditorsWithinOneYearApi getCreditorsWithinOneYearApi(String transactionId,
       String companyAccountsId) throws ServiceException {
     ApiClient apiClient = apiClientService.getApiClient();

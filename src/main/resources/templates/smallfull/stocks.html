@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
 <html
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    xmlns:th="http://www.w3.org/1999/xhtml"
-    layout:decorate="~{layouts/baseLayout}">
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">
 
 <head>
     <title>Stocks</title>
@@ -11,7 +11,8 @@
 
 <div id="stocks-main-content" layout:fragment="content" class="two-column-accounts">
 
-    <form id="balanceSheet-form" th:action="@{''}" th:object="${stocksNote}" class="form currency-included-within-inputs govuk-body" method="post">
+    <form id="balanceSheet-form" th:action="@{''}" th:object="${stocksNote}"
+          class="form currency-included-within-inputs govuk-body" method="post">
 
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
@@ -22,7 +23,8 @@
 
         <div class="left-indent">
             <div class="panel panel-border-wide">
-                <p id="stocks-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
+                <p id="stocks-help-text" class="warning-note warning-note-large">You only need to
+                    enter items included in your prepared accounts.</p>
             </div>
 
             <div class="govuk-grid-row" id="accounts-header">
@@ -31,108 +33,116 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
+                        <span id="currentPeriodHeading"
+                              th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
                         <!-- Hidden input for form binding -->
-                        <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
+                        <input th:field="*{balanceSheetHeadings.currentPeriodHeading}"
+                               type="hidden">
                     </h2>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <h2 class="govuk-heading-s">
-                        <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
+                        <span id="previousPeriodHeading"
+                              th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
                         <!-- Hidden input for form binding -->
-                        <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
+                        <input th:field="*{balanceSheetHeadings.previousPeriodHeading}"
+                               type="hidden">
                     </h2>
                 </div>
             </div>
-        </div>
 
-        <!-- Start Stocks -->
 
-        <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+            <!-- Start Stocks -->
+
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'stocks.currentStocks',
                         previousField = 'stocks.previousStocks'
                         )">
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
-               Stocks
             </div>
-            <div class="govuk-grid-column-one-quarter">
-                <div th:replace="fragments/numberInput :: numberInput (
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    Stocks
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'stocks.currentStocks',
                                 text = 'stocks current',
                                 class= 'govuk-input current current-stocks-add',
                                 )">
+                    </div>
                 </div>
-            </div>
-            <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
-                <div th:replace="fragments/numberInput :: numberInput (
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}"
+                     class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'stocks.previousStocks',
                                 text = 'Stocks previous',
                                 class= 'govuk-input previous previous-stocks-add',
                                 )">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- End Stocks -->
+            <!-- End Stocks -->
 
-        <!-- Start Payments on Account -->
+            <!-- Start Payments on Account -->
 
-        <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'paymentsOnAccount.currentPaymentsOnAccount',
                         previousField = 'paymentsOnAccount.previousPaymentsOnAccount'
                         )">
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
-                Payments on Account
             </div>
-            <div class="govuk-grid-column-one-quarter">
-                <div th:replace="fragments/numberInput :: numberInput (
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    Payments on account
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'paymentsOnAccount.currentPaymentsOnAccount',
                                 text = 'Payments on Account current',
                                 class= 'govuk-input current current-stocks-add',
                                 )">
+                    </div>
                 </div>
-            </div>
-            <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
-                <div th:replace="fragments/numberInput :: numberInput (
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}"
+                     class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'paymentsOnAccount.previousPaymentsOnAccount',
                                 text = 'Payments on Account previous',
                                 class= 'govuk-input previous previous-stocks-add',
                                 )">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- End Payment on Account  -->
+            <!-- End Payment on Account  -->
 
-        <!--Start Total-->
+            <!--Start Total-->
 
-        <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'total.currentTotal',
                         previousField = 'total.previousTotal'
                         )">
-        </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
-                <strong>Total</strong>
             </div>
-            <div class="govuk-grid-column-one-quarter">
-                <div th:replace="fragments/numberInput :: numberInput (
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    <strong>Total</strong>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.currentTotal',
                                 text = 'Total current',
                                 class= 'govuk-input current-stocks-total',
                                 )">
+                    </div>
                 </div>
-            </div>
-            <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
-                <div th:replace="fragments/numberInput :: numberInput (
+                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}"
+                     class="govuk-grid-column-one-quarter">
+                    <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
                                 text = 'Total previous',
                                 class= 'govuk-input previous-stocks-total',
                                 )">
+                    </div>
                 </div>
             </div>
         </div>
@@ -140,7 +150,9 @@
         <!--End Total-->
 
         <div class="form-group">
-            <input id="next-button" class="govuk-button piwik-event" data-event-id="Stocks - Save and continue" type="submit" role="button" value="Save and continue"/>
+            <input id="next-button" class="govuk-button piwik-event"
+                   data-event-id="Stocks - Save and continue" type="submit" role="button"
+                   value="Save and continue"/>
         </div>
     </form>
 </div>
