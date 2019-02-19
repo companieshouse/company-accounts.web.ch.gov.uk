@@ -120,10 +120,6 @@ public class EmployeesServiceImpl implements EmployeesService {
         }
       }
 
-    private boolean hasEmployees(SmallFullLinks smallFullLinks) {
-        return smallFullLinks.getEmployeesNote() != null;
-    }
-
     @Override
     public void deleteEmployees(String transactionId, String companyAccountsId) throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
@@ -137,5 +133,9 @@ public class EmployeesServiceImpl implements EmployeesService {
         } catch (ApiErrorResponseException e) {
             throw new ServiceException("Error deleting employees resource", e);
         }
+    }
+
+    private boolean hasEmployees(SmallFullLinks smallFullLinks) {
+        return smallFullLinks.getEmployeesNote() != null;
     }
 }
