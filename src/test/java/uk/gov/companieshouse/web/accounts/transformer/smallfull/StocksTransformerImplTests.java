@@ -1,0 +1,108 @@
+package uk.gov.companieshouse.web.accounts.transformer.smallfull;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.PreviousPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
+import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.StocksTransformerImpl;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+public class StocksTransformerImplTests {
+
+    private StocksTransformer transformer = new StocksTransformerImpl();
+
+    private static final Long PAYMENT_ON_ACCOUNT_VALUE = 5L;
+    private static final Long STOCKS_VALUE = 10L;
+    private static final Long TOTAL_VALUE = 15L;
+
+    @Test
+    @DisplayName("All current period values added to stock sheet web model")
+    void transformStocksForCurrentPeriodApiToWeb() {
+
+        StocksApi stocksApi = new StocksApi();
+
+        CurrentPeriod stocksCurrentPeriod = new CurrentPeriod();
+
+        stocksCurrentPeriod.setPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksCurrentPeriod.setStocks(STOCKS_VALUE);
+        stocksCurrentPeriod.setTotal(TOTAL_VALUE);
+
+        stocksApi.setCurrentPeriod(stocksCurrentPeriod);
+
+        StocksNote stocksNote = transformer.getStocks(stocksApi);
+
+        assertNotNull(stocksNote);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
+        assertEquals(STOCKS_VALUE, stocksNote.getStocks().getCurrentStocks());
+        assertEquals(TOTAL_VALUE, stocksNote.getTotal().getCurrentTotal());
+    }
+
+    @Test
+    @DisplayName("Only populated Current period values added to stock sheet web model")
+    void transformCurrentPeriodPopulatedValuesApiToWeb() {
+
+        StocksApi stocksApi = new StocksApi();
+
+        CurrentPeriod stocksCurrentPeriod = new CurrentPeriod();
+
+        stocksCurrentPeriod.setPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksCurrentPeriod.setTotal(TOTAL_VALUE);
+
+        stocksApi.setCurrentPeriod(stocksCurrentPeriod);
+
+        StocksNote stocksNote = transformer.getStocks(stocksApi);
+
+        assertNotNull(stocksNote);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
+        assertNull(stocksNote.getStocks().getCurrentStocks());
+        assertEquals(TOTAL_VALUE, stocksNote.getTotal().getCurrentTotal());
+    }
+
+    @Test
+    @DisplayName("All previous period values added to stocks sheet web model")
+    void transformStocksForPreviousPeriodApiToWeb() {
+
+        StocksApi stocksApi = new StocksApi();
+
+        PreviousPeriod stocksPreviousPeriod = new PreviousPeriod();
+
+        stocksPreviousPeriod.setPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksPreviousPeriod.setStocks(STOCKS_VALUE);
+        stocksPreviousPeriod.setTotal(TOTAL_VALUE);
+
+        stocksApi.setPreviousPeriod(stocksPreviousPeriod);
+
+        StocksNote stocksNote = transformer.getStocks(stocksApi);
+
+        assertNotNull(stocksNote);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
+        assertEquals(STOCKS_VALUE, stocksNote.getStocks().getPreviousStocks());
+        assertEquals(TOTAL_VALUE, stocksNote.getTotal().getPreviousTotal());
+    }
+
+    @Test
+    @DisplayName("Only populated Previous period values added to stock sheet web model")
+    void transformPreviousPeriodPopulatedValuesApiToWeb() {
+
+        StocksApi stocksApi = new StocksApi();
+
+        PreviousPeriod stocksPreviousPeriod = new PreviousPeriod();
+
+        stocksPreviousPeriod.setPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
+        stocksPreviousPeriod.setTotal(TOTAL_VALUE);
+
+        stocksApi.setPreviousPeriod(stocksPreviousPeriod);
+
+        StocksNote stocksNote = transformer.getStocks(stocksApi);
+
+        assertNotNull(stocksNote);
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
+        assertNull(stocksNote.getStocks().getPreviousStocks());
+        assertEquals(TOTAL_VALUE, stocksNote.getTotal().getPreviousTotal());
+    }
+}
