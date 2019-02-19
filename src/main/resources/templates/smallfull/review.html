@@ -293,9 +293,9 @@
                     <div class="app-check-your-answers__contents">
                         <dt class="app-check-your-answers__answer">
                             <p id="review-basisOfPreparation"
-                               th:text="*{basisOfPreparation.isPreparedInAccordanceWithStandards} ?
-                                        *{basisOfPreparation.preparedStatement} :
-                                        *{basisOfPreparation.customStatement}">
+                                th:utext="*{basisOfPreparation.isPreparedInAccordanceWithStandards} ?
+                                          *{basisOfPreparation.preparedStatement} :
+                                          *{#strings.replace(basisOfPreparation.customStatement,'&#10;','&lt;br&gt;')}">
                             </p>
                         </dt>
                     </div>
@@ -315,7 +315,7 @@
                         <div class="app-check-your-answers__contents">
                             <dt class="app-check-your-answers__answer">
                                 <p id="review-turnoverPolicy"
-                                   th:text="*{turnoverPolicy.turnoverPolicyDetails}">
+                                   th:utext="*{#strings.replace(turnoverPolicy.turnoverPolicyDetails,'&#10;','&lt;br&gt;')}">
                                 </p>
                             </dt>
                         </div>
@@ -335,7 +335,7 @@
                         <div class="app-check-your-answers__contents">
                             <dt class="app-check-your-answers__answer">
                                 <p id="review-tangibleDepreciationPolicy"
-                                   th:text="*{tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails}">
+                                   th:utext="*{#strings.replace(tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails,'&#10;','&lt;br&gt;')}">
                                 </p>
                             </dt>
                         </div>
@@ -356,7 +356,7 @@
                         <div class="app-check-your-answers__contents">
                             <dt class="app-check-your-answers__answer">
                                 <p id="review-intangibleAmortisationPolicy"
-                                   th:text="*{intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails}">
+                                   th:utext="*{#strings.replace(intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails,'&#10;','&lt;br&gt;')}">
                                 </p>
                             </dt>
                         </div>
@@ -376,7 +376,7 @@
                         <div class="app-check-your-answers__contents">
                             <dt class="app-check-your-answers__answer">
                                 <p id="review-valuationInformationPolicy"
-                                   th:text="*{valuationInformationPolicy.valuationInformationPolicyDetails}">
+                                   th:utext="*{#strings.replace(valuationInformationPolicy.valuationInformationPolicyDetails,'&#10;','&lt;br&gt;')}">
                                 </p>
                             </dt>
                         </div>
@@ -396,7 +396,7 @@
                         <div class="app-check-your-answers__contents">
                             <dt class="app-check-your-answers__answer">
                                 <p id="review-otherAccountingPolicy"
-                                   th:text="*{otherAccountingPolicy.otherAccountingPolicyDetails}">
+                                   th:utext="*{#strings.replace(otherAccountingPolicy.otherAccountingPolicyDetails,'&#10;','&lt;br&gt;')}">
                                 </p>
                             </dt>
                         </div>
@@ -556,7 +556,7 @@
                                     <dt class="app-check-your-answers__question">Additional information</dt>
                                     <dd class="app-check-your-answers__answer">
                                         <p id="review-tangible-assets-additional-information"
-                                           th:text="*{tangibleAssets.additionalInformation}">
+                                           th:utext="*{#strings.replace(tangibleAssets?.additionalInformation,'&#10;','&lt;br&gt;')}">
                                         </p>
                                     </dd>
                                     <dd class="app-check-your-answers__change"></dd>
@@ -644,7 +644,7 @@
                                     <dt class="app-check-your-answers__question">Additional information</dt>
                                     <dd class="app-check-your-answers__answer">
                                         <p id="review-debtors-details"
-                                           th:text="*{debtors?.details}">
+                                           th:utext="*{#strings.replace(debtors?.details,'&#10;','&lt;br&gt;')}">
                                         </p>
                                     <dd class="app-check-your-answers__change"></dd>
                                 </div>
@@ -749,7 +749,7 @@
                                     <dt class="app-check-your-answers__question">Additional information</dt>
                                     <dd class="app-check-your-answers__answer">
                                         <p id="review-creditors-within-one-year-details"
-                                           th:text="*{creditorsWithinOneYear?.details}">
+                                           th:utext="*{#strings.replace(creditorsWithinOneYear?.details,'&#10;','&lt;br&gt;')}">
                                         </p>
                                     <dd class="app-check-your-answers__change"></dd>
                                 </div>
@@ -758,6 +758,85 @@
                     </div>
                 </div>
                 <!-- End Creditors Within One Year Note -->
+
+                <!-- Creditors After One Year Note -->
+                <div id="cya-small-full-creditors-after-one-year-note">
+
+                    <div th:if="*{creditorsAfterOneYear.total != null}">
+                        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Creditors - amounts falling due after one year note',
+                            identifier= 'creditors-after-one-year-note',
+                            resource = 'creditors-after-more-than-one-year',
+
+                            marginTop = true
+                            )">
+                        </div>
+
+                        <dl class="app-check-your-answers app-check-your-answers--short">
+                            <div class="app-check-your-answers__contents cya-desktop-only">
+                                <dt class="app-check-your-answers__question"></dt>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__answer govuk-heading-s"
+                                    th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                                    th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                                <dd class="app-check-your-answers__change"></dd>
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Bank loans and overdrafts',
+                                identifier = 'bank-loans-and-overdrafts',
+                                currentAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
+                                previousAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Amounts due under finance leases and hire purchase contracts',
+                                identifier = 'finance-leases-and-hire-purchase-contracts',
+                                currentAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.currentFinanceLeasesAndHirePurchaseContracts},
+                                previousAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.previousFinanceLeasesAndHirePurchaseContracts},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Other creditors',
+                                identifier = 'other-creditors',
+                                currentAmount = *{creditorsAfterOneYear?.otherCreditors.currentOtherCreditors},
+                                previousAmount = *{creditorsAfterOneYear?.otherCreditors.previousOtherCreditors},
+                                isBoldLegend = true
+                            )">
+                            </div>
+
+                            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Total',
+                                identifier = 'total',
+                                currentAmount = *{creditorsAfterOneYear?.total.currentTotal},
+                                previousAmount = *{creditorsAfterOneYear?.total.previousTotal},
+                                isTotalRow = true
+                            )">
+                            </div>
+
+                        </dl>
+
+                        <div th:if="*{creditorsAfterOneYear.details != null}">
+                            <dl class="app-check-your-answers app-check-your-answers--short">
+                                <div class="app-check-your-answers__contents">
+                                    <dt class="app-check-your-answers__question">Additional information</dt>
+                                    <dd class="app-check-your-answers__answer">
+                                        <p id="review-creditors-after-one-year-details"
+                                           th:utext="*{#strings.replace(creditorsAfterOneYear?.details,'&#10;','&lt;br&gt;')}">
+                                        </p>
+                                    <dd class="app-check-your-answers__change"></dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Creditors After One Year Note -->
                 
                 <div class="govuk-form-group">
                     <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
