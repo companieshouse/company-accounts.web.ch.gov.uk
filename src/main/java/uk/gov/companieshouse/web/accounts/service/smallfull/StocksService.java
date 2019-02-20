@@ -30,7 +30,7 @@ public interface StocksService {
      */
     List<ValidationError> submitStocks(String transactionId, String companyAccountsId, StocksNote stocksNote, String companyNumber)
         throws ServiceException;
-    
+
     /**
      * Delete the stocks note
      *

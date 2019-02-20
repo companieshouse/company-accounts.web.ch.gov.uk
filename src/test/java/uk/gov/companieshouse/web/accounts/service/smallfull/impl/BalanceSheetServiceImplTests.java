@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -67,7 +68,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class BalanceSheetServiceImplTests {
 
     @Mock
@@ -120,7 +121,7 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private DebtorsService debtorsService;
-    
+
     @Mock
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
@@ -132,9 +133,6 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
-
-    @Mock
-    private BalanceSheet mockCachedBalanceSheet;
 
     @InjectMocks
     private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
@@ -282,7 +280,7 @@ public class BalanceSheetServiceImplTests {
 
     @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Success Path - Notes Present to Delete")
-    void postFirstYearFilerBalanceSheetSuccessDebtorsNotePresentToDelete() throws ServiceException,
+    void postFirstYearFilerBalanceSheetSuccessNotesPresentToDelete() throws ServiceException,
         URIValidationException, ApiErrorResponseException {
         mockApiClient();
         createFirstYearFilerCompanyProfile();
@@ -290,37 +288,6 @@ public class BalanceSheetServiceImplTests {
 
         BalanceSheet balanceSheet = new BalanceSheet();
 
-        CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
-        calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
-        balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
-
-        mockCurrentPeriodPost(balanceSheet);
-
-        List<ValidationError> validationErrors = balanceSheetService.postBalanceSheet(
-            TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID,
-            balanceSheet,
-            "0064000");
-        assertEquals(0, validationErrors.size());
-        
-        verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-    }
-
-    @Test
-    @DisplayName("First Year Filer - POST - Balance Sheet - Success Path - Notes Present to Delete")
-    void postFirstYearFilerBalanceSheetSuccessTangibleAssetssNotePresentToDelete() throws ServiceException,
-        URIValidationException, ApiErrorResponseException {
-        mockApiClient();
-        createFirstYearFilerCompanyProfile();
-        createMultipleYearFilerSmallFullAccountPostNotesPresent();
-
-        BalanceSheet balanceSheet = new BalanceSheet();
-
-        createBalanceSheetWithNullValues(balanceSheet);
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
         balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
@@ -336,6 +303,9 @@ public class BalanceSheetServiceImplTests {
 
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -552,7 +522,7 @@ public class BalanceSheetServiceImplTests {
 
     @Test
     @DisplayName("Multiple Year Filer - POST - Balance sheet - Remove notes when corresponding values aren't present")
-    void postMultipleYearFilerBalanceSheetSuccessDeleteDebtorsNote() throws ServiceException, URIValidationException, ApiErrorResponseException {
+    void postMultipleYearFilerBalanceSheetSuccessDeleteNotes() throws ServiceException, URIValidationException, ApiErrorResponseException {
         mockApiClient();
         createMultipleYearFilerCompanyProfile();
         createMultipleYearFilerSmallFullAccountPostNotesPresent();
@@ -577,8 +547,8 @@ public class BalanceSheetServiceImplTests {
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -915,6 +885,10 @@ public class BalanceSheetServiceImplTests {
     @DisplayName("Cached balance sheet returned if previously set")
     void cachedBalanceSheetReturnedIfPreviouslySet() throws ServiceException {
 
+        BalanceSheet mockCachedBalanceSheet = new BalanceSheet();
+
+        ReflectionTestUtils.setField(balanceSheetService, "cachedBalanceSheet", mockCachedBalanceSheet);
+
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(balanceSheet);
@@ -957,8 +931,8 @@ public class BalanceSheetServiceImplTests {
         smallFullLinks.setDebtorsNote("DEBTORS_LINK");
         smallFullLinks.setCreditorsWithinOneYearNote("CREDITORS_WITHIN_ONE_YEAR_LINK");
         smallFullLinks.setCreditorsAfterMoreThanOneYearNote("CREDITORS_AFTER_ONE_YEAR_LINK");
-        smallFullLinks.setStocksNote("STOCKS_LINK");
         smallFullLinks.setTangibleAssetsNote("TANGIBLE_ASSETS_LINK");
+        smallFullLinks.setStocksNote("STOCKS_LINK");
         smallFullApi.setLinks(smallFullLinks);
         mockSmallFullAccountGet(smallFullApi);
     }

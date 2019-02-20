@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccountTypeController;
 
 @Controller
-@PreviousController(MicroCriteriaController.class)
+@PreviousController(SelectAccountTypeController.class)
 @RequestMapping("/company/{companyNumber}/micro-entity/criteria")
 public class MicroCriteriaController extends BaseController {
 
