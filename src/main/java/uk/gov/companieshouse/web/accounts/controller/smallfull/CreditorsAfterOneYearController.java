@@ -26,7 +26,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(EmployeesQuestionController.class)
 @PreviousController(CreditorsWithinOneYearController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/creditors-after-more-than-one-year")

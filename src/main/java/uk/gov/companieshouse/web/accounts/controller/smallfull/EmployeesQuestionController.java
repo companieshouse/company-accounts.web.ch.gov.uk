@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 
 @Controller
 @NextController(EmployeesController.class)
-@PreviousController(CreditorsWithinOneYearController.class)
+@PreviousController(CreditorsAfterOneYearController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/employees-question")
 public class EmployeesQuestionController extends BaseController {
 
