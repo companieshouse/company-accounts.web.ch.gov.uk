@@ -35,6 +35,11 @@ public class StocksController extends BaseController implements ConditionalContr
     @Autowired
     private StocksService stocksService;
 
+    @Override
+    protected String getTemplateName() {
+        return "smallfull/stocks";
+    }
+
     @GetMapping
     public String getStocks(@PathVariable String companyNumber,
                             @PathVariable String transactionId,
@@ -84,11 +89,6 @@ public class StocksController extends BaseController implements ConditionalContr
 
         return navigatorService.getNextControllerRedirect(
             this.getClass(), companyNumber, transactionId, companyAccountsId);
-    }
-
-    @Override
-    protected String getTemplateName() {
-        return "smallfull/stocks";
     }
 
     @Override
