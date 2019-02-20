@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,8 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
@@ -87,36 +90,36 @@ public class StocksController extends BaseController implements ConditionalContr
             this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
-    private boolean shouldStocksNoteRender(BalanceSheet balanceSheet) {
-        if (balanceSheet.getCurrentAssets() != null && balanceSheet.getCurrentAssets().getStocks() != null) {
-
-            Long previousAmount = balanceSheet.getCurrentAssets().getStocks().getPreviousAmount();
-            Long currentAmount = balanceSheet.getCurrentAssets().getStocks().getCurrentAmount();
-
-            return valuePresent(previousAmount) || valuePresent(currentAmount);
-
-        }
-        return false;
-    }
-
-    private boolean valuePresent(Long value) {
-        return value != null && value != 0;
-    }
-
     @Override
     protected String getTemplateName() {
         return "smallfull/stocks";
     }
 
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
+            throws ServiceException {
 
-        try {
-            BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
-                transactionId, companyAccountsId, companyNumber);
-            return shouldStocksNoteRender(balanceSheet);
-        } catch (ServiceException e) {
-            return false;
-        }
+        BalanceSheet balanceSheet =
+                balanceSheetService.getBalanceSheet(
+                        transactionId, companyAccountsId, companyNumber);
+
+        return hasStocks(balanceSheet);
+    }
+
+    private boolean hasStocks(BalanceSheet balanceSheet) {
+
+        Long currentStocks = Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getStocks)
+                .map(Stocks::getCurrentAmount)
+                .orElse(0L);
+
+        Long previousStocks = Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getStocks)
+                .map(Stocks::getPreviousAmount)
+                .orElse(0L);
+
+        return !(currentStocks.equals(0L) && previousStocks.equals(0L));
     }
 }
