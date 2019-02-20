@@ -74,7 +74,7 @@ public class ReviewServiceImplTests {
 
     @Mock
     private OtherAccountingPolicyService otherAccountingPolicyService;
-
+    
     @Mock
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
 
@@ -83,7 +83,7 @@ public class ReviewServiceImplTests {
 
     @Mock
     private DebtorsService debtorsService;
-    
+
     @Mock
     private StocksService stocksService;
 
@@ -125,7 +125,7 @@ public class ReviewServiceImplTests {
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
         when(otherAccountingPolicyService.getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(mockOtherAccounting);
-
+        
         CreditorsWithinOneYear mockCreditorsWithinOneYear = new CreditorsWithinOneYear();
         when(creditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(mockCreditorsWithinOneYear);
@@ -136,7 +136,7 @@ public class ReviewServiceImplTests {
 
         Debtors mockDebtors = new Debtors();
         when(debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockDebtors);
-        
+
         StocksNote mockStocks = new StocksNote();
         when(stocksService.getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockStocks);
 

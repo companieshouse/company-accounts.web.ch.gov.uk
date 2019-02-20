@@ -67,7 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private DebtorsService debtorsService;
-    
+
     @Autowired
     private StocksService stocksService;
 

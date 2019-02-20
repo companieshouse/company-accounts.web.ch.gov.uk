@@ -39,8 +39,8 @@ public class Review {
     CreditorsAfterOneYear creditorsAfterOneYear;
 
     Debtors debtors;
-    
+
     TangibleAssets tangibleAssets;
-    
+
     StocksNote stocks;
 }
