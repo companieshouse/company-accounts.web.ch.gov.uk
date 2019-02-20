@@ -8,11 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -25,9 +22,6 @@ public abstract class BaseController {
 
     @Autowired
     protected NavigatorService navigatorService;
-
-    @Autowired
-    private BalanceSheetService balanceSheetService;
 
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
@@ -112,11 +106,5 @@ public abstract class BaseController {
     protected void updateStateOnRequest(HttpServletRequest request, CompanyAccountsDataState companyAccountsDataState) {
 
         request.getSession().setAttribute(COMPANY_ACCOUNTS_DATA_STATE, companyAccountsDataState);
-    }
-
-    protected BalanceSheet getBalanceSheet(String companyNumber, String transactionId, String companyAccountsId)
-            throws ServiceException {
-
-        return balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
     }
 }

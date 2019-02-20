@@ -21,6 +21,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -34,6 +35,9 @@ public class CreditorsAfterOneYearController extends BaseController implements
 
     @Autowired
     private CreditorsAfterOneYearService creditorsAfterOneYearService;
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
     @Override
     protected String getTemplateName() {
@@ -98,7 +102,11 @@ public class CreditorsAfterOneYearController extends BaseController implements
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        return hasCreditorsAfter(getBalanceSheet(companyNumber, transactionId, companyAccountsId));
+        BalanceSheet balanceSheet =
+                balanceSheetService.getBalanceSheet(
+                        transactionId, companyAccountsId, companyNumber);
+
+        return hasCreditorsAfter(balanceSheet);
     }
 
     private boolean hasCreditorsAfter(BalanceSheet balanceSheet) {
