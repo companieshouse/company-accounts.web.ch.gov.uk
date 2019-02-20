@@ -6,11 +6,8 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
-<<<<<<< HEAD
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-=======
->>>>>>> develop
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
@@ -20,7 +17,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
