@@ -17,7 +17,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -34,9 +33,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
-
-    @Autowired
-    private BalanceSheetService balanceSheetService;
 
     @Override
     protected String getTemplateName() {
@@ -104,11 +100,7 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        BalanceSheet balanceSheet =
-                balanceSheetService.getBalanceSheet(
-                        transactionId, companyAccountsId, companyNumber);
-
-        return hasTangibleAssets(balanceSheet);
+        return hasTangibleAssets(getBalanceSheet(companyNumber, transactionId, companyAccountsId));
     }
 
     private boolean hasTangibleAssets(BalanceSheet balanceSheet) {

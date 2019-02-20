@@ -18,7 +18,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -35,9 +34,6 @@ public class DebtorsController extends BaseController implements ConditionalCont
 
     @Autowired
     private DebtorsService debtorsService;
-
-    @Autowired
-    private BalanceSheetService balanceSheetService;
 
     @Override
     protected String getTemplateName() {
@@ -104,11 +100,7 @@ public class DebtorsController extends BaseController implements ConditionalCont
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        BalanceSheet balanceSheet =
-                balanceSheetService.getBalanceSheet(
-                        transactionId, companyAccountsId, companyNumber);
-
-        return hasDebtors(balanceSheet);
+        return hasDebtors(getBalanceSheet(companyNumber, transactionId, companyAccountsId));
     }
 
     private boolean hasDebtors(BalanceSheet balanceSheet) {

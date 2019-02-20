@@ -18,7 +18,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import javax.servlet.http.HttpServletRequest;
@@ -34,9 +33,6 @@ public class CreditorsWithinOneYearController extends BaseController implements
 
     @Autowired
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
-
-    @Autowired
-    private BalanceSheetService balanceSheetService;
 
     @Override
     protected String getTemplateName() {
@@ -101,11 +97,7 @@ public class CreditorsWithinOneYearController extends BaseController implements
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        BalanceSheet balanceSheet =
-                balanceSheetService.getBalanceSheet(
-                        transactionId, companyAccountsId, companyNumber);
-
-        return hasCreditorsWithin(balanceSheet);
+        return hasCreditorsWithin(getBalanceSheet(companyNumber, transactionId, companyAccountsId));
     }
 
     private boolean hasCreditorsWithin(BalanceSheet balanceSheet) {
