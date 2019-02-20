@@ -279,7 +279,7 @@ public class BalanceSheetServiceImplTests {
 
     @Test
     @DisplayName("First Year Filer - POST - Balance Sheet - Success Path - Notes Present to Delete")
-    void postFirstYearFilerBalanceSheetSuccessNotePresentToDelete() throws ServiceException,
+    void postFirstYearFilerBalanceSheetSuccessNotesPresentToDelete() throws ServiceException,
         URIValidationException, ApiErrorResponseException {
         mockApiClient();
         createFirstYearFilerCompanyProfile();
@@ -303,8 +303,8 @@ public class BalanceSheetServiceImplTests {
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -973,7 +973,7 @@ public class BalanceSheetServiceImplTests {
 
         return balanceSheet;
     }
-  
+
     private void createBalanceSheetWithNullValues(BalanceSheet balanceSheet) {
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);

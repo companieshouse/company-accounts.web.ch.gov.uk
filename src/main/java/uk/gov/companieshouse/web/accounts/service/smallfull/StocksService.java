@@ -39,6 +39,5 @@ public interface StocksService {
      * @throws ServiceException if there's an error on deletion
      */
     void deleteStocks(String transactionId, String companyAccountsId) throws ServiceException;
-
 }
 

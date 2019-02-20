@@ -101,10 +101,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
 
-        StocksNote stocks = stocksService.getStocks(transactionId,companyAccountsId, companyNumber);
-
         TangibleAssets tangibleAssets =
                 tangibleAssetsNoteService.getTangibleAssets(transactionId, companyAccountsId, companyNumber);
+        
+        StocksNote stocks = stocksService.getStocks(transactionId,companyAccountsId, companyNumber);
 
         Review review = new Review();
         review.setBalanceSheet(balanceSheet);
