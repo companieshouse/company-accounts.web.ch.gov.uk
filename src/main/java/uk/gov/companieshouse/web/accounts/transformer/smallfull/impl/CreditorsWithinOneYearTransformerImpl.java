@@ -2,6 +2,8 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CurrentPeriod;
@@ -121,16 +123,10 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
 
     CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
 
-    if (creditorsWithinOneYear.getTotal() != null) {
-        if (creditorsWithinOneYear.getTotal().getCurrentTotal() != null) {
-            setCurrentPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
-        }
-    
-        if (creditorsWithinOneYear.getTotal().getPreviousTotal() != null) {
-            setPreviousPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
-        }
-    }
-    
+    setCurrentPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
+
+    setPreviousPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
+
     return creditorsWithinOneYearApi;
   }
 
@@ -138,10 +134,7 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
       CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
     CurrentPeriod currentPeriod = new CurrentPeriod();
 
-    if (creditorsWithinOneYear.getDetails() != null
-        && creditorsWithinOneYear.getDetails().equals("")) {
-      currentPeriod.setDetails(null);
-    } else {
+    if (StringUtils.isNotBlank(creditorsWithinOneYear.getDetails())) {
       currentPeriod.setDetails(creditorsWithinOneYear.getDetails());
     }
 
@@ -190,7 +183,9 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
           .getCurrentTradeCreditors());
     }
 
-    creditorsWithinOneYearApi.setCreditorsWithinOneYearCurrentPeriod(currentPeriod);
+      if (isCurrentPeriodPopulated(currentPeriod)) {
+          creditorsWithinOneYearApi.setCreditorsWithinOneYearCurrentPeriod(currentPeriod);
+      }
   }
 
   private void setPreviousPeriodOnApiModel(CreditorsWithinOneYear creditorsWithinOneYear,
@@ -246,14 +241,26 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
       creditorsWithinOneYearApi.setCreditorsWithinOneYearPreviousPeriod(previousPeriod);
     }
   }
-  
-  private boolean isPreviousPeriodPopulated(PreviousPeriod period) {
-    return Stream.of(period.getAccrualsAndDeferredIncome(),
-        period.getBankLoansAndOverdrafts(),
-        period.getFinanceLeasesAndHirePurchaseContracts(),
-        period.getOtherCreditors(),
-        period.getTaxationAndSocialSecurity(),
-        period.getTotal(),
-        period.getTradeCreditors()).anyMatch(Objects::nonNull);
-  }
+
+    private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
+
+        return Stream.of(currentPeriod.getAccrualsAndDeferredIncome(),
+                currentPeriod.getBankLoansAndOverdrafts(),
+                currentPeriod.getFinanceLeasesAndHirePurchaseContracts(),
+                currentPeriod.getOtherCreditors(),
+                currentPeriod.getTaxationAndSocialSecurity(),
+                currentPeriod.getTotal(),
+                currentPeriod.getTradeCreditors()).anyMatch(Objects::nonNull);
+    }
+
+    private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
+
+        return Stream.of(previousPeriod.getAccrualsAndDeferredIncome(),
+                previousPeriod.getBankLoansAndOverdrafts(),
+                previousPeriod.getFinanceLeasesAndHirePurchaseContracts(),
+                previousPeriod.getOtherCreditors(),
+                previousPeriod.getTaxationAndSocialSecurity(),
+                previousPeriod.getTotal(),
+                previousPeriod.getTradeCreditors()).anyMatch(Objects::nonNull);
+    }
 }
