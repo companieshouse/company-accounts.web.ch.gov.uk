@@ -74,7 +74,7 @@ public class EmployeesQuestionController extends BaseController {
                                                      @ModelAttribute(EMPLOYEES_QUESTION) @Valid EmployeesQuestion employeesQuestion,
                                                      BindingResult bindingResult,
                                                      Model model,
-                                                     HttpServletRequest request) {
+                                                     HttpServletRequest request) throws ServiceException {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -83,6 +83,14 @@ public class EmployeesQuestionController extends BaseController {
         }
 
         cacheIsEmployeesIncluded(request, employeesQuestion);
+
+        Employees employees =
+                employeesService.getEmployees(transactionId, companyAccountsId, companyNumber);
+
+        if((!employeesQuestion.getHasSelectedEmployeesNote()) && employeesNoteProvided( employees)){
+            employeesService.deleteEmployees(transactionId, companyAccountsId);
+
+        }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
