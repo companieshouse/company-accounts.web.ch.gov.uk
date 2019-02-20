@@ -22,12 +22,15 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
@@ -35,6 +38,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisati
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
@@ -72,15 +76,21 @@ public class ReviewServiceImplTests {
 
     @Mock
     private OtherAccountingPolicyService otherAccountingPolicyService;
-
+    
     @Mock
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
+
+    @Mock
+    private CreditorsAfterOneYearService creditorsAfterOneYearService;
 
     @Mock
     private DebtorsService debtorsService;
 
     @Mock
     private EmployeesService employeesService;
+
+    @Mock
+    private StocksService stocksService;
 
     @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
@@ -120,16 +130,23 @@ public class ReviewServiceImplTests {
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
         when(otherAccountingPolicyService.getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(mockOtherAccounting);
-
+        
         CreditorsWithinOneYear mockCreditorsWithinOneYear = new CreditorsWithinOneYear();
         when(creditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(mockCreditorsWithinOneYear);
+
+        CreditorsAfterOneYear mockCreditorsAfterOneYear = new CreditorsAfterOneYear();
+        when(creditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+            .thenReturn(mockCreditorsAfterOneYear);
 
         Debtors mockDebtors = new Debtors();
         when(debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockDebtors);
 
         Employees mockEmployees = new Employees();
         when(employeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockEmployees);
+
+        StocksNote mockStocks = new StocksNote();
+        when(stocksService.getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockStocks);
 
         TangibleAssets mockTangibleAssets = new TangibleAssets();
         when(tangibleAssetsNoteService.getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
@@ -147,7 +164,10 @@ public class ReviewServiceImplTests {
         assertEquals(valuationInformationPolicy, review.getValuationInformationPolicy());
         assertEquals(mockOtherAccounting, review.getOtherAccountingPolicy());
         assertEquals(mockCreditorsWithinOneYear, review.getCreditorsWithinOneYear());
+        assertEquals(mockCreditorsAfterOneYear, review.getCreditorsAfterOneYear());
         assertEquals(mockTangibleAssets, review.getTangibleAssets());
         assertEquals(mockEmployees, review.getEmployees());
+        assertEquals(mockDebtors, review.getDebtors());
+        assertEquals(mockStocks, review.getStocks());
     }
 }

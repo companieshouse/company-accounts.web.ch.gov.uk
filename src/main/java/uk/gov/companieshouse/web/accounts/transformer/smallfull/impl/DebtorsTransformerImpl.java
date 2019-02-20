@@ -1,11 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
-import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDebtors;
@@ -14,6 +14,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 public class DebtorsTransformerImpl implements DebtorsTransformer {
@@ -81,17 +84,12 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     public DebtorsApi getDebtorsApi(Debtors debtors) {
 
         DebtorsApi debtorsApi = new DebtorsApi();
-        if (debtors.getTotal().getCurrentTotal() != null) {
 
-            setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
-        }
+        setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
 
-        if (debtors.getTotal().getPreviousTotal() != null) {
+        setPreviousPeriodDebtorsOnApiModel(debtors, debtorsApi);
 
-            setPreviousPeriodDebtorsOnApiModel(debtors, debtorsApi);
-        }
         return debtorsApi;
-
     }
 
     private void setPreviousPeriodDebtorsOnApiModel(Debtors debtors, DebtorsApi debtorsApi) {
@@ -116,15 +114,16 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
         if (debtors.getGreaterThanOneYear() != null && debtors.getGreaterThanOneYear().getPreviousGreaterThanOneYear() != null) {
             previousPeriod.setGreaterThanOneYear(debtors.getGreaterThanOneYear().getPreviousGreaterThanOneYear());
         }
-        debtorsApi.setDebtorsPreviousPeriod(previousPeriod);
+
+        if (isPreviousPeriodPopulated(previousPeriod)) {
+            debtorsApi.setDebtorsPreviousPeriod(previousPeriod);
+        }
     }
 
     private void setCurrentPeriodDebtorsOnApiModel(Debtors debtors, DebtorsApi debtorsApi) {
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        if (debtors.getDetails() != null && debtors.getDetails().equals("")) {
-            currentPeriod.setDetails(null);
-        } else {
+        if (StringUtils.isNotBlank(debtors.getDetails())) {
             currentPeriod.setDetails(debtors.getDetails());
         }
 
@@ -148,6 +147,27 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
             currentPeriod.setGreaterThanOneYear(debtors.getGreaterThanOneYear().getCurrentGreaterThanOneYear());
         }
 
-        debtorsApi.setDebtorsCurrentPeriod(currentPeriod);
+        if (isCurrentPeriodPopulated(currentPeriod)) {
+            debtorsApi.setDebtorsCurrentPeriod(currentPeriod);
+        }
+    }
+
+    private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
+
+        return Stream.of(currentPeriod.getDetails(),
+                currentPeriod.getGreaterThanOneYear(),
+                currentPeriod.getOtherDebtors(),
+                currentPeriod.getPrepaymentsAndAccruedIncome(),
+                currentPeriod.getTotal(),
+                currentPeriod.getTradeDebtors()).anyMatch(Objects::nonNull);
+    }
+
+    private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
+
+        return Stream.of(previousPeriod.getGreaterThanOneYear(),
+                previousPeriod.getOtherDebtors(),
+                previousPeriod.getPrepaymentsAndAccruedIncome(),
+                previousPeriod.getTotal(),
+                previousPeriod.getTradeDebtors()).anyMatch(Objects::nonNull);
     }
 }
