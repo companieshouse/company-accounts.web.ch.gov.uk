@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
@@ -17,6 +18,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 @NextController(StepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/small-full/criteria")
 public class CriteriaController extends BaseController {
+
+    private static final String COMPANY_PATH = "/company/";
+    private static final String ALTERNATIVE_OPTIONS_PATH = "/submit-abridged-accounts/alternative-filing-options";
+    private static final String OTHER_OPTIONS_PATH = "/select-account-type";
 
     @GetMapping
     public String getCriteria(Model model) {
@@ -40,8 +45,17 @@ public class CriteriaController extends BaseController {
             return getTemplateName();
         }
 
+        if (criteria.getIsCriteriaMet().equalsIgnoreCase("noAlternativeFilingMethod")) {
+
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + COMPANY_PATH + companyNumber + ALTERNATIVE_OPTIONS_PATH;
+        } else if (criteria.getIsCriteriaMet().equalsIgnoreCase("noOtherAccounts")) {
+
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + COMPANY_PATH + companyNumber + OTHER_OPTIONS_PATH;
+        }
+
+        //TODO - update to proper link once What Type of Accounts has been built
         if (!criteria.getIsCriteriaMet().equalsIgnoreCase("yes")) {
-            // TODO: Temporarily return the criteria page until other routes are developed
+
             return getTemplateName();
         }
 

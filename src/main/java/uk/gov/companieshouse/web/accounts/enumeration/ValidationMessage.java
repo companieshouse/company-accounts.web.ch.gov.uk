@@ -20,10 +20,10 @@ public enum ValidationMessage {
     DATE_INVALID("date_is_invalid", "validation.date.invalid", false),
     MAX_LENGTH_EXCEEDED("max_length_exceeded", "validation.length.maxExceeded", false),
     SHAREHOLDER_FUND_MISMATCH("shareholder_funds_mismatch", "validation.shareholderFunds.mismatch", false),
-    INVALID_NOTE("invalid_note", "invalid.note", true),
-    INCONSISTENT_DATA("inconsistent_data", "inconstent.data", true),
     CURRENT_BALANCESHEET_NOT_EQUAL("value_not_equal_to_current_period_on_balance_sheet", "current.balancesheet.not.equal", false),
-    PREVIOUS_BALANCESHEET_NOT_EQUAL("value_not_equal_to_previous_period_on_balance_sheet", "previous.balancesheet.not.equal", false);
+    PREVIOUS_BALANCESHEET_NOT_EQUAL("value_not_equal_to_previous_period_on_balance_sheet", "previous.balancesheet.not.equal", false),
+    VALUE_REQUIRED("value_required", "value.required", true),
+    UNEXPECTED_DATA("unexpected_data", "validation.unexpected.data", false);
 
     private String messageKey;
     private String apiError;
