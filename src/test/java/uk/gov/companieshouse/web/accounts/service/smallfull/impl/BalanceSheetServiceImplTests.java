@@ -133,6 +133,8 @@ public class BalanceSheetServiceImplTests {
     @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
+    @Mock
+    private BalanceSheet mockCachedBalanceSheet;
 
     @InjectMocks
     private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
@@ -907,6 +909,16 @@ public class BalanceSheetServiceImplTests {
         assertNotNull(balanceSheet.getBalanceSheetHeadings());
         assertEquals(currentPeriodHeading, balanceSheet.getBalanceSheetHeadings().getCurrentPeriodHeading());
         assertEquals(previousPeriodHeading, balanceSheet.getBalanceSheetHeadings().getPreviousPeriodHeading());
+    }
+
+    @Test
+    @DisplayName("Cached balance sheet returned if previously set")
+    void cachedBalanceSheetReturnedIfPreviouslySet() throws ServiceException {
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertNotNull(balanceSheet);
+        assertEquals(mockCachedBalanceSheet, balanceSheet);
     }
 
     private void createFirstYearFilerCompanyProfile() throws ServiceException {
