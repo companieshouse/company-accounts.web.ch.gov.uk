@@ -63,8 +63,6 @@ public class BalanceSheetControllerTests {
 
     private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
 
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
@@ -75,8 +73,12 @@ public class BalanceSheetControllerTests {
 
     @BeforeEach
     private void setup() {
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    }
+
+    private void mockControllerPath() {
+
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
     }
 
     @Test
@@ -89,7 +91,6 @@ public class BalanceSheetControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(BALANCE_SHEET_VIEW))
                     .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
-                    .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                     .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(balanceSheetService, times(1)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -112,6 +113,8 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
+        mockControllerPath();
+
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(new ArrayList<>());
 
@@ -123,6 +126,8 @@ public class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet failure path")
     void postRequestFailure() throws Exception {
+
+        mockControllerPath();
 
         doThrow(ServiceException.class)
                 .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString());
@@ -136,6 +141,8 @@ public class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
+
+        mockControllerPath();
 
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath("calledUpShareCapitalNotPaid");
@@ -154,6 +161,8 @@ public class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
+
+        mockControllerPath();
 
         String beanElement = "calledUpShareCapitalNotPaid.currentAmount";
         // Mock non-numeric input to trigger binding result errors

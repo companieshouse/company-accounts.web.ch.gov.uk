@@ -32,8 +32,6 @@ class SelectAccountTypeControllerTests {
 
     private static final String SELECT_ACCOUNT_TYPE_VIEW = "accountselector/selectAccountType";
 
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     private static final String TYPE_OF_ACCOUNTS_ATTR = "typeOfAccounts";
@@ -65,9 +63,12 @@ class SelectAccountTypeControllerTests {
     @BeforeEach
     void setUpBeforeEAch() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    }
+
+    private void mockControllerPath() {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+                .thenReturn(MOCK_CONTROLLER_PATH);
     }
 
     @Test
@@ -78,13 +79,14 @@ class SelectAccountTypeControllerTests {
             .andExpect(status().isOk())
             .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR))
-            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
+            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
 
     @Test
     @DisplayName("Post select account type for micros account, success path")
     void postRequestForMicrosSuccess() throws Exception {
+
+        mockControllerPath();
 
         performPostRequestAndValidateResponse(
             "micros",
@@ -96,6 +98,8 @@ class SelectAccountTypeControllerTests {
     @DisplayName("Post select account type for abridged account, success path")
     void postRequestForAbridgedAccountSuccess() throws Exception {
 
+        mockControllerPath();
+
         performPostRequestAndValidateResponse(
             "abridged",
             status().is3xxRedirection(),
@@ -106,6 +110,8 @@ class SelectAccountTypeControllerTests {
     @DisplayName("Post select account type for full account, success path")
     void postRequestForFullAccountSuccess() throws Exception {
 
+        mockControllerPath();
+
         performPostRequestAndValidateResponse(
             "full",
             status().is3xxRedirection(),
@@ -115,6 +121,9 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for dormant account, success path")
     void postRequestForDormantAccountSuccess() throws Exception {
+
+        mockControllerPath();
+
         performPostRequestAndValidateResponse(
             "dormant",
             status().is3xxRedirection(),
@@ -125,6 +134,8 @@ class SelectAccountTypeControllerTests {
     @DisplayName("Post any other account selected will not be re-directed")
     void postRequestAnyOtherAccountSuccess() throws Exception {
 
+        mockControllerPath();
+
         performPostRequestAndValidateResponse(
             "anyOtherAccount",
             status().isOk(),
@@ -134,6 +145,8 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post criteria with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
+
+        mockControllerPath();
 
         performPostRequestAndValidateResponse(
             null,
@@ -146,13 +159,14 @@ class SelectAccountTypeControllerTests {
         ResultMatcher expectedStatus,
         String expectedViewName) throws Exception {
 
+        mockControllerPath();
+
         this.mockMvc.perform(
             post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
             .andExpect(expectedStatus)
             .andExpect(view().name(expectedViewName))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR))
-            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
+            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
 
     private String getRedirectUrlForAccount(UriTemplate accountTypeUri) {
