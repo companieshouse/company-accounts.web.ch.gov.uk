@@ -36,7 +36,6 @@ public class SelectAccountTypeController extends BaseController {
     public String getTypeOfAccounts(@PathVariable String companyNumber, Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
-        //addBackPageAttributeToModel(model, companyNumber);
 
         return getTemplateName();
     }

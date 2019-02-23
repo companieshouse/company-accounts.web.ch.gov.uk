@@ -42,8 +42,6 @@ public class BalanceSheetController extends BaseController {
                                   Model model,
                                   HttpServletRequest request) {
 
-        //addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
         try {
             model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
         } catch (ServiceException e) {
