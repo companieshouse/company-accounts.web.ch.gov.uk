@@ -1,100 +1,126 @@
 <!DOCTYPE html>
 
 <html
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:th="http://www.w3.org/1999/xhtml"
-        layout:decorate="~{layouts/baseLayout}">
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
 
 <head>
-    <title>Employees note</title>
+  <title>Employees note</title>
 </head>
 
 <div id="employees-main-content" layout:fragment="content" class="two-column-accounts">
 
-    <form id="balanceSheet-form" th:action="@{''}" th:object="${employeesNote}" class="form currency-included-within-inputs govuk-body" method="post">
+  <form id="balanceSheet-form" th:action="@{''}" th:object="${employees}"
+        class="form currency-included-within-inputs govuk-body" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+    <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
-        <div th:replace="fragments/numberedHeading :: numberedHeading (
+    <div th:if="${noteEmpty}" class="govuk-error-summary" role="alert"
+         aria-labelledby="error-summary-heading" tabindex="-1">
+      <h2 class="govuk-error-summary__title" id="error-summary-heading">There is a problem</h2>
+      <p id="error-summary-subheading">Check the following:</p>
+      <ul class="govuk-list govuk-error-summary__list" id="error-text">
+        <li th:class="fielderr">
+          <div>
+            <a th:id="employees-globalErrorId"
+               th:text="#{employeesNote.error.averageEmployeesText.missing}"
+               href="#employees-globalErrorId">
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div th:replace="fragments/numberedHeading :: numberedHeading (
                     headingText = 'Employees note'
                 )">
+    </div>
+
+    <div class="left-indent">
+
+      <div class="govuk-grid-row" id="accounts-header">
+        <div class="govuk-grid-column-one-half">
+          &nbsp;
         </div>
+        <div class="govuk-grid-column-one-quarter">
+          <h2 class="govuk-heading-s">
+            <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
+            <!-- Hidden input for form binding -->
+            <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
+          </h2>
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+          <h2 class="govuk-heading-s">
+            <span id="previousPeriodHeading"
+                  th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
+            <!-- Hidden input for form binding -->
+            <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
+          </h2>
+        </div>
+      </div>
 
-        <div class="left-indent">
+      <!--Start Average Number Of Employees -->
 
-            <div class="govuk-grid-row" id="accounts-header">
-                <div class="govuk-grid-column-one-half">
-                    &nbsp;
-                </div>
-                <div class="govuk-grid-column-one-quarter">
-                    <h2 class="govuk-heading-s">
-                        <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'>Current Period</span>
-                        <!-- Hidden input for form binding -->
-                        <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
-                    </h2>
-                </div>
-                <div class="govuk-grid-column-one-quarter">
-                    <h2 class="govuk-heading-s">
-                        <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'>Previous Period</span>
-                        <!-- Hidden input for form binding -->
-                        <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
-                    </h2>
-                </div>
-            </div>
-
-            <!--Start Average Number Of Employees -->
-
-            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+      <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'averageNumberOfEmployees.currentAverageNumberOfEmployees',
                         previousField = 'averageNumberOfEmployees.previousAverageNumberOfEmployees'
                         )">
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+
+          <details class="govuk-details" role="group">
+            <summary class="govuk-details__summary" role="button" aria-controls="details-content"
+                     aria-expanded="false">
+              <span id="additional-information-title-text" class="govuk-details__summary-text">Average number of employees</span>
+            </summary>
+            <div class="govuk-govuk-form-group" id="details-content" aria-hidden="true">
+              <label class="govuk-visually-hidden"
+                     th:for="averageNumberOfEmployees.currentAverageNumberOfEmployees">Average
+                number of employees</label>
+              <span id="more-detail-hint" class="govuk-hint">Enter the average number of people employed by the company in the period you're filing for.</span>
             </div>
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-one-half">
-                    
-                    <details class="govuk-details" role="group">
-                        <summary class="govuk-details__summary" role="button" aria-controls="details-content"
-                            aria-expanded="false">
-                           <span id="additional-information-title-text" class="govuk-details__summary-text">Average number of employees</span>
-                        </summary>
-                        <div class="govuk-govuk-form-group" id="details-content" aria-hidden="true">
-                            <label class="govuk-visually-hidden" th:for="averageNumberOfEmployees.currentAverageNumberOfEmployees">Average number of employees</label>
-                            <span id="more-detail-hint" class="govuk-hint">Enter the average number of people employed by the company in the period you're filing for.</span>
-                        </div>
-                    </details>
-                </div>
-                <div class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+          </details>
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+          <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'averageNumberOfEmployees.currentAverageNumberOfEmployees',
                                 text = 'Average number of employees current',
-                                class= 'govuk-input current current-employees-add',
+                                class= 'govuk-input current',
                                 )">
-                    </div>
-                </div>
-                <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+          </div>
+        </div>
+        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}"
+             class="govuk-grid-column-one-quarter">
+          <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'averageNumberOfEmployees.previousAverageNumberOfEmployees',
                                 text = 'Average number of employees previous',
-                                class= 'govuk-input previous previous-employees-add',
+                                class= 'govuk-input previous',
                                 )">
-                    </div>
-                </div>
-            </div>
+          </div>
+        </div>
+      </div>
 
-            <!--End Average Number Of Employees -->
+      <!--End Average Number Of Employees -->
 
 
-            <div th:replace="fragments/additionalInformation :: additionalInformation (
+      <div th:replace="fragments/additionalInformation :: additionalInformation (
                                 id = 'details',
                                 dropDownText = 'Add additional information about your \'employees\' note?',
                                 helpText = 'Enter details of any other \'employees\' information not already covered'
                                 )">
-            </div>
+      </div>
 
-            <div class="form-group">
-                <input id="next-button" class="govuk-button piwik-event" data-event-id="Employees - Save and continue" type="submit" role="button" value="Save and continue"/>
-            </div>
-        </div>
-    </form>
+      <div class="form-group">
+        <input id="next-button" class="govuk-button piwik-event"
+               data-event-id="Employees - Save and continue" type="submit" role="button"
+               value="Save and continue"/>
+      </div>
+    </div>
+    <script
+        th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/balancesheet-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}"
+        type="text/javascript"></script>
+  </form>
 </div>
 </html>
