@@ -269,7 +269,7 @@ public class EmployeesServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - Employees throws ServiceExcepiton getting Smallfull data")
+    @DisplayName("POST - Employees throws ServiceException getting Smallfull data")
     void postEmployeesGetSmallFullDataApiResponseException() throws Exception {
 
         Employees employees = new Employees();
