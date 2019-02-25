@@ -260,58 +260,34 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
 
     private void setCurrentPeriodOnApiModel(CreditorsWithinOneYear creditorsWithinOneYear,
             CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
+
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
         if (StringUtils.isNotBlank(creditorsWithinOneYear.getDetails())) {
             currentPeriod.setDetails(creditorsWithinOneYear.getDetails());
         }
 
-        if (creditorsWithinOneYear.getAccrualsAndDeferredIncome() != null
-                && creditorsWithinOneYear.getAccrualsAndDeferredIncome()
-                .getCurrentAccrualsAndDeferredIncome() != null) {
-            currentPeriod.setAccrualsAndDeferredIncome(creditorsWithinOneYear
-                    .getAccrualsAndDeferredIncome().getCurrentAccrualsAndDeferredIncome());
-        }
+        currentPeriod.setAccrualsAndDeferredIncome(creditorsWithinOneYear
+                .getAccrualsAndDeferredIncome().getCurrentAccrualsAndDeferredIncome());
 
-        if (creditorsWithinOneYear.getBankLoansAndOverdrafts() != null
-                && creditorsWithinOneYear.getBankLoansAndOverdrafts()
-                .getCurrentBankLoansAndOverdrafts() != null) {
-            currentPeriod
-                    .setBankLoansAndOverdrafts(creditorsWithinOneYear.getBankLoansAndOverdrafts()
-                            .getCurrentBankLoansAndOverdrafts());
-        }
+        currentPeriod
+                .setBankLoansAndOverdrafts(creditorsWithinOneYear.getBankLoansAndOverdrafts()
+                        .getCurrentBankLoansAndOverdrafts());
 
-        if (creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts() != null
-                && creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts()
-                .getCurrentFinanceLeasesAndHirePurchaseContracts() != null) {
-            currentPeriod.setFinanceLeasesAndHirePurchaseContracts(creditorsWithinOneYear
-                    .getFinanceLeasesAndHirePurchaseContracts()
-                    .getCurrentFinanceLeasesAndHirePurchaseContracts());
-        }
+        currentPeriod.setFinanceLeasesAndHirePurchaseContracts(creditorsWithinOneYear
+                .getFinanceLeasesAndHirePurchaseContracts()
+                .getCurrentFinanceLeasesAndHirePurchaseContracts());
 
-        if (creditorsWithinOneYear.getOtherCreditors() != null
-                && creditorsWithinOneYear.getOtherCreditors().getCurrentOtherCreditors() != null) {
-            currentPeriod.setOtherCreditors(creditorsWithinOneYear.getOtherCreditors()
-                    .getCurrentOtherCreditors());
-        }
+        currentPeriod.setOtherCreditors(creditorsWithinOneYear.getOtherCreditors()
+                .getCurrentOtherCreditors());
 
-        if (creditorsWithinOneYear.getTaxationAndSocialSecurity() != null
-                && creditorsWithinOneYear.getTaxationAndSocialSecurity()
-                .getCurrentTaxationAndSocialSecurity() != null) {
-            currentPeriod.setTaxationAndSocialSecurity(creditorsWithinOneYear
-                    .getTaxationAndSocialSecurity().getCurrentTaxationAndSocialSecurity());
-        }
+        currentPeriod.setTaxationAndSocialSecurity(creditorsWithinOneYear
+                .getTaxationAndSocialSecurity().getCurrentTaxationAndSocialSecurity());
 
-        if (creditorsWithinOneYear.getTotal() != null
-                && creditorsWithinOneYear.getTotal().getCurrentTotal() != null) {
-            currentPeriod.setTotal(creditorsWithinOneYear.getTotal().getCurrentTotal());
-        }
+        currentPeriod.setTotal(creditorsWithinOneYear.getTotal().getCurrentTotal());
 
-        if (creditorsWithinOneYear.getTradeCreditors() != null
-                && creditorsWithinOneYear.getTradeCreditors().getCurrentTradeCreditors() != null) {
-            currentPeriod.setTradeCreditors(creditorsWithinOneYear.getTradeCreditors()
-                    .getCurrentTradeCreditors());
-        }
+        currentPeriod.setTradeCreditors(creditorsWithinOneYear.getTradeCreditors()
+                .getCurrentTradeCreditors());
 
         if (isCurrentPeriodPopulated(currentPeriod)) {
             creditorsWithinOneYearApi.setCreditorsWithinOneYearCurrentPeriod(currentPeriod);
@@ -320,54 +296,30 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
 
     private void setPreviousPeriodOnApiModel(CreditorsWithinOneYear creditorsWithinOneYear,
             CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
+
         PreviousPeriod previousPeriod = new PreviousPeriod();
 
-        if (creditorsWithinOneYear.getAccrualsAndDeferredIncome() != null
-                && creditorsWithinOneYear.getAccrualsAndDeferredIncome()
-                .getPreviousAccrualsAndDeferredIncome() != null) {
-            previousPeriod.setAccrualsAndDeferredIncome(creditorsWithinOneYear
-                    .getAccrualsAndDeferredIncome().getPreviousAccrualsAndDeferredIncome());
-        }
+        previousPeriod.setAccrualsAndDeferredIncome(creditorsWithinOneYear
+                .getAccrualsAndDeferredIncome().getPreviousAccrualsAndDeferredIncome());
 
-        if (creditorsWithinOneYear.getBankLoansAndOverdrafts() != null
-                && creditorsWithinOneYear.getBankLoansAndOverdrafts()
-                .getPreviousBankLoansAndOverdrafts() != null) {
-            previousPeriod
-                    .setBankLoansAndOverdrafts(creditorsWithinOneYear.getBankLoansAndOverdrafts()
-                            .getPreviousBankLoansAndOverdrafts());
-        }
+        previousPeriod
+                .setBankLoansAndOverdrafts(creditorsWithinOneYear.getBankLoansAndOverdrafts()
+                        .getPreviousBankLoansAndOverdrafts());
 
-        if (creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts() != null
-                && creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts()
-                .getPreviousFinanceLeasesAndHirePurchaseContracts() != null) {
-            previousPeriod.setFinanceLeasesAndHirePurchaseContracts(creditorsWithinOneYear
-                    .getFinanceLeasesAndHirePurchaseContracts()
-                    .getPreviousFinanceLeasesAndHirePurchaseContracts());
-        }
+        previousPeriod.setFinanceLeasesAndHirePurchaseContracts(creditorsWithinOneYear
+                .getFinanceLeasesAndHirePurchaseContracts()
+                .getPreviousFinanceLeasesAndHirePurchaseContracts());
 
-        if (creditorsWithinOneYear.getOtherCreditors() != null
-                && creditorsWithinOneYear.getOtherCreditors().getPreviousOtherCreditors() != null) {
-            previousPeriod.setOtherCreditors(creditorsWithinOneYear.getOtherCreditors()
-                    .getPreviousOtherCreditors());
-        }
+        previousPeriod.setOtherCreditors(creditorsWithinOneYear.getOtherCreditors()
+                .getPreviousOtherCreditors());
 
-        if (creditorsWithinOneYear.getTaxationAndSocialSecurity() != null
-                && creditorsWithinOneYear.getTaxationAndSocialSecurity()
-                .getPreviousTaxationAndSocialSecurity() != null) {
-            previousPeriod.setTaxationAndSocialSecurity(creditorsWithinOneYear
-                    .getTaxationAndSocialSecurity().getPreviousTaxationAndSocialSecurity());
-        }
+        previousPeriod.setTaxationAndSocialSecurity(creditorsWithinOneYear
+                .getTaxationAndSocialSecurity().getPreviousTaxationAndSocialSecurity());
 
-        if (creditorsWithinOneYear.getTotal() != null
-                && creditorsWithinOneYear.getTotal().getPreviousTotal() != null) {
-            previousPeriod.setTotal(creditorsWithinOneYear.getTotal().getPreviousTotal());
-        }
+        previousPeriod.setTotal(creditorsWithinOneYear.getTotal().getPreviousTotal());
 
-        if (creditorsWithinOneYear.getTradeCreditors() != null
-                && creditorsWithinOneYear.getTradeCreditors().getPreviousTradeCreditors() != null) {
-            previousPeriod.setTradeCreditors(creditorsWithinOneYear.getTradeCreditors()
-                    .getPreviousTradeCreditors());
-        }
+        previousPeriod.setTradeCreditors(creditorsWithinOneYear.getTradeCreditors()
+                .getPreviousTradeCreditors());
 
         if (isPreviousPeriodPopulated(previousPeriod)) {
             creditorsWithinOneYearApi.setCreditorsWithinOneYearPreviousPeriod(previousPeriod);
