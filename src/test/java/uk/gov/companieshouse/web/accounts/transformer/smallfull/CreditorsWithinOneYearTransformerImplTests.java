@@ -245,26 +245,6 @@ public class CreditorsWithinOneYearTransformerImplTests {
     }
     
     @Test
-    @DisplayName("No current period added to creditors within one year API model when total not present")
-    void currentPeriodValueNotAddedToCreditorsWithinOneYearApiModel() {
-        
-        CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
-        creditorsWithinOneYear.setDetails(DETAILS);
-
-        creditorsWithinOneYear.setAccrualsAndDeferredIncome(new AccrualsAndDeferredIncome());
-        creditorsWithinOneYear.setBankLoansAndOverdrafts(new BankLoansAndOverdrafts());
-        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(new FinanceLeasesAndHirePurchaseContracts());
-        creditorsWithinOneYear.setOtherCreditors(new OtherCreditors());
-        creditorsWithinOneYear.setTaxationAndSocialSecurity(new TaxationAndSocialSecurity());
-        creditorsWithinOneYear.setTotal(new Total());
-        creditorsWithinOneYear.setTradeCreditors(new TradeCreditors());
-        
-        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear);
-
-        assertNull(creditorsWithinOneYearApi.getCreditorsWithinOneYearCurrentPeriod());
-    }
-    
-    @Test
     @DisplayName("No previous period added to creditors within one year API model when total not present")
     void previousPeriodValueNotAddedToCreditorsWithinOneYearApiModel() {
 

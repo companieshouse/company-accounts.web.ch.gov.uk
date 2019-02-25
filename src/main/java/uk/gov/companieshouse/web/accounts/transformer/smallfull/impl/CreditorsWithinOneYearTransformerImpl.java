@@ -334,7 +334,8 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
                 currentPeriod.getOtherCreditors(),
                 currentPeriod.getTaxationAndSocialSecurity(),
                 currentPeriod.getTotal(),
-                currentPeriod.getTradeCreditors()).anyMatch(Objects::nonNull);
+                currentPeriod.getTradeCreditors(),
+                currentPeriod.getDetails()).anyMatch(Objects::nonNull);
     }
 
     private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
