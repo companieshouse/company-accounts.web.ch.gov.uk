@@ -89,8 +89,6 @@ public class CreditorsWithinOneYearTransformerImplTests {
         CreditorsWithinOneYear creditorsWithinOneYear = transformer.getCreditorsWithinOneYear(creditorsWithinOneYearApi);
 
         assertEquals(TRADE_CREDITORS_CURRENT, creditorsWithinOneYear.getTradeCreditors().getCurrentTradeCreditors());
-        assertNull(creditorsWithinOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
-        assertNull(creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts().getCurrentFinanceLeasesAndHirePurchaseContracts());
         assertEquals(TOTAL_CURRENT, creditorsWithinOneYear.getTotal().getCurrentTotal());
         assertEquals(DETAILS, creditorsWithinOneYear.getDetails());
     }
