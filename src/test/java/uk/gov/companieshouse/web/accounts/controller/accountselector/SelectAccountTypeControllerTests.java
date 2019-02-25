@@ -65,12 +65,6 @@ class SelectAccountTypeControllerTests {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-    private void mockControllerPath() {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any()))
-                .thenReturn(MOCK_CONTROLLER_PATH);
-    }
-
     @Test
     @DisplayName("Get select account type view, success path")
     void getRequestSuccess() throws Exception {
@@ -86,8 +80,6 @@ class SelectAccountTypeControllerTests {
     @DisplayName("Post select account type for micros account, success path")
     void postRequestForMicrosSuccess() throws Exception {
 
-        mockControllerPath();
-
         performPostRequestAndValidateResponse(
             "micros",
             status().is3xxRedirection(),
@@ -97,8 +89,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for abridged account, success path")
     void postRequestForAbridgedAccountSuccess() throws Exception {
-
-        mockControllerPath();
 
         performPostRequestAndValidateResponse(
             "abridged",
@@ -110,8 +100,6 @@ class SelectAccountTypeControllerTests {
     @DisplayName("Post select account type for full account, success path")
     void postRequestForFullAccountSuccess() throws Exception {
 
-        mockControllerPath();
-
         performPostRequestAndValidateResponse(
             "full",
             status().is3xxRedirection(),
@@ -121,8 +109,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for dormant account, success path")
     void postRequestForDormantAccountSuccess() throws Exception {
-
-        mockControllerPath();
 
         performPostRequestAndValidateResponse(
             "dormant",
@@ -134,8 +120,6 @@ class SelectAccountTypeControllerTests {
     @DisplayName("Post any other account selected will not be re-directed")
     void postRequestAnyOtherAccountSuccess() throws Exception {
 
-        mockControllerPath();
-
         performPostRequestAndValidateResponse(
             "anyOtherAccount",
             status().isOk(),
@@ -145,8 +129,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post criteria with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
-        mockControllerPath();
 
         performPostRequestAndValidateResponse(
             null,
@@ -158,8 +140,6 @@ class SelectAccountTypeControllerTests {
         String beanElementValue,
         ResultMatcher expectedStatus,
         String expectedViewName) throws Exception {
-
-        mockControllerPath();
 
         this.mockMvc.perform(
             post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))

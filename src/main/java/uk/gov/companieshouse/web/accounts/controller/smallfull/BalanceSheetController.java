@@ -62,8 +62,6 @@ public class BalanceSheetController extends BaseController {
                                    Model model,
                                    HttpServletRequest request) {
 
-        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }

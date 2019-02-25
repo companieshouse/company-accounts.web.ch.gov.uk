@@ -46,8 +46,6 @@ public class SelectAccountTypeController extends BaseController {
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
 
-        addBackPageAttributeToModel(model, companyNumber);
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }

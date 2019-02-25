@@ -76,11 +76,6 @@ public class BalanceSheetControllerTests {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-    private void mockControllerPath() {
-
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-    }
-
     @Test
     @DisplayName("Get balance sheet view success path")
     void getRequestSuccess() throws Exception {
@@ -113,8 +108,6 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
-        mockControllerPath();
-
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(new ArrayList<>());
 
@@ -126,8 +119,6 @@ public class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet failure path")
     void postRequestFailure() throws Exception {
-
-        mockControllerPath();
 
         doThrow(ServiceException.class)
                 .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString());
@@ -141,8 +132,6 @@ public class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
-        mockControllerPath();
 
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath("calledUpShareCapitalNotPaid");
@@ -161,8 +150,6 @@ public class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
-        mockControllerPath();
 
         String beanElement = "calledUpShareCapitalNotPaid.currentAmount";
         // Mock non-numeric input to trigger binding result errors
