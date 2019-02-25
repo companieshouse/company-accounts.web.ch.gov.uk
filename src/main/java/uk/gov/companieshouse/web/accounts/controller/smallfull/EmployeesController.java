@@ -53,7 +53,7 @@ public class EmployeesController extends BaseController implements
                 employeesService.getEmployees(transactionId, companyAccountsId,
                     companyNumber);
 
-            model.addAttribute("employeesNote", employees);
+            model.addAttribute("employees", employees);
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -78,9 +78,9 @@ public class EmployeesController extends BaseController implements
         try {
             List<ValidationError> validationErrors =
                 employeesService.submitEmployees(transactionId, companyAccountsId,
-                    employees, companyNumber);
+                    employees, companyNumber, model);
 
-            if (!validationErrors.isEmpty()) {
+            if ((!validationErrors.isEmpty()) || model.containsAttribute("noteEmpty")) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
