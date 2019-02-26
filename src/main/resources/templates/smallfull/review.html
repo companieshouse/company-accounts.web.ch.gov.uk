@@ -180,7 +180,7 @@
 
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Accruals and deferred income',
-                            identifier = 'accruals-and-deferred-income',
+                            identifier = 'accruals-and-deferred-income-other-liabilities',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.accrualsAndDeferredIncome?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.accrualsAndDeferredIncome?.previousAmount}
                         )">
@@ -623,7 +623,7 @@
 
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
-                                identifier = 'total',
+                                identifier = 'total-stocks',
                                 currentAmount = *{stocks?.total.currentTotal},
                                 previousAmount = *{stocks?.total.previousTotal},
                                 isTotalRow = true
@@ -692,7 +692,7 @@
 
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
-                                identifier = 'total',
+                                identifier = 'total-debtors',
                                 currentAmount = *{debtors?.total.currentTotal},
                                 previousAmount = *{debtors?.total.previousTotal},
                                 isTotalRow = true
@@ -752,7 +752,7 @@
 
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Bank loans and overdrafts',
-                                identifier = 'bank-loans-and-overdrafts',
+                                identifier = 'bank-loans-and-overdrafts-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
                                 previousAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
                                 isBoldLegend = true
@@ -761,7 +761,7 @@
                             
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Amounts due under finance leases and hire purchase contracts',
-                                identifier = 'finance-leases-and-hire-purchase-contracts',
+                                identifier = 'finance-leases-and-hire-purchase-contracts-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts.currentFinanceLeasesAndHirePurchaseContracts},
                                 previousAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts.previousFinanceLeasesAndHirePurchaseContracts},
                                 isBoldLegend = true
@@ -788,7 +788,7 @@
                             
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Accruals and deferred income',
-                                identifier = 'accruals-and-deferred-income',
+                                identifier = 'accruals-and-deferred-income-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome.currentAccrualsAndDeferredIncome},
                                 previousAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome.previousAccrualsAndDeferredIncome},
                                 isBoldLegend = true
@@ -797,7 +797,7 @@
                                   
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other creditors',
-                                identifier = 'other-creditors',
+                                identifier = 'other-creditors-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.otherCreditors.currentOtherCreditors},
                                 previousAmount = *{creditorsWithinOneYear?.otherCreditors.previousOtherCreditors},
                                 isBoldLegend = true
@@ -806,7 +806,7 @@
                                                                               
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
-                                identifier = 'total',
+                                identifier = 'total-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.total.currentTotal},
                                 previousAmount = *{creditorsWithinOneYear?.total.previousTotal},
                                 isTotalRow = true
@@ -859,7 +859,7 @@
 
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Bank loans and overdrafts',
-                                identifier = 'bank-loans-and-overdrafts',
+                                identifier = 'bank-loans-and-overdrafts-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
                                 previousAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
                                 isBoldLegend = true
@@ -868,7 +868,7 @@
 
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Amounts due under finance leases and hire purchase contracts',
-                                identifier = 'finance-leases-and-hire-purchase-contracts',
+                                identifier = 'finance-leases-and-hire-purchase-contracts-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.currentFinanceLeasesAndHirePurchaseContracts},
                                 previousAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.previousFinanceLeasesAndHirePurchaseContracts},
                                 isBoldLegend = true
@@ -877,7 +877,7 @@
 
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other creditors',
-                                identifier = 'other-creditors',
+                                identifier = 'other-creditors-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.otherCreditors.currentOtherCreditors},
                                 previousAmount = *{creditorsAfterOneYear?.otherCreditors.previousOtherCreditors},
                                 isBoldLegend = true
@@ -886,7 +886,7 @@
 
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
-                                identifier = 'total',
+                                identifier = 'total-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.total.currentTotal},
                                 previousAmount = *{creditorsAfterOneYear?.total.previousTotal},
                                 isTotalRow = true
