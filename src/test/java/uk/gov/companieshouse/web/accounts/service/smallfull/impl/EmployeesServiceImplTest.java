@@ -204,7 +204,7 @@ public class EmployeesServiceImplTest {
         employeesCreate(employeesApi);
 
         List<ValidationError> validationErrors = employeesService.submitEmployees(TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER, mockModel) ;
+            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER) ;
 
         assertEquals(0, validationErrors.size());
     }
@@ -235,8 +235,7 @@ public class EmployeesServiceImplTest {
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
             employees,
-            COMPANY_NUMBER,
-                mockModel));
+            COMPANY_NUMBER));
     }
 
     @Test
@@ -265,7 +264,7 @@ public class EmployeesServiceImplTest {
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
             employees,
-            COMPANY_NUMBER, mockModel));
+            COMPANY_NUMBER));
     }
 
     @Test
@@ -281,7 +280,7 @@ public class EmployeesServiceImplTest {
                 TRANSACTION_ID,
                 COMPANY_ACCOUNTS_ID,
                 employees,
-                COMPANY_NUMBER, mockModel));
+                COMPANY_NUMBER));
     }
 
     @Test
@@ -300,7 +299,7 @@ public class EmployeesServiceImplTest {
         employeesUpdate(employeesApi);
 
         List<ValidationError> validationErrors = employeesService.submitEmployees(TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER, mockModel);
+            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER);
 
         assertEquals(0, validationErrors.size());
     }
@@ -329,7 +328,7 @@ public class EmployeesServiceImplTest {
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
             employees,
-            COMPANY_NUMBER, mockModel));
+            COMPANY_NUMBER));
     }
 
     @Test

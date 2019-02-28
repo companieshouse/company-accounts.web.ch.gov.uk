@@ -29,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -147,7 +145,7 @@ public class EmployeesControllerTest {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockEmployeesService).submitEmployees(anyString(), anyString(), any(Employees.class), anyString(), any(Model.class));
+            .when(mockEmployeesService).submitEmployees(anyString(), anyString(), any(Employees.class), anyString());
 
         this.mockMvc.perform(post(EMPLOYEES_PATH))
             .andExpect(status().isOk())
@@ -181,7 +179,7 @@ public class EmployeesControllerTest {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockEmployeesService.submitEmployees(anyString(), anyString(), any(Employees.class), anyString(), any(Model.class))).thenReturn(errors);
+        when(mockEmployeesService.submitEmployees(anyString(), anyString(), any(Employees.class), anyString())).thenReturn(errors);
 
         this.mockMvc.perform(post(EMPLOYEES_PATH))
             .andExpect(status().isOk())

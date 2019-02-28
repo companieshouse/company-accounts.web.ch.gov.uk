@@ -16,22 +16,6 @@
 
     <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
-    <div th:if="${noteEmpty}" class="govuk-error-summary" role="alert"
-         aria-labelledby="error-summary-heading" tabindex="-1">
-      <h2 class="govuk-error-summary__title" id="error-summary-heading">There is a problem</h2>
-      <p id="error-summary-subheading">Check the following:</p>
-      <ul class="govuk-list govuk-error-summary__list" id="error-text">
-        <li th:class="fielderr">
-          <div>
-            <a th:id="employees-globalErrorId"
-               th:text="#{employeesNote.error.averageEmployeesText.missing}"
-               href="#employees-globalErrorId">
-            </a>
-          </div>
-        </li>
-      </ul>
-    </div>
-
     <div th:replace="fragments/numberedHeading :: numberedHeading (
                     headingText = 'Employees note'
                 )">

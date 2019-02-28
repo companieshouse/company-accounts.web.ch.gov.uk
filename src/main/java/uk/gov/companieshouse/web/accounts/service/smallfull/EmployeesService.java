@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull;
 
-import org.springframework.ui.Model;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -31,7 +30,7 @@ public interface EmployeesService {
      * @return A list of validation errors, or an empty array list if none are present
      * @throws ServiceException if there's an error on submission
      */
-    List<ValidationError> submitEmployees(String transactionId, String companyAccountsId, Employees employees, String companyNumber, Model model)
+    List<ValidationError> submitEmployees(String transactionId, String companyAccountsId, Employees employees, String companyNumber)
         throws ServiceException;
 
     /**

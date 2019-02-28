@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
+import uk.gov.companieshouse.web.accounts.validation.EmployeesValidator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,6 +73,9 @@ public class EmployeesController extends BaseController implements
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        EmployeesValidator employeesValidator = new EmployeesValidator();
+        employeesValidator.validate(employees, bindingResult);
+        
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -78,9 +83,9 @@ public class EmployeesController extends BaseController implements
         try {
             List<ValidationError> validationErrors =
                 employeesService.submitEmployees(transactionId, companyAccountsId,
-                    employees, companyNumber, model);
-
-            if ((!validationErrors.isEmpty()) || model.containsAttribute("noteEmpty")) {
+                    employees, companyNumber);
+            
+            if ((!validationErrors.isEmpty())) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }

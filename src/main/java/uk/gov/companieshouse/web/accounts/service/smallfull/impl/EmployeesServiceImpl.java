@@ -1,10 +1,8 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -53,10 +51,6 @@ public class EmployeesServiceImpl implements EmployeesService {
     private static final String INVALID_URI_MESSAGE =
             "Invalid URI for employees note resource";
 
-    private static final String EMPLOYEES_DETAILS = "details";
-    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE = "validation.length.minInvalid" +
-            ".accounting_policies.turnover_policy";
-
     @Override
     public Employees getEmployees(String transactionId, String companyAccountsId,
             String companyNumber) throws ServiceException {
@@ -75,9 +69,7 @@ public class EmployeesServiceImpl implements EmployeesService {
 
     @Override
     public List<ValidationError> submitEmployees(String transactionId, String companyAccountsId,
-            Employees employees, String companyNumber, Model model) throws ServiceException {
-
-        validateEmployees(employees, model);
+            Employees employees, String companyNumber) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
@@ -110,17 +102,6 @@ public class EmployeesServiceImpl implements EmployeesService {
         }
 
         return new ArrayList<>();
-    }
-
-    private void validateEmployees(Employees employees, Model model) {
-
-        if ((employees == null) || (employees != null &&
-                employees.getAverageNumberOfEmployees()!=null &&
-                employees.getAverageNumberOfEmployees().getCurrentAverageNumberOfEmployees() == null
-                && employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees() == null
-                && StringUtils.isEmpty(employees.getDetails()))) {
-            model.addAttribute("noteEmpty", "noteEmpty");
-        }
     }
 
     private EmployeesApi getEmployeesApi(String transactionId,
