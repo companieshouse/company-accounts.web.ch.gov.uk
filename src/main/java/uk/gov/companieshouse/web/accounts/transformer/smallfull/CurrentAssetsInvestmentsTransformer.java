@@ -6,4 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.CurrentAssetsInv
 public interface CurrentAssetsInvestmentsTransformer {
 
     CurrentAssetsInvestments getCurrentAssetsInvestments(CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi);
+
+    CurrentAssetsInvestmentsApi getCurrentAssetsInvestmentsApi(CurrentAssetsInvestments currentAssetsInvestments);
 }

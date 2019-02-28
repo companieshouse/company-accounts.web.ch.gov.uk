@@ -7,7 +7,8 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.CurrentAssetsInv
 public class CurrentAssetsInvestmentsTransformerImpl implements CurrentAssetsInvestmentsTransformer {
 
     @Override
-    public CurrentAssetsInvestments getCurrentAssetsInvestments(CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi) {
+    public CurrentAssetsInvestments getCurrentAssetsInvestments(CurrentAssetsInvestmentsApi
+        currentAssetsInvestmentsApi) {
 
         CurrentAssetsInvestments currentAssetsInvestments = new CurrentAssetsInvestments();
 
@@ -18,5 +19,16 @@ public class CurrentAssetsInvestmentsTransformerImpl implements CurrentAssetsInv
         currentAssetsInvestments.setDetails(currentAssetsInvestmentsApi.getDetails());
 
         return currentAssetsInvestments;
+    }
+
+    @Override
+    public CurrentAssetsInvestmentsApi getCurrentAssetsInvestmentsApi(
+        CurrentAssetsInvestments currentAssetsInvestments) {
+
+        CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi = new CurrentAssetsInvestmentsApi();
+
+        currentAssetsInvestments.setDetails(currentAssetsInvestments.getDetails());
+
+        return currentAssetsInvestmentsApi;
     }
 }
