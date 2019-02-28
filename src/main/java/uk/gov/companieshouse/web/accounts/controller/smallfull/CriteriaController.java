@@ -19,10 +19,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 @RequestMapping("/company/{companyNumber}/small-full/criteria")
 public class CriteriaController extends BaseController {
 
-    private static final String COMPANY_PATH = "/company/";
-    private static final String ALTERNATIVE_OPTIONS_PATH = "/submit-abridged-accounts/alternative-filing-options";
-    private static final String OTHER_OPTIONS_PATH = "/select-account-type";
-
     @GetMapping
     public String getCriteria(Model model) {
 
@@ -47,16 +43,12 @@ public class CriteriaController extends BaseController {
 
         if (criteria.getIsCriteriaMet().equalsIgnoreCase("noAlternativeFilingMethod")) {
 
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + COMPANY_PATH + companyNumber + ALTERNATIVE_OPTIONS_PATH;
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + companyNumber
+                    + "/submit-abridged-accounts/alternative-filing-options";
         } else if (criteria.getIsCriteriaMet().equalsIgnoreCase("noOtherAccounts")) {
 
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + COMPANY_PATH + companyNumber + OTHER_OPTIONS_PATH;
-        }
-
-        //TODO - update to proper link once What Type of Accounts has been built
-        if (!criteria.getIsCriteriaMet().equalsIgnoreCase("yes")) {
-
-            return getTemplateName();
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + companyNumber
+                    + "/select-account-type";
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
