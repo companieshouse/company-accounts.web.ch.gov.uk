@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.controller.smallfull.EmployeesController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
@@ -135,7 +136,8 @@ public class EmployeesControllerTest {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(post(EMPLOYEES_PATH))
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", "test"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -147,7 +149,8 @@ public class EmployeesControllerTest {
         doThrow(ServiceException.class)
             .when(mockEmployeesService).submitEmployees(anyString(), anyString(), any(Employees.class), anyString());
 
-        this.mockMvc.perform(post(EMPLOYEES_PATH))
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", "test"))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -167,6 +170,27 @@ public class EmployeesControllerTest {
             .andExpect(view().name(EMPLOYEES_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
+    
+    @Test
+    @DisplayName("Post employees without populated values")
+    void postRequestWithEmptyNoteReturnsBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH))
+            .andExpect(status().isOk())
+            .andExpect(view().name(EMPLOYEES_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+    
+    @Test
+    @DisplayName("Post employees with just blank details")
+    void postRequestWithOnlyBlankDetailsReturnsBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name(EMPLOYEES_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
 
     @Test
     @DisplayName("Post employees failure path with API validation errors")
@@ -181,7 +205,8 @@ public class EmployeesControllerTest {
 
         when(mockEmployeesService.submitEmployees(anyString(), anyString(), any(Employees.class), anyString())).thenReturn(errors);
 
-        this.mockMvc.perform(post(EMPLOYEES_PATH))
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", "test"))
             .andExpect(status().isOk())
             .andExpect(view().name(EMPLOYEES_VIEW));
     }
