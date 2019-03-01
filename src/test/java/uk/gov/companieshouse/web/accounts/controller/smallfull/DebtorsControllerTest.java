@@ -72,8 +72,6 @@ public class DebtorsControllerTest {
 
     private static final String DEBTORS_PATH = SMALL_FULL_PATH + "/debtors";
 
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
-
     private static final String DEBTORS_MODEL_ATTR = "debtors";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";

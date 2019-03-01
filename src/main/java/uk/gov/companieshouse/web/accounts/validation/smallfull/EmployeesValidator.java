@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.validation;
+package uk.gov.companieshouse.web.accounts.validation.smallfull;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
