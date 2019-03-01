@@ -21,6 +21,7 @@ public interface CurrentAssetsInvestmentsService {
         throws ServiceException;
 
     /**
+     * Submit the current assets investments note
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
@@ -31,4 +32,13 @@ public interface CurrentAssetsInvestmentsService {
      */
     List<ValidationError> submitCurrentAssetsInvestments(String transactionId, String companyAccountsId, CurrentAssetsInvestments currentAssetsInvestments, String companyNumber)
         throws  ServiceException;
+
+    /**
+     * Delete the current assets investments note
+     *
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteCurrentAssetsInvestments(String transactionId, String companyAccountsId) throws ServiceException;
 }

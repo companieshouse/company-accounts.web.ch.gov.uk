@@ -98,6 +98,23 @@ public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestm
         return new ArrayList<>();
     }
 
+    @Override
+    public void deleteCurrentAssetsInvestments(String transactionId,
+        String companyAccountsId) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = CURRENT_ASSETS_INVESTMENTS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().currentAssetsInvestments().delete(uri).execute();
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            throw new ServiceException("Error deleting current assets investments note resource", e);
+        }
+    }
+
     private boolean hasCurrentAssetsInvestments(ApiClient apiClient, String transactionId,
         String companyAccountsId) throws ServiceException {
 
