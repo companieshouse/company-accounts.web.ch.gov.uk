@@ -974,21 +974,6 @@ public class BalanceSheetServiceImplTests {
         return balanceSheet;
     }
 
-    private void createBalanceSheetWithNullValues(BalanceSheet balanceSheet) {
-        CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
-        calledUpShareCapitalNotPaid.setCurrentAmount((long)1000);
-        calledUpShareCapitalNotPaid.setPreviousAmount((long)1000);
-        balanceSheet.setCalledUpShareCapitalNotPaid(calledUpShareCapitalNotPaid);
-
-        CurrentAssets currentAssets = new CurrentAssets();
-        Debtors debtors = new Debtors();
-        debtors.setCurrentAmount(null);
-        debtors.setPreviousAmount(null);
-
-        currentAssets.setDebtors(debtors);
-        balanceSheet.setCurrentAssets(currentAssets);
-    }
-
     private BalanceSheet createMultipleYearFilerBalanceSheetTestObject() {
         BalanceSheet balanceSheet = createFirstYearFilerBalanceSheetTestObject();
         balanceSheet.getCalledUpShareCapitalNotPaid().setPreviousAmount((long)1000);
