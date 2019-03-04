@@ -177,7 +177,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         createCurrentPeriod(apiClient, smallFullApi, currentPeriodUri, currentPeriod,
                 validationErrors);
 
-        checkConditionalNotes(companyProfileApi, balanceSheet, smallFullApi.getLinks(),
+        checkConditionalNotes(balanceSheet, smallFullApi.getLinks(),
                 transactionId, companyAccountsId);
 
         return validationErrors;
@@ -308,8 +308,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
      * @throws ServiceException if there's an error on submission
      */
 
-    private void checkConditionalNotes(CompanyProfileApi companyProfileApi,
-                                       BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
+    private void checkConditionalNotes(BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
                                        String transactionId, String companyAccountsId) throws ServiceException {
 
         if ((isDebtorsCurrentAmountNullOrZero(balanceSheet)
