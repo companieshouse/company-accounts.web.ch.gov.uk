@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -118,7 +117,8 @@ public class FixedAssetInvestmentsControllerTests {
         when(mockFixedAssetsInvestmentsService.submitFixedAssetsInvestments(anyString(), anyString(), any(FixedAssetsInvestments.class), anyString()))
             .thenReturn(new ArrayList<>());
 
-        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, "Test"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -130,7 +130,8 @@ public class FixedAssetInvestmentsControllerTests {
         doThrow(ServiceException.class)
             .when(mockFixedAssetsInvestmentsService).submitFixedAssetsInvestments(anyString(), anyString(), any(FixedAssetsInvestments.class), anyString());
 
-        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, "Test"))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -150,8 +151,20 @@ public class FixedAssetInvestmentsControllerTests {
         when(mockFixedAssetsInvestmentsService.submitFixedAssetsInvestments(anyString(), anyString(), any(FixedAssetsInvestments.class), anyString()))
             .thenReturn(errors);
 
-        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, "#¢¢#¢"))
             .andExpect(status().isOk())
             .andExpect(view().name(FIXED_ASSETS_INVESTMENTS_VIEW));
+    }
+    
+    @Test
+    @DisplayName("Post fixedAssetsInvestments with binding result error")
+    void postRequestBindingResultErrors() throws Exception {
+        
+        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name(FIXED_ASSETS_INVESTMENTS_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 }
