@@ -27,7 +27,7 @@ public class CurrentAssetsInvestmentsTransformerImpl implements CurrentAssetsInv
 
         CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi = new CurrentAssetsInvestmentsApi();
 
-        currentAssetsInvestments.setDetails(currentAssetsInvestments.getDetails());
+        currentAssetsInvestmentsApi.setDetails(currentAssetsInvestments.getDetails());
 
         return currentAssetsInvestmentsApi;
     }
