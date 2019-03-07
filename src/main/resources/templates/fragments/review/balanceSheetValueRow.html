@@ -7,16 +7,17 @@
         <div th:fragment="balanceSheetValueRow" th:if="${currentAmount != null || previousAmount != null}" class="app-check-your-answers__contents">
             <dt class="app-check-your-answers__question" th:text="${description}" th:classappend="${isTotalRow == null && isBoldLegend == null} ? 'govuk-!-font-weight-regular' : ''"></dt>
 
-            <dd th:attr="id=${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
-                th:text="${currentAmount != null ? '£' + #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
-                th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-                <span class="mobile-only-label" th:text="*{'(' + balanceSheet.balanceSheetHeadings.currentPeriodHeading + ')'}"></span>
+            <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+                <span class="mobile-only-label" th:text="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading + ':'}"></span>
+                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
+                      th:text="${currentAmount != null ? '£' + #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}">
+                </span>
             </dd>
-            <dd th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                th:attr="id=${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
-                th:text="${previousAmount != null ? '£' + #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
-                th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-                <span class="mobile-only-label" th:text="*{'(' + balanceSheet.balanceSheetHeadings.currentPeriodHeading + ')'}"></span>
+            <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+                <span class="mobile-only-label" th:text="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading + ':'}"></span>
+                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
+                      th:text="${previousAmount != null ? '£' + #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}">
+                </span>
             </dd>
 
             <dd class="app-check-your-answers__change"></dd>
