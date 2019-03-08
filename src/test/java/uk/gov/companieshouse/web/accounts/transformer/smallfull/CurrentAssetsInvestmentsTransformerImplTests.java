@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.currentassetsinvestments.CurrentAssetsInvestmentsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CurrentAssetsInvestmentsTransformerImpl;
@@ -10,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CurrentAssetsInvestmentsTransformerImplTests {
 
     private static final String TEST_DETAILS = "test details";
