@@ -64,8 +64,13 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
                               Model model,
                               HttpServletRequest request) {
 
+        
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
+        
         try {
             List<ValidationError> validationErrors =
                 fixedAssetsInvestmentsService.submitFixedAssetsInvestments(transactionId, companyAccountsId, fixedAssetsInvestments, companyNumber);
