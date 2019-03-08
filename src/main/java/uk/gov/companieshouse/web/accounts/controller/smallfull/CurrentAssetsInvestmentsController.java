@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/current-assets-investments")
-public class CurrentAssetsInvestmentsController extends BaseController {
+public class CurrentAssetsInvestmentsController extends BaseController implements ConditionalController {
 
     @Autowired
     CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
@@ -80,5 +81,13 @@ public class CurrentAssetsInvestmentsController extends BaseController {
             .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
                 companyAccountsId);
 
+    }
+
+
+    @Override
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
+            throws ServiceException {
+
+        return true;
     }
 }
