@@ -80,7 +80,6 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
         return navigatorService
             .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
                 companyAccountsId);
-
     }
 
 
