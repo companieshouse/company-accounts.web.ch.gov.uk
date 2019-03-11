@@ -29,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
 
-        transaction.setDescription("Small Full Accounts");
+        transaction.setDescription("Full accounts");
 
         ApiClient apiClient = apiClientService.getApiClient();
 
