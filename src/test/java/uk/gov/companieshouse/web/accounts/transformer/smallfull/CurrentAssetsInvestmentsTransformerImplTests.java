@@ -6,7 +6,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.currentassetsinvestments.CurrentAssetsInvestmentsApi;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.CurrentAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CurrentAssetsInvestmentsTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.model.smallfull.notes;
+package uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +10,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 @ValidationModel
 public class CurrentAssetsInvestments {
 
-    @ValidationMapping("$.current_asset_investments.details")
+    @ValidationMapping("$.current_assets_investments.details")
     private String details;
 }

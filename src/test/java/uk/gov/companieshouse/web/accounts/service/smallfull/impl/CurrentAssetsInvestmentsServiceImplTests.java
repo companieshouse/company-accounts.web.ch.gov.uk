@@ -21,7 +21,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.currentassetsinvestments.CurrentAssetsInvestmentsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.CurrentAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CurrentAssetsInvestmentsTransformer;
@@ -182,7 +182,7 @@ public class CurrentAssetsInvestmentsServiceImplTests {
     }
 
     @Test
-    @DisplayName("POST - currentAssetsInvestments throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
+    @DisplayName("POST - currentAssetsInvestments throws ServiceException due to ApiErrorResponseException - 404 Not Found")
     void postCurrentAssetsInvestmentsApiErrorResponseExceptionNotFound() throws Exception {
 
         getMockCurrentAssetsInvestmentsResourceHandler();
@@ -217,7 +217,7 @@ public class CurrentAssetsInvestmentsServiceImplTests {
     }
 
     @Test
-    @DisplayName("POST - currentAssetsInvestments throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
+    @DisplayName("POST - currentAssetsInvestments throws ServiceException due to ApiErrorResponseException - 400 Bad Request")
     void postCurrentAssetsInvestmentsApiErrorResponseExceptionBadRequest() throws Exception {
 
         getMockCurrentAssetsInvestmentsResourceHandler();
@@ -252,7 +252,7 @@ public class CurrentAssetsInvestmentsServiceImplTests {
     }
 
     @Test
-    @DisplayName("POST - currentAssetsInvestments throws ServiceExcepiton getting Smallfull data")
+    @DisplayName("POST - currentAssetsInvestments throws ServiceException getting Smallfull data")
     void postCurrentAssetsInvestmentsGetSmallFullDataApiResponseException() throws Exception {
 
         CurrentAssetsInvestments currentAssetsInvestments = createCurrentAssetsInvestments();
