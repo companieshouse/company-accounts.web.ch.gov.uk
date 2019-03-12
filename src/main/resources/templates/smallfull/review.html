@@ -910,6 +910,29 @@
                     </div>
                 </div>
                 <!-- End Creditors After One Year Note -->
+
+                <!-- Current Assets Investments Note -->
+                <div th:if="*{currentAssetsInvestments.details != null}">
+                    <div
+                            th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Current assets investments',
+                        identifier= 'current-assets-investments',
+                        resource = 'current-assets-investments',
+                        marginTop = true
+                        )">
+                    </div>
+
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__answer">
+                                <p id="review-current-assets-investments"
+                                   th:utext="*{#strings.replace(currentAssetsInvestments.details,'&#10;','&lt;br&gt;')}">
+                                </p>
+                            </dt>
+                        </div>
+                    </dl>
+                </div>
+                <!-- End Current Assets Investments Note -->
                 
                 <div class="govuk-form-group">
                     <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
