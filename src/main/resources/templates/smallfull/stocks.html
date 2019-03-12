@@ -66,7 +66,8 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'stocks.currentStocks',
-                                text = 'stocks current',
+                                text = 'Stocks current',
+                                period = current,
                                 class= 'govuk-input current current-stocks-add',
                                 )">
                     </div>
@@ -76,6 +77,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'stocks.previousStocks',
                                 text = 'Stocks previous',
+                                period = previous,
                                 class= 'govuk-input previous previous-stocks-add',
                                 )">
                     </div>
@@ -98,7 +100,8 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'paymentsOnAccount.currentPaymentsOnAccount',
-                                text = 'Payments on Account current',
+                                text = 'Payments on account current',
+                                period = current,
                                 class= 'govuk-input current current-stocks-add',
                                 )">
                     </div>
@@ -107,7 +110,8 @@
                      class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'paymentsOnAccount.previousPaymentsOnAccount',
-                                text = 'Payments on Account previous',
+                                text = 'Payments on account previous',
+                                period = previous,
                                 class= 'govuk-input previous previous-stocks-add',
                                 )">
                     </div>
@@ -131,6 +135,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.currentTotal',
                                 text = 'Total current',
+                                period = current,
                                 class= 'govuk-input current-stocks-total',
                                 )">
                     </div>
@@ -140,6 +145,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
                                 text = 'Total previous',
+                                period = previous,
                                 class= 'govuk-input previous-stocks-total',
                                 )">
                     </div>
