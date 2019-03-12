@@ -60,6 +60,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.currentTradeDebtors',
                                 text = 'Trade debtors current',
+                                period = current,
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -68,6 +69,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.previousTradeDebtors',
                                 text = 'Trade debtors previous',
+                                period = previous,
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -91,6 +93,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income current',
+                                period = current,
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -99,6 +102,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income previous',
+                                period = previous,
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -122,6 +126,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.currentOtherDebtors',
                                 text = 'Other debtors current',
+                                period = current,
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -130,6 +135,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.previousOtherDebtors',
                                 text = 'Other debtors previous',
+                                period = previous,
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -153,6 +159,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.currentTotal',
                                 text = 'Total current',
+                                period = current,
                                 class= 'govuk-input current-debtors-total',
                                 )">
                     </div>
@@ -161,6 +168,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
                                 text = 'Total previous',
+                                period = previous,
                                 class= 'govuk-input previous-debtors-total',
                                 )">
                     </div>
@@ -184,6 +192,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'greaterThanOneYear.currentGreaterThanOneYear',
                                 text = 'Debtors after more than one year current',
+                                period = current,
                                 class= 'govuk-input current',
                                 )">
                     </div>
@@ -192,6 +201,7 @@
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'greaterThanOneYear.previousGreaterThanOneYear',
                                 text = 'Debtors after more than one year previous',
+                                period = previous,
                                 class= 'govuk-input previous',
                                 )">
                     </div>
