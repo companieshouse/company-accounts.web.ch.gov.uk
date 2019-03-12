@@ -59,8 +59,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.currentTradeDebtors',
-                                text = 'Trade debtors current',
-                                period = current,
+                                text = 'Trade debtors current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -68,8 +67,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.previousTradeDebtors',
-                                text = 'Trade debtors previous',
-                                period = previous,
+                                text = 'Trade debtors previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -92,8 +90,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome',
-                                text = 'Prepayments and accrued income current',
-                                period = current,
+                                text = 'Prepayments and accrued income current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -101,8 +98,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome',
-                                text = 'Prepayments and accrued income previous',
-                                period = previous,
+                                text = 'Prepayments and accrued income previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -125,8 +121,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.currentOtherDebtors',
-                                text = 'Other debtors current',
-                                period = current,
+                                text = 'Other debtors current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -134,8 +129,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.previousOtherDebtors',
-                                text = 'Other debtors previous',
-                                period = previous,
+                                text = 'Other debtors previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -158,8 +152,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.currentTotal',
-                                text = 'Total current',
-                                period = current,
+                                text = 'Total current '+ *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current-debtors-total',
                                 )">
                     </div>
@@ -167,8 +160,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
-                                text = 'Total previous',
-                                period = previous,
+                                text = 'Total previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous-debtors-total',
                                 )">
                     </div>
@@ -191,8 +183,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'greaterThanOneYear.currentGreaterThanOneYear',
-                                text = 'Debtors after more than one year current',
-                                period = current,
+                                text = 'Debtors after more than one year current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current',
                                 )">
                     </div>
@@ -200,8 +191,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'greaterThanOneYear.previousGreaterThanOneYear',
-                                text = 'Debtors after more than one year previous',
-                                period = previous,
+                                text = 'Debtors after more than one year previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous',
                                 )">
                     </div>

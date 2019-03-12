@@ -66,8 +66,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'stocks.currentStocks',
-                                text = 'Stocks current',
-                                period = current,
+                                text = 'Stocks current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-stocks-add',
                                 )">
                     </div>
@@ -76,8 +75,7 @@
                      class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'stocks.previousStocks',
-                                text = 'Stocks previous',
-                                period = previous,
+                                text = 'Stocks previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-stocks-add',
                                 )">
                     </div>
@@ -100,8 +98,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'paymentsOnAccount.currentPaymentsOnAccount',
-                                text = 'Payments on account current',
-                                period = current,
+                                text = 'Payments on account current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-stocks-add',
                                 )">
                     </div>
@@ -110,8 +107,7 @@
                      class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'paymentsOnAccount.previousPaymentsOnAccount',
-                                text = 'Payments on account previous',
-                                period = previous,
+                                text = 'Payments on account previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-stocks-add',
                                 )">
                     </div>
@@ -134,8 +130,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.currentTotal',
-                                text = 'Total current',
-                                period = current,
+                                text = 'Total current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current-stocks-total',
                                 )">
                     </div>
@@ -144,8 +139,7 @@
                      class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
-                                text = 'Total previous',
-                                period = previous,
+                                text = 'Total previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous-stocks-total',
                                 )">
                     </div>
