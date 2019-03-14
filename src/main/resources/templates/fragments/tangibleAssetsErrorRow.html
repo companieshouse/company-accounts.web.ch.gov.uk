@@ -13,64 +13,64 @@
                                                     #fields.hasErrors('__${row}__' + '.total')} ? (${isTopRow} ? 'accounts-row-spacer' : '') : 'error-hidden'">
     <div class="column-fifth block-desktop-only">&nbsp;</div>
     <div class="column-sixth block-desktop-only">
-      <span th:id="${row} + '.landAndBuildings-error'" class="govuk-error-message hidden"></span>
       <span th:if="${#fields.hasErrors('__${row}__' + '.landAndBuildings')}"
             th:id="${row} + '.landAndBuildings-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.landAndBuildings')}"
             th:text="${e}"
             class="govuk-error-message api">
       </span>
-      <span th:if="${!#fields.hasErrors('__${row}__' + '.landAndBuildings')}" class="spacer">&nbsp;</span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.landAndBuildings')}"></span>
+      <span th:id="${row} + '.landAndBuildings-error'" class="govuk-error-message hidden"></span>
     </div>
     <div class="column-sixth block-desktop-only">
-      <span th:id="${row} + '.plantAndMachinery-error'" class="govuk-error-message hidden"></span>
       <span th:if="${#fields.hasErrors('__${row}__' + '.plantAndMachinery')}"
             th:id="${row} + '.plantAndMachinery-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.plantAndMachinery')}"
             th:text="${e}"
             class="govuk-error-message api">
       </span>
-      <span th:if="${!#fields.hasErrors('__${row}__' + '.plantAndMachinery')}" class="spacer">&nbsp;</span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.plantAndMachinery')}"></span>
+      <span th:id="${row} + '.plantAndMachinery-error'" class="govuk-error-message hidden"></span>
     </div>
     <div class="column-sixth block-desktop-only">
-      <span th:id="${row} + '.fixturesAndFittings-error'" class="govuk-error-message hidden"></span>
       <span th:if="${#fields.hasErrors('__${row}__' + '.fixturesAndFittings')}"
             th:id="${row} + '.fixturesAndFittings-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.fixturesAndFittings')}"
             th:text="${e}"
             class="govuk-error-message api">
       </span>
-      <span th:if="${!#fields.hasErrors('__${row}__' + '.fixturesAndFittings')}" class="spacer">&nbsp;</span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.fixturesAndFittings')}"></span>
+      <span th:id="${row} + '.fixturesAndFittings-error'" class="govuk-error-message hidden"></span>
     </div>
     <div class="column-sixth block-desktop-only">
-      <span th:id="${row} + '.officeEquipment-error'" class="govuk-error-message hidden"></span>
       <span th:if="${#fields.hasErrors('__${row}__' + '.officeEquipment')}"
             th:id="${row} + '.officeEquipment-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.officeEquipment')}"
             th:text="${e}"
             class="govuk-error-message api">
       </span>
-      <span th:if="${!#fields.hasErrors('__${row}__' + '.officeEquipment')}" class="spacer">&nbsp;</span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.officeEquipment')}"></span>
+      <span th:id="${row} + '.officeEquipment-error'" class="govuk-error-message hidden"></span>
     </div>
     <div class="column-sixth block-desktop-only">
-      <span th:id="${row} + '.motorVehicles-error'" class="govuk-error-message hidden"></span>
       <span th:if="${#fields.hasErrors('__${row}__' + '.motorVehicles')}"
             th:id="${row} + '.motorVehicles-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.motorVehicles')}"
             th:text="${e}"
             class="govuk-error-message api">
       </span>
-      <span th:if="${!#fields.hasErrors('__${row}__' + '.motorVehicles')}" class="spacer">&nbsp;</span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.motorVehicles')}"></span>
+      <span th:id="${row} + '.motorVehicles-error'" class="govuk-error-message hidden"></span>
     </div>
     <div class="column-sixth block-desktop-only">
-      <span th:id="${row} + '.total-error'" class="govuk-error-message hidden"></span>
       <span th:if="${#fields.hasErrors('__${row}__' + '.total')}"
             th:id="${row} + '.total-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.total')}"
             th:text="${e}"
             class="govuk-error-message api">
       </span>
-      <span th:if="${!#fields.hasErrors('__${row}__' + '.total')}" class="spacer">&nbsp;</span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.total')}"></span>
+      <span th:id="${row} + '.total-error'" class="govuk-error-message hidden"></span>
     </div>
   </div>
 </div>
