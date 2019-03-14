@@ -7,35 +7,47 @@
 <div th:fragment="tangibleAssetsValueRow" class="app-check-your-answers__contents">
   <dt class="app-check-your-answers__question" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : 'govuk-!-font-weight-regular'" th:text="${description}"></dt>
 
-  <dd th:attr="id='review-' + ${identifier} + '-land-and-buildings'"
-      th:text="${row?.landAndBuildings != null ? '£' + #numbers.formatInteger(row.landAndBuildings, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
+  <dd class="app-check-your-answers__answer"
       th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-    <span class="mobile-only-label">(Land &amp; buildings)</span>
+    <span class="mobile-only-label">Land &amp; buildings:</span>
+    <span th:id="'review-' + ${identifier} + '-land-and-buildings'"
+        th:text="${row?.landAndBuildings != null ? '£' + #numbers.formatInteger(row.landAndBuildings, 0, 'COMMA') : ''}">
+    </span>
   </dd>
-  <dd th:attr="id='review-' + ${identifier} + '-plant-and-machinery'"
-      th:text="${row?.plantAndMachinery != null ? '£' + #numbers.formatInteger(row.plantAndMachinery, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
+  <dd class="app-check-your-answers__answer"
       th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-    <span class="mobile-only-label">(Plant &amp; machinery)</span>
+    <span class="mobile-only-label">Plant &amp; machinery:</span>
+    <span th:id="'review-' + ${identifier} + '-plant-and-machinery'"
+        th:text="${row?.plantAndMachinery != null ? '£' + #numbers.formatInteger(row.plantAndMachinery, 0, 'COMMA') : ''}">
+    </span>
   </dd>
-  <dd th:attr="id='review-' + ${identifier} + '-fixtures-and-fittings'"
-      th:text="${row?.fixturesAndFittings != null ? '£' + #numbers.formatInteger(row.fixturesAndFittings, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
+  <dd class="app-check-your-answers__answer"
       th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-    <span class="mobile-only-label">(Fixtures &amp; fittings)</span>
+    <span class="mobile-only-label">Fixtures &amp; fittings:</span>
+    <span th:id="'review-' + ${identifier} + '-fixtures-and-fittings'"
+        th:text="${row?.fixturesAndFittings != null ? '£' + #numbers.formatInteger(row.fixturesAndFittings, 0, 'COMMA') : ''}">
+    </span>
   </dd>
-  <dd th:attr="id='review-' + ${identifier} + '-office-equipment'"
-      th:text="${row?.officeEquipment != null ? '£' + #numbers.formatInteger(row.officeEquipment, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
+  <dd class="app-check-your-answers__answer"
       th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-    <span class="mobile-only-label">(Office equipment)</span>
+    <span class="mobile-only-label">Office equipment:</span>
+    <span th:id="'review-' + ${identifier} + '-office-equipment'"
+        th:text="${row?.officeEquipment != null ? '£' + #numbers.formatInteger(row.officeEquipment, 0, 'COMMA') : ''}">
+    </span>
   </dd>
-  <dd th:attr="id='review-' + ${identifier} + '-motor-vehicles'"
-      th:text="${row?.motorVehicles != null ? '£' + #numbers.formatInteger(row.motorVehicles, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
+  <dd class="app-check-your-answers__answer"
       th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-    <span class="mobile-only-label">(Motor vehicles)</span>
+    <span class="mobile-only-label">Motor vehicles:</span>
+    <span th:id="'review-' + ${identifier} + '-motor-vehicles'"
+        th:text="${row?.motorVehicles != null ? '£' + #numbers.formatInteger(row.motorVehicles, 0, 'COMMA') : ''}">
+    </span>
   </dd>
-  <dd th:attr="id='review-' + ${identifier} + '-total'"
-      th:text="${row?.total != null ? '£' + #numbers.formatInteger(row.total, 0, 'COMMA') : ''}" class="app-check-your-answers__answer"
+  <dd class="app-check-your-answers__answer"
       th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-    <span class="mobile-only-label">(Total)</span>
+    <span class="mobile-only-label">Total:</span>
+    <span th:id="'review-' + ${identifier} + '-total'"
+        th:text="${row?.total != null ? '£' + #numbers.formatInteger(row.total, 0, 'COMMA') : ''}">
+    </span>
   </dd>
 
   <dd class="app-check-your-answers__change"></dd>

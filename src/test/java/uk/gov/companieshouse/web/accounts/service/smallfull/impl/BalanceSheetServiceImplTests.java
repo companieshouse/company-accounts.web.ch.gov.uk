@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -67,7 +68,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class BalanceSheetServiceImplTests {
 
     @Mock
@@ -878,6 +879,20 @@ public class BalanceSheetServiceImplTests {
         assertNotNull(balanceSheet.getBalanceSheetHeadings());
         assertEquals(currentPeriodHeading, balanceSheet.getBalanceSheetHeadings().getCurrentPeriodHeading());
         assertEquals(previousPeriodHeading, balanceSheet.getBalanceSheetHeadings().getPreviousPeriodHeading());
+    }
+
+    @Test
+    @DisplayName("Cached balance sheet returned if previously set")
+    void cachedBalanceSheetReturnedIfPreviouslySet() throws ServiceException {
+
+        BalanceSheet mockCachedBalanceSheet = new BalanceSheet();
+
+        ReflectionTestUtils.setField(balanceSheetService, "cachedBalanceSheet", mockCachedBalanceSheet);
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertNotNull(balanceSheet);
+        assertEquals(mockCachedBalanceSheet, balanceSheet);
     }
 
     private void createFirstYearFilerCompanyProfile() throws ServiceException {

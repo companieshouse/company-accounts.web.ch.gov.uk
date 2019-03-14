@@ -63,8 +63,6 @@ public class BalanceSheetControllerTests {
 
     private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
 
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
@@ -75,7 +73,6 @@ public class BalanceSheetControllerTests {
 
     @BeforeEach
     private void setup() {
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -89,7 +86,6 @@ public class BalanceSheetControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(BALANCE_SHEET_VIEW))
                     .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
-                    .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                     .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(balanceSheetService, times(1)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);

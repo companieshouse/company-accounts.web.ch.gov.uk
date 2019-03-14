@@ -184,16 +184,6 @@ public class DebtorsControllerTest {
     }
 
     @Test
-    @DisplayName("Test will render with Debtors not present on balancesheet")
-    void willRenderDebtorsServiceException() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
-
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-
-        assertFalse(renderPage);
-    }
-
-    @Test
     @DisplayName("Test will not render with 0 values in debtors on balance sheet")
     void willNotRenderDebtorsZeroValues() throws Exception {
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());

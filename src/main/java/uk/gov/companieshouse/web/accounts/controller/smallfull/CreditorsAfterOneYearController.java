@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
@@ -99,29 +101,28 @@ public class CreditorsAfterOneYearController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-        return shouldNoteRender(balanceSheetService.getBalanceSheet(transactionId,
-                companyAccountsId,
-                companyNumber));
+
+        BalanceSheet balanceSheet =
+                balanceSheetService.getBalanceSheet(
+                        transactionId, companyAccountsId, companyNumber);
+
+        return hasCreditorsAfter(balanceSheet);
     }
 
-    private boolean shouldNoteRender(BalanceSheet balanceSheet) {
+    private boolean hasCreditorsAfter(BalanceSheet balanceSheet) {
 
-        if (balanceSheet.getOtherLiabilitiesOrAssets() != null
-                && balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() != null) {
+        Long currentCreditorsAfter = Optional.of(balanceSheet)
+                .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+                .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
+                .map(uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsAfterOneYear::getCurrentAmount)
+                .orElse(0L);
 
-            Long previousAmount =
-                    balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear()
-                            .getPreviousAmount();
-            Long currentAmount =
-                    balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear()
-                            .getCurrentAmount();
+        Long previousCreditorsAfter = Optional.of(balanceSheet)
+                .map(BalanceSheet::getOtherLiabilitiesOrAssets)
+                .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
+                .map(uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsAfterOneYear::getPreviousAmount)
+                .orElse(0L);
 
-            return valuePresent(previousAmount) || valuePresent(currentAmount);
-        }
-        return false;
-    }
-
-    private boolean valuePresent(Long value) {
-        return value != null && value != 0;
+        return !(currentCreditorsAfter.equals(0L) && previousCreditorsAfter.equals(0L));
     }
 }
