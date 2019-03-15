@@ -13,15 +13,24 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.controller.smallfull.EmployeesController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,12 +51,18 @@ public class EmployeesControllerTest {
 
     @Mock
     private NavigatorService mockNavigatorService;
-    
+
     @Mock
     private MockHttpServletRequest mockHttpServletRequest;
-    
+
     @Mock
     private MockHttpSession mockHttpSession;
+
+    @Mock
+    private Model mockModel;
+
+    @Mock
+    private Employees mockEmployees;
 
     @InjectMocks
     private EmployeesController controller;
@@ -65,7 +80,7 @@ public class EmployeesControllerTest {
 
     private static final String EMPLOYEES_PATH = SMALL_FULL_PATH + "/employees";
 
-    private static final String EMPLOYEES_MODEL_ATTR = "employeesNote";
+    private static final String EMPLOYEES_MODEL_ATTR = "employees";
 
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
@@ -80,7 +95,7 @@ public class EmployeesControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
-    
+
     @BeforeEach
     private void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -121,9 +136,24 @@ public class EmployeesControllerTest {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(post(EMPLOYEES_PATH))
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", "test"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Post employees failure path")
+    void postRequestFailure() throws Exception {
+
+        doThrow(ServiceException.class)
+            .when(mockEmployeesService).submitEmployees(anyString(), anyString(), any(Employees.class), anyString());
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", "test"))
+            .andExpect(status().isOk())
+            .andExpect(view().name(ERROR_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -140,18 +170,58 @@ public class EmployeesControllerTest {
             .andExpect(view().name(EMPLOYEES_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
+    
+    @Test
+    @DisplayName("Post employees without populated values")
+    void postRequestWithEmptyNoteReturnsBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH))
+            .andExpect(status().isOk())
+            .andExpect(view().name(EMPLOYEES_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+    
+    @Test
+    @DisplayName("Post employees with just blank details")
+    void postRequestWithOnlyBlankDetailsReturnsBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name(EMPLOYEES_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Post employees failure path with API validation errors")
+    void postRequestFailureWithApiValidationErrors() throws Exception {
+
+        ValidationError validationError = new ValidationError();
+        validationError.setFieldPath(TEST_PATH);
+        validationError.setMessageKey("invalid_character");
+
+        List<ValidationError> errors = new ArrayList<>();
+        errors.add(validationError);
+
+        when(mockEmployeesService.submitEmployees(anyString(), anyString(), any(Employees.class), anyString())).thenReturn(errors);
+
+        this.mockMvc.perform(post(EMPLOYEES_PATH)
+            .param("details", "test"))
+            .andExpect(status().isOk())
+            .andExpect(view().name(EMPLOYEES_VIEW));
+    }
 
     @Test
     @DisplayName("Test will render with selected employees note")
     void willRenderWithSelectedEmployeesNote() throws Exception {
-        
+
         CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
         companyAccountsDataState.setHasSelectedEmployeesNote(true);
-        
+
         when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
         when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
         .thenReturn(companyAccountsDataState);
-               
+
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
@@ -160,11 +230,11 @@ public class EmployeesControllerTest {
     void willNotRenderWithUnselectedEmployeesNote() throws Exception {
         CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
         companyAccountsDataState.setHasSelectedEmployeesNote(false);
-        
+
         when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
         when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
         .thenReturn(companyAccountsDataState);
-        
+
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }

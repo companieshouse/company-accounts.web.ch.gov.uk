@@ -32,8 +32,6 @@ class SelectAccountTypeControllerTests {
 
     private static final String SELECT_ACCOUNT_TYPE_VIEW = "accountselector/selectAccountType";
 
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     private static final String TYPE_OF_ACCOUNTS_ATTR = "typeOfAccounts";
@@ -65,9 +63,6 @@ class SelectAccountTypeControllerTests {
     @BeforeEach
     void setUpBeforeEAch() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
     }
 
     @Test
@@ -78,8 +73,7 @@ class SelectAccountTypeControllerTests {
             .andExpect(status().isOk())
             .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR))
-            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
+            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
 
     @Test
@@ -115,6 +109,7 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for dormant account, success path")
     void postRequestForDormantAccountSuccess() throws Exception {
+
         performPostRequestAndValidateResponse(
             "dormant",
             status().is3xxRedirection(),
@@ -151,8 +146,7 @@ class SelectAccountTypeControllerTests {
             .andExpect(expectedStatus)
             .andExpect(view().name(expectedViewName))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR))
-            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR));
+            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
 
     private String getRedirectUrlForAccount(UriTemplate accountTypeUri) {
