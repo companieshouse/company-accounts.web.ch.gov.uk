@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @Controller
 @NextController(SelectAccountTypeController.class)
-@RequestMapping("/company/{companyNumber}/corporation-tax")
+@RequestMapping(value = {"/company/{companyNumber}/corporation-tax", "/accounts/corporation-tax"})
 public class CorporationTaxController extends BaseController {
 
     @GetMapping
