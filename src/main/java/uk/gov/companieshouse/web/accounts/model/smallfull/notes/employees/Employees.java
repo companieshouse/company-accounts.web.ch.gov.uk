@@ -16,6 +16,7 @@ public class Employees {
     @ValidationMapping("$.employees.current_period.details")
     private String details;
 
+    @ValidationMapping("$.employees.current_period.average_number_of_employees")
     private AverageNumberOfEmployees averageNumberOfEmployees;
 
 }

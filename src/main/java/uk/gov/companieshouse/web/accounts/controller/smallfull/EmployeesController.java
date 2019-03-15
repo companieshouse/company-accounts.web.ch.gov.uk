@@ -18,7 +18,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employ
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
+import uk.gov.companieshouse.web.accounts.validation.smallfull.EmployeesValidator;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
@@ -53,7 +53,7 @@ public class EmployeesController extends BaseController implements
                 employeesService.getEmployees(transactionId, companyAccountsId,
                     companyNumber);
 
-            model.addAttribute("employeesNote", employees);
+            model.addAttribute("employees", employees);
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -71,6 +71,9 @@ public class EmployeesController extends BaseController implements
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        EmployeesValidator employeesValidator = new EmployeesValidator();
+        employeesValidator.validate(employees, bindingResult);
+        
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -79,8 +82,8 @@ public class EmployeesController extends BaseController implements
             List<ValidationError> validationErrors =
                 employeesService.submitEmployees(transactionId, companyAccountsId,
                     employees, companyNumber);
-
-            if (!validationErrors.isEmpty()) {
+            
+            if ((!validationErrors.isEmpty())) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }

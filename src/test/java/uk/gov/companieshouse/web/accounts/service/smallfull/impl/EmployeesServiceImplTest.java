@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.ui.Model;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -80,6 +81,9 @@ public class EmployeesServiceImplTest {
     private SmallFullGet mockSmallFullGet;
 
     @Mock
+    private Model mockModel;
+
+    @Mock
     private EmployeesTransformer mockEmployeesTransformer;
 
     @Mock
@@ -108,7 +112,7 @@ public class EmployeesServiceImplTest {
         "/small-full";
 
     private static final String EMPLOYEES_URI = BASE_SMALL_FULL_URI + "/notes/employees";
-    
+
     private static final String DETAILS = "test";
 
     @Test
@@ -200,7 +204,7 @@ public class EmployeesServiceImplTest {
         employeesCreate(employeesApi);
 
         List<ValidationError> validationErrors = employeesService.submitEmployees(TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER);
+            COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER) ;
 
         assertEquals(0, validationErrors.size());
     }
@@ -264,19 +268,19 @@ public class EmployeesServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - Employees throws ServiceExcepiton getting Smallfull data")
+    @DisplayName("POST - Employees throws ServiceException getting Smallfull data")
     void postEmployeesGetSmallFullDataApiResponseException() throws Exception {
 
-        Employees employees = createEmployees();
+        Employees employees = new Employees();
 
         when(mockApiClientService.getApiClient()).thenReturn(mockApiClient);
         when(smallFullService.getSmallFullAccounts(mockApiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
-            TRANSACTION_ID,
-            COMPANY_ACCOUNTS_ID,
-            employees,
-            COMPANY_NUMBER));
+                TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID,
+                employees,
+                COMPANY_NUMBER));
     }
 
     @Test

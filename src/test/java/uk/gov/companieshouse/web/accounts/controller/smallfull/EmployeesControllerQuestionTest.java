@@ -16,12 +16,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.EmployeesQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -168,9 +165,6 @@ public class EmployeesControllerQuestionTest {
     @Test
     @DisplayName("Test note deleted when no selected and employees resource present")
     void deleteEmployeesNoteWhenNoSelected() throws Exception {
-
-        // Mock non-numeric input to trigger binding result errors
-        String invalidData = "test";
 
         Employees employees = new Employees();
         employees.setDetails("test details");

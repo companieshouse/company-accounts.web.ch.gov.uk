@@ -44,21 +44,23 @@ public class EmployeesServiceImpl implements EmployeesService {
     private SmallFullService smallFullService;
 
     private static final UriTemplate EMPLOYEES_URI =
-        new UriTemplate(
-            "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/employees");
+            new UriTemplate(
+                    "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small" +
+                            "-full/notes/employees");
 
     private static final String INVALID_URI_MESSAGE =
-        "Invalid URI for employees note resource";
+            "Invalid URI for employees note resource";
 
     @Override
     public Employees getEmployees(String transactionId, String companyAccountsId,
-        String companyNumber) throws ServiceException {
+            String companyNumber) throws ServiceException {
 
         EmployeesApi employeesApi = getEmployeesApi(transactionId, companyAccountsId);
         Employees employees = transformer.getEmployees(employeesApi);
 
         BalanceSheet balanceSheet =
-            balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
+                balanceSheetService.getBalanceSheet(transactionId, companyAccountsId,
+                        companyNumber);
         BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
         employees.setBalanceSheetHeadings(balanceSheetHeadings);
 
@@ -67,20 +69,21 @@ public class EmployeesServiceImpl implements EmployeesService {
 
     @Override
     public List<ValidationError> submitEmployees(String transactionId, String companyAccountsId,
-        Employees employees, String companyNumber) throws ServiceException {
+            Employees employees, String companyNumber) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = EMPLOYEES_URI.expand(transactionId, companyAccountsId).toString();
 
-        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient,
+                transactionId, companyAccountsId);
 
         EmployeesApi employeesApi = transformer.getEmployeesApi(employees);
 
         boolean employeesResourceExists = hasEmployees(smallFullApi.getLinks());
 
         try {
-            if (!employeesResourceExists) {
+            if (! employeesResourceExists) {
                 apiClient.smallFull().employees().create(uri, employeesApi).execute();
             } else {
                 apiClient.smallFull().employees().update(uri, employeesApi).execute();
@@ -102,23 +105,23 @@ public class EmployeesServiceImpl implements EmployeesService {
     }
 
     private EmployeesApi getEmployeesApi(String transactionId,
-          String companyAccountsId) throws ServiceException {
+            String companyAccountsId) throws ServiceException {
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = EMPLOYEES_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-          return apiClient.smallFull().employees().get(uri).execute();
+            return apiClient.smallFull().employees().get(uri).execute();
 
         } catch (ApiErrorResponseException e) {
-          if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-            return null;
-          }
-          throw new ServiceException("Error when retrieving cemployees note", e);
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                return null;
+            }
+            throw new ServiceException("Error when retrieving employees note", e);
         } catch (URIValidationException e) {
-          throw new ServiceException(INVALID_URI_MESSAGE, e);
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
         }
-      }
+    }
 
     @Override
     public void deleteEmployees(String transactionId, String companyAccountsId) throws ServiceException {
