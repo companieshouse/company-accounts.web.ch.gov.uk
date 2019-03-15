@@ -22,20 +22,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http)
             throws Exception {
 
-            http.authorizeRequests()
-                .antMatchers("/accounts/*").permitAll()
-                .and()
-                    .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
-                    .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
-                    .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class);
+            http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class);
         }
-
-//        @Override
-//        public void configure(org.springframework.security.config.annotation.web.builders.WebSecurityConfigurer web) throws Exception {
-//            web.ignoring().antMatchers("/accounts/*");
-//        }
-
-
    }
 
     @Override
