@@ -14,13 +14,17 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @NextController(ReviewController.class)
@@ -29,7 +33,10 @@ import java.util.List;
 public class CurrentAssetsInvestmentsController extends BaseController implements ConditionalController {
 
     @Autowired
-    CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
+    private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
     @Override
     protected String getTemplateName() {
@@ -91,6 +98,28 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        return true;
+        BalanceSheet balanceSheet =
+            balanceSheetService.getBalanceSheet(
+                transactionId, companyAccountsId, companyNumber);
+
+        return hasInvestments(balanceSheet);
+    }
+
+    private boolean hasInvestments(BalanceSheet balanceSheet) {
+
+        Long currentInvestments = Optional.of(balanceSheet)
+            .map(BalanceSheet::getCurrentAssets)
+            .map(CurrentAssets::getInvestments)
+            .map(uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments::getCurrentAmount)
+            .orElse(0L);
+
+        Long previousInvestments = Optional.of(balanceSheet)
+            .map(BalanceSheet::getCurrentAssets)
+            .map(CurrentAssets::getInvestments)
+            .map(uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments::getPreviousAmount)
+            .orElse(0L);
+
+        return !(currentInvestments.equals(0L) && previousInvestments.equals(0L));
+
     }
 }

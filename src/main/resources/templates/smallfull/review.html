@@ -114,6 +114,14 @@
                         </div>
 
                         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'investments',
+                            identifier = 'investments',
+                            currentAmount = *{balanceSheet?.currentAssets?.investments?.currentAmount},
+                            previousAmount = *{balanceSheet?.currentAssets?.investments?.previousAmount}
+                        )">
+                        </div>
+
+                        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total current assets',
                             identifier = 'total-current-assets',
                             currentAmount = *{balanceSheet?.currentAssets?.currentTotal},
