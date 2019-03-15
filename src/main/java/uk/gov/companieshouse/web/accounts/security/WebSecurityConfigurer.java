@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.security;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -11,7 +12,7 @@ import uk.gov.companieshouse.auth.filter.HijackFilter;
 import uk.gov.companieshouse.session.handler.SessionHandler;
 
 @EnableWebSecurity
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Configuration
     @Order(1)
@@ -30,8 +31,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         }
 
 //        @Override
-//        public void configure(org.springframework.security.config.annotation.web.builders.WebSecurity web) throws Exception {
+//        public void configure(org.springframework.security.config.annotation.web.builders.WebSecurityConfigurer web) throws Exception {
 //            web.ignoring().antMatchers("/accounts/*");
 //        }
+
+
+   }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/accounts/corporation-tax");
     }
 }

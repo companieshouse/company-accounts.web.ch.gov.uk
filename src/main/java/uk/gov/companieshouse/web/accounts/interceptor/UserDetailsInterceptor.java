@@ -35,7 +35,7 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
         if ((isGetRequest(request) && !isResumeRequest(request))
                 || isPostRequestRedirect(request, modelAndView)) {
 
-//            addUserDetailsToModelAndView(modelAndView);
+            addUserDetailsToModelAndView(modelAndView);
         }
     }
 
@@ -52,13 +52,13 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
         return request.getRequestURI().endsWith("/resume");
     }
 
-//    private void addUserDetailsToModelAndView(ModelAndView modelAndView) {
-//        Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
-//        Map<String, Object> signInInfo = (Map<String, Object>) sessionData.get(SIGN_IN_KEY);
-//        if (signInInfo != null) {
-//            Map<String, Object> userProfile = (Map<String, Object>) signInInfo
-//                    .get(USER_PROFILE_KEY);
-//            modelAndView.addObject(USER_EMAIL, userProfile.get(EMAIL_KEY));
-//        }
-//    }
+    private void addUserDetailsToModelAndView(ModelAndView modelAndView) {
+        Map<String, Object> sessionData = sessionService.getSessionDataFromContext();
+        Map<String, Object> signInInfo = (Map<String, Object>) sessionData.get(SIGN_IN_KEY);
+        if (signInInfo != null) {
+            Map<String, Object> userProfile = (Map<String, Object>) signInInfo
+                    .get(USER_PROFILE_KEY);
+            modelAndView.addObject(USER_EMAIL, userProfile.get(EMAIL_KEY));
+        }
+    }
 }

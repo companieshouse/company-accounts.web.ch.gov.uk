@@ -36,7 +36,7 @@ public class CompanyAccountsWebApplication implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(loggingInterceptor);
-        registry.addInterceptor(userDetailsInterceptor);
+        registry.addInterceptor(userDetailsInterceptor).excludePathPatterns("/accounts/corporation-tax");
         registry.addInterceptor(companyAccountsDataStateInterceptor);
     }
 }
