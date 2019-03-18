@@ -30,6 +30,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/accounts/corporation-tax");
+        web.ignoring().antMatchers("/accounts/*");
     }
 }

@@ -17,7 +17,7 @@ import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 
 @Controller
 @PreviousController(SelectAccountTypeController.class)
-@RequestMapping("/company/{companyNumber}/select-account-type")
+@RequestMapping(value = {"/company/{companyNumber}/select-account-type", "/accounts/select-account-type"})
 public class SelectAccountTypeController extends BaseController {
 
     private static final UriTemplate MICRO_ENTITY_ACCOUNTS_URI =
@@ -33,7 +33,7 @@ public class SelectAccountTypeController extends BaseController {
         new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
 
     @GetMapping
-    public String getTypeOfAccounts(@PathVariable String companyNumber, Model model) {
+    public String getTypeOfAccounts(Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
 
