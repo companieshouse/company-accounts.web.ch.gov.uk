@@ -9,15 +9,18 @@
 
             <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
                 <span class="mobile-only-label" th:text="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading + ':'}"></span>
-                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
-                      th:text="${currentAmount != null ? '£' + #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}">
-                </span>
+
+               <div th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null">
+                <span th:if="${isEmployees==true}" th:text="${currentAmount != null ? #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"></span>
+                <span th:unless="${isEmployees==true}" th:text="${currentAmount != null ? '£' + #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"></span>
+               </div>
             </dd>
             <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
                 <span class="mobile-only-label" th:text="${previousAmount != null} ? *{balanceSheet.balanceSheetHeadings.previousPeriodHeading + ':'} : ''"></span>
-                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
-                      th:text="${previousAmount != null ? '£' + #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}">
-                </span>
+              <div th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null">
+                  <span th:if="${isEmployees==true}" th:text="${previousAmount != null ? #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}"></span>
+                  <span th:unless="${isEmployees==true}" th:text="${previousAmount != null ? '£' + #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}"></span>
+                </div>
             </dd>
 
             <dd class="app-check-your-answers__change"></dd>
