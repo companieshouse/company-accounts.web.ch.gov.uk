@@ -1,12 +1,11 @@
-package uk.gov.companieshouse.web.accounts.controller.accountselector;
+package uk.gov.companieshouse.web.accounts.controller.govuk;
 
-import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -15,22 +14,24 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 
+import javax.validation.Valid;
+
 @Controller
-@PreviousController(SelectAccountTypeController.class)
-@RequestMapping("/company/{companyNumber}/select-account-type")
-public class SelectAccountTypeController extends BaseController {
+@PreviousController(GovukCorporationTaxController.class)
+@RequestMapping("/accounts/select-account-type")
+public class GovukSelectAccountTypeController extends BaseController {
 
-    private static final UriTemplate MICRO_ENTITY_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/micro-entity/criteria");
+    @Value("${dormant-accounts.uri}")
+    private String dormantAccountsUri;
 
-    private static final UriTemplate DORMANT_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/dormant/criteria");
+    @Value("${micro-entity-accounts.uri}")
+    private String microEntityAccountsUri;
+
+    @Value("${abridged-accounts.uri}")
+    private String abridgedAccountsUri;
 
     private static final UriTemplate FULL_ACCOUNTS_URI =
         new UriTemplate("/company/{companyNumber}/small-full/criteria");
-
-    private static final UriTemplate ABRIDGED_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
 
     @GetMapping
     public String getTypeOfAccounts(Model model) {
@@ -42,7 +43,6 @@ public class SelectAccountTypeController extends BaseController {
 
     @PostMapping
     public String postTypeOfAccounts(
-        @PathVariable String companyNumber,
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
 
@@ -50,28 +50,24 @@ public class SelectAccountTypeController extends BaseController {
             return getTemplateName();
         }
 
-        return getReDirectPageURL(companyNumber, typeOfAccounts.getSelectedAccountTypeName());
+        return getReDirectPageURL(typeOfAccounts.getSelectedAccountTypeName());
     }
 
-    private String getReDirectPageURL(String companyNumber, String selectedAccount) {
+    private String getReDirectPageURL(String selectedAccount) {
 
         if ("micros".equalsIgnoreCase(selectedAccount)) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + MICRO_ENTITY_ACCOUNTS_URI
-                .expand(companyNumber).toString();
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + microEntityAccountsUri;
         }
 
         if ("abridged".equalsIgnoreCase(selectedAccount)) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + ABRIDGED_ACCOUNTS_URI
-                .expand(companyNumber).toString();
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + abridgedAccountsUri;
         }
 
         if ("full".equalsIgnoreCase(selectedAccount)) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FULL_ACCOUNTS_URI
-                .expand(companyNumber).toString();
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FULL_ACCOUNTS_URI.toString();
         }
         if ("dormant".equalsIgnoreCase(selectedAccount)) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + DORMANT_ACCOUNTS_URI
-                .expand(companyNumber).toString();
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + dormantAccountsUri;
         }
 
         return getTemplateName();
