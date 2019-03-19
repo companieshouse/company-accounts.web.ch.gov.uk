@@ -12,7 +12,7 @@
 <div id="employees-main-content" layout:fragment="content" class="two-column-accounts">
 
   <form id="balanceSheet-form" th:action="@{''}" th:object="${employees}"
-        class="form currency-included-within-inputs govuk-body" method="post">
+        class="form" method="post">
 
     <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
@@ -55,15 +55,15 @@
         <div class="govuk-grid-column-one-half">
 
           <details class="govuk-details" role="group">
-            <summary class="govuk-details__summary" role="button" aria-controls="details-content"
+            <summary class="govuk-details__summary" role="button" aria-controls="employees-details-content"
                      aria-expanded="false">
-              <span id="additional-information-title-text" class="govuk-details__summary-text">Average number of employees</span>
+              <span id="average-employees-title-text" class="govuk-details__summary-text">Average number of employees</span>
             </summary>
-            <div class="govuk-govuk-form-group" id="details-content" aria-hidden="true">
+            <div class="govuk-govuk-form-group" id="employees-details-content" aria-hidden="true">
               <label class="govuk-visually-hidden"
                      th:for="averageNumberOfEmployees.currentAverageNumberOfEmployees">Average
                 number of employees</label>
-              <span id="more-detail-hint" class="govuk-hint">Enter the average number of people employed by the company in the period you're filing for.</span>
+              <span id="employees-more-detail-hint" class="govuk-hint">Enter the average number of people employed by the company in the period you're filing for.</span>
             </div>
           </details>
         </div>
