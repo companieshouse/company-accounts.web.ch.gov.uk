@@ -70,7 +70,8 @@ public class ApprovalServiceImpl implements ApprovalService {
         ApprovalApi approvalApi = transformer.getApprovalApi(approval);
 
         try {
-            SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(transactionId, companyAccountsId);
+            SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId,
+                    companyAccountsId);
 
             if (smallFullApi.getLinks().getApproval() != null) {
                 apiClient.smallFull().approval().update(uri, approvalApi).execute();

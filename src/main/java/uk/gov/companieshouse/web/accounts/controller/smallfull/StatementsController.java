@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 @Controller
 @NextController(BasisOfPreparationController.class)
@@ -58,7 +57,7 @@ public class StatementsController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override

@@ -13,13 +13,12 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @NextController(ApprovalController.class)
-@PreviousController(OtherAccountingPolicyController.class)
+@PreviousController(CreditorsAfterOneYearController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/review")
 public class ReviewController extends BaseController {
 
@@ -57,7 +56,7 @@ public class ReviewController extends BaseController {
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId) {
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override

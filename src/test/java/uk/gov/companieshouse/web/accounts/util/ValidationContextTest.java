@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,6 +35,7 @@ import uk.gov.companieshouse.web.accounts.exception.MissingValidationMappingExce
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
+import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 @ExtendWith(MockitoExtension.class)
 public class ValidationContextTest {
@@ -44,8 +45,10 @@ public class ValidationContextTest {
     private static final String MAP_BEAN_NAME = MockMapValidationModel.class.getName();
     private static final String COLLECTION_BEAN_NAME = MockCollectionValidationModel.class.getName();
     private static final String RECURSIVE_BEAN_NAME = MockRecursiveValidationModel.class.getName();
+    private static final String LOCALDATE_BEAN_NAME = MockValidationModelWithLocalDate.class.getName();
     private static final String PRIMITIVES_ONLY_BEAN_NAME = MockPrimitivesOnlyValidationModel.class.getName();
     private static final String INVALID_BEAN_CLASS_NAME = MockValidationModel.class.getName() + "invalid";
+    private static final String PARENT_MAPPING_BEAN_NAME = MockValidationModelWithParentMapping.class.getName();
     
     private static final String BASE_PATH = "test";
     private static final String JSON_PATH = "json.path";
@@ -83,6 +86,22 @@ public class ValidationContextTest {
     @Test
     public void testSuccessfulScanWithCollectionFieldPresent() {
         mockComponentScanning(COLLECTION_BEAN_NAME);
+
+        Assertions.assertAll(() ->
+                new ValidationContext(mockProvider, BASE_PATH));
+    }
+    
+    @Test
+    public void testSuccessfulScanWithLocalDateFieldPresent() {
+        mockComponentScanning(LOCALDATE_BEAN_NAME);
+
+        Assertions.assertAll(() ->
+                new ValidationContext(mockProvider, BASE_PATH));
+    }
+
+    @Test
+    public void testSuccessfulScanWithParentFieldMapping() {
+        mockComponentScanning(PARENT_MAPPING_BEAN_NAME);
 
         Assertions.assertAll(() ->
                 new ValidationContext(mockProvider, BASE_PATH));
@@ -295,6 +314,19 @@ public class ValidationContextTest {
     }
     
     /**
+     * Mocked class containing a single field of the type LocalDate
+     */
+    @ValidationModel
+    private class MockValidationModelWithLocalDate {
+        @SuppressWarnings("unused")
+        @ValidationMapping(JSON_PATH)
+        public String mockString;
+        
+        @SuppressWarnings("unused")
+        public LocalDate localDate;
+    }
+    
+    /**
      * Mocked class containing multiple primitive fields with no validation
      * annotations.
      */
@@ -305,5 +337,15 @@ public class ValidationContextTest {
         
         @SuppressWarnings("unused")
         public Integer mockString2;
+    }
+
+    /**
+     * Mocked class containing a single field with validation parent
+     * mapping.
+     */
+    private class MockValidationModelWithParentMapping {
+        @SuppressWarnings("unused")
+        @ValidationParentMapping(JSON_PATH)
+        public String mockString;
     }
 }

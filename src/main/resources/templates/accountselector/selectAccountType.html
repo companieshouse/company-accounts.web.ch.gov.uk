@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title> Which type of accounts have you prepared?</title>
+</head>
+<body>
+<div id="criteria-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      <form id="criteria-form" th:action="@{''}" th:object="${typeOfAccounts}" class="form" method="post">
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <header>
+          <h1 id="page-title" class="govuk-heading-l">Which type of accounts have you prepared?</h1>
+        </header>
+
+        <p class="lede">If you’re not sure, you may want to ask an accountant.</p>
+
+        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('selectedAccountTypeName')} ? 'govuk-form-group--error' : ''">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-visually-hidden">
+              Which type of accounts have you prepared?
+            </legend>
+
+            <span class="govuk-error-message"
+                  id="selectedAccountTypeName-errorId"
+                  th:if="${#fields.hasErrors('selectedAccountTypeName')}"
+                  th:each="e : ${#fields.errors('selectedAccountTypeName')}" th:text="${e}" >
+            </span>
+
+            <div class="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input piwik-event" id="microEntityAccountsButton"
+                       name="chooseAccountsRadio"
+                       type="radio"
+                       value="micros"
+                       data-event-id="Micro-entity accounts"
+                       th:field="*{selectedAccountTypeName}"
+                       th:errorclass="govuk-error-message"/>
+                <label class="govuk-label govuk-radios__label" id="microEntityAccountsButton-label" for="microEntityAccountsButton" >
+                  Micro-entity accounts
+                </label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input piwik-event" id="abridgedAccountsButton"
+                     name="chooseAccountsRadio"
+                     type="radio"
+                     value="abridged"
+                     data-event-id="Abridged accounts"
+                     th:field="*{selectedAccountTypeName}"
+                     th:errorclass="govuk-error-message"/>
+                <label class="govuk-label govuk-radios__label" id="abridgedAccountsButton-label" for="abridgedAccountsButton">
+                  Abridged accounts
+                </label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input piwik-event" id="fullAccountsButton"
+                       name="chooseAccountsRadio"
+                       type="radio"
+                       value="full"
+                       data-event-id="Full accounts"
+                       th:field="*{selectedAccountTypeName}"
+                       th:errorclass="govuk-error-message"/>
+                <label class="govuk-label govuk-radios__label" id="fullAccountsButton-label" for="fullAccountsButton">
+                  Full accounts
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input piwik-event" id="dormantCompanyAccountsButton"
+                       name="chooseAccountsRadio"
+                       type="radio"
+                       value="dormant"
+                       th:field="*{selectedAccountTypeName}"
+                       th:errorclass="govuk-error-message"
+                       data-event-id="Micro-entity selected"/>
+                <label class="govuk-label govuk-radios__label" id="dormantCompanyAccountsButton-label" for="dormantCompanyAccountsButton">
+                  Dormant company accounts
+                </label>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+       <input type="submit" class="govuk-button" id="next-button" role="button" value="Save and continue"/>
+      </form>
+
+      <p>Looking to file
+        <a href="https://ewf.companieshouse.gov.uk">abbreviated accounts</a>?
+      </p>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -18,7 +18,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 
 import java.util.List;
 
@@ -43,8 +42,6 @@ public class BalanceSheetController extends BaseController {
                                   Model model,
                                   HttpServletRequest request) {
 
-        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
         try {
             model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
         } catch (ServiceException e) {
@@ -65,8 +62,6 @@ public class BalanceSheetController extends BaseController {
                                    Model model,
                                    HttpServletRequest request) {
 
-        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -84,6 +79,6 @@ public class BalanceSheetController extends BaseController {
             return ERROR_VIEW;
         }
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 }

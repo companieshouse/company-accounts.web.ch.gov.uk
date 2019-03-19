@@ -5,20 +5,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,15 +46,13 @@ public class ReviewControllerTests {
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full/review";
 
-    private static final String APPROVAL_PATH = "/company/" + COMPANY_NUMBER +
-            "/transaction/" + TRANSACTION_ID +
-            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-            "/small-full/approval";
     private static final String REVIEW_VIEW = "smallfull/review";
 
     private static final String REVIEW_MODEL_ATTR = "review";
 
     private static final String ERROR_VIEW = "error";
+
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @Mock
     CompanyService companyService;
@@ -62,6 +62,9 @@ public class ReviewControllerTests {
 
     @Mock
     ReviewService reviewService;
+
+    @Mock
+    NavigatorService navigatorService;
 
     private MockMvc mockMvc;
 
@@ -80,8 +83,6 @@ public class ReviewControllerTests {
 
         Review review = new Review();
         review.setBalanceSheet(new BalanceSheet());
-
-        CompanyProfileApi companyProfile = new CompanyProfileApi();
 
         when(reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(review);
 
@@ -109,8 +110,10 @@ public class ReviewControllerTests {
     @DisplayName("Post review page success path")
     void postRequestSuccess() throws Exception {
 
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
         this.mockMvc.perform(post(REVIEW_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + APPROVAL_PATH));
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 }

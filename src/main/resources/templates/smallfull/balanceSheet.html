@@ -121,7 +121,7 @@
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'fixedAssets.currentTotal',
-                                text = 'Total current fixed assets',
+                                text = 'Total fixed assets current',
                                 class= 'govuk-input current-fixed-assets-total current-assets-less-current-liabilities-add'
                                 )">
                             </div>
@@ -129,7 +129,7 @@
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'fixedAssets.previousTotal',
-                                text = 'Total previous fixed assets',
+                                text = 'Total fixed assets previous',
                                 class= 'govuk-input previous-fixed-assets-total previous-assets-less-current-liabilities-add',
                                 )">
                             </div>
@@ -246,7 +246,7 @@
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'currentAssets.currentTotal',
-                                text = 'Total current current assets',
+                                text = 'Total current assets current',
                                 class= 'govuk-input current-current-assets-total current-net-assets-add'
                                 )">
                             </div>
@@ -254,7 +254,7 @@
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.previousTotal',
-                                 text = 'Total previous current assets',
+                                 text = 'Total current assets previous',
                                  class= 'govuk-input previous-current-assets-total previous-net-assets-add'
                                  )">
                             </div>
@@ -287,7 +287,7 @@
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                    id = 'otherLiabilitiesOrAssets.prepaymentsAndAccruedIncome.previousAmount',
-                                   text = 'Tangible assets previous',
+                                   text = 'Prepayments and accrued income previous',
                                    class= 'govuk-input previous previous-net-assets-add'
                                    )">
                             </div>
@@ -656,8 +656,10 @@
                     <div class="form-group">
                         <input id="next-button" class="govuk-button piwik-event" data-event-id="Balance Sheet - Save and continue" type="submit" role="button" value="Save and continue"/>
                     </div>
-                </div>
+                <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/balancesheet-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+
             </form>
-         </div>
-      </main>
+        </div>
 </html>
+
+

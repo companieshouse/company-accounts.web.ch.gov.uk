@@ -17,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -41,6 +43,9 @@ public class BalanceSheetControllerTests {
 
     @Mock
     private BalanceSheetService balanceSheetService;
+
+    @Mock
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private BalanceSheetController controller;
@@ -56,14 +61,7 @@ public class BalanceSheetControllerTests {
                                                      "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                      "/small-full/balance-sheet";
 
-    private static final String STATEMENTS_PATH = "/company/" + COMPANY_NUMBER +
-                                               "/transaction/" + TRANSACTION_ID +
-                                               "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                               "/small-full/balance-sheet-statements";
-
     private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
-
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
@@ -71,9 +69,10 @@ public class BalanceSheetControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
     @BeforeEach
     private void setup() {
-
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -87,7 +86,6 @@ public class BalanceSheetControllerTests {
                     .andExpect(status().isOk())
                     .andExpect(view().name(BALANCE_SHEET_VIEW))
                     .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
-                    .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                     .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(balanceSheetService, times(1)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -110,11 +108,12 @@ public class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
         when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + STATEMENTS_PATH));
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test

@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -89,7 +88,7 @@ public class TurnoverPolicyController extends BaseController {
 
         cacheIsPolicyIncluded(request, turnoverPolicy);
 
-        return Navigator.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);
     }
 

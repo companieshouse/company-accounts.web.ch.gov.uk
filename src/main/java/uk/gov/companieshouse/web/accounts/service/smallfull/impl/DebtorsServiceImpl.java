@@ -1,0 +1,133 @@
+package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class DebtorsServiceImpl implements DebtorsService {
+
+    @Autowired
+    private ApiClientService apiClientService;
+
+    @Autowired
+    private ValidationContext validationContext;
+
+    @Autowired
+    private DebtorsTransformer transformer;
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
+
+    @Autowired
+    private SmallFullService smallFullService;
+
+    private static final UriTemplate DEBTORS_URI =
+        new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/debtors");
+
+    private static final String INVALID_URI_MESSAGE = "Invalid URI for debtors resource";
+
+    @Override
+    public Debtors getDebtors(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
+        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
+        Debtors debtors = transformer.getDebtors(debtorsApi);
+
+        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings();
+        debtors.setBalanceSheetHeadings(balanceSheetHeadings);
+
+        return debtors;
+    }
+
+    @Override
+    public List<ValidationError> submitDebtors(String transactionId, String companyAccountsId,
+            Debtors debtors, String companyNumber) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
+
+        boolean debtorsResourceExists = hasDebtors(smallFullApi.getLinks());
+
+        try {
+            if (!debtorsResourceExists) {
+                apiClient.smallFull().debtors().create(uri, debtorsApi).execute();
+            } else {
+                apiClient.smallFull().debtors().update(uri, debtorsApi).execute();
+            }
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
+                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
+                if (validationErrors.isEmpty()) {
+                    throw new ServiceException("Bad request when creating debtors resource", e);
+                }
+                return validationErrors;
+            }
+            throw new ServiceException("Error creating debtors resource", e);
+        }
+
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void deleteDebtors(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().debtors().delete(uri).execute();
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } catch (ApiErrorResponseException e) {
+            throw new ServiceException("Error deleting debtors resource", e);
+        }
+    }
+
+    private DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            return apiClient.smallFull().debtors().get(uri).execute();
+
+        } catch (ApiErrorResponseException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                return null;
+            }
+            throw new ServiceException("Error when retrieving debtors", e);
+        } catch (URIValidationException e) {
+            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        }
+    }
+
+    private boolean hasDebtors(SmallFullLinks smallFullLinks) {
+        return smallFullLinks.getDebtorsNote() != null;
+    }
+}

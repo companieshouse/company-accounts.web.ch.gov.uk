@@ -5,14 +5,14 @@
     </head>
     <body>
         <div th:fragment="fieldErrorRow">
-            <div class="grid-row" th:classappend="${#fields.hasErrors('__${currentField}__') || #fields.hasErrors('__${previousField}__')} ? '' : 'error-hidden'">
+            <div class="govuk-grid-row" th:classappend="${#fields.hasErrors('__${currentField}__') || #fields.hasErrors('__${previousField}__')} ? '' : 'error-hidden'">
                 <div class="govuk-grid-column-one-half">&nbsp;</div>
                 <div class="govuk-grid-column-one-quarter">
                     <span th:if="${#fields.hasErrors('__${currentField}__')}"
                           th:id="${currentField} + '-errorId'"
                           th:each="e : ${#fields.errors('__${currentField}__')}"
                           th:text="${e}"
-                          class="govuk-error-message">
+                          class="govuk-error-message api">
                     </span>
                     <span class="govuk-error-message current-error hidden"></span>
                     <span th:if="${!#fields.hasErrors('__${currentField}__')}" class="spacer">&nbsp;</span>
@@ -22,7 +22,7 @@
                           th:id="${previousField} + '-errorId'"
                           th:each="e : ${#fields.errors('__${previousField}__')}"
                           th:text="${e}"
-                          class="govuk-error-message">
+                          class="govuk-error-message api">
                     </span>
                     <span class="govuk-error-message previous-error hidden"></span>
                 </div>

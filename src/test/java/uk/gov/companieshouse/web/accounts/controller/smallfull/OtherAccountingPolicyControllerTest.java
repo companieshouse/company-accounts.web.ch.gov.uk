@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,6 +33,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,6 +54,9 @@ public class OtherAccountingPolicyControllerTest {
     @Mock
     private AccountingPolicies accountingPolicies;
 
+    @Mock
+    private NavigatorService navigatorService;
+
     @InjectMocks
     private OtherAccountingPolicyController controller;
 
@@ -64,7 +69,6 @@ public class OtherAccountingPolicyControllerTest {
         "/small-full";
     private static final String OTHER_ACCOUNTING_POLICY_PATH =
         SMALL_FULL_PATH + "/other-accounting-policies";
-    private static final String REVIEW_PATH = SMALL_FULL_PATH + "/review";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String OTHER_ACCOUNTING_POLICY_MODEL_ATTR = "otherAccountingPolicy";
@@ -72,6 +76,7 @@ public class OtherAccountingPolicyControllerTest {
     private static final String ERROR_VIEW = "error";
     private static final String MODEL_ELEMENT = "hasOtherAccountingPolicySelected";
     private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
     private void setup() {
@@ -87,6 +92,7 @@ public class OtherAccountingPolicyControllerTest {
         when(otherAccountingPolicyService
             .getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(otherAccountingPolicy);
+        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(OTHER_ACCOUNTING_POLICY_PATH))
             .andExpect(status().isOk())
@@ -109,6 +115,8 @@ public class OtherAccountingPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
         when(accountingPolicies.getHasProvidedOtherAccountingPolicy()).thenReturn(false);
+
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(OTHER_ACCOUNTING_POLICY_PATH).session(session))
                 .andExpect(status().isOk())
@@ -147,10 +155,11 @@ public class OtherAccountingPolicyControllerTest {
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(navigatorService.getNextControllerRedirect(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + REVIEW_PATH));
+            .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(accountingPolicies, times(1)).setHasProvidedOtherAccountingPolicy(anyBoolean());
     }

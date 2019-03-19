@@ -12,9 +12,11 @@ import uk.gov.companieshouse.web.accounts.exception.MissingValidationMappingExce
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -168,18 +170,29 @@ public class ValidationContext {
         }
 
         for (Field field : clazz.getDeclaredFields()) {
-        	if (!field.isSynthetic()) {
-	            Annotation annotation = field.getAnnotation(ValidationMapping.class);
-	            String webPath = basePath.isEmpty() ? field.getName() : basePath + PATH_DELIMITER + field.getName();
-	
-	            if (annotation != null) {
-	                String apiPath = ((ValidationMapping) annotation).value();
-	                mappings.put(apiPath, webPath);
-	            } else if (isCandidateModelClass(field.getType())) {
-	                depth = depth + 1;
-	                scanClassValidationMappings(field.getType(), webPath);
-	            }
-        	}
+
+            if (field.isSynthetic()) {
+                continue;
+            }
+
+            String webPath = basePath.isEmpty() ? field.getName() : basePath + PATH_DELIMITER + field.getName();
+
+            Annotation validationMappingAnnotation = field.getAnnotation(ValidationMapping.class);
+            if (validationMappingAnnotation != null) {
+                String apiPath = ((ValidationMapping) validationMappingAnnotation).value();
+                mappings.put(apiPath, webPath);
+            }
+
+            Annotation validationParentMappingAnnotation = field.getAnnotation(ValidationParentMapping.class);
+            if (validationParentMappingAnnotation != null) {
+                String apiPath = ((ValidationParentMapping) validationParentMappingAnnotation).value();
+                mappings.put(apiPath, webPath);
+            }
+
+            if (isCandidateModelClass(field.getType())) {
+                depth = depth + 1;
+                scanClassValidationMappings(field.getType(), webPath);
+            }
         }
 
         depth = depth - 1;
@@ -187,8 +200,8 @@ public class ValidationContext {
 
     /**
      * Returns {@code true} if the {@code Class} object is not a primitive,
-     * boxed primitive, collection or {@code String} and therefore likely
-     * to be a model class.
+     * boxed primitive, collection or {@code String} or {@code LocalDate}, 
+     * and therefore likely to be a model class.
      *
      * @param  clazz the {@code Class} object to test
      * @return       {@code true} if the class is not a primitive, boxed
@@ -219,6 +232,7 @@ public class ValidationContext {
         types.add(Boolean.class);
         types.add(Character.class);
         types.add(String.class);
+        types.add(LocalDate.class);
         return types;
     }
 }

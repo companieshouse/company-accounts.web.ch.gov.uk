@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,6 +33,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,8 +50,6 @@ public class ValuationInformationPolicyControllerTest {
                                                     "/small-full";
 
     private static final String VALUATION_INFORMATION_POLICY_PATH = SMALL_FULL_PATH + "/valuation-information";
-    private static final String OTHER_ACCOUNTING_POLICIES_PATH = SMALL_FULL_PATH + "/other-accounting-policies";
-
     private static final String VALUATION_INFORMATION_POLICY_VIEW = "smallfull/valuationInformationPolicy";
     private static final String ERROR_VIEW = "error";
 
@@ -58,6 +58,8 @@ public class ValuationInformationPolicyControllerTest {
     private static final String VALUATION_INFORMATION_POLICY_MODEL_ATTR = "valuationInformationPolicy";
 
     private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
+
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private MockMvc mockMvc;
 
@@ -72,6 +74,9 @@ public class ValuationInformationPolicyControllerTest {
 
     @Mock
     private AccountingPolicies accountingPolicies;
+
+    @Mock
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private ValuationInformationPolicyController controller;
@@ -89,6 +94,8 @@ public class ValuationInformationPolicyControllerTest {
         valuationInformationPolicy.setIncludeValuationInformationPolicy(true);
         when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(valuationInformationPolicy);
+
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
             .perform(get(VALUATION_INFORMATION_POLICY_PATH))
@@ -111,6 +118,8 @@ public class ValuationInformationPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
         when(accountingPolicies.getHasProvidedValuationInformationPolicy()).thenReturn(false);
+
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
                 .perform(get(VALUATION_INFORMATION_POLICY_PATH).session(session))
@@ -153,9 +162,11 @@ public class ValuationInformationPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
 
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
         this.mockMvc.perform(createPostRequestWithParam(true).session(session))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + OTHER_ACCOUNTING_POLICIES_PATH));
+            .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(accountingPolicies, times(1)).setHasProvidedValuationInformationPolicy(anyBoolean());
     }
@@ -163,6 +174,9 @@ public class ValuationInformationPolicyControllerTest {
     @Test
     @DisplayName("Submit valuation information policy - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
+
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
         this.mockMvc
             .perform(createPostRequestWithParam(false))
             .andExpect(status().isOk())
@@ -182,6 +196,8 @@ public class ValuationInformationPolicyControllerTest {
                     .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
+
+        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
             .perform(createPostRequestWithParam(true))

@@ -8,6 +8,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 
 @Getter
 @Setter
@@ -28,4 +33,14 @@ public class Review {
     ValuationInformationPolicy valuationInformationPolicy;
 
     OtherAccountingPolicy otherAccountingPolicy;
+    
+    CreditorsWithinOneYear creditorsWithinOneYear;
+
+    CreditorsAfterOneYear creditorsAfterOneYear;
+
+    Debtors debtors;
+
+    TangibleAssets tangibleAssets;
+
+    StocksNote stocks;
 }

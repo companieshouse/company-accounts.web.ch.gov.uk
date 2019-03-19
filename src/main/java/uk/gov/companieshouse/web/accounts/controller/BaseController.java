@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -8,7 +9,7 @@ import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.util.Navigator;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class BaseController {
+
+    @Autowired
+    protected NavigatorService navigatorService;
 
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
@@ -60,7 +64,7 @@ public abstract class BaseController {
 
     protected void addBackPageAttributeToModel(Model model, String... pathVars) {
 
-        model.addAttribute("backButton", Navigator.getPreviousControllerPath(this.getClass(), pathVars));
+        model.addAttribute("backButton", navigatorService.getPreviousControllerPath(this.getClass(), pathVars));
     }
 
     /**

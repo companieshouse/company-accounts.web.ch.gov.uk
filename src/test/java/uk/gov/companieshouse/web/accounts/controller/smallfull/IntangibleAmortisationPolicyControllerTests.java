@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,6 +32,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,6 +53,9 @@ public class IntangibleAmortisationPolicyControllerTests {
     @Mock
     private AccountingPolicies accountingPolicies;
 
+    @Mock
+    private NavigatorService navigatorService;
+
     @InjectMocks
     private IntangibleAmortisationPolicyController controller;
 
@@ -67,8 +72,6 @@ public class IntangibleAmortisationPolicyControllerTests {
 
     private static final String INTANGIBLE_AMORTISATION_POLICY_PATH = SMALL_FULL_PATH + "/intangible-fixed-assets-amortisation";
 
-    private static final String VALUATION_INFOMATION_POLICY_PATH = SMALL_FULL_PATH + "/valuation-information";
-
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
@@ -82,6 +85,8 @@ public class IntangibleAmortisationPolicyControllerTests {
     private static final String MODEL_ELEMENT = "includeIntangibleAmortisationPolicy";
 
     private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
+
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
     private void setup() {
@@ -97,6 +102,7 @@ public class IntangibleAmortisationPolicyControllerTests {
         intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(true);
         when(intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(intangibleAmortisationPolicy);
+        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH))
                 .andExpect(status().isOk())
@@ -118,6 +124,7 @@ public class IntangibleAmortisationPolicyControllerTests {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
         when(accountingPolicies.getHasProvidedIntangiblePolicy()).thenReturn(false);
+        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH).session(session))
                 .andExpect(status().isOk())
@@ -156,10 +163,11 @@ public class IntangibleAmortisationPolicyControllerTests {
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + VALUATION_INFOMATION_POLICY_PATH));
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(accountingPolicies, times(1)).setHasProvidedIntangiblePolicy(anyBoolean());
     }
