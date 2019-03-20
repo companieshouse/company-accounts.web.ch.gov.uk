@@ -4,7 +4,7 @@
         <title>User Bar</title>
     </head>
     <body>
-        <div th:fragment="userBar" class="js-toggle-nav" id="global-nav">
+        <div th:fragment="userBar" th:classappend="${hideUserBar != null ? 'hidden' : ''}" class="js-toggle-nav" id="global-nav">
 
             <nav class="content" role="navigation">
                 <ul id="navigation" class="mobile-hidden">
