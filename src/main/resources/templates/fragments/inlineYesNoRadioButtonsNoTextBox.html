@@ -23,13 +23,14 @@
     <div class="govuk-radios govuk-radios--inline" data-module="radios">
 
         <div class="govuk-radios__item">
-            <input class="govuk-radios__input show-text"
+            <input class="govuk-radios__input show-text piwik-event"
                    id="yesButton"
                    type="radio"
                    value="1"
                    name="${radioButtonsFieldName}"
                    th:field="*{__${radioButtonsFieldName}__}"
-                   th:errorclass="govuk-error-message"/>
+                   th:errorclass="govuk-error-message"
+                   data-event-id="Yes"/>
 
             <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
                 Yes
@@ -37,13 +38,14 @@
         </div>
 
         <div class="govuk-radios__item">
-            <input class="govuk-radios__input"
+            <input class="govuk-radios__input piwik-event"
                    id="noButton"
                    type="radio"
                    value="0"
                    name="${radioButtonsFieldName}"
                    th:field="*{__${radioButtonsFieldName}__}"
-                   th:errorclass="govuk-error-message"/>
+                   th:errorclass="govuk-error-message"
+                   data-event-id="No"/>
 
             <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
                 No
