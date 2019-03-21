@@ -23,6 +23,7 @@ public class GovukCorporationTaxController extends BaseController {
     public String getCorporationTax(Model model) {
 
         model.addAttribute("corporationTax", new CorporationTax());
+        model.addAttribute("hideUserBar", true);
 
         return getTemplateName();
     }
