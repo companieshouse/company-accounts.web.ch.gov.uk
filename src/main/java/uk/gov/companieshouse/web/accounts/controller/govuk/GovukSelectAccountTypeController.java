@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
@@ -28,6 +29,9 @@ public class GovukSelectAccountTypeController extends BaseController {
 
     @Value("${abridged-accounts.uri}")
     private String abridgedAccountsUri;
+
+    private static final UriTemplate FULL_ACCOUNTS_URI =
+            new UriTemplate("/accounts/full-accounts-criteria");
 
     @GetMapping
     public String getTypeOfAccounts(Model model) {
@@ -58,6 +62,10 @@ public class GovukSelectAccountTypeController extends BaseController {
 
         if ("abridged".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + abridgedAccountsUri;
+        }
+
+        if ("full".equalsIgnoreCase(selectedAccount)) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FULL_ACCOUNTS_URI.toString();
         }
 
         if ("dormant".equalsIgnoreCase(selectedAccount)) {
