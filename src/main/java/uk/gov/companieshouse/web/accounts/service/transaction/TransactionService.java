@@ -9,7 +9,7 @@ public interface TransactionService {
      *
      * @param companyNumber The company number for which accounts are to be filed against the transaction
      * @return The ID of the created transaction
-     * @throws ServiceException
+     * @throws ServiceException if there's an error on transaction creation
      */
     String createTransaction(String companyNumber) throws ServiceException;
 
@@ -17,7 +17,7 @@ public interface TransactionService {
      * Set the status to 'closed' for an accounts filing transaction
      *
      * @param transactionId The ID of the transaction to close
-     * @throws ServiceException
+     * @throws ServiceException  if there's an error on transaction closure
      */
     void closeTransaction(String transactionId) throws ServiceException;
 
@@ -28,7 +28,7 @@ public interface TransactionService {
      * @param companyNumber     the company number
      * @param transactionId     the ID of the transaction to update
      * @param companyAccountsId the company accounts ID of the transaction to update
-     * @throws ServiceException
+     * @throws ServiceException if there's an error when creating a resume link
      */
     void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException;
 }

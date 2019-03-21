@@ -140,10 +140,6 @@ public class IntangibleAmortisationPolicyServiceImplTests {
                 .updateAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi);
     }
 
-    /**
-     * Creates an intangible amortisation policy with 'include policy' set to true, but without policy details
-     * @return
-     */
     private IntangibleAmortisationPolicy createInvalidIntangibleAmortisationPolicy() {
 
         IntangibleAmortisationPolicy intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();

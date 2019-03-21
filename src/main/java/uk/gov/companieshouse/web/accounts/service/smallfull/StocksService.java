@@ -15,6 +15,7 @@ public interface StocksService {
      * @param companyAccountsId The company accounts identifier
      * @param companyNumber     The company identifier
      * @return the stocks note
+     * @throws ServiceException if there's an error on retrieval
      */
     StocksNote getStocks(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException;
 

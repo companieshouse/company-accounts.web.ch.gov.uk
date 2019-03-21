@@ -226,13 +226,6 @@ public class TurnoverPolicyControllerTest {
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
     }
 
-    /**
-     * Add the information to the post request. Where the parameter will control if data to be set
-     * needs to be valid or invalid
-     *
-     * @param addInvalidData
-     * @return
-     */
     private MockHttpServletRequestBuilder createPostRequestWithParam(boolean addInvalidData) {
 
         String beanElement = "isIncludeTurnoverSelected";

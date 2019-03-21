@@ -8,6 +8,7 @@ public interface ResumeService {
      * @param companyNumber     the company number
      * @param transactionId     the transaction identifier
      * @param companyAccountsId the company accounts identifier
+     * @return                  a resume link redirect
      */
     String getResumeRedirect(String companyNumber, String transactionId, String companyAccountsId);
 }

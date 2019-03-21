@@ -86,7 +86,7 @@ public class TurnoverPolicyServiceImpl implements TurnoverPolicyService {
      * contain empty characters.
      *
      * @param turnoverPolicy the turnover policy information
-     * @return
+     * @return true if a turnover policy has been elected to be provided, but no details are entered
      */
     private boolean isTurnoverPolicyDetailsEmpty(TurnoverPolicy turnoverPolicy) {
         return turnoverPolicy.getIsIncludeTurnoverSelected()

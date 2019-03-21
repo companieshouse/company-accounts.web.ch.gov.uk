@@ -23,6 +23,7 @@ public interface AccountingPoliciesService {
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
+     * @param accountingPoliciesApi The accounting policies resource to create
      * @return a list of validation errors, or an empty array list if none are present
      * @throws ServiceException if there's an error while creating the resource
      */
@@ -35,6 +36,7 @@ public interface AccountingPoliciesService {
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
+     * @param accountingPoliciesApi The accounting policies resource to update
      * @return a list of validation errors, or an empty array list if none are present
      * @throws ServiceException if there's an error while updating the resource
      */

@@ -200,14 +200,7 @@ public class ValidationContextTest {
         ApiErrorResponseException exception = createApiErrorResponse(errors);
         assertThrows(MissingValidationMappingException.class, () -> context.getValidationErrors(exception));
     }
-    
-    /**
-     * Create a valid API exception with dummy data.
-     * 
-     * @param errors
-     * @return exception
-     * @throws JsonProcessingException
-     */
+
     private ApiErrorResponseException createApiErrorResponse(List<ApiError> errors) {
         ApiErrorResponse response = new ApiErrorResponse();
         response.setErrors(errors);

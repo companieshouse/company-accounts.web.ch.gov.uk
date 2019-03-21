@@ -24,6 +24,7 @@ public interface ConditionalController {
      * @param companyNumber     the company number
      * @param transactionId     the transaction identifier
      * @param companyAccountsId the company accounts identifier
+     * @throws ServiceException if there are errors when determining whether to render a page
      *
      * @see uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService
      * @see uk.gov.companieshouse.web.accounts.exception.NavigationException

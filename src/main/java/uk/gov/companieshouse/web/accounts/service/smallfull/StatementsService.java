@@ -31,6 +31,8 @@ public interface StatementsService {
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
      * @throws ServiceException when failing to fetch the resource
+     *
+     * @return balance sheet statements
      */
     Statements getBalanceSheetStatements(String transactionId, String companyAccountsId)
             throws ServiceException;
