@@ -31,6 +31,4 @@ public class FullAccountsCriteriaController extends BaseController{
     protected String getTemplateName() {
         return "fullaccounts/criteria";
     }
-
 }
-
