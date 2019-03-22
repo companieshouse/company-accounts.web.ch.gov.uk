@@ -13,8 +13,12 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -98,16 +102,6 @@ class GovukSelectAccountTypeControllerTests {
             "dormant",
             status().is3xxRedirection(),
             getRedirectUrlForAccount(DORMANT_ACCOUNTS_URI));
-    }
-
-    @Test
-    @DisplayName("Post any other account selected will not be re-directed")
-    void postRequestAnyOtherAccountSuccess() throws Exception {
-
-        performPostRequestAndValidateResponse(
-            "anyOtherAccount",
-            status().isOk(),
-            SELECT_ACCOUNT_TYPE_VIEW);
     }
 
     @Test
