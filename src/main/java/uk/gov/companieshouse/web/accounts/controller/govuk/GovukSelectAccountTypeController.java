@@ -72,7 +72,7 @@ public class GovukSelectAccountTypeController extends BaseController {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + dormantAccountsUri;
         }
 
-        return getTemplateName();
+        throw new RuntimeException("Failed to redirect to another webpage");
     }
 
     @Override
