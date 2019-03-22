@@ -55,7 +55,7 @@ class GovukSelectAccountTypeControllerTests {
     private GovukSelectAccountTypeController controller;
 
     @BeforeEach
-    void setUpBeforeEAch() {
+    void setUpBeforeEach() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

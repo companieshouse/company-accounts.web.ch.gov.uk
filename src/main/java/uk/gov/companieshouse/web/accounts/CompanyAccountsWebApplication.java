@@ -37,6 +37,6 @@ public class CompanyAccountsWebApplication implements WebMvcConfigurer {
 
         registry.addInterceptor(loggingInterceptor);
         registry.addInterceptor(userDetailsInterceptor).excludePathPatterns("/accounts/*");
-        registry.addInterceptor(companyAccountsDataStateInterceptor).excludePathPatterns("/accounts/*");;
+        registry.addInterceptor(companyAccountsDataStateInterceptor).excludePathPatterns("/accounts/*");
     }
 }

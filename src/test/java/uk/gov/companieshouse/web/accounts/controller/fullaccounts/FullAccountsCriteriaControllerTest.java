@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -56,9 +57,6 @@ public class FullAccountsCriteriaControllerTest {
     void postRequestCriteriaMet() throws Exception {
 
         ReflectionTestUtils.setField(controller, "chsUrl", "/");
-        this.mockMvc.perform(post(PATH)
-            .param("chsUrl" ,"/"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(CHS_HOME_PATH));
+        assertEquals("redirect:/", controller.postFullAccountsCriteria());
     }
 }
