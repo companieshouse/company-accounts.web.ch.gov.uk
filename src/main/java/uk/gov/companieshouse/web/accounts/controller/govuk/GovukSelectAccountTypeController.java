@@ -12,6 +12,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.exception.NavigationException;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 
 import javax.validation.Valid;
@@ -72,7 +73,7 @@ public class GovukSelectAccountTypeController extends BaseController {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + dormantAccountsUri;
         }
 
-        throw new RuntimeException("Failed to redirect to another webpage");
+        throw new NavigationException("Failed to redirect to another webpage");
     }
 
     @Override
