@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.controller.fullaccounts;
+package uk.gov.companieshouse.web.accounts.controller.govuk.smallfull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,21 +14,20 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class FullAccountsCriteriaControllerTest {
+public class GovukFullAccountsCriteriaControllerTest {
 
     private MockMvc mockMvc;
 
     @InjectMocks
-    private FullAccountsCriteriaController controller;
+    private GovukFullAccountsCriteriaController controller;
 
-    private static final String VIEW = "fullaccounts/criteria";
+    private static final String VIEW = "govuk/smallfull/criteria";
     private static final String PATH = "/accounts/full-accounts-criteria";
     private static final String MODEL_ATTR = "hideUserBar";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";

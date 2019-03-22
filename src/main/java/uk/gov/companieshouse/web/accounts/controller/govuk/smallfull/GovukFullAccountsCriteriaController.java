@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.controller.fullaccounts;
+package uk.gov.companieshouse.web.accounts.controller.govuk.smallfull;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
 @Controller
 @RequestMapping("/accounts/full-accounts-criteria")
-public class FullAccountsCriteriaController extends BaseController{
+public class GovukFullAccountsCriteriaController extends BaseController{
 
     @Value("${chs.url}")
     private String chsUrl;
@@ -29,6 +29,6 @@ public class FullAccountsCriteriaController extends BaseController{
 
     @Override
     protected String getTemplateName() {
-        return "fullaccounts/criteria";
+        return "govuk/smallfull/criteria";
     }
 }
