@@ -60,7 +60,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.currentAmount',
                                 text = 'Called up share capital not paid current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class= 'govuk-input current',
+                                class= 'govuk-input current current-assets-less-current-liabilities-add',
                                 )">
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'calledUpShareCapitalNotPaid.previousAmount',
                                 text = 'Called up share capital not paid previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous',
+                                class= 'govuk-input previous previous-assets-less-current-liabilities-add',
                                 )">
                             </div>
                         </div>

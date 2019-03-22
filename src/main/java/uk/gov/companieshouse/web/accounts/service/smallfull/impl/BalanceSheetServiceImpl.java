@@ -19,8 +19,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
