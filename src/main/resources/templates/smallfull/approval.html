@@ -111,6 +111,26 @@
               </div>
             </fieldset>
 
+            <div class="govuk-inset-text onlyJS">
+              <div id="widget">
+                <a class="render-accounts-document PDF print piwik-event" data-event-id="save or print" href="#"> Save or print a copy of your accounts
+                  <span class="govuk-visually-hidden">(Opens in new tab/window)</span>
+                </a>
+                <span class="govuk-hint"> (Opens in new tab/window) </span>
+                <div id="status-widget" class="widget-footer hidden">
+                  <div id="status">
+                    <div id="process-spinner" class="process-spinner"></div>
+                    <span id="process-status" class="process-status">Status: in-progress</span>
+                  </div>
+                  <input type="hidden" id="document-data"
+                         th:data-resource-url="'/transactions/' + ${transaction_id} + '/company-accounts/' + ${company_accounts_id}"
+                         data-content-type="text/html" data-document-type="text/html">
+                  </input>
+                </div>
+              </div>
+            </div>
+            <div id="download-button"></div>
+
           </div>
 
         </fieldset>
@@ -119,7 +139,7 @@
 
       </div>
     </div>
-
+    <script th:src="@{{cdnUrl}/javascripts/app/accounts-pdf.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
   </form>
 
 </div>
