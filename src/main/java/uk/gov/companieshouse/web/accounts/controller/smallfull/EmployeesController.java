@@ -26,9 +26,10 @@ import java.util.List;
 @Controller
 @NextController(ReviewController.class)
 @PreviousController(EmployeesQuestionController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/employees")
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
+        "/{companyAccountsId}/small-full/employees")
 public class EmployeesController extends BaseController implements
-    ConditionalController {
+        ConditionalController {
 
     @Autowired
     private EmployeesService employeesService;
@@ -43,15 +44,16 @@ public class EmployeesController extends BaseController implements
 
     @GetMapping
     public String getEmployees(
-        @PathVariable String companyNumber,
-        @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model) {
+            @PathVariable String companyNumber,
+            @PathVariable String transactionId, @PathVariable String companyAccountsId,
+            Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             Employees employees =
-                employeesService.getEmployees(transactionId, companyAccountsId,
-                    companyNumber);
+                    employeesService.getEmployees(transactionId, companyAccountsId,
+                            companyNumber);
 
             model.addAttribute("employees", employees);
         } catch (ServiceException e) {
@@ -63,42 +65,50 @@ public class EmployeesController extends BaseController implements
 
     @PostMapping
     public String postEmployees(
-        @PathVariable String companyNumber,
-        @PathVariable String transactionId,
-        @PathVariable String companyAccountsId,
-        @ModelAttribute("employees") @Valid Employees employees,
-        BindingResult bindingResult, Model model) {
+            @PathVariable String companyNumber,
+            @PathVariable String transactionId,
+            @PathVariable String companyAccountsId,
+            @ModelAttribute("employees") @Valid Employees employees,
+            BindingResult bindingResult, Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        EmployeesValidator employeesValidator = new EmployeesValidator();
-        employeesValidator.validate(employees, bindingResult);
-        
         if (bindingResult.hasErrors()) {
             return getTemplateName();
-        }
+        } else {
 
-        try {
-            List<ValidationError> validationErrors =
-                employeesService.submitEmployees(transactionId, companyAccountsId,
-                    employees, companyNumber);
-            
-            if ((!validationErrors.isEmpty())) {
-                bindValidationErrors(bindingResult, validationErrors);
+            EmployeesValidator employeesValidator = new EmployeesValidator();
+            employeesValidator.validate(employees, bindingResult);
+
+            if (bindingResult.hasErrors()) {
                 return getTemplateName();
-            }
-        } catch (ServiceException e) {
-            LOGGER.errorRequest(request, e.getMessage(), e);
-            return ERROR_VIEW;
-        }
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
-            companyAccountsId);
+            } else {
+                try {
+                    List<ValidationError> validationErrors =
+                            employeesService.submitEmployees(transactionId, companyAccountsId,
+                                    employees, companyNumber);
+
+                    if ((! validationErrors.isEmpty())) {
+                        bindValidationErrors(bindingResult, validationErrors);
+                        return getTemplateName();
+                    }
+                } catch (ServiceException e) {
+                    LOGGER.errorRequest(request, e.getMessage(), e);
+                    return ERROR_VIEW;
+                }
+
+                return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber,
+                        transactionId,
+                        companyAccountsId);
+            }
+        }
     }
 
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
-        throws ServiceException {
+    public boolean willRender(String companyNumber, String transactionId, String
+            companyAccountsId)
+            throws ServiceException {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return companyAccountsDataState.getHasSelectedEmployeesNote();
