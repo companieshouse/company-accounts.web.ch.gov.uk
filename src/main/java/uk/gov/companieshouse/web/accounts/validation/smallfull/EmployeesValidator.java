@@ -17,7 +17,8 @@ public class EmployeesValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Employees employees = (Employees) target;
 
-      if (!isEmployeesValid(employees)) {
+      if (!isEmployeesValid(employees) && !errors.hasFieldErrors()) {
+
           errors.reject("validation.missing.employees", new Object[]{}, null);
       }
     }
