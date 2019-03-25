@@ -62,7 +62,6 @@ public class StocksTransformerImplTests {
 
         assertNotNull(stocksNote);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
-        assertNull(stocksNote.getStocks().getCurrentStocks());
         assertEquals(TOTAL_VALUE, stocksNote.getTotal().getCurrentTotal());
     }
 
@@ -105,7 +104,6 @@ public class StocksTransformerImplTests {
 
         assertNotNull(stocksNote);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
-        assertNull(stocksNote.getStocks().getPreviousStocks());
         assertEquals(TOTAL_VALUE, stocksNote.getTotal().getPreviousTotal());
     }
 
@@ -149,6 +147,8 @@ public class StocksTransformerImplTests {
         paymentsOnAccount.setCurrentPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
         stocksNote.setPaymentsOnAccount(paymentsOnAccount);
 
+        stocksNote.setStocks(new Stocks());
+
         Total total = new Total();
         total.setCurrentTotal(TOTAL_VALUE);
         stocksNote.setTotal(total);
@@ -169,6 +169,8 @@ public class StocksTransformerImplTests {
         PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
         paymentsOnAccount.setPreviousPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
         stocksNote.setPaymentsOnAccount(paymentsOnAccount);
+
+        stocksNote.setStocks(new Stocks());
 
         Total total = new Total();
         total.setPreviousTotal(TOTAL_VALUE);
