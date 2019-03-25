@@ -82,7 +82,7 @@ public class EmployeesController extends BaseController implements
 
             if (bindingResult.hasErrors()) {
                 return getTemplateName();
-
+            
             } else {
                 try {
                     List<ValidationError> validationErrors =
@@ -105,12 +105,12 @@ public class EmployeesController extends BaseController implements
         }
     }
 
-    @Override
-    public boolean willRender(String companyNumber, String transactionId, String
-            companyAccountsId)
-            throws ServiceException {
+        @Override
+        public boolean willRender (String companyNumber, String transactionId, String
+        companyAccountsId)
+        throws ServiceException {
 
-        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return companyAccountsDataState.getHasSelectedEmployeesNote();
+            CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+            return companyAccountsDataState.getHasSelectedEmployeesNote();
+        }
     }
-}
