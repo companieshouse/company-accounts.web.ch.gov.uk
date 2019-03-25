@@ -73,44 +73,38 @@ public class EmployeesController extends BaseController implements
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        EmployeesValidator employeesValidator = new EmployeesValidator();
+        employeesValidator.validate(employees, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
-        } else {
+        }
 
-            EmployeesValidator employeesValidator = new EmployeesValidator();
-            employeesValidator.validate(employees, bindingResult);
+        try {
+            List<ValidationError> validationErrors =
+                    employeesService.submitEmployees(transactionId, companyAccountsId,
+                            employees, companyNumber);
 
-            if (bindingResult.hasErrors()) {
+            if ((! validationErrors.isEmpty())) {
+                bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
-            
-            } else {
-                try {
-                    List<ValidationError> validationErrors =
-                            employeesService.submitEmployees(transactionId, companyAccountsId,
-                                    employees, companyNumber);
-
-                    if ((! validationErrors.isEmpty())) {
-                        bindValidationErrors(bindingResult, validationErrors);
-                        return getTemplateName();
-                    }
-                } catch (ServiceException e) {
-                    LOGGER.errorRequest(request, e.getMessage(), e);
-                    return ERROR_VIEW;
-                }
-
-                return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber,
-                        transactionId,
-                        companyAccountsId);
             }
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
         }
+
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber,
+                transactionId,
+                companyAccountsId);
     }
 
-        @Override
-        public boolean willRender (String companyNumber, String transactionId, String
-        companyAccountsId)
-        throws ServiceException {
+    @Override
+    public boolean willRender(String companyNumber, String transactionId, String
+            companyAccountsId)
+            throws ServiceException {
 
-            CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-            return companyAccountsDataState.getHasSelectedEmployeesNote();
-        }
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        return companyAccountsDataState.getHasSelectedEmployeesNote();
     }
+}
