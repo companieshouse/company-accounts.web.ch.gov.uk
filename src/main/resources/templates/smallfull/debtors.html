@@ -59,7 +59,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.currentTradeDebtors',
-                                text = 'Trade debtors current',
+                                text = 'Trade debtors current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -67,7 +67,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.previousTradeDebtors',
-                                text = 'Trade debtors previous',
+                                text = 'Trade debtors previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -90,7 +90,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome',
-                                text = 'Prepayments and accrued income current',
+                                text = 'Prepayments and accrued income current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -98,7 +98,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome',
-                                text = 'Prepayments and accrued income previous',
+                                text = 'Prepayments and accrued income previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -121,7 +121,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.currentOtherDebtors',
-                                text = 'Other debtors current',
+                                text = 'Other debtors current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
                                 )">
                     </div>
@@ -129,7 +129,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.previousOtherDebtors',
-                                text = 'Other debtors previous',
+                                text = 'Other debtors previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
                                 )">
                     </div>
@@ -152,7 +152,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.currentTotal',
-                                text = 'Total current',
+                                text = 'Total current '+ *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current-debtors-total',
                                 )">
                     </div>
@@ -160,7 +160,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'total.previousTotal',
-                                text = 'Total previous',
+                                text = 'Total previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous-debtors-total',
                                 )">
                     </div>
@@ -183,7 +183,7 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'greaterThanOneYear.currentGreaterThanOneYear',
-                                text = 'Debtors after more than one year current',
+                                text = 'Debtors after more than one year current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current',
                                 )">
                     </div>
@@ -191,7 +191,7 @@
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                     <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'greaterThanOneYear.previousGreaterThanOneYear',
-                                text = 'Debtors after more than one year previous',
+                                text = 'Debtors after more than one year previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous',
                                 )">
                     </div>

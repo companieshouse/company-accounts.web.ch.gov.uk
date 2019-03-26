@@ -99,7 +99,7 @@
 
       <div class="govuk-grid-row">
         <div class="column-fifth">
-          <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodStartOn"></div>
+          <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="cost.nextAccountsPeriodStartOn"></div>
         </div>
         <div class="column-sixth">
           <div th:replace="fragments/numberInput :: numberInput (
