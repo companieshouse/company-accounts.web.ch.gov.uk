@@ -12,7 +12,7 @@
 <div id="employees-main-content" layout:fragment="content" class="two-column-accounts">
 
   <form id="balanceSheet-form" th:action="@{''}" th:object="${employees}"
-        class="form" method="post">
+        class="form currency-included-within-inputs govuk-body" method="post">
 
     <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
@@ -51,10 +51,10 @@
                         previousField = 'averageNumberOfEmployees.previousAverageNumberOfEmployees'
                         )">
       </div>
-      <div class="govuk-grid-row">
+      <div class="govuk-grid-row govuk-!-padding-bottom-5">
         <div class="govuk-grid-column-one-half">
 
-          <details class="govuk-details" role="group">
+          <details class="govuk-details margin-top-minus-25">
             <summary class="govuk-details__summary" role="button" aria-controls="employees-details-content"
                      aria-expanded="false">
               <span id="average-employees-title-text" class="govuk-details__summary-text">Average number of employees</span>
