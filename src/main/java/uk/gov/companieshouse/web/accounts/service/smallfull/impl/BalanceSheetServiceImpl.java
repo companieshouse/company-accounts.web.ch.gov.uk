@@ -1,7 +1,10 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
 import uk.gov.companieshouse.accountsdates.impl.AccountsDatesHelperImpl;
@@ -44,6 +47,7 @@ import java.util.Optional;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
+@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private static final UriTemplate SMALL_FULL_URI =
@@ -81,6 +85,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
+    private BalanceSheet cachedBalanceSheet;
+
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
     private static final String CURRENT_PERIOD_RESOURCE = "current period";
@@ -90,6 +96,10 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId,
                                         String companyNumber)
             throws ServiceException {
+
+        if (cachedBalanceSheet != null) {
+            return cachedBalanceSheet;
+        }
 
         ApiClient apiClient = apiClientService.getApiClient();
 
@@ -110,6 +120,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 previousPeriodApi);
 
         balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+
+        cachedBalanceSheet = balanceSheet;
 
         return balanceSheet;
     }
@@ -153,6 +165,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                                   BalanceSheet balanceSheet,
                                                   String companyNumber)
             throws ServiceException {
+
+        invalidateRequestScopedCache();
+
         ApiClient apiClient = apiClientService.getApiClient();
 
         List<ValidationError> validationErrors = new ArrayList<>();
@@ -426,5 +441,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .map(CurrentAssets::getStocks)
                 .map(Stocks::getPreviousAmount)
                 .orElse(0L).equals(0L);
+    }
+
+    private void invalidateRequestScopedCache() {
+        cachedBalanceSheet = null;
     }
 }

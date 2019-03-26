@@ -19,22 +19,14 @@ public class StocksTransformerImpl implements StocksTransformer {
     @Override
     public StocksNote getStocks(StocksApi stocksApi) {
 
-        if (stocksApi == null) {
-            return new StocksNote();
-        }
-
         StocksNote stocksNote = new StocksNote();
 
-        PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
-        Stocks stocks = new Stocks();
-        Total total = new Total();
+        if (stocksApi == null) {
+            return stocksNote;
+        }
 
-        getStocksCurrentPeriodForWeb(stocksApi, paymentsOnAccount, stocks, total);
-        getStocksPreviousPeriodForWeb(stocksApi, paymentsOnAccount, stocks, total);
-
-        stocksNote.setPaymentsOnAccount(paymentsOnAccount);
-        stocksNote.setStocks(stocks);
-        stocksNote.setTotal(total);
+        populateCurrentPeriodForWeb(stocksApi, stocksNote);
+        populatePreviousPeriodForWeb(stocksApi, stocksNote);
 
         return stocksNote;
     }
@@ -45,7 +37,6 @@ public class StocksTransformerImpl implements StocksTransformer {
         StocksApi stocksApi = new StocksApi();
 
         setCurrentPeriodDebtorsOnApiModel(stocksNote, stocksApi);
-
         setPreviousPeriodDebtorsOnApiModel(stocksNote, stocksApi);
 
         return stocksApi;
@@ -55,19 +46,13 @@ public class StocksTransformerImpl implements StocksTransformer {
 
         PreviousPeriod previousPeriod = new PreviousPeriod();
 
-        if (stocksNote.getPaymentsOnAccount() != null &&
-            stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount() != null) {
-            previousPeriod.setPaymentsOnAccount(
+        previousPeriod.setPaymentsOnAccount(
                 stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
-        }
 
-        if (stocksNote.getStocks() != null && stocksNote.getStocks().getPreviousStocks() != null) {
-            previousPeriod.setStocks(stocksNote.getStocks().getPreviousStocks());
-        }
+        previousPeriod.setStocks(stocksNote.getStocks().getPreviousStocks());
 
-        if (stocksNote.getTotal() != null && stocksNote.getTotal().getPreviousTotal() != null) {
-            previousPeriod.setTotal(stocksNote.getTotal().getPreviousTotal());
-        }
+        previousPeriod.setTotal(stocksNote.getTotal().getPreviousTotal());
+
 
         if (isPreviousPeriodPopulated(previousPeriod)) {
             stocksApi.setPreviousPeriod(previousPeriod);
@@ -78,47 +63,106 @@ public class StocksTransformerImpl implements StocksTransformer {
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
-        if (stocksNote.getPaymentsOnAccount() != null &&
-            stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount() != null) {
-            currentPeriod.setPaymentsOnAccount(
+        currentPeriod.setPaymentsOnAccount(
                 stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
-        }
 
-        if (stocksNote.getStocks() != null && stocksNote.getStocks().getCurrentStocks() != null) {
-            currentPeriod.setStocks(stocksNote.getStocks().getCurrentStocks());
-        }
+        currentPeriod.setStocks(stocksNote.getStocks().getCurrentStocks());
 
-        if (stocksNote.getTotal() != null && stocksNote.getTotal().getCurrentTotal() != null) {
-            currentPeriod.setTotal(stocksNote.getTotal().getCurrentTotal());
-        }
+        currentPeriod.setTotal(stocksNote.getTotal().getCurrentTotal());
 
         if (isCurrentPeriodPopulated(currentPeriod)) {
             stocksApi.setCurrentPeriod(currentPeriod);
         }
     }
 
-    private void getStocksPreviousPeriodForWeb(StocksApi stocksApi,
-                                               PaymentsOnAccount paymentsOnAccount,
-                                               Stocks stocks, Total total) {
+    private void populatePreviousPeriodForWeb(StocksApi stocksApi,
+                                               StocksNote stocksNote) {
 
-        if (stocksApi.getPreviousPeriod() != null) {
-            paymentsOnAccount.setPreviousPaymentsOnAccount(
-                stocksApi.getPreviousPeriod().getPaymentsOnAccount());
-            stocks.setPreviousStocks(stocksApi.getPreviousPeriod().getStocks());
-            total.setPreviousTotal(stocksApi.getPreviousPeriod().getTotal());
+        PreviousPeriod previousPeriod = stocksApi.getPreviousPeriod();
+
+        if (previousPeriod != null) {
+
+            if (previousPeriod.getPaymentsOnAccount() != null) {
+                PaymentsOnAccount paymentsOnAccount = createPaymentsOnAccount(stocksNote);
+                paymentsOnAccount.setPreviousPaymentsOnAccount(previousPeriod.getPaymentsOnAccount());
+            }
+
+            if (previousPeriod.getStocks() != null) {
+                Stocks stocks = createStocks(stocksNote);
+                stocks.setPreviousStocks(previousPeriod.getStocks());
+            }
+
+            if (previousPeriod.getTotal() != null) {
+                Total total = createTotal(stocksNote);
+                total.setPreviousTotal(previousPeriod.getTotal());
+            }
         }
     }
 
-    private void getStocksCurrentPeriodForWeb(StocksApi stocksApi,
-                                              PaymentsOnAccount paymentsOnAccount,
-                                              Stocks stocks, Total total) {
+    private void populateCurrentPeriodForWeb(StocksApi stocksApi,
+                                              StocksNote stocksNote) {
 
-        if (stocksApi.getCurrentPeriod() != null) {
-            paymentsOnAccount.setCurrentPaymentsOnAccount(
-                stocksApi.getCurrentPeriod().getPaymentsOnAccount());
-            stocks.setCurrentStocks(stocksApi.getCurrentPeriod().getStocks());
-            total.setCurrentTotal(stocksApi.getCurrentPeriod().getTotal());
+        CurrentPeriod currentPeriod = stocksApi.getCurrentPeriod();
+
+        if (currentPeriod != null) {
+
+            if (currentPeriod.getPaymentsOnAccount() != null) {
+                PaymentsOnAccount paymentsOnAccount = createPaymentsOnAccount(stocksNote);
+                paymentsOnAccount.setCurrentPaymentsOnAccount(currentPeriod.getPaymentsOnAccount());
+            }
+
+            if (currentPeriod.getStocks() != null) {
+                Stocks stocks = createStocks(stocksNote);
+                stocks.setCurrentStocks(currentPeriod.getStocks());
+            }
+
+            if (currentPeriod.getTotal() != null) {
+                Total total = createTotal(stocksNote);
+                total.setCurrentTotal(currentPeriod.getTotal());
+            }
         }
+    }
+
+    private PaymentsOnAccount createPaymentsOnAccount(StocksNote stocksNote) {
+
+        PaymentsOnAccount paymentsOnAccount;
+
+        if (stocksNote.getPaymentsOnAccount() != null) {
+            paymentsOnAccount = stocksNote.getPaymentsOnAccount();
+        } else {
+            paymentsOnAccount = new PaymentsOnAccount();
+            stocksNote.setPaymentsOnAccount(paymentsOnAccount);
+        }
+
+        return paymentsOnAccount;
+    }
+
+    private Stocks createStocks(StocksNote stocksNote) {
+
+        Stocks stocks;
+
+        if (stocksNote.getStocks() != null) {
+            stocks = stocksNote.getStocks();
+        } else {
+            stocks = new Stocks();
+            stocksNote.setStocks(stocks);
+        }
+
+        return stocks;
+    }
+
+    private Total createTotal(StocksNote stocksNote) {
+
+        Total total;
+
+        if (stocksNote.getTotal() != null) {
+            total = stocksNote.getTotal();
+        } else {
+            total = new Total();
+            stocksNote.setTotal(total);
+        }
+
+        return total;
     }
 
     private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
