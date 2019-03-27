@@ -39,6 +39,7 @@ public class GovukSelectAccountTypeController extends BaseController {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
         model.addAttribute("hideUserBar", true);
+        addBackPageAttributeToModel(model);
 
         return getTemplateName();
     }

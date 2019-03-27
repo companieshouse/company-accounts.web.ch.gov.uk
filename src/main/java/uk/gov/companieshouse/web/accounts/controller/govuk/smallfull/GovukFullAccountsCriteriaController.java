@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.govuk.GovukSelectAccountTypeController;
 
 @Controller
+@PreviousController(GovukSelectAccountTypeController.class)
 @RequestMapping("/accounts/full-accounts-criteria")
 public class GovukFullAccountsCriteriaController extends BaseController{
 
@@ -19,6 +22,8 @@ public class GovukFullAccountsCriteriaController extends BaseController{
     @GetMapping
     public String getCriteria(Model model){
         model.addAttribute("hideUserBar" , true);
+        addBackPageAttributeToModel(model);
+
         return getTemplateName();
     }
 
