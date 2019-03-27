@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.environment.EnvironmentReader;
+import uk.gov.companieshouse.environment.impl.EnvironmentReaderImpl;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.corporationtax.CorporationTax;
@@ -22,8 +24,11 @@ public class GovukCorporationTaxController extends BaseController {
     @GetMapping
     public String getCorporationTax(Model model) {
 
+        EnvironmentReader enviromentReader = new EnvironmentReaderImpl();
+
         model.addAttribute("corporationTax", new CorporationTax());
         model.addAttribute("hideUserBar", true);
+        model.addAttribute("backButton", enviromentReader.getMandatoryString("GOV_UK_FULL_ACCOUNTS_URL"));
 
         return getTemplateName();
     }
