@@ -18,7 +18,7 @@ import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 import javax.validation.Valid;
 
 @Controller
-@PreviousController(GovukCorporationTaxController.class)
+@PreviousController(GovukCriteriaController.class)
 @RequestMapping("/accounts/select-account-type")
 public class GovukSelectAccountTypeController extends BaseController {
 

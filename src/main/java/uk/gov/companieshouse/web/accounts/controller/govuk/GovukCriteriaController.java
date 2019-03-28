@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,10 +18,13 @@ import uk.gov.companieshouse.web.accounts.controller.govuk.smallfull.GovukFullAc
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 
 @Controller
-@NextController(GovukStepsToCompleteCompleteController.class)
+@NextController(GovukStepsToCompleteController.class)
 @PreviousController(GovukFullAccountsCriteriaController.class)
 @RequestMapping("/accounts/criteria")
 public class GovukCriteriaController extends BaseController {
+
+    @Value("${accounts-selector.uri}")
+    private String govUkAccountsSelectorUrl;
 
     @Override
     protected String getTemplateName() {
@@ -38,11 +42,10 @@ public class GovukCriteriaController extends BaseController {
     }
 
     @PostMapping
-    public String postCriteria(@PathVariable String companyNumber,
-            @ModelAttribute("criteria") @Valid Criteria criteria,
+    public String postGovUkCriteria(@ModelAttribute("criteria") @Valid Criteria criteria,
             BindingResult bindingResult, Model model) {
 
-        addBackPageAttributeToModel(model, companyNumber);
+        addBackPageAttributeToModel(model);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
@@ -53,9 +56,9 @@ public class GovukCriteriaController extends BaseController {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/select-account-type";
         } else if (criteria.getIsCriteriaMet().equalsIgnoreCase("noOtherAccounts")) {
 
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/select-account-type";
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/alternative-filing-options";
         }
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
+        return navigatorService.getNextControllerRedirect(this.getClass());
     }
 }

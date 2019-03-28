@@ -8,8 +8,8 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
 @Controller
+@RequestMapping("/accounts/stepsToComplete")
 @PreviousController(GovukCriteriaController.class)
-@RequestMapping("/accounts/steps-to-complete")
 public class GovukStepsToCompleteController extends BaseController {
 
     @Override
