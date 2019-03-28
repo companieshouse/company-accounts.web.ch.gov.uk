@@ -25,9 +25,7 @@ public class GovukStepsToCompleteController extends BaseController {
 
     @GetMapping
     public String getStepsToComplete(Model model) {
-
         addBackPageAttributeToModel(model);
-
         return getTemplateName();
     }
 
