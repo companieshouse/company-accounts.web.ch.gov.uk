@@ -70,7 +70,7 @@
         <div class="govuk-grid-column-one-quarter">
           <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'averageNumberOfEmployees.currentAverageNumberOfEmployees',
-                                text = 'Average number of employees current',
+                                text = 'Average number of employees current ' + *{balanceSheetHeadings.currentPeriodHeading}',
                                 class= 'govuk-input range-to-99999 current',
                                 isEmployees = true,
                                 )">
@@ -80,7 +80,7 @@
              class="govuk-grid-column-one-quarter">
           <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'averageNumberOfEmployees.previousAverageNumberOfEmployees',
-                                text = 'Average number of employees previous',
+                                text = 'Average number of employees previous ' + *{balanceSheetHeadings.previousPeriodHeading},
                                 class= 'govuk-input range-to-99999 previous',
                                 isEmployees = true,
                                 )">
