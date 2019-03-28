@@ -35,7 +35,6 @@ public class GovukCriteriaController extends BaseController {
     public String getGovUkCriteria(Model model) {
 
         model.addAttribute("criteria", new Criteria());
-        model.addAttribute("hideUserBar", true);
         addBackPageAttributeToModel(model);
 
         return getTemplateName();

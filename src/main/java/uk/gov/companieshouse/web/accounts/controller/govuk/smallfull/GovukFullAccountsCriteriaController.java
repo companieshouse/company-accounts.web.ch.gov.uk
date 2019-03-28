@@ -19,7 +19,6 @@ public class GovukFullAccountsCriteriaController extends BaseController{
 
     @GetMapping
     public String getCriteria(Model model){
-        model.addAttribute("hideUserBar" , true);
         addBackPageAttributeToModel(model);
 
         return getTemplateName();

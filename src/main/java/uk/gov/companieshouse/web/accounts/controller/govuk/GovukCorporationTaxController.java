@@ -20,15 +20,14 @@ import javax.validation.Valid;
 @RequestMapping("/accounts/corporation-tax")
 public class GovukCorporationTaxController extends BaseController {
 
-    @Value("${gov-uk-full-accounts.uri}")
-    private String govUkFullAccountsUrl;
+    @Value("${gov-uk-file-your-accounts.uri}")
+    private String govUkFileYourAccountsUrl;
 
     @GetMapping
     public String getCorporationTax(Model model) {
 
         model.addAttribute("corporationTax", new CorporationTax());
-        model.addAttribute("hideUserBar", true);
-        model.addAttribute("backButton", govUkFullAccountsUrl);
+        model.addAttribute("backButton", govUkFileYourAccountsUrl);
 
         return getTemplateName();
     }

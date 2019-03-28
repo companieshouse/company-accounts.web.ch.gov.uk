@@ -9,15 +9,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.govuk.smallfull.GovukFullAccountsCriteriaController;
 import uk.gov.companieshouse.web.accounts.exception.NavigationException;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 
 import javax.validation.Valid;
 
 @Controller
+@NextController(GovukFullAccountsCriteriaController.class)
 @PreviousController(GovukCriteriaController.class)
 @RequestMapping("/accounts/select-account-type")
 public class GovukSelectAccountTypeController extends BaseController {
@@ -31,14 +33,10 @@ public class GovukSelectAccountTypeController extends BaseController {
     @Value("${abridged-accounts.uri}")
     private String abridgedAccountsUri;
 
-    private static final UriTemplate FULL_ACCOUNTS_URI =
-            new UriTemplate("/accounts/full-accounts-criteria");
-
     @GetMapping
     public String getTypeOfAccounts(Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
-        model.addAttribute("hideUserBar", true);
         addBackPageAttributeToModel(model);
 
         return getTemplateName();
@@ -67,7 +65,7 @@ public class GovukSelectAccountTypeController extends BaseController {
         }
 
         if ("full".equalsIgnoreCase(selectedAccount)) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FULL_ACCOUNTS_URI.toString();
+            return navigatorService.getNextControllerRedirect(this.getClass());
         }
 
         if ("dormant".equalsIgnoreCase(selectedAccount)) {
