@@ -20,7 +20,6 @@ public class GovukAlternativeFilingOptionsController extends BaseController {
     @GetMapping
     public String showAlternativeFilingOptionsPage(Model model) {
 
-        model.addAttribute("hideUserBar", true);
         addBackPageAttributeToModel(model);
 
         return getTemplateName();
