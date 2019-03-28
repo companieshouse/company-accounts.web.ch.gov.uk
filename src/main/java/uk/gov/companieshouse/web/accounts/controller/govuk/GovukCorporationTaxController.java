@@ -21,13 +21,13 @@ import javax.validation.Valid;
 public class GovukCorporationTaxController extends BaseController {
 
     @Value("${gov-uk-file-your-accounts.uri}")
-    private String govUkFullAccountsUrl;
+    private String govUkFileYourAccountsUrl;
 
     @GetMapping
     public String getCorporationTax(Model model) {
 
         model.addAttribute("corporationTax", new CorporationTax());
-        model.addAttribute("backButton", govUkFullAccountsUrl);
+        model.addAttribute("backButton", govUkFileYourAccountsUrl);
 
         return getTemplateName();
     }
