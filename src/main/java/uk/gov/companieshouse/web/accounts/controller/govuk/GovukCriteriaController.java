@@ -1,13 +1,11 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -16,6 +14,8 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.govuk.smallfull.GovukFullAccountsCriteriaController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
+
+import javax.validation.Valid;
 
 @Controller
 @NextController(GovukStepsToCompleteController.class)
