@@ -53,10 +53,10 @@ public class GovukCriteriaController extends BaseController {
 
         if (criteria.getIsCriteriaMet().equalsIgnoreCase("noAlternativeFilingMethod")) {
 
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/select-account-type";
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/alternative-filing-options";
         } else if (criteria.getIsCriteriaMet().equalsIgnoreCase("noOtherAccounts")) {
 
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/alternative-filing-options";
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/select-account-type";
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass());
