@@ -15,6 +15,6 @@ public class ServiceException extends Exception {
      * @param cause the cause
      */
     public ServiceException(String message, Throwable cause) {
-        super(cause);
+        super(message, cause);
     }
 }

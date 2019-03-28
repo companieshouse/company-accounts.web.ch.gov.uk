@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
@@ -19,11 +18,11 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
 import java.util.List;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 public class StocksServiceImpl implements StocksService {
@@ -41,12 +40,12 @@ public class StocksServiceImpl implements StocksService {
     private SmallFullService smallFullService;
 
     @Autowired
-    private ValidationContext validationContext;
+    private ServiceExceptionHandler serviceExceptionHandler;
 
     private static final UriTemplate STOCKS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/stocks");
 
-    private static final String INVALID_URI_MESSAGE = "Invalid URI for stocks resource";
+    private static final String RESOURCE_NAME = "stocks";
 
     @Override
     public StocksNote getStocks(String transactionId, String companyAccountsId, String companyNumber)
@@ -84,16 +83,9 @@ public class StocksServiceImpl implements StocksService {
                 apiClient.smallFull().stocks().update(uri, stocksApi).execute();
             }
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request when creating stocks resource", e);
-                }
-                return validationErrors;
-            }
-            throw new ServiceException("Error creating stocks resource", e);
+            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -108,13 +100,12 @@ public class StocksServiceImpl implements StocksService {
         try {
             return apiClient.smallFull().stocks().get(uri).execute();
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-            throw new ServiceException("Error when retrieving stocks", e);
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
+
+        return null;
     }
 
     private boolean hasStocks(SmallFullLinks smallFullLinks) {
@@ -130,9 +121,9 @@ public class StocksServiceImpl implements StocksService {
         try {
             apiClient.smallFull().stocks().delete(uri).execute();
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error deleting stocks resource", e);
+            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
         }
     }
 }
