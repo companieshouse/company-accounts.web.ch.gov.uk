@@ -58,6 +58,7 @@ public class GovukCriteriaController extends BaseController {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/select-account-type";
         }
 
+        //TODO - To be remove along with next controller annotation when "What is the company number" screen is added
         return navigatorService.getNextControllerRedirect(this.getClass());
     }
 }
