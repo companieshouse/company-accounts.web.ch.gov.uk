@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GovukSelectAccountTypeControllerTests {
+class GovukSelectAccountTypeControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH =
         UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";

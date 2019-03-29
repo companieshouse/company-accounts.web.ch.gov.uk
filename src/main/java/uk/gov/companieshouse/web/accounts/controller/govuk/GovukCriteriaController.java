@@ -18,7 +18,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 import javax.validation.Valid;
 
 @Controller
-@NextController(GovukStepsToCompleteController.class)
+@NextController(GovukCriteriaController.class)
 @PreviousController(GovukFullAccountsCriteriaController.class)
 @RequestMapping("/accounts/criteria")
 public class GovukCriteriaController extends BaseController {
