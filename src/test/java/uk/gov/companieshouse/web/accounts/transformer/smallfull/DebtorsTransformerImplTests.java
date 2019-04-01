@@ -79,8 +79,6 @@ public class DebtorsTransformerImplTests {
 
         assertEquals(TRADE_DEBTORS_CURRENT, debtors.getTradeDebtors().getCurrentTradeDebtors().longValue());
         assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome().longValue());
-        assertNull(debtors.getOtherDebtors().getCurrentOtherDebtors());
-        assertNull(debtors.getGreaterThanOneYear().getCurrentGreaterThanOneYear());
         assertEquals(TOTAL_CURRENT, debtors.getTotal().getCurrentTotal().longValue());
         assertEquals(DETAILS, debtors.getDetails());
     }

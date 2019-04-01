@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
@@ -12,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDeb
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.PrepaymentsAndAccruedIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
 
 import java.util.Objects;
@@ -21,63 +19,161 @@ import java.util.stream.Stream;
 @Component
 public class DebtorsTransformerImpl implements DebtorsTransformer {
 
-    @Autowired
-    CompanyService companyService;
-
     @Override
     public Debtors getDebtors(DebtorsApi debtorsApi) {
 
-        if (debtorsApi == null) {
-            return new Debtors();
-        }
-
         Debtors debtors = new Debtors();
 
-        TradeDebtors tradeDebtors = new TradeDebtors();
-        PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
-        OtherDebtors otherDebtors = new OtherDebtors();
-        Total total = new Total();
-        GreaterThanOneYear greaterThanOneYear = new GreaterThanOneYear();
+        if (debtorsApi == null) {
+            return debtors;
+        }
 
-        getDebtorsCurrentPeriodForWeb(debtorsApi, debtors, tradeDebtors,
-                prepaymentsAndAccruedIncome, otherDebtors, total, greaterThanOneYear);
-        getDebtorsPreviousPeriodForWeb(debtorsApi, tradeDebtors, prepaymentsAndAccruedIncome,
-                otherDebtors, total, greaterThanOneYear);
-
-        debtors.setGreaterThanOneYear(greaterThanOneYear);
-        debtors.setTradeDebtors(tradeDebtors);
-        debtors.setPrepaymentsAndAccruedIncome(prepaymentsAndAccruedIncome);
-        debtors.setOtherDebtors(otherDebtors);
-        debtors.setTotal(total);
+        populateCurrentPeriodForWeb(debtorsApi, debtors);
+        populatePreviousPeriodForWeb(debtorsApi, debtors);
 
         return debtors;
     }
 
-    private void getDebtorsPreviousPeriodForWeb(DebtorsApi debtorsApi, TradeDebtors tradeDebtors,
-            PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome, OtherDebtors otherDebtors,
-            Total total, GreaterThanOneYear greaterThanOneYear) {
-        if (debtorsApi.getDebtorsPreviousPeriod() != null) {
+    private void populatePreviousPeriodForWeb(DebtorsApi debtorsApi, Debtors debtors) {
 
-            tradeDebtors.setPreviousTradeDebtors(debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors());
-            prepaymentsAndAccruedIncome.setPreviousPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome());
-            otherDebtors.setPreviousOtherDebtors(debtorsApi.getDebtorsPreviousPeriod().getOtherDebtors());
-            total.setPreviousTotal(debtorsApi.getDebtorsPreviousPeriod().getTotal());
-            greaterThanOneYear.setPreviousGreaterThanOneYear(debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear());
+        PreviousPeriod previousPeriod = debtorsApi.getDebtorsPreviousPeriod();
+
+        if (previousPeriod != null) {
+
+            if (previousPeriod.getTradeDebtors() != null) {
+                TradeDebtors tradeDebtors = createTradeDebtors(debtors);
+                tradeDebtors.setPreviousTradeDebtors(previousPeriod.getTradeDebtors());
+            }
+
+            if (previousPeriod.getPrepaymentsAndAccruedIncome() != null) {
+                PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome =
+                        createPrepaymentsAndAccruedIncome(debtors);
+                prepaymentsAndAccruedIncome.setPreviousPrepaymentsAndAccruedIncome(
+                        previousPeriod.getPrepaymentsAndAccruedIncome());
+            }
+
+            if (previousPeriod.getOtherDebtors() != null) {
+                OtherDebtors otherDebtors = createOtherDebtors(debtors);
+                otherDebtors.setPreviousOtherDebtors(previousPeriod.getOtherDebtors());
+            }
+
+            if (previousPeriod.getTotal() != null) {
+                Total total = createTotal(debtors);
+                total.setPreviousTotal(previousPeriod.getTotal());
+            }
+
+            if (previousPeriod.getGreaterThanOneYear() != null) {
+                GreaterThanOneYear greaterThanOneYear = createGreaterThanOneYear(debtors);
+                greaterThanOneYear.setPreviousGreaterThanOneYear(previousPeriod.getGreaterThanOneYear());
+            }
         }
     }
 
-    private void getDebtorsCurrentPeriodForWeb(DebtorsApi debtorsApi, Debtors debtors,
-            TradeDebtors tradeDebtors, PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome,
-            OtherDebtors otherDebtors, Total total, GreaterThanOneYear greaterThanOneYear) {
-        if (debtorsApi.getDebtorsCurrentPeriod() != null) {
-            debtors.setDetails(debtorsApi.getDebtorsCurrentPeriod().getDetails());
+    private void populateCurrentPeriodForWeb(DebtorsApi debtorsApi, Debtors debtors) {
 
-            tradeDebtors.setCurrentTradeDebtors(debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors());
-            prepaymentsAndAccruedIncome.setCurrentPrepaymentsAndAccruedIncome(debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome());
-            otherDebtors.setCurrentOtherDebtors(debtorsApi.getDebtorsCurrentPeriod().getOtherDebtors());
-            total.setCurrentTotal(debtorsApi.getDebtorsCurrentPeriod().getTotal());
-            greaterThanOneYear.setCurrentGreaterThanOneYear(debtorsApi.getDebtorsCurrentPeriod().getGreaterThanOneYear());
+        CurrentPeriod currentPeriod = debtorsApi.getDebtorsCurrentPeriod();
+
+        if (currentPeriod != null) {
+
+            debtors.setDetails(currentPeriod.getDetails());
+
+            if (currentPeriod.getTradeDebtors() != null) {
+                TradeDebtors tradeDebtors = createTradeDebtors(debtors);
+                tradeDebtors.setCurrentTradeDebtors(currentPeriod.getTradeDebtors());
+            }
+
+            if (currentPeriod.getPrepaymentsAndAccruedIncome() != null) {
+                PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome =
+                        createPrepaymentsAndAccruedIncome(debtors);
+                prepaymentsAndAccruedIncome.setCurrentPrepaymentsAndAccruedIncome(
+                        currentPeriod.getPrepaymentsAndAccruedIncome());
+            }
+
+            if (currentPeriod.getOtherDebtors() != null) {
+                OtherDebtors otherDebtors = createOtherDebtors(debtors);
+                otherDebtors.setCurrentOtherDebtors(currentPeriod.getOtherDebtors());
+            }
+
+            if (currentPeriod.getTotal() != null) {
+                Total total = createTotal(debtors);
+                total.setCurrentTotal(currentPeriod.getTotal());
+            }
+
+            if (currentPeriod.getGreaterThanOneYear() != null) {
+                GreaterThanOneYear greaterThanOneYear = createGreaterThanOneYear(debtors);
+                greaterThanOneYear.setCurrentGreaterThanOneYear(currentPeriod.getGreaterThanOneYear());
+            }
         }
+    }
+
+    private TradeDebtors createTradeDebtors(Debtors debtors) {
+
+        TradeDebtors tradeDebtors;
+
+        if (debtors.getTradeDebtors() != null) {
+            tradeDebtors = debtors.getTradeDebtors();
+        } else {
+            tradeDebtors = new TradeDebtors();
+            debtors.setTradeDebtors(tradeDebtors);
+        }
+
+        return tradeDebtors;
+    }
+
+    private PrepaymentsAndAccruedIncome createPrepaymentsAndAccruedIncome(Debtors debtors) {
+
+        PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome;
+
+        if (debtors.getPrepaymentsAndAccruedIncome() != null) {
+            prepaymentsAndAccruedIncome = debtors.getPrepaymentsAndAccruedIncome();
+        } else {
+            prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
+            debtors.setPrepaymentsAndAccruedIncome(prepaymentsAndAccruedIncome);
+        }
+
+        return prepaymentsAndAccruedIncome;
+    }
+
+    private OtherDebtors createOtherDebtors(Debtors debtors) {
+
+        OtherDebtors otherDebtors;
+
+        if (debtors.getOtherDebtors() != null) {
+            otherDebtors = debtors.getOtherDebtors();
+        } else {
+            otherDebtors = new OtherDebtors();
+            debtors.setOtherDebtors(otherDebtors);
+        }
+
+        return otherDebtors;
+    }
+
+    private Total createTotal(Debtors debtors) {
+
+        Total total;
+
+        if (debtors.getTotal() != null) {
+            total = debtors.getTotal();
+        } else {
+            total = new Total();
+            debtors.setTotal(total);
+        }
+
+        return total;
+    }
+
+    private GreaterThanOneYear createGreaterThanOneYear(Debtors debtors) {
+
+        GreaterThanOneYear greaterThanOneYear;
+
+        if (debtors.getGreaterThanOneYear() != null) {
+            greaterThanOneYear = debtors.getGreaterThanOneYear();
+        } else {
+            greaterThanOneYear = new GreaterThanOneYear();
+            debtors.setGreaterThanOneYear(greaterThanOneYear);
+        }
+
+        return greaterThanOneYear;
     }
 
     @Override
@@ -86,34 +182,24 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
         DebtorsApi debtorsApi = new DebtorsApi();
 
         setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
-
         setPreviousPeriodDebtorsOnApiModel(debtors, debtorsApi);
 
         return debtorsApi;
     }
 
     private void setPreviousPeriodDebtorsOnApiModel(Debtors debtors, DebtorsApi debtorsApi) {
+
         PreviousPeriod previousPeriod = new PreviousPeriod();
 
-        if (debtors.getTradeDebtors() != null && debtors.getTradeDebtors().getPreviousTradeDebtors() != null) {
-            previousPeriod.setTradeDebtors(debtors.getTradeDebtors().getPreviousTradeDebtors());
-        }
+        previousPeriod.setTradeDebtors(debtors.getTradeDebtors().getPreviousTradeDebtors());
 
-        if (debtors.getPrepaymentsAndAccruedIncome() != null && debtors.getPrepaymentsAndAccruedIncome().getPreviousPrepaymentsAndAccruedIncome() != null) {
-            previousPeriod.setPrepaymentsAndAccruedIncome(debtors.getPrepaymentsAndAccruedIncome().getPreviousPrepaymentsAndAccruedIncome());
-        }
+        previousPeriod.setPrepaymentsAndAccruedIncome(debtors.getPrepaymentsAndAccruedIncome().getPreviousPrepaymentsAndAccruedIncome());
 
-        if (debtors.getOtherDebtors() != null && debtors.getOtherDebtors().getPreviousOtherDebtors() != null) {
-            previousPeriod.setOtherDebtors(debtors.getOtherDebtors().getPreviousOtherDebtors());
-        }
+        previousPeriod.setOtherDebtors(debtors.getOtherDebtors().getPreviousOtherDebtors());
 
-        if (debtors.getTotal() != null && debtors.getTotal().getPreviousTotal() != null) {
-            previousPeriod.setTotal(debtors.getTotal().getPreviousTotal());
-        }
+        previousPeriod.setTotal(debtors.getTotal().getPreviousTotal());
 
-        if (debtors.getGreaterThanOneYear() != null && debtors.getGreaterThanOneYear().getPreviousGreaterThanOneYear() != null) {
-            previousPeriod.setGreaterThanOneYear(debtors.getGreaterThanOneYear().getPreviousGreaterThanOneYear());
-        }
+        previousPeriod.setGreaterThanOneYear(debtors.getGreaterThanOneYear().getPreviousGreaterThanOneYear());
 
         if (isPreviousPeriodPopulated(previousPeriod)) {
             debtorsApi.setDebtorsPreviousPeriod(previousPeriod);
@@ -121,31 +207,22 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     }
 
     private void setCurrentPeriodDebtorsOnApiModel(Debtors debtors, DebtorsApi debtorsApi) {
+
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
         if (StringUtils.isNotBlank(debtors.getDetails())) {
             currentPeriod.setDetails(debtors.getDetails());
         }
 
-        if (debtors.getTradeDebtors() != null && debtors.getTradeDebtors().getCurrentTradeDebtors() != null) {
-            currentPeriod.setTradeDebtors(debtors.getTradeDebtors().getCurrentTradeDebtors());
-        }
+        currentPeriod.setTradeDebtors(debtors.getTradeDebtors().getCurrentTradeDebtors());
 
-        if (debtors.getPrepaymentsAndAccruedIncome() != null && debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome() != null) {
-            currentPeriod.setPrepaymentsAndAccruedIncome(debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome());
-        }
+        currentPeriod.setPrepaymentsAndAccruedIncome(debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome());
 
-        if (debtors.getOtherDebtors() != null && debtors.getOtherDebtors().getCurrentOtherDebtors() != null) {
-            currentPeriod.setOtherDebtors(debtors.getOtherDebtors().getCurrentOtherDebtors());
-        }
+        currentPeriod.setOtherDebtors(debtors.getOtherDebtors().getCurrentOtherDebtors());
 
-        if (debtors.getTotal() != null && debtors.getTotal().getCurrentTotal() != null) {
-            currentPeriod.setTotal(debtors.getTotal().getCurrentTotal());
-        }
+        currentPeriod.setTotal(debtors.getTotal().getCurrentTotal());
 
-        if (debtors.getGreaterThanOneYear() != null && debtors.getGreaterThanOneYear().getCurrentGreaterThanOneYear() != null) {
-            currentPeriod.setGreaterThanOneYear(debtors.getGreaterThanOneYear().getCurrentGreaterThanOneYear());
-        }
+        currentPeriod.setGreaterThanOneYear(debtors.getGreaterThanOneYear().getCurrentGreaterThanOneYear());
 
         if (isCurrentPeriodPopulated(currentPeriod)) {
             debtorsApi.setDebtorsCurrentPeriod(currentPeriod);
