@@ -47,6 +47,8 @@ public class GovukSelectAccountTypeController extends BaseController {
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
 
+        addBackPageAttributeToModel(model);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
