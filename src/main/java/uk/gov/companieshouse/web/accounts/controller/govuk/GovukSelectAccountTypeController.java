@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Controller
 @NextController(GovukFullAccountsCriteriaController.class)
-@PreviousController(GovukCriteriaController.class)
+@PreviousController(GovukCorporationTaxController.class)
 @RequestMapping("/accounts/select-account-type")
 public class GovukSelectAccountTypeController extends BaseController {
 
