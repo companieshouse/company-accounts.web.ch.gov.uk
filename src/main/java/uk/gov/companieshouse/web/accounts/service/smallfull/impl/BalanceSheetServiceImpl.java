@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.UriTemplate;
@@ -39,13 +38,13 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -66,7 +65,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private ApiClientService apiClientService;
 
     @Autowired
-    private ValidationContext validationContext;
+    private ServiceExceptionHandler serviceExceptionHandler;
 
     @Autowired
     private CompanyService companyService;
@@ -89,6 +88,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private BalanceSheet cachedBalanceSheet;
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
+
+    private static final String CURRENT_PERIOD_RESOURCE = "current period";
+    private static final String PREVIOUS_PERIOD_RESOURCE = "previous period";
 
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId,
@@ -131,16 +133,12 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             return apiClient.smallFull().currentPeriod().get(CURRENT_PERIOD_URI.expand(transactionId,
                     companyAccountsId).toString()).execute();
         } catch (ApiErrorResponseException e) {
-
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-
-            throw new ServiceException("Error retrieving current period resource", e);
+            serviceExceptionHandler.handleRetrievalException(e, CURRENT_PERIOD_RESOURCE);
         } catch (URIValidationException e) {
-
-            throw new ServiceException("Invalid URI for current period resource", e);
+            serviceExceptionHandler.handleURIValidationException(e, CURRENT_PERIOD_RESOURCE);
         }
+
+        return null;
     }
 
     private PreviousPeriodApi getPreviousPeriod(ApiClient apiClient,
@@ -153,16 +151,12 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                     .get(PREVIOUS_PERIOD_URI.expand(transactionId,
                             companyAccountsId).toString()).execute();
         } catch (ApiErrorResponseException e) {
-
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-
-            throw new ServiceException("Error retrieving previous period resource", e);
+            serviceExceptionHandler.handleRetrievalException(e, PREVIOUS_PERIOD_RESOURCE);
         } catch (URIValidationException e) {
-
-            throw new ServiceException("Invalid URI for previous period resource", e);
+            serviceExceptionHandler.handleURIValidationException(e, PREVIOUS_PERIOD_RESOURCE);
         }
+
+        return null;
     }
 
     @Override
@@ -231,18 +225,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             }
 
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                validationErrors.addAll(validationContext.getValidationErrors(e));
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request when submitting previous period " +
-                            "resource", e);
-                }
-            } else {
-                throw new ServiceException("Bad request when submitting previous period resource"
-                        , e);
-            }
+            validationErrors.addAll(serviceExceptionHandler.handleSubmissionException(e, PREVIOUS_PERIOD_RESOURCE));
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for previous period resource", e);
+            serviceExceptionHandler.handleURIValidationException(e, PREVIOUS_PERIOD_RESOURCE);
         }
     }
 
@@ -260,18 +245,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             }
 
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                validationErrors.addAll(validationContext.getValidationErrors(e));
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request when submitting current period " +
-                            "resource", e);
-                }
-            } else {
-                throw new ServiceException("Bad request when submitting current period resource",
-                        e);
-            }
+            validationErrors.addAll(serviceExceptionHandler.handleSubmissionException(e, CURRENT_PERIOD_RESOURCE));
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for current period resource", e);
+            serviceExceptionHandler.handleURIValidationException(e, CURRENT_PERIOD_RESOURCE);
         }
     }
 
