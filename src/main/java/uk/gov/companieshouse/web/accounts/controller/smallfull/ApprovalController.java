@@ -27,7 +27,11 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
 public class ApprovalController extends BaseController {
 
-   private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
+    private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
+
+    private static final String APPROVAL = "approval";
+    private static final String TRANSACTION_ID = "transaction_id";
+    private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
 
     @Autowired
     private TransactionService transactionService;
@@ -48,7 +52,9 @@ public class ApprovalController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        model.addAttribute("approval", new Approval());
+        model.addAttribute(APPROVAL, new Approval());
+        model.addAttribute(TRANSACTION_ID, transactionId);
+        model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
 
         return getTemplateName();
     }
@@ -57,7 +63,7 @@ public class ApprovalController extends BaseController {
     public String postApproval(@PathVariable String companyNumber,
                                @PathVariable String transactionId,
                                @PathVariable String companyAccountsId,
-                               @ModelAttribute("approval") @Valid Approval approval,
+                               @ModelAttribute(APPROVAL) @Valid Approval approval,
                                BindingResult bindingResult,
                                Model model,
                                HttpServletRequest request) {

@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
@@ -18,11 +17,11 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
 import java.util.List;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 public class DebtorsServiceImpl implements DebtorsService {
@@ -31,13 +30,13 @@ public class DebtorsServiceImpl implements DebtorsService {
     private ApiClientService apiClientService;
 
     @Autowired
-    private ValidationContext validationContext;
-
-    @Autowired
     private DebtorsTransformer transformer;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
+
+    @Autowired
+    private ServiceExceptionHandler serviceExceptionHandler;
 
     @Autowired
     private SmallFullService smallFullService;
@@ -45,10 +44,11 @@ public class DebtorsServiceImpl implements DebtorsService {
     private static final UriTemplate DEBTORS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/debtors");
 
-    private static final String INVALID_URI_MESSAGE = "Invalid URI for debtors resource";
+    private static final String RESOURCE_NAME = "debtors";
 
     @Override
     public Debtors getDebtors(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
+
         DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
         Debtors debtors = transformer.getDebtors(debtorsApi);
 
@@ -79,16 +79,9 @@ public class DebtorsServiceImpl implements DebtorsService {
                 apiClient.smallFull().debtors().update(uri, debtorsApi).execute();
             }
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request when creating debtors resource", e);
-                }
-                return validationErrors;
-            }
-            throw new ServiceException("Error creating debtors resource", e);
+            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -103,9 +96,9 @@ public class DebtorsServiceImpl implements DebtorsService {
         try {
             apiClient.smallFull().debtors().delete(uri).execute();
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error deleting debtors resource", e);
+            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
         }
     }
 
@@ -116,15 +109,13 @@ public class DebtorsServiceImpl implements DebtorsService {
 
         try {
             return apiClient.smallFull().debtors().get(uri).execute();
-
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-            throw new ServiceException("Error when retrieving debtors", e);
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
+
+        return null;
     }
 
     private boolean hasDebtors(SmallFullLinks smallFullLinks) {

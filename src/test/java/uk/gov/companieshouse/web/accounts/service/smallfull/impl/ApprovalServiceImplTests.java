@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -39,8 +40,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -77,7 +78,7 @@ public class ApprovalServiceImplTests {
     private SmallFullLinks smallFullLinks;
 
     @Mock
-    private ValidationContext validationContext;
+    private ServiceExceptionHandler serviceExceptionHandler;
 
     @Mock
     private List<ValidationError> mockValidationErrors;
@@ -103,6 +104,8 @@ public class ApprovalServiceImplTests {
     private static final String DATE_INVALID = "validation.date.nonExistent";
 
     private static final String MOCK_APPROVAL_LINK = "mockApprovalLink";
+
+    private static final String RESOURCE_NAME = "approval";
 
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
@@ -165,7 +168,13 @@ public class ApprovalServiceImplTests {
 
         when(smallFullLinks.getApproval()).thenReturn(null);
 
-        when(approvalCreate.execute()).thenThrow(URIValidationException.class);
+        URIValidationException uriValidationException = new URIValidationException("invalid uri");
+
+        when(approvalCreate.execute()).thenThrow(uriValidationException);
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -200,63 +209,23 @@ public class ApprovalServiceImplTests {
         when(smallFullLinks.getApproval()).thenReturn(null);
 
         HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
+                new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders())
+                        .build();
 
         ApiErrorResponseException apiErrorResponseException =
                 ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         when(approvalCreate.execute()).thenThrow(apiErrorResponseException);
 
-        when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(mockValidationErrors);
+        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+                .thenReturn(mockValidationErrors);
 
         List<ValidationError> validationErrors =
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval);
 
         verify(approvalCreate, times(1)).execute();
 
-        assertNotNull(validationErrors);
-    }
-
-    @Test
-    @DisplayName("Submit Approval - POST - ApiErrorResponseException Thrown - No Validation Errors")
-    void createApprovalThrowsApiErrorResponseExceptionWithoutValidationErrors()
-            throws ApiErrorResponseException, URIValidationException, ServiceException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
-
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(smallFullApi);
-
-        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-
-        Approval approval = new Approval();
-
-        ApprovalApi approvalApi = new ApprovalApi();
-
-        when(approvalTransformer.getApprovalApi(approval)).thenReturn(approvalApi);
-
-        when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(approvalCreate);
-
-        when(smallFullLinks.getApproval()).thenReturn(null);
-
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
-
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
-        when(approvalCreate.execute()).thenThrow(apiErrorResponseException);
-
-        when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(null);
-
-        assertThrows(ServiceException.class, () ->
-                approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
-
-        verify(approvalCreate, times(1)).execute();
+        assertEquals(mockValidationErrors, validationErrors);
     }
 
     @Test
@@ -285,7 +254,17 @@ public class ApprovalServiceImplTests {
 
         when(smallFullLinks.getApproval()).thenReturn(null);
 
-        when(approvalCreate.execute()).thenThrow(ApiErrorResponseException.class);
+        HttpResponseException httpResponseException =
+                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
+                        .build();
+
+        ApiErrorResponseException apiErrorResponseException =
+                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        when(approvalCreate.execute()).thenThrow(apiErrorResponseException);
+
+        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+                .thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -354,7 +333,13 @@ public class ApprovalServiceImplTests {
 
         when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
-        doThrow(URIValidationException.class).when(approvalUpdate).execute();
+        URIValidationException uriValidationException = new URIValidationException("invalid uri");
+
+        doThrow(uriValidationException).when(approvalUpdate).execute();
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -389,63 +374,23 @@ public class ApprovalServiceImplTests {
         when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
         HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
+                new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders())
+                        .build();
 
         ApiErrorResponseException apiErrorResponseException =
                 ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         doThrow(apiErrorResponseException).when(approvalUpdate).execute();
 
-        when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(mockValidationErrors);
+        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+                .thenReturn(mockValidationErrors);
 
         List<ValidationError> validationErrors =
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval);
 
         verify(approvalUpdate, times(1)).execute();
 
-        assertNotNull(validationErrors);
-    }
-
-    @Test
-    @DisplayName("Submit Approval - PUT - ApiErrorResponseException Thrown - No Validation Errors")
-    void updateApprovalThrowsApiErrorResponseExceptionWithoutValidationErrors()
-            throws ApiErrorResponseException, URIValidationException, ServiceException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-
-        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
-
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(smallFullApi);
-
-        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-
-        Approval approval = new Approval();
-
-        ApprovalApi approvalApi = new ApprovalApi();
-
-        when(approvalTransformer.getApprovalApi(approval)).thenReturn(approvalApi);
-
-        when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(approvalUpdate);
-
-        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
-
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(400,"Bad Request", new HttpHeaders()).build();
-
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
-        doThrow(apiErrorResponseException).when(approvalUpdate).execute();
-
-        when(validationContext.getValidationErrors(apiErrorResponseException)).thenReturn(null);
-
-        assertThrows(ServiceException.class, () ->
-                approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
-
-        verify(approvalUpdate, times(1)).execute();
+        assertEquals(mockValidationErrors, validationErrors);
     }
 
     @Test
@@ -474,7 +419,17 @@ public class ApprovalServiceImplTests {
 
         when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
-        doThrow(ApiErrorResponseException.class).when(approvalUpdate).execute();
+        HttpResponseException httpResponseException =
+                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
+                        .build();
+
+        ApiErrorResponseException apiErrorResponseException =
+                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        doThrow(apiErrorResponseException).when(approvalUpdate).execute();
+
+        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+                .thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
