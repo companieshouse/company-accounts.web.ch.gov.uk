@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.controller.smallfull;
+package uk.gov.companieshouse.web.accounts.controller.govuk;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -19,12 +19,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CriteriaControllerTests {
+public class GovukCriteriaControllerTest {
 
     private MockMvc mockMvc;
 
@@ -32,18 +32,14 @@ public class CriteriaControllerTests {
     private NavigatorService navigatorService;
 
     @InjectMocks
-    private CriteriaController controller;
+    private GovukCriteriaController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-    private static final String CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
-                                                    "/small-full/criteria";
+    private static final String CRITERIA_PATH = "/accounts/criteria";
     private static final String CRITERIA_MODEL_ATTR = "criteria";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String CRITERIA_VIEW = "smallfull/criteria";
-    private static final String ALTERNATIVE_FILING_PATH = "redirect:/company/" + COMPANY_NUMBER +
-                                                            "/submit-abridged-accounts/alternative-filing-options";
-    private static final String OTHER_FILING_PATH = "redirect:/company/" + COMPANY_NUMBER +
-        "/select-account-type";
+    private static final String ALTERNATIVE_FILING_PATH = "redirect:/accounts/alternative-filing-options";
+    private static final String OTHER_FILING_PATH = "redirect:/accounts/select-account-type";
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
@@ -64,7 +60,7 @@ public class CriteriaControllerTests {
     }
 
     @Test
-    @DisplayName("Post criteria with YES selection")
+    @DisplayName("Post criteria with criteria met")
     void postRequestCriteriaMet() throws Exception {
 
         String beanElement = "isCriteriaMet";
@@ -79,41 +75,40 @@ public class CriteriaControllerTests {
     }
 
     @Test
-    @DisplayName("Post criteria with alternative filing method selection")
-    void postRequestCriteriaNotMetAlternativeFiling() throws Exception {
+    @DisplayName("Post corporation tax with alternative filing selected")
+    void postRequestAlternativeFiling() throws Exception {
 
         String beanElement = "isCriteriaMet";
-        String criteriaNotMet = "noAlternativeFilingMethod";
+        String criteriaMet = "noAlternativeFilingMethod";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaNotMet))
+                .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(ALTERNATIVE_FILING_PATH));
     }
 
     @Test
-    @DisplayName("Post criteria with other accounts selection")
-    void postRequestCriteriaNotMetOtherAccounts() throws Exception {
+    @DisplayName("Post corporation tax with other filing selected")
+    void postRequestOtherFilings() throws Exception {
 
         String beanElement = "isCriteriaMet";
-        String criteriaNotMet = "noOtherAccounts";
+        String criteriaMet = "noOtherAccounts";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaNotMet))
+                .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(OTHER_FILING_PATH));
     }
 
     @Test
-    @DisplayName("Post criteria with binding result errors")
+    @DisplayName("Post corporation tax with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        String beanElement = "isCriteriaMet";
-        // Mock no selection to trigger binding result errors
-        String invalidData = null;
+        String beanElement = "fileChoice";
+        String criteriaMet = null;
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, invalidData))
+                .param(beanElement, criteriaMet))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CRITERIA_VIEW));
     }
