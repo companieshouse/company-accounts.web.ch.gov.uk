@@ -25,21 +25,14 @@ public class EmployeesValidator implements Validator {
 
     private boolean isEmployeesValid(Employees employees) {
 
-        if (employees == null || (isAverageNumberOfEmployeesNull(employees) &&
-               StringUtils.isEmpty(employees.getDetails()))) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(employees == null || (isAverageNumberOfEmployeesNull(employees) &&
+            StringUtils.isEmpty(employees.getDetails())));
     }
     
     private boolean isAverageNumberOfEmployeesNull(Employees employees) {
         AverageNumberOfEmployees average = employees.getAverageNumberOfEmployees();
-        if (average == null || (average.getCurrentAverageNumberOfEmployees() == null &&
-             average.getPreviousAverageNumberOfEmployees() == null)) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return  average == null || (average.getCurrentAverageNumberOfEmployees() == null &&
+            average.getPreviousAverageNumberOfEmployees() == null);
     }
 }
