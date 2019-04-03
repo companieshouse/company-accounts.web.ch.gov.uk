@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +18,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employ
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 @Controller
 @NextController(EmployeesController.class)
-@PreviousController(CreditorsAfterOneYearController.class)
+@PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/employees-question")
 public class EmployeesQuestionController extends BaseController {
 
