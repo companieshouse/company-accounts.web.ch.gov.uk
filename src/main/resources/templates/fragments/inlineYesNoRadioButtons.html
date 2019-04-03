@@ -57,7 +57,7 @@
 
   <!-- Text Box Field -->
   <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-       th:id="${dataTargetTextFieldName}">
+       th:id="${dataTargetTextFieldName}" th:if="${dataTargetTextFieldName != null}">
 
     <div class="govuk-form-group"
          th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">

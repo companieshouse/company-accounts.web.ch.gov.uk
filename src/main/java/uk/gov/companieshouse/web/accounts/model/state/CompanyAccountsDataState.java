@@ -16,6 +16,9 @@ public class CompanyAccountsDataState implements Serializable {
 
     @JsonProperty("accounting_policies")
     private AccountingPolicies accountingPolicies;
+    
+    @JsonProperty("has_selected_employees_note")
+    private Boolean hasSelectedEmployeesNote;
 
     @JsonProperty("created")
     @JsonSerialize(using = ToStringSerializer.class)
