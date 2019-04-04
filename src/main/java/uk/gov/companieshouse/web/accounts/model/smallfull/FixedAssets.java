@@ -9,11 +9,13 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 public class FixedAssets {
 
     private TangibleAssets tangibleAssets;
+    private FixedInvestments investments;
 
     @ValidationMapping("$.previous_period.balance_sheet.fixed_assets.total")
     private Long previousTotal;
 
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.total")
     private Long currentTotal;
+
 
 }
