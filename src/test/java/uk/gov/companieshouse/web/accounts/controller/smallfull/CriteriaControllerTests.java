@@ -64,7 +64,7 @@ public class CriteriaControllerTests {
     }
 
     @Test
-    @DisplayName("Post criteria with criteria met selection")
+    @DisplayName("Post criteria with YES selection")
     void postRequestCriteriaMet() throws Exception {
 
         String beanElement = "isCriteriaMet";
@@ -79,7 +79,7 @@ public class CriteriaControllerTests {
     }
 
     @Test
-    @DisplayName("Post criteria with criteria not met and alternative filing method selection")
+    @DisplayName("Post criteria with alternative filing method selection")
     void postRequestCriteriaNotMetAlternativeFiling() throws Exception {
 
         String beanElement = "isCriteriaMet";
@@ -92,7 +92,7 @@ public class CriteriaControllerTests {
     }
 
     @Test
-    @DisplayName("Post criteria with criteria not met and other accounts selection")
+    @DisplayName("Post criteria with other accounts selection")
     void postRequestCriteriaNotMetOtherAccounts() throws Exception {
 
         String beanElement = "isCriteriaMet";

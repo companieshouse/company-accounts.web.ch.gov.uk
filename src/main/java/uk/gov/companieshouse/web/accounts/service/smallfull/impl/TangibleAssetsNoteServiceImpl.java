@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
@@ -23,8 +22,8 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService {
@@ -39,7 +38,7 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
     private CompanyService companyService;
 
     @Autowired
-    private ValidationContext validationContext;
+    private ServiceExceptionHandler serviceExceptionHandler;
 
     @Autowired
     private TangibleAssetsTransformer tangibleAssetsTransformer;
@@ -48,38 +47,41 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
         new UriTemplate(
             "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/tangible-assets");
 
-    private static final String INVALID_URI_MESSAGE = "Invalid URI for tangible assets note resource";
+    private static final String RESOURCE_NAME = "tangible assets";
 
     @Override
     public TangibleAssets getTangibleAssets(String transactionId, String companyAccountsId,
         String companyNumber) throws ServiceException {
 
-        ApiClient apiClient = apiClientService.getApiClient();
-
-        String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
-
         TangibleAssets tangibleAssets;
 
-        try {
-            TangibleApi tangibleApi = apiClient.smallFull().tangible().get(uri).execute();
-
+        TangibleApi tangibleApi = getTangibleApi(transactionId, companyAccountsId);
+        if (tangibleApi != null) {
             tangibleAssets = tangibleAssetsTransformer.getTangibleAssets(tangibleApi);
-
-        } catch (ApiErrorResponseException e) {
-
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                tangibleAssets = new TangibleAssets();
-            } else {
-                throw new ServiceException("Error retrieving tangible assets note resource", e);
-            }
-        } catch (URIValidationException e) {
-
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+        } else {
+            tangibleAssets = new TangibleAssets();
         }
 
         addCompanyDatesToTangibleAssets(tangibleAssets, getCompanyProfile(companyNumber));
 
         return tangibleAssets;
+    }
+
+    private TangibleApi getTangibleApi(String transactionId, String companyAccountsId) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            return apiClient.smallFull().tangible().get(uri).execute();
+        } catch (ApiErrorResponseException e) {
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
+        } catch (URIValidationException e) {
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+        }
+
+        return null;
     }
 
     @Override
@@ -104,17 +106,9 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
                 apiClient.smallFull().tangible().update(uri, tangibleApi).execute();
             }
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException(
-                        "Bad request when creating tangible assets note resource", e);
-                }
-                return validationErrors;
-            }
-            throw new ServiceException("Error creating tangible assets note resource", e);
+            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -146,9 +140,9 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
         try {
             apiClient.smallFull().tangible().delete(uri).execute();
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error deleting tangible assets note resource", e);
+            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
         }
     }
 }

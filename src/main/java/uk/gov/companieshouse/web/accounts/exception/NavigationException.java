@@ -21,6 +21,11 @@ public class NavigationException extends RuntimeException {
         super(message, cause);
     }
 
+    /**
+     * Constructs a new {@code NavigationException} with a custom message
+     *
+     * @param message a custom message
+     */
     public NavigationException(String message) {
         super(message);
     }

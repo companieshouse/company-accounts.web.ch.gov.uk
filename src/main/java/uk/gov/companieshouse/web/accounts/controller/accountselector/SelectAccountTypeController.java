@@ -33,10 +33,9 @@ public class SelectAccountTypeController extends BaseController {
         new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
 
     @GetMapping
-    public String getTypeOfAccounts(@PathVariable String companyNumber, Model model) {
+    public String getTypeOfAccounts(Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
-        addBackPageAttributeToModel(model, companyNumber);
 
         return getTemplateName();
     }
@@ -46,8 +45,6 @@ public class SelectAccountTypeController extends BaseController {
         @PathVariable String companyNumber,
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
-
-        addBackPageAttributeToModel(model, companyNumber);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

@@ -21,7 +21,6 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
     private static final String SIGN_IN_KEY = "signin_info";
     private static final String USER_PROFILE_KEY = "user_profile";
     private static final String EMAIL_KEY = "email";
-    private static final String RESUME_PATH = "/resume";
 
     @Autowired
     SessionService sessionService;
@@ -50,7 +49,7 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean isResumeRequest(HttpServletRequest request) {
-        return request.getRequestURI().endsWith(RESUME_PATH);
+        return request.getRequestURI().endsWith("/resume");
     }
 
     private void addUserDetailsToModelAndView(ModelAndView modelAndView) {
