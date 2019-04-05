@@ -14,13 +14,18 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @NextController(ReviewController.class)
@@ -30,6 +35,9 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
     
     @Autowired
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
     @Override
     protected String getTemplateName() {
@@ -92,6 +100,27 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        return true;
+        BalanceSheet balanceSheet =
+            balanceSheetService.getBalanceSheet(
+                transactionId, companyAccountsId, companyNumber);
+
+        return hasFixedInvestments(balanceSheet);
+    }
+
+    private boolean hasFixedInvestments(BalanceSheet balanceSheet) {
+
+        Long currentInvestments = Optional.of(balanceSheet)
+            .map(BalanceSheet::getFixedAssets)
+            .map(FixedAssets::getInvestments)
+            .map(FixedInvestments::getCurrentAmount)
+            .orElse(0L);
+
+        Long previousInvestments = Optional.of(balanceSheet)
+            .map(BalanceSheet::getFixedAssets)
+            .map(FixedAssets::getInvestments)
+            .map(FixedInvestments::getPreviousAmount)
+            .orElse(0L);
+
+        return !(currentInvestments.equals(0L) && previousInvestments.equals(0L));
     }
 }
