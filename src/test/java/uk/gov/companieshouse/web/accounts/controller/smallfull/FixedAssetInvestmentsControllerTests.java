@@ -13,12 +13,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -42,6 +52,9 @@ public class FixedAssetInvestmentsControllerTests {
     
     @Mock
     private FixedAssetsInvestmentsService mockFixedAssetsInvestmentsService;
+
+    @Mock
+    private BalanceSheetService mockBalanceSheetService;
 
     @InjectMocks
     private FixedAssetsInvestmentsController controller;
@@ -166,5 +179,89 @@ public class FixedAssetInvestmentsControllerTests {
             .andExpect(status().isOk())
             .andExpect(view().name(FIXED_ASSETS_INVESTMENTS_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Test will render with Investments present on balancesheet")
+    void willRenderInvestmentsPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertTrue(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will render with Investments not present on balancesheet")
+    void willRenderInvestmentsNotPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoFixedInvestments());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will not render with 0 values in Investments on balance sheet")
+    void willNotRenderDebtorsZeroValues() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    private BalanceSheet getMockBalanceSheet() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        FixedAssets fixedAssets = new FixedAssets();
+        FixedInvestments fixedInvestments = new FixedInvestments();
+
+        fixedInvestments.setCurrentAmount(1L);
+        fixedInvestments.setPreviousAmount(2L);
+
+        fixedAssets.setInvestments(fixedInvestments);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setFixedAssets(fixedAssets);
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+        return balanceSheet;
+    }
+
+    private BalanceSheet getMockBalanceSheetNoFixedInvestments() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        FixedAssets fixedAssets = new FixedAssets();
+
+        TangibleAssets tangibleAssets = new TangibleAssets();
+
+        tangibleAssets.setCurrentAmount(1L);
+        tangibleAssets.setPreviousAmount(1L);
+
+        fixedAssets.setTangibleAssets(tangibleAssets);
+        balanceSheet.setFixedAssets(fixedAssets);
+        return balanceSheet;
+    }
+
+    private BalanceSheet getMockBalanceSheetZeroValues() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        FixedAssets fixedAssets = new FixedAssets();
+        FixedInvestments fixedInvestments = new FixedInvestments();
+
+        fixedInvestments.setCurrentAmount(0L);
+        fixedInvestments.setPreviousAmount(0L);
+
+        fixedAssets.setInvestments(fixedInvestments);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setFixedAssets(fixedAssets);
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+        return balanceSheet;
     }
 }
