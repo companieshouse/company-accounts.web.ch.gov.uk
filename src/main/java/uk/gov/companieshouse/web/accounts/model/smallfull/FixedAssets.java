@@ -16,6 +16,4 @@ public class FixedAssets {
 
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.total")
     private Long currentTotal;
-
-
 }

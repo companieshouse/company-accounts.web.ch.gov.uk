@@ -40,5 +40,4 @@ public interface FixedAssetsInvestmentsService {
      */
     void deleteFixedAssetsInvestments(String transactionId, String companyAccountsId)
         throws ServiceException;
-
  }
