@@ -31,4 +31,14 @@ public interface FixedAssetsInvestmentsService {
     List<ValidationError> submitFixedAssetsInvestments(String transactionId, String companyAccountsId, FixedAssetsInvestments fixedAssetsInvestments, String companyNumber)
         throws ServiceException;
 
+    /**
+     * Delete the fixedAssetsInvestments note
+     *
+     * @param transactionId     The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException if there's an error on deletion
+     */
+    void deleteFixedAssetsInvestments(String transactionId, String companyAccountsId)
+        throws ServiceException;
+
  }
