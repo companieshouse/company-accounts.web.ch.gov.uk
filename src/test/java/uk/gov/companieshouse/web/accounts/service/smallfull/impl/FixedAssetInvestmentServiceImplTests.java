@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -23,17 +24,22 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.fixedassetsinvestments
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
-import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.FixedAssetsInvestmentsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,6 +76,9 @@ public class FixedAssetInvestmentServiceImplTests {
     @Mock
     private ValidationContext mockValidationContext;
 
+    @Mock
+    private ServiceExceptionHandler serviceExceptionHandler;
+
     @InjectMocks
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService = new FixedAssetsInvestmentsServiceImpl();
 
@@ -84,6 +93,8 @@ public class FixedAssetInvestmentServiceImplTests {
         "/small-full/notes/fixed-assets-investments";
     
     private static final String TEST_DETAILS = "details text";
+
+    private static final String RESOURCE_NAME = "fixed assets investments";
 
     @Test
     @DisplayName("GET - fixedAssetsInvestments successful path")
@@ -266,6 +277,63 @@ public class FixedAssetInvestmentServiceImplTests {
             COMPANY_ACCOUNTS_ID,
             fixedAssetsInvestments,
             COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("DELETE - Investments successful delete path")
+    void deleteInvestments() throws Exception {
+
+        getMockFixedAssetsInvestmentsResourceHandler();
+        when(mockFixedAssetsInvestmentsResourceHandler.delete(FIXED_ASSETS_INVESTMENTS_URI)).thenReturn(mockFixedAssetsInvestmentsDelete);
+        doNothing().when(mockFixedAssetsInvestmentsDelete).execute();
+
+        fixedAssetsInvestmentsService.deleteFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(mockFixedAssetsInvestmentsDelete, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("DELETE - Investments throws ServiceExcepiton due to URIValidationException")
+    void deleteInvestmentsUriValidationException() throws Exception {
+
+        getMockFixedAssetsInvestmentsResourceHandler();
+        when(mockFixedAssetsInvestmentsResourceHandler.delete(FIXED_ASSETS_INVESTMENTS_URI)).thenReturn(mockFixedAssetsInvestmentsDelete);
+
+        URIValidationException uriValidationException = new URIValidationException("invalid uri");
+
+        when(mockFixedAssetsInvestmentsDelete.execute()).thenThrow(uriValidationException);
+
+        doThrow(ServiceException.class)
+            .when(serviceExceptionHandler)
+            .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> fixedAssetsInvestmentsService.deleteFixedAssetsInvestments(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("DELETE - Investments throws ServiceExcepiton due to ApiErrorResponseException - 404 Not Found")
+    void deleteInvestmentsApiErrorResponseExceptionNotFound() throws Exception {
+
+        getMockFixedAssetsInvestmentsResourceHandler();
+        when(mockFixedAssetsInvestmentsResourceHandler.delete(FIXED_ASSETS_INVESTMENTS_URI)).thenReturn(mockFixedAssetsInvestmentsDelete);
+
+        HttpResponseException httpResponseException =
+            new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
+                .build();
+        ApiErrorResponseException apiErrorResponseException =
+            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        when(mockFixedAssetsInvestmentsDelete.execute()).thenThrow(apiErrorResponseException);
+
+        doThrow(ServiceException.class)
+            .when(serviceExceptionHandler)
+            .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> fixedAssetsInvestmentsService.deleteFixedAssetsInvestments(
+            TRANSACTION_ID,
+            COMPANY_ACCOUNTS_ID));
     }
     
     private void getMockFixedAssetsInvestmentsApi(FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi) throws Exception {

@@ -13,11 +13,12 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.fixedassetsinvestments
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
-import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.FixedAssetsInvestmentsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,15 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
     @Autowired
     private ValidationContext validationContext;
 
+    @Autowired
+    private ServiceExceptionHandler serviceExceptionHandler;
+
     private static final UriTemplate FIXED_ASSETS_INVESTMENTS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/fixed-assets-investments");
 
     private static final String INVALID_URI_MESSAGE = "Invalid URI for fixedAssetsInvestments resource";
+
+    private static final String RESOURCE_NAME = "fixed assets investments";
 
     @Override
     public FixedAssetsInvestments getFixedAssetsInvestments(String transactionId, String companyAccountsId, String companyNumber)
@@ -86,6 +92,21 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public void deleteFixedAssetsInvestments(String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = FIXED_ASSETS_INVESTMENTS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().fixedAssetsInvestments().delete(uri).execute();
+        } catch (URIValidationException e) {
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+        } catch (ApiErrorResponseException e) {
+            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
+        }
     }
 
     private FixedAssetsInvestmentsApi getFixedAssetsInvestmentsApi(String transactionId, String companyAccountsId) throws ServiceException {
