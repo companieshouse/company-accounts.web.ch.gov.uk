@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
@@ -44,8 +43,6 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
     private static final UriTemplate FIXED_ASSETS_INVESTMENTS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/fixed-assets-investments");
 
-    private static final String INVALID_URI_MESSAGE = "Invalid URI for fixedAssetsInvestments resource";
-
     private static final String RESOURCE_NAME = "fixed assets investments";
 
     @Override
@@ -53,9 +50,8 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
         throws ServiceException {
 
         FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi = getFixedAssetsInvestmentsApi(transactionId, companyAccountsId);
-        FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsTransformer.getFixedAssetsInvestments(fixedAssetsInvestmentsApi);
 
-        return fixedAssetsInvestments;
+        return fixedAssetsInvestmentsTransformer.getFixedAssetsInvestments(fixedAssetsInvestmentsApi);
     }
 
     @Override
@@ -79,16 +75,9 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
                 apiClient.smallFull().fixedAssetsInvestments().update(uri, fixedAssetsInvestmentsApi).execute();
             }
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request when creating fixedAssetsInvestments resource", e);
-                }
-                return validationErrors;
-            }
-            throw new ServiceException("Error creating fixedAssetsInvestments resource", e);
+            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -118,13 +107,11 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
         try {
             return apiClient.smallFull().fixedAssetsInvestments().get(uri).execute();
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-            throw new ServiceException("Error when retrieving fixedAssetsInvestments", e);
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
+        return null;
     }
 
     private boolean hasFixedAssetsInvestments(SmallFullLinks smallFullLinks) {
