@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@NextController(ReviewController.class)
-@PreviousController(CreditorsAfterOneYearController.class)
+@NextController(StocksController.class)
+@PreviousController(TangibleAssetsNoteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/fixed-assets-investments")
 public class FixedAssetsInvestmentsController extends BaseController implements ConditionalController {
     
