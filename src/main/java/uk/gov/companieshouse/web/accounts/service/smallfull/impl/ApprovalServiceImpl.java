@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
@@ -19,8 +18,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
-import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
@@ -29,7 +28,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     private ApiClientService apiClientService;
 
     @Autowired
-    private ValidationContext validationContext;
+    private ServiceExceptionHandler serviceExceptionHandler;
 
     @Autowired
     private ApprovalTransformer transformer;
@@ -56,6 +55,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     private static final String DATE_INVALID = "validation.date.nonExistent";
 
+    private static final String RESOURCE_NAME = "approval";
+
     /**
      * {@inheritDoc}
      */
@@ -79,20 +80,9 @@ public class ApprovalServiceImpl implements ApprovalService {
                 apiClient.smallFull().approval().create(uri, approvalApi).execute();
             }
         } catch (ApiErrorResponseException e) {
-
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors == null) {
-                    throw new ServiceException("Bad request when submitting approval", e);
-                }
-
-                return validationErrors;
-            }
-
-            throw new ServiceException("Error when submitting approval", e);
+            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
-
-            throw new ServiceException("Invalid URI for approval resource", e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();

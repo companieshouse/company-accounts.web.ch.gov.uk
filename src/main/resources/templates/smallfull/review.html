@@ -606,8 +606,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Stocks',
                                 identifier = 'stocks-note-stocks',
-                                currentAmount = *{stocks?.stocks.currentStocks},
-                                previousAmount = *{stocks?.stocks.previousStocks},
+                                currentAmount = *{stocks?.stocks?.currentStocks},
+                                previousAmount = *{stocks?.stocks?.previousStocks},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -615,8 +615,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Payments on account',
                                 identifier = 'stocks-note-payments-on-account',
-                                currentAmount = *{stocks?.paymentsOnAccount.currentPaymentsOnAccount},
-                                previousAmount = *{stocks?.paymentsOnAccount.previousPaymentsOnAccount},
+                                currentAmount = *{stocks?.paymentsOnAccount?.currentPaymentsOnAccount},
+                                previousAmount = *{stocks?.paymentsOnAccount?.previousPaymentsOnAccount},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -624,8 +624,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-stocks',
-                                currentAmount = *{stocks?.total.currentTotal},
-                                previousAmount = *{stocks?.total.previousTotal},
+                                currentAmount = *{stocks?.total?.currentTotal},
+                                previousAmount = *{stocks?.total?.previousTotal},
                                 isTotalRow = true
                             )">
                             </div>
@@ -666,8 +666,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Trade debtors',
                                 identifier = 'trade-debtors',
-                                currentAmount = *{debtors?.tradeDebtors.currentTradeDebtors},
-                                previousAmount = *{debtors?.tradeDebtors.previousTradeDebtors},
+                                currentAmount = *{debtors?.tradeDebtors?.currentTradeDebtors},
+                                previousAmount = *{debtors?.tradeDebtors?.previousTradeDebtors},
                                 isBoldLegend = true
                                 )">
                             </div>
@@ -675,8 +675,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Prepayments and accrued income',
                                 identifier = 'prepayments=and-accrued-income',
-                                currentAmount = *{debtors?.prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome},
-                                previousAmount = *{debtors?.prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome},
+                                currentAmount = *{debtors?.prepaymentsAndAccruedIncome?.currentPrepaymentsAndAccruedIncome},
+                                previousAmount = *{debtors?.prepaymentsAndAccruedIncome?.previousPrepaymentsAndAccruedIncome},
                                 isBoldLegend = true
                                 )">
                             </div>
@@ -684,8 +684,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other debtors',
                                 identifier = 'other-debtors',
-                                currentAmount = *{debtors?.otherDebtors.currentOtherDebtors},
-                                previousAmount = *{debtors?.otherDebtors.previousOtherDebtors},
+                                currentAmount = *{debtors?.otherDebtors?.currentOtherDebtors},
+                                previousAmount = *{debtors?.otherDebtors?.previousOtherDebtors},
                                 isBoldLegend = true
                                 )">
                             </div>
@@ -693,8 +693,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-debtors',
-                                currentAmount = *{debtors?.total.currentTotal},
-                                previousAmount = *{debtors?.total.previousTotal},
+                                currentAmount = *{debtors?.total?.currentTotal},
+                                previousAmount = *{debtors?.total?.previousTotal},
                                 isTotalRow = true
                                 )">
                             </div>
@@ -702,8 +702,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Debtors after more than one year',
                                 identifier = 'debtors-after-more-than-one-year',
-                                currentAmount = *{debtors?.greaterThanOneYear.currentGreaterThanOneYear},
-                                previousAmount = *{debtors?.greaterThanOneYear.previousGreaterThanOneYear},
+                                currentAmount = *{debtors?.greaterThanOneYear?.currentGreaterThanOneYear},
+                                previousAmount = *{debtors?.greaterThanOneYear?.previousGreaterThanOneYear},
                                 isBoldLegend = true
                                 )">
                             </div>
@@ -753,8 +753,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Bank loans and overdrafts',
                                 identifier = 'bank-loans-and-overdrafts-creditors-within',
-                                currentAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
-                                previousAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
+                                currentAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts?.currentBankLoansAndOverdrafts},
+                                previousAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts?.previousBankLoansAndOverdrafts},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -762,8 +762,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Amounts due under finance leases and hire purchase contracts',
                                 identifier = 'finance-leases-and-hire-purchase-contracts-creditors-within',
-                                currentAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts.currentFinanceLeasesAndHirePurchaseContracts},
-                                previousAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts.previousFinanceLeasesAndHirePurchaseContracts},
+                                currentAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts?.currentFinanceLeasesAndHirePurchaseContracts},
+                                previousAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts?.previousFinanceLeasesAndHirePurchaseContracts},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -771,8 +771,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Trade creditors',
                                 identifier = 'trade-creditors',
-                                currentAmount = *{creditorsWithinOneYear?.tradeCreditors.currentTradeCreditors},
-                                previousAmount = *{creditorsWithinOneYear?.tradeCreditors.previousTradeCreditors},
+                                currentAmount = *{creditorsWithinOneYear?.tradeCreditors?.currentTradeCreditors},
+                                previousAmount = *{creditorsWithinOneYear?.tradeCreditors?.previousTradeCreditors},
                                 isBoldLegend = true
                             )">
                             </div> 
@@ -780,8 +780,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Taxation and social security',
                                 identifier = 'taxation-and-social-security',
-                                currentAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity.currentTaxationAndSocialSecurity},
-                                previousAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity.previousTaxationAndSocialSecurity},
+                                currentAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity?.currentTaxationAndSocialSecurity},
+                                previousAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity?.previousTaxationAndSocialSecurity},
                                 isBoldLegend = true
                             )">
                             </div>                                               
@@ -789,8 +789,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Accruals and deferred income',
                                 identifier = 'accruals-and-deferred-income-creditors-within',
-                                currentAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome.currentAccrualsAndDeferredIncome},
-                                previousAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome.previousAccrualsAndDeferredIncome},
+                                currentAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome?.currentAccrualsAndDeferredIncome},
+                                previousAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome?.previousAccrualsAndDeferredIncome},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -798,8 +798,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other creditors',
                                 identifier = 'other-creditors-creditors-within',
-                                currentAmount = *{creditorsWithinOneYear?.otherCreditors.currentOtherCreditors},
-                                previousAmount = *{creditorsWithinOneYear?.otherCreditors.previousOtherCreditors},
+                                currentAmount = *{creditorsWithinOneYear?.otherCreditors?.currentOtherCreditors},
+                                previousAmount = *{creditorsWithinOneYear?.otherCreditors?.previousOtherCreditors},
                                 isBoldLegend = true
                             )">
                             </div> 
@@ -807,8 +807,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-creditors-within',
-                                currentAmount = *{creditorsWithinOneYear?.total.currentTotal},
-                                previousAmount = *{creditorsWithinOneYear?.total.previousTotal},
+                                currentAmount = *{creditorsWithinOneYear?.total?.currentTotal},
+                                previousAmount = *{creditorsWithinOneYear?.total?.previousTotal},
                                 isTotalRow = true
                             )">
                             </div>                             
@@ -860,8 +860,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Bank loans and overdrafts',
                                 identifier = 'bank-loans-and-overdrafts-creditors-after',
-                                currentAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.currentBankLoansAndOverdrafts},
-                                previousAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts.previousBankLoansAndOverdrafts},
+                                currentAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts?.currentBankLoansAndOverdrafts},
+                                previousAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts?.previousBankLoansAndOverdrafts},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -869,8 +869,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Amounts due under finance leases and hire purchase contracts',
                                 identifier = 'finance-leases-and-hire-purchase-contracts-creditors-after',
-                                currentAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.currentFinanceLeasesAndHirePurchaseContracts},
-                                previousAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts.previousFinanceLeasesAndHirePurchaseContracts},
+                                currentAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts?.currentFinanceLeasesAndHirePurchaseContracts},
+                                previousAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts?.previousFinanceLeasesAndHirePurchaseContracts},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -878,8 +878,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other creditors',
                                 identifier = 'other-creditors-creditors-after',
-                                currentAmount = *{creditorsAfterOneYear?.otherCreditors.currentOtherCreditors},
-                                previousAmount = *{creditorsAfterOneYear?.otherCreditors.previousOtherCreditors},
+                                currentAmount = *{creditorsAfterOneYear?.otherCreditors?.currentOtherCreditors},
+                                previousAmount = *{creditorsAfterOneYear?.otherCreditors?.previousOtherCreditors},
                                 isBoldLegend = true
                             )">
                             </div>
@@ -887,8 +887,8 @@
                             <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-creditors-after',
-                                currentAmount = *{creditorsAfterOneYear?.total.currentTotal},
-                                previousAmount = *{creditorsAfterOneYear?.total.previousTotal},
+                                currentAmount = *{creditorsAfterOneYear?.total?.currentTotal},
+                                previousAmount = *{creditorsAfterOneYear?.total?.previousTotal},
                                 isTotalRow = true
                             )">
                             </div>
