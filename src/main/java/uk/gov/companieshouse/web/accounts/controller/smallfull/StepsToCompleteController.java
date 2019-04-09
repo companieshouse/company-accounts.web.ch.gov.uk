@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 @Controller
 @NextController(BalanceSheetController.class)
 @PreviousController(CriteriaController.class)
-@RequestMapping("/company/{companyNumber}/small-full/steps-to-complete")
+@RequestMapping({"/company/{companyNumber}/small-full/steps-to-complete", "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/steps-to-complete"})
 public class StepsToCompleteController extends BaseController {
 
     @Autowired
@@ -48,7 +49,21 @@ public class StepsToCompleteController extends BaseController {
 
     @GetMapping
     public String getStepsToComplete(@PathVariable String companyNumber,
+                                     @PathVariable Optional<String> transactionId,
+                                     @PathVariable Optional<String> companyAccountsId,
                                      Model model) {
+
+        if (companyNumber != null && !companyNumber.isEmpty()) {
+            System.out.println("Company number is present");
+        }
+
+        if (transactionId != null && transactionId.isPresent()) {
+            System.out.println("Transaction ID is present");
+        }
+
+        if (companyAccountsId != null && companyAccountsId.isPresent()) {
+            System.out.println("Company Accounts ID is present");
+        }
 
         addBackPageAttributeToModel(model, companyNumber);
 
@@ -57,24 +72,45 @@ public class StepsToCompleteController extends BaseController {
 
     @PostMapping
     public String postStepsToComplete(@PathVariable String companyNumber,
+                                      @PathVariable Optional<String> transactionId,
+                                      @PathVariable Optional<String> companyAccountsId,
                                       HttpServletRequest request) {
 
+        boolean isExistingTransaction = false;
+        String transactionID = "";
+        String companyAccountsID = "";
+
+        if (transactionId.isPresent() && companyAccountsId.isPresent()) {
+            transactionID = transactionId.get();
+            companyAccountsID = companyAccountsId.get();
+            isExistingTransaction = true;
+        }
+
+        if (!isExistingTransaction) {
+            try {
+                transactionID = transactionService.createTransaction(companyNumber);
+
+                CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
+                LocalDate periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+
+                companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID, periodEndOn);
+
+            } catch (ServiceException e) {
+
+                LOGGER.errorRequest(request, e.getMessage(), e);
+                return ERROR_VIEW;
+            }
+        }
+
         try {
-            String transactionId = transactionService.createTransaction(companyNumber);
 
-            CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
-            LocalDate periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+            smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
 
-            String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId, periodEndOn);
+            statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
 
-            smallFullService.createSmallFullAccounts(transactionId, companyAccountsId);
+            transactionService.createResumeLink(companyNumber, transactionID, companyAccountsID);
 
-            statementsService.createBalanceSheetStatementsResource(transactionId, companyAccountsId);
-
-            transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
-
-            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
-
+            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
