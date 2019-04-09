@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
-import java.io.UnsupportedEncodingException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -43,8 +42,7 @@ public class GovukCriteriaController extends BaseController {
 
     @PostMapping
     public String postGovUkCriteria(@ModelAttribute("criteria") @Valid Criteria criteria,
-        BindingResult bindingResult, Model model, RedirectAttributes attributes)
-        throws UnsupportedEncodingException {
+        BindingResult bindingResult, Model model, RedirectAttributes attributes) {
 
         addBackPageAttributeToModel(model);
 
