@@ -13,8 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,11 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
-import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
-import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -48,9 +42,6 @@ public class StepsToCompleteControllerTests {
     private TransactionService transactionService;
 
     @Mock
-    private CompanyService companyService;
-
-    @Mock
     private CompanyAccountsService companyAccountsService;
 
     @Mock
@@ -60,7 +51,7 @@ public class StepsToCompleteControllerTests {
     private StatementsService statementsService;
 
     @Mock
-    NavigatorService navigatorService;
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private StepsToCompleteController controller;
@@ -109,20 +100,7 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        LocalDate periodEndOn = LocalDate.now();
-
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodEndOn(periodEndOn);
-
-        CompanyAccountApi companyAccount = new CompanyAccountApi();
-        companyAccount.setNextAccounts(nextAccounts);
-
-        CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccount);
-
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
-
-        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn)).thenReturn(COMPANY_ACCOUNTS_ID);
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -136,9 +114,7 @@ public class StepsToCompleteControllerTests {
 
         verify(transactionService, times(1)).createTransaction(COMPANY_NUMBER);
 
-        verify(companyService, times(1)).getCompanyProfile(COMPANY_NUMBER);
-
-        verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID, periodEndOn);
+        verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID);
 
         verify(smallFullService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -158,40 +134,13 @@ public class StepsToCompleteControllerTests {
     }
 
     @Test
-    @DisplayName("Post steps to complete failure path for company service")
-    void postRequestCompanyServiceFailure() throws Exception {
-
-        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
-
-        doThrow(ServiceException.class)
-                .when(companyService).getCompanyProfile(anyString());
-
-        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
-                .andExpect(status().isOk())
-                .andExpect(view().name(ERROR_VIEW));
-    }
-
-    @Test
     @DisplayName("Post steps to complete failure path for create company accounts resource")
     void postRequestCompanyAccountsServiceCreateCompanyAccountsFailure() throws Exception {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        LocalDate periodEndOn = LocalDate.now();
-
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodEndOn(periodEndOn);
-
-        CompanyAccountApi companyAccount = new CompanyAccountApi();
-        companyAccount.setNextAccounts(nextAccounts);
-
-        CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccount);
-
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
-
         doThrow(ServiceException.class)
-                .when(companyAccountsService).createCompanyAccounts(anyString(), any(LocalDate.class));
+                .when(companyAccountsService).createCompanyAccounts(TRANSACTION_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
@@ -204,23 +153,10 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        LocalDate periodEndOn = LocalDate.now();
-
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodEndOn(periodEndOn);
-
-        CompanyAccountApi companyAccount = new CompanyAccountApi();
-        companyAccount.setNextAccounts(nextAccounts);
-
-        CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccount);
-
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
-
-        when(companyAccountsService.createCompanyAccounts(anyString(), any(LocalDate.class))).thenReturn("company_accounts_id");
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
 
         doThrow(ServiceException.class)
-                .when(smallFullService).createSmallFullAccounts(anyString(), anyString());
+                .when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
@@ -233,23 +169,12 @@ public class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodEndOn(LocalDate.now());
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
 
-        CompanyAccountApi companyAccount = new CompanyAccountApi();
-        companyAccount.setNextAccounts(nextAccounts);
-
-        CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccount);
-
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
-
-        when(companyAccountsService.createCompanyAccounts(anyString(), any(LocalDate.class))).thenReturn("company_accounts_id");
-
-        doNothing().when(smallFullService).createSmallFullAccounts(anyString(), anyString());
+        doNothing().when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         doThrow(ServiceException.class)
-                .when(statementsService).createBalanceSheetStatementsResource(anyString(), anyString());
+                .when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
