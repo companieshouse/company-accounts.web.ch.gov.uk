@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Controller
 @NextController(GovukFullAccountsCriteriaController.class)
-@PreviousController(GovukCriteriaController.class)
+@PreviousController(GovukCorporationTaxController.class)
 @RequestMapping("/accounts/select-account-type")
 public class GovukSelectAccountTypeController extends BaseController {
 
@@ -46,6 +46,8 @@ public class GovukSelectAccountTypeController extends BaseController {
     public String postTypeOfAccounts(
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
+
+        addBackPageAttributeToModel(model);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

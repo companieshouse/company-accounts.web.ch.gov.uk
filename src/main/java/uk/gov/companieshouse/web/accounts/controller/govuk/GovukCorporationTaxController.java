@@ -33,8 +33,11 @@ public class GovukCorporationTaxController extends BaseController {
     }
 
     @PostMapping
-    public String postCorporationTax(@ModelAttribute("corporationTax") @Valid CorporationTax corporationTax,
-                                     BindingResult bindingResult) {
+    public String postCorporationTax(@ModelAttribute("corporationTax")
+                                     @Valid CorporationTax corporationTax,
+                                     BindingResult bindingResult, Model model) {
+
+        model.addAttribute("backButton", govUkFileYourAccountsUrl);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
