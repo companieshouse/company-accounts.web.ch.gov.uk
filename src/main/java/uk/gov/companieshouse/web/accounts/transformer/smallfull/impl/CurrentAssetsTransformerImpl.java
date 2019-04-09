@@ -23,7 +23,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
             CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
-            currentAssetsApi.setCashAtBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
+            currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
             currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentTotal());
 
             balanceSheetApi.setCurrentAssets(currentAssetsApi);
@@ -37,7 +37,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
             CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
-            currentAssetsApi.setCashAtBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
+            currentAssetsApi.setCashInBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
             currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getPreviousTotal());
 
             balanceSheetApi.setCurrentAssets(currentAssetsApi);

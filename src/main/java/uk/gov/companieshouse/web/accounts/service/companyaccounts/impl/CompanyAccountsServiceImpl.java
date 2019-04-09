@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.companyaccounts.impl;
 
+import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,12 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
             new UriTemplate("/transactions/{transactionId}/company-accounts");
 
     @Override
-    public String createCompanyAccounts(String transactionId) throws ServiceException {
+    public String createCompanyAccounts(String transactionId, LocalDate periodEndOn) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
         CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
+        companyAccounts.setPeriodEndOn(periodEndOn);
 
         String uri = CREATE_COMPANY_ACCOUNTS_URI.expand(transactionId).toString();
 
