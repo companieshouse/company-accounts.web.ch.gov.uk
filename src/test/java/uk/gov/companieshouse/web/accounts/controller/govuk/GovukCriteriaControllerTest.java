@@ -40,7 +40,7 @@ public class GovukCriteriaControllerTest {
     private static final String CRITERIA_VIEW = "smallfull/criteria";
     private static final String ALTERNATIVE_FILING_PATH = "redirect:/accounts/alternative-filing-options";
     private static final String OTHER_FILING_PATH = "redirect:/accounts/select-account-type";
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
 
     @BeforeEach
     private void setup() {
@@ -65,8 +65,6 @@ public class GovukCriteriaControllerTest {
 
         String beanElement = "isCriteriaMet";
         String criteriaMet = "yes";
-
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(CRITERIA_PATH)
                 .param(beanElement, criteriaMet))
