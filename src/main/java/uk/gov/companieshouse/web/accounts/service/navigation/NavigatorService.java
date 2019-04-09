@@ -87,7 +87,7 @@ public class NavigatorService {
                         notImplementingBranch = lookAtMe;
 
                         if (j > 1) {
-                            throw new NavigationException("More than one default branch " + clazz.toString());
+                            throw new NavigationException("getNextControllerClass: More than one default branch " + clazz.toString());
                         }
                     } else {
                         BranchController hello = (BranchController)applicationContext.getBean(lookAtMe);
@@ -101,11 +101,11 @@ public class NavigatorService {
                 if (notImplementingBranch != null) {
                     return notImplementingBranch;
                 } else {
-                    throw new NavigationException("No default branch and no branch is valid " + clazz.toString());
+                    throw new NavigationException("getNextControllerClass: No default branch and no branch is valid " + clazz.toString());
                 }
             }
         } else {
-            throw new NavigationException("No next controller to navigate to " + clazz.toString());
+            throw new NavigationException("getNextControllerClass: No next controller to navigate to " + clazz.toString());
         }
     }
 
@@ -122,7 +122,45 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz.toString());
         }
 
-        return ((PreviousController) previousControllerAnnotation).value();
+        Class[] classList = ((PreviousController) previousControllerAnnotation).value();
+
+        if (classList.length > 0) {
+
+            if (classList.length == 1) {
+                return ((PreviousController) previousControllerAnnotation).value()[0];
+            } else {
+
+                Class notImplementingBranch = null;
+
+                for (int i = 0, j = 0; i < classList.length; i++) {
+
+                    Class lookAtMe = classList[i];
+
+                    if (!isBranchController(lookAtMe)) {
+                        j++;
+                        notImplementingBranch = lookAtMe;
+
+                        if (j > 1) {
+                            throw new NavigationException("getPreviousControllerClass: More than one default branch " + clazz.toString());
+                        }
+                    } else {
+                        BranchController hello = (BranchController)applicationContext.getBean(lookAtMe);
+
+                        if (hello.willRender()) {
+                            return hello.getClass();
+                        }
+                    }
+                }
+
+                if (notImplementingBranch != null) {
+                    return notImplementingBranch;
+                } else {
+                    throw new NavigationException("getPreviousControllerClass: No default branch and no branch is valid " + clazz.toString());
+                }
+            }
+        } else {
+            throw new NavigationException("getPreviousControllerClass: No previous controller to navigate to " + clazz.toString());
+        }
     }
 
     /**
