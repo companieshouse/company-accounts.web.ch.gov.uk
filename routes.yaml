@@ -9,3 +9,4 @@ routes:
    5: /company/(.*)/micro-entity/
    6: /company/(.*)/select-account-type
    7: /company/(.*)/dormant/
+   8: /accounts/(.*)
