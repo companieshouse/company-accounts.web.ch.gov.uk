@@ -9,4 +9,8 @@ routes:
    5: ^/company/(.*)/micro-entity/
    6: ^/company/(.*)/select-account-type
    7: ^/company/(.*)/dormant/
-   8: ^/accounts/(.*)
+   8: ^/accounts/criteria
+   9: ^/accounts/alternative-filing-options
+   10: ^/accounts/corporation-tax
+   11: ^/accounts/select-account-type
+   12: ^/accounts/full-accounts-criteria
