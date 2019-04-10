@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,8 +60,6 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        LocalDate periodEndOn = LocalDate.now();
-
         CompanyAccountsLinks companyAccountsLinks = new CompanyAccountsLinks();
         companyAccountsLinks.setSelf("/company-accounts/" + COMPANY_ACCOUNTS_ID);
 
@@ -74,7 +71,7 @@ public class CompanyAccountsServiceImplTests {
 
         when(companyAccountsCreate.execute()).thenReturn(companyAccounts);
 
-        String companyAccountsId = companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn);
+        String companyAccountsId = companyAccountsService.createCompanyAccounts(TRANSACTION_ID);
 
         assertEquals(COMPANY_ACCOUNTS_ID, companyAccountsId);
     }
@@ -85,8 +82,6 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        LocalDate periodEndOn = LocalDate.now();
-
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);
 
@@ -94,7 +89,7 @@ public class CompanyAccountsServiceImplTests {
                 .thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
-                companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn));
+                companyAccountsService.createCompanyAccounts(TRANSACTION_ID));
     }
 
     @Test
@@ -103,8 +98,6 @@ public class CompanyAccountsServiceImplTests {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
-        LocalDate periodEndOn = LocalDate.now();
-
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);
 
@@ -112,6 +105,6 @@ public class CompanyAccountsServiceImplTests {
                 .thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
-                companyAccountsService.createCompanyAccounts(TRANSACTION_ID, periodEndOn));
+                companyAccountsService.createCompanyAccounts(TRANSACTION_ID));
     }
 }
