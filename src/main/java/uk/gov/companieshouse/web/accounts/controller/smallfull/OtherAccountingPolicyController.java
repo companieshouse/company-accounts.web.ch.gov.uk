@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@NextController(TangibleAssetsNoteController.class)
+@NextController(EmployeesQuestionController.class)
 @PreviousController(ValuationInformationPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/other-accounting-policies")
 public class OtherAccountingPolicyController extends BaseController {

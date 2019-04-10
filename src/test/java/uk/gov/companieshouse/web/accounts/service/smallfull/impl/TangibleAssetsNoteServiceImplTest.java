@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -48,6 +49,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -98,6 +100,12 @@ public class TangibleAssetsNoteServiceImplTest {
     @Mock
     private SmallFullLinks smallFullLinks;
 
+    @Mock
+    private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Mock
+    private List<ValidationError> mockValidationErrors;
+
     @InjectMocks
     private TangibleAssetsNoteService tangibleAssetsNoteService = new TangibleAssetsNoteServiceImpl();
 
@@ -112,6 +120,8 @@ public class TangibleAssetsNoteServiceImplTest {
     private static final LocalDate NEXT_PERIOD_START_ON = LocalDate.parse("2017-07-01");
 
     private static final LocalDate NEXT_PERIOD_END_ON = LocalDate.parse("2018-06-30");
+
+    private static final String RESOURCE_NAME = "tangible assets";
 
     @BeforeEach
     private void setUp() {
@@ -143,12 +153,17 @@ public class TangibleAssetsNoteServiceImplTest {
 
         when(tangibleResourceHandler.get(anyString())).thenReturn(tangibleGet);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(
-            HttpStatus.NOT_FOUND.value(), "", new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException
-            .fromHttpResponseException(httpResponseException);
+        HttpResponseException httpResponseException =
+                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
+                        .build();
+        ApiErrorResponseException apiErrorResponseException =
+                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         doThrow(apiErrorResponseException).when(tangibleGet).execute();
+
+        doNothing()
+                .when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(getCompanyProfile());
 
@@ -165,7 +180,17 @@ public class TangibleAssetsNoteServiceImplTest {
 
         when(tangibleResourceHandler.get(anyString())).thenReturn(tangibleGet);
 
-        doThrow(ApiErrorResponseException.class).when(tangibleGet).execute();
+        HttpResponseException httpResponseException =
+                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
+                        .build();
+        ApiErrorResponseException apiErrorResponseException =
+                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        doThrow(apiErrorResponseException).when(tangibleGet).execute();
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> tangibleAssetsNoteService.getTangibleAssets(
             TRANSACTION_ID,
@@ -237,7 +262,17 @@ public class TangibleAssetsNoteServiceImplTest {
 
         when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
 
-        doThrow(ApiErrorResponseException.class).when(tangibleDelete).execute();
+        HttpResponseException httpResponseException =
+                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
+                        .build();
+        ApiErrorResponseException apiErrorResponseException =
+                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+
+        doThrow(apiErrorResponseException).when(tangibleDelete).execute();
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> tangibleAssetsNoteService
                 .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -249,7 +284,13 @@ public class TangibleAssetsNoteServiceImplTest {
 
         when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
 
-        doThrow(URIValidationException.class).when(tangibleDelete).execute();
+        URIValidationException uriValidationException = new URIValidationException("invalid uri");
+
+        doThrow(uriValidationException).when(tangibleDelete).execute();
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> tangibleAssetsNoteService
                 .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));

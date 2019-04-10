@@ -71,6 +71,10 @@ public class ApprovalControllerTests {
 
     private static final String APPROVAL_MODEL_ATTR = "approval";
 
+    private static final String TRANSACTION_ID_MODEL_ATTR = "transaction_id";
+
+    private static final String COMPANY_ACCOUNTS_ID_MODEL_ATTR = "company_accounts_id";
+
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
@@ -89,7 +93,9 @@ public class ApprovalControllerTests {
                 .andExpect(view().name(APPROVAL_VIEW))
                 .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
+                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
+                .andExpect(model().attributeExists(TRANSACTION_ID_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR));
     }
 
     @Test

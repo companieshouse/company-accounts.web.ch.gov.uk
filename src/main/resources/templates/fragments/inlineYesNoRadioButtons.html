@@ -23,14 +23,15 @@
   <div class="govuk-radios govuk-radios--inline" data-module="radios">
 
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input show-text"
+      <input class="govuk-radios__input show-text piwik-event"
              id="yesButton"
              type="radio"
              value="1"
              name="${radioButtonsFieldName}"
              th:field="*{__${radioButtonsFieldName}__}"
              th:errorclass="govuk-error-message"
-             th:data-target-text-field="${dataTargetTextFieldName}"/>
+             th:data-target-text-field="${dataTargetTextFieldName}"
+             data-event-id="Yes"/>
 
       <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
         Yes
@@ -38,14 +39,15 @@
     </div>
 
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input"
+      <input class="govuk-radios__input piwik-event"
              id="noButton"
              type="radio"
              value="0"
              name="${radioButtonsFieldName}"
              th:field="*{__${radioButtonsFieldName}__}"
              th:errorclass="govuk-error-message"
-             th:data-target-text-field="${dataTargetTextFieldName}"/>
+             th:data-target-text-field="${dataTargetTextFieldName}"
+             data-event-id="No"/>
 
       <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
         No
@@ -55,7 +57,7 @@
 
   <!-- Text Box Field -->
   <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
-       th:id="${dataTargetTextFieldName}">
+       th:id="${dataTargetTextFieldName}" th:if="${dataTargetTextFieldName != null}">
 
     <div class="govuk-form-group"
          th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
