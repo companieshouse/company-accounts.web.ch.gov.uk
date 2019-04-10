@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
@@ -65,6 +66,8 @@ public class GovukCriteriaControllerTest {
 
         this.mockMvc.perform(post(CRITERIA_PATH)
                 .param(beanElement, criteriaMet))
+                .andExpect(MockMvcResultMatchers.model()
+                    .attribute("forward", "/company/{companyNumber}/small-full/steps-to-complete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
