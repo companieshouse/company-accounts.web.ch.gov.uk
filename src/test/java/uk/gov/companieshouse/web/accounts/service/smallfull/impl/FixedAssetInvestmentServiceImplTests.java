@@ -111,7 +111,7 @@ public class FixedAssetInvestmentServiceImplTests {
         FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.getFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(fixedAssetsInvestments);
-        assertEquals(TEST_DETAILS, fixedAssetsInvestments.getDetails());
+        assertEquals(TEST_DETAILS, fixedAssetsInvestments.getFixedAssetsDetails());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class FixedAssetInvestmentServiceImplTests {
                 COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(fixedAssetsInvestments);
-        assertEquals(TEST_DETAILS, fixedAssetsInvestments.getDetails());
+        assertEquals(TEST_DETAILS, fixedAssetsInvestments.getFixedAssetsDetails());
     }
 
     @Test
@@ -389,7 +389,7 @@ public class FixedAssetInvestmentServiceImplTests {
 
     private FixedAssetsInvestments createFixedAssetsInvestments() {
         FixedAssetsInvestments fixedAssetsInvestments = new FixedAssetsInvestments();
-        fixedAssetsInvestments.setDetails(TEST_DETAILS);
+        fixedAssetsInvestments.setFixedAssetsDetails(TEST_DETAILS);
         return fixedAssetsInvestments;
     }
 
