@@ -654,7 +654,7 @@
     <!-- End Tangible Assets -->
 
     <!-- Fixed Assets Investments Note -->
-    <div th:if="*{fixedAssetsInvestments.details != null}">
+    <div th:if="*{fixedAssetsInvestments.fixedAssetsDetails != null}">
       <div
           th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Fixed assets investments',
@@ -668,7 +668,7 @@
         <div class="app-check-your-answers__contents">
           <dt class="app-check-your-answers__answer">
             <p id="review-fixed-assets-investments"
-               th:utext="*{#strings.replace(fixedAssetsInvestments.details,'&#10;','&lt;br&gt;')}">
+               th:utext="*{#strings.replace(fixedAssetsInvestments.fixedAssetsDetails,'&#10;','&lt;br&gt;')}">
             </p>
           </dt>
         </div>
