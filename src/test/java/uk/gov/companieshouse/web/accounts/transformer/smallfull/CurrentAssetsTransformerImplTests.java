@@ -237,7 +237,7 @@ public class CurrentAssetsTransformerImplTests {
     private BalanceSheetApi mockBalanceSheetApiForCurrentPeriod() {
 
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
-        currentAssetsApi.setCashInBankAndInHand(CURRENT_CASH_IN_BANK_AND_IN_HAND);
+        currentAssetsApi.setCashAtBankAndInHand(CURRENT_CASH_IN_BANK_AND_IN_HAND);
         currentAssetsApi.setDebtors(CURRENT_DEBTORS);
         currentAssetsApi.setStocks(CURRENT_STOCKS);
         currentAssetsApi.setTotal(CURRENT_TOTAL);
@@ -251,7 +251,7 @@ public class CurrentAssetsTransformerImplTests {
     private BalanceSheetApi mockBalanceSheetApiForPreviousPeriod() {
 
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
-        currentAssetsApi.setCashInBankAndInHand(PREVIOUS_CASH_IN_BANK_AND_IN_HAND);
+        currentAssetsApi.setCashAtBankAndInHand(PREVIOUS_CASH_IN_BANK_AND_IN_HAND);
         currentAssetsApi.setDebtors(PREVIOUS_DEBTORS);
         currentAssetsApi.setStocks(PREVIOUS_STOCKS);
         currentAssetsApi.setTotal(PREVIOUS_TOTAL);
