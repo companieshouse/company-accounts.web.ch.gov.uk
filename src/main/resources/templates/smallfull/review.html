@@ -422,6 +422,65 @@
 
     <!-- End Accounting Policies -->
 
+
+    <!-- Employees Note -->
+    <div id="cya-small-full-employees-note">
+
+      <div th:if="*{employees?.details != null or employees?.averageNumberOfEmployees !=null}">
+
+        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Employees',
+                            identifier= 'employees-note',
+                            resource = 'employees-question',
+                            marginTop = true
+                            )">
+        </div>
+
+        <dl th:if="*{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees != null or
+                        employees?.averageNumberOfEmployees.previousAverageNumberOfEmployees != null}" class="app-check-your-answers app-check-your-answers--short">
+
+          <div
+              class="app-check-your-answers__contents cya-desktop-only">
+            <dt class="app-check-your-answers__question"></dt>
+
+            <dd class="app-check-your-answers__answer govuk-heading-s"
+                th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+            <dd class="app-check-your-answers__answer govuk-heading-s"
+                th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+            <dd class="app-check-your-answers__change"></dd>
+          </div>
+
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                                description = 'Average number of employees',
+                                identifier = 'average-number-of-employees',
+                                currentAmount = *{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees},
+                                previousAmount = *{employees?.averageNumberOfEmployees.previousAverageNumberOfEmployees},
+                                isBoldLegend = true,
+                                isEmployees = true
+                            )">
+          </div>
+
+        </dl>
+
+        <div th:if="*{employees.details != null}">
+          <dl class="app-check-your-answers app-check-your-answers--short">
+            <div class="app-check-your-answers__contents">
+              <dt class="app-check-your-answers__question">Additional information</dt>
+              <dd class="app-check-your-answers__answer">
+                <p id="review-employees-details"
+                   th:utext="*{#strings.replace(employees?.details,'&#10;','&lt;br&gt;')}"></p>
+              <dd class="app-check-your-answers__change"></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employees Note End -->
+
     <!-- Start Tangible Assets -->
 
     <div id="cya-small-full-tangible-assets-note">
@@ -594,6 +653,29 @@
     </div>
 
     <!-- End Tangible Assets -->
+
+    <!-- Fixed Assets Investments Note -->
+    <div th:if="*{fixedAssetsInvestments.details != null}">
+      <div
+          th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Fixed assets investments',
+                            identifier= 'fixed-assets-investments',
+                            resource = 'fixed-assets-investments',
+                            marginTop = true
+                            )">
+      </div>
+
+      <dl class="app-check-your-answers app-check-your-answers--short">
+        <div class="app-check-your-answers__contents">
+          <dt class="app-check-your-answers__answer">
+            <p id="review-fixed-assets-investments"
+               th:utext="*{#strings.replace(fixedAssetsInvestments.details,'&#10;','&lt;br&gt;')}">
+            </p>
+          </dt>
+        </div>
+      </dl>
+    </div>
+    <!-- End Fixed Assets Investments Note -->
 
     <!-- Stocks Note -->
 
@@ -927,88 +1009,6 @@
       </div>
     </div>
     <!-- End Creditors After One Year Note -->
-
-    <!-- Employees Note -->
-    <div id="cya-small-full-employees-note">
-
-      <div th:if="*{employees?.details != null or employees?.averageNumberOfEmployees !=null}">
-
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
-                            description = 'Employees',
-                            identifier= 'employees-note',
-                            resource = 'employees-question',
-                            marginTop = true
-                            )">
-        </div>
-
-        <dl th:if="*{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees != null or
-                        employees?.averageNumberOfEmployees.previousAverageNumberOfEmployees != null}" class="app-check-your-answers app-check-your-answers--short">
-
-          <div
-               class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question"></dt>
-
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
-
-
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
-                                description = 'Average number of employees',
-                                identifier = 'average-number-of-employees',
-                                currentAmount = *{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees},
-                                previousAmount = *{employees?.averageNumberOfEmployees.previousAverageNumberOfEmployees},
-                                isBoldLegend = true,
-                                isEmployees = true
-                            )">
-          </div>
-
-        </dl>
-
-        <div th:if="*{employees.details != null}">
-          <dl class="app-check-your-answers app-check-your-answers--short">
-            <div class="app-check-your-answers__contents">
-              <dt class="app-check-your-answers__question">Additional information</dt>
-              <dd class="app-check-your-answers__answer">
-                <p id="review-employees-details"
-                   th:utext="*{#strings.replace(employees?.details,'&#10;','&lt;br&gt;')}"></p>
-              <dd class="app-check-your-answers__change"></dd>
-            </div>
-          </dl>
-        </div>
-      </div>
-    </div>
-
-    <!-- Employees Note End -->
-
-
-    <!-- Fixed Assets Investments Note -->
-    <div th:if="*{fixedAssetsInvestments.details != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
-                            description = 'Fixed assets investments',
-                            identifier= 'fixed-assets-investments',
-                            resource = 'fixed-assets-investments',
-                            marginTop = true
-                            )">
-      </div>
-
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-fixed-assets-investments"
-               th:utext="*{#strings.replace(fixedAssetsInvestments.details,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
-        </div>
-      </dl>
-    </div>
-    <!-- End Fixed Assets Investments Note -->
 
     <div class="govuk-form-group">
       <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
