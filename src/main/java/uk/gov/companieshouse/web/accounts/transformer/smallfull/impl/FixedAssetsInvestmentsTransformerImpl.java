@@ -16,7 +16,7 @@ public class FixedAssetsInvestmentsTransformerImpl implements FixedAssetsInvestm
         }
 
         FixedAssetsInvestments fixedAssetsInvestments = new FixedAssetsInvestments();
-        fixedAssetsInvestments.setDetails(fixedAssetsInvestmentsApi.getDetails());
+        fixedAssetsInvestments.setFixedAssetsDetails(fixedAssetsInvestmentsApi.getDetails());
 
         return fixedAssetsInvestments;
     }
@@ -25,7 +25,7 @@ public class FixedAssetsInvestmentsTransformerImpl implements FixedAssetsInvestm
     public FixedAssetsInvestmentsApi getFixedAssetsInvestmentsApi(FixedAssetsInvestments fixedAssetsInvestments) {
 
         FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi = new FixedAssetsInvestmentsApi();
-        fixedAssetsInvestmentsApi.setDetails(fixedAssetsInvestments.getDetails());
+        fixedAssetsInvestmentsApi.setDetails(fixedAssetsInvestments.getFixedAssetsDetails());
 
         return fixedAssetsInvestmentsApi;
     }

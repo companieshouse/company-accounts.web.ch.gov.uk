@@ -82,7 +82,7 @@ public class FixedAssetInvestmentsControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String TEST_PATH = "details";
+    private static final String TEST_PATH = "fixedAssetsDetails";
 
     @BeforeEach
     private void setup() {

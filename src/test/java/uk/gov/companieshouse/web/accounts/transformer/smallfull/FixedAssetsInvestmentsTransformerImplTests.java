@@ -25,8 +25,8 @@ public class FixedAssetsInvestmentsTransformerImplTests {
         FixedAssetsInvestments fixedAssetsInvestments = transformer.getFixedAssetsInvestments(fixedAssetsInvestmentsApi);
 
         assertNotNull(fixedAssetsInvestments);
-        assertNotNull(fixedAssetsInvestments.getDetails());
-        assertEquals(TEST_DETAILS, fixedAssetsInvestments.getDetails());
+        assertNotNull(fixedAssetsInvestments.getFixedAssetsDetails());
+        assertEquals(TEST_DETAILS, fixedAssetsInvestments.getFixedAssetsDetails());
     }
     
     @Test
@@ -35,14 +35,14 @@ public class FixedAssetsInvestmentsTransformerImplTests {
         FixedAssetsInvestments fixedAssetsInvestments = transformer.getFixedAssetsInvestments(null);
 
         assertNotNull(fixedAssetsInvestments);
-        assertNull(fixedAssetsInvestments.getDetails());
+        assertNull(fixedAssetsInvestments.getFixedAssetsDetails());
     }
     
     @Test
     @DisplayName("Transform web model to api model")
     void transformFixedAssetsInvestmentsWebToApi() {
         FixedAssetsInvestments fixedAssetsInvestments = new FixedAssetsInvestments();
-        fixedAssetsInvestments.setDetails(TEST_DETAILS);
+        fixedAssetsInvestments.setFixedAssetsDetails(TEST_DETAILS);
 
         FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi = transformer.getFixedAssetsInvestmentsApi(fixedAssetsInvestments);
 
