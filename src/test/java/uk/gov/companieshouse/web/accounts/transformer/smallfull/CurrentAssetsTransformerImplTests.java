@@ -7,6 +7,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentAssetsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CashAtBankAndInHand;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CurrentAssetsTransformerImpl;
@@ -20,12 +21,14 @@ public class CurrentAssetsTransformerImplTests {
     private static final Long CURRENT_CASH_IN_BANK_AND_IN_HAND = 1L;
     private static final Long CURRENT_DEBTORS = 2L;
     private static final Long CURRENT_STOCKS = 3L;
-    private static final Long CURRENT_TOTAL = 4L;
+    private static final Long CURRENT_INVESTMENTS = 4L;
+    private static final Long CURRENT_TOTAL = 5L;
 
     private static final Long PREVIOUS_CASH_IN_BANK_AND_IN_HAND = 10L;
     private static final Long PREVIOUS_DEBTORS = 20L;
     private static final Long PREVIOUS_STOCKS = 30L;
-    private static final Long PREVIOUS_TOTAL = 40L;
+    private static final Long PREVIOUS_INVESTMENTS = 40L;
+    private static final Long PREVIOUS_TOTAL = 50L;
 
     private Transformer transformer = new CurrentAssetsTransformerImpl();
 
@@ -140,6 +143,7 @@ public class CurrentAssetsTransformerImplTests {
         currentAssets.setCashAtBankAndInHand(new CashAtBankAndInHand());
         currentAssets.setDebtors(new Debtors());
         currentAssets.setStocks(new Stocks());
+        currentAssets.setInvestments(new CurrentAssetsInvestments());
 
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setCurrentAssets(currentAssets);
@@ -181,6 +185,7 @@ public class CurrentAssetsTransformerImplTests {
         currentAssets.setCashAtBankAndInHand(new CashAtBankAndInHand());
         currentAssets.setDebtors(new Debtors());
         currentAssets.setStocks(new Stocks());
+        currentAssets.setInvestments(new CurrentAssetsInvestments());
 
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setCurrentAssets(currentAssets);
@@ -200,16 +205,20 @@ public class CurrentAssetsTransformerImplTests {
         CashAtBankAndInHand cashAtBankAndInHand = new CashAtBankAndInHand();
         Debtors debtors = new Debtors();
         Stocks stocks = new Stocks();
+        CurrentAssetsInvestments investments = new CurrentAssetsInvestments();
+
 
         CurrentAssets currentAssets = new CurrentAssets();
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
         currentAssets.setDebtors(debtors);
         currentAssets.setStocks(stocks);
+        currentAssets.setInvestments(investments);
 
         if (currentPeriod) {
             cashAtBankAndInHand.setCurrentAmount(CURRENT_CASH_IN_BANK_AND_IN_HAND);
             debtors.setCurrentAmount(CURRENT_DEBTORS);
             stocks.setCurrentAmount(CURRENT_STOCKS);
+            investments.setCurrentAmount(CURRENT_INVESTMENTS);
             currentAssets.setCurrentTotal(CURRENT_TOTAL);
         }
 
@@ -217,6 +226,7 @@ public class CurrentAssetsTransformerImplTests {
             cashAtBankAndInHand.setPreviousAmount(PREVIOUS_CASH_IN_BANK_AND_IN_HAND);
             debtors.setPreviousAmount(PREVIOUS_DEBTORS);
             stocks.setPreviousAmount(PREVIOUS_STOCKS);
+            investments.setPreviousAmount(PREVIOUS_INVESTMENTS);
             currentAssets.setPreviousTotal(PREVIOUS_TOTAL);
         }
 
@@ -237,9 +247,10 @@ public class CurrentAssetsTransformerImplTests {
     private BalanceSheetApi mockBalanceSheetApiForCurrentPeriod() {
 
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
-        currentAssetsApi.setCashInBankAndInHand(CURRENT_CASH_IN_BANK_AND_IN_HAND);
+        currentAssetsApi.setCashAtBankAndInHand(CURRENT_CASH_IN_BANK_AND_IN_HAND);
         currentAssetsApi.setDebtors(CURRENT_DEBTORS);
         currentAssetsApi.setStocks(CURRENT_STOCKS);
+        currentAssetsApi.setInvestments(CURRENT_INVESTMENTS);
         currentAssetsApi.setTotal(CURRENT_TOTAL);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -251,9 +262,10 @@ public class CurrentAssetsTransformerImplTests {
     private BalanceSheetApi mockBalanceSheetApiForPreviousPeriod() {
 
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
-        currentAssetsApi.setCashInBankAndInHand(PREVIOUS_CASH_IN_BANK_AND_IN_HAND);
+        currentAssetsApi.setCashAtBankAndInHand(PREVIOUS_CASH_IN_BANK_AND_IN_HAND);
         currentAssetsApi.setDebtors(PREVIOUS_DEBTORS);
         currentAssetsApi.setStocks(PREVIOUS_STOCKS);
+        currentAssetsApi.setInvestments(PREVIOUS_INVESTMENTS);
         currentAssetsApi.setTotal(PREVIOUS_TOTAL);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -272,6 +284,7 @@ public class CurrentAssetsTransformerImplTests {
         assertNotNull(balanceSheet.getCurrentAssets().getCashAtBankAndInHand());
         assertNotNull(balanceSheet.getCurrentAssets().getDebtors());
         assertNotNull(balanceSheet.getCurrentAssets().getStocks());
+        assertNotNull(balanceSheet.getCurrentAssets().getInvestments());
 
     }
 
@@ -279,6 +292,7 @@ public class CurrentAssetsTransformerImplTests {
         assertNull(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
         assertNull(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
         assertNull(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
+        assertNull(balanceSheet.getCurrentAssets().getInvestments().getCurrentAmount());
         assertNull(balanceSheet.getCurrentAssets().getCurrentTotal());
     }
 
@@ -286,6 +300,7 @@ public class CurrentAssetsTransformerImplTests {
         assertNull(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
         assertNull(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
         assertNull(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
+        assertNull(balanceSheet.getCurrentAssets().getInvestments().getPreviousAmount());
         assertNull(balanceSheet.getCurrentAssets().getPreviousTotal());
     }
 
@@ -293,6 +308,7 @@ public class CurrentAssetsTransformerImplTests {
         assertNotNull(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
         assertNotNull(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
         assertNotNull(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
+        assertNotNull(balanceSheet.getCurrentAssets().getInvestments().getCurrentAmount());
         assertNotNull(balanceSheet.getCurrentAssets().getCurrentTotal());
     }
 
@@ -300,6 +316,7 @@ public class CurrentAssetsTransformerImplTests {
         assertNotNull(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
         assertNotNull(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
         assertNotNull(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
+        assertNotNull(balanceSheet.getCurrentAssets().getInvestments().getPreviousAmount());
         assertNotNull(balanceSheet.getCurrentAssets().getPreviousTotal());
     }
 
@@ -307,6 +324,7 @@ public class CurrentAssetsTransformerImplTests {
         assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND, balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
         assertEquals(CURRENT_DEBTORS, balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
         assertEquals(CURRENT_STOCKS, balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
+        assertEquals(CURRENT_INVESTMENTS, balanceSheet.getCurrentAssets().getInvestments().getCurrentAmount());
         assertEquals(CURRENT_TOTAL, balanceSheet.getCurrentAssets().getCurrentTotal());
     }
 
@@ -314,6 +332,7 @@ public class CurrentAssetsTransformerImplTests {
         assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND, balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
         assertEquals(PREVIOUS_DEBTORS, balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
         assertEquals(PREVIOUS_STOCKS, balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
+        assertEquals(PREVIOUS_INVESTMENTS, balanceSheet.getCurrentAssets().getInvestments().getPreviousAmount());
         assertEquals(PREVIOUS_TOTAL, balanceSheet.getCurrentAssets().getPreviousTotal());
     }
 
@@ -322,6 +341,7 @@ public class CurrentAssetsTransformerImplTests {
         assertNotNull(balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
         assertNotNull(balanceSheetApi.getCurrentAssets().getDebtors());
         assertNotNull(balanceSheetApi.getCurrentAssets().getStocks());
+        assertNotNull(balanceSheetApi.getCurrentAssets().getInvestments());
         assertNotNull(balanceSheetApi.getCurrentAssets().getTotal());
     }
 
@@ -329,6 +349,7 @@ public class CurrentAssetsTransformerImplTests {
         assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
         assertEquals(CURRENT_DEBTORS, balanceSheetApi.getCurrentAssets().getDebtors());
         assertEquals(CURRENT_STOCKS, balanceSheetApi.getCurrentAssets().getStocks());
+        assertEquals(CURRENT_INVESTMENTS, balanceSheetApi.getCurrentAssets().getInvestments());
         assertEquals(CURRENT_TOTAL, balanceSheetApi.getCurrentAssets().getTotal());
     }
 
@@ -336,6 +357,7 @@ public class CurrentAssetsTransformerImplTests {
         assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
         assertEquals(PREVIOUS_DEBTORS, balanceSheetApi.getCurrentAssets().getDebtors());
         assertEquals(PREVIOUS_STOCKS, balanceSheetApi.getCurrentAssets().getStocks());
+        assertEquals(PREVIOUS_INVESTMENTS, balanceSheetApi.getCurrentAssets().getInvestments());
         assertEquals(PREVIOUS_TOTAL, balanceSheetApi.getCurrentAssets().getTotal());
     }
 

@@ -19,8 +19,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
@@ -28,6 +26,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsDueWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
@@ -37,6 +36,7 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
@@ -87,6 +87,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
+
+    @Autowired
+    private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
 
     private BalanceSheet cachedBalanceSheet;
 
@@ -387,6 +390,13 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
             stocksService.deleteStocks(transactionId, companyAccountsId);
         }
+
+        if ((isCurrentAssetsInvestmentsCurrentAmountNullOrZero(balanceSheet)
+                && isCurrentAssetsInvestmentsPreviousAmountNullOrZero(balanceSheet)
+                && smallFullLinks.getCurrentAssetsInvestmentsNote() != null)) {
+
+            currentAssetsInvestmentsService.deleteCurrentAssetsInvestments(transactionId, companyAccountsId);
+        }
     }
 
     private boolean isDebtorsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
@@ -466,6 +476,22 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .map(BalanceSheet::getCurrentAssets)
                 .map(CurrentAssets::getStocks)
                 .map(Stocks::getPreviousAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isCurrentAssetsInvestmentsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getInvestments)
+                .map(CurrentAssetsInvestments::getCurrentAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isCurrentAssetsInvestmentsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getCurrentAssets)
+                .map(CurrentAssets::getInvestments)
+                .map(CurrentAssetsInvestments::getPreviousAmount)
                 .orElse(0L).equals(0L);
     }
 
