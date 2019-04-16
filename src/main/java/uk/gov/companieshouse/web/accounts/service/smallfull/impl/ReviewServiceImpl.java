@@ -6,6 +6,8 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
@@ -16,7 +18,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteron
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
@@ -24,6 +25,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
@@ -71,6 +73,9 @@ public class ReviewServiceImpl implements ReviewService {
     private DebtorsService debtorsService;
 
     @Autowired
+    private EmployeesService employeesService;
+
+    @Autowired
     private StocksService stocksService;
 
     @Autowired
@@ -106,6 +111,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
 
+        Employees employees = employeesService.getEmployees(transactionId, companyAccountsId, companyNumber);
+
         TangibleAssets tangibleAssets =
                 tangibleAssetsNoteService.getTangibleAssets(transactionId, companyAccountsId, companyNumber);
         
@@ -126,6 +133,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setCreditorsWithinOneYear(creditorsWithinOneYear);
         review.setCreditorsAfterOneYear(creditorsAfterOneYear);
         review.setDebtors(debtors);
+        review.setEmployees(employees);
         review.setTangibleAssets(tangibleAssets);
         review.setStocks(stocks);
         review.setCurrentAssetsInvestments(currentAssetsInvestments);

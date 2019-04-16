@@ -77,9 +77,6 @@ public class CreditorsAfterOneYearTransformerTests {
 
         assertEquals(OTHER_CREDITORS_CURRENT,
                 creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
-        assertNull(creditorsAfterOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
-        assertNull(creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts()
-                .getCurrentFinanceLeasesAndHirePurchaseContracts());
         assertEquals(TOTAL_CURRENT, creditorsAfterOneYear.getTotal().getCurrentTotal());
         assertEquals(DETAILS, creditorsAfterOneYear.getDetails());
     }

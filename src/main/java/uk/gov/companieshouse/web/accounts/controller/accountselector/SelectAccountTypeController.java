@@ -33,7 +33,7 @@ public class SelectAccountTypeController extends BaseController {
         new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
 
     @GetMapping
-    public String getTypeOfAccounts(@PathVariable String companyNumber, Model model) {
+    public String getTypeOfAccounts(Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
 

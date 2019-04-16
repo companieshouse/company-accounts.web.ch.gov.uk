@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title layout:title-pattern="$CONTENT_TITLE"></title>
+  <title>Tangible assets note</title>
   <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
 
   <link
-      th:href="@{{cdnUrl}/stylesheets/small-full-ch-accounts.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      th:href="@{{cdnUrl}/stylesheets/chs-styles.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
       media="all" rel="stylesheet" type="text/css" />
 
   <link
@@ -99,7 +99,7 @@
 
       <div class="govuk-grid-row">
         <div class="column-fifth">
-          <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodStartOn"></div>
+          <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="cost.nextAccountsPeriodStartOn"></div>
         </div>
         <div class="column-sixth">
           <div th:replace="fragments/numberInput :: numberInput (
