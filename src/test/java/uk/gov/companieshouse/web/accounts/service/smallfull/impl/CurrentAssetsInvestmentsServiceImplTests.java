@@ -95,7 +95,7 @@ public class CurrentAssetsInvestmentsServiceImplTests {
             service.getCurrentAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(currentAssetsInvestments);
-        assertEquals(TEST_DETAILS, currentAssetsInvestments.getDetails());
+        assertEquals(TEST_DETAILS, currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class CurrentAssetsInvestmentsServiceImplTests {
             service.getCurrentAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(currentAssetsInvestments);
-        assertEquals(TEST_DETAILS, currentAssetsInvestments.getDetails());
+        assertEquals(TEST_DETAILS, currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
     }
 
     @Test
@@ -301,7 +301,7 @@ public class CurrentAssetsInvestmentsServiceImplTests {
 
     private CurrentAssetsInvestments createCurrentAssetsInvestments() {
         CurrentAssetsInvestments currentAssetsInvestments = new CurrentAssetsInvestments();
-        currentAssetsInvestments.setDetails(TEST_DETAILS);
+        currentAssetsInvestments.setCurrentAssetsInvestmentsDetails(TEST_DETAILS);
         return currentAssetsInvestments;
     }
 

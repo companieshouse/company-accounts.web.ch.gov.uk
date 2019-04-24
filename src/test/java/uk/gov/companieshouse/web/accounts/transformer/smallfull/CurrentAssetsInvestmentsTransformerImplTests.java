@@ -31,8 +31,8 @@ public class CurrentAssetsInvestmentsTransformerImplTests {
             transformer.getCurrentAssetsInvestments(currentAssetsInvestmentsApi);
 
         assertNotNull(currentAssetsInvestments);
-        assertNotNull(currentAssetsInvestments.getDetails());
-        assertEquals(TEST_DETAILS, currentAssetsInvestments.getDetails());
+        assertNotNull(currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
+        assertEquals(TEST_DETAILS, currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
     }
 
     @Test
@@ -42,14 +42,14 @@ public class CurrentAssetsInvestmentsTransformerImplTests {
             transformer.getCurrentAssetsInvestments(null);
 
         assertNotNull(currentAssetsInvestments);
-        assertNull(currentAssetsInvestments.getDetails());
+        assertNull(currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
     }
 
     @Test
     @DisplayName("Transform web model to api model")
     void transformCurrentAssetsInvestmentsWebToApi() {
         CurrentAssetsInvestments currentAssetsInvestments = new CurrentAssetsInvestments();
-        currentAssetsInvestments.setDetails(TEST_DETAILS);
+        currentAssetsInvestments.setCurrentAssetsInvestmentsDetails(TEST_DETAILS);
 
         CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi =
             transformer.getCurrentAssetsInvestmentsApi(currentAssetsInvestments);

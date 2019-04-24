@@ -20,18 +20,18 @@
 
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
-                    <label class="govuk-label govuk-label govuk-label--l" th:for="details">Enter your 'current assets investments' note</label>
+                    <label class="govuk-label govuk-label govuk-label--l" th:for="currentAssetsInvestmentsDetails">Enter your 'current assets investments' note</label>
 
                     <span class="govuk-error-message"
                           id="details-errorId"
-                          th:if="${#fields.hasErrors('__details__')}"
-                          th:each="e : ${#fields.errors('__details__')}" th:text="${e}">
+                          th:if="${#fields.hasErrors('__currentAssetsInvestmentsDetails__')}"
+                          th:each="e : ${#fields.errors('__currentAssetsInvestmentsDetails__')}" th:text="${e}">
                     </span>
 
-                    <textarea class="govuk-textarea" th:id="details" th:name="details" th:field="*{__details__}"
+                    <textarea class="govuk-textarea" th:id="details" th:name="details" th:field="*{__currentAssetsInvestmentsDetails__}"
                               th:value="details"
                               rows="5"
-                              th:classappend="${#fields.hasErrors('__details__')} ? 'govuk-textarea--error' : ''"></textarea>
+                              th:classappend="${#fields.hasErrors('__currentAssetsInvestmentsDetails__')} ? 'govuk-textarea--error' : ''"></textarea>
                 </div>
             </div>
 

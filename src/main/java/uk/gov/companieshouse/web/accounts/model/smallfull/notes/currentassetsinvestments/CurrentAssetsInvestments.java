@@ -14,5 +14,5 @@ public class CurrentAssetsInvestments {
 
     @NotBlank(message = "{currentAssetsInvestments.details.missing}")
     @ValidationMapping("$.current_assets_investments.details")
-    private String details;
+    private String currentAssetsInvestmentsDetails;
 }

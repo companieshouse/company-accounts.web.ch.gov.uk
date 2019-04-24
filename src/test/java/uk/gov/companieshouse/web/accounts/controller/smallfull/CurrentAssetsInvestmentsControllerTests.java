@@ -13,14 +13,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -45,6 +53,9 @@ public class CurrentAssetsInvestmentsControllerTests {
     @Mock
     private CurrentAssetsInvestmentsService mockCurrentAssetsInvestmentsService;
 
+    @Mock
+    private BalanceSheetService mockBalanceSheetService;
+
     @InjectMocks
     private CurrentAssetsInvestmentsController controller;
 
@@ -54,7 +65,7 @@ public class CurrentAssetsInvestmentsControllerTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
-    private static final String SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH = "/company/" + COMPANY_NUMBER +
+    private static final String SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH = "/company/" + COMPANY_NUMBER +
         "/transaction/" + TRANSACTION_ID +
         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
         "/small-full/current-assets-investments";
@@ -71,7 +82,7 @@ public class CurrentAssetsInvestmentsControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String TEST_PATH = "details";
+    private static final String TEST_PATH = "currentAssetsInvestmentsDetails";
 
 
     @BeforeEach
@@ -89,7 +100,7 @@ public class CurrentAssetsInvestmentsControllerTests {
             TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(new CurrentAssetsInvestments());
 
-        this.mockMvc.perform(get(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(get(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(CURRENT_ASSETS_INVESTMENTS_VIEW))
             .andExpect(model().attributeExists(CURRENT_ASSETS_INVESTMENTS_MODEL_ATTR))
@@ -108,7 +119,7 @@ public class CurrentAssetsInvestmentsControllerTests {
             TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenThrow(ServiceException.class);
 
-        this.mockMvc.perform(get(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(get(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -124,7 +135,8 @@ public class CurrentAssetsInvestmentsControllerTests {
             anyString(), anyString(), any(CurrentAssetsInvestments.class), anyString()))
             .thenReturn(new ArrayList<>());
 
-        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, "Test"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -137,7 +149,8 @@ public class CurrentAssetsInvestmentsControllerTests {
             .when(mockCurrentAssetsInvestmentsService).submitCurrentAssetsInvestments(
                 anyString(), anyString(), any(CurrentAssetsInvestments.class), anyString());
 
-        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, "Test"))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -158,8 +171,106 @@ public class CurrentAssetsInvestmentsControllerTests {
             anyString(), anyString(), any(CurrentAssetsInvestments.class), anyString()))
             .thenReturn(errors);
 
-        this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
+        this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, "#¢¢#¢"))
             .andExpect(status().isOk())
             .andExpect(view().name(CURRENT_ASSETS_INVESTMENTS_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post currentAssetsInvestments with binding result error")
+    void postRequestBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
+            .param(TEST_PATH, ""))
+            .andExpect(status().isOk())
+            .andExpect(view().name(CURRENT_ASSETS_INVESTMENTS_VIEW))
+            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Test will render with Investments present on balancesheet")
+    void willRenderInvestmentsPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertTrue(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will render with Investments not present on balancesheet")
+    void willRenderInvestmentsNotPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoCurrentInvestments());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will not render with 0 values in Investments on balance sheet")
+    void willNotRenderDebtorsZeroValues() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    private BalanceSheet getMockBalanceSheet() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        CurrentAssets currentAssets = new CurrentAssets();
+        uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments currentAssetsInvestments
+            = new uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments();
+
+        currentAssetsInvestments.setCurrentAmount(1L);
+        currentAssetsInvestments.setPreviousAmount(2L);
+
+        currentAssets.setInvestments(currentAssetsInvestments);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setCurrentAssets(currentAssets);
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+        return balanceSheet;
+    }
+
+    private BalanceSheet getMockBalanceSheetNoCurrentInvestments() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        FixedAssets fixedAssets = new FixedAssets();
+
+        TangibleAssets tangibleAssets = new TangibleAssets();
+
+        tangibleAssets.setCurrentAmount(1L);
+        tangibleAssets.setPreviousAmount(1L);
+
+        fixedAssets.setTangibleAssets(tangibleAssets);
+        balanceSheet.setFixedAssets(fixedAssets);
+        return balanceSheet;
+    }
+
+    private BalanceSheet getMockBalanceSheetZeroValues() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+        CurrentAssets currentAssets = new CurrentAssets();
+        uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments currentAssetsInvestments
+            = new uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments();
+
+        currentAssetsInvestments.setCurrentAmount(0L);
+        currentAssetsInvestments.setPreviousAmount(0L);
+
+        currentAssets.setInvestments(currentAssetsInvestments);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setCurrentAssets(currentAssets);
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+        return balanceSheet;
     }
 }
