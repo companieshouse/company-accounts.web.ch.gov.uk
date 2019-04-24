@@ -71,7 +71,7 @@ public class CurrentAssetsInvestmentsControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String TEST_PATH = "details";
+    private static final String TEST_PATH = "currentAssetsInvestmentsDetails";
 
 
     @BeforeEach

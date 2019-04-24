@@ -18,7 +18,7 @@ public class CurrentAssetsInvestmentsTransformerImpl implements CurrentAssetsInv
             return  currentAssetsInvestments;
         }
 
-        currentAssetsInvestments.setDetails(currentAssetsInvestmentsApi.getDetails());
+        currentAssetsInvestments.setCurrentAssetsInvestmentsDetails(currentAssetsInvestmentsApi.getDetails());
 
         return currentAssetsInvestments;
     }
@@ -29,7 +29,7 @@ public class CurrentAssetsInvestmentsTransformerImpl implements CurrentAssetsInv
 
         CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi = new CurrentAssetsInvestmentsApi();
 
-        currentAssetsInvestmentsApi.setDetails(currentAssetsInvestments.getDetails());
+        currentAssetsInvestmentsApi.setDetails(currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
 
         return currentAssetsInvestmentsApi;
     }
