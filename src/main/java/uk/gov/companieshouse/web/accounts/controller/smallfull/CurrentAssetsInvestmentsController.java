@@ -73,6 +73,10 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
+
         try {
             List<ValidationError> validationErrors =
                 currentAssetsInvestmentsService.submitCurrentAssetsInvestments(transactionId,
