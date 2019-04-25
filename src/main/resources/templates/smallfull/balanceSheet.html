@@ -255,7 +255,7 @@
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
                                  id = 'currentAssets.investments.previousAmount',
-                                 text = 'Investments previous ' + + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                 text = 'Investments previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                  class= 'govuk-input previous previous-current-assets-add',
                                  )">
                             </div>
