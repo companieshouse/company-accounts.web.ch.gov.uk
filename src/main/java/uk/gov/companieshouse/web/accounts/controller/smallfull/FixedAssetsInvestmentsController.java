@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,36 +15,37 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
-import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
-@NextController(DebtorsController.class)
-@PreviousController(FixedAssetsInvestmentsController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/stocks")
-public class StocksController extends BaseController implements ConditionalController {
+@NextController(StocksController.class)
+@PreviousController(TangibleAssetsNoteController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/fixed-assets-investments")
+public class FixedAssetsInvestmentsController extends BaseController implements ConditionalController {
+    
+    @Autowired
+    private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
 
-    @Autowired
-    private StocksService stocksService;
-
     @Override
     protected String getTemplateName() {
-        return "smallfull/stocks";
+        return "smallfull/fixedAssetsInvestments";
     }
 
     @GetMapping
-    public String getStocks(@PathVariable String companyNumber,
+    public String getFixedAssetsInvestments(@PathVariable String companyNumber,
                             @PathVariable String transactionId,
                             @PathVariable String companyAccountsId,
                             Model model, HttpServletRequest request) {
@@ -53,8 +53,8 @@ public class StocksController extends BaseController implements ConditionalContr
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            StocksNote stocksNote = stocksService.getStocks(transactionId, companyAccountsId, companyNumber);
-            model.addAttribute("stocksNote", stocksNote);
+            FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.getFixedAssetsInvestments(transactionId, companyAccountsId, companyNumber);
+            model.addAttribute("fixedAssetsInvestments", fixedAssetsInvestments);
         } catch (ServiceException se) {
             LOGGER.errorRequest(request, se.getMessage(), se);
             return ERROR_VIEW;
@@ -64,23 +64,24 @@ public class StocksController extends BaseController implements ConditionalContr
     }
 
     @PostMapping
-    public String postStocks(@PathVariable String companyNumber,
+    public String postFixedAssetsInvestments(@PathVariable String companyNumber,
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
-                              @ModelAttribute("stocksNote") @Valid StocksNote stocksNote,
+                              @ModelAttribute("fixedAssetsInvestments") @Valid FixedAssetsInvestments fixedAssetsInvestments,
                               BindingResult bindingResult,
                               Model model,
                               HttpServletRequest request) {
 
+        
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
-
+        
         try {
             List<ValidationError> validationErrors =
-                stocksService.submitStocks(transactionId, companyAccountsId, stocksNote, companyNumber);
+                fixedAssetsInvestmentsService.submitFixedAssetsInvestments(transactionId, companyAccountsId, fixedAssetsInvestments, companyNumber);
 
             if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
@@ -100,26 +101,26 @@ public class StocksController extends BaseController implements ConditionalContr
             throws ServiceException {
 
         BalanceSheet balanceSheet =
-                balanceSheetService.getBalanceSheet(
-                        transactionId, companyAccountsId, companyNumber);
+            balanceSheetService.getBalanceSheet(
+                transactionId, companyAccountsId, companyNumber);
 
-        return hasStocks(balanceSheet);
+        return hasFixedInvestments(balanceSheet);
     }
 
-    private boolean hasStocks(BalanceSheet balanceSheet) {
+    private boolean hasFixedInvestments(BalanceSheet balanceSheet) {
 
-        Long currentStocks = Optional.of(balanceSheet)
-                .map(BalanceSheet::getCurrentAssets)
-                .map(CurrentAssets::getStocks)
-                .map(Stocks::getCurrentAmount)
-                .orElse(0L);
+        Long currentInvestments = Optional.of(balanceSheet)
+            .map(BalanceSheet::getFixedAssets)
+            .map(FixedAssets::getInvestments)
+            .map(FixedInvestments::getCurrentAmount)
+            .orElse(0L);
 
-        Long previousStocks = Optional.of(balanceSheet)
-                .map(BalanceSheet::getCurrentAssets)
-                .map(CurrentAssets::getStocks)
-                .map(Stocks::getPreviousAmount)
-                .orElse(0L);
+        Long previousInvestments = Optional.of(balanceSheet)
+            .map(BalanceSheet::getFixedAssets)
+            .map(FixedAssets::getInvestments)
+            .map(FixedInvestments::getPreviousAmount)
+            .orElse(0L);
 
-        return !(currentStocks.equals(0L) && previousStocks.equals(0L));
+        return !(currentInvestments.equals(0L) && previousInvestments.equals(0L));
     }
 }

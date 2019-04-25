@@ -25,6 +25,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
@@ -33,6 +34,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationSe
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
@@ -94,6 +96,9 @@ public class ReviewServiceImplTests {
 
     @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
+    
+    @Mock
+    private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
@@ -151,6 +156,10 @@ public class ReviewServiceImplTests {
         TangibleAssets mockTangibleAssets = new TangibleAssets();
         when(tangibleAssetsNoteService.getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
                 .thenReturn(mockTangibleAssets);
+        
+        FixedAssetsInvestments mockFixedAssetsInvestments = new FixedAssetsInvestments();
+        when(fixedAssetsInvestmentsService.getFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+                .thenReturn(mockFixedAssetsInvestments);
 
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -169,5 +178,6 @@ public class ReviewServiceImplTests {
         assertEquals(mockEmployees, review.getEmployees());
         assertEquals(mockDebtors, review.getDebtors());
         assertEquals(mockStocks, review.getStocks());
+        assertEquals(mockFixedAssetsInvestments, review.getFixedAssetsInvestments());
     }
 }
