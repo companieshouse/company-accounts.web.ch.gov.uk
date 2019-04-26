@@ -5,6 +5,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.FixedAssetsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
@@ -21,6 +22,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
+            fixedAssetsApi.setInvestments(balanceSheet.getFixedAssets().getInvestments().getCurrentAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getCurrentTotal());
 
             balanceSheetApi.setFixedAssets(fixedAssetsApi);
@@ -34,6 +36,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
 
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
+            fixedAssetsApi.setInvestments(balanceSheet.getFixedAssets().getInvestments().getPreviousAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getPreviousTotal());
 
             balanceSheetApi.setFixedAssets(fixedAssetsApi);
@@ -54,6 +57,13 @@ public class FixedAssetsTransformerImpl implements Transformer {
             tangibleAssets.setCurrentAmount(fixedAssetsApi.getTangible());
         }
 
+        //Fixed assets investments
+        if (fixedAssetsApi.getInvestments() !=null) {
+
+            FixedInvestments fixedInvestments = createFixedInvestments(balanceSheet);
+            fixedInvestments.setCurrentAmount((fixedAssetsApi.getInvestments()));
+        }
+
         // Total fixed assets
         if (fixedAssetsApi.getTotal() != null) {
             fixedAssets.setCurrentTotal(fixedAssetsApi.getTotal());
@@ -70,6 +80,12 @@ public class FixedAssetsTransformerImpl implements Transformer {
         if (fixedAssetsApi.getTangible() != null) {
             TangibleAssets tangibleAssets = createTangibleAssets(balanceSheet);
             tangibleAssets.setPreviousAmount(fixedAssetsApi.getTangible());
+        }
+
+        // Fixed Investments
+        if (fixedAssetsApi.getInvestments() != null) {
+            FixedInvestments fixedInvestments = createFixedInvestments(balanceSheet);
+            fixedInvestments.setPreviousAmount(fixedAssetsApi.getInvestments());
         }
 
         // Total fixed assets
@@ -104,6 +120,20 @@ public class FixedAssetsTransformerImpl implements Transformer {
         }
 
         return tangibleAssets;
+    }
+
+    private FixedInvestments createFixedInvestments(BalanceSheet balanceSheet){
+
+        FixedInvestments fixedInvestments;
+
+        if(balanceSheet.getFixedAssets().getInvestments() == null) {
+            fixedInvestments = new FixedInvestments();
+            balanceSheet.getFixedAssets().setInvestments(fixedInvestments);
+        } else {
+            fixedInvestments = balanceSheet.getFixedAssets().getInvestments();
+        }
+
+        return fixedInvestments;
     }
 
     private Boolean hasCurrentPeriodFixedAssets(BalanceSheet balanceSheet) {

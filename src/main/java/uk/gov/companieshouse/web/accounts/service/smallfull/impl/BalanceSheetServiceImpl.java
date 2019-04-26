@@ -28,6 +28,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
@@ -37,16 +38,17 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -86,6 +88,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
+
+    @Autowired
+    private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Autowired
     private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
@@ -360,6 +365,13 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             tangibleAssetsNoteService.deleteTangibleAssets(transactionId, companyAccountsId);
         }
 
+        if ((isFixedInvestmentsCurrentAmountNullOrZero(balanceSheet)
+            && isFixedInvestmentsPreviousAmountNullOrZero(balanceSheet))
+            && smallFullLinks.getFixedAssetsInvestmentsNote() != null) {
+
+            fixedAssetsInvestmentsService.deleteFixedAssetsInvestments(transactionId, companyAccountsId);
+        }
+
         if ((isStocksCurrentAmountNullOrZero(balanceSheet)
                 && isStocksPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getStocksNote() != null) {
@@ -437,6 +449,22 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .map(FixedAssets::getTangibleAssets)
                 .map(TangibleAssets::getPreviousAmount)
                 .orElse(0L).equals(0L);
+    }
+
+    private boolean isFixedInvestmentsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+            .map(BalanceSheet::getFixedAssets)
+            .map(FixedAssets::getInvestments)
+            .map(FixedInvestments::getCurrentAmount)
+            .orElse(0L).equals(0L);
+    }
+
+    private boolean isFixedInvestmentsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+            .map(BalanceSheet::getFixedAssets)
+            .map(FixedAssets::getInvestments)
+            .map(FixedInvestments::getPreviousAmount)
+            .orElse(0L).equals(0L);
     }
 
     private boolean isStocksCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
