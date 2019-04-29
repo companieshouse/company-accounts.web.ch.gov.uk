@@ -262,6 +262,36 @@
                     </div>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'currentAssets.investments.currentAmount',
+                        previousField = 'currentAssets.investments.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half">
+                            Investments
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                 id = 'currentAssets.investments.currentAmount',
+                                 text = 'Investments current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                 class = 'govuk-input current current-current-assets-add',
+                                 )">
+                            </div>
+                        </div>
+
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                 id = 'currentAssets.investments.previousAmount',
+                                 text = 'Investments previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                 class= 'govuk-input previous previous-current-assets-add',
+                                 )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'currentAssets.currentTotal',
                         previousField = 'currentAssets.previousTotal'
                         )">

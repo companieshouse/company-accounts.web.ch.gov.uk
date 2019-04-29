@@ -124,6 +124,14 @@
         </div>
 
         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Investments',
+                            identifier = 'investments',
+                            currentAmount = *{balanceSheet?.currentAssets?.investments?.currentAmount},
+                            previousAmount = *{balanceSheet?.currentAssets?.investments?.previousAmount}
+                        )">
+        </div>
+
+        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total current assets',
                             identifier = 'total-current-assets',
                             currentAmount = *{balanceSheet?.currentAssets?.currentTotal},
@@ -821,6 +829,31 @@
         </div>
       </div>
     </div>
+
+    <!-- End Debtors Note -->
+
+    <!-- Current Assets Investments Note -->
+    <div th:if="*{currentAssetsInvestments.currentAssetsInvestmentsDetails != null}">
+      <div
+          th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Current assets investments',
+                        identifier= 'current-assets-investments',
+                        resource = 'current-assets-investments',
+                        marginTop = true
+                        )">
+      </div>
+
+      <dl class="app-check-your-answers app-check-your-answers--short">
+        <div class="app-check-your-answers__contents">
+          <dt class="app-check-your-answers__answer">
+            <p id="review-current-assets-investments"
+               th:utext="*{#strings.replace(currentAssetsInvestments.currentAssetsInvestmentsDetails,'&#10;','&lt;br&gt;')}">
+            </p>
+          </dt>
+        </div>
+      </dl>
+    </div>
+    <!-- End Current Assets Investments Note -->
 
     <!-- Creditors Within One Year Note -->
 
