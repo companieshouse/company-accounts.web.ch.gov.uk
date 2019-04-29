@@ -27,7 +27,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@NextController(CreditorsWithinOneYearController.class)
+@NextController(CurrentAssetsInvestmentsController.class)
 @PreviousController(StocksController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/debtors")
