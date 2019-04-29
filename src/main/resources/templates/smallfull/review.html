@@ -833,7 +833,7 @@
     <!-- End Debtors Note -->
 
     <!-- Current Assets Investments Note -->
-    <div th:if="*{currentAssetsInvestments.details != null}">
+    <div th:if="*{currentAssetsInvestments.currentAssetsInvestmentsDetails != null}">
       <div
           th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Current assets investments',
@@ -847,7 +847,7 @@
         <div class="app-check-your-answers__contents">
           <dt class="app-check-your-answers__answer">
             <p id="review-current-assets-investments"
-               th:utext="*{#strings.replace(currentAssetsInvestments.details,'&#10;','&lt;br&gt;')}">
+               th:utext="*{#strings.replace(currentAssetsInvestments.currentAssetsInvestmentsDetails,'&#10;','&lt;br&gt;')}">
             </p>
           </dt>
         </div>
