@@ -59,6 +59,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -176,6 +177,7 @@ public class BalanceSheetServiceImplTests {
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(balanceSheet);
+        assertNotNull(balanceSheet.getLbg());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertNotNull(balanceSheet.getFixedAssets());
@@ -526,6 +528,7 @@ public class BalanceSheetServiceImplTests {
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(balanceSheet);
+        assertNotNull(balanceSheet.getLbg());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertNotNull(balanceSheet.getFixedAssets());
@@ -1051,6 +1054,45 @@ public class BalanceSheetServiceImplTests {
     }
 
     @Test
+    @DisplayName("First Year Filer - Get Balance Sheet - LBG true")
+    void getFirstYearFilerBalanceSheetLBG() throws ApiErrorResponseException, URIValidationException, ServiceException {
+        mockApiClientGetFirstYearFiler();
+        createFirstYearFilerCompanyProfile();
+
+        CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
+        when(currentPeriodGet.execute()).thenReturn(currentPeriodApi);
+
+        when(transformer.getBalanceSheet(currentPeriodApi, null)).thenReturn(createFirstYearFilerBalanceSheetTestObject());
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertNotNull(balanceSheet);
+        assertNotNull(balanceSheet.getLbg());
+        assertTrue(balanceSheet.getLbg());
+    }
+
+    @Test
+    @DisplayName("Multiple Year Filer - Get Balance Sheet - LBG false")
+    void getMultipleYearFilerrBalanceSheetLBG() throws ApiErrorResponseException, URIValidationException, ServiceException {
+        mockApiClientGetMultipleYearFiler();
+        createMultipleYearFilerCompanyProfile();
+
+        CurrentPeriodApi currentPeriodApi = new CurrentPeriodApi();
+        when(currentPeriodGet.execute()).thenReturn(currentPeriodApi);
+
+        PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
+        when(previousPeriodGet.execute()).thenReturn(previousPeriodApi);
+
+        when(transformer.getBalanceSheet(currentPeriodApi, previousPeriodApi)).thenReturn(createMultipleYearFilerBalanceSheetTestObject());
+
+        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+
+        assertNotNull(balanceSheet);
+        assertNotNull(balanceSheet.getLbg());
+        assertFalse(balanceSheet.getLbg());
+    }
+
+    @Test
     @DisplayName("Cached balance sheet returned if previously set")
     void cachedBalanceSheetReturnedIfPreviouslySet() throws ServiceException {
 
@@ -1067,6 +1109,7 @@ public class BalanceSheetServiceImplTests {
     private void createFirstYearFilerCompanyProfile() throws ServiceException {
         CompanyProfileApi companyProfile = new CompanyProfileApi();
         companyProfile.setAccounts(createFirstYearCompanyAccountsObject());
+        companyProfile.setType("private-limited-guarant-nsc");
 
         when(companyServiceMock.getCompanyProfile(anyString())).thenReturn(companyProfile);
     }
@@ -1074,6 +1117,7 @@ public class BalanceSheetServiceImplTests {
     private void createMultipleYearFilerCompanyProfile() throws ServiceException {
         CompanyProfileApi companyProfile = new CompanyProfileApi();
         companyProfile.setAccounts(createMultipleYearCompanyAccountsObject());
+        companyProfile.setType("ltd");
 
         when(companyServiceMock.getCompanyProfile(anyString())).thenReturn(companyProfile);
     }

@@ -33,6 +33,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     @Qualifier("capitalAndReservesTransformer")
     private Transformer capitalAndReservesTransformer;
 
+    @Autowired
+    @Qualifier("membersFundsTransformer")
+    private Transformer membersFundsTransformer;
+
     @Override
     public BalanceSheet getBalanceSheet(CurrentPeriodApi currentPeriodApi, PreviousPeriodApi previousPeriodApi) {
 
@@ -59,6 +63,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         currentAssetsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         otherLiabilitiesOrAssetsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         capitalAndReservesTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
+        membersFundsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
         currentPeriod.setBalanceSheet(balanceSheetApi);
@@ -76,6 +81,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         currentAssetsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         otherLiabilitiesOrAssetsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         capitalAndReservesTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
+        membersFundsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
         previousPeriodApi.setBalanceSheet(balanceSheetApi);
@@ -104,6 +110,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         if (balanceSheetApi.getCapitalAndReserves() != null) {
             capitalAndReservesTransformer.addCurrentPeriodToWebModel(balanceSheet, balanceSheetApi);
         }
+
+        if (balanceSheetApi.getMembersFunds() != null) {
+            membersFundsTransformer.addCurrentPeriodToWebModel(balanceSheet, balanceSheetApi);
+        }
     }
 
     private void populatePreviousPeriodValues(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
@@ -126,6 +136,10 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
         if (balanceSheetApi.getCapitalAndReserves() != null) {
             capitalAndReservesTransformer.addPreviousPeriodToWebModel(balanceSheet, balanceSheetApi);
+        }
+
+        if (balanceSheetApi.getMembersFunds() != null) {
+            membersFundsTransformer.addPreviousPeriodToWebModel(balanceSheet, balanceSheetApi);
         }
     }
 }
