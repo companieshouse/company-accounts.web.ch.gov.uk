@@ -21,8 +21,9 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
         if (hasCurrentPeriodCapitalAndReserves(balanceSheet)) {
+
+            CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
             capitalAndReservesApi.setCalledUpShareCapital(
                 balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
             capitalAndReservesApi.setOtherReserves(
@@ -32,19 +33,18 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
             capitalAndReservesApi.setSharePremiumAccount(
                 balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
             capitalAndReservesApi.setTotalShareholdersFunds(
-                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
-                    .getCurrentAmount());
-        }
+                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getCurrentAmount());
 
-        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+            balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+        }
     }
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
-
         if (hasPreviousPeriodCapitalAndReserves(balanceSheet)) {
+
+            CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
             capitalAndReservesApi.setCalledUpShareCapital(
                 balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
             capitalAndReservesApi.setOtherReserves(
@@ -54,11 +54,10 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
             capitalAndReservesApi.setSharePremiumAccount(
                 balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
             capitalAndReservesApi.setTotalShareholdersFunds(
-                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
-                    .getPreviousAmount());
-        }
+                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
 
-        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+            balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+        }
     }
 
     @Override
