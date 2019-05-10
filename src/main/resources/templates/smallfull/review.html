@@ -69,6 +69,14 @@
         </div>
 
         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Investments',
+                            identifier = 'fixed-investments',
+                            currentAmount = *{balanceSheet?.fixedAssets?.investments?.currentAmount},
+                            previousAmount = *{balanceSheet?.fixedAssets?.investments?.previousAmount}
+                        )">
+        </div>
+
+        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total fixed assets',
                             identifier = 'total-fixed-assets',
                             currentAmount = *{balanceSheet?.fixedAssets?.currentTotal},
@@ -112,6 +120,14 @@
                             identifier = 'cash-at-bank-and-in-hand',
                             currentAmount = *{balanceSheet?.currentAssets?.cashAtBankAndInHand?.currentAmount},
                             previousAmount = *{balanceSheet?.currentAssets?.cashAtBankAndInHand?.previousAmount}
+                        )">
+        </div>
+
+        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Investments',
+                            identifier = 'investments',
+                            currentAmount = *{balanceSheet?.currentAssets?.investments?.currentAmount},
+                            previousAmount = *{balanceSheet?.currentAssets?.investments?.previousAmount}
                         )">
         </div>
 
@@ -413,7 +429,7 @@
     </div>
 
     <!-- End Accounting Policies -->
-
+    
     <!-- Employees Note -->
     <div id="cya-small-full-employees-note">
 
@@ -645,6 +661,29 @@
 
     <!-- End Tangible Assets -->
 
+    <!-- Fixed Assets Investments Note -->
+    <div th:if="*{fixedAssetsInvestments.fixedAssetsDetails != null}">
+      <div
+          th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Fixed assets investments',
+                            identifier= 'fixed-assets-investments',
+                            resource = 'fixed-assets-investments',
+                            marginTop = true
+                            )">
+      </div>
+
+      <dl class="app-check-your-answers app-check-your-answers--short">
+        <div class="app-check-your-answers__contents">
+          <dt class="app-check-your-answers__answer">
+            <p id="review-fixed-assets-investments"
+               th:utext="*{#strings.replace(fixedAssetsInvestments.fixedAssetsDetails,'&#10;','&lt;br&gt;')}">
+            </p>
+          </dt>
+        </div>
+      </dl>
+    </div>
+    <!-- End Fixed Assets Investments Note -->
+
     <!-- Stocks Note -->
 
     <div id="cya-small-full-stocks-note">
@@ -790,6 +829,31 @@
         </div>
       </div>
     </div>
+
+    <!-- End Debtors Note -->
+
+    <!-- Current Assets Investments Note -->
+    <div th:if="*{currentAssetsInvestments.currentAssetsInvestmentsDetails != null}">
+      <div
+          th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Current assets investments',
+                        identifier= 'current-assets-investments',
+                        resource = 'current-assets-investments',
+                        marginTop = true
+                        )">
+      </div>
+
+      <dl class="app-check-your-answers app-check-your-answers--short">
+        <div class="app-check-your-answers__contents">
+          <dt class="app-check-your-answers__answer">
+            <p id="review-current-assets-investments"
+               th:utext="*{#strings.replace(currentAssetsInvestments.currentAssetsInvestmentsDetails,'&#10;','&lt;br&gt;')}">
+            </p>
+          </dt>
+        </div>
+      </dl>
+    </div>
+    <!-- End Current Assets Investments Note -->
 
     <!-- Creditors Within One Year Note -->
 

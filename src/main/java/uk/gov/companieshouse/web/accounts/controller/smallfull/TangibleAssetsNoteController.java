@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@NextController(StocksController.class)
+@NextController(FixedAssetsInvestmentsController.class)
 @PreviousController(EmployeesController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/tangible-assets")
 public class TangibleAssetsNoteController extends BaseController implements ConditionalController {

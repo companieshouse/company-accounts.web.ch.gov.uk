@@ -11,6 +11,7 @@ public class CurrentAssets {
     private Stocks stocks;
     private Debtors debtors;
     private CashAtBankAndInHand cashAtBankAndInHand;
+    private CurrentAssetsInvestments investments;
 
     @ValidationMapping("$.current_period.balance_sheet.current_assets.total")
     private Long currentTotal;

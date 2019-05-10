@@ -6,6 +6,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentAssetsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CashAtBankAndInHand;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
@@ -24,6 +25,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
             currentAssetsApi.setCashAtBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
+            currentAssetsApi.setInvestments(balanceSheet.getCurrentAssets().getInvestments().getCurrentAmount());
             currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getCurrentTotal());
 
             balanceSheetApi.setCurrentAssets(currentAssetsApi);
@@ -38,6 +40,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
             currentAssetsApi.setCashAtBankAndInHand(balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
+            currentAssetsApi.setInvestments(balanceSheet.getCurrentAssets().getInvestments().getPreviousAmount());
             currentAssetsApi.setTotal(balanceSheet.getCurrentAssets().getPreviousTotal());
 
             balanceSheetApi.setCurrentAssets(currentAssetsApi);
@@ -68,6 +71,11 @@ public class CurrentAssetsTransformerImpl implements Transformer {
             cashAtBankAndInHand.setCurrentAmount(currentAssetsApi.getCashAtBankAndInHand());
         }
 
+        if (currentAssetsApi.getInvestments() != null) {
+            CurrentAssetsInvestments currentAssetsInvestments = createInvestments(balanceSheet);
+            currentAssetsInvestments.setCurrentAmount(currentAssetsApi.getInvestments());
+        }
+
         // Total
         if (currentAssetsApi.getTotal() != null) {
             currentAssets.setCurrentTotal(currentAssetsApi.getTotal());
@@ -96,6 +104,11 @@ public class CurrentAssetsTransformerImpl implements Transformer {
         if (currentAssetsApi.getCashAtBankAndInHand() != null) {
             CashAtBankAndInHand cashAtBankAndInHand = createCashAtBankAndInHand(balanceSheet);
             cashAtBankAndInHand.setPreviousAmount(currentAssetsApi.getCashAtBankAndInHand());
+        }
+
+        if (currentAssetsApi.getInvestments() != null) {
+            CurrentAssetsInvestments currentAssetsInvestments = createInvestments(balanceSheet);
+            currentAssetsInvestments.setPreviousAmount(currentAssetsApi.getInvestments());
         }
 
         // Total
@@ -158,6 +171,20 @@ public class CurrentAssetsTransformerImpl implements Transformer {
         }
 
         return cashAtBankAndInHand;
+    }
+
+    private CurrentAssetsInvestments  createInvestments(BalanceSheet balanceSheet) {
+
+        CurrentAssetsInvestments currentAssetsInvestments;
+
+        if (balanceSheet.getCurrentAssets().getInvestments() == null) {
+            currentAssetsInvestments = new CurrentAssetsInvestments();
+            balanceSheet.getCurrentAssets().setInvestments(currentAssetsInvestments);
+        } else {
+            currentAssetsInvestments = balanceSheet.getCurrentAssets().getInvestments();
+        }
+
+        return  currentAssetsInvestments;
     }
 
     private Boolean hasCurrentPeriodCurrentAssets(BalanceSheet balanceSheet) {
