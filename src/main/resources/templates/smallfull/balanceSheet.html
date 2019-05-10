@@ -23,8 +23,6 @@
                     <div class="panel panel-border-wide">
                         <p id="balanceSheet-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
                     </div>
-                    <!-- Hidden input for form binding -->
-                    <input th:field="*{lbg}" type="hidden">
                     <div class="govuk-grid-row" id="accounts-header">
                         <div class="govuk-grid-column-one-half">
                             &nbsp;
@@ -45,7 +43,7 @@
                         </div>
                     </div>
 
-                    <div th:if="*{!lbg}">
+                    <th:block th:if="*{!lbg}">
                         <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                             currentField = 'calledUpShareCapitalNotPaid.currentAmount',
                             previousField = 'calledUpShareCapitalNotPaid.previousAmount'
@@ -75,7 +73,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </th:block>
 
 
                     <!-- Start Fixed Assets -->
@@ -561,7 +559,7 @@
                     <!-- End Other Libabilities and Assets -->
 
                     <!-- Start Capital and Reservces -->
-                    <div th:if="*{!lbg}">
+                    <th:block th:if="*{!lbg}">
                         <h2 class="govuk-heading-m">Capital and reserves</h2>
 
                         <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
@@ -710,12 +708,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </th:block>
                     <!-- End Capital and Reservces -->
 
 
                     <!-- Start Members funds -->
-                    <div th:if="*{lbg}">
+                    <th:block th:if="*{lbg}">
                         <h2 class="govuk-heading-m">Members' funds</h2>
                         <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                             currentField = 'membersFunds.profitAndLossAccount.currentAmount',
@@ -775,10 +773,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </th:block>
                     <!-- End Members funds -->
 
                 </div>
+
+                <!-- Hidden input for form binding -->
+                <input th:field="*{lbg}" type="hidden">
 
                     <br>
 
