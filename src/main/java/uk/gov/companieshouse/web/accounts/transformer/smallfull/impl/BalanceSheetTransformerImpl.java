@@ -62,8 +62,11 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         calledUpShareCapitalNotPaidTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         currentAssetsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         otherLiabilitiesOrAssetsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
-        capitalAndReservesTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
-        membersFundsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
+        if (balanceSheet.getLbg()){
+            membersFundsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
+        } else {
+            capitalAndReservesTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
+        }
 
         CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
         currentPeriod.setBalanceSheet(balanceSheetApi);
@@ -80,8 +83,12 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         calledUpShareCapitalNotPaidTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         currentAssetsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         otherLiabilitiesOrAssetsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
-        capitalAndReservesTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
-        membersFundsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
+        if (balanceSheet.getLbg()){
+            membersFundsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
+        } else {
+            capitalAndReservesTransformer
+                .addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
+        }
 
         PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
         previousPeriodApi.setBalanceSheet(balanceSheetApi);

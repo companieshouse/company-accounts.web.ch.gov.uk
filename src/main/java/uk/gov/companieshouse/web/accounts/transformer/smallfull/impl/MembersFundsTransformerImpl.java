@@ -19,32 +19,29 @@ public class MembersFundsTransformerImpl implements Transformer {
     public void addCurrentPeriodToApiModel(
         BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        MembersFundsApi membersFundsApi = new MembersFundsApi();
-
         if (hasCurrentPeriodMembersFunds(balanceSheet)) {
+            MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
                 balanceSheet.getMembersFunds().getProfitAndLossAccount().getCurrentAmount());
             membersFundsApi.setTotalMembersFunds(
                 balanceSheet.getMembersFunds().getTotalMembersFunds().getCurrentAmount());
+            balanceSheetApi.setMembersFunds(membersFundsApi);
         }
 
-        balanceSheetApi.setMembersFunds(membersFundsApi);
     }
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
 
-        MembersFundsApi membersFundsApi = new MembersFundsApi();
-
         if (hasPreviousPeriodMembersFunds(balanceSheet)) {
+            MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
                 balanceSheet.getMembersFunds().getProfitAndLossAccount().getPreviousAmount());
             membersFundsApi.setTotalMembersFunds(
                 balanceSheet.getMembersFunds().getTotalMembersFunds().getPreviousAmount());
+            balanceSheetApi.setMembersFunds(membersFundsApi);
         }
-
-        balanceSheetApi.setMembersFunds(membersFundsApi);
 
     }
 
