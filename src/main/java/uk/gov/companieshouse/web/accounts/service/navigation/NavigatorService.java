@@ -80,20 +80,20 @@ public class NavigatorService {
 
                 for (int i = 0, j = 0; i < classList.length; i++) {
 
-                    Class lookAtMe = classList[i];
+                    Class specificClass = classList[i];
 
-                    if (!isBranchController(lookAtMe)) {
+                    if (!isBranchController(specificClass)) {
                         j++;
-                        notImplementingBranch = lookAtMe;
+                        notImplementingBranch = specificClass;
 
                         if (j > 1) {
                             throw new NavigationException("getNextControllerClass: More than one default branch " + clazz.toString());
                         }
                     } else {
-                        BranchController hello = (BranchController)applicationContext.getBean(lookAtMe);
+                        BranchController potential = (BranchController)applicationContext.getBean(specificClass);
 
-                        if (hello.willRender()) {
-                            return hello.getClass();
+                        if (potential.shouldBranch()) {
+                            return potential.getClass();
                         }
                     }
                 }
@@ -134,20 +134,20 @@ public class NavigatorService {
 
                 for (int i = 0, j = 0; i < classList.length; i++) {
 
-                    Class lookAtMe = classList[i];
+                    Class specificClass = classList[i];
 
-                    if (!isBranchController(lookAtMe)) {
+                    if (!isBranchController(specificClass)) {
                         j++;
-                        notImplementingBranch = lookAtMe;
+                        notImplementingBranch = specificClass;
 
                         if (j > 1) {
                             throw new NavigationException("getPreviousControllerClass: More than one default branch " + clazz.toString());
                         }
                     } else {
-                        BranchController hello = (BranchController)applicationContext.getBean(lookAtMe);
+                        BranchController potential = (BranchController)applicationContext.getBean(specificClass);
 
-                        if (hello.willRender()) {
-                            return hello.getClass();
+                        if (potential.shouldBranch()) {
+                            return potential.getClass();
                         }
                     }
                 }
