@@ -6,6 +6,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.FixedAssetsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.FixedAssetsTransformerImpl;
 
@@ -16,9 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class FixedAssetsTransformerImplTests {
 
     private static final Long CURRENT_TANGIBLE_ASSETS = 1L;
+    private static final Long CURRENT_FIXED_ASSETS_INVESTMENTS = 1L;
     private static final Long CURRENT_TOTAL_FIXED_ASSETS = 2L;
 
     private static final Long PREVIOUS_TANGIBLE_ASSETS = 10L;
+    private static final Long PREVIOUS_FIXED_ASSETS_INVESTMENTS = 1L;
     private static final Long PREVIOUS_TOTAL_FIXED_ASSETS = 20L;
 
     private Transformer transformer = new FixedAssetsTransformerImpl();
@@ -188,17 +191,21 @@ public class FixedAssetsTransformerImplTests {
     private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
 
         TangibleAssets tangibleAssets = new TangibleAssets();
+        FixedInvestments fixedInvestments = new FixedInvestments();
 
         if (currentPeriod) {
             tangibleAssets.setCurrentAmount(CURRENT_TANGIBLE_ASSETS);
+            fixedInvestments.setCurrentAmount(CURRENT_FIXED_ASSETS_INVESTMENTS);
         }
 
         if (previousPeriod) {
             tangibleAssets.setPreviousAmount(PREVIOUS_TANGIBLE_ASSETS);
+            fixedInvestments.setPreviousAmount(PREVIOUS_FIXED_ASSETS_INVESTMENTS);
         }
 
         FixedAssets fixedAssets = new FixedAssets();
         fixedAssets.setTangibleAssets(tangibleAssets);
+        fixedAssets.setInvestments(fixedInvestments);
 
         if (currentPeriod) {
             fixedAssets.setCurrentTotal(CURRENT_TOTAL_FIXED_ASSETS);
@@ -226,6 +233,7 @@ public class FixedAssetsTransformerImplTests {
 
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
         fixedAssetsApi.setTangible(CURRENT_TANGIBLE_ASSETS);
+        fixedAssetsApi.setInvestments(CURRENT_FIXED_ASSETS_INVESTMENTS);
         fixedAssetsApi.setTotal(CURRENT_TOTAL_FIXED_ASSETS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -238,6 +246,7 @@ public class FixedAssetsTransformerImplTests {
 
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
         fixedAssetsApi.setTangible(PREVIOUS_TANGIBLE_ASSETS);
+        fixedAssetsApi.setInvestments(PREVIOUS_FIXED_ASSETS_INVESTMENTS);
         fixedAssetsApi.setTotal(PREVIOUS_TOTAL_FIXED_ASSETS);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();

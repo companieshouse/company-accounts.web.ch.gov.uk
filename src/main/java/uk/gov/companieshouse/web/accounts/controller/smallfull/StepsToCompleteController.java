@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -29,9 +27,6 @@ public class StepsToCompleteController extends BaseController {
 
     @Autowired
     private TransactionService transactionService;
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private SmallFullService smallFullService;
@@ -89,11 +84,7 @@ public class StepsToCompleteController extends BaseController {
         if (!isExistingTransaction) {
             try {
                 transactionID = transactionService.createTransaction(companyNumber);
-
-                CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
-                LocalDate periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
-
-                companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID, periodEndOn);
+                companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID);
 
             } catch (ServiceException e) {
 
