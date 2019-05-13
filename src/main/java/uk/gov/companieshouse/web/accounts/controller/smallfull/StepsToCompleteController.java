@@ -96,9 +96,7 @@ public class StepsToCompleteController extends BaseController {
         try {
 
             smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
-
             statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
-
             transactionService.createResumeLink(companyNumber, transactionID, companyAccountsID);
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
