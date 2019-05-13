@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
