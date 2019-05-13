@@ -48,18 +48,6 @@ public class StepsToCompleteController extends BaseController {
                                      @PathVariable Optional<String> companyAccountsId,
                                      Model model) {
 
-        if (companyNumber != null && !companyNumber.isEmpty()) {
-            System.out.println("Company number is present");
-        }
-
-        if (transactionId != null && transactionId.isPresent()) {
-            System.out.println("Transaction ID is present");
-        }
-
-        if (companyAccountsId != null && companyAccountsId.isPresent()) {
-            System.out.println("Company Accounts ID is present");
-        }
-
         addBackPageAttributeToModel(model, companyNumber);
 
         return getTemplateName();
