@@ -23,6 +23,10 @@
                     <div class="panel panel-border-wide">
                         <p id="balanceSheet-help-text" class="warning-note warning-note-large">You only need to enter items included in your prepared accounts.</p>
                     </div>
+                    
+                    <!-- Hidden input for form binding -->
+                    <input th:field="*{lbg}" type="hidden">
+
                     <div class="govuk-grid-row" id="accounts-header">
                         <div class="govuk-grid-column-one-half">
                             &nbsp;
@@ -50,9 +54,9 @@
                             )">
                         </div>
                         <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half">
+                            <div class="govuk-grid-column-one-half" id="called-up-share-capital-not-paid-subtitle">
                                 Called up share capital not paid
-                                <span class="govuk-hint">
+                                <span class="govuk-hint" id="called-up-share-capital-not-paid-help-text">
                                     This should not be confused with ‘Called up share capital', which can be found under 'Capital and reserves' at the end of this Balance sheet
                                 </span>
                             </div>
@@ -78,7 +82,7 @@
 
                     <!-- Start Fixed Assets -->
 
-                    <h2 class="govuk-heading-m">Fixed assets</h2>
+                    <h2 class="govuk-heading-m" id="fixed-assets-title">Fixed assets</h2>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'fixedAssets.tangibleAssets.currentAmount',
@@ -87,7 +91,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="fixed-assets-tangible-subtitle">
                             Tangible assets
                         </div>
 
@@ -116,7 +120,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="fixed-assets-investments-subtitle">
                             Investments
                         </div>
 
@@ -146,7 +150,7 @@
 
                     <div class="govuk-grid-row accounts-total">
                         <div class="govuk-grid-column-one-half">
-                            <strong>Total fixed assets</strong>
+                            <strong id="fixed-assets-total-subtitle">Total fixed assets</strong>
                         </div>
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
@@ -170,7 +174,7 @@
 
                     <!-- Start Current Assets -->
 
-                    <h2 class="govuk-heading-m">Current assets</h2>
+                    <h2 class="govuk-heading-m" id="current-assets-title">Current assets</h2>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'currentAssets.stocks.currentAmount',
@@ -179,7 +183,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="current-assets-stocks-subtitle">
                             Stocks
                         </div>
 
@@ -209,7 +213,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="current-assets-debtors-subtitle">
                             Debtors
                         </div>
 
@@ -239,7 +243,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="current-assets-cash-at-bank-and-in-hand-subtitle">
                             Cash at bank and in hand
                         </div>
 
@@ -269,7 +273,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="current-assets-investments-subtitle">
                             Investments
                         </div>
 
@@ -300,7 +304,7 @@
 
                     <div class="govuk-grid-row accounts-total">
                         <div class="govuk-grid-column-one-half">
-                            <strong>Total current assets</strong>
+                            <strong id="current-assets-total-subtitle">Total current assets</strong>
                         </div>
 
                         <div class="govuk-grid-column-one-quarter">
@@ -332,7 +336,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="prepayments-and-accrued-income-subtitle">
                             Prepayments and accrued income
                         </div>
 
@@ -361,9 +365,9 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="creditors-within-one-year-subtitle">
                             Creditors - amounts falling due within one year
-                            <span class="govuk-hint">
+                            <span class="govuk-hint" id="creditors-within-one-year-help-text">
                                 Enter this number as a positive value and we'll calculate your net current assets
                             </span>
                         </div>
@@ -393,7 +397,7 @@
 
                     <div class="govuk-grid-row accounts-total">
                         <div class="govuk-grid-column-one-half">
-                            <strong>Net current assets (liabilities)</strong>
+                            <strong id="net-current-assets-subtitle">Net current assets (liabilities)</strong>
                         </div>
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
@@ -421,7 +425,7 @@
 
                     <div class="govuk-grid-row accounts-total">
                         <div class="govuk-grid-column-one-half">
-                            <strong>Total assets less current liabilities</strong>
+                            <strong id="total-assets-less-current-liabilities-subtitle">Total assets less current liabilities</strong>
                         </div>
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
@@ -448,9 +452,9 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="creditors-after-one-year-subtitle">
                             Creditors - amounts falling due after more than one year
-                            <span class="govuk-hint">
+                            <span class="govuk-hint" id="creditors-after-one-year-help-text">
                                 Enter this number as a positive value and we'll calculate your net current assets
                             </span>
                         </div>
@@ -479,7 +483,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="provision-for-liabilities-subtitle">
                             Provision for liabilities
                         </div>
                         <div class="govuk-grid-column-one-quarter">
@@ -507,7 +511,7 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half">
+                        <div class="govuk-grid-column-one-half" id="accruals-and-deferred-income-subtitle">
                             Accruals and deferred income
                         </div>
                         <div class="govuk-grid-column-one-quarter">
@@ -536,7 +540,7 @@
 
                     <div class="govuk-grid-row accounts-total">
                         <div class="govuk-grid-column-one-half">
-                            <strong>Total net assets (liabilities)</strong>
+                            <strong id="total-net-assets-subtitle">Total net assets (liabilities)</strong>
                         </div>
                         <div class="govuk-grid-column-one-quarter">
                             <div th:replace="fragments/numberInput :: numberInput (
@@ -560,7 +564,7 @@
 
                     <!-- Start Capital and Reservces -->
                     <th:block th:if="*{!lbg}">
-                        <h2 class="govuk-heading-m">Capital and reserves</h2>
+                        <h2 class="govuk-heading-m" id="capital-and-reserves-title">Capital and reserves</h2>
 
                         <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                             currentField = 'capitalAndReserves.calledUpShareCapital.currentAmount',
@@ -569,7 +573,7 @@
                         </div>
 
                         <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half">
+                            <div class="govuk-grid-column-one-half" id="capital-and-reserves-called-up-share-capital-subtitle">
                                 Called up share capital
                             </div>
 
@@ -598,7 +602,7 @@
                         </div>
 
                         <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half">
+                            <div class="govuk-grid-column-one-half" id="capital-and-reserves-share-premium-account-subtitle">
                                 Share premium account
                             </div>
 
@@ -627,7 +631,7 @@
                         </div>
 
                         <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half">
+                            <div class="govuk-grid-column-one-half" id="capital-and-reserves-other-reserves-subtitle">
                                 Other reserves
                             </div>
 
@@ -657,9 +661,9 @@
                         </div>
 
                         <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half">
+                            <div class="govuk-grid-column-one-half" id="capital-and-reserves-profit-and-loss-account-subtitle">
                                 Profit and loss account
-                                <span class="govuk-hint">Also known as 'retained earnings'</span>
+                                <span class="govuk-hint" id="capital-and-reserves-profit-and-loss-account-help-text">Also known as 'retained earnings'</span>
                             </div>
 
                             <div class="govuk-grid-column-one-quarter">
@@ -689,7 +693,7 @@
 
                         <div class="govuk-grid-row accounts-total">
                             <div class="govuk-grid-column-one-half">
-                                <strong>Total shareholders' funds</strong>
+                                <strong id="capital-and-reserves-total-subtitle">Total shareholders' funds</strong>
                             </div>
                             <div class="govuk-grid-column-one-quarter">
                                 <div th:replace="fragments/numberInput :: numberInput (
@@ -714,7 +718,7 @@
 
                     <!-- Start Members funds -->
                     <th:block th:if="*{lbg}">
-                        <h2 class="govuk-heading-m">Members' funds</h2>
+                        <h2 class="govuk-heading-m" id="members-funds-title">Members' funds</h2>
                         <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                             currentField = 'membersFunds.profitAndLossAccount.currentAmount',
                             previousField = 'membersFunds.profitAndLossAccount.previousAmount'
@@ -722,9 +726,9 @@
                         </div>
 
                         <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half">
+                            <div class="govuk-grid-column-one-half" id="members-funds-profit-and-loss-account-subtitle">
                                 Profit and loss account
-                                <span class="govuk-hint">Also known as 'retained earnings'</span>
+                                <span class="govuk-hint" id="members-funds-profit-and-loss-account-help-text">Also known as 'retained earnings'</span>
                             </div>
 
                             <div class="govuk-grid-column-one-quarter">
@@ -754,7 +758,7 @@
 
                         <div class="govuk-grid-row accounts-total">
                             <div class="govuk-grid-column-one-half">
-                                <strong>Total members' funds</strong>
+                                <strong id="members-funds-total-subtitle">Total members' funds</strong>
                             </div>
                             <div class="govuk-grid-column-one-quarter">
                                 <div th:replace="fragments/numberInput :: numberInput (
@@ -777,9 +781,6 @@
                     <!-- End Members funds -->
 
                 </div>
-
-                <!-- Hidden input for form binding -->
-                <input th:field="*{lbg}" type="hidden">
 
                     <br>
 
