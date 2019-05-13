@@ -107,14 +107,15 @@ public class BalanceSheetTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Get current period")
-    void getCurrentPeriod() {
+    @DisplayName("Get current period for LBG company")
+    void getCurrentPeriodLBG() {
 
         BalanceSheet balanceSheet = new BalanceSheet();
+        balanceSheet.setLbg(true);
 
         CurrentPeriodApi currentPeriodApi = transformer.getCurrentPeriod(balanceSheet);
 
-        verifyCurrentPeriodWebToApiTransformersCalled();
+        verifyCurrentPeriodWebToApiTransformersCalled(true);
         verifyPreviousPeriodWebToApiTransformersNotCalled();
 
         verifyCurrentPeriodApiToWebTransformersNotCalled();
@@ -124,15 +125,16 @@ public class BalanceSheetTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Get previous period")
-    void getPreviousPeriod() {
+    @DisplayName("Get previous period for LBG company")
+    void getPreviousPeriodLBG() {
 
         BalanceSheet balanceSheet = new BalanceSheet();
+        balanceSheet.setLbg(true);
 
         PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
 
         verifyCurrentPeriodWebToApiTransformersNotCalled();
-        verifyPreviousPeriodWebToApiTransformersCalled();
+        verifyPreviousPeriodWebToApiTransformersCalled(true);
 
         verifyCurrentPeriodApiToWebTransformersNotCalled();
         verifyPreviousPeriodApiToWebTransformersNotCalled();
@@ -140,24 +142,74 @@ public class BalanceSheetTransformerImplTests {
         assertNotNull(previousPeriodApi);
     }
 
-    private void verifyCurrentPeriodWebToApiTransformersCalled() {
+    @Test
+    @DisplayName("Get current period for LBS company")
+    void getCurrentPeriodLBS() {
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+        balanceSheet.setLbg(false);
+
+        CurrentPeriodApi currentPeriodApi = transformer.getCurrentPeriod(balanceSheet);
+
+        verifyCurrentPeriodWebToApiTransformersCalled(false);
+        verifyPreviousPeriodWebToApiTransformersNotCalled();
+
+        verifyCurrentPeriodApiToWebTransformersNotCalled();
+        verifyPreviousPeriodApiToWebTransformersNotCalled();
+
+        assertNotNull(currentPeriodApi);
+    }
+
+    @Test
+    @DisplayName("Get previous period for LBS company")
+    void getPreviousPeriodLBS() {
+
+        BalanceSheet balanceSheet = new BalanceSheet();
+        balanceSheet.setLbg(false);
+
+        PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
+
+        verifyCurrentPeriodWebToApiTransformersNotCalled();
+        verifyPreviousPeriodWebToApiTransformersCalled(false);
+
+        verifyCurrentPeriodApiToWebTransformersNotCalled();
+        verifyPreviousPeriodApiToWebTransformersNotCalled();
+
+        assertNotNull(previousPeriodApi);
+    }
+
+    private void verifyCurrentPeriodWebToApiTransformersCalled(boolean isLbg) {
 
         verify(fixedAssetsTransformer, times(1)).addCurrentPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
         verify(calledUpShareCapitalNotPaidTransformer, times(1)).addCurrentPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
         verify(currentAssetsTransformer, times(1)).addCurrentPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
         verify(otherLiabilitiesOrAssetsTransformer, times(1)).addCurrentPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
-        verify(capitalAndReservesTransformer, times(1)).addCurrentPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
-        verify(membersFundsTransformer, times(1)).addCurrentPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
+        if (isLbg) {
+            verify(membersFundsTransformer, times(1))
+                    .addCurrentPeriodToApiModel(any(BalanceSheetApi.class),
+                            any(BalanceSheet.class));
+        } else {
+            verify(capitalAndReservesTransformer, times(1))
+                    .addCurrentPeriodToApiModel(any(BalanceSheetApi.class),
+                            any(BalanceSheet.class));
+        }
     }
 
-    private void verifyPreviousPeriodWebToApiTransformersCalled() {
+    private void verifyPreviousPeriodWebToApiTransformersCalled(boolean isLbg) {
 
         verify(fixedAssetsTransformer, times(1)).addPreviousPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
         verify(calledUpShareCapitalNotPaidTransformer, times(1)).addPreviousPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
         verify(currentAssetsTransformer, times(1)).addPreviousPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
         verify(otherLiabilitiesOrAssetsTransformer, times(1)).addPreviousPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
-        verify(capitalAndReservesTransformer, times(1)).addPreviousPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
-        verify(membersFundsTransformer, times(1)).addPreviousPeriodToApiModel(any(BalanceSheetApi.class), any(BalanceSheet.class));
+        if (isLbg) {
+            verify(membersFundsTransformer, times(1))
+                    .addPreviousPeriodToApiModel(any(BalanceSheetApi.class),
+                            any(BalanceSheet.class));
+        } else {
+            verify(capitalAndReservesTransformer, times(1))
+                    .addPreviousPeriodToApiModel(any(BalanceSheetApi.class),
+                            any(BalanceSheet.class));
+        }
     }
 
     private void verifyCurrentPeriodApiToWebTransformersCalled() {
