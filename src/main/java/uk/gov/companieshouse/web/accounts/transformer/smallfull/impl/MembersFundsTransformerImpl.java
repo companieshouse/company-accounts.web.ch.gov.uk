@@ -19,32 +19,29 @@ public class MembersFundsTransformerImpl implements Transformer {
     public void addCurrentPeriodToApiModel(
         BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        MembersFundsApi membersFundsApi = new MembersFundsApi();
-
         if (hasCurrentPeriodMembersFunds(balanceSheet)) {
+            MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
                 balanceSheet.getMembersFunds().getProfitAndLossAccount().getCurrentAmount());
             membersFundsApi.setTotalMembersFunds(
                 balanceSheet.getMembersFunds().getTotalMembersFunds().getCurrentAmount());
+            balanceSheetApi.setMembersFunds(membersFundsApi);
         }
 
-        balanceSheetApi.setMembersFunds(membersFundsApi);
     }
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
 
-        MembersFundsApi membersFundsApi = new MembersFundsApi();
-
         if (hasPreviousPeriodMembersFunds(balanceSheet)) {
+            MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
                 balanceSheet.getMembersFunds().getProfitAndLossAccount().getPreviousAmount());
             membersFundsApi.setTotalMembersFunds(
                 balanceSheet.getMembersFunds().getTotalMembersFunds().getPreviousAmount());
+            balanceSheetApi.setMembersFunds(membersFundsApi);
         }
-
-        balanceSheetApi.setMembersFunds(membersFundsApi);
 
     }
 
@@ -52,7 +49,7 @@ public class MembersFundsTransformerImpl implements Transformer {
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet,
         BalanceSheetApi balanceSheetApi) {
 
-        createCapitalAndReserves(balanceSheet);
+        createMembersFunds(balanceSheet);
         MembersFundsApi membersFundsApi = balanceSheetApi.getMembersFunds();
 
         // Profit and Loss
@@ -74,7 +71,7 @@ public class MembersFundsTransformerImpl implements Transformer {
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet,
         BalanceSheetApi balanceSheetApi) {
 
-        createCapitalAndReserves(balanceSheet);
+        createMembersFunds(balanceSheet);
         MembersFundsApi membersFundsApi = balanceSheetApi.getMembersFunds();
 
         // Profit and Loss
@@ -92,18 +89,18 @@ public class MembersFundsTransformerImpl implements Transformer {
         }
     }
 
-    private CapitalAndReserves createCapitalAndReserves(BalanceSheet balanceSheet) {
+    private MembersFunds createMembersFunds(BalanceSheet balanceSheet) {
 
-        CapitalAndReserves capitalAndReserves;
+        MembersFunds membersFunds;
 
-        if (balanceSheet.getCapitalAndReserves() == null) {
-            capitalAndReserves = new CapitalAndReserves();
-            balanceSheet.setCapitalAndReserves(capitalAndReserves);
+        if (balanceSheet.getMembersFunds() == null) {
+            membersFunds = new MembersFunds();
+            balanceSheet.setMembersFunds(membersFunds);
         } else {
-            capitalAndReserves = balanceSheet.getCapitalAndReserves();
+            membersFunds = balanceSheet.getMembersFunds();
         }
 
-        return capitalAndReserves;
+        return membersFunds;
     }
 
     private MembersFundsProfitAndLossAccount createProfitAndLossAccount(BalanceSheet balanceSheet) {

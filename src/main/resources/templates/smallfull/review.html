@@ -271,6 +271,34 @@
 
       </th:block>
 
+      <th:block
+              th:if="*{balanceSheet?.membersFunds?.totalMembersFunds?.currentAmount != null or balanceSheet?.membersFunds?.totalMembersFunds?.previousAmount != null}">
+
+        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                            description = 'Members Funds'
+                        )">
+        </div>
+
+        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Profit and loss account',
+                            identifier = 'profit-and-loss-account',
+                            currentAmount = *{balanceSheet?.membersFunds?.profitAndLossAccount?.currentAmount},
+                            previousAmount = *{balanceSheet?.membersFunds?.profitAndLossAccount?.previousAmount}
+                        )">
+        </div>
+
+        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Total Members funds',
+                            identifier = 'total-members-funds',
+                            currentAmount = *{balanceSheet?.membersFunds?.totalMembersFunds?.currentAmount},
+                            previousAmount = *{balanceSheet?.membersFunds?.totalMembersFunds?.previousAmount},
+                            isTotalRow = true
+                        )">
+        </div>
+
+
+      </th:block>
+
       <!-- End Capital and Reserves -->
 
     </dl>
