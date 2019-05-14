@@ -42,14 +42,14 @@ public class NavigatorService {
      * @param  direction the direction to follow when scanning the controller chain
      * @return the next or previous controller class in the chain dependent on {@code direction}
      */
-    private Class getControllerClass(Class clazz, Direction direction) {
+    private Class getControllerClass(Class clazz, Direction direction, String ... pathVars) {
 
         Class controllerClass;
 
         if (direction == Direction.FORWARD) {
-            controllerClass = getNextControllerClass(clazz);
+            controllerClass = getNextControllerClass(clazz, pathVars);
         } else {
-            controllerClass = getPreviousControllerClass(clazz);
+            controllerClass = getPreviousControllerClass(clazz, pathVars);
         }
 
         return controllerClass;
@@ -62,7 +62,7 @@ public class NavigatorService {
      * @param  clazz the controller class in the chain to begin the scan at
      * @return the next controller class in the chain
      */
-    private Class getNextControllerClass(Class clazz) {
+    private Class getNextControllerClass(Class clazz, String ... pathVars) {
         Annotation nextControllerAnnotation = AnnotationUtils.findAnnotation(clazz, NextController.class);
         if (nextControllerAnnotation == null) {
             throw new MissingAnnotationException("Missing @NextController annotation on " + clazz.toString());
@@ -92,7 +92,7 @@ public class NavigatorService {
                     } else {
                         BranchController potential = (BranchController)applicationContext.getBean(specificClass);
 
-                        if (potential.shouldBranch()) {
+                        if (potential.shouldBranch(pathVars)) {
                             return potential.getClass();
                         }
                     }
@@ -116,7 +116,7 @@ public class NavigatorService {
      * @param  clazz the controller class in the chain to begin the scan at
      * @return the previous controller class in the chain
      */
-    private Class getPreviousControllerClass(Class clazz) {
+    private Class getPreviousControllerClass(Class clazz, String ... pathVars) {
         Annotation previousControllerAnnotation = AnnotationUtils.findAnnotation(clazz, PreviousController.class);
         if (previousControllerAnnotation == null) {
             throw new MissingAnnotationException("Missing @PreviousController annotation on " + clazz.toString());
@@ -146,7 +146,7 @@ public class NavigatorService {
                     } else {
                         BranchController potential = (BranchController)applicationContext.getBean(specificClass);
 
-                        if (potential.shouldBranch()) {
+                        if (potential.shouldBranch(pathVars)) {
                             return potential.getClass();
                         }
                     }
@@ -177,7 +177,7 @@ public class NavigatorService {
      */
     private Class findControllerClass(Class clazz, Direction direction, String... pathVars) {
 
-        Class controllerClass = getControllerClass(clazz, direction);
+        Class controllerClass = getControllerClass(clazz, direction, pathVars);
         if (!isConditionalController(controllerClass) || pathVars.length != EXPECTED_PATH_VAR_COUNT) {
             return controllerClass;
         }
