@@ -8,9 +8,9 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 @Setter
 public class CalledUpShareCapital {
 
-    @ValidationMapping("$.current_period.balance_sheet.capital_and_reserves.called_up_share_capital")
+    @ValidationMapping({"$.current_period.balance_sheet.capital_and_reserves.called_up_share_capital", "$.current_period.balance_sheet.capital_and_reserves"})
     private Long currentAmount;
 
-    @ValidationMapping("$.previous_period.balance_sheet.capital_and_reserves.called_up_share_capital")
+    @ValidationMapping({"$.previous_period.balance_sheet.capital_and_reserves.called_up_share_capital", "$.previous_period.balance_sheet.capital_and_reserves"})
     private Long previousAmount;
 }
