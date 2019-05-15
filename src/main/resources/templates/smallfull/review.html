@@ -169,7 +169,8 @@
                             description = 'Net current assets (liabilities)',
                             identifier = 'net-current-assets',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.netCurrentAssets?.currentAmount},
-                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.netCurrentAssets?.previousAmount}
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.netCurrentAssets?.previousAmount},
+                            isTotalRow = true
                         )">
         </div>
 
@@ -177,7 +178,8 @@
                             description = 'Total assets less current liabilities',
                             identifier = 'total-assets-less-current-liabilities',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalAssetsLessCurrentLiabilities?.currentAmount},
-                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalAssetsLessCurrentLiabilities?.previousAmount}
+                            previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalAssetsLessCurrentLiabilities?.previousAmount},
+                            isTotalRow = true
                         )">
         </div>
 
