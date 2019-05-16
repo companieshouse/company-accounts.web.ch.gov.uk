@@ -59,6 +59,8 @@ public class CICStepsToCompleteController extends BaseController {
 
             cicReportService.createCicReport(transactionId, companyAccountsId);
 
+            transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
+
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
         } catch (ServiceException e) {

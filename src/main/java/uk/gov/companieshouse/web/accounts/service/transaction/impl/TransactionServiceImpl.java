@@ -90,7 +90,7 @@ public class TransactionServiceImpl implements TransactionService {
         String resumeLink = "/company/" + companyNumber +
                 "/transaction/" + transactionId +
                 "/company-accounts/" + companyAccountsId +
-                "/small-full/resume";
+                "/resume";
 
         Transaction transaction = new Transaction();
         transaction.setResumeJourneyUri(resumeLink);

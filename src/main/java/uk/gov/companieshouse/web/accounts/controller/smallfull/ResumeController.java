@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
 @Controller
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/resume")
+@RequestMapping({"/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/resume",
+                "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/resume"})
 public class ResumeController {
 
     @Autowired
