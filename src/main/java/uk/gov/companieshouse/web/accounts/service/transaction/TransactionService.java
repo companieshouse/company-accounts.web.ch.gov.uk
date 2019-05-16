@@ -13,6 +13,8 @@ public interface TransactionService {
      */
     String createTransaction(String companyNumber) throws ServiceException;
 
+    String createTransactionWithDescription(String companyNumber, String description) throws ServiceException;
+
     /**
      * Set the status to 'closed' for an accounts filing transaction
      *

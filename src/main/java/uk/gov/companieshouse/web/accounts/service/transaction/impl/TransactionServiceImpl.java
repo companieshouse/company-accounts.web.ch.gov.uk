@@ -12,6 +12,8 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
+import java.util.Optional;
+
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
@@ -21,15 +23,25 @@ public class TransactionServiceImpl implements TransactionService {
     private static final UriTemplate TRANSACTIONS_URI = new UriTemplate("/transactions/{transactionId}");
 
     /**
+     *
      * {@inheritDoc}
      */
     @Override
     public String createTransaction(String companyNumber) throws ServiceException {
 
+        return createTransactionWithDescription(companyNumber, "Small Full Accounts");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String createTransactionWithDescription(String companyNumber, String description) throws ServiceException {
+
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
 
-        transaction.setDescription("Small Full Accounts");
+        transaction.setDescription(description);
 
         ApiClient apiClient = apiClientService.getApiClient();
 

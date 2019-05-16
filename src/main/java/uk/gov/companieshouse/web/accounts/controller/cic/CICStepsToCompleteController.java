@@ -52,11 +52,10 @@ public class CICStepsToCompleteController extends BaseController {
                                       HttpServletRequest request) {
 
         try {
-            String transactionId = transactionService.createTransaction(companyNumber);
+            String transactionId = transactionService.createTransactionWithDescription(companyNumber,
+                    "CIC Report and Small Full Accounts");
 
             String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId);
-
-            transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
 
             cicReportService.createCicReport(transactionId, companyAccountsId);
 
