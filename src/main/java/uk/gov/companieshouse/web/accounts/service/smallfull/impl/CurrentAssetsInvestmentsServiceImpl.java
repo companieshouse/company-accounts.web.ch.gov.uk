@@ -50,10 +50,7 @@ public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestm
         CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi = getCurrentAssetsInvestmentsApi(
             transactionId, companyAccountsId);
 
-        CurrentAssetsInvestments currentAssetsInvestments = transformer.getCurrentAssetsInvestments(
-            currentAssetsInvestmentsApi);
-
-        return currentAssetsInvestments;
+        return transformer.getCurrentAssetsInvestments(currentAssetsInvestmentsApi);
     }
 
     @Override
