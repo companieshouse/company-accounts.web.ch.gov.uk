@@ -12,8 +12,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
-import java.util.Optional;
-
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
