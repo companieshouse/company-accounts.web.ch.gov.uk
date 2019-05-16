@@ -51,7 +51,7 @@ public class SmallFullServiceImpl implements SmallFullService {
         String uri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().get(uri).execute();
+            return apiClient.smallFull().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error retrieving small full accounts", e);

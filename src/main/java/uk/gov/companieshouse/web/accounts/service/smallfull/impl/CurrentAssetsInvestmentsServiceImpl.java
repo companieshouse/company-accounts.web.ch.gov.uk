@@ -1,12 +1,12 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.currentassetsinvestments.CurrentAssetsInvestmentsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -20,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
 import java.util.List;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestmentsService {
@@ -34,14 +35,16 @@ public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestm
     private SmallFullService smallFullService;
 
     @Autowired
+    private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
     private ValidationContext validationContext;
 
     private static final UriTemplate CURRENT_ASSETS_INVESTMENTS_URI =
         new UriTemplate(
             "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/current-assets-investments");
 
-    private static final String INVALID_URI_MESSAGE =
-        "Invalid URI for current assets investments resource";
+    private static final String RESOURCE_NAME = "current assets investments";
 
     @Override
     public CurrentAssetsInvestments getCurrentAssetsInvestments(String transactionId,
@@ -50,10 +53,7 @@ public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestm
         CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi = getCurrentAssetsInvestmentsApi(
             transactionId, companyAccountsId);
 
-        CurrentAssetsInvestments currentAssetsInvestments = transformer.getCurrentAssetsInvestments(
-            currentAssetsInvestmentsApi);
-
-        return currentAssetsInvestments;
+        return transformer.getCurrentAssetsInvestments(currentAssetsInvestmentsApi);
     }
 
     @Override
@@ -72,29 +72,24 @@ public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestm
             hasCurrentAssetsInvestments(apiClient, transactionId, companyAccountsId);
 
         try {
-
+            ApiResponse apiResponse;
             if(!currentAssetsInvestmentsResourceExists) {
-                apiClient.smallFull().currentAssetsInvestments()
-                    .create(uri, currentAssetsInvestmentsApi)
-                    .execute();
+                apiResponse =
+                        apiClient.smallFull().currentAssetsInvestments()
+                            .create(uri, currentAssetsInvestmentsApi).execute();
             } else {
-                apiClient.smallFull().currentAssetsInvestments()
-                    .update(uri, currentAssetsInvestmentsApi)
-                    .execute();
+                apiResponse =
+                        apiClient.smallFull().currentAssetsInvestments()
+                                .update(uri, currentAssetsInvestmentsApi).execute();
             }
 
-        } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
-        } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException(
-                        "Bad request when creating current assets investments resource", e);
-                }
-                return validationErrors;
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
-            throw new ServiceException("Error creating current assets investments resource", e);
+        } catch (URIValidationException e) {
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+        } catch (ApiErrorResponseException e) {
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -111,9 +106,9 @@ public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestm
         try {
             apiClient.smallFull().currentAssetsInvestments().delete(uri).execute();
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error deleting current assets investments note resource", e);
+            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
         }
     }
 
@@ -134,15 +129,13 @@ public class CurrentAssetsInvestmentsServiceImpl implements CurrentAssetsInvestm
         String uri = CURRENT_ASSETS_INVESTMENTS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().currentAssetsInvestments().get(uri).execute();
-
+            return apiClient.smallFull().currentAssetsInvestments().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-            throw new ServiceException("Error when retrieving current assets investments note", e);
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
+
+        return null;
     }
 }
