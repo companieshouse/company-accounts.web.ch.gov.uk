@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull;
 
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+
 public interface ResumeService {
 
     /**
@@ -9,5 +11,5 @@ public interface ResumeService {
      * @param transactionId     the transaction identifier
      * @param companyAccountsId the company accounts identifier
      */
-    String getResumeRedirect(String companyNumber, String transactionId, String companyAccountsId);
+    String getResumeRedirect(String companyNumber, String transactionId, String companyAccountsId)  throws ServiceException;
 }
