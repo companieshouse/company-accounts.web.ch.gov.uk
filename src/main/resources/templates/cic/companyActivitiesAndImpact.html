@@ -15,6 +15,10 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="companyActivitiesAndImpact-form" class="form" th:action="@{''}" th:object="${companyActivitiesAndImpact}" method="post">
 
+        <header>
+          <h1 id="page-header" class="govuk-heading-l">The company’s activities and impact</h1>
+        </header>
+
         <h2 class="govuk-heading-m">Give a summary of the company's activities in this financial year, including how they’ve benefited the community</h2>
 
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
@@ -47,29 +51,29 @@
                  th:classappend="${#fields.hasErrors('activitiesAndImpact')} ? 'govuk-form-group--error' : ''">
 
               <span class="govuk-error-message"
-                    th:id="${activitiesAndImpact} + '-errorId'"
+                    th:id="*{activitiesAndImpact} + '-errorId'"
                     th:if="${#fields.hasErrors('activitiesAndImpact')}"
                     th:each="e : ${#fields.errors('activitiesAndImpact')}" th:text="${e}">
               </span>
 
                       <!--label text will be different based on javascript switched on or off-->
                       <label class="govuk-label" th:id="${activitiesAndImpact} + '-label'"
-                             th:for="${activitiesAndImpact}">
+                             th:for="*{activitiesAndImpact}">
 
                 <span th:if="${boxLabelTextJavaScriptOn != null}"
-                      th:id="${activitiesAndImpact} + '-javascript-on-span'" hidden="true" class="onlyJS"
+                      th:id="*{activitiesAndImpact} + '-javascript-on-span'" hidden="true" class="onlyJS"
                       th:text="${boxLabelTextJavaScriptOn}"></span>
 
                         <span th:if="${boxLabelTextJavaScriptOff != null}"
-                              th:id="${activitiesAndImpact} + '-javascript-off-span'" class="hideWhenOnlyJS"
+                              th:id="*{activitiesAndImpact} + '-javascript-off-span'" class="hideWhenOnlyJS"
                               th:text="${boxLabelTextJavaScriptOff}"></span>
                       </label>
 
                       <textarea class="govuk-textarea"
-                                th:id="${activitiesAndImpact}"
-                                name="${activitiesAndImpact}"
-                                rows="5"
-                                th:field="${activitiesAndImpact}">
+                                th:id="*{activitiesAndImpact}"
+                                name="*{activitiesAndImpact}"
+                                rows="20"
+                                th:field="*{activitiesAndImpact}">
               </textarea>
 
             </div>
