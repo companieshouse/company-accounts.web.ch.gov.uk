@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @PreviousController(StepsToCompleteController.class)
-@NextController(StepsToCompleteController.class)
+@NextController(CompanyActivitiesAndImpactController.class)
 @RequestMapping("/company/{companyNumber}/cic/steps-to-complete")
 public class CICStepsToCompleteController extends BaseController {
 
