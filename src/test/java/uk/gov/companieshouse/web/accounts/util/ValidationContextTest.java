@@ -22,15 +22,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
-import com.google.api.client.http.HttpResponseException.Builder;
-import com.google.gson.Gson;
-
 import uk.gov.companieshouse.api.error.ApiError;
-import uk.gov.companieshouse.api.error.ApiErrorResponse;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.web.accounts.exception.MissingValidationMappingException;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
@@ -131,14 +123,12 @@ public class ValidationContextTest {
     }
 
     @Test
-    public void testGetValidationError() throws JsonProcessingException {
+    public void testGetValidationError() {
         mockComponentScanning(BEAN_CLASS_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
-
-        ApiErrorResponseException exception = createApiErrorResponse(createErrors(1));
         
-        List<ValidationError> validationErrors = context.getValidationErrors(exception);
+        List<ValidationError> validationErrors = context.getValidationErrors(createErrors(1));
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
         
@@ -148,14 +138,12 @@ public class ValidationContextTest {
     }
 
     @Test
-    public void testGetValidationErrorForNestedModelField() throws JsonProcessingException {
+    public void testGetValidationErrorForNestedModelField() {
         mockComponentScanning(NESTED_BEAN_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
 
-        ApiErrorResponseException exception = createApiErrorResponse(createErrors(1));
-
-        List<ValidationError> validationErrors = context.getValidationErrors(exception);
+        List<ValidationError> validationErrors = context.getValidationErrors(createErrors(1));
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
 
@@ -165,16 +153,14 @@ public class ValidationContextTest {
     }
     
     @Test
-    public void testGetMultipleValidationErrors() throws JsonProcessingException {
+    public void testGetMultipleValidationErrors() {
         mockComponentScanning(BEAN_CLASS_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
 
         int errorCount = 2;
-
-        ApiErrorResponseException exception = createApiErrorResponse(createErrors(errorCount));
         
-        List<ValidationError> validationErrors = context.getValidationErrors(exception);
+        List<ValidationError> validationErrors = context.getValidationErrors(createErrors(errorCount));
         assertNotNull(validationErrors);
         assertEquals(errorCount, validationErrors.size());
 
@@ -185,7 +171,7 @@ public class ValidationContextTest {
     }
     
     @Test
-    public void testMissingMappingKey() throws JsonProcessingException {
+    public void testMissingMappingKey() {
         mockComponentScanning(BEAN_CLASS_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
@@ -196,30 +182,8 @@ public class ValidationContextTest {
         error.setLocation("invalid");
         error.setErrorValues(MESSAGE_ARGUMENTS);
         errors.add(error);
-        
-        ApiErrorResponseException exception = createApiErrorResponse(errors);
-        assertThrows(MissingValidationMappingException.class, () -> context.getValidationErrors(exception));
-    }
-    
-    /**
-     * Create a valid API exception with dummy data.
-     * 
-     * @param errors
-     * @return exception
-     * @throws JsonProcessingException
-     */
-    private ApiErrorResponseException createApiErrorResponse(List<ApiError> errors) {
-        ApiErrorResponse response = new ApiErrorResponse();
-        response.setErrors(errors);
-        
-        Gson gson = new Gson();
-        String responseJson = gson.toJson(response);
-        
-        Builder builder = new HttpResponseException.Builder(400, "message", new HttpHeaders());
-        builder.setContent(responseJson);
-        ApiErrorResponseException exception = new ApiErrorResponseException(builder);
-        
-        return exception;
+
+        assertThrows(MissingValidationMappingException.class, () -> context.getValidationErrors(errors));
     }
     
     /**
