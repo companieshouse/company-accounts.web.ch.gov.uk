@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.ReviewController;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.StatementsController;
 import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
@@ -30,9 +27,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @PreviousController(CICStepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/company-activity")
 public class CompanyActivitiesAndImpactController extends BaseController {
-
-    private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate(
-        "/transaction/{transactionId}/confirmation");
 
     @Autowired
     private CompanyActivitiesAndImpactService companyActivitiesAndImpactService;
@@ -66,7 +60,6 @@ public class CompanyActivitiesAndImpactController extends BaseController {
         @PathVariable String companyAccountsId,
         @ModelAttribute("companyActivitiesAndImpact") @Valid CompanyActivitiesAndImpact companyActivitiesAndImpact,
         BindingResult bindingResult,
-        Model model,
         HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {

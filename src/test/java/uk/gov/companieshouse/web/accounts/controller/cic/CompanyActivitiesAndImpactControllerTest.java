@@ -44,7 +44,7 @@ public class CompanyActivitiesAndImpactControllerTest {
     @InjectMocks
     private CompanyActivitiesAndImpactController companyActivitiesAndImpactController;
 
-    private static final String COMPANY_ACTIVITY_PATH = "/company/01234567/transaction/01234567/company-accounts/01234567/cic/company-activity";
+    private static final String COMPANY_ACTIVITY_PATH = "/company/012/transaction/345/company-accounts/678/cic/company-activity";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
@@ -103,7 +103,7 @@ public class CompanyActivitiesAndImpactControllerTest {
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
             .thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH))
+        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("activitiesAndImpact", "value"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -116,10 +116,18 @@ public class CompanyActivitiesAndImpactControllerTest {
             .when(companyActivitiesAndImpactService)
             .submitCompanyActivitiesAndImpact(anyString(), anyString(),
                 any(CompanyActivitiesAndImpact.class));
-
-        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH))
+        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("activitiesAndImpact", "value"))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Accept CompanyActivitiesAndImpact - binding errors")
+    void postRequestCompanyActivitiesAndImpactBindingErrors() throws Exception {
+
+        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("activitiesAndImpact", "") )
+            .andExpect(status().isOk())
+            .andExpect(view().name(COMPANY_ACTIVITY_VIEW));
     }
 
 
