@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -112,6 +113,11 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private static final String CURRENT_PERIOD_RESOURCE = "current period";
     private static final String PREVIOUS_PERIOD_RESOURCE = "previous period";
 
+    private static List<String> lbgTypes = Arrays.asList(
+        "private-limited-guarant-nsc",
+        "private-limited-guarant-nsc-limited-exemption"
+    );
+
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId,
                                         String companyNumber)
@@ -139,6 +145,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriodApi,
                 previousPeriodApi);
 
+        balanceSheet.setLbg(lbgTypes.contains(companyProfileApi.getType()));
         balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
 
         cachedBalanceSheet = balanceSheet;

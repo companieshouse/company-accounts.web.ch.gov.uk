@@ -138,8 +138,8 @@ public class CapitalAndReservesTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Current period value always added to balance sheet API model")
-    void currentPeriodValueAlwaysAddedToApiModel() {
+    @DisplayName("No current capital and reserves added to balance sheet API model")
+    void noCurrentPeriodCapitalAndReservesAddedToApiModel() {
 
         CapitalAndReserves capitalAndReserves = new CapitalAndReserves();
         capitalAndReserves.setCalledUpShareCapital(new CalledUpShareCapital());
@@ -160,7 +160,7 @@ public class CapitalAndReservesTransformerImplTests {
         assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
-        assertNotNull(balanceSheetApi.getCapitalAndReserves());
+        assertNull(balanceSheetApi.getCapitalAndReserves());
     }
 
     @Test
@@ -184,8 +184,8 @@ public class CapitalAndReservesTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Previous period value always added to balance sheet API model")
-    void previousPeriodValueAlwaysAddedToApiModel() {
+    @DisplayName("No previous capital and reserves added to balance sheet API model")
+    void noPreviousPeriodCapitalAndReservesAddedToApiModel() {
 
         CapitalAndReserves capitalAndReserves = new CapitalAndReserves();
         capitalAndReserves.setCalledUpShareCapital(new CalledUpShareCapital());
@@ -206,7 +206,7 @@ public class CapitalAndReservesTransformerImplTests {
         assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
 
-        assertNotNull(balanceSheetApi.getCapitalAndReserves());
+        assertNull(balanceSheetApi.getCapitalAndReserves());
     }
 
     private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
