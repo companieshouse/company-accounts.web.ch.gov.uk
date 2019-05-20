@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.cic.statements;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
