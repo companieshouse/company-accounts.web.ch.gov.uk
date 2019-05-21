@@ -2,6 +2,7 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -20,13 +23,15 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
+import uk.gov.companieshouse.web.accounts.model.state.CicStatements;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemunerationService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 
 @Controller
 @NextController(StepsToCompleteController.class)
-@PreviousController(CICStepsToCompleteController.class)
+@PreviousController(DirectorsRemunerationSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/directors-remuneration")
 public class DirectorsRemunerationController extends BaseController implements
     ConditionalController {
@@ -45,6 +50,8 @@ public class DirectorsRemunerationController extends BaseController implements
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute("directorsRemuneration", directorsRemunerationService
@@ -93,6 +100,14 @@ public class DirectorsRemunerationController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
         throws ServiceException {
-        return true;
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        return Optional.of(companyAccountsDataState)
+                .map(CompanyAccountsDataState::getCicStatements)
+                .map(CicStatements::getHasProvidedDirectorsRemuneration)
+                .orElse(false);
     }
 }
