@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CapitalAndReservesApi;
@@ -19,28 +21,43 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
-        capitalAndReservesApi.setCalledUpShareCapital(balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
-        capitalAndReservesApi.setOtherReserves(balanceSheet.getCapitalAndReserves().getOtherReserves().getCurrentAmount());
-        capitalAndReservesApi.setProfitAndLoss(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
-        capitalAndReservesApi.setSharePremiumAccount(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
-        capitalAndReservesApi.setTotalShareholdersFunds(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getCurrentAmount());
-        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+        if (hasCurrentPeriodCapitalAndReserves(balanceSheet)) {
 
+            CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
+            capitalAndReservesApi.setCalledUpShareCapital(
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
+            capitalAndReservesApi.setOtherReserves(
+                balanceSheet.getCapitalAndReserves().getOtherReserves().getCurrentAmount());
+            capitalAndReservesApi.setProfitAndLoss(
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
+            capitalAndReservesApi.setSharePremiumAccount(
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
+            capitalAndReservesApi.setTotalShareholdersFunds(
+                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getCurrentAmount());
+
+            balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+        }
     }
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
-        capitalAndReservesApi.setCalledUpShareCapital(balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
-        capitalAndReservesApi.setOtherReserves(balanceSheet.getCapitalAndReserves().getOtherReserves().getPreviousAmount());
-        capitalAndReservesApi.setProfitAndLoss(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
-        capitalAndReservesApi.setSharePremiumAccount(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
-        capitalAndReservesApi.setTotalShareholdersFunds(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
+        if (hasPreviousPeriodCapitalAndReserves(balanceSheet)) {
 
-        balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+            CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
+            capitalAndReservesApi.setCalledUpShareCapital(
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
+            capitalAndReservesApi.setOtherReserves(
+                balanceSheet.getCapitalAndReserves().getOtherReserves().getPreviousAmount());
+            capitalAndReservesApi.setProfitAndLoss(
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
+            capitalAndReservesApi.setSharePremiumAccount(
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
+            capitalAndReservesApi.setTotalShareholdersFunds(
+                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
 
+            balanceSheetApi.setCapitalAndReserves(capitalAndReservesApi);
+        }
     }
 
     @Override
@@ -199,5 +216,35 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
         }
 
         return totalShareholdersFunds;
+    }
+
+    private Boolean hasCurrentPeriodCapitalAndReserves(BalanceSheet balanceSheet) {
+
+        CapitalAndReserves capitalAndReserves = balanceSheet.getCapitalAndReserves();
+
+        if (capitalAndReserves != null) {
+            return Stream.of(capitalAndReserves.getCalledUpShareCapital().getCurrentAmount(),
+                capitalAndReserves.getSharePremiumAccount().getCurrentAmount(),
+                capitalAndReserves.getOtherReserves().getCurrentAmount(),
+                capitalAndReserves.getProfitAndLossAccount().getCurrentAmount(),
+                capitalAndReserves.getTotalShareholdersFunds().getCurrentAmount()).
+                anyMatch(Objects::nonNull);
+        }
+        return false;
+    }
+
+    private Boolean hasPreviousPeriodCapitalAndReserves(BalanceSheet balanceSheet) {
+
+        CapitalAndReserves capitalAndReserves = balanceSheet.getCapitalAndReserves();
+
+        if (capitalAndReserves != null) {
+            return Stream.of(capitalAndReserves.getCalledUpShareCapital().getPreviousAmount(),
+                capitalAndReserves.getSharePremiumAccount().getPreviousAmount(),
+                capitalAndReserves.getOtherReserves().getPreviousAmount(),
+                capitalAndReserves.getProfitAndLossAccount().getPreviousAmount(),
+                capitalAndReserves.getTotalShareholdersFunds().getPreviousAmount()).
+                anyMatch(Objects::nonNull);
+        }
+        return false;
     }
 }
