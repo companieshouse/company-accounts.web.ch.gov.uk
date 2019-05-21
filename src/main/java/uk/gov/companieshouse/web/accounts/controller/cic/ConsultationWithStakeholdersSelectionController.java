@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersSelectionService;
 
 @Controller
-@NextController(StepsToCompleteController.class)
+@NextController(ConsultationWithStakeholdersController.class)
 @PreviousController(CompanyActivitiesAndImpactController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/consultation-with-stakeholders-selection")
 public class ConsultationWithStakeholdersSelectionController extends BaseController {
