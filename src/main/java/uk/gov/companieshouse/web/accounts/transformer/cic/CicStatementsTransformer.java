@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.transformer.cic;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 
 public interface CicStatementsTransformer {
 
@@ -30,4 +31,8 @@ public interface CicStatementsTransformer {
     void setConsultationWithStakeholders(
         ConsultationWithStakeholders consultationWithStakeholders,
         CicStatementsApi cicStatementsApi);
+
+    TransferOfAssets getTransferOfAssets(CicStatementsApi cicStatementsApi);
+
+    void setTransferOfAssets(TransferOfAssets transferOfAssets, CicStatementsApi cicStatementsApi);
 }

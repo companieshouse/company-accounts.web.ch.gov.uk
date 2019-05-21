@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransformer;
 
 @Component
@@ -56,5 +57,21 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
 
         cicStatementsApi.getReportStatements().setConsultationWithStakeholders(
             consultationWithStakeholders.getConsultationWithStakeholders());
+    }
+
+    @Override
+    public TransferOfAssets getTransferOfAssets(CicStatementsApi cicStatementsApi) {
+        TransferOfAssets transferOfAssets = new TransferOfAssets();
+        transferOfAssets.setTransferOfAssets(
+            cicStatementsApi.getReportStatements().getTransferOfAssets());
+
+        return transferOfAssets;
+    }
+
+    @Override
+    public void setTransferOfAssets(TransferOfAssets transferOfAssets,
+        CicStatementsApi cicStatementsApi) {
+        cicStatementsApi.getReportStatements().setTransferOfAssets(
+            transferOfAssets.getTransferOfAssets());
     }
 }
