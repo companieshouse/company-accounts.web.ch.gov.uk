@@ -10,4 +10,7 @@ public class CicStatements {
 
     @JsonProperty("has_provided_consultation_with_stakeholders")
     private Boolean hasProvidedConsultationWithStakeholders;
+
+    @JsonProperty("has_provided_transfer_of_assets")
+    private Boolean hasProvidedTransferOfAssets;
 }

@@ -24,7 +24,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 
 @Controller
-@NextController(StepsToCompleteController.class)
+@NextController(TransferOfAssetsSelectionController.class)
 @PreviousController(CICStepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/consultation")
 public class ConsultationWithStakeholdersController extends BaseController implements
