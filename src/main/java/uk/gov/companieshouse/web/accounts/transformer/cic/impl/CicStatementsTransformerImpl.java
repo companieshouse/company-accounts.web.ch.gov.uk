@@ -5,6 +5,7 @@ import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransformer;
 
 @Component
@@ -75,4 +76,20 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
             directorsRemuneration.getDirectorsRemuneration());
     }
 
+
+    @Override
+    public TransferOfAssets getTransferOfAssets(CicStatementsApi cicStatementsApi) {
+        TransferOfAssets transferOfAssets = new TransferOfAssets();
+        transferOfAssets.setTransferOfAssets(
+            cicStatementsApi.getReportStatements().getTransferOfAssets());
+
+        return transferOfAssets;
+    }
+
+    @Override
+    public void setTransferOfAssets(TransferOfAssets transferOfAssets,
+        CicStatementsApi cicStatementsApi) {
+        cicStatementsApi.getReportStatements().setTransferOfAssets(
+            transferOfAssets.getTransferOfAssets());
+    }
 }
