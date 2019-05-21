@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.cic;
 
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
 
 public interface CicStatementsTransformer {
 
@@ -9,7 +10,8 @@ public interface CicStatementsTransformer {
      * Gets the company's activities and impact from a given cic statements API resource
      *
      * @param cicStatementsApi The cic statements API resource
-     * @return the company's activities and impact, or an unpopulated model if the API resource is null
+     * @return the company's activities and impact, or an unpopulated model if the API resource is
+     * null
      */
     CompanyActivitiesAndImpact getCompanyActivitiesAndImpact(CicStatementsApi cicStatementsApi);
 
@@ -20,5 +22,12 @@ public interface CicStatementsTransformer {
      * @param cicStatementsApi The cic statements API resource
      */
     void setCompanyActivitiesAndImpact(
-            CompanyActivitiesAndImpact companyActivitiesAndImpact, CicStatementsApi cicStatementsApi);
+        CompanyActivitiesAndImpact companyActivitiesAndImpact, CicStatementsApi cicStatementsApi);
+
+
+    ConsultationWithStakeholders getConsultationWithStakeholders(CicStatementsApi cicStatementsApi);
+
+    void setConsultationWithStakeholders(
+        ConsultationWithStakeholders consultationWithStakeholders,
+        CicStatementsApi cicStatementsApi);
 }
