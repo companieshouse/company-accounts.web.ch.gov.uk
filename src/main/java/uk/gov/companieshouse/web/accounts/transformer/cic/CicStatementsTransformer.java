@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.cic;
 
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
 
 public interface CicStatementsTransformer {
 
@@ -21,4 +22,10 @@ public interface CicStatementsTransformer {
      */
     void setCompanyActivitiesAndImpact(
             CompanyActivitiesAndImpact companyActivitiesAndImpact, CicStatementsApi cicStatementsApi);
+
+    DirectorsRemuneration getDirectorsRemuneration(CicStatementsApi cicStatementsApi);
+
+    void setDirectorsRemuneration(
+        DirectorsRemuneration directorsRemuneration,
+        CicStatementsApi cicStatementsApi);
 }
