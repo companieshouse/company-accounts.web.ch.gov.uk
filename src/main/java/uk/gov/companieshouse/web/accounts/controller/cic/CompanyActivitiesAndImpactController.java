@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 
 @Controller
-@NextController(StepsToCompleteController.class)
+@NextController(ConsultationWithStakeholdersSelectionController.class)
 @PreviousController(CICStepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/company-activity")
 public class CompanyActivitiesAndImpactController extends BaseController {
