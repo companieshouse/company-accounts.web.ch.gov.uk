@@ -21,15 +21,25 @@ public class TransactionServiceImpl implements TransactionService {
     private static final UriTemplate TRANSACTIONS_URI = new UriTemplate("/transactions/{transactionId}");
 
     /**
+     *
      * {@inheritDoc}
      */
     @Override
     public String createTransaction(String companyNumber) throws ServiceException {
 
+        return createTransactionWithDescription(companyNumber, "Small Full Accounts");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String createTransactionWithDescription(String companyNumber, String description) throws ServiceException {
+
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
 
-        transaction.setDescription("Small Full Accounts");
+        transaction.setDescription(description);
 
         ApiClient apiClient = apiClientService.getApiClient();
 
@@ -78,7 +88,7 @@ public class TransactionServiceImpl implements TransactionService {
         String resumeLink = "/company/" + companyNumber +
                 "/transaction/" + transactionId +
                 "/company-accounts/" + companyAccountsId +
-                "/small-full/resume";
+                "/resume";
 
         Transaction transaction = new Transaction();
         transaction.setResumeJourneyUri(resumeLink);
