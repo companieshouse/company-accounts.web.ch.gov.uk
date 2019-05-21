@@ -13,4 +13,7 @@ public class CicStatements {
 
     @JsonProperty("has_provided_transfer_of_assets")
     private Boolean hasProvidedTransferOfAssets;
+
+    @JsonProperty("has_provided_directors_remuneration")
+    private Boolean hasProvidedDirectorsRemuneration;
 }
