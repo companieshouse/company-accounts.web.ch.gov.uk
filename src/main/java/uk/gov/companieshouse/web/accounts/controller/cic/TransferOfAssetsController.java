@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -19,6 +22,8 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
+import uk.gov.companieshouse.web.accounts.model.state.CicStatements;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAssetsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -92,6 +97,14 @@ public class TransferOfAssetsController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
         throws ServiceException {
-        return true;
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        return Optional.of(companyAccountsDataState)
+                .map(CompanyAccountsDataState::getCicStatements)
+                .map(CicStatements::getHasProvidedTransferOfAssets)
+                .orElse(false);
     }
 }
