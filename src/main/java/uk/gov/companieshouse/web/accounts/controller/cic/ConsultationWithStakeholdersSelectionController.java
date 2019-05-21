@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholdersSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CicStatements;
@@ -23,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersSelectionService;
 
 @Controller
-@NextController(StepsToCompleteController.class)
+@NextController(ConsultationWithStakeholdersController.class)
 @PreviousController(CompanyActivitiesAndImpactController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/consultation-with-stakeholders-selection")
 public class ConsultationWithStakeholdersSelectionController extends BaseController {
