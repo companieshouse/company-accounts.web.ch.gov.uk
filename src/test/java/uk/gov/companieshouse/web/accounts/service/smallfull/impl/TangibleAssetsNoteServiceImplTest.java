@@ -5,15 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -34,6 +28,7 @@ import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleCrea
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleDelete;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleGet;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleUpdate;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
@@ -48,6 +43,7 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -104,7 +100,22 @@ public class TangibleAssetsNoteServiceImplTest {
     private ServiceExceptionHandler serviceExceptionHandler;
 
     @Mock
+    private ValidationContext validationContext;
+
+    @Mock
+    private ApiResponse<TangibleApi> responseWithData;
+
+    @Mock
+    private ApiResponse<Void> responseNoData;
+
+    @Mock
     private List<ValidationError> mockValidationErrors;
+
+    @Mock
+    private ApiErrorResponseException apiErrorResponseException;
+
+    @Mock
+    private URIValidationException uriValidationException;
 
     @InjectMocks
     private TangibleAssetsNoteService tangibleAssetsNoteService = new TangibleAssetsNoteServiceImpl();
@@ -114,6 +125,9 @@ public class TangibleAssetsNoteServiceImplTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String TANGIBLE_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                                                    COMPANY_ACCOUNTS_ID + "/small-full/notes/tangible-assets";
 
     private static final LocalDate LAST_PERIOD_END_ON = LocalDate.parse("2017-06-30");
 
@@ -134,8 +148,11 @@ public class TangibleAssetsNoteServiceImplTest {
     @DisplayName("GET - Tangible successful path")
     void getTangibleSuccess() throws Exception {
 
-        when(tangibleResourceHandler.get(anyString())).thenReturn(tangibleGet);
-        when(tangibleGet.execute()).thenReturn(tangibleApi);
+        when(tangibleResourceHandler.get(TANGIBLE_URI)).thenReturn(tangibleGet);
+
+        when(tangibleGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(tangibleApi);
+
         when(tangibleAssetsTransformer.getTangibleAssets(tangibleApi)).thenReturn(new TangibleAssets());
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(getCompanyProfile());
@@ -151,19 +168,13 @@ public class TangibleAssetsNoteServiceImplTest {
     @DisplayName("GET - Tangible successful path when http status not found")
     void getTangibleSuccessHttpStatusNotFound() throws Exception {
 
-        when(tangibleResourceHandler.get(anyString())).thenReturn(tangibleGet);
+        when(tangibleResourceHandler.get(TANGIBLE_URI)).thenReturn(tangibleGet);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
-        doThrow(apiErrorResponseException).when(tangibleGet).execute();
+        when(tangibleGet.execute()).thenThrow(apiErrorResponseException);
 
         doNothing()
                 .when(serviceExceptionHandler)
-                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(getCompanyProfile());
 
@@ -175,22 +186,16 @@ public class TangibleAssetsNoteServiceImplTest {
     }
 
     @Test
-    @DisplayName("GET - Tangible successful path when service exception is thrown")
-    void getTangibleServiceException() throws Exception {
+    @DisplayName("GET - Tangible ApiErrorResponseException is thrown")
+    void getTangibleApiErrorResponseException() throws Exception {
 
-        when(tangibleResourceHandler.get(anyString())).thenReturn(tangibleGet);
+        when(tangibleResourceHandler.get(TANGIBLE_URI)).thenReturn(tangibleGet);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
-        doThrow(apiErrorResponseException).when(tangibleGet).execute();
+        when(tangibleGet.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> tangibleAssetsNoteService.getTangibleAssets(
             TRANSACTION_ID,
@@ -199,8 +204,26 @@ public class TangibleAssetsNoteServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - Tangible successful path create")
-    void postTangibleSuccessCreate() throws Exception {
+    @DisplayName("GET - Tangible URIValidationException is thrown")
+    void getTangibleURIValidationException() throws Exception {
+
+        when(tangibleResourceHandler.get(TANGIBLE_URI)).thenReturn(tangibleGet);
+
+        when(tangibleGet.execute()).thenThrow(uriValidationException);
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> tangibleAssetsNoteService.getTangibleAssets(
+                TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("POST - Tangible successful path")
+    void postTangibleSuccess() throws Exception {
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(smallFullApi);
@@ -208,24 +231,52 @@ public class TangibleAssetsNoteServiceImplTest {
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn(null);
 
-        when(tangibleResourceHandler.create(
-            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/notes/tangible-assets",
-            null)).thenReturn(tangibleCreate);
+        when(tangibleAssetsTransformer.getTangibleApi(tangibleAssets)).thenReturn(tangibleApi);
 
-        List<ValidationError> testResult = tangibleAssetsNoteService
+        when(tangibleResourceHandler.create(TANGIBLE_URI, tangibleApi)).thenReturn(tangibleCreate);
+
+        when(tangibleCreate.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.hasErrors()).thenReturn(false);
+
+        List<ValidationError> validationErrors = tangibleAssetsNoteService
             .postTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets,
                 COMPANY_NUMBER);
 
-        verify(tangibleCreate, times(1)).execute();
-        assertTrue(testResult.isEmpty());
-        assertNotNull(testResult);
+        assertTrue(validationErrors.isEmpty());
     }
 
     @Test
-    @DisplayName("POST - Tangible successful path update")
-    void postTangibleSuccessUpdate() throws Exception {
+    @DisplayName("POST - Tangible with validation errors")
+    void postTangibleWithValidationErrors() throws Exception {
 
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+        when(smallFullLinks.getTangibleAssetsNote()).thenReturn(null);
+
+        when(tangibleAssetsTransformer.getTangibleApi(tangibleAssets)).thenReturn(tangibleApi);
+
+        when(tangibleResourceHandler.create(TANGIBLE_URI, tangibleApi)).thenReturn(tangibleCreate);
+
+        when(tangibleCreate.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.hasErrors()).thenReturn(true);
+
+        when(validationContext.getValidationErrors(responseWithData.getErrors()))
+                .thenReturn(mockValidationErrors);
+
+        List<ValidationError> validationErrors = tangibleAssetsNoteService
+                .postTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets,
+                        COMPANY_NUMBER);
+
+        assertEquals(mockValidationErrors, validationErrors);
+    }
+
+    @Test
+    @DisplayName("PUT - Tangible successful path")
+    void putTangibleSuccess() throws Exception {
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(smallFullApi);
@@ -233,24 +284,54 @@ public class TangibleAssetsNoteServiceImplTest {
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn("");
 
-        when(tangibleResourceHandler.update(
-            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/notes/tangible-assets",
-            null)).thenReturn(tangibleUpdate);
+        when(tangibleAssetsTransformer.getTangibleApi(tangibleAssets)).thenReturn(tangibleApi);
 
-        List<ValidationError> testResult = tangibleAssetsNoteService
+        when(tangibleResourceHandler.update(TANGIBLE_URI, tangibleApi)).thenReturn(tangibleUpdate);
+
+        when(tangibleUpdate.execute()).thenReturn(responseNoData);
+
+        when(responseNoData.hasErrors()).thenReturn(false);
+
+        List<ValidationError> validationErrors = tangibleAssetsNoteService
             .postTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets,
                 COMPANY_NUMBER);
 
-        verify(tangibleUpdate, times(1)).execute();
-        assertTrue(testResult.isEmpty());
-        assertNotNull(testResult);
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("PUT - Tangible with validation errors")
+    void putTangibleWithValidationErrors() throws Exception {
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+        when(smallFullLinks.getTangibleAssetsNote()).thenReturn("");
+
+        when(tangibleAssetsTransformer.getTangibleApi(tangibleAssets)).thenReturn(tangibleApi);
+
+        when(tangibleResourceHandler.update(TANGIBLE_URI, tangibleApi)).thenReturn(tangibleUpdate);
+
+        when(tangibleUpdate.execute()).thenReturn(responseNoData);
+
+        when(responseNoData.hasErrors()).thenReturn(true);
+
+        when(validationContext.getValidationErrors(responseNoData.getErrors()))
+                .thenReturn(mockValidationErrors);
+
+        List<ValidationError> validationErrors = tangibleAssetsNoteService
+                .postTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets,
+                        COMPANY_NUMBER);
+
+        assertEquals(mockValidationErrors, validationErrors);
     }
 
     @Test
     @DisplayName("DELETE - Tangible successful path")
     void deleteTangibleSuccess() {
 
-        when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
+        when(tangibleResourceHandler.delete(TANGIBLE_URI)).thenReturn(tangibleDelete);
 
         assertAll(() -> tangibleAssetsNoteService
                 .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -260,19 +341,13 @@ public class TangibleAssetsNoteServiceImplTest {
     @DisplayName("DELETE - Tangible failure path due to a thrown ApiErrorResponseException")
     void deleteTangibleApiErrorResponseException() throws Exception {
 
-        when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
+        when(tangibleResourceHandler.delete(TANGIBLE_URI)).thenReturn(tangibleDelete);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
-        doThrow(apiErrorResponseException).when(tangibleDelete).execute();
+        when(tangibleDelete.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+                        .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> tangibleAssetsNoteService
                 .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -282,15 +357,13 @@ public class TangibleAssetsNoteServiceImplTest {
     @DisplayName("DELETE - Tangible failure path due to a thrown URIValidationException")
     void deleteTangibleURIValidationException() throws Exception {
 
-        when(tangibleResourceHandler.delete(anyString())).thenReturn(tangibleDelete);
+        when(tangibleResourceHandler.delete(TANGIBLE_URI)).thenReturn(tangibleDelete);
 
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
-
-        doThrow(uriValidationException).when(tangibleDelete).execute();
+        when(tangibleDelete.execute()).thenThrow(uriValidationException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> tangibleAssetsNoteService
                 .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));

@@ -22,6 +22,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullCreate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -46,6 +47,9 @@ public class SmallFullServiceImplTests {
     @Mock
     private SmallFullGet smallFullGet;
 
+    @Mock
+    private ApiResponse<SmallFullApi> responseWithData;
+
     @InjectMocks
     private SmallFullService smallFullService = new SmallFullServiceImpl();
 
@@ -67,8 +71,6 @@ public class SmallFullServiceImplTests {
 
         when(smallFullResourceHandler.create(anyString(), any(SmallFullApi.class)))
                 .thenReturn(smallFullCreate);
-
-        when(smallFullCreate.execute()).thenReturn(new SmallFullApi());
 
         smallFullService.createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -111,7 +113,9 @@ public class SmallFullServiceImplTests {
 
         when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
 
-        when(smallFullGet.execute()).thenReturn(new SmallFullApi());
+        when(smallFullGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(new SmallFullApi());
 
         assertNotNull(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 

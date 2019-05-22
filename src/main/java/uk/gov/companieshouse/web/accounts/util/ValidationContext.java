@@ -109,16 +109,12 @@ public class ValidationContext {
     }
 
     /**
-     * Returns a list of validation errors extracted from the
-     * {@code ApiErrorResponseException} object.
+     * Returns a list of validation errors derived from a list of provided {@link ApiError}'s
      *
-     * @param  apiException the exception object from which to
-     *                      extract validation errors
-     * @return              a list of validation errors
+     * @param  apiErrors a list of API errors
+     * @return           a list of web-readable validation errors
      */
-    public List<ValidationError> getValidationErrors(ApiErrorResponseException apiException) {
-
-        List<ApiError> apiErrors = apiException.getDetails().getErrors();
+    public List<ValidationError> getValidationErrors(List<ApiError> apiErrors) {
 
         return apiErrors.stream().map(apiError -> {
             ValidationError validationError = new ValidationError();

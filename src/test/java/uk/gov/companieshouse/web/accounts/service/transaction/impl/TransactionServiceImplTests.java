@@ -26,6 +26,7 @@ import uk.gov.companieshouse.api.handler.transaction.TransactionsResourceHandler
 import uk.gov.companieshouse.api.handler.transaction.request.TransactionsCreate;
 import uk.gov.companieshouse.api.handler.transaction.request.TransactionsGet;
 import uk.gov.companieshouse.api.handler.transaction.request.TransactionsUpdate;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -53,6 +54,9 @@ public class TransactionServiceImplTests {
 
     @Mock
     private TransactionsUpdate transactionsUpdate;
+
+    @Mock
+    private ApiResponse<Transaction> responseWithData;
 
     @InjectMocks
     private TransactionService transactionService = new TransactionServiceImpl();
@@ -83,7 +87,9 @@ public class TransactionServiceImplTests {
         when(transactionsResourceHandler.create(anyString(), any(Transaction.class)))
                 .thenReturn(transactionsCreate);
 
-        when(transactionsCreate.execute()).thenReturn(createdTransaction);
+        when(transactionsCreate.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(createdTransaction);
 
         String transactionId = transactionService.createTransaction(COMPANY_NUMBER);
 
@@ -123,19 +129,16 @@ public class TransactionServiceImplTests {
 
         when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
 
-        when(transactionsGet.execute()).thenReturn(transaction);
+        when(transactionsGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(transaction);
 
         transaction.setStatus(TransactionStatus.CLOSED);
 
         when(transactionsResourceHandler.update(GET_TRANSACTION_URI, transaction))
                 .thenReturn(transactionsUpdate);
 
-        doNothing().when(transactionsUpdate).execute();
-
         transactionService.closeTransaction(TRANSACTION_ID);
-
-        verify(transactionsResourceHandler, times(1))
-                .update(GET_TRANSACTION_URI, transaction);
     }
 
     @Test
@@ -169,7 +172,9 @@ public class TransactionServiceImplTests {
 
         when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
 
-        when(transactionsGet.execute()).thenReturn(transaction);
+        when(transactionsGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(transaction);
 
         transaction.setStatus(TransactionStatus.CLOSED);
 
@@ -190,7 +195,9 @@ public class TransactionServiceImplTests {
 
         when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
 
-        when(transactionsGet.execute()).thenReturn(transaction);
+        when(transactionsGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(transaction);
 
         transaction.setStatus(TransactionStatus.CLOSED);
 
@@ -204,12 +211,10 @@ public class TransactionServiceImplTests {
 
     @Test
     @DisplayName("Create transaction resume link")
-    void createTransactionResumeLink() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void createTransactionResumeLink() throws ServiceException {
 
         when(transactionsResourceHandler.update(anyString(), any(Transaction.class)))
                 .thenReturn(transactionsUpdate);
-
-        doNothing().when(transactionsUpdate).execute();
 
         transactionService.createResumeLink(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 

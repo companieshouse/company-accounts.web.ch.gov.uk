@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,6 +14,7 @@ import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.currentassetsinvestments.CurrentAssetsInvestmentsResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.currentassetsinvestments.request.CurrentAssetsInvestmentsCreate;
 import uk.gov.companieshouse.api.handler.smallfull.currentassetsinvestments.request.CurrentAssetsInvestmentsGet;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.currentassetsinvestments.CurrentAssetsInvestmentsApi;
@@ -29,10 +28,13 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,7 +66,22 @@ public class CurrentAssetsInvestmentsServiceImplTests {
     private CurrentAssetsInvestmentsCreate mockCurrentAssetsInvestmentsCreate;
 
     @Mock
+    private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Mock
     private ValidationContext mockValidationContext;
+
+    @Mock
+    private ApiResponse<CurrentAssetsInvestmentsApi> responseWithData;
+
+    @Mock
+    private ApiResponse<Void> responseNoData;
+
+    @Mock
+    private ApiErrorResponseException apiErrorResponseException;
+
+    @Mock
+    private URIValidationException uriValidationException;
 
     @InjectMocks
     private CurrentAssetsInvestmentsService service = new CurrentAssetsInvestmentsServiceImpl();
@@ -76,6 +93,8 @@ public class CurrentAssetsInvestmentsServiceImplTests {
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TEST_DETAILS = "details text";
+
+    private static final String RESOURCE_NAME = "current assets investments";
 
     private static final String CURRENTS_ASSETS_INVESTMENTS_URI = "/transactions/" + TRANSACTION_ID +
         "/company-accounts/" + COMPANY_ACCOUNTS_ID +
@@ -100,17 +119,16 @@ public class CurrentAssetsInvestmentsServiceImplTests {
 
     @Test
     @DisplayName("GET - currentAssetsInvestments successful path when http status not found")
-    void getCurrentAssetsInvestmentsSuccessHttpSTatusNotFound() throws Exception {
-
-        HttpResponseException httpResponseException = new HttpResponseException
-            .Builder(404, "Not Found", new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+    void getCurrentAssetsInvestmentsSuccessHttpStatusNotFound() throws Exception {
 
         getMockCurrentAssetsInvestmentsResourceHandler();
         when(mockCurrentAssetsInvestmentsResourceHandler.get(CURRENTS_ASSETS_INVESTMENTS_URI))
             .thenReturn(mockCurrentAssetsInvestmentsGet);
         when(mockCurrentAssetsInvestmentsGet.execute()).thenThrow(apiErrorResponseException);
+
+        doNothing()
+                .when(serviceExceptionHandler)
+                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
         when(mockTransformer.getCurrentAssetsInvestments(null))
             .thenReturn(createCurrentAssetsInvestments());
 
@@ -125,17 +143,15 @@ public class CurrentAssetsInvestmentsServiceImplTests {
     @DisplayName("GET - currentAssetsInvestments throws ServiceException due to 400 Bad Request")
     void getCurrentAssetsInvestmentsApiResponseException() throws Exception {
 
-        HttpResponseException httpResponseException = new HttpResponseException
-            .Builder(400, "Bad Request", new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         getMockCurrentAssetsInvestmentsResourceHandler();
         when(mockCurrentAssetsInvestmentsResourceHandler.get(CURRENTS_ASSETS_INVESTMENTS_URI))
             .thenReturn(mockCurrentAssetsInvestmentsGet);
         when(mockCurrentAssetsInvestmentsGet.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockCurrentAssetsInvestmentsGet.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> service.getCurrentAssetsInvestments(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -149,9 +165,12 @@ public class CurrentAssetsInvestmentsServiceImplTests {
         getMockCurrentAssetsInvestmentsResourceHandler();
         when(mockCurrentAssetsInvestmentsResourceHandler.get(CURRENTS_ASSETS_INVESTMENTS_URI))
             .thenReturn(mockCurrentAssetsInvestmentsGet);
-        when(mockCurrentAssetsInvestmentsGet.execute()).thenThrow(URIValidationException.class);
+        when(mockCurrentAssetsInvestmentsGet.execute()).thenThrow(uriValidationException);
 
-        assertThrows(URIValidationException.class, () -> mockCurrentAssetsInvestmentsGet.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> service.getCurrentAssetsInvestments(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -174,6 +193,8 @@ public class CurrentAssetsInvestmentsServiceImplTests {
             .thenReturn(currentAssetsInvestmentsApi);
 
         currentAssetsInvestmentsCreate(currentAssetsInvestmentsApi);
+
+        when(responseWithData.hasErrors()).thenReturn(false);
 
         List<ValidationError> validationErrors = service.submitCurrentAssetsInvestments(
             TRANSACTION_ID, COMPANY_ACCOUNTS_ID, currentAssetsInvestments, COMPANY_NUMBER);
@@ -202,13 +223,12 @@ public class CurrentAssetsInvestmentsServiceImplTests {
             .create(CURRENTS_ASSETS_INVESTMENTS_URI, currentAssetsInvestmentsApi))
             .thenReturn(mockCurrentAssetsInvestmentsCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(
-            404,"Not Found",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockCurrentAssetsInvestmentsCreate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockCurrentAssetsInvestmentsCreate.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> service.submitCurrentAssetsInvestments(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -237,13 +257,12 @@ public class CurrentAssetsInvestmentsServiceImplTests {
             .create(CURRENTS_ASSETS_INVESTMENTS_URI, currentAssetsInvestmentsApi))
             .thenReturn(mockCurrentAssetsInvestmentsCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(
-            400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockCurrentAssetsInvestmentsCreate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockCurrentAssetsInvestmentsCreate.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> service.submitCurrentAssetsInvestments(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -268,11 +287,13 @@ public class CurrentAssetsInvestmentsServiceImplTests {
             COMPANY_NUMBER));
     }
 
-    private void currentAssetsInvestmentsCreate(CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi) {
+    private void currentAssetsInvestmentsCreate(CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi)
+            throws ApiErrorResponseException, URIValidationException {
         getMockCurrentAssetsInvestmentsResourceHandler();
         when(mockCurrentAssetsInvestmentsResourceHandler
             .create(CURRENTS_ASSETS_INVESTMENTS_URI, currentAssetsInvestmentsApi))
             .thenReturn(mockCurrentAssetsInvestmentsCreate);
+        when(mockCurrentAssetsInvestmentsCreate.execute()).thenReturn(responseWithData);
     }
 
     private void setLinksWithoutCurrentAssetsInvestments(SmallFullApi smallFullApi) {
@@ -285,7 +306,8 @@ public class CurrentAssetsInvestmentsServiceImplTests {
         getMockCurrentAssetsInvestmentsResourceHandler();
         when(mockCurrentAssetsInvestmentsResourceHandler.get(CURRENTS_ASSETS_INVESTMENTS_URI))
             .thenReturn(mockCurrentAssetsInvestmentsGet);
-        when(mockCurrentAssetsInvestmentsGet.execute()).thenReturn(currentAssetsInvestmentsApi);
+        when(mockCurrentAssetsInvestmentsGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(currentAssetsInvestmentsApi);
     }
 
     private void getMockCurrentAssetsInvestmentsResourceHandler() {

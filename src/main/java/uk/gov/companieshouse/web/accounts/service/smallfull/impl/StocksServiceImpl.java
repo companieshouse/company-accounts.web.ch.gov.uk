@@ -6,6 +6,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
@@ -18,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -41,6 +43,9 @@ public class StocksServiceImpl implements StocksService {
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
+    private ValidationContext validationContext;
 
     private static final UriTemplate STOCKS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/stocks");
@@ -77,15 +82,20 @@ public class StocksServiceImpl implements StocksService {
         boolean stocksResourceExists = hasStocks(smallFullApi.getLinks());
 
         try {
+            ApiResponse apiResponse;
             if (!stocksResourceExists) {
-                apiClient.smallFull().stocks().create(uri, stocksApi).execute();
+                apiResponse = apiClient.smallFull().stocks().create(uri, stocksApi).execute();
             } else {
-                apiClient.smallFull().stocks().update(uri, stocksApi).execute();
+                apiResponse = apiClient.smallFull().stocks().update(uri, stocksApi).execute();
+            }
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -98,7 +108,7 @@ public class StocksServiceImpl implements StocksService {
         String uri = STOCKS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().stocks().get(uri).execute();
+            return apiClient.smallFull().stocks().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {

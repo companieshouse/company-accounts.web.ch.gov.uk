@@ -1,10 +1,8 @@
 package uk.gov.companieshouse.web.accounts.validation.helper;
 
-import java.util.List;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface ServiceExceptionHandler {
 
@@ -12,11 +10,9 @@ public interface ServiceExceptionHandler {
      * Handles an {@link ApiErrorResponseException}, triggered by resource submission
      * @param e The exception which has occurred as a result of submitting an API resource
      * @param resourceName The name of the submitted resource (e.g. 'debtors'), used for the exception message
-     * @return A list of validation errors
-     * @throws ServiceException in the case where the exception is not thrown due to a bad request,
-     *                          or no validation errors are present in the returned response
+     * @throws ServiceException wrapping the {@link ApiErrorResponseException} with an appropriate message
      */
-    List<ValidationError> handleSubmissionException(ApiErrorResponseException e, String resourceName) throws ServiceException;
+    void handleSubmissionException(ApiErrorResponseException e, String resourceName) throws ServiceException;
 
     /**
      * Handles an {@link ApiErrorResponseException} which occurs as a result of a delete request
