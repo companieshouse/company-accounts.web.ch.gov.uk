@@ -10,7 +10,7 @@
     <h1 id="page-header" class="govuk-heading-l"><span th:text="${heading}"></span></h1>
   </header>
 
-  <h2 class="govuk-heading-m"><span th:text="${subheading}"></span></h2>
+  <h2 th:classappend="${subheadingClass}"><span th:text="${subheading}"></span></h2>
 
 
   <div th:replace="fragments/globalErrors :: globalErrors"></div>
