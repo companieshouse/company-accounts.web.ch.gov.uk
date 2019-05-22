@@ -68,7 +68,10 @@ public class ConsultationWithStakeholdersController extends BaseController imple
         @PathVariable String companyAccountsId,
         @ModelAttribute("consultationWithStakeholders") @Valid ConsultationWithStakeholders consultationWithStakeholders,
         BindingResult bindingResult,
+        Model model,
         HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

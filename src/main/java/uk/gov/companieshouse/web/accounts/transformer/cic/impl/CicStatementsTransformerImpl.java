@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.cic.impl;
 
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
+import uk.gov.companieshouse.web.accounts.enumeration.DefaultCicStatements;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
@@ -45,8 +46,13 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
         CicStatementsApi cicStatementsApi) {
 
         ConsultationWithStakeholders consultationWithStakeholders = new ConsultationWithStakeholders();
-        consultationWithStakeholders.setConsultationWithStakeholders(
-            cicStatementsApi.getReportStatements().getConsultationWithStakeholders());
+
+        if (!cicStatementsApi.getReportStatements().getConsultationWithStakeholders().equals(
+                DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement())) {
+
+            consultationWithStakeholders.setConsultationWithStakeholders(
+                    cicStatementsApi.getReportStatements().getConsultationWithStakeholders());
+        }
 
         return consultationWithStakeholders;
     }
@@ -63,8 +69,13 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
     @Override
     public DirectorsRemuneration getDirectorsRemuneration(CicStatementsApi cicStatementsApi) {
         DirectorsRemuneration directorsRemuneration = new DirectorsRemuneration();
-        directorsRemuneration.setDirectorsRemuneration(
-            cicStatementsApi.getReportStatements().getDirectorsRemuneration());
+
+        if (!cicStatementsApi.getReportStatements().getDirectorsRemuneration().equals(
+                DefaultCicStatements.DIRECTORS_REMUNERATION.getDefaultStatement())) {
+
+            directorsRemuneration.setDirectorsRemuneration(
+                    cicStatementsApi.getReportStatements().getDirectorsRemuneration());
+        }
 
         return directorsRemuneration;
     }
