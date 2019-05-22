@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.cic;
 
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
+import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
@@ -42,4 +43,6 @@ public interface CicStatementsTransformer {
     TransferOfAssets getTransferOfAssets(CicStatementsApi cicStatementsApi);
 
     void setTransferOfAssets(TransferOfAssets transferOfAssets, CicStatementsApi cicStatementsApi);
+
+    CicReview getCicReview(CicStatementsApi cicStatementsApi);
 }
