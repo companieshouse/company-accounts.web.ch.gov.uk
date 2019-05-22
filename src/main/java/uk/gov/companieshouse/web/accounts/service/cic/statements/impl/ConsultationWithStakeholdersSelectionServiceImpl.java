@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.cic.statements.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
+import uk.gov.companieshouse.web.accounts.enumeration.DefaultCicStatements;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholdersSelection;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CicStatementsService;
@@ -15,9 +16,6 @@ public class ConsultationWithStakeholdersSelectionServiceImpl implements
     @Autowired
     private CicStatementsService cicStatementsService;
 
-    private static final String DEFAULT_CONSULTATION_WITH_STAKEHOLDERS_STATEMENT =
-            "No consultation with stakeholders";
-
     @Override
     public ConsultationWithStakeholdersSelection getConsultationWithStakeholdersSelection(
             String transactionId, String companyAccountsId) throws ServiceException {
@@ -29,7 +27,7 @@ public class ConsultationWithStakeholdersSelectionServiceImpl implements
 
         if (!statements.getReportStatements()
                 .getConsultationWithStakeholders()
-                        .equals(DEFAULT_CONSULTATION_WITH_STAKEHOLDERS_STATEMENT)) {
+                        .equals(DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement())) {
 
             selection.setHasProvidedConsultationWithStakeholders(true);
         }
@@ -49,10 +47,10 @@ public class ConsultationWithStakeholdersSelectionServiceImpl implements
 
             if (!statements.getReportStatements()
                     .getConsultationWithStakeholders()
-                    .equals(DEFAULT_CONSULTATION_WITH_STAKEHOLDERS_STATEMENT)) {
+                            .equals(DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement())) {
 
                 statements.getReportStatements().setConsultationWithStakeholders(
-                        DEFAULT_CONSULTATION_WITH_STAKEHOLDERS_STATEMENT);
+                        DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement());
 
                 cicStatementsService.updateCicStatementsApi(transactionId, companyAccountsId, statements);
             }
