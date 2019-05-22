@@ -55,10 +55,13 @@ public class CicReviewControllerTest {
 
 
     @Mock
-    CicReviewService cicReviewService;
+    private CicReviewService cicReviewService;
 
     @Mock
-    NavigatorService navigatorService;
+    private NavigatorService navigatorService;
+
+    @Mock
+    private CicReview cicReview;
 
     private MockMvc mockMvc;
 
@@ -75,13 +78,7 @@ public class CicReviewControllerTest {
     @DisplayName("Get review page success path")
     void getRequestSuccess() throws Exception {
 
-        CicReview cicReview = new CicReview();
-        cicReview.setTransferOfAssets("transfer");
-        cicReview.setDirectorsRemuneration("director");
-        cicReview.setConsultationWithStakeholders("consultation");
-        cicReview.setActivitiesAndImpact("activity");
-
-        when(cicReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(cicReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(cicReview);
 
         this.mockMvc.perform(get(REVIEW_PATH))
@@ -90,7 +87,7 @@ public class CicReviewControllerTest {
             .andExpect(model().attributeExists(REVIEW_MODEL_ATTR));
 
         verify(cicReviewService, times(1))
-            .getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+            .getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -98,7 +95,7 @@ public class CicReviewControllerTest {
     void getRequestFailureWithServiceException() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(cicReviewService).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+            .when(cicReviewService).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(get(REVIEW_PATH))
             .andExpect(status().isOk())

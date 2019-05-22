@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.cic.impl;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -27,8 +27,6 @@ public class CicReviewServiceImplTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
     @Mock
     private CicStatementsService cicStatementsService;
 
@@ -53,9 +51,9 @@ public class CicReviewServiceImplTest {
         when(cicStatementsTransformer.getCicReview(cicStatementsApi)).thenReturn(cicReview);
 
         CicReview review = cicReviewService
-            .getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+            .getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        assertNotNull(review);
+        assertEquals(cicReview, review);
     }
 
     @Test
@@ -66,7 +64,7 @@ public class CicReviewServiceImplTest {
             .getCicStatementsApi(anyString(), anyString());
 
         assertThrows(ServiceException.class,
-            () -> cicReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER));
+            () -> cicReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
 }

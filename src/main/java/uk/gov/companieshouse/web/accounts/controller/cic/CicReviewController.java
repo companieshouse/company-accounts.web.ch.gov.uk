@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicReviewService;
 public class CicReviewController extends BaseController {
 
     @Autowired
-    CicReviewService cicReviewService;
+    private CicReviewService cicReviewService;
 
     @GetMapping
     public String getCicReviewPage(@PathVariable String companyNumber,
@@ -36,7 +36,7 @@ public class CicReviewController extends BaseController {
 
         try {
             CicReview cicReview = cicReviewService
-                .getReview(transactionId, companyAccountsId, companyNumber);
+                .getReview(transactionId, companyAccountsId);
 
             model.addAttribute("cicReview", cicReview);
             model.addAttribute("companyNumber", companyNumber);
@@ -55,7 +55,16 @@ public class CicReviewController extends BaseController {
     @PostMapping
     public String postCicReviewPage(@PathVariable String companyNumber,
         @PathVariable String transactionId,
-        @PathVariable String companyAccountsId) {
+        @PathVariable String companyAccountsId,
+        HttpServletRequest request) {
+
+        try {
+            cicReviewService.acceptStatements(transactionId, companyAccountsId);
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return navigatorService
             .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,

@@ -5,5 +5,7 @@ import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
 
 public interface CicReviewService {
 
-    CicReview getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException;
+    CicReview getReview(String transactionId, String companyAccountsId) throws ServiceException;
+
+    void acceptStatements(String transactionId, String companyAccountsId) throws ServiceException;
 }
