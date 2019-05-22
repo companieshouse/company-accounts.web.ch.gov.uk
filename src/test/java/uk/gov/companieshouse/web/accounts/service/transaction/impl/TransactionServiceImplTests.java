@@ -224,7 +224,7 @@ public class TransactionServiceImplTests {
         String expectedResumeJourneyUri = "/company/" + COMPANY_NUMBER +
                 "/transaction/" + TRANSACTION_ID +
                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                "/small-full/resume";
+                "/resume";
 
         assertEquals(expectedResumeJourneyUri, transactionCaptor.getValue().getResumeJourneyUri());
     }

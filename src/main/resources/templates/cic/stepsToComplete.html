@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title>How to file your CIC report and accounts with Companies House</title>
+</head>
+<body>
+<div id="stepsToComplete-main-content" layout:fragment="content">
+
+    <form id="stepsToComplete-form" th:action="@{''}" class="form" method="post">
+
+        <div class="interruption-card">
+            <header>
+                <h1 class="govuk-heading-l" id="page-title">
+                    How to file your CIC report and accounts
+                </h1>
+            </header>
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds" id="accounts-start-page">
+
+                    <ul class="govuk-list" id="stepsToComplete-list">
+                        <li>
+                            <span class="circle-step-white" id="circle-1">1</span>
+                            <h2 class="govuk-heading-m" id="step-1">Have your prepared accounts ready</h2>
+                        </li>
+                        <li>
+                            <span class="circle-step-white" id="circle-2">2</span>
+                            <h2 class="govuk-heading-m" id="step-2">File your CIC report</h2>
+                        </li>
+                        <li>
+                            <span class="circle-step-white" id="circle-3">3</span>
+                            <h2 class="govuk-heading-m" id="step-3">File your accounts</h2>
+                        </li>
+                        <li>
+                            <span class="circle-step-white" id="circle-4">4</span>
+                            <h2 class="govuk-heading-m" id="step-4">Pay £15 fee</h2>
+                        </li>
+                    </ul>
+
+                    <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue" data-event-id="How to file CIC report continue"/>
+
+                    <p>
+                        <a id="accounts-help" href="https://www.gov.uk/annual-accounts">I need help preparing my accounts</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+</body>
+</html>
