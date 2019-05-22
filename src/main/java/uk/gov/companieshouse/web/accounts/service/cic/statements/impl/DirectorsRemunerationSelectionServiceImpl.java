@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.cic.statements.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
+import uk.gov.companieshouse.web.accounts.enumeration.DefaultCicStatements;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemunerationSelection;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CicStatementsService;
@@ -15,9 +16,6 @@ public class DirectorsRemunerationSelectionServiceImpl implements
     @Autowired
     private CicStatementsService cicStatementsService;
 
-    private static final String DEFAULT_DIRECTORS_REMUNERATION_STATEMENT =
-            "No remuneration was received";
-
     @Override
     public DirectorsRemunerationSelection getDirectorsRemunerationSelection(String transactionId,
             String companyAccountsId) throws ServiceException {
@@ -29,7 +27,7 @@ public class DirectorsRemunerationSelectionServiceImpl implements
 
         if (!statements.getReportStatements()
                 .getDirectorsRemuneration()
-                        .equals(DEFAULT_DIRECTORS_REMUNERATION_STATEMENT)) {
+                        .equals(DefaultCicStatements.DIRECTORS_REMUNERATION.getDefaultStatement())) {
 
             selection.setHasProvidedDirectorsRemuneration(true);
         }
@@ -48,10 +46,10 @@ public class DirectorsRemunerationSelectionServiceImpl implements
 
             if (!statements.getReportStatements()
                     .getDirectorsRemuneration()
-                            .equals(DEFAULT_DIRECTORS_REMUNERATION_STATEMENT)) {
+                            .equals(DefaultCicStatements.DIRECTORS_REMUNERATION.getDefaultStatement())) {
 
                 statements.getReportStatements().setDirectorsRemuneration(
-                        DEFAULT_DIRECTORS_REMUNERATION_STATEMENT);
+                        DefaultCicStatements.DIRECTORS_REMUNERATION.getDefaultStatement());
 
                 cicStatementsService.updateCicStatementsApi(transactionId, companyAccountsId, statements);
             }

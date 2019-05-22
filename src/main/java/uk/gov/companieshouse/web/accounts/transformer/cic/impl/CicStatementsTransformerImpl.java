@@ -68,8 +68,13 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
     @Override
     public DirectorsRemuneration getDirectorsRemuneration(CicStatementsApi cicStatementsApi) {
         DirectorsRemuneration directorsRemuneration = new DirectorsRemuneration();
-        directorsRemuneration.setDirectorsRemuneration(
-            cicStatementsApi.getReportStatements().getDirectorsRemuneration());
+
+        if (!cicStatementsApi.getReportStatements().getDirectorsRemuneration().equals(
+                DefaultCicStatements.DIRECTORS_REMUNERATION.getDefaultStatement())) {
+
+            directorsRemuneration.setDirectorsRemuneration(
+                    cicStatementsApi.getReportStatements().getDirectorsRemuneration());
+        }
 
         return directorsRemuneration;
     }

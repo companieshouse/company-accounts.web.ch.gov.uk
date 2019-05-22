@@ -71,7 +71,10 @@ public class DirectorsRemunerationController extends BaseController implements
         @PathVariable String companyAccountsId,
         @ModelAttribute("directorsRemuneration") @Valid DirectorsRemuneration directorsRemuneration,
         BindingResult bindingResult,
+        Model model,
         HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
