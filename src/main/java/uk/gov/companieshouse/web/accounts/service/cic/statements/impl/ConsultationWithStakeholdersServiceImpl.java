@@ -52,5 +52,4 @@ public class ConsultationWithStakeholdersServiceImpl implements
             .updateCicStatementsApi(transactionId, companyAccountsId, cicStatementsApi);
 
     }
-
 }
