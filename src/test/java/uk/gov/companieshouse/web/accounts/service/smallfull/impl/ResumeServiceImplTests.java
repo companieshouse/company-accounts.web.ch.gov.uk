@@ -13,6 +13,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.company.CompanyResourceHandler;
 import uk.gov.companieshouse.api.handler.company.request.CompanyGet;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -37,6 +38,9 @@ public class ResumeServiceImplTests {
     private CompanyGet companyGet;
 
     @Mock
+    private ApiResponse<CompanyProfileApi> responseWithData;
+
+    @Mock
     private CompanyProfileApi companyProfileApi;
 
     @InjectMocks
@@ -53,7 +57,8 @@ public class ResumeServiceImplTests {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.company()).thenReturn(companyResourceHandler);
         when(companyResourceHandler.get(any(String.class))).thenReturn(companyGet);
-        when(companyGet.execute()).thenReturn(companyProfileApi);
+        when(companyGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(companyProfileApi);
     }
     
     @Test
