@@ -1,4 +1,3 @@
-
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
 import uk.gov.companieshouse.web.accounts.model.state.CicStatements;
