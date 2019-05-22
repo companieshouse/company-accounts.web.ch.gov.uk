@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.cic.statements.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
+import uk.gov.companieshouse.web.accounts.enumeration.DefaultCicStatements;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssetsSelection;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CicStatementsService;
@@ -15,9 +16,6 @@ public class TransferOfAssetsSelectionServiceImpl implements
     @Autowired
     private CicStatementsService cicStatementsService;
 
-    private static final String DEFAULT_TRANSFER_OF_ASSETS_STATEMENT =
-            "No transfer of assets other than for full consideration";
-
     @Override
     public TransferOfAssetsSelection getTransferOfAssetsSelection(
             String transactionId, String companyAccountsId) throws ServiceException {
@@ -29,7 +27,7 @@ public class TransferOfAssetsSelectionServiceImpl implements
 
         if (!statements.getReportStatements()
                 .getTransferOfAssets()
-                        .equals(DEFAULT_TRANSFER_OF_ASSETS_STATEMENT)) {
+                        .equals(DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement())) {
 
             selection.setHasProvidedTransferOfAssets(true);
         }
@@ -49,10 +47,10 @@ public class TransferOfAssetsSelectionServiceImpl implements
 
             if (!statements.getReportStatements()
                     .getTransferOfAssets()
-                    .equals(DEFAULT_TRANSFER_OF_ASSETS_STATEMENT)) {
+                            .equals(DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement())) {
 
                 statements.getReportStatements().setTransferOfAssets(
-                        DEFAULT_TRANSFER_OF_ASSETS_STATEMENT);
+                        DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement());
 
                 cicStatementsService.updateCicStatementsApi(transactionId, companyAccountsId, statements);
             }

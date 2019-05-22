@@ -50,6 +50,8 @@ public class TransferOfAssetsController extends BaseController implements
         Model model,
         HttpServletRequest request) {
 
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
         try {
             model.addAttribute("transferOfAssets", transferOfAssetsService
                 .getTransferOfAssets(transactionId, companyAccountsId));
@@ -68,7 +70,10 @@ public class TransferOfAssetsController extends BaseController implements
         @PathVariable String companyAccountsId,
         @ModelAttribute("transferOfAssets") @Valid TransferOfAssets transferOfAssets,
         BindingResult bindingResult,
+        Model model,
         HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

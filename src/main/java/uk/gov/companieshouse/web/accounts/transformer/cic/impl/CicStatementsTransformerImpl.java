@@ -91,8 +91,13 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
     @Override
     public TransferOfAssets getTransferOfAssets(CicStatementsApi cicStatementsApi) {
         TransferOfAssets transferOfAssets = new TransferOfAssets();
-        transferOfAssets.setTransferOfAssets(
-            cicStatementsApi.getReportStatements().getTransferOfAssets());
+
+        if (!cicStatementsApi.getReportStatements().getTransferOfAssets().equals(
+                DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement())) {
+
+            transferOfAssets.setTransferOfAssets(
+                    cicStatementsApi.getReportStatements().getTransferOfAssets());
+        }
 
         return transferOfAssets;
     }
