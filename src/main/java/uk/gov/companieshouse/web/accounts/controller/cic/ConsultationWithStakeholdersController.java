@@ -27,7 +27,6 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-
 @Controller
 @NextController(StepsToCompleteController.class)
 @PreviousController(ConsultationWithStakeholdersSelectionController.class)
@@ -70,7 +69,10 @@ public class ConsultationWithStakeholdersController extends BaseController imple
         @PathVariable String companyAccountsId,
         @ModelAttribute("consultationWithStakeholders") @Valid ConsultationWithStakeholders consultationWithStakeholders,
         BindingResult bindingResult,
+        Model model,
         HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
