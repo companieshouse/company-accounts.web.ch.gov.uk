@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemunerationService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-
 @Controller
 @NextController(StepsToCompleteController.class)
 @PreviousController(DirectorsRemunerationSelectionController.class)
