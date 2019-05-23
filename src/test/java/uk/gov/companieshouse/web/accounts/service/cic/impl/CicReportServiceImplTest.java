@@ -22,6 +22,7 @@ import uk.gov.companieshouse.api.handler.cic.CicReportResourceHandler;
 import uk.gov.companieshouse.api.handler.cic.request.CicReportCreate;
 import uk.gov.companieshouse.api.handler.cic.request.CicReportGet;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.cic.CicReportApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -47,7 +48,10 @@ public class CicReportServiceImplTest {
     private CicReportGet cicReportGet;
 
     @Mock
-    private CicReportApi cicReportApi;
+    private ApiResponse<CicReportApi> responseWithData;
+
+    @Mock
+    private CicReportApi cicReport;
 
     @InjectMocks
     private CicReportService cicReportService = new CicReportServiceImpl();
@@ -117,12 +121,14 @@ public class CicReportServiceImplTest {
 
         when(cicReportResourceHandler.get(CIC_REPORT_URI)).thenReturn(cicReportGet);
 
-        when(cicReportGet.execute()).thenReturn(cicReportApi);
+        when(cicReportGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(cicReport);
 
         CicReportApi returnedCicReport =
                 cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        assertEquals(cicReportApi, returnedCicReport);
+        assertEquals(cicReport, returnedCicReport);
     }
 
     @Test

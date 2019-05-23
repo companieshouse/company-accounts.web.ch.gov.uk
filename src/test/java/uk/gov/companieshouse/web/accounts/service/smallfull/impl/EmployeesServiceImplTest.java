@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -9,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ui.Model;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -19,7 +16,7 @@ import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesDe
 import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesCreate;
 import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesGet;
 import uk.gov.companieshouse.api.handler.smallfull.employees.request.EmployeesUpdate;
-import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod;
@@ -39,12 +36,14 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -78,13 +77,10 @@ public class EmployeesServiceImplTest {
     private EmployeesDelete mockEmployeesDelete;
 
     @Mock
-    private SmallFullGet mockSmallFullGet;
-
-    @Mock
-    private Model mockModel;
-
-    @Mock
     private EmployeesTransformer mockEmployeesTransformer;
+
+    @Mock
+    private ServiceExceptionHandler serviceExceptionHandler;
 
     @Mock
     private ValidationContext mockValidationContext;
@@ -97,6 +93,18 @@ public class EmployeesServiceImplTest {
 
     @Mock
     private BalanceSheet mockBalanceSheet;
+
+    @Mock
+    private ApiResponse<EmployeesApi> responseWithData;
+
+    @Mock
+    private ApiResponse<Void> responseNoData;
+
+    @Mock
+    private ApiErrorResponseException apiErrorResponseException;
+
+    @Mock
+    private URIValidationException uriValidationException;
 
     @InjectMocks
     private EmployeesService employeesService = new EmployeesServiceImpl();
@@ -114,6 +122,8 @@ public class EmployeesServiceImplTest {
     private static final String EMPLOYEES_URI = BASE_SMALL_FULL_URI + "/notes/employees";
 
     private static final String DETAILS = "test";
+
+    private static final String RESOURCE_NAME = "employees";
 
     @Test
     @DisplayName("GET - Employees successful path")
@@ -139,12 +149,14 @@ public class EmployeesServiceImplTest {
     @DisplayName("GET - Employees successful path when http status not found")
     void getEmployeesSuccessHttpStatusNotFound() throws Exception {
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.get(EMPLOYEES_URI)).thenReturn(mockEmployeesGet);
         when(mockEmployeesGet.execute()).thenThrow(apiErrorResponseException);
+
+        doNothing()
+                .when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
 
         when(mockEmployeesTransformer.getEmployees(null)).thenReturn(new Employees());
@@ -160,14 +172,14 @@ public class EmployeesServiceImplTest {
     @DisplayName("GET - Employees throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
     void getEmployeesApiResponseException() throws Exception {
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.get(EMPLOYEES_URI)).thenReturn(mockEmployeesGet);
         when(mockEmployeesGet.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockEmployeesGet.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> employeesService.getEmployees(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -180,9 +192,12 @@ public class EmployeesServiceImplTest {
 
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.get(EMPLOYEES_URI)).thenReturn(mockEmployeesGet);
-        when(mockEmployeesGet.execute()).thenThrow(URIValidationException.class);
+        when(mockEmployeesGet.execute()).thenThrow(uriValidationException);
 
-        assertThrows(URIValidationException.class, () -> mockEmployeesGet.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> employeesService.getEmployees(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -211,7 +226,7 @@ public class EmployeesServiceImplTest {
 
     @Test
     @DisplayName("POST - Employees throws ServiceException due to ApiErrorResponseException - 404 Not Found")
-    void postEmployeeesApiErrorResponseExceptionNotFound() throws Exception {
+    void postEmployeesApiErrorResponseExceptionNotFound() throws Exception {
 
         getMockEmployeesResourceHandler();
 
@@ -226,11 +241,12 @@ public class EmployeesServiceImplTest {
         when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
         when(mockEmployeesResourceHandler.create(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockEmployeesCreate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockEmployeesCreate.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -255,11 +271,12 @@ public class EmployeesServiceImplTest {
         when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
         when(mockEmployeesResourceHandler.create(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400,"Bad Request",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockEmployeesCreate.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockEmployeesCreate.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -298,6 +315,8 @@ public class EmployeesServiceImplTest {
         when(mockEmployeesTransformer.getEmployeesApi(employees)).thenReturn(employeesApi);
         employeesUpdate(employeesApi);
 
+        when(responseNoData.hasErrors()).thenReturn(false);
+
         List<ValidationError> validationErrors = employeesService.submitEmployees(TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID, employees, COMPANY_NUMBER);
 
@@ -321,9 +340,12 @@ public class EmployeesServiceImplTest {
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.update(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesUpdate);
 
-        when(mockEmployeesUpdate.execute()).thenThrow(URIValidationException.class);
+        when(mockEmployeesUpdate.execute()).thenThrow(uriValidationException);
 
-        assertThrows(URIValidationException.class, () -> mockEmployeesUpdate.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> employeesService.submitEmployees(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID,
@@ -337,7 +359,6 @@ public class EmployeesServiceImplTest {
 
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.delete(EMPLOYEES_URI)).thenReturn(mockEmployeesDelete);
-        doNothing().when(mockEmployeesDelete).execute();
 
         employeesService.deleteEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -350,9 +371,12 @@ public class EmployeesServiceImplTest {
 
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.delete(EMPLOYEES_URI)).thenReturn(mockEmployeesDelete);
-        when(mockEmployeesDelete.execute()).thenThrow(URIValidationException.class);
+        when(mockEmployeesDelete.execute()).thenThrow(uriValidationException);
 
-        assertThrows(URIValidationException.class, () -> mockEmployeesDelete.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> employeesService.deleteEmployees(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID));
@@ -365,11 +389,12 @@ public class EmployeesServiceImplTest {
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.delete(EMPLOYEES_URI)).thenReturn(mockEmployeesDelete);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404,"Not Found",new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
         when(mockEmployeesDelete.execute()).thenThrow(apiErrorResponseException);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockEmployeesDelete.execute());
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+
         assertThrows(ServiceException.class, () -> employeesService.deleteEmployees(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID));
@@ -380,7 +405,7 @@ public class EmployeesServiceImplTest {
         when(mockApiClient.smallFull()).thenReturn(mockSmallFullResourceHandler);
     }
 
-    private void getMockEmployeesResourceHandler() throws Exception {
+    private void getMockEmployeesResourceHandler() {
         getMockSmallFullResourceHandler();
         when(mockSmallFullResourceHandler.employees()).thenReturn(mockEmployeesResourceHandler);
     }
@@ -388,19 +413,20 @@ public class EmployeesServiceImplTest {
     private void getMockEmployeesApi(EmployeesApi employeesApi) throws Exception {
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.get(EMPLOYEES_URI)).thenReturn(mockEmployeesGet);
-        when(mockEmployeesGet.execute()).thenReturn(employeesApi);
+        when(mockEmployeesGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(employeesApi);
     }
 
     private void employeesCreate(EmployeesApi employeesApi) throws Exception {
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.create(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesCreate);
-        when(mockEmployeesCreate.execute()).thenReturn(employeesApi);
+        when(mockEmployeesCreate.execute()).thenReturn(responseWithData);
     }
 
     private void employeesUpdate(EmployeesApi employeesApi) throws Exception {
         getMockEmployeesResourceHandler();
         when(mockEmployeesResourceHandler.update(EMPLOYEES_URI, employeesApi)).thenReturn(mockEmployeesUpdate);
-        doNothing().when(mockEmployeesUpdate).execute();
+        when(mockEmployeesUpdate.execute()).thenReturn(responseNoData);
     }
 
     private Employees createEmployees() {
