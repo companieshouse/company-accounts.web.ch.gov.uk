@@ -40,7 +40,7 @@ public class DirectorsRemunerationControllerTest {
     private DirectorsRemunerationService directorsRemunerationService;
 
     @Mock
-    NavigatorService navigatorService;
+    private NavigatorService navigatorService;
 
     @InjectMocks
     private DirectorsRemunerationController directorsRemunerationController;
