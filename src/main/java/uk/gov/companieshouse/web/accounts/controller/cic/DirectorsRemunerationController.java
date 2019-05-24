@@ -1,3 +1,4 @@
+
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import java.util.List;
@@ -19,30 +20,31 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
 import uk.gov.companieshouse.web.accounts.model.state.CicStatements;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersService;
+import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemunerationService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(DirectorsRemunerationSelectionController.class)
-@PreviousController(ConsultationWithStakeholdersSelectionController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/consultation")
-public class ConsultationWithStakeholdersController extends BaseController implements
+@NextController(StepsToCompleteController.class)
+@PreviousController(DirectorsRemunerationSelectionController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/directors-remuneration")
+public class DirectorsRemunerationController extends BaseController implements
     ConditionalController {
 
     @Autowired
-    private ConsultationWithStakeholdersService consultationWithStakeholdersService;
+    private DirectorsRemunerationService directorsRemunerationService;
 
     @Override
     protected String getTemplateName() {
-        return "cic/consultationWithStakeholders";
+        return "cic/directorsRemuneration";
     }
 
     @GetMapping
-    public String getConsulationWithStakeholders(@PathVariable String companyNumber,
+    public String getDirectorsRemuneration(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
         Model model,
@@ -51,8 +53,8 @@ public class ConsultationWithStakeholdersController extends BaseController imple
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("consultationWithStakeholders", consultationWithStakeholdersService
-                .getConsultationWithStakeholders(transactionId, companyAccountsId));
+            model.addAttribute("directorsRemuneration", directorsRemunerationService
+                .getDirectorsRemuneration(transactionId, companyAccountsId));
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -63,10 +65,10 @@ public class ConsultationWithStakeholdersController extends BaseController imple
     }
 
     @PostMapping
-    public String postConsulationWithStakeholders(@PathVariable String companyNumber,
+    public String postDirectorsRemuneration(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
-        @ModelAttribute("consultationWithStakeholders") @Valid ConsultationWithStakeholders consultationWithStakeholders,
+        @ModelAttribute("directorsRemuneration") @Valid DirectorsRemuneration directorsRemuneration,
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
@@ -78,9 +80,9 @@ public class ConsultationWithStakeholdersController extends BaseController imple
         }
 
         try {
-            List<ValidationError> validationErrors = consultationWithStakeholdersService
-                .submitConsultationWithStakeholders(transactionId, companyAccountsId,
-                    consultationWithStakeholders);
+            List<ValidationError> validationErrors = directorsRemunerationService
+                .submitDirectorsRemuneration(transactionId, companyAccountsId,
+                    directorsRemuneration);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
@@ -102,12 +104,12 @@ public class ConsultationWithStakeholdersController extends BaseController imple
         throws ServiceException {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                        .getRequest();
+                .getRequest();
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return Optional.of(companyAccountsDataState)
                 .map(CompanyAccountsDataState::getCicStatements)
-                .map(CicStatements::getHasProvidedConsultationWithStakeholders)
+                .map(CicStatements::getHasProvidedDirectorsRemuneration)
                 .orElse(false);
     }
 }

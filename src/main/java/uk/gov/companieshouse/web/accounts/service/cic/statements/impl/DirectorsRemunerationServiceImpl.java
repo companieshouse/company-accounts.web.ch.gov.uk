@@ -4,17 +4,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
-import uk.gov.companieshouse.api.model.accounts.cic.statements.ReportStatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CicStatementsService;
-import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersService;
+import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemunerationService;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
-public class ConsultationWithStakeholdersServiceImpl implements
-    ConsultationWithStakeholdersService {
+public class DirectorsRemunerationServiceImpl implements
+    DirectorsRemunerationService {
 
     @Autowired
     private CicStatementsService cicStatementsService;
@@ -26,30 +25,31 @@ public class ConsultationWithStakeholdersServiceImpl implements
      * {@inheritDoc}
      */
     @Override
-    public ConsultationWithStakeholders getConsultationWithStakeholders(String transactionId,
+    public DirectorsRemuneration getDirectorsRemuneration(String transactionId,
         String companyAccountsId) throws ServiceException {
 
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
-        return cicStatementsTransformer.getConsultationWithStakeholders(cicStatementsApi);
+        return cicStatementsTransformer.getDirectorsRemuneration(cicStatementsApi);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<ValidationError> submitConsultationWithStakeholders(String transactionId,
-        String companyAccountsId, ConsultationWithStakeholders consultationWithStakeholders)
+    public List<ValidationError> submitDirectorsRemuneration(String transactionId,
+        String companyAccountsId, DirectorsRemuneration directorsRemuneration)
         throws ServiceException {
 
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
         cicStatementsTransformer
-            .setConsultationWithStakeholders(consultationWithStakeholders, cicStatementsApi);
+            .setDirectorsRemuneration(directorsRemuneration, cicStatementsApi);
         return cicStatementsService
             .updateCicStatementsApi(transactionId, companyAccountsId, cicStatementsApi);
 
     }
+
 }
