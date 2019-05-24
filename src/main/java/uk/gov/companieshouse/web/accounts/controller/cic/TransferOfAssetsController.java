@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 import uk.gov.companieshouse.web.accounts.model.state.CicStatements;
@@ -29,7 +28,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 
 @Controller
-@NextController(StepsToCompleteController.class)
+@NextController(CicReviewController.class)
 @PreviousController(TransferOfAssetsSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/transfer-of-assets")
 public class TransferOfAssetsController extends BaseController implements

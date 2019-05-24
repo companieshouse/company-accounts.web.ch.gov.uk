@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.transformer.cic.impl;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.enumeration.DefaultCicStatements;
+import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
@@ -107,5 +108,21 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
         CicStatementsApi cicStatementsApi) {
         cicStatementsApi.getReportStatements().setTransferOfAssets(
             transferOfAssets.getTransferOfAssets());
+    }
+
+    @Override
+    public CicReview getCicReview(CicStatementsApi cicStatementsApi) {
+        CicReview cicReview = new CicReview();
+
+        cicReview.setActivitiesAndImpact(
+            cicStatementsApi.getReportStatements().getCompanyActivitiesAndImpact());
+        cicReview.setTransferOfAssets(
+                cicStatementsApi.getReportStatements().getTransferOfAssets());
+        cicReview.setDirectorsRemuneration(
+            cicStatementsApi.getReportStatements().getDirectorsRemuneration());
+        cicReview.setConsultationWithStakeholders(
+            cicStatementsApi.getReportStatements().getConsultationWithStakeholders());
+
+        return cicReview;
     }
 }
