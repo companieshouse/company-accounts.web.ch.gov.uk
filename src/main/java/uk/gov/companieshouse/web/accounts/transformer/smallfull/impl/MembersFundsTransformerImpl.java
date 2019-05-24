@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.MembersFundsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.model.smallfull.CapitalAndReserves;
 import uk.gov.companieshouse.web.accounts.model.smallfull.MembersFunds;
 import uk.gov.companieshouse.web.accounts.model.smallfull.MembersFundsProfitAndLossAccount;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TotalMembersFunds;
