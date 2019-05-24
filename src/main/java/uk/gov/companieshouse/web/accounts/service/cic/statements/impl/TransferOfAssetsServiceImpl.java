@@ -5,15 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithStakeholders;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CicStatementsService;
-import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersService;
+import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAssetsService;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
-public class ConsultationWithStakeholdersServiceImpl implements
-    ConsultationWithStakeholdersService {
+public class TransferOfAssetsServiceImpl implements
+    TransferOfAssetsService {
 
     @Autowired
     private CicStatementsService cicStatementsService;
@@ -25,30 +25,31 @@ public class ConsultationWithStakeholdersServiceImpl implements
      * {@inheritDoc}
      */
     @Override
-    public ConsultationWithStakeholders getConsultationWithStakeholders(String transactionId,
+    public TransferOfAssets getTransferOfAssets(String transactionId,
         String companyAccountsId) throws ServiceException {
 
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
-        return cicStatementsTransformer.getConsultationWithStakeholders(cicStatementsApi);
+        return cicStatementsTransformer.getTransferOfAssets(cicStatementsApi);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<ValidationError> submitConsultationWithStakeholders(String transactionId,
-        String companyAccountsId, ConsultationWithStakeholders consultationWithStakeholders)
+    public List<ValidationError> submitTransferOfAssets(String transactionId,
+        String companyAccountsId, TransferOfAssets transferOfAssets)
         throws ServiceException {
 
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
         cicStatementsTransformer
-            .setConsultationWithStakeholders(consultationWithStakeholders, cicStatementsApi);
+            .setTransferOfAssets(transferOfAssets, cicStatementsApi);
         return cicStatementsService
             .updateCicStatementsApi(transactionId, companyAccountsId, cicStatementsApi);
 
     }
+
 }

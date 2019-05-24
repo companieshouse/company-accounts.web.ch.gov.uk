@@ -19,30 +19,32 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemuneration;
+import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 import uk.gov.companieshouse.web.accounts.model.state.CicStatements;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemunerationService;
+import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAssetsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+
 @Controller
-@NextController(TransferOfAssetsSelectionController.class)
-@PreviousController(DirectorsRemunerationSelectionController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/directors-remuneration")
-public class DirectorsRemunerationController extends BaseController implements
+@NextController(StepsToCompleteController.class)
+@PreviousController(TransferOfAssetsSelectionController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/transfer-of-assets")
+public class TransferOfAssetsController extends BaseController implements
     ConditionalController {
 
     @Autowired
-    private DirectorsRemunerationService directorsRemunerationService;
+    private TransferOfAssetsService transferOfAssetsService;
 
     @Override
     protected String getTemplateName() {
-        return "cic/directorsRemuneration";
+        return "cic/transferOfAssets";
     }
 
     @GetMapping
-    public String getDirectorsRemuneration(@PathVariable String companyNumber,
+    public String getTransferOfAssets(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
         Model model,
@@ -51,8 +53,8 @@ public class DirectorsRemunerationController extends BaseController implements
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("directorsRemuneration", directorsRemunerationService
-                .getDirectorsRemuneration(transactionId, companyAccountsId));
+            model.addAttribute("transferOfAssets", transferOfAssetsService
+                .getTransferOfAssets(transactionId, companyAccountsId));
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -63,10 +65,10 @@ public class DirectorsRemunerationController extends BaseController implements
     }
 
     @PostMapping
-    public String postDirectorsRemuneration(@PathVariable String companyNumber,
+    public String postTransferOfAssets(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
-        @ModelAttribute("directorsRemuneration") @Valid DirectorsRemuneration directorsRemuneration,
+        @ModelAttribute("transferOfAssets") @Valid TransferOfAssets transferOfAssets,
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
@@ -78,9 +80,9 @@ public class DirectorsRemunerationController extends BaseController implements
         }
 
         try {
-            List<ValidationError> validationErrors = directorsRemunerationService
-                .submitDirectorsRemuneration(transactionId, companyAccountsId,
-                    directorsRemuneration);
+            List<ValidationError> validationErrors = transferOfAssetsService
+                .submitTransferOfAssets(transactionId, companyAccountsId,
+                    transferOfAssets);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
@@ -107,7 +109,7 @@ public class DirectorsRemunerationController extends BaseController implements
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return Optional.of(companyAccountsDataState)
                 .map(CompanyAccountsDataState::getCicStatements)
-                .map(CicStatements::getHasProvidedDirectorsRemuneration)
+                .map(CicStatements::getHasProvidedTransferOfAssets)
                 .orElse(false);
     }
 }

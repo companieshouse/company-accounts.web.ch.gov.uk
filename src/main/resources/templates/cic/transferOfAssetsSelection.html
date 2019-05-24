@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Was there any transfer of assets other than for full consideration?
+  </title>
+</head>
+<body>
+<div id="transferOfAssetsSelection-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="transferOfAssetsSelection-form" class="form" th:action="@{''}"
+            th:object="${transferOfAssetsSelection}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Was there any transfer of assets other than for full consideration?'
+                )">
+        </div>
+
+        <details class="govuk-details" role="group">
+          <summary id="transfer-of-assets-help-dropdown" class="govuk-details__summary" role="button" aria-controls="transfer-of-assets-help-text" aria-expanded="false">
+                <span class="govuk-details__summary-text">
+                  What's this?
+                </span>
+          </summary>
+          <div class="govuk-details__text" id="transfer-of-assets-help-text" aria-hidden="true">
+            <p>This generally means any transfer of the CIC's assets that have not reached full market value during this financial year. For example, if an asset was valued at £1,000 and the CIC sold it for less (say £500), you should declare why. This also
+              applies if the CIC gave any assets to another CIC or a charity.</p>
+            <p>For more details,
+              <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/605418/14-1089-community-interest-companies-chapter-6-the-asset-lock.pdf">read our guidance (PDF 297kb)</a>
+              or speak to your accountant.</p>
+          </div>
+        </details>
+
+        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('hasProvidedTransferOfAssets')} ? 'govuk-form-group--error' : ''">
+          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+                                  radioButtonsFieldName = 'hasProvidedTransferOfAssets'
+                                  )">
+          </div>
+        </div>
+
+        <input id="next-button" class="govuk-button" type="submit" role="button"
+               data-event-id="Save CIC has there been a consultation" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+
