@@ -17,7 +17,7 @@ import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
 import uk.gov.companieshouse.web.accounts.service.cic.CicReviewService;
 
 @Controller
-@NextController(StepsToCompleteController.class)
+@NextController(CicApprovalController.class)
 @PreviousController(TransferOfAssetsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/review")
 public class CicReviewController extends BaseController {
