@@ -13,14 +13,14 @@
     <h1 id="page-header" class="govuk-heading-l"><span th:text="${heading}"></span></h1>
   </header>
 
-  <h2 th:classappend="${subheadingClass}"><span th:text="${subheading}"></span></h2>
+  <h2 id="page-subheading" th:classappend="${subheadingClass}"><span th:text="${subheading}"></span></h2>
 
   <details class="govuk-details">
     <summary class="govuk-details__summary">
-                  <span class="govuk-details__summary-text" th:text="${helpText}">
+                  <span id="help-text" class="govuk-details__summary-text" th:text="${helpText}">
                   </span>
     </summary>
-    <div class="govuk-details__text">
+    <div id="dropdown-text" class="govuk-details__text">
       <th:block th:utext="${dropDownText}"></th:block>
     </div>
   </details>
