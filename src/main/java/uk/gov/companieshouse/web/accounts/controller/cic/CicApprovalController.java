@@ -46,11 +46,17 @@ public class CicApprovalController extends BaseController {
     public String getApproval(@PathVariable String companyNumber,
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
-        Model model) {
+        Model model,
+        HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        model.addAttribute(APPROVAL, new CicApproval());
+        try {
+            model.addAttribute(APPROVAL, cicApprovalService.getCicApproval(transactionId, companyAccountsId));
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return getTemplateName();
     }

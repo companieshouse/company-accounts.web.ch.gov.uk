@@ -137,4 +137,25 @@ public class CicApprovalServiceImpl implements CicApprovalService {
 
         return validationErrors;
     }
+
+    @Override
+    public CicApproval getCicApproval(String transactionId, String companyAccountsId) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = APPROVAL_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+
+            CicApprovalApi cicApprovalApi = apiClient.cicReport().approval().get(uri).execute();
+            return transformer.getCicApproval(cicApprovalApi);
+
+        } catch (ApiErrorResponseException e) {
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
+        } catch (URIValidationException e) {
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+        }
+
+        return new CicApproval();
+    }
 }
