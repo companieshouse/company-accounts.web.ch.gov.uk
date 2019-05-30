@@ -10,6 +10,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -18,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -29,6 +31,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
+    private ValidationContext validationContext;
 
     @Autowired
     private ApprovalTransformer transformer;
@@ -74,13 +79,19 @@ public class ApprovalServiceImpl implements ApprovalService {
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId,
                     companyAccountsId);
 
+            ApiResponse apiResponse;
+
             if (smallFullApi.getLinks().getApproval() != null) {
-                apiClient.smallFull().approval().update(uri, approvalApi).execute();
+                apiResponse = apiClient.smallFull().approval().update(uri, approvalApi).execute();
             } else {
-                apiClient.smallFull().approval().create(uri, approvalApi).execute();
+                apiResponse = apiClient.smallFull().approval().create(uri, approvalApi).execute();
+            }
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }

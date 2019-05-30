@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -21,6 +17,7 @@ import uk.gov.companieshouse.api.handler.smallfull.creditorswithinoneyear.reques
 import uk.gov.companieshouse.api.handler.smallfull.creditorswithinoneyear.request.CreditorsWithinOneYearDelete;
 import uk.gov.companieshouse.api.handler.smallfull.creditorswithinoneyear.request.CreditorsWithinOneYearGet;
 import uk.gov.companieshouse.api.handler.smallfull.creditorswithinoneyear.request.CreditorsWithinOneYearUpdate;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.PreviousPeriod;
@@ -37,6 +34,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsWithinOneYearTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;
@@ -83,6 +81,9 @@ public class CreditorsWithinOneYearServiceImplTest {
     private ServiceExceptionHandler serviceExceptionHandler;
 
     @Mock
+    private ValidationContext validationContext;
+
+    @Mock
     private CreditorsWithinOneYearTransformer mockCreditorsWithinOneYearTransformer;
 
     @Mock
@@ -96,6 +97,18 @@ public class CreditorsWithinOneYearServiceImplTest {
 
     @Mock
     private List<ValidationError> mockValidationErrors;
+
+    @Mock
+    private ApiResponse<CreditorsWithinOneYearApi> responseWithData;
+
+    @Mock
+    private ApiResponse<Void> responseNoData;
+
+    @Mock
+    private ApiErrorResponseException apiErrorResponseException;
+
+    @Mock
+    private URIValidationException uriValidationException;
 
     @InjectMocks
     private CreditorsWithinOneYearService creditorsWithinOneYearService = new CreditorsWithinOneYearServiceImpl();
@@ -138,12 +151,6 @@ public class CreditorsWithinOneYearServiceImplTest {
     @DisplayName("GET - Creditors Within One Year successful path when http status not found")
     void getCreditorsWithinOneYearSuccessHttpStatusNotFound() throws Exception {
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.get(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearGet);
         when(mockCreditorsWithinOneYearGet.execute()).thenThrow(apiErrorResponseException);
@@ -169,12 +176,6 @@ public class CreditorsWithinOneYearServiceImplTest {
     @DisplayName("GET - Creditors Within One Year throws ServiceExcepiton due to ApiErrorResponseException - 400 Bad Request")
     void getCreditorsWithinOneYearApiResponseException() throws Exception {
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.get(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearGet);
         when(mockCreditorsWithinOneYearGet.execute()).thenThrow(apiErrorResponseException);
@@ -195,8 +196,6 @@ public class CreditorsWithinOneYearServiceImplTest {
 
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.get(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearGet);
-
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
 
         when(mockCreditorsWithinOneYearGet.execute()).thenThrow(uriValidationException);
 
@@ -225,6 +224,8 @@ public class CreditorsWithinOneYearServiceImplTest {
 
         creditorsWithinOneYearCreate(creditorsWithinOneYearApi);
 
+        when(responseWithData.hasErrors()).thenReturn(false);
+
         List<ValidationError> validationErrors = creditorsWithinOneYearService.submitCreditorsWithinOneYear(TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID, creditorsWithinOneYear, COMPANY_NUMBER);
 
@@ -248,16 +249,11 @@ public class CreditorsWithinOneYearServiceImplTest {
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
         when(mockCreditorsWithinOneYearResourceHandler.create(CREDITORS_WITHIN_ONE_YEAR_URI, creditorsWithinOneYearApi)).thenReturn(mockCreditorsWithinOneYearCreate);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         when(mockCreditorsWithinOneYearCreate.execute()).thenThrow(apiErrorResponseException);
 
-        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-                .thenThrow(ServiceException.class);
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> creditorsWithinOneYearService.submitCreditorsWithinOneYear(
             TRANSACTION_ID,
@@ -282,17 +278,11 @@ public class CreditorsWithinOneYearServiceImplTest {
 
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
 
-        when(mockCreditorsWithinOneYearResourceHandler.create(CREDITORS_WITHIN_ONE_YEAR_URI, creditorsWithinOneYearApi)).thenReturn(mockCreditorsWithinOneYearCreate);
+        creditorsWithinOneYearCreate(creditorsWithinOneYearApi);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(responseWithData.hasErrors()).thenReturn(true);
 
-        when(mockCreditorsWithinOneYearCreate.execute()).thenThrow(apiErrorResponseException);
-
-        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+        when(validationContext.getValidationErrors(responseWithData.getErrors()))
                 .thenReturn(mockValidationErrors);
 
         List<ValidationError> validationErrors = creditorsWithinOneYearService.submitCreditorsWithinOneYear(
@@ -335,6 +325,8 @@ public class CreditorsWithinOneYearServiceImplTest {
         when(mockCreditorsWithinOneYearTransformer.getCreditorsWithinOneYearApi(creditorsWithinOneYear)).thenReturn(creditorsWithinOneYearApi);
         creditorsWithinOneYearUpdate(creditorsWithinOneYearApi);
 
+        when(responseNoData.hasErrors()).thenReturn(false);
+
         List<ValidationError> validationErrors = creditorsWithinOneYearService.submitCreditorsWithinOneYear(TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID, creditorsWithinOneYear, COMPANY_NUMBER);
 
@@ -358,8 +350,6 @@ public class CreditorsWithinOneYearServiceImplTest {
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.update(CREDITORS_WITHIN_ONE_YEAR_URI, creditorsWithinOneYearApi)).thenReturn(mockCreditorsWithinOneYearUpdate);
 
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
-
         when(mockCreditorsWithinOneYearUpdate.execute()).thenThrow(uriValidationException);
 
         doThrow(ServiceException.class)
@@ -380,7 +370,6 @@ public class CreditorsWithinOneYearServiceImplTest {
 
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
-        doNothing().when(mockCreditorsWithinOneYearDelete).execute();
 
         creditorsWithinOneYearService.deleteCreditorsWithinOneYear(TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID);
@@ -394,8 +383,6 @@ public class CreditorsWithinOneYearServiceImplTest {
 
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
-
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
 
         when(mockCreditorsWithinOneYearDelete.execute()).thenThrow(uriValidationException);
 
@@ -415,19 +402,12 @@ public class CreditorsWithinOneYearServiceImplTest {
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.delete(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearDelete);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException =
-                ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         when(mockCreditorsWithinOneYearDelete.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
                 .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockCreditorsWithinOneYearDelete.execute());
         assertThrows(ServiceException.class, () -> creditorsWithinOneYearService.deleteCreditorsWithinOneYear(
             TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID));
@@ -438,7 +418,7 @@ public class CreditorsWithinOneYearServiceImplTest {
         when(mockApiClient.smallFull()).thenReturn(mockSmallFullResourceHandler);
     }
 
-    private void getMockCreditorsWithinOneYearResourceHandler() throws Exception {
+    private void getMockCreditorsWithinOneYearResourceHandler() {
         getMockSmallFullResourceHandler();
         when(mockSmallFullResourceHandler.creditorsWithinOneYear()).thenReturn(mockCreditorsWithinOneYearResourceHandler);
     }
@@ -446,19 +426,20 @@ public class CreditorsWithinOneYearServiceImplTest {
     private void getMockCreditorsWithinOneYearApi(CreditorsWithinOneYearApi creditorsWithinOneYearApi) throws Exception {
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.get(CREDITORS_WITHIN_ONE_YEAR_URI)).thenReturn(mockCreditorsWithinOneYearGet);
-        when(mockCreditorsWithinOneYearGet.execute()).thenReturn(creditorsWithinOneYearApi);
+        when(mockCreditorsWithinOneYearGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(creditorsWithinOneYearApi);
     }
 
     private void creditorsWithinOneYearCreate(CreditorsWithinOneYearApi creditorsWithinOneYearApi) throws Exception {
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.create(CREDITORS_WITHIN_ONE_YEAR_URI, creditorsWithinOneYearApi)).thenReturn(mockCreditorsWithinOneYearCreate);
-        when(mockCreditorsWithinOneYearCreate.execute()).thenReturn(creditorsWithinOneYearApi);
+        when(mockCreditorsWithinOneYearCreate.execute()).thenReturn(responseWithData);
     }
 
     private void creditorsWithinOneYearUpdate(CreditorsWithinOneYearApi creditorsWithinOneYearApi) throws Exception {
         getMockCreditorsWithinOneYearResourceHandler();
         when(mockCreditorsWithinOneYearResourceHandler.update(CREDITORS_WITHIN_ONE_YEAR_URI, creditorsWithinOneYearApi)).thenReturn(mockCreditorsWithinOneYearUpdate);
-        doNothing().when(mockCreditorsWithinOneYearUpdate).execute();
+        when(mockCreditorsWithinOneYearUpdate.execute()).thenReturn(responseNoData);
     }
 
     private void setLinksWithCreditorsWithinOneYear(SmallFullApi smallFullApi) {

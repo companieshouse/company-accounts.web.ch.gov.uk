@@ -1,4 +1,3 @@
-
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import java.util.List;

@@ -29,7 +29,7 @@ public class ResumeServiceImpl implements ResumeService {
         CompanyProfileApi company = null;
 
         try {
-            company = apiClient.company().get("/company/" + companyNumber).execute();
+            company = apiClient.company().get("/company/" + companyNumber).execute().getData();
         } catch (ApiErrorResponseException | URIValidationException e) {
             throw new ServiceException("Error when trying to retrieve company data", e);
         }

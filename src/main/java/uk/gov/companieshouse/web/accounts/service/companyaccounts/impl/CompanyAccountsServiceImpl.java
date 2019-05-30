@@ -17,7 +17,7 @@ import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccount
 public class CompanyAccountsServiceImpl implements CompanyAccountsService {
 
     @Autowired
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     private static final Pattern COMPANY_ACCOUNTS_ID_MATCHER = Pattern.compile("/company-accounts/(.*)");
 
@@ -34,7 +34,7 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
         String uri = CREATE_COMPANY_ACCOUNTS_URI.expand(transactionId).toString();
 
         try {
-            companyAccounts = apiClient.companyAccounts().create(uri, companyAccounts).execute();
+            companyAccounts = apiClient.companyAccounts().create(uri, companyAccounts).execute().getData();
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error creating company account", e);
