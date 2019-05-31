@@ -30,6 +30,7 @@ import uk.gov.companieshouse.api.handler.cic.approval.CicApprovalResourceHandler
 import uk.gov.companieshouse.api.handler.cic.approval.request.CicApprovalCreate;
 import uk.gov.companieshouse.api.handler.cic.approval.request.CicApprovalUpdate;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.cic.CicReportApi;
 import uk.gov.companieshouse.api.model.accounts.cic.CicReportLinks;
 import uk.gov.companieshouse.api.model.accounts.cic.approval.CicApprovalApi;
@@ -83,6 +84,12 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @Mock
         private List<ValidationError> mockValidationErrors;
 
+        @Mock
+        private ApiResponse<CicApprovalApi> mockApiResponse;
+
+        @Mock
+        private ApiResponse<Void> mockVoidApiResponse;
+
         @InjectMocks
         private CicApprovalService cicApprovalService = new CicApprovalServiceImpl();
 
@@ -107,7 +114,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
         private static final String RESOURCE_NAME = "approval";
 
-        /*@Test
+        @Test
         @DisplayName("Submit Approval - POST - Success Path")
         void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
 
@@ -132,7 +139,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
             when(cicReportLinks.getApproval()).thenReturn(null);
 
-            when(cicApprovalCreate.execute().getData()).thenReturn(cicApprovalApi);
+            when(cicApprovalCreate.execute()).thenReturn(mockApiResponse);
 
             List<ValidationError> validationErrors =
                 cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
@@ -217,15 +224,9 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
             when(cicApprovalCreate.execute()).thenThrow(apiErrorResponseException);
 
-            when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-                .thenThrow(ServiceException.class);
-
-            List<ValidationError> validationErrors =
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
+            cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
 
             verify(cicApprovalCreate, times(1)).execute();
-
-            assertEquals(mockValidationErrors, validationErrors);
         }
 
         @Test
@@ -263,11 +264,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
             when(cicApprovalCreate.execute()).thenThrow(apiErrorResponseException);
 
-            when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-                .thenThrow(ServiceException.class);
-
-            assertThrows(ServiceException.class, () ->
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval));
+            cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
 
             verify(cicApprovalCreate, times(1)).execute();
         }
@@ -297,7 +294,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
             when(cicReportLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
-            doNothing().when(cicApprovalUpdate).execute();
+            when(cicApprovalUpdate.execute()).thenReturn(mockVoidApiResponse);
 
             List<ValidationError> validationErrors =
                 cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
@@ -382,15 +379,9 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
             doThrow(apiErrorResponseException).when(cicApprovalUpdate).execute();
 
-            when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-                .thenReturn(mockValidationErrors);
-
-            List<ValidationError> validationErrors =
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
+            cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
 
             verify(cicApprovalUpdate, times(1)).execute();
-
-            assertEquals(mockValidationErrors, validationErrors);
         }
 
         @Test
@@ -428,8 +419,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
             doThrow(apiErrorResponseException).when(cicApprovalUpdate).execute();
 
-            when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-                .thenThrow(ServiceException.class);
+            doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
             assertThrows(ServiceException.class, () ->
                 cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval));
@@ -602,6 +592,5 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
             List<ValidationError> validationErrors = cicApprovalService.validateCicApprovalDate(cicApproval);
 
             assertEquals(0, validationErrors.size());
-        }*/
-
+        }
     }
