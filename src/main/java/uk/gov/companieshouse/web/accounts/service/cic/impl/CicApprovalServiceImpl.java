@@ -83,7 +83,7 @@ public class CicApprovalServiceImpl implements CicApprovalService {
                 apiClient.cicReport().approval().create(uri, cicApprovalApi).execute();
             }
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
@@ -147,7 +147,7 @@ public class CicApprovalServiceImpl implements CicApprovalService {
 
         try {
 
-            CicApprovalApi cicApprovalApi = apiClient.cicReport().approval().get(uri).execute();
+            CicApprovalApi cicApprovalApi = apiClient.cicReport().approval().get(uri).execute().getData();
             return transformer.getCicApproval(cicApprovalApi);
 
         } catch (ApiErrorResponseException e) {
