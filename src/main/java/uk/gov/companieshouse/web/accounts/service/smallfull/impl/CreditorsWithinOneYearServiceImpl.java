@@ -6,6 +6,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -17,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsWithinOneYearTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,9 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
+    private ValidationContext validationContext;
 
     @Autowired
     private CreditorsWithinOneYearTransformer transformer;
@@ -79,19 +84,24 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
         boolean creditorsWithinOneYearResourceExists =
                 hasCreditorsWithinOneYear(apiClient, transactionId, companyAccountsId);
         try {
+            ApiResponse apiResponse;
             if (!creditorsWithinOneYearResourceExists) {
-                apiClient.smallFull().creditorsWithinOneYear()
-                        .create(uri, creditorsWithinOneYearApi)
-                        .execute();
+                apiResponse =
+                        apiClient.smallFull().creditorsWithinOneYear()
+                                .create(uri, creditorsWithinOneYearApi).execute();
             } else {
-                apiClient.smallFull().creditorsWithinOneYear()
-                        .update(uri, creditorsWithinOneYearApi)
-                        .execute();
+                apiResponse =
+                        apiClient.smallFull().creditorsWithinOneYear()
+                                .update(uri, creditorsWithinOneYearApi).execute();
+            }
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -122,7 +132,7 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
                 .toString();
 
         try {
-            return apiClient.smallFull().creditorsWithinOneYear().get(uri).execute();
+            return apiClient.smallFull().creditorsWithinOneYear().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {

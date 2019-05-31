@@ -19,6 +19,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.companyaccount.CompanyAccountsResourceHandler;
 import uk.gov.companieshouse.api.handler.companyaccount.request.CompanyAccountsCreate;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
 import uk.gov.companieshouse.api.model.accounts.CompanyAccountsLinks;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -40,6 +41,9 @@ public class CompanyAccountsServiceImplTests {
 
     @Mock
     private CompanyAccountsCreate companyAccountsCreate;
+
+    @Mock
+    private ApiResponse<CompanyAccountsApi> responseWithData;
 
     @InjectMocks
     private CompanyAccountsService companyAccountsService = new CompanyAccountsServiceImpl();
@@ -69,7 +73,9 @@ public class CompanyAccountsServiceImplTests {
         when(companyAccountsResourceHandler.create(anyString(), any(CompanyAccountsApi.class)))
                 .thenReturn(companyAccountsCreate);
 
-        when(companyAccountsCreate.execute()).thenReturn(companyAccounts);
+        when(companyAccountsCreate.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(companyAccounts);
 
         String companyAccountsId = companyAccountsService.createCompanyAccounts(TRANSACTION_ID);
 

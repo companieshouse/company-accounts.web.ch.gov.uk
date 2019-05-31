@@ -6,6 +6,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CreditorsAfterOneYearApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -17,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOneYearTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -45,6 +47,9 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
+    private ValidationContext validationContext;
 
     private static final String RESOURCE_NAME = "creditors after one year";
 
@@ -78,18 +83,22 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
 
         boolean creditorsAfterOneYearResourceExists = hasCreditorsAfterOneYear(apiClient, transactionId, companyAccountsId);
         try {
+            ApiResponse apiResponse;
             if (!creditorsAfterOneYearResourceExists) {
-                apiClient.smallFull().creditorsAfterOneYear().create(uri, creditorsAfterOneYearApi)
+                apiResponse = apiClient.smallFull().creditorsAfterOneYear().create(uri, creditorsAfterOneYearApi)
                         .execute();
             } else {
-                apiClient.smallFull().creditorsAfterOneYear().update(uri, creditorsAfterOneYearApi)
+                apiResponse = apiClient.smallFull().creditorsAfterOneYear().update(uri, creditorsAfterOneYearApi)
                         .execute();
             }
 
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
+            }
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -118,7 +127,7 @@ public class CreditorsAfterOneYearServiceImpl implements CreditorsAfterOneYearSe
                 CREDITORS_AFTER_ONE_YEAR_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().creditorsAfterOneYear().get(uri).execute();
+            return apiClient.smallFull().creditorsAfterOneYear().get(uri).execute().getData();
 
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);

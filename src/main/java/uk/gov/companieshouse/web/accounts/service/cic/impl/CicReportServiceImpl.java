@@ -52,7 +52,7 @@ public class CicReportServiceImpl implements CicReportService {
         String uri = CIC_REPORT_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.cicReport().get(uri).execute();
+            return apiClient.cicReport().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error retrieving cic report resource", e);
