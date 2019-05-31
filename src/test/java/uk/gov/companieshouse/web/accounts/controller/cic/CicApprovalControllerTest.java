@@ -2,8 +2,6 @@ package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,11 +24,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.CicApproval;
-import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
-import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,7 +71,7 @@ public class CicApprovalControllerTest {
     private static final String MOCK_CONTROLLER_PATH =
         UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    /*@BeforeEach
+    @BeforeEach
     private void setup() {
         when(navigatorService.getPreviousControllerPath(any(), any()))
             .thenReturn(MOCK_CONTROLLER_PATH);
@@ -86,14 +81,17 @@ public class CicApprovalControllerTest {
     @Test
     @DisplayName("Get approval view success path")
     void getRequestSuccess() throws Exception {
+
+        when(cicApprovalService
+                .getCicApproval(anyString(), anyString()))
+                .thenReturn(new CicApproval());
+
         this.mockMvc.perform(get(APPROVAL_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(APPROVAL_VIEW))
             .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
-            .andExpect(model().attributeExists(TRANSACTION_ID_MODEL_ATTR))
-            .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR));
+            .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
     }
 
     @Test
@@ -158,5 +156,5 @@ public class CicApprovalControllerTest {
 
         this.mockMvc.perform(post(APPROVAL_PATH))
             .andExpect(status().isOk());
-    }*/
+    }
 }
