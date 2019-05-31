@@ -15,7 +15,7 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     private static final UriTemplate GET_COMPANY_URI =
             new UriTemplate("/company/{companyNumber}");
@@ -30,7 +30,7 @@ public class CompanyServiceImpl implements CompanyService {
         String uri = GET_COMPANY_URI.expand(companyNumber).toString();
 
         try {
-            companyProfileApi = apiClient.company().get(uri).execute();
+            companyProfileApi = apiClient.company().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error retieving company profile", e);

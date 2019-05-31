@@ -26,10 +26,12 @@ import uk.gov.companieshouse.api.handler.cic.statements.request.CicStatementsCre
 import uk.gov.companieshouse.api.handler.cic.statements.request.CicStatementsGet;
 import uk.gov.companieshouse.api.handler.cic.statements.request.CicStatementsUpdate;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CicStatementsService;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -47,6 +49,9 @@ public class CicStatementsServiceImplTest {
     private ServiceExceptionHandler serviceExceptionHandler;
 
     @Mock
+    private ValidationContext validationContext;
+
+    @Mock
     private CicReportResourceHandler cicReportResourceHandler;
 
     @Mock
@@ -60,6 +65,12 @@ public class CicStatementsServiceImplTest {
 
     @Mock
     private CicStatementsGet cicStatementsGet;
+
+    @Mock
+    private ApiResponse<CicStatementsApi> responseWithData;
+
+    @Mock
+    private ApiResponse<Void> responseNoData;
 
     @Mock
     private CicStatementsApi cicStatementsApi;
@@ -101,7 +112,9 @@ public class CicStatementsServiceImplTest {
 
         when(cicStatementsResourceHandler.get(CIC_STATEMENTS_URI)).thenReturn(cicStatementsGet);
 
-        when(cicStatementsGet.execute()).thenReturn(cicStatementsApi);
+        when(cicStatementsGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(cicStatementsApi);
 
         CicStatementsApi returnedCicStatements =
                 statementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
@@ -150,6 +163,10 @@ public class CicStatementsServiceImplTest {
         when(cicStatementsResourceHandler.create(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsCreate);
 
+        when(cicStatementsCreate.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.hasErrors()).thenReturn(false);
+
         List<ValidationError> returnedValidationErrors =
                 statementsService.createCicStatementsApi(
                         TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi);
@@ -157,6 +174,28 @@ public class CicStatementsServiceImplTest {
         assertTrue(returnedValidationErrors.isEmpty());
 
         verify(cicStatementsCreate).execute();
+    }
+
+    @Test
+    @DisplayName("Create CIC statements - validation errors")
+    void createCicStatementsValidationErrors()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(cicStatementsResourceHandler.create(CIC_STATEMENTS_URI, cicStatementsApi))
+                .thenReturn(cicStatementsCreate);
+
+        when(cicStatementsCreate.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.hasErrors()).thenReturn(true);
+
+        when(validationContext.getValidationErrors(responseWithData.getErrors()))
+                .thenReturn(validationErrors);
+
+        List<ValidationError> returnedValidationErrors =
+                statementsService.createCicStatementsApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi);
+
+        assertEquals(validationErrors, returnedValidationErrors);
     }
 
     @Test
@@ -188,14 +227,13 @@ public class CicStatementsServiceImplTest {
 
         when(cicStatementsCreate.execute()).thenThrow(apiErrorResponseException);
 
-        when(serviceExceptionHandler
-                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-                        .thenReturn(validationErrors);
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        List<ValidationError> returnedValidationErrors =
-                statementsService.createCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi);
-
-        assertEquals(validationErrors, returnedValidationErrors);
+        assertThrows(ServiceException.class, () ->
+                statementsService.createCicStatementsApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi));
     }
 
     @Test
@@ -206,13 +244,37 @@ public class CicStatementsServiceImplTest {
         when(cicStatementsResourceHandler.update(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsUpdate);
 
+        when(cicStatementsUpdate.execute()).thenReturn(responseNoData);
+
+        when(responseNoData.hasErrors()).thenReturn(false);
+
         List<ValidationError> returnedValidationErrors =
                 statementsService.updateCicStatementsApi(
                         TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi);
 
         assertTrue(returnedValidationErrors.isEmpty());
+    }
 
-        verify(cicStatementsUpdate).execute();
+    @Test
+    @DisplayName("Update CIC statements - validation errors")
+    void updateCicStatementsValidationErrors()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(cicStatementsResourceHandler.update(CIC_STATEMENTS_URI, cicStatementsApi))
+                .thenReturn(cicStatementsUpdate);
+
+        when(cicStatementsUpdate.execute()).thenReturn(responseNoData);
+
+        when(responseNoData.hasErrors()).thenReturn(true);
+
+        when(validationContext.getValidationErrors(responseNoData.getErrors()))
+                .thenReturn(validationErrors);
+
+        List<ValidationError> returnedValidationErrors =
+                statementsService.updateCicStatementsApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi);
+
+        assertEquals(validationErrors, returnedValidationErrors);
     }
 
     @Test
@@ -244,13 +306,12 @@ public class CicStatementsServiceImplTest {
 
         when(cicStatementsUpdate.execute()).thenThrow(apiErrorResponseException);
 
-        when(serviceExceptionHandler
-                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-                        .thenReturn(validationErrors);
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        List<ValidationError> returnedValidationErrors =
-                statementsService.updateCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi);
-
-        assertEquals(validationErrors, returnedValidationErrors);
+        assertThrows(ServiceException.class, () ->
+                statementsService.updateCicStatementsApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi));
     }
 }

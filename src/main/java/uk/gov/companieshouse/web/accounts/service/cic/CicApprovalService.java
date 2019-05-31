@@ -28,5 +28,14 @@ public interface CicApprovalService {
      * @return a list of validation errors, or an empty list if none are present
      */
     List<ValidationError> validateCicApprovalDate(CicApproval cicAproval);
+
+    /**
+     * Get CicApproval object if it exists
+     * @param transactionId
+     * @param companyAccountsId
+     * @return
+     * @throws ServiceException
+     */
+    CicApproval getCicApproval(String transactionId, String companyAccountsId) throws ServiceException;
 }
 

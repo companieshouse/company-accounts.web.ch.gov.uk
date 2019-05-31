@@ -9,5 +9,7 @@ public interface CicApprovalTransformer {
 
     CicApprovalApi getCicApprovalApi(CicApproval cicApproval);
 
+    CicApproval getCicApproval(CicApprovalApi cicApprovalApi);
+
     LocalDate getCicApprovalDate(CicApproval cicApproval);
 }

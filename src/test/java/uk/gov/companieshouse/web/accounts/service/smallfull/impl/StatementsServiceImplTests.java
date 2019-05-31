@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,7 @@ import uk.gov.companieshouse.api.handler.smallfull.balancesheetstatements.Statem
 import uk.gov.companieshouse.api.handler.smallfull.balancesheetstatements.request.StatementsCreate;
 import uk.gov.companieshouse.api.handler.smallfull.balancesheetstatements.request.StatementsGet;
 import uk.gov.companieshouse.api.handler.smallfull.balancesheetstatements.request.StatementsUpdate;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetStatementsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -60,6 +62,9 @@ public class StatementsServiceImplTests {
     @Mock
     private StatementsGet statementsGet;
 
+    @Mock
+    private ApiResponse<BalanceSheetStatementsApi> responseWithData;
+
     @InjectMocks
     private StatementsService statementsService = new StatementsServiceImpl();
 
@@ -86,7 +91,8 @@ public class StatementsServiceImplTests {
         when(statementsResourceHandler.get(STATEMENTS_URI)).thenReturn(statementsGet);
 
         BalanceSheetStatementsApi statementsApi = new BalanceSheetStatementsApi();
-        when(statementsGet.execute()).thenReturn(statementsApi);
+        when(statementsGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(statementsApi);
         when(transformer.getBalanceSheetStatements(statementsApi)).thenReturn(new Statements());
 
         Statements statements = statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
@@ -127,9 +133,10 @@ public class StatementsServiceImplTests {
 
         when(statementsResourceHandler.create(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsCreate);
-        when(statementsCreate.execute()).thenReturn(new BalanceSheetStatementsApi());
 
         assertAll(() -> statementsService.createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
+        verify(statementsCreate).execute();
     }
 
     @Test
@@ -165,9 +172,10 @@ public class StatementsServiceImplTests {
 
         when(statementsResourceHandler.update(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsUpdate);
-        doNothing().when(statementsUpdate).execute();
 
         assertAll(() -> statementsService.acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
+        verify(statementsUpdate).execute();
     }
 
     @Test
