@@ -10,6 +10,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.cic.CicReportApi;
 import uk.gov.companieshouse.api.model.accounts.cic.approval.CicApprovalApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -18,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.model.cic.CicApproval;
 import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.cic.CicReportService;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicApprovalTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -35,6 +37,9 @@ public class CicApprovalServiceImpl implements CicApprovalService {
 
     @Autowired
     private CicReportService cicReportService;
+
+    @Autowired
+    private ValidationContext validationContext;
 
     private static final UriTemplate APPROVAL_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/cic-report/cic-approval");
@@ -77,10 +82,16 @@ public class CicApprovalServiceImpl implements CicApprovalService {
             CicReportApi cicReportApi = cicReportService.getCicReport(apiClient, transactionId,
                 companyAccountsId);
 
+            ApiResponse apiResponse;
+
             if (cicReportApi.getLinks().getApproval() != null) {
-                apiClient.cicReport().approval().update(uri, cicApprovalApi).execute();
+                apiResponse = apiClient.cicReport().approval().update(uri, cicApprovalApi).execute();
             } else {
-                apiClient.cicReport().approval().create(uri, cicApprovalApi).execute();
+                apiResponse = apiClient.cicReport().approval().create(uri, cicApprovalApi).execute();
+            }
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
