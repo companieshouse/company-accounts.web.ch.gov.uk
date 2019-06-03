@@ -45,7 +45,7 @@ public class CicApprovalServiceImpl implements CicApprovalService {
 
     private static final String APPROVAL_DATE_FIELD_PATH = "date";
 
-    private static final String APPROVAL_DATE_ERROR_LOCATION = ".approval.date";
+    private static final String APPROVAL_DATE_ERROR_LOCATION = ".cic_approval.date";
 
     private static final String DATE_MISSING =
         "validation.date.missing" + APPROVAL_DATE_ERROR_LOCATION;
