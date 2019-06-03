@@ -100,7 +100,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         private static final String APPROVAL_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
             COMPANY_ACCOUNTS_ID + "/cic-report/cic-approval";
 
-        private static final String APPROVAL_DATE_ERROR_LOCATION = ".approval.date";
+        private static final String APPROVAL_DATE_ERROR_LOCATION = ".cic_approval.date";
 
         private static final String DATE_MISSING = "validation.date.missing" + APPROVAL_DATE_ERROR_LOCATION;
 
