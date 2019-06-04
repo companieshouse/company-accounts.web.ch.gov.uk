@@ -237,11 +237,15 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @RequestMapping value on " + nextControllerClass.toString());
         }
 
-        if (mappings.length > 1 && pathVars.length > 1) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[1]).expand((Object[]) pathVars);
+        for (String mapping : mappings) {
+            UriTemplate mappingTemplate = new UriTemplate(mapping);
+
+            if (pathVars.length == mappingTemplate.getVariableNames().size()) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + mappingTemplate.expand((Object[]) pathVars).toString();
+            }
         }
 
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[0]).expand((Object[]) pathVars);
+        throw new NavigationException("No mapping found that matches the number of path variables provided");
     }
 
     /**
@@ -270,11 +274,15 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @RequestMapping value on " + previousControllerClass.toString());
         }
 
-        if (mappings.length > 1 && pathVars.length > 1) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[1]).expand((Object[]) pathVars);
+        for (String mapping : mappings) {
+            UriTemplate mappingTemplate = new UriTemplate(mapping);
+
+            if (pathVars.length == mappingTemplate.getVariableNames().size()) {
+                return mappingTemplate.expand((Object[]) pathVars).toString();
+            }
         }
 
-        return new UriTemplate(mappings[0]).expand((Object[]) pathVars).toString();
+        throw new NavigationException("No mapping found that matches the number of path variables provided");
     }
 
     /**

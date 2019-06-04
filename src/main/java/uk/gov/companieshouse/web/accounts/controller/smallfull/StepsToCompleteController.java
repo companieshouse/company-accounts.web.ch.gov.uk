@@ -73,19 +73,12 @@ public class StepsToCompleteController extends BaseController {
             isExistingTransaction = true;
         }
 
-        if (!isExistingTransaction) {
-            try {
+        try {
+
+            if (!isExistingTransaction) {
                 transactionID = transactionService.createTransaction(companyNumber);
                 companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID);
-
-            } catch (ServiceException e) {
-
-                LOGGER.errorRequest(request, e.getMessage(), e);
-                return ERROR_VIEW;
             }
-        }
-
-        try {
 
             smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
             statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
