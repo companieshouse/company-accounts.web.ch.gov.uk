@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.cic.AccountStartController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -20,7 +21,7 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 
 @Controller
 @NextController(BalanceSheetController.class)
-@PreviousController(CriteriaController.class)
+@PreviousController({CriteriaController.class, AccountStartController.class})
 @RequestMapping({"/company/{companyNumber}/small-full/steps-to-complete", "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/steps-to-complete"})
 public class StepsToCompleteController extends BaseController {
 
@@ -47,7 +48,11 @@ public class StepsToCompleteController extends BaseController {
                                      @PathVariable Optional<String> companyAccountsId,
                                      Model model) {
 
-        addBackPageAttributeToModel(model, companyNumber);
+        if (transactionId.isPresent() && companyAccountsId.isPresent()) {
+            addBackPageAttributeToModel(model, companyNumber, transactionId.get(), companyAccountsId.get());
+        } else {
+            addBackPageAttributeToModel(model, companyNumber);
+        }
 
         return getTemplateName();
     }

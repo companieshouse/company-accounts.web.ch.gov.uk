@@ -237,6 +237,10 @@ public class NavigatorService {
             throw new MissingAnnotationException("Missing @RequestMapping value on " + nextControllerClass.toString());
         }
 
+        if (mappings.length > 1 && pathVars.length > 1) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[1]).expand((Object[]) pathVars);
+        }
+
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[0]).expand((Object[]) pathVars);
     }
 
@@ -264,6 +268,10 @@ public class NavigatorService {
 
         if (mappings.length <= 0) {
             throw new MissingAnnotationException("Missing @RequestMapping value on " + previousControllerClass.toString());
+        }
+
+        if (mappings.length > 1 && pathVars.length > 1) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + new UriTemplate(mappings[1]).expand((Object[]) pathVars);
         }
 
         return new UriTemplate(mappings[0]).expand((Object[]) pathVars).toString();
