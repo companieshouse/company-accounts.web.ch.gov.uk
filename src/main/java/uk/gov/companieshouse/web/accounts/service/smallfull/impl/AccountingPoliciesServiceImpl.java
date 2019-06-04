@@ -8,10 +8,12 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AccountingPoliciesService;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -23,6 +25,9 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
+    private ValidationContext validationContext;
 
     private static final UriTemplate ACCOUNTING_POLICIES_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/accounting-policy");
@@ -41,7 +46,7 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
         String uri = ACCOUNTING_POLICIES_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().accountingPolicies().get(uri).execute();
+            return apiClient.smallFull().accountingPolicies().get(uri).execute().getData();
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
@@ -63,11 +68,16 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
         String uri = ACCOUNTING_POLICIES_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            apiClient.smallFull().accountingPolicies().create(uri, accountingPoliciesApi).execute();
+            ApiResponse<AccountingPoliciesApi> apiResponse =
+                    apiClient.smallFull().accountingPolicies().create(uri, accountingPoliciesApi).execute();
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
+            }
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -85,11 +95,16 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
         String uri = ACCOUNTING_POLICIES_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            apiClient.smallFull().accountingPolicies().update(uri, accountingPoliciesApi).execute();
+            ApiResponse<Void> apiResponse =
+                    apiClient.smallFull().accountingPolicies().update(uri, accountingPoliciesApi).execute();
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
+            }
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();

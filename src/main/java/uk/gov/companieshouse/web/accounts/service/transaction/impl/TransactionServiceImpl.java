@@ -16,25 +16,35 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     private static final UriTemplate TRANSACTIONS_URI = new UriTemplate("/transactions/{transactionId}");
 
     /**
+     *
      * {@inheritDoc}
      */
     @Override
     public String createTransaction(String companyNumber) throws ServiceException {
 
+        return createTransactionWithDescription(companyNumber, "Small Full Accounts");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String createTransactionWithDescription(String companyNumber, String description) throws ServiceException {
+
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
 
-        transaction.setDescription("Small Full Accounts");
+        transaction.setDescription(description);
 
         ApiClient apiClient = apiClientService.getApiClient();
 
         try {
-            transaction = apiClient.transactions().create("/transactions", transaction).execute();
+            transaction = apiClient.transactions().create("/transactions", transaction).execute().getData();
         } catch (ApiErrorResponseException e) {
             
             throw new ServiceException("Error creating transaction", e);
@@ -55,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
         try {
-            Transaction transaction = apiClientService.getApiClient().transactions().get(uri).execute();
+            Transaction transaction = apiClientService.getApiClient().transactions().get(uri).execute().getData();
             transaction.setStatus(TransactionStatus.CLOSED);
             apiClientService.getApiClient().transactions().update(uri, transaction).execute();
         } catch (ApiErrorResponseException e) {
@@ -78,7 +88,7 @@ public class TransactionServiceImpl implements TransactionService {
         String resumeLink = "/company/" + companyNumber +
                 "/transaction/" + transactionId +
                 "/company-accounts/" + companyAccountsId +
-                "/small-full/resume";
+                "/resume";
 
         Transaction transaction = new Transaction();
         transaction.setResumeJourneyUri(resumeLink);

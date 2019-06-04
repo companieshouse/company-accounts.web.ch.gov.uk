@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title></title>
+</head>
+<body>
+<div th:fragment="textAreaWithHelpAndHeadings">
+  
+  <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+  <header>
+    <h1 id="page-header" class="govuk-heading-l"><span th:text="${heading}"></span></h1>
+  </header>
+
+  <h2 id="page-subheading" th:classappend="${subheadingClass}"><span th:text="${subheading}"></span></h2>
+
+  <details class="govuk-details">
+    <summary class="govuk-details__summary">
+                  <span id="help-text" class="govuk-details__summary-text" th:text="${helpText}">
+                  </span>
+    </summary>
+    <div id="dropdown-text" class="govuk-details__text">
+      <th:block th:utext="${dropDownText}"></th:block>
+    </div>
+  </details>
+
+  <div class="govuk-form-group"
+       th:classappend="${#fields.hasErrors('__${field}__')} ? 'govuk-form-group--error' : ''">
+
+      <span class="govuk-error-message"
+            th:id="${field} + '-errorId'"
+            th:if="${#fields.hasErrors('__${field}__')}"
+            th:each="e : ${#fields.errors('__${field}__')}" th:text="${e}">
+      </span>
+
+    <label class="govuk-label" th:id="${field} + '-label'"
+           th:for="${field}">
+
+        <span th:if="${boxLabelTextJavaScriptOn != null}"
+              th:id="${field} + '-javascript-on-span'" hidden="true" class="onlyJS"
+              th:text="${boxLabelTextJavaScriptOn}"></span>
+
+      <span th:if="${boxLabelTextJavaScriptOff != null}"
+            th:id="${field} + '-javascript-off-span'" class="hideWhenOnlyJS"
+            th:text="${boxLabelTextJavaScriptOff}"></span>
+    </label>
+
+    <textarea class="govuk-textarea"
+              th:id="${field}"
+              name="${field}"
+              rows="20"
+              th:field="*{__${field}__}">
+      </textarea>
+
+  </div>
+
+
+</div>
+</body>
+</html>

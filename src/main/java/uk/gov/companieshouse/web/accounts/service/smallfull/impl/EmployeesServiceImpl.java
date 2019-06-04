@@ -7,6 +7,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
@@ -24,6 +25,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
 import java.util.List;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 public class EmployeesServiceImpl implements EmployeesService {
@@ -38,6 +40,9 @@ public class EmployeesServiceImpl implements EmployeesService {
     private BalanceSheetService balanceSheetService;
 
     @Autowired
+    private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
     private ValidationContext validationContext;
 
     @Autowired
@@ -48,8 +53,7 @@ public class EmployeesServiceImpl implements EmployeesService {
                     "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small" +
                             "-full/notes/employees");
 
-    private static final String INVALID_URI_MESSAGE =
-            "Invalid URI for employees note resource";
+    private static final String RESOURCE_NAME = "employees";
 
     @Override
     public Employees getEmployees(String transactionId, String companyAccountsId,
@@ -83,22 +87,20 @@ public class EmployeesServiceImpl implements EmployeesService {
         boolean employeesResourceExists = hasEmployees(smallFullApi.getLinks());
 
         try {
+            ApiResponse apiResponse;
             if (! employeesResourceExists) {
-                apiClient.smallFull().employees().create(uri, employeesApi).execute();
+                apiResponse = apiClient.smallFull().employees().create(uri, employeesApi).execute();
             } else {
-                apiClient.smallFull().employees().update(uri, employeesApi).execute();
+                apiResponse = apiClient.smallFull().employees().update(uri, employeesApi).execute();
+            }
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.BAD_REQUEST.value()) {
-                List<ValidationError> validationErrors = validationContext.getValidationErrors(e);
-                if (validationErrors.isEmpty()) {
-                    throw new ServiceException("Bad request when creating employees resource", e);
-                }
-                return validationErrors;
-            }
-            throw new ServiceException("Error creating employees resource", e);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -111,16 +113,14 @@ public class EmployeesServiceImpl implements EmployeesService {
         String uri = EMPLOYEES_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().employees().get(uri).execute();
-
+            return apiClient.smallFull().employees().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND.value()) {
-                return null;
-            }
-            throw new ServiceException("Error when retrieving employees note", e);
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
+
+        return null;
     }
 
     @Override
@@ -132,9 +132,9 @@ public class EmployeesServiceImpl implements EmployeesService {
         try {
             apiClient.smallFull().employees().delete(uri).execute();
         } catch (URIValidationException e) {
-            throw new ServiceException(INVALID_URI_MESSAGE, e);
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error deleting employees resource", e);
+            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
         }
     }
 

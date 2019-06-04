@@ -10,23 +10,28 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
 
     @Override
-    public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
+    public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi,
+        BalanceSheet balanceSheet) {
 
         if (hasCurrentPeriodCalledUpShareCapitalNotPaid(balanceSheet)) {
-            balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+            balanceSheetApi.setCalledUpShareCapitalNotPaid(
+                balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         }
     }
 
     @Override
-    public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
+    public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi,
+        BalanceSheet balanceSheet) {
 
         if (hasPreviousPeriodCalledUpShareCapitalNotPaid(balanceSheet)) {
-            balanceSheetApi.setCalledUpShareCapitalNotPaid(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
+            balanceSheetApi.setCalledUpShareCapitalNotPaid(
+                balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
         }
     }
 
     @Override
-    public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+    public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet,
+        BalanceSheetApi balanceSheetApi) {
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
@@ -37,11 +42,13 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
             calledUpShareCapitalNotPaid = balanceSheet.getCalledUpShareCapitalNotPaid();
         }
 
-        calledUpShareCapitalNotPaid.setCurrentAmount(balanceSheetApi.getCalledUpShareCapitalNotPaid());
+        calledUpShareCapitalNotPaid
+            .setCurrentAmount(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
     @Override
-    public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
+    public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet,
+        BalanceSheetApi balanceSheetApi) {
 
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
@@ -52,16 +59,19 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
             calledUpShareCapitalNotPaid = balanceSheet.getCalledUpShareCapitalNotPaid();
         }
 
-        calledUpShareCapitalNotPaid.setPreviousAmount(balanceSheetApi.getCalledUpShareCapitalNotPaid());
+        calledUpShareCapitalNotPaid
+            .setPreviousAmount(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
     private Boolean hasCurrentPeriodCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet) {
 
-        return balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount() != null;
+        return (balanceSheet.getCalledUpShareCapitalNotPaid() != null
+            && balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount() != null);
     }
 
     private Boolean hasPreviousPeriodCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet) {
 
-        return balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount() != null;
+        return (balanceSheet.getCalledUpShareCapitalNotPaid() != null
+            && balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount() != null);
     }
 }

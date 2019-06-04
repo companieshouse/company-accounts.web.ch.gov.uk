@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Enter your directors’ remuneration information here
+  </title>
+</head>
+<body>
+<div id="directorsRemuneration-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="directorsRemuneration-form" class="form" th:action="@{''}"
+            th:object="${directorsRemuneration}" method="post">
+
+
+        <div th:replace="fragments/textAreaWithHelpAndHeadings :: textAreaWithHelpAndHeadings (
+                                heading = 'Enter your directors’ remuneration information here',
+                                subheading = 'If your remuneration information is in your accounts, you must enter it here in your CIC report.',
+                                subheadingClass = 'govuk-inset-text',
+                                helpText = 'See an example',
+                                dropDownText = '<p>The total amount paid to or receivable by directors in respect of qualifying services was £10,000</p>',
+                                field = 'directorsRemuneration'
+                                )">
+
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" type="submit" role="button"
+               data-event-id="Save CIC remuneration information" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+

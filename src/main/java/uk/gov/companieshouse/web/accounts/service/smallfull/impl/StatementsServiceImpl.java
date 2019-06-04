@@ -87,7 +87,7 @@ public class StatementsServiceImpl implements StatementsService {
 
         try {
             BalanceSheetStatementsApi statementsApi =
-                apiClient.smallFull().balanceSheetStatements().get(uri).execute();
+                apiClient.smallFull().balanceSheetStatements().get(uri).execute().getData();
 
             return transformer.getBalanceSheetStatements(statementsApi);
 

@@ -6,6 +6,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
@@ -17,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -40,6 +42,9 @@ public class DebtorsServiceImpl implements DebtorsService {
 
     @Autowired
     private SmallFullService smallFullService;
+
+    @Autowired
+    private ValidationContext validationContext;
 
     private static final UriTemplate DEBTORS_URI =
         new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/debtors");
@@ -73,15 +78,20 @@ public class DebtorsServiceImpl implements DebtorsService {
         boolean debtorsResourceExists = hasDebtors(smallFullApi.getLinks());
 
         try {
+            ApiResponse apiResponse;
             if (!debtorsResourceExists) {
-                apiClient.smallFull().debtors().create(uri, debtorsApi).execute();
+                apiResponse = apiClient.smallFull().debtors().create(uri, debtorsApi).execute();
             } else {
-                apiClient.smallFull().debtors().update(uri, debtorsApi).execute();
+                apiResponse = apiClient.smallFull().debtors().update(uri, debtorsApi).execute();
+            }
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -108,7 +118,7 @@ public class DebtorsServiceImpl implements DebtorsService {
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().debtors().get(uri).execute();
+            return apiClient.smallFull().debtors().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {

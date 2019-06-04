@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Check your answers
+  </title>
+</head>
+<body>
+<div id="lookup-main-content" layout:fragment="content">
+
+  <form id="lookup-form" th:action="@{''}" th:object="${cicReview}" class="form" method="post">
+
+    <div class="govuk-grid-row">
+
+      <div class="govuk-grid-column-two-thirds">
+
+        <fieldset class="govuk-fieldset">
+
+          <h1 class="govuk-heading-l" id="company-details-heading">
+            Check your answers
+          </h1>
+          <dl class="app-check-your-answers app-check-your-answers--short">
+            <div class="app-check-your-answers__contents">
+              <dt id="heading-activities-and-impact" class="app-check-your-answers__question">
+                Company’s activities and impact
+              </dt>
+              <dd class="app-check-your-answers__answer"  id="cicReview-activitiesAndImpact"
+                  th:utext="*{#strings.replace(activitiesAndImpact,'&#10;','&lt;br&gt;')}">
+              </dd>
+
+              <dd class="app-check-your-answers__change">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/cic/company-activity|}" id="change-activities-and-impact" class="piwik-event" data-event-id="Change activities and impact link">Change</a></dd>
+              <input th:field="*{activitiesAndImpact}" type="hidden">
+            </div>
+
+            <div class="app-check-your-answers__contents">
+              <dt id="heading-consultation-stakeholders" class="app-check-your-answers__question">
+                Consultation with stakeholders
+              </dt>
+              <dd class="app-check-your-answers__answer" id="cicReview-consultationWithStakeholders"
+                  th:utext="*{#strings.replace(consultationWithStakeholders,'&#10;','&lt;br&gt;')}">
+              </dd>
+              <dd class="app-check-your-answers__change">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/cic/consultation-with-stakeholders-selection|}" id="change-consultation-stakeholders" class="piwik-event" data-event-id="Change consultation with stakeholders link">Change</a></dd>
+              <input th:field="*{consultationWithStakeholders}" type="hidden">
+            </div>
+
+            <div class="app-check-your-answers__contents">
+              <dt id="heading-directors-remuneration" class="app-check-your-answers__question">
+                Directors' remuneration
+              </dt>
+              <dd class="app-check-your-answers__answer" id="cicReview-directorsRemuneration"
+                  th:utext="*{#strings.replace(directorsRemuneration,'&#10;','&lt;br&gt;')}">
+              </dd>
+              <dd class="app-check-your-answers__change">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/cic/directors-remuneration-selection|}" id="change-directors-remuneration" class="piwik-event" data-event-id="Change directors remuneration link">Change</a></dd>
+              <input th:field="*{directorsRemuneration}" type="hidden">
+            </div>
+
+            <div class="app-check-your-answers__contents">
+              <dt id="heading-transfer-assets" class="app-check-your-answers__question">
+                Assets transferred
+              </dt>
+              <dd class="app-check-your-answers__answer" id="cicReview-transferOfAssets"
+                  th:utext="*{#strings.replace(transferOfAssets,'&#10;','&lt;br&gt;')}">
+              </dd>
+              <dd class="app-check-your-answers__change">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/cic/transfer-of-assets-selection|}" id="change-transfer-assets" class="piwik-event" data-event-id="Change assets transferred link">Change</a></dd>
+              <input th:field="*{transferOfAssets}" type="hidden">
+            </div>
+          </dl>
+        </fieldset>
+        <input id="next-button" class="govuk-button piwik-event" type="submit" data-event-id="Save CIC check your answers" role="button" value="Continue"/>
+
+      </div>
+    </div>
+  </form>
+
+</div>
+</body>
+</html>

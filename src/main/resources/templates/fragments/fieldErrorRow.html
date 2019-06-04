@@ -14,7 +14,9 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-                    <span class="govuk-error-message current-error hidden"></span>
+                    <span th:id="${currentField} + '-js-errorId'"
+                          class="govuk-error-message current-error hidden">
+                    </span>
                     <span th:if="${!#fields.hasErrors('__${currentField}__')}" class="spacer">&nbsp;</span>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
@@ -24,7 +26,9 @@
                           th:text="${e}"
                           class="govuk-error-message api">
                     </span>
-                    <span class="govuk-error-message previous-error hidden"></span>
+                    <span th:id="${previousField} + '-js-errorId'"
+                          class="govuk-error-message previous-error hidden">
+                    </span>
                 </div>
             </div>
         </div>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Consultation with stakeholders
+  </title>
+</head>
+<body>
+<div id="consultationWithStakeholdersSelection-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="consultationWithStakeholdersSelection-form" class="form" th:action="@{''}"
+            th:object="${consultationWithStakeholdersSelection}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Has there been a consultation with stakeholders?'
+                )">
+        </div>
+
+        <p id="stakeholders-help-text">
+          A stakeholder is a party that has an interest in the CIC and can either affect or be affected by its business and activities.
+        </p>
+
+        <p id="consultation-with-stakeholders-help-text">
+          If there's been any consultation with stakeholders, you should mention:
+        </p>
+
+        <ul id="consultation-with-stakeholders-help-list" class="govuk-list govuk-list--bullet">
+          <li id="consultation-with-stakeholders-help-list-item-1">who the company's stakeholders are</li>
+          <li id="consultation-with-stakeholders-help-list-item-2">how the stakeholders have been consulted</li>
+          <li id="consultation-with-stakeholders-help-list-item-3">any action the company has taken in response to feedback from its consultations</li>
+        </ul>
+
+        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('hasProvidedConsultationWithStakeholders')} ? 'govuk-form-group--error' : ''">
+          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+                                  radioButtonsFieldName = 'hasProvidedConsultationWithStakeholders'
+                                  )">
+          </div>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" type="submit" role="button"
+               data-event-id="Save CIC has there been a consultation" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+

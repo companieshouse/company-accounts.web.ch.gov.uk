@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -9,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -18,6 +15,7 @@ import uk.gov.companieshouse.api.handler.smallfull.fixedassetsinvestments.FixedA
 import uk.gov.companieshouse.api.handler.smallfull.fixedassetsinvestments.request.FixedAssetsInvestmentsCreate;
 import uk.gov.companieshouse.api.handler.smallfull.fixedassetsinvestments.request.FixedAssetsInvestmentsDelete;
 import uk.gov.companieshouse.api.handler.smallfull.fixedassetsinvestments.request.FixedAssetsInvestmentsGet;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.fixedassetsinvestments.FixedAssetsInvestmentsApi;
@@ -82,6 +80,18 @@ public class FixedAssetInvestmentServiceImplTests {
     @Mock
     private List<ValidationError> mockValidationErrors;
 
+    @Mock
+    private ApiResponse<FixedAssetsInvestmentsApi> responseWithData;
+
+    @Mock
+    private ApiResponse<Void> responseNoData;
+
+    @Mock
+    private ApiErrorResponseException apiErrorResponseException;
+
+    @Mock
+    private URIValidationException uriValidationException;
+
     @InjectMocks
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService = new FixedAssetsInvestmentsServiceImpl();
 
@@ -118,15 +128,15 @@ public class FixedAssetInvestmentServiceImplTests {
     @DisplayName("GET - fixedAssetsInvestments successful path when http status not found")
     void getFixedAssetsInvestmentsSuccessHttpStatusNotFound() throws Exception {
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(404, "Not" +
-            " Found", new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.get(FIXED_ASSETS_INVESTMENTS_URI)).
             thenReturn(mockFixedAssetsInvestmentsGet);
         when(mockFixedAssetsInvestmentsGet.execute()).thenThrow(apiErrorResponseException);
+
+        doNothing()
+                .when(serviceExceptionHandler)
+                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+
         when(mockFixedAssetsInvestmentsTransformer.getFixedAssetsInvestments(null))
             .thenReturn(createFixedAssetsInvestments());
 
@@ -143,11 +153,6 @@ public class FixedAssetInvestmentServiceImplTests {
         "ApiErrorResponseException - 400 Bad Request")
     void getFixedAssetsInvestmentsApiResponseException() throws Exception {
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(400, "Bad" +
-            " Request", new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.get(FIXED_ASSETS_INVESTMENTS_URI))
             .thenReturn(mockFixedAssetsInvestmentsGet);
@@ -157,7 +162,6 @@ public class FixedAssetInvestmentServiceImplTests {
             .when(serviceExceptionHandler)
             .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ApiErrorResponseException.class, () -> mockFixedAssetsInvestmentsGet.execute());
         assertThrows(ServiceException.class,
             () -> fixedAssetsInvestmentsService.getFixedAssetsInvestments(
                 TRANSACTION_ID,
@@ -173,8 +177,6 @@ public class FixedAssetInvestmentServiceImplTests {
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.get(FIXED_ASSETS_INVESTMENTS_URI))
             .thenReturn(mockFixedAssetsInvestmentsGet);
-
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
 
         when(mockFixedAssetsInvestmentsGet.execute()).thenThrow(uriValidationException);
 
@@ -205,6 +207,8 @@ public class FixedAssetInvestmentServiceImplTests {
 
         fixedAssetsInvestmentsCreate(fixedAssetsInvestmentsApi);
 
+        when(responseWithData.hasErrors()).thenReturn(false);
+
         List<ValidationError> validationErrors = fixedAssetsInvestmentsService.submitFixedAssetsInvestments(TRANSACTION_ID,
             COMPANY_ACCOUNTS_ID, fixedAssetsInvestments, COMPANY_NUMBER);
 
@@ -229,16 +233,11 @@ public class FixedAssetInvestmentServiceImplTests {
         when(mockFixedAssetsInvestmentsTransformer.getFixedAssetsInvestmentsApi(fixedAssetsInvestments)).thenReturn(fixedAssetsInvestmentsApi);
         when(mockFixedAssetsInvestmentsResourceHandler.create(FIXED_ASSETS_INVESTMENTS_URI, fixedAssetsInvestmentsApi)).thenReturn(mockFixedAssetsInvestmentsCreate);
 
-        HttpResponseException httpResponseException =
-            new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
-                .build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         when(mockFixedAssetsInvestmentsCreate.execute()).thenThrow(apiErrorResponseException);
 
-        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
-            .thenThrow(ServiceException.class);
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> fixedAssetsInvestmentsService.submitFixedAssetsInvestments(
             TRANSACTION_ID,
@@ -265,15 +264,11 @@ public class FixedAssetInvestmentServiceImplTests {
         when(mockFixedAssetsInvestmentsTransformer.getFixedAssetsInvestmentsApi(fixedAssetsInvestments)).thenReturn(fixedAssetsInvestmentsApi);
         when(mockFixedAssetsInvestmentsResourceHandler.create(FIXED_ASSETS_INVESTMENTS_URI, fixedAssetsInvestmentsApi)).thenReturn(mockFixedAssetsInvestmentsCreate);
 
-        HttpResponseException httpResponseException =
-            new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders())
-                .build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(mockFixedAssetsInvestmentsCreate.execute()).thenReturn(responseWithData);
 
-        when(mockFixedAssetsInvestmentsCreate.execute()).thenThrow(apiErrorResponseException);
+        when(responseWithData.hasErrors()).thenReturn(true);
 
-        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+        when(mockValidationContext.getValidationErrors(responseWithData.getErrors()))
             .thenReturn(mockValidationErrors);
 
         List<ValidationError> validationErrors = fixedAssetsInvestmentsService.submitFixedAssetsInvestments(
@@ -308,7 +303,6 @@ public class FixedAssetInvestmentServiceImplTests {
 
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.delete(FIXED_ASSETS_INVESTMENTS_URI)).thenReturn(mockFixedAssetsInvestmentsDelete);
-        doNothing().when(mockFixedAssetsInvestmentsDelete).execute();
 
         fixedAssetsInvestmentsService.deleteFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -321,8 +315,6 @@ public class FixedAssetInvestmentServiceImplTests {
 
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.delete(FIXED_ASSETS_INVESTMENTS_URI)).thenReturn(mockFixedAssetsInvestmentsDelete);
-
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
 
         when(mockFixedAssetsInvestmentsDelete.execute()).thenThrow(uriValidationException);
 
@@ -342,12 +334,6 @@ public class FixedAssetInvestmentServiceImplTests {
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.delete(FIXED_ASSETS_INVESTMENTS_URI)).thenReturn(mockFixedAssetsInvestmentsDelete);
 
-        HttpResponseException httpResponseException =
-            new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
-                .build();
-        ApiErrorResponseException apiErrorResponseException =
-            ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         when(mockFixedAssetsInvestmentsDelete.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
@@ -362,7 +348,8 @@ public class FixedAssetInvestmentServiceImplTests {
     private void getMockFixedAssetsInvestmentsApi(FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi) throws Exception {
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.get(FIXED_ASSETS_INVESTMENTS_URI)).thenReturn(mockFixedAssetsInvestmentsGet);
-        when(mockFixedAssetsInvestmentsGet.execute()).thenReturn(fixedAssetsInvestmentsApi);
+        when(mockFixedAssetsInvestmentsGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(fixedAssetsInvestmentsApi);
     }
 
     private void getMockFixedAssetsInvestmentsResourceHandler() {
@@ -378,7 +365,7 @@ public class FixedAssetInvestmentServiceImplTests {
     private void fixedAssetsInvestmentsCreate(FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi) throws Exception {
         getMockFixedAssetsInvestmentsResourceHandler();
         when(mockFixedAssetsInvestmentsResourceHandler.create(FIXED_ASSETS_INVESTMENTS_URI, fixedAssetsInvestmentsApi)).thenReturn(mockFixedAssetsInvestmentsCreate);
-        when(mockFixedAssetsInvestmentsCreate.execute()).thenReturn(fixedAssetsInvestmentsApi);
+        when(mockFixedAssetsInvestmentsCreate.execute()).thenReturn(responseWithData);
     }
 
     private void setLinksWithoutFixedAssetsInvestments(SmallFullApi smallFullApi) {

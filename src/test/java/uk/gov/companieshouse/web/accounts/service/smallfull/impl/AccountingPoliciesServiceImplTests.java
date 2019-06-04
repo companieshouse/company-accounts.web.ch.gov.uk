@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,8 +8,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -29,10 +25,12 @@ import uk.gov.companieshouse.api.handler.smallfull.accountingpolicies.Accounting
 import uk.gov.companieshouse.api.handler.smallfull.accountingpolicies.request.AccountingPoliciesCreate;
 import uk.gov.companieshouse.api.handler.smallfull.accountingpolicies.request.AccountingPoliciesGet;
 import uk.gov.companieshouse.api.handler.smallfull.accountingpolicies.request.AccountingPoliciesUpdate;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AccountingPoliciesService;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -45,6 +43,9 @@ public class AccountingPoliciesServiceImplTests {
 
     @Mock
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Mock
+    private ValidationContext validationContext;
 
     @Mock
     private ApiClient apiClient;
@@ -65,7 +66,22 @@ public class AccountingPoliciesServiceImplTests {
     private AccountingPoliciesGet accountingPoliciesGet;
 
     @Mock
+    private ApiResponse<AccountingPoliciesApi> responseWithData;
+
+    @Mock
+    private ApiResponse<Void> responseNoData;
+
+    @Mock
+    private AccountingPoliciesApi accountingPolicies;
+
+    @Mock
     private List<ValidationError> mockValidationErrors;
+
+    @Mock
+    private ApiErrorResponseException apiErrorResponseException;
+
+    @Mock
+    private URIValidationException uriValidationException;
 
     @InjectMocks
     private AccountingPoliciesService accountingPoliciesService = new AccountingPoliciesServiceImpl();
@@ -94,12 +110,13 @@ public class AccountingPoliciesServiceImplTests {
 
         when(accountingPoliciesResourceHandler.get(ACCOUNTING_POLICIES_URI)).thenReturn(accountingPoliciesGet);
 
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        when(accountingPoliciesGet.execute()).thenReturn(accountingPoliciesApi);
+        when(accountingPoliciesGet.execute()).thenReturn(responseWithData);
 
-        AccountingPoliciesApi accountingPolicies = accountingPoliciesService.getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        when(responseWithData.getData()).thenReturn(accountingPolicies);
 
-        assertNotNull(accountingPolicies);
+        AccountingPoliciesApi returnedAccountingPolicies = accountingPoliciesService.getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertEquals(accountingPolicies, returnedAccountingPolicies);
     }
 
     @Test
@@ -109,16 +126,11 @@ public class AccountingPoliciesServiceImplTests {
 
         when(accountingPoliciesResourceHandler.get(ACCOUNTING_POLICIES_URI)).thenReturn(accountingPoliciesGet);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         when(accountingPoliciesGet.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 accountingPoliciesService.getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -131,16 +143,11 @@ public class AccountingPoliciesServiceImplTests {
 
         when(accountingPoliciesResourceHandler.get(ACCOUNTING_POLICIES_URI)).thenReturn(accountingPoliciesGet);
 
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
         when(accountingPoliciesGet.execute()).thenThrow(apiErrorResponseException);
 
         doNothing()
                 .when(serviceExceptionHandler)
-                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertNull(accountingPoliciesService.getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -152,13 +159,11 @@ public class AccountingPoliciesServiceImplTests {
 
         when(accountingPoliciesResourceHandler.get(ACCOUNTING_POLICIES_URI)).thenReturn(accountingPoliciesGet);
 
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
-
         when(accountingPoliciesGet.execute()).thenThrow(uriValidationException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 accountingPoliciesService.getAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -169,14 +174,15 @@ public class AccountingPoliciesServiceImplTests {
     void createAccountingPoliciesSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-
-        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
+        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPolicies))
                 .thenReturn(accountingPoliciesCreate);
-        when(accountingPoliciesCreate.execute()).thenReturn(accountingPoliciesApi);
+
+        when(accountingPoliciesCreate.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.hasErrors()).thenReturn(false);
 
         List<ValidationError> validationErrors =
-                accountingPoliciesService.createAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi);
+                accountingPoliciesService.createAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -186,46 +192,37 @@ public class AccountingPoliciesServiceImplTests {
     void createAccountingPoliciesThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-
-        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
+        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPolicies))
                 .thenReturn(accountingPoliciesCreate);
-
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         when(accountingPoliciesCreate.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                accountingPoliciesService.createAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi));
+                accountingPoliciesService.createAccountingPoliciesApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies));
     }
 
     @Test
-    @DisplayName("Create accounting policies - bad request")
-    void createAccountingPoliciesBadRequest()
+    @DisplayName("Create accounting policies - validation errors")
+    void createAccountingPoliciesValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-
-        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
+        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPolicies))
                 .thenReturn(accountingPoliciesCreate);
 
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        when(accountingPoliciesCreate.execute()).thenReturn(responseWithData);
 
-        when(accountingPoliciesCreate.execute()).thenThrow(apiErrorResponseException);
+        when(responseWithData.hasErrors()).thenReturn(true);
 
-        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+        when(validationContext.getValidationErrors(responseWithData.getErrors()))
                 .thenReturn(mockValidationErrors);
 
         List<ValidationError> validationErrors =
-                accountingPoliciesService.createAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi);
+                accountingPoliciesService.createAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -235,21 +232,18 @@ public class AccountingPoliciesServiceImplTests {
     void createAccountingPoliciesThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-
-        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
+        when(accountingPoliciesResourceHandler.create(ACCOUNTING_POLICIES_URI, accountingPolicies))
                 .thenReturn(accountingPoliciesCreate);
-
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
 
         when(accountingPoliciesCreate.execute()).thenThrow(uriValidationException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                accountingPoliciesService.createAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi));
+                accountingPoliciesService.createAccountingPoliciesApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies));
     }
 
     @Test
@@ -261,7 +255,10 @@ public class AccountingPoliciesServiceImplTests {
 
         when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
                 .thenReturn(accountingPoliciesUpdate);
-        doNothing().when(accountingPoliciesUpdate).execute();
+
+        when(accountingPoliciesUpdate.execute()).thenReturn(responseNoData);
+
+        when(responseNoData.hasErrors()).thenReturn(false);
 
         List<ValidationError> validationErrors =
                 accountingPoliciesService.updateAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi);
@@ -274,46 +271,38 @@ public class AccountingPoliciesServiceImplTests {
     void updateAccountingPoliciesThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-
-        when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
+        when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPolicies))
                 .thenReturn(accountingPoliciesUpdate);
-
-        HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
-                        .build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
-
-        doThrow(apiErrorResponseException).when(accountingPoliciesUpdate).execute();
-
-        doThrow(ServiceException.class)
-                .when(serviceExceptionHandler)
-                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
-
-        assertThrows(ServiceException.class, () ->
-                accountingPoliciesService.updateAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi));
-    }
-
-    @Test
-    @DisplayName("Update accounting policies - bad request")
-    void updateAccountingPoliciesBadRequest()
-            throws ApiErrorResponseException, URIValidationException, ServiceException {
-
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-
-        when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
-                .thenReturn(accountingPoliciesUpdate);
-
-        HttpResponseException httpResponseException = new HttpResponseException.Builder(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), new HttpHeaders()).build();
-        ApiErrorResponseException apiErrorResponseException = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
 
         when(accountingPoliciesUpdate.execute()).thenThrow(apiErrorResponseException);
 
-        when(serviceExceptionHandler.handleSubmissionException(apiErrorResponseException, RESOURCE_NAME))
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () ->
+                accountingPoliciesService.updateAccountingPoliciesApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies));
+    }
+
+    @Test
+    @DisplayName("Update accounting policies - validation errors")
+    void updateAccountingPoliciesValidationErrors()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPolicies))
+                .thenReturn(accountingPoliciesUpdate);
+
+        when(accountingPoliciesUpdate.execute()).thenReturn(responseNoData);
+
+        when(responseNoData.hasErrors()).thenReturn(true);
+
+        when(validationContext.getValidationErrors(responseNoData.getErrors()))
                 .thenReturn(mockValidationErrors);
 
         List<ValidationError> validationErrors =
-                accountingPoliciesService.updateAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi);
+                accountingPoliciesService.updateAccountingPoliciesApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -323,21 +312,18 @@ public class AccountingPoliciesServiceImplTests {
     void updateAccountingPoliciesThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-
-        when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPoliciesApi))
+        when(accountingPoliciesResourceHandler.update(ACCOUNTING_POLICIES_URI, accountingPolicies))
                 .thenReturn(accountingPoliciesUpdate);
 
-        URIValidationException uriValidationException = new URIValidationException("invalid uri");
-
-        doThrow(uriValidationException).when(accountingPoliciesUpdate).execute();
+        when(accountingPoliciesUpdate.execute()).thenThrow(uriValidationException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                accountingPoliciesService.updateAccountingPoliciesApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPoliciesApi));
+                accountingPoliciesService.updateAccountingPoliciesApi(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies));
     }
 
 }

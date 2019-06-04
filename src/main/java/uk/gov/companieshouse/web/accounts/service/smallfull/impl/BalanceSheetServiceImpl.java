@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -11,6 +12,7 @@ import uk.gov.companieshouse.accountsdates.impl.AccountsDatesHelperImpl;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -39,9 +41,11 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYe
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -54,13 +58,14 @@ import java.util.Optional;
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class BalanceSheetServiceImpl implements BalanceSheetService {
 
-    private static final UriTemplate SMALL_FULL_URI =
-            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId" +
-                    "}/small-full");
+    private static final String SMALL_FULL_URI =
+            "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full";
+
     private static final UriTemplate CURRENT_PERIOD_URI =
-            new UriTemplate(SMALL_FULL_URI.toString() + "/current-period");
+            new UriTemplate(SMALL_FULL_URI + "/current-period");
+
     private static final UriTemplate PREVIOUS_PERIOD_URI =
-            new UriTemplate(SMALL_FULL_URI.toString() + "/previous-period");
+            new UriTemplate(SMALL_FULL_URI + "/previous-period");
 
     @Autowired
     private BalanceSheetTransformer transformer;
@@ -95,12 +100,23 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     @Autowired
     private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
 
+    @Autowired
+    private SmallFullService smallFullService;
+
+    @Autowired
+    private ValidationContext validationContext;
+
     private BalanceSheet cachedBalanceSheet;
 
     private AccountsDatesHelper accountsDatesHelper = new AccountsDatesHelperImpl();
 
     private static final String CURRENT_PERIOD_RESOURCE = "current period";
     private static final String PREVIOUS_PERIOD_RESOURCE = "previous period";
+
+    private static List<String> lbgTypes = Arrays.asList(
+        "private-limited-guarant-nsc",
+        "private-limited-guarant-nsc-limited-exemption"
+    );
 
     @Override
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId,
@@ -129,6 +145,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         BalanceSheet balanceSheet = transformer.getBalanceSheet(currentPeriodApi,
                 previousPeriodApi);
 
+        balanceSheet.setLbg(lbgTypes.contains(companyProfileApi.getType()));
         balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
 
         cachedBalanceSheet = balanceSheet;
@@ -140,8 +157,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                               String transactionId, String companyAccountsId) throws ServiceException {
 
         try {
-            return apiClient.smallFull().currentPeriod().get(CURRENT_PERIOD_URI.expand(transactionId,
-                    companyAccountsId).toString()).execute();
+            return apiClient.smallFull().currentPeriod()
+                    .get(CURRENT_PERIOD_URI.expand(transactionId,
+                            companyAccountsId).toString()).execute().getData();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, CURRENT_PERIOD_RESOURCE);
         } catch (URIValidationException e) {
@@ -159,7 +177,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         try {
             return apiClient.smallFull().previousPeriod()
                     .get(PREVIOUS_PERIOD_URI.expand(transactionId,
-                            companyAccountsId).toString()).execute();
+                            companyAccountsId).toString()).execute().getData();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, PREVIOUS_PERIOD_RESOURCE);
         } catch (URIValidationException e) {
@@ -182,8 +200,8 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        String smallFullUri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
-        SmallFullApi smallFullApi = getSmallFullData(apiClient, smallFullUri);
+        SmallFullApi smallFullApi =
+                smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         CompanyProfileApi companyProfileApi = getCompanyProfile(companyNumber);
         if (isMultipleYearFiler(companyProfileApi)) {
@@ -209,33 +227,26 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     }
 
-    private SmallFullApi getSmallFullData(ApiClient apiClient, String smallFullUri)
-            throws ServiceException {
-        try {
-            return apiClient.smallFull().get(smallFullUri).execute();
-        } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error retrieving small full data", e);
-        } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for small full resource", e);
-        }
-    }
-
     private void createPreviousPeriod(ApiClient apiClient, SmallFullApi smallFullApi,
                                       String previousPeriodUri, PreviousPeriodApi previousPeriodApi,
                                       List<ValidationError> validationErrors)
             throws ServiceException {
         boolean isCreated = hasPreviousPeriod(smallFullApi.getLinks());
         try {
+            ApiResponse apiResponse;
             if (!isCreated) {
-                apiClient.smallFull().previousPeriod().create(previousPeriodUri,
+                apiResponse = apiClient.smallFull().previousPeriod().create(previousPeriodUri,
                         previousPeriodApi).execute();
             } else {
-                apiClient.smallFull().previousPeriod().update(previousPeriodUri,
+                apiResponse = apiClient.smallFull().previousPeriod().update(previousPeriodUri,
                         previousPeriodApi).execute();
             }
 
+            if (apiResponse.hasErrors()) {
+                validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
+            }
         } catch (ApiErrorResponseException e) {
-            validationErrors.addAll(serviceExceptionHandler.handleSubmissionException(e, PREVIOUS_PERIOD_RESOURCE));
+            serviceExceptionHandler.handleSubmissionException(e, PREVIOUS_PERIOD_RESOURCE);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, PREVIOUS_PERIOD_RESOURCE);
         }
@@ -248,14 +259,18 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
         boolean isCreated = hasCurrentPeriod(smallFullApi.getLinks());
         try {
+            ApiResponse apiResponse;
             if (!isCreated) {
-                apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
+                apiResponse = apiClient.smallFull().currentPeriod().create(currentPeriodUri, currentPeriod).execute();
             } else {
-                apiClient.smallFull().currentPeriod().update(currentPeriodUri, currentPeriod).execute();
+                apiResponse = apiClient.smallFull().currentPeriod().update(currentPeriodUri, currentPeriod).execute();
             }
 
+            if (apiResponse.hasErrors()) {
+                validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
+            }
         } catch (ApiErrorResponseException e) {
-            validationErrors.addAll(serviceExceptionHandler.handleSubmissionException(e, CURRENT_PERIOD_RESOURCE));
+            serviceExceptionHandler.handleSubmissionException(e, CURRENT_PERIOD_RESOURCE);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, CURRENT_PERIOD_RESOURCE);
         }
@@ -332,7 +347,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
      * @param companyAccountsId The company accounts identifier
      * @throws ServiceException if there's an error on submission
      */
-
     private void checkConditionalNotes(BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
                                        String transactionId, String companyAccountsId) throws ServiceException {
 

@@ -11,6 +11,8 @@ public class BalanceSheet {
 
     private BalanceSheetHeadings balanceSheetHeadings;
 
+    private Boolean lbg;
+
     private CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
     private FixedAssets fixedAssets;
@@ -20,4 +22,6 @@ public class BalanceSheet {
     private CapitalAndReserves capitalAndReserves;
 
     private OtherLiabilitiesOrAssets otherLiabilitiesOrAssets;
+
+    private MembersFunds membersFunds;
 }
