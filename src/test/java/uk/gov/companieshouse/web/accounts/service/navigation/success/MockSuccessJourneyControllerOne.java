@@ -8,7 +8,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
  * Mock controller class for success scenario testing of navigation.
  */
 @NextController(MockSuccessJourneyControllerTwo.class)
-@RequestMapping("/mock-success-journey-controller-one")
+@RequestMapping("/mock-success-journey-controller-one/{companyNumber}/{transactionId}/{companyAccountsId}")
 public class MockSuccessJourneyControllerOne extends BaseController {
 
     @Override

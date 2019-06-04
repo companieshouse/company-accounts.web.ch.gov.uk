@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.BranchController;
 import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 
 @Controller
 @PreviousController(CicApprovalController.class)
 @NextController(StepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/accounts-start")
-public class AccountStartController extends BaseController {
+public class AccountStartController extends BaseController implements BranchController {
 
 
     private static final String TRANSACTION_ID = "transaction_id";
@@ -50,5 +51,11 @@ public class AccountStartController extends BaseController {
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
+    }
+
+    @Override
+    public boolean shouldBranch(String ... pathVars) {
+
+        return pathVars.length == 3;
     }
 }
