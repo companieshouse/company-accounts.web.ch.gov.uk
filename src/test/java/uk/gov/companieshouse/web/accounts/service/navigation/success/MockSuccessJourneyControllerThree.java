@@ -9,7 +9,7 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
  * Mock controller class for success scenario testing of navigation.
  */
 @PreviousController(MockSuccessJourneyControllerTwo.class)
-@RequestMapping("/mock-success-journey-controller-three")
+@RequestMapping("/mock-success-journey-controller-three/{companyNumber}/{transactionId}/{companyAccountsId}")
 public class MockSuccessJourneyControllerThree extends BaseController implements ConditionalController {
 
     @Override
