@@ -35,11 +35,12 @@ public class GovukCompanyDetailController extends BaseController {
 
         try {
             model.addAttribute("companyDetail", companyService.getCompanyDetail(companyNumber));
-            model.addAttribute("templateHeading", TEMPLATE_HEADING);
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
+
+        model.addAttribute("templateHeading", TEMPLATE_HEADING);
 
         return getTemplateName();
     }
