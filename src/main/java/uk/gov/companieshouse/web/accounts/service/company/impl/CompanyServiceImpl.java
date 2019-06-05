@@ -9,13 +9,18 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.transformer.company.CompanyDetailTransformer;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private ApiClientService apiClientService;
+
+    @Autowired
+    private CompanyDetailTransformer companyDetailTransformer;
 
     private static final UriTemplate GET_COMPANY_URI =
             new UriTemplate("/company/{companyNumber}");
@@ -33,12 +38,18 @@ public class CompanyServiceImpl implements CompanyService {
             companyProfileApi = apiClient.company().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException("Error retieving company profile", e);
+            throw new ServiceException("Error retrieving company profile", e);
         } catch (URIValidationException e) {
 
             throw new ServiceException("Invalid URI for company resource", e);
         }
 
         return companyProfileApi;
+    }
+
+    @Override
+    public CompanyDetail getCompanyDetail(String companyNumber) throws ServiceException {
+
+        return companyDetailTransformer.getCompanyDetail(getCompanyProfile(companyNumber));
     }
 }

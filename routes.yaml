@@ -14,6 +14,7 @@ routes:
    10: ^/accounts/corporation-tax
    11: ^/accounts/select-account-type
    12: ^/accounts/full-accounts-criteria
-   13: ^/company/(.*)/cic/ 
-   14: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/resume
-   15: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/cic/
+   13: ^/accounts/company/(.*)/details
+   14: ^/company/(.*)/cic/
+   15: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/resume
+   16: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/cic/

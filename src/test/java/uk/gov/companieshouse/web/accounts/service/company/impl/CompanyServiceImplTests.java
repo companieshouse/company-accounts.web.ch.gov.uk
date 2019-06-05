@@ -21,7 +21,9 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.transformer.company.CompanyDetailTransformer;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -44,6 +46,12 @@ public class CompanyServiceImplTests {
 
     @Mock
     private CompanyProfileApi companyProfile;
+
+    @Mock
+    private CompanyDetail companyDetail;
+
+    @Mock
+    private CompanyDetailTransformer companyDetailTransformer;
 
     @InjectMocks
     private CompanyService companyService = new CompanyServiceImpl();
@@ -93,5 +101,20 @@ public class CompanyServiceImplTests {
 
         assertThrows(ServiceException.class, () ->
                 companyService.getCompanyProfile(COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("Get Company Details - Success Path")
+    void getCompanyDetailSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(companyGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(companyProfile);
+
+        when(companyDetailTransformer.getCompanyDetail(companyProfile)).thenReturn(companyDetail);
+
+        CompanyDetail returnedCompanyDetail = companyService.getCompanyDetail(COMPANY_NUMBER);
+
+        assertEquals(companyDetail, returnedCompanyDetail);
     }
 }
