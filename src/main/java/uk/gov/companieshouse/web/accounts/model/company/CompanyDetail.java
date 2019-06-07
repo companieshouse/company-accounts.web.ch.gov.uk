@@ -18,4 +18,6 @@ public class CompanyDetail {
     private LocalDate accountsNextMadeUpTo;
 
     private LocalDate lastAccountsNextMadeUpTo;
+
+    private Boolean isCic;
 }
