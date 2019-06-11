@@ -58,7 +58,10 @@ public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
         if (signInInfo != null) {
             Map<String, Object> userProfile = (Map<String, Object>) signInInfo
                     .get(USER_PROFILE_KEY);
-            modelAndView.addObject(USER_EMAIL, userProfile.get(EMAIL_KEY));
+
+            if (userProfile != null) {
+                modelAndView.addObject(USER_EMAIL, userProfile.get(EMAIL_KEY));
+            }
         }
     }
 }
