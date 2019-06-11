@@ -22,7 +22,7 @@ import java.time.LocalDate;
 public class CicCompanyDetailController extends BaseController {
 
     @Autowired
-    CompanyService companyService;
+    private CompanyService companyService;
 
     @Override
     protected String getTemplateName() {
@@ -43,8 +43,8 @@ public class CicCompanyDetailController extends BaseController {
     private static final String MODEL_ATTR_LINK_TEXT = "templateLinkText";
     private static final String MODEL_ATTR_LINK_URL = "templateLinkUrl";
 
-    private static final boolean SHOW_CONTINUE_BUTTON = true;
-    private static final String MODEL_ATTR_HIDE_CONTINUE_BUTTON = "showContinueButton";
+    private static final boolean SHOW_CONTINUE = true;
+    private static final String MODEL_ATTR_SHOW_CONTINUE = "showContinue";
 
     @GetMapping
     public String getCompanyDetail(@PathVariable String companyNumber, Model model, HttpServletRequest request) {
@@ -67,9 +67,8 @@ public class CicCompanyDetailController extends BaseController {
             if(accountsNextMadeUpTo != null && accountsNextMadeUpTo.isBefore(LocalDate.now())) {
                 model.addAttribute(MODEL_ATTR_HEADING, TEMPLATE_HEADING_IS_CIC);
 
-                model.addAttribute(MODEL_ATTR_HIDE_CONTINUE_BUTTON, SHOW_CONTINUE_BUTTON);
-            }
-            else {
+                model.addAttribute(MODEL_ATTR_SHOW_CONTINUE, SHOW_CONTINUE);
+            } else {
                 model.addAttribute(MODEL_ATTR_HEADING, TEMPLATE_HEADING_ACC_NOT_DUE);
                 model.addAttribute(MODEL_ATTR_LINK_TEXT, TEMPLATE_LINK_ACC_TEXT);
                 model.addAttribute(MODEL_ATTR_LINK_URL, TEMPLATE_LINK_ACC_URL);
@@ -84,7 +83,6 @@ public class CicCompanyDetailController extends BaseController {
         return getTemplateName();
     }
 
-    //Post method uses navigation service but where will it go to? Cic steps to complete?
     @PostMapping
     public String postCompanyDetails(@PathVariable String companyNumber) {
 

@@ -25,6 +25,9 @@ public class GovukCompanyDetailController extends BaseController {
 
     private static final String TEMPLATE_HEADING = "Confirm company details";
 
+    private static final boolean SHOW_CONTINUE = true;
+    private static final String MODEL_ATTR_SHOW_CONTINUE = "showContinue";
+
     @Override
     protected String getTemplateName() {
         return "company/companyDetail";
@@ -40,6 +43,7 @@ public class GovukCompanyDetailController extends BaseController {
             return ERROR_VIEW;
         }
 
+        model.addAttribute(MODEL_ATTR_SHOW_CONTINUE, SHOW_CONTINUE);
         model.addAttribute("templateHeading", TEMPLATE_HEADING);
 
         return getTemplateName();
