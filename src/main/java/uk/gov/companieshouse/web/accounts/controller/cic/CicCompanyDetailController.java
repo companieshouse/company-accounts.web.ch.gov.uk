@@ -34,14 +34,17 @@ public class CicCompanyDetailController extends BaseController {
     private static final String TEMPLATE_HEADING_ACC_NOT_DUE = "This CIC’s annual accounts are not due yet";
     private static final String TEMPLATE_LINK_ACC_TEXT = "File CIC report and accounts for a different CIC";
     private static final String TEMPLATE_LINK_ACC_URL = "/company-lookup/search?forward=%2Faccounts%2Fcompany%2F%7BcompanyNumber%7D%2Fcic%2Fdetails";
+    private static final String TEMPLATE_EVENT_FILE_DIFF_CIC = "File for a different CIC link";
 
     private static final String TEMPLATE_HEADING_NOT_CIC = "This is not a Community Interest Company";
     private static final String TEMPLATE_LINK_NOT_CIC_TEXT = "File accounts for other company types";
     private static final String TEMPLATE_LINK_NOT_CIC_URL = "https://www.gov.uk/file-your-company-annual-accounts";
+    private static final String TEMPLATE_EVENT_NOT_CIC = "Other company types link";
 
     private static final String MODEL_ATTR_HEADING = "templateHeading";
     private static final String MODEL_ATTR_LINK_TEXT = "templateLinkText";
     private static final String MODEL_ATTR_LINK_URL = "templateLinkUrl";
+    private static final String MODEL_ATTR_EVENT = "eventLink";
 
     private static final boolean SHOW_CONTINUE = true;
     private static final String MODEL_ATTR_SHOW_CONTINUE = "showContinue";
@@ -72,12 +75,14 @@ public class CicCompanyDetailController extends BaseController {
                 model.addAttribute(MODEL_ATTR_HEADING, TEMPLATE_HEADING_ACC_NOT_DUE);
                 model.addAttribute(MODEL_ATTR_LINK_TEXT, TEMPLATE_LINK_ACC_TEXT);
                 model.addAttribute(MODEL_ATTR_LINK_URL, TEMPLATE_LINK_ACC_URL);
+                model.addAttribute(MODEL_ATTR_EVENT, TEMPLATE_EVENT_FILE_DIFF_CIC);
             }
         }
         else {
             model.addAttribute(MODEL_ATTR_HEADING, TEMPLATE_HEADING_NOT_CIC);
             model.addAttribute(MODEL_ATTR_LINK_TEXT, TEMPLATE_LINK_NOT_CIC_TEXT);
             model.addAttribute(MODEL_ATTR_LINK_URL, TEMPLATE_LINK_NOT_CIC_URL);
+            model.addAttribute(MODEL_ATTR_EVENT, TEMPLATE_EVENT_NOT_CIC);
         }
 
         return getTemplateName();

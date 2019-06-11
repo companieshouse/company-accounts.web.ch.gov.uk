@@ -21,7 +21,7 @@
           <h1 class="govuk-heading-l" id="company-details-heading" th:utext="${templateHeading}">
           </h1>
           <p class="govuk-body govuk-!-margin-bottom-9">
-            <a th:href="${templateLinkUrl}" th:utext="${templateLinkText}"></a>
+            <a th:href="${templateLinkUrl}" th:data-event-id="${eventLink}" class="piwik-event" th:utext="${templateLinkText}"></a>
           </p>
           <dl class="app-check-your-answers app-check-your-answers--short">
             <div class="app-check-your-answers__contents">
@@ -69,7 +69,7 @@
             </div>
           </dl>
         </fieldset>
-        <input th:if="${showContinueButton}" id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
+        <input th:if="${showContinue}" id="next-button" data-event-id="Confirm company" class="govuk-button piwik-event" type="submit" role="button" value="Continue"/>
 
       </div>
     </div>
