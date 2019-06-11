@@ -46,6 +46,7 @@ public class CompanyTransformerImplTests {
 
     private static final LocalDate NEXT_ACCOUNT_DATE = LocalDate.of(2016, 5, 3);
     private static final LocalDate LAST_ACCOUNT_DATE = LocalDate.of(2015, 5, 3);
+    private static final LocalDate DUE_BY_DATE = LocalDate.of(2017, 1, 1);
 
     private CompanyProfileApi createMockCompanyProfileApi(boolean hasRegisteredOfficeAddress, boolean hasAccounts) {
 
@@ -61,6 +62,8 @@ public class CompanyTransformerImplTests {
             LastAccountsApi lastAccounts = new LastAccountsApi();
             lastAccounts.setMadeUpTo(LAST_ACCOUNT_DATE);
             companyAccounts.setLastAccounts(lastAccounts);
+
+            companyAccounts.setNextDue(DUE_BY_DATE);
 
             companyProfile.setAccounts(companyAccounts);
         }
@@ -87,6 +90,7 @@ public class CompanyTransformerImplTests {
         assertEquals(ADDRESS_FORMATTED, companyDetailReturned.getRegisteredOfficeAddress());
         assertEquals(NEXT_ACCOUNT_DATE, companyDetailReturned.getAccountsNextMadeUpTo());
         assertEquals(LAST_ACCOUNT_DATE, companyDetailReturned.getLastAccountsNextMadeUpTo());
+        assertEquals(DUE_BY_DATE, companyDetailReturned.getNextDue());
     }
 
     @Test
@@ -100,6 +104,7 @@ public class CompanyTransformerImplTests {
         assertEquals(ADDRESS_FORMATTED, companyDetailReturned.getRegisteredOfficeAddress());
         assertNull(companyDetailReturned.getAccountsNextMadeUpTo());
         assertNull(companyDetailReturned.getLastAccountsNextMadeUpTo());
+        assertNull(companyDetailReturned.getNextDue());
     }
 
     @Test
@@ -113,5 +118,6 @@ public class CompanyTransformerImplTests {
         assertNull(companyDetailReturned.getRegisteredOfficeAddress());
         assertEquals(NEXT_ACCOUNT_DATE, companyDetailReturned.getAccountsNextMadeUpTo());
         assertEquals(LAST_ACCOUNT_DATE, companyDetailReturned.getLastAccountsNextMadeUpTo());
+        assertEquals(DUE_BY_DATE, companyDetailReturned.getNextDue());
     }
 }

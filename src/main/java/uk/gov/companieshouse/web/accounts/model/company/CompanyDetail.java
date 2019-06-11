@@ -20,4 +20,6 @@ public class CompanyDetail {
     private LocalDate lastAccountsNextMadeUpTo;
 
     private Boolean isCic;
+
+    private LocalDate nextDue;
 }
