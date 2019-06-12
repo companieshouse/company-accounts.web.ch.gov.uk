@@ -47,7 +47,13 @@ public class CompanyDetailTransformerImpl implements CompanyDetailTransformer {
                 .map(LastAccountsApi::getMadeUpTo)
                 .orElse(null));
 
-        return companyDetail;
+        companyDetail.setNextDue(Optional.of(companyProfile)
+        .map(CompanyProfileApi::getAccounts)
+        .map(CompanyAccountApi::getNextDue)
+        .orElse(null));
 
+        companyDetail.setIsCic(companyProfile.isCommunityInterestCompany());
+
+        return companyDetail;
     }
 }

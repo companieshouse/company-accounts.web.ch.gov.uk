@@ -47,6 +47,7 @@ public class GovukCompanyDetailControllerTest {
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String TEMPLATE_HEADING_MODEL_ATTR = "templateHeading";
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String TEMPLATE_SHOW_CONTINUE_MODEL_ATTR = "showContinue";
 
     @BeforeEach
     private void setup() {
@@ -65,6 +66,7 @@ public class GovukCompanyDetailControllerTest {
                 .andExpect(view().name(COMPANY_DETAIL_VIEW))
                 .andExpect(model().attributeExists(COMPANY_DETAIL_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_HEADING_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_SHOW_CONTINUE_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
