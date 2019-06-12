@@ -47,6 +47,7 @@ public class CicCriteriaController extends BaseController {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
         }
 
+        //TODO: Implement the Cannot file online yet page and link it to the "No" option to complete the journey. [SFA-1331]
         return getTemplateName();
     }
 }
