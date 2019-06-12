@@ -58,7 +58,7 @@ public class GovukCriteriaController extends BaseController {
 
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/select-account-type";
         }
-        attributes.addAttribute("forward", "/company/{companyNumber}/small-full/steps-to-complete");
+        attributes.addAttribute("forward", "/accounts/company/{companyNumber}/details");
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
     }
 }
