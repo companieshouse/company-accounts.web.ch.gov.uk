@@ -46,6 +46,8 @@ public class GovukCompanyDetailController extends BaseController {
         model.addAttribute(MODEL_ATTR_SHOW_CONTINUE, SHOW_CONTINUE);
         model.addAttribute("templateHeading", TEMPLATE_HEADING);
 
+        model.addAttribute("backButton", "/company-lookup/search?forward=%2Faccounts%2Fcompany%2F%7BcompanyNumber%7D%2Fdetails");
+
         return getTemplateName();
     }
 

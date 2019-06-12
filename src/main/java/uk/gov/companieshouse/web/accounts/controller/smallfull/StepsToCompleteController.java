@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.cic.AccountStartController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -19,8 +21,8 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 
 @Controller
 @NextController(BalanceSheetController.class)
-@PreviousController(CriteriaController.class)
-@RequestMapping("/company/{companyNumber}/small-full/steps-to-complete")
+@PreviousController({CriteriaController.class, AccountStartController.class})
+@RequestMapping({"/company/{companyNumber}/small-full/steps-to-complete", "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/steps-to-complete"})
 public class StepsToCompleteController extends BaseController {
 
     @Autowired
@@ -42,30 +44,47 @@ public class StepsToCompleteController extends BaseController {
 
     @GetMapping
     public String getStepsToComplete(@PathVariable String companyNumber,
-            Model model) {
+                                     @PathVariable Optional<String> transactionId,
+                                     @PathVariable Optional<String> companyAccountsId,
+                                     Model model) {
 
-        addBackPageAttributeToModel(model, companyNumber);
+        if (transactionId.isPresent() && companyAccountsId.isPresent()) {
+            addBackPageAttributeToModel(model, companyNumber, transactionId.get(), companyAccountsId.get());
+        } else {
+            addBackPageAttributeToModel(model, companyNumber);
+        }
 
         return getTemplateName();
     }
 
     @PostMapping
     public String postStepsToComplete(@PathVariable String companyNumber,
-            HttpServletRequest request) {
+                                      @PathVariable Optional<String> transactionId,
+                                      @PathVariable Optional<String> companyAccountsId,
+                                      HttpServletRequest request) {
+
+        boolean isExistingTransaction = false;
+        String transactionID = "";
+        String companyAccountsID = "";
+
+        if (transactionId.isPresent() && companyAccountsId.isPresent()) {
+            transactionID = transactionId.get();
+            companyAccountsID = companyAccountsId.get();
+            isExistingTransaction = true;
+        }
 
         try {
-            String transactionId = transactionService.createTransaction(companyNumber);
 
-            String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId);
+            if (!isExistingTransaction) {
+                transactionID = transactionService.createTransaction(companyNumber);
+                companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID);
+            }
 
-            smallFullService.createSmallFullAccounts(transactionId, companyAccountsId);
+            smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
+            statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
+            transactionService.createResumeLink(companyNumber, transactionID, companyAccountsID);
 
-            statementsService.createBalanceSheetStatementsResource(transactionId, companyAccountsId);
-
-            transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
-
-            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
-
+            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);

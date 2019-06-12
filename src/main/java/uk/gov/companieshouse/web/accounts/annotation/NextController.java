@@ -9,5 +9,5 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NextController {
-    Class<? extends BaseController> value();
+    Class<? extends BaseController>[] value();
 }

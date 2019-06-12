@@ -85,6 +85,8 @@ public class CicCompanyDetailController extends BaseController {
             model.addAttribute(MODEL_ATTR_EVENT, TEMPLATE_EVENT_NOT_CIC);
         }
 
+        model.addAttribute("backButton", TEMPLATE_LINK_ACC_URL);
+
         return getTemplateName();
     }
 
