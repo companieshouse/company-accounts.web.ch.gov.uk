@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Was directors' remuneration recieved?
+  </title>
+</head>
+<body>
+<div id="directorsRemunerationSelection-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="directorsRemunerationSelection-form" class="form" th:action="@{''}"
+            th:object="${directorsRemunerationSelection}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Was directors\' remuneration received?'
+                )">
+        </div>
+
+        <p id="remuneration-help-text">
+          Directors' remuneration is any money paid to the CIC director(s). This includes their usual pay, as well as other benefits.
+        </p>
+
+        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('hasProvidedDirectorsRemuneration')} ? 'govuk-form-group--error' : ''">
+          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+                                  radioButtonsFieldName = 'hasProvidedDirectorsRemuneration'
+                                  )">
+          </div>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" type="submit" role="button"
+               data-event-id="Save CIC was remuneration received" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
+
+

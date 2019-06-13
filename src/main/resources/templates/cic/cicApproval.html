@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title>Approval</title>
+</head>
+<body>
+<div id="approval-main-content" layout:fragment="content">
+
+  <form id="approval-form" th:action="@{''}" th:object="${cicApproval}" class="form" method="post">
+
+    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+    <div class="govuk-grid-row">
+
+      <div class="govuk-grid-column-two-thirds">
+
+        <fieldset class="govuk-fieldset">
+
+          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('directorName')} ? 'govuk-form-group--error' : ''">
+
+            <h1 id="director-approved-cic-report-heading" class="govuk-label-wrapper">
+              <label class="govuk-label govuk-label--l" for="director-approved-cic-report">
+                Which director approved the CIC report?
+              </label>
+            </h1>
+
+            <span id="director-approved-cic-report-hint" class="govuk-hint">
+              If the company has two or more directors, give the name of the director acting on their behalf.
+            </span>
+
+            <span class="govuk-error-message"
+                  id="directorName-errorId"
+                  th:if="${#fields.hasErrors('directorName')}"
+                  th:each="e : ${#fields.errors('directorName')}" th:text="${e}">
+            </span>
+
+            <input class="govuk-input"
+                   id="director-approved-cic-report"
+                   th:field="*{directorName}"
+                   th:errorclass="govuk-input--error"
+                   type="text">
+          </div>
+
+          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('date')} ? 'govuk-form-group--error' : ''">
+            <fieldset class="govuk-fieldset" aria-describedby="approval-date-hint" role="group">
+
+              <legend id="date-approved-cic-report-heading" class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                When was the CIC report approved?
+              </legend>
+
+              <span id="date-approved-cic-report-hint" class="govuk-hint">
+                  <p class="govuk-hint">This is the date the accounts were approved by the director.<br>
+                    For example, 31 3 2017</p>
+              </span>
+
+              <span class="govuk-error-message"
+                    id="date-errorId"
+                    th:if="${#fields.hasErrors('date')}"
+                    th:each="e : ${#fields.errors('date')}" th:text="${e}">
+              </span>
+
+              <div class="govuk-date-input" id="approval-date">
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="approval-date-day">
+                      Day
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-day"
+                           th:field="*{date.day}"
+                           type="text">
+                  </div>
+                </div>
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="approval-date-month">
+                      Month
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-month"
+                           th:field="*{date.month}"
+                           type="text">
+                  </div>
+                </div>
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="approval-date-year">
+                      Year
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="approval-date-year"
+                           th:field="*{date.year}"
+                           type="text">
+                  </div>
+                </div>
+
+              </div>
+            </fieldset>
+
+          </div>
+
+        </fieldset>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Save CIC approval" type="submit" role="button" value="Save and continue to accounts"/>
+
+      </div>
+    </div>
+  </form>
+
+</div>
+</body>
+</html>

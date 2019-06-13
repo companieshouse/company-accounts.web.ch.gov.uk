@@ -16,6 +16,9 @@ public class CompanyAccountsDataState implements Serializable {
 
     @JsonProperty("accounting_policies")
     private AccountingPolicies accountingPolicies;
+
+    @JsonProperty("cic_statements")
+    private CicStatements cicStatements;
     
     @JsonProperty("has_selected_employees_note")
     private Boolean hasSelectedEmployeesNote;

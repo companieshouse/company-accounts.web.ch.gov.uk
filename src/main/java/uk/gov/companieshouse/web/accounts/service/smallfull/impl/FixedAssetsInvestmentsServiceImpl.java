@@ -6,6 +6,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.fixedassetsinvestments.FixedAssetsInvestmentsApi;
@@ -69,15 +70,20 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
         boolean fixedAssetsInvestmentsResourceExists = hasFixedAssetsInvestments(smallFullApi.getLinks());
 
         try {
+            ApiResponse apiResponse;
             if (!fixedAssetsInvestmentsResourceExists) {
-                apiClient.smallFull().fixedAssetsInvestments().create(uri, fixedAssetsInvestmentsApi).execute();
+                apiResponse = apiClient.smallFull().fixedAssetsInvestments().create(uri, fixedAssetsInvestmentsApi).execute();
             } else {
-                apiClient.smallFull().fixedAssetsInvestments().update(uri, fixedAssetsInvestmentsApi).execute();
+                apiResponse = apiClient.smallFull().fixedAssetsInvestments().update(uri, fixedAssetsInvestmentsApi).execute();
+            }
+
+            if (apiResponse.hasErrors()) {
+                return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            return serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         }
 
         return new ArrayList<>();
@@ -105,7 +111,7 @@ public class FixedAssetsInvestmentsServiceImpl implements FixedAssetsInvestments
         String uri = FIXED_ASSETS_INVESTMENTS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().fixedAssetsInvestments().get(uri).execute();
+            return apiClient.smallFull().fixedAssetsInvestments().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {

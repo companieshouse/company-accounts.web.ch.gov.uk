@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.ReportStatementsApi;
+import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransformer;
 
@@ -62,6 +63,19 @@ public class CicStatementsTransformerImplTest {
         assertEquals(CONSULTATION_WITH_STAKEHOLDERS, reportStatements.getConsultationWithStakeholders());
         assertEquals(DIRECTORS_REMUNERATION, reportStatements.getDirectorsRemuneration());
         assertEquals(TRANSFER_OF_ASSETS, reportStatements.getTransferOfAssets());
+    }
+
+    @Test
+    @DisplayName("Get cicReview")
+    void getCicReview() {
+
+        CicReview cicReview = transformer.getCicReview(createCicStatementsApi());
+
+        assertNotNull(cicReview);
+        assertEquals(COMPANY_ACTIVITIES_AND_IMPACT, cicReview.getActivitiesAndImpact());
+        assertEquals(CONSULTATION_WITH_STAKEHOLDERS, cicReview.getConsultationWithStakeholders());
+        assertEquals(DIRECTORS_REMUNERATION, cicReview.getDirectorsRemuneration());
+        assertEquals(TRANSFER_OF_ASSETS, cicReview.getTransferOfAssets());
     }
 
     CicStatementsApi createCicStatementsApi() {
