@@ -33,7 +33,7 @@ public class CicFileOnPaperControllerTest {
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     @Test
-    @DisplayName("Get File cic on paper Request - Success Path")
+    @DisplayName("Get CIC file on paper view success path")
     void getRequestSuccess() throws Exception {
         this.mockMvc.perform(get(CIC_FILE_PAPER_URL))
                 .andExpect(status().isOk())
