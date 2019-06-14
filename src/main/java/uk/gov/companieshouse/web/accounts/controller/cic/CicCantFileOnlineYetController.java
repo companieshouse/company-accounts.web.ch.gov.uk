@@ -4,23 +4,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
 @Controller
-@RequestMapping("/accounts/cic/cics-file-paper")
-@PreviousController(CicCantFileOnlineYetController.class)
-public class CicFileOnPaperController extends BaseController {
+@RequestMapping("/accounts/cic/cant-file-online-yet")
+public class CicCantFileOnlineYetController extends BaseController {
 
     @Override
     protected String getTemplateName() {
-        return "cic/cicFileOnPaper";
+        return "cic/cicCantFileOnlineYet";
     }
 
     @GetMapping
-    public String getCicFileOnPaper(Model model) {
+    String getCantFileOnlineYetRequest(Model model) {
 
-        addBackPageAttributeToModel(model);
+        model.addAttribute("accountType", "full");
 
         return getTemplateName();
     }

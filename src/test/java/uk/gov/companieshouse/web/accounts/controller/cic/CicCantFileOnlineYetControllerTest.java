@@ -6,11 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -18,15 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CicFileOnPaperControllerTest {
+public class CicCantFileOnlineYetControllerTest {
 
     private MockMvc mockMvc;
 
-    @Mock
-    private NavigatorService service;
-
     @InjectMocks
-    private CicFileOnPaperController controller;
+    private CicCantFileOnlineYetController controller;
 
     @BeforeEach
     private void setup() {
@@ -34,14 +29,18 @@ public class CicFileOnPaperControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-    private static final String CIC_FILE_PAPER_URL = "/accounts/cic/cics-file-paper";
+    private static final String CIC_CANT_FILE_ONLINE_YET_VIEW_PATH = "/accounts/cic/cant-file-online-yet";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR = "accountType";
+
 
     @Test
-    @DisplayName("Get CIC file on paper view success path")
-    void getRequestSuccess() throws Exception {
-        mockMvc.perform(get(CIC_FILE_PAPER_URL))
+    @DisplayName("Get Cic cant file online yet view success path")
+    void getCicCantFindOnlineYetRequest() throws Exception {
+
+        mockMvc.perform(get(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR));
     }
 }

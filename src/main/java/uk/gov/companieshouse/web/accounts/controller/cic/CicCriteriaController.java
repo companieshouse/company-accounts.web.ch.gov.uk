@@ -20,6 +20,8 @@ import javax.validation.Valid;
 @RequestMapping("/accounts/cic/criteria")
 public class CicCriteriaController extends BaseController {
 
+    private static final String NO_CRITERIA_URL_LINK = "/accounts/cic/cant-file-online-yet";
+
     @Override
     protected String getTemplateName() {
         return "cic/cicCriteria";
@@ -47,7 +49,6 @@ public class CicCriteriaController extends BaseController {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
         }
 
-        //TODO: Implement the Cannot file online yet page and link it to the "No" option to complete the journey. [SFA-1331]
-        return getTemplateName();
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + NO_CRITERIA_URL_LINK;
     }
 }
