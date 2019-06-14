@@ -258,7 +258,6 @@
                     <meminitial>128m</meminitial>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <maxmem>512m</maxmem>
-                    <failOnError>false</failOnError>
                 </configuration>
             </plugin>
             <plugin>
