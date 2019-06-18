@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,6 +26,9 @@ import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT
 public class CicCriteriaControllerTest {
 
     private MockMvc mockMvc;
+
+    @Mock
+    private NavigatorService service;
 
     @InjectMocks
     private CicCriteriaController controller;

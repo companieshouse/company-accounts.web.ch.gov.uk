@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
+import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.cic.CicCriteria;
 
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 
 @Controller
 @NextController(CicCriteriaController.class)
+@PreviousController(CicFileFullAccountsController.class)
 @RequestMapping("/accounts/cic/criteria")
 public class CicCriteriaController extends BaseController {
 
@@ -31,6 +33,8 @@ public class CicCriteriaController extends BaseController {
     public String getCicCriteria(Model model) {
 
         model.addAttribute("criteria", new CicCriteria());
+
+        addBackPageAttributeToModel(model);
 
         return getTemplateName();
     }
