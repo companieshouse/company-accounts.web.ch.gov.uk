@@ -25,7 +25,7 @@ public class CicFileFullAccountsControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    NavigatorService service;
+    private NavigatorService service;
 
     @InjectMocks
     private CicFileFullAccountsController controller;
