@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
 @Controller
@@ -17,9 +18,11 @@ public class CicCantFileOnlineYetController extends BaseController {
     }
 
     @GetMapping
-    String getCantFileOnlineYetRequest(Model model) {
+    String getCantFileOnlineYetRequest(@RequestParam("backLink") String backLink, Model model) {
 
         model.addAttribute("accountType", "full");
+
+        model.addAttribute("backButton", backLink);
 
         return getTemplateName();
     }

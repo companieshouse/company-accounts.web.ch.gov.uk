@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
@@ -18,9 +19,9 @@ public class CicFileOnPaperController extends BaseController {
     }
 
     @GetMapping
-    public String getCicFileOnPaper(Model model) {
+    public String getCicFileOnPaper(@RequestParam("backLink") String backLink, Model model) {
 
-        addBackPageAttributeToModel(model);
+        model.addAttribute("backButton", "/accounts/cic/cant-file-online-yet?backLink=" + backLink);
 
         return getTemplateName();
     }

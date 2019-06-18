@@ -29,7 +29,7 @@ public class CicCantFileOnlineYetControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-    private static final String CIC_CANT_FILE_ONLINE_YET_VIEW_PATH = "/accounts/cic/cant-file-online-yet";
+    private static final String CIC_CANT_FILE_ONLINE_YET_VIEW_PATH = "/accounts/cic/cant-file-online-yet?backLink=/test";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR = "accountType";
 

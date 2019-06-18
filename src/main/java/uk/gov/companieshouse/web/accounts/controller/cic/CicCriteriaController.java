@@ -53,6 +53,7 @@ public class CicCriteriaController extends BaseController {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
         }
 
+        attributes.addAttribute("backLink", "/accounts/cic/criteria");
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + NO_CRITERIA_URL_LINK;
     }
 }
