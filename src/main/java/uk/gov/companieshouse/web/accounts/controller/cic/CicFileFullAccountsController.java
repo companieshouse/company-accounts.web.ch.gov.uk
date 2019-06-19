@@ -25,6 +25,9 @@ public class CicFileFullAccountsController extends BaseController {
         //TODO: Add backPageAttribute model for back button functionality [SFA-1330]
         //addBackPageAttributeToModel(model);
 
+        //TODO: Temp back button implemented for testing, will remove when [SFA-14330] is being developed
+        model.addAttribute("backButton", "/accounts/cic/full-accounts-criteria");
+
         return getTemplateName();
     }
 
