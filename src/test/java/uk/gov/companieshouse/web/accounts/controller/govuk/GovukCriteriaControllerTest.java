@@ -39,6 +39,7 @@ public class GovukCriteriaControllerTest {
     private static final String ALTERNATIVE_FILING_PATH = "redirect:/accounts/alternative-filing-options";
     private static final String OTHER_FILING_PATH = "redirect:/accounts/select-account-type";
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
+    private static final String FORWARD_PATH = "/accounts/company/{companyNumber}/details";
 
     @BeforeEach
     private void setup() {
@@ -67,7 +68,7 @@ public class GovukCriteriaControllerTest {
         this.mockMvc.perform(post(CRITERIA_PATH)
                 .param(beanElement, criteriaMet))
                 .andExpect(MockMvcResultMatchers.model()
-                    .attribute("forward", "/company/{companyNumber}/small-full/steps-to-complete"))
+                    .attribute("forward", FORWARD_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
