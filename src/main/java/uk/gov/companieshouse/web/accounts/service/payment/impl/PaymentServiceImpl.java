@@ -10,6 +10,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.payment.PaymentSessionApi;
 import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.MalformedPaymentUrlException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 
@@ -56,9 +57,12 @@ public class PaymentServiceImpl implements PaymentService {
 
         Matcher paymentUrlMatcher = PAYMENT_URL_PATTERN.matcher(paymentUrl);
 
-        String paymentEndpoint = "";
+        String paymentEndpoint;
         if (paymentUrlMatcher.find()) {
             paymentEndpoint = paymentUrlMatcher.group(3);
+        } else {
+            throw new MalformedPaymentUrlException(
+                    "Invalid payment url for which to create payment session. Payment url: " + paymentUrl);
         }
 
         try {
