@@ -26,6 +26,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     private static final String PAYMENT_REQUIRED_HEADER = "x-payment-required";
 
+    private static final String COSTS_LINK = "costs";
+
     /**
      *
      * {@inheritDoc}
@@ -138,7 +140,7 @@ public class TransactionServiceImpl implements TransactionService {
 
             return transaction.getResources()
                     .get("/transactions/" + transactionId + "/company-accounts/" + companyAccountsId)
-                            .getLinks().get("costs") != null;
+                            .getLinks().get(COSTS_LINK) != null;
         } catch (URIValidationException e) {
 
             throw new ServiceException("Error fetching transaction", e);

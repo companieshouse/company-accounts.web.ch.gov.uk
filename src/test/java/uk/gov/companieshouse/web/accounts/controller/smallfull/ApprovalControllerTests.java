@@ -79,6 +79,8 @@ public class ApprovalControllerTests {
 
     private static final String COMPANY_ACCOUNTS_ID_MODEL_ATTR = "company_accounts_id";
 
+    private static final String IS_PAYABLE_TRANSACTION_ATTR = "isPayableTransaction";
+
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
@@ -103,7 +105,19 @@ public class ApprovalControllerTests {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
                 .andExpect(model().attributeExists(TRANSACTION_ID_MODEL_ATTR))
-                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR));
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR))
+                .andExpect(model().attributeExists(IS_PAYABLE_TRANSACTION_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get approval - throws service exception")
+    void getRequestServiceException() throws Exception {
+
+        when(transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(get(APPROVAL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test

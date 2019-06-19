@@ -30,6 +30,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static final Pattern PAYMENT_URL_PATTERN = Pattern.compile("^(http|https)://([^/]+)(.*)");
 
+    private static final String JOURNEY_LINK = "journey";
+
     @Autowired
     public PaymentServiceImpl(ApiClientService apiClientService, EnvironmentReader environmentReader) {
 
@@ -62,7 +64,7 @@ public class PaymentServiceImpl implements PaymentService {
         try {
             return apiClientService.getApiClient()
                     .payment().create(paymentEndpoint, paymentSessionApi)
-                            .execute().getData().getLinks().get("journey");
+                            .execute().getData().getLinks().get(JOURNEY_LINK);
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error creating payment session", e);

@@ -6,14 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,6 +32,7 @@ import uk.gov.companieshouse.api.handler.transaction.request.TransactionsCreate;
 import uk.gov.companieshouse.api.handler.transaction.request.TransactionsGet;
 import uk.gov.companieshouse.api.handler.transaction.request.TransactionsUpdate;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.transaction.Resource;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -285,5 +284,80 @@ public class TransactionServiceImplTests {
                 "/resume";
 
         assertEquals(expectedResumeJourneyUri, transactionCaptor.getValue().getResumeJourneyUri());
+    }
+
+    @Test
+    @DisplayName("Is payable transaction returns true")
+    void isPayableTransactionReturnsTrue()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        Map<String, String> links = new HashMap<>();
+        links.put("costs", "tests");
+
+        Resource resource = new Resource();
+        resource.setLinks(links);
+
+        Map<String, Resource> resources = new HashMap<>();
+        resources.put("/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID, resource);
+
+        Transaction transaction = new Transaction();
+        transaction.setResources(resources);
+
+        when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
+
+        when(transactionsGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(transaction);
+
+        assertTrue(transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Is payable transaction returns false")
+    void isPayableTransactionReturnsFalse()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        Resource resource = new Resource();
+        resource.setLinks(new HashMap<>());
+
+        Map<String, Resource> resources = new HashMap<>();
+        resources.put("/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID, resource);
+
+        Transaction transaction = new Transaction();
+        transaction.setResources(resources);
+
+        when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
+
+        when(transactionsGet.execute()).thenReturn(responseWithData);
+
+        when(responseWithData.getData()).thenReturn(transaction);
+
+        assertFalse(transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Is payable transaction throws ApiErrorResponseException")
+    void isPayableTransactionThrowsApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
+
+        when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
+
+        when(transactionsGet.execute()).thenThrow(ApiErrorResponseException.class);
+
+        assertThrows(ServiceException.class,
+                () -> transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Is payable transaction throws URIValidationException")
+    void isPayableTransactionThrowsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException {
+
+        when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
+
+        when(transactionsGet.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(ServiceException.class,
+                () -> transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
