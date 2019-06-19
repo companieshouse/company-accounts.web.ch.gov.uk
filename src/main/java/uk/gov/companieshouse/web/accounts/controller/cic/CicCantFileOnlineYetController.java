@@ -18,9 +18,9 @@ public class CicCantFileOnlineYetController extends BaseController {
     }
 
     @GetMapping
-    String getCantFileOnlineYetRequest(@RequestParam("backLink") String backLink, Model model) {
+    String getCantFileOnlineYetRequest(@RequestParam("backLink") String backLink, @RequestParam("accountType") String accountType, Model model) {
 
-        model.addAttribute("accountType", "full");
+        model.addAttribute("accountType", accountType);
 
         model.addAttribute("backButton", backLink);
 

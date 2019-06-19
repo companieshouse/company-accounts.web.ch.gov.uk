@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
+import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
 @Controller
 @RequestMapping("/accounts/cic/full-accounts-criteria")
 @NextController(CicCriteriaController.class)
-//TODO: Add previous controller for back button functionality [SFA-1330]
+@PreviousController(CicSelectAccountTypeController.class)
 public class CicFileFullAccountsController extends BaseController {
 
     @Override
@@ -22,11 +23,7 @@ public class CicFileFullAccountsController extends BaseController {
     @GetMapping
     public String getCicFullAccountsCriteria(Model model) {
 
-        //TODO: Add backPageAttribute model for back button functionality [SFA-1330]
-        //addBackPageAttributeToModel(model);
-
-        //TODO: Temp back button implemented for testing, will remove when [SFA-14330] is being developed
-        model.addAttribute("backButton", "/accounts/cic/full-accounts-criteria");
+        addBackPageAttributeToModel(model);
 
         return getTemplateName();
     }
