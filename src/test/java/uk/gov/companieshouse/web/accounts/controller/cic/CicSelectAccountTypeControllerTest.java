@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.companieshouse.web.accounts.exception.NavigationException;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,10 +35,7 @@ public class CicSelectAccountTypeControllerTest {
     private static final String TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR = "typeOfAccounts";
 
     @Mock
-    NavigatorService service;
-
-    @Mock
-    NavigationException exception;
+    private NavigatorService service;
 
     @InjectMocks
     private CicSelectAccountTypeController controller;

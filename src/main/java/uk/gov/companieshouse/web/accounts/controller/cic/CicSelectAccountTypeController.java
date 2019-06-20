@@ -44,15 +44,15 @@ public class CicSelectAccountTypeController extends BaseController {
                 return getTemplateName();
             }
 
-        if (!"full".equalsIgnoreCase(typeOfAccounts.getSelectedAccountTypeName())) {
+            if (!"full".equalsIgnoreCase(typeOfAccounts.getSelectedAccountTypeName())) {
 
-            attributes.addAttribute("backLink", BACK_BUTTON_URL_LINK);
-            attributes.addAttribute("accountType", typeOfAccounts.getSelectedAccountTypeName());
+                attributes.addAttribute("backLink", BACK_BUTTON_URL_LINK);
+                attributes.addAttribute("accountType", typeOfAccounts.getSelectedAccountTypeName());
 
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANT_FILE_ONLINE_YET_URL_LINK;
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANT_FILE_ONLINE_YET_URL_LINK;
 
-        } else {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FILE_FULL_ACCOUNTS_URL_LINK;
-        }
+            } else {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FILE_FULL_ACCOUNTS_URL_LINK;
+            }
     }
 }
