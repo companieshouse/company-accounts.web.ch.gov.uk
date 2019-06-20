@@ -58,7 +58,7 @@ public class GovukSelectAccountTypeController extends BaseController {
 
     private String getReDirectPageURL(String selectedAccount) {
 
-        if ("micros".equalsIgnoreCase(selectedAccount)) {
+        if ("micro-entity".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + microEntityAccountsUri;
         }
 

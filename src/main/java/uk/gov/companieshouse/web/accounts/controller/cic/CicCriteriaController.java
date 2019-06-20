@@ -54,6 +54,7 @@ public class CicCriteriaController extends BaseController {
         }
 
         attributes.addAttribute("backLink", "/accounts/cic/criteria");
+        attributes.addAttribute("accountType", "full");
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + NO_CRITERIA_URL_LINK;
     }
 }

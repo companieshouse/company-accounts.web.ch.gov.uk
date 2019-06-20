@@ -75,11 +75,11 @@ class GovukSelectAccountTypeControllerTest {
     }
 
     @Test
-    @DisplayName("Post select account type for micros account, success path")
-    void postRequestForMicrosSuccess() throws Exception {
+    @DisplayName("Post select account type for micro-entity account, success path")
+    void postRequestForMicroEntitySuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "micros",
+            "micro-entity",
             status().is3xxRedirection(),
             getRedirectUrlForAccount(MICRO_ENTITY_ACCOUNTS_URI));
     }

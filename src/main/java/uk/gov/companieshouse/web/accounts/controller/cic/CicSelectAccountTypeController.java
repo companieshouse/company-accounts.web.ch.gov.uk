@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.exception.NavigationException;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 
 import javax.validation.Valid;
@@ -45,40 +44,15 @@ public class CicSelectAccountTypeController extends BaseController {
                 return getTemplateName();
             }
 
-            return getReDirectPageURL(typeOfAccounts.getSelectedAccountTypeName(), attributes);
-    }
-
-    private String getReDirectPageURL(String selectedAccount, RedirectAttributes attributes) {
-
-        if ("micros".equalsIgnoreCase(selectedAccount)) {
+        if (!"full".equalsIgnoreCase(typeOfAccounts.getSelectedAccountTypeName())) {
 
             attributes.addAttribute("backLink", BACK_BUTTON_URL_LINK);
-            attributes.addAttribute("accountType", "micro");
+            attributes.addAttribute("accountType", typeOfAccounts.getSelectedAccountTypeName());
 
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANT_FILE_ONLINE_YET_URL_LINK;
-        }
 
-        if ("abridged".equalsIgnoreCase(selectedAccount)) {
-
-            attributes.addAttribute("backLink", BACK_BUTTON_URL_LINK);
-            attributes.addAttribute("accountType", "abridged");
-
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANT_FILE_ONLINE_YET_URL_LINK;
-        }
-
-        if ("full".equalsIgnoreCase(selectedAccount)) {
-
+        } else {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FILE_FULL_ACCOUNTS_URL_LINK;
         }
-
-        if ("dormant".equalsIgnoreCase(selectedAccount)) {
-
-            attributes.addAttribute("backLink", BACK_BUTTON_URL_LINK);
-            attributes.addAttribute("accountType", "dormant");
-
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANT_FILE_ONLINE_YET_URL_LINK;
-        }
-
-        throw new NavigationException("Failed to redirect to another webpage");
     }
 }
