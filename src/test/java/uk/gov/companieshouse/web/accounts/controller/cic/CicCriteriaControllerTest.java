@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,6 +37,8 @@ public class CicCriteriaControllerTest {
     private static final String CIC_CRITERIA_PATH = "/accounts/cic/criteria";
 
     private static final String CIC_CRITERIA_VIEW = "cic/cicCriteria";
+    private static final String CIC_CANT_FILE_ONLINE_YET_VIEW_PATH = REDIRECT_URL_PREFIX
+            + "/accounts/cic/cant-file-online-yet";
     private static final String CIC_SUCCESS_VIEW = REDIRECT_URL_PREFIX + "/company-lookup/search";
 
     private static final String CIC_CRITERIA_MODEL_ATTR = "criteria";
@@ -68,8 +71,8 @@ public class CicCriteriaControllerTest {
 
         mockMvc.perform(post(CIC_CRITERIA_PATH).
                 param("isCriteriaMet", "0"))
-                .andExpect(status().isOk())
-                .andExpect(view().name(CIC_CRITERIA_VIEW));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
     }
 
     @Test
