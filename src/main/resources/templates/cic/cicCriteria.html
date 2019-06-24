@@ -12,7 +12,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
-            <form id="criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
+            <form id="cic-criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
                 <div th:replace="fragments/globalErrors :: globalErrors"></div>
                 <header>
                     <h1 id="page-title" class="govuk-heading-l">
@@ -34,10 +34,10 @@
                 <p id="criteria-list-heading">You <b>can</b> file full accounts here if:</p>
 
                 <ul class="govuk-list govuk-list--bullet" id="criteria-list">
-                    <li>you don't need to include a directors' report or profit and loss account</li>
-                    <li>you don't need to change the date the accounts are made up to</li>
-                    <li>your balance sheet doesn’t have 'revaluation reserve', or 'intangible assets'</li>
-                    <li>you only need to add notes (if applicable) for 'accounting policies', 'employees', 'tangible assets',
+                    <li id="criteria-list-first-item">you don't need to include a directors' report or profit and loss account</li>
+                    <li id="criteria-list-second-item">you don't need to change the date the accounts are made up to</li>
+                    <li id="criteria-list-third-item">your balance sheet doesn’t have 'revaluation reserve', or 'intangible assets'</li>
+                    <li id="criteria-list-forth-item">you only need to add notes (if applicable) for 'accounting policies', 'employees', 'tangible assets',
                         'fixed assets investments', 'stocks', 'debtors', 'current assets investments', 'creditors - amounts falling
                         due within one year', or 'creditors - amounts falling due after one year'</li>
                 </ul>

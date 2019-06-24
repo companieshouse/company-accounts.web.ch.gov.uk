@@ -19,9 +19,9 @@ public class CicFileOnPaperController extends BaseController {
     }
 
     @GetMapping
-    public String getCicFileOnPaper(@RequestParam("backLink") String backLink, Model model) {
+    public String getCicFileOnPaper(@RequestParam("backLink") String backLink, @RequestParam("accountType") String accountType, Model model) {
 
-        model.addAttribute("backButton", "/accounts/cic/cant-file-online-yet?backLink=" + backLink);
+        model.addAttribute("backButton", "/accounts/cic/cant-file-online-yet?backLink=" + backLink + "&accountType=" + accountType);
 
         return getTemplateName();
     }
