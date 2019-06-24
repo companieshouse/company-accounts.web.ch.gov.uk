@@ -15,6 +15,7 @@
 
       <form id="criteria-form" th:action="@{''}" th:object="${typeOfAccounts}" class="form" method="post">
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
         <header>
           <h1 id="page-title" class="govuk-heading-l">Which type of accounts have you prepared?</h1>
         </header>
@@ -61,7 +62,7 @@
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input piwik-event" id="fullAccountsButton"
+                <input class="govuk-radios__input piwik-event" id=id="fullAccountsButton"
                        name="chooseAccountsRadio"
                        type="radio"
                        value="full"
