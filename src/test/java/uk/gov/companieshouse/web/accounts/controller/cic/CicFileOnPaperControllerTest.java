@@ -34,7 +34,7 @@ public class CicFileOnPaperControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-    private static final String CIC_FILE_PAPER_URL = "/accounts/cic/cics-file-paper";
+    private static final String CIC_FILE_PAPER_URL = "/accounts/cic/cics-file-paper?backLink=/test";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     @Test
