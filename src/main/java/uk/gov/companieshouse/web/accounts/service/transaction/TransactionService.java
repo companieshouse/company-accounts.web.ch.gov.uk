@@ -43,7 +43,7 @@ public interface TransactionService {
      * @param transactionId     the ID of the CHS transaction
      * @param companyAccountsId the company accounts identifier
      * @return true if the transaction is payable
-     * @throws ServiceException
+     * @throws ServiceException if there's an error when fetching a transaction
      */
     boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException;
 }

@@ -19,8 +19,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     private ApiClientService apiClientService;
 
-    private EnvironmentReader environmentReader;
-
     private String chsUrl;
 
     private String apiUrl;
@@ -37,7 +35,6 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentServiceImpl(ApiClientService apiClientService, EnvironmentReader environmentReader) {
 
         this.apiClientService = apiClientService;
-        this.environmentReader = environmentReader;
         this.chsUrl = environmentReader.getMandatoryString(CHS_URL);
         this.apiUrl = environmentReader.getMandatoryString(API_URL);
     }
