@@ -44,6 +44,7 @@ public class CicCriteriaController extends BaseController {
                                   BindingResult bindingResult, Model model, RedirectAttributes attributes) {
 
         if (bindingResult.hasErrors()) {
+            addBackPageAttributeToModel(model);
             return getTemplateName();
         }
 
