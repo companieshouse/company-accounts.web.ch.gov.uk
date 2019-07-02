@@ -1,11 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks;
 
-import lombok.Getter;
-import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
-@Getter
-@Setter
 public class Stocks {
 
     @ValidationMapping("$.stocks.current_period.stocks")
@@ -13,4 +9,20 @@ public class Stocks {
 
     @ValidationMapping("$.stocks.previous_period.stocks")
     private Long previousStocks;
+
+    public Long getCurrentStocks() {
+        return currentStocks;
+    }
+
+    public void setCurrentStocks(Long currentStocks) {
+        this.currentStocks = currentStocks;
+    }
+
+    public Long getPreviousStocks() {
+        return previousStocks;
+    }
+
+    public void setPreviousStocks(Long previousStocks) {
+        this.previousStocks = previousStocks;
+    }
 }

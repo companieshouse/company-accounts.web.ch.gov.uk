@@ -1,13 +1,9 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies;
 
 import javax.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
-@Getter
-@Setter
 @ValidationModel
 public class TangibleDepreciationPolicy {
 
@@ -17,4 +13,20 @@ public class TangibleDepreciationPolicy {
     @ValidationMapping("$.accounting_policies.tangible_fixed_assets_depreciation_policy")
     private String tangibleDepreciationPolicyDetails;
 
+    public Boolean getHasTangibleDepreciationPolicySelected() {
+        return hasTangibleDepreciationPolicySelected;
+    }
+
+    public void setHasTangibleDepreciationPolicySelected(
+        Boolean hasTangibleDepreciationPolicySelected) {
+        this.hasTangibleDepreciationPolicySelected = hasTangibleDepreciationPolicySelected;
+    }
+
+    public String getTangibleDepreciationPolicyDetails() {
+        return tangibleDepreciationPolicyDetails;
+    }
+
+    public void setTangibleDepreciationPolicyDetails(String tangibleDepreciationPolicyDetails) {
+        this.tangibleDepreciationPolicyDetails = tangibleDepreciationPolicyDetails;
+    }
 }

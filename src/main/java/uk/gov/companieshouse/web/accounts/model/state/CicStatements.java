@@ -1,11 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.state;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class CicStatements {
 
     @JsonProperty("has_provided_consultation_with_stakeholders")
@@ -16,4 +12,29 @@ public class CicStatements {
 
     @JsonProperty("has_provided_directors_remuneration")
     private Boolean hasProvidedDirectorsRemuneration;
+
+    public Boolean getHasProvidedConsultationWithStakeholders() {
+        return hasProvidedConsultationWithStakeholders;
+    }
+
+    public void setHasProvidedConsultationWithStakeholders(
+        Boolean hasProvidedConsultationWithStakeholders) {
+        this.hasProvidedConsultationWithStakeholders = hasProvidedConsultationWithStakeholders;
+    }
+
+    public Boolean getHasProvidedTransferOfAssets() {
+        return hasProvidedTransferOfAssets;
+    }
+
+    public void setHasProvidedTransferOfAssets(Boolean hasProvidedTransferOfAssets) {
+        this.hasProvidedTransferOfAssets = hasProvidedTransferOfAssets;
+    }
+
+    public Boolean getHasProvidedDirectorsRemuneration() {
+        return hasProvidedDirectorsRemuneration;
+    }
+
+    public void setHasProvidedDirectorsRemuneration(Boolean hasProvidedDirectorsRemuneration) {
+        this.hasProvidedDirectorsRemuneration = hasProvidedDirectorsRemuneration;
+    }
 }
