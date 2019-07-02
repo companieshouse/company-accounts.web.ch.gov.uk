@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.controller.govuk.smallfull;
+package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.controller.govuk.GovukCriteriaController;
-import uk.gov.companieshouse.web.accounts.controller.govuk.GovukSelectAccountTypeController;
 
 @Controller
-@NextController(GovukCriteriaController.class)
-@PreviousController(GovukSelectAccountTypeController.class)
-@RequestMapping("/accounts/full-accounts-criteria")
-public class GovukFullAccountsCriteriaController extends BaseController{
+@RequestMapping("/accounts/cic/full-accounts-criteria")
+@NextController(CicCriteriaController.class)
+@PreviousController(CicSelectAccountTypeController.class)
+public class CicFileFullAccountsController extends BaseController {
 
     @Override
     protected String getTemplateName() {
@@ -23,7 +21,7 @@ public class GovukFullAccountsCriteriaController extends BaseController{
     }
 
     @GetMapping
-    public String getCriteria(Model model){
+    public String getCicFullAccountsCriteria(Model model) {
 
         addBackPageAttributeToModel(model);
 
@@ -31,7 +29,8 @@ public class GovukFullAccountsCriteriaController extends BaseController{
     }
 
     @PostMapping
-    public String postFullAccountsCriteria(){
+    public String postCicFullAccountsCriteria() {
+
         return navigatorService.getNextControllerRedirect(this.getClass());
     }
 }

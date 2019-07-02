@@ -10,11 +10,16 @@ routes:
    6: ^/company/(.*)/select-account-type
    7: ^/company/(.*)/dormant/
    8: ^/accounts/criteria
-   9: ^/accounts/alternative-filing-options
-   10: ^/accounts/corporation-tax
-   11: ^/accounts/select-account-type
-   12: ^/accounts/full-accounts-criteria
-   13: ^/accounts/company/(.*)/details
-   14: ^/company/(.*)/cic/
-   15: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/resume
-   16: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/cic/
+   9: ^/accounts/cic/select-account-type
+   10: ^/accounts/cic/full-accounts-criteria
+   11: ^/accounts/cic/criteria
+   12: ^/accounts/cic/cant-file-online-yet
+   13: ^/accounts/cic/cics-file-paper
+   14: ^/accounts/alternative-filing-options
+   15: ^/accounts/corporation-tax
+   16: ^/accounts/select-account-type
+   17: ^/accounts/full-accounts-criteria
+   18: ^/accounts/company/(.*)/details
+   19: ^/company/(.*)/cic/
+   20: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/resume
+   21: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/cic/

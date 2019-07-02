@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title>Full Accounts Criteria</title>
+</head>
+<body>
+<div id="criteria-main-content" layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form id="cic-criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <header>
+                    <h1 id="page-title" class="govuk-heading-l">
+                        File full accounts
+                    </h1>
+                </header>
+
+                <h2 class="govuk-heading-m" id="criteria-sub-heading">Criteria</h2>
+
+                <p id="criteria-overview">Check your prepared accounts to see if you meet the criteria.</p>
+
+                <p id="company-criteria-list-heading">You <b>cannot</b> file full accounts using the new service if your company type is:</p>
+
+                <ul class="govuk-list govuk-list--bullet" id="company-criteria-list">
+                    <li>a charity</li>
+                    <li>a PLC</li>
+                </ul>
+
+                <p id="criteria-list-heading">You <b>can</b> file full accounts here if:</p>
+
+                <ul class="govuk-list govuk-list--bullet" id="criteria-list">
+                    <li id="criteria-list-first-item">you don't need to include a directors' report or profit and loss account</li>
+                    <li id="criteria-list-second-item">you don't need to change the date the accounts are made up to</li>
+                    <li id="criteria-list-third-item">your balance sheet doesn’t have 'revaluation reserve', or 'intangible assets'</li>
+                    <li id="criteria-list-forth-item">you only need to add notes (if applicable) for 'accounting policies', 'employees', 'tangible assets',
+                        'fixed assets investments', 'stocks', 'debtors', 'current assets investments', 'creditors - amounts falling
+                        due within one year', or 'creditors - amounts falling due after one year'</li>
+                </ul>
+
+                <h2 class="govuk-heading-m" id="criteria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
+
+                <div class="govuk-form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'govuk-form-group--error' : ''">
+                    <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-visually-hidden">Do your prepared full accounts meet the criteria?</legend>
+
+                        <span class="govuk-error-message"
+                              id="isCriteriaMet-errorId"
+                              th:if="${#fields.hasErrors('isCriteriaMet')}"
+                              th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" >
+                            </span>
+
+                        <div class="govuk-radios">
+                            <div class="govuk-radios__item">
+                                <input id="yesButton"
+                                       type="radio"
+                                       value="1"
+                                       th:field="*{isCriteriaMet}"
+                                       th:errorclass="govuk-error-message"
+                                       class="govuk-radios__input piwik-event" data-event-id="Yes"/>
+                                <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
+                                    Yes
+                                </label>
+                            </div>
+
+                            <div class="govuk-radios__item">
+                                <input id="noButton"
+                                       type="radio"
+                                       value="0"
+                                       th:field="*{isCriteriaMet}"
+                                       th:errorclass="govuk-error-message"
+                                       class="govuk-radios__input piwik-event" data-event-id="No"/>
+                                <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
+                                    No
+                                </label>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="govuk-form-group">
+                    <input id="next-button" class="govuk-button" type="submit" role="button" value="Continue"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
