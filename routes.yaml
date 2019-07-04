@@ -13,9 +13,9 @@ routes:
    9: ^/accounts/cic/select-account-type
    10: ^/accounts/cic/(.*)/select-account-type
    11: ^/accounts/cic/full-accounts-criteria
-   12: ^^/accounts/cic/(.*)/full-accounts-criteria
+   12: ^/accounts/cic/(.*)/full-accounts-criteria
    13: ^/accounts/cic/criteria
-   14: ^^/accounts/cic/(.*)/criteria
+   14: ^/accounts/cic/(.*)/criteria
    15: ^/accounts/cic/cant-file-online-yet
    16: ^/accounts/cic/(.*)/cant-file-online-yet
    17: ^/accounts/cic/cics-file-paper
