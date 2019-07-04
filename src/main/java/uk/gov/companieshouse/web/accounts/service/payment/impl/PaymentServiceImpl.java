@@ -62,6 +62,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         LOGGER.trace("PAYMENT SESSION API "+ paymentSessionApi.getRedirectUri() +
                 " :::: "+paymentSessionApi.getResource());
+        LOGGER.trace("PAYMENT URL "+paymentUrl);
+
 
         String paymentEndpoint;
         if (paymentUrlMatcher.find()) {
