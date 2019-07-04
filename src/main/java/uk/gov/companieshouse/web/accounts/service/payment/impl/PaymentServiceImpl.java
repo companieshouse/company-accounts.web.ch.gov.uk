@@ -60,12 +60,12 @@ public class PaymentServiceImpl implements PaymentService {
 
         Matcher paymentUrlMatcher = PAYMENT_URL_PATTERN.matcher(paymentUrl);
 
-        LOGGER.trace("PAYMENT SESSION API "+ paymentSessionApi.toString());
+        LOGGER.trace("PAYMENT SESSION API "+ paymentSessionApi.getRedirectUri() +
+                " :::: "+paymentSessionApi.getResource());
 
         String paymentEndpoint;
         if (paymentUrlMatcher.find()) {
             paymentEndpoint = paymentUrlMatcher.group(3);
-            LOGGER.trace("PAYMENT ENDPOINT "+paymentEndpoint);
         } else {
             throw new MalformedPaymentUrlException(
                     "Invalid payment url for which to create payment session. Payment url: " + paymentUrl);
