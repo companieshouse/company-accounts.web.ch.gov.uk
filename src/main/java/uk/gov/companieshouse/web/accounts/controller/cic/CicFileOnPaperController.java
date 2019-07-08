@@ -9,7 +9,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 
 @Controller
-@RequestMapping("/accounts/cic/cics-file-paper")
+@RequestMapping({"/accounts/cic/cics-file-paper", "/accounts/cic/{companyNumber}/cics-file-paper"})
 @PreviousController(CicCantFileOnlineYetController.class)
 public class CicFileOnPaperController extends BaseController {
 
