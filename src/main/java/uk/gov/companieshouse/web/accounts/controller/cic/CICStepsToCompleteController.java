@@ -40,9 +40,6 @@ public class CICStepsToCompleteController extends BaseController {
     @GetMapping
     public String getStepsToComplete(@PathVariable String companyNumber,
                                      Model model) {
-
-        addBackPageAttributeToModel(model, companyNumber);
-
         return getTemplateName();
     }
 
