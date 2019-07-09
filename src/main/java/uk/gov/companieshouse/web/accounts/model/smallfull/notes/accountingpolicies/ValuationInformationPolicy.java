@@ -1,13 +1,9 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies;
 
 import javax.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
-@Getter
-@Setter
 @ValidationModel
 public class ValuationInformationPolicy {
 
@@ -16,4 +12,20 @@ public class ValuationInformationPolicy {
 
     @ValidationMapping("$.accounting_policies.valuation_information_and_policy")
     private String valuationInformationPolicyDetails;
+
+    public Boolean getIncludeValuationInformationPolicy() {
+        return includeValuationInformationPolicy;
+    }
+
+    public void setIncludeValuationInformationPolicy(Boolean includeValuationInformationPolicy) {
+        this.includeValuationInformationPolicy = includeValuationInformationPolicy;
+    }
+
+    public String getValuationInformationPolicyDetails() {
+        return valuationInformationPolicyDetails;
+    }
+
+    public void setValuationInformationPolicyDetails(String valuationInformationPolicyDetails) {
+        this.valuationInformationPolicyDetails = valuationInformationPolicyDetails;
+    }
 }

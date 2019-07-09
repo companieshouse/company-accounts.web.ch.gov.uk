@@ -1,10 +1,5 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class TangibleAssetsCost {
 
     private CostAtPeriodStart atPeriodStart;
@@ -19,4 +14,57 @@ public class TangibleAssetsCost {
 
     private CostAtPeriodEnd atPeriodEnd;
 
+    public CostAtPeriodStart getAtPeriodStart() {
+        return atPeriodStart;
+    }
+
+    public void setAtPeriodStart(
+        CostAtPeriodStart atPeriodStart) {
+        this.atPeriodStart = atPeriodStart;
+    }
+
+    public Additions getAdditions() {
+        return additions;
+    }
+
+    public void setAdditions(
+        Additions additions) {
+        this.additions = additions;
+    }
+
+    public Disposals getDisposals() {
+        return disposals;
+    }
+
+    public void setDisposals(
+        Disposals disposals) {
+        this.disposals = disposals;
+    }
+
+    public Revaluations getRevaluations() {
+        return revaluations;
+    }
+
+    public void setRevaluations(
+        Revaluations revaluations) {
+        this.revaluations = revaluations;
+    }
+
+    public Transfers getTransfers() {
+        return transfers;
+    }
+
+    public void setTransfers(
+        Transfers transfers) {
+        this.transfers = transfers;
+    }
+
+    public CostAtPeriodEnd getAtPeriodEnd() {
+        return atPeriodEnd;
+    }
+
+    public void setAtPeriodEnd(
+        CostAtPeriodEnd atPeriodEnd) {
+        this.atPeriodEnd = atPeriodEnd;
+    }
 }

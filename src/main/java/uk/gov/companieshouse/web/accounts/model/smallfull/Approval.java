@@ -1,12 +1,8 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
-import lombok.Getter;
-import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
-@Getter
-@Setter
 @ValidationModel
 public class Approval {
 
@@ -15,4 +11,20 @@ public class Approval {
 
     @ValidationMapping("$.approval.date")
     private ApprovalDate date;
+
+    public String getDirectorName() {
+        return directorName;
+    }
+
+    public void setDirectorName(String directorName) {
+        this.directorName = directorName;
+    }
+
+    public ApprovalDate getDate() {
+        return date;
+    }
+
+    public void setDate(ApprovalDate date) {
+        this.date = date;
+    }
 }
