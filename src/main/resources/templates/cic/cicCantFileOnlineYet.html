@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/baseLayout}">
+<head>
+    <title>You can't file online yet</title>
+</head>
+<body  layout:fragment="content">
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 id="page-title" class="govuk-heading-l">You can’t file online yet</h1>
+        <p id="cic-cant-file-online-information-text">For now, you can only file full accounts with Companies House here.</p>
+        <p id="cic-cant-file-online-alternative-text">You need to
+            <a class="piwik-event" id="cic-cant-file-online-yet-link" data-event-id="CIC can't file online yet link" th:href="${link + '?backLink=' + backButton + '&accountType=' + accountType}"
+               th:text="${'file ' + accountType + ' accounts on paper.'}"></a></p>
+    </div>
+</div>
+</div>
+</body>
+</html>

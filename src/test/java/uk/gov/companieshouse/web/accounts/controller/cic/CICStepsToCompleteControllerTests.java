@@ -61,8 +61,6 @@ public class CICStepsToCompleteControllerTests {
     private static final String STEPS_TO_COMPLETE_PATH = "/company/" + COMPANY_NUMBER +
             "/cic/steps-to-complete";
 
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     private static final String STEPS_TO_COMPLETE_VIEW = "cic/stepsToComplete";
@@ -83,12 +81,9 @@ public class CICStepsToCompleteControllerTests {
     @DisplayName("Get CIC steps to complete view success path")
     void getRequestSuccess() throws Exception {
 
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-
         this.mockMvc.perform(get(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(STEPS_TO_COMPLETE_VIEW))
-                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 

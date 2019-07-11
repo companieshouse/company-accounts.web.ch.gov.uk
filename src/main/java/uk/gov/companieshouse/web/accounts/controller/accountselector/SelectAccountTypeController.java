@@ -55,7 +55,7 @@ public class SelectAccountTypeController extends BaseController {
 
     private String getReDirectPageURL(String companyNumber, String selectedAccount) {
 
-        if ("micros".equalsIgnoreCase(selectedAccount)) {
+        if ("micro-entity".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + MICRO_ENTITY_ACCOUNTS_URI
                 .expand(companyNumber).toString();
         }

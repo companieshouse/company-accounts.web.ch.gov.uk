@@ -1,11 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
-import lombok.Getter;
-import lombok.Setter;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
-@Getter
-@Setter
 public class FixedAssets {
 
     private TangibleAssets tangibleAssets;
@@ -16,4 +12,38 @@ public class FixedAssets {
 
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.total")
     private Long currentTotal;
+
+    public TangibleAssets getTangibleAssets() {
+        return tangibleAssets;
+    }
+
+    public void setTangibleAssets(
+        TangibleAssets tangibleAssets) {
+        this.tangibleAssets = tangibleAssets;
+    }
+
+    public FixedInvestments getInvestments() {
+        return investments;
+    }
+
+    public void setInvestments(
+        FixedInvestments investments) {
+        this.investments = investments;
+    }
+
+    public Long getPreviousTotal() {
+        return previousTotal;
+    }
+
+    public void setPreviousTotal(Long previousTotal) {
+        this.previousTotal = previousTotal;
+    }
+
+    public Long getCurrentTotal() {
+        return currentTotal;
+    }
+
+    public void setCurrentTotal(Long currentTotal) {
+        this.currentTotal = currentTotal;
+    }
 }
