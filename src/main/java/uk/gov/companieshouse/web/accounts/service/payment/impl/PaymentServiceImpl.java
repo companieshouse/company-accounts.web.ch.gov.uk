@@ -9,6 +9,9 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.payment.PaymentSessionApi;
 import uk.gov.companieshouse.environment.EnvironmentReader;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
+import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.MalformedPaymentUrlException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -30,6 +33,9 @@ public class PaymentServiceImpl implements PaymentService {
     private static final Pattern PAYMENT_URL_PATTERN = Pattern.compile("^(http|https)://([^/]+)(.*)");
 
     private static final String JOURNEY_LINK = "journey";
+
+    protected static final Logger LOGGER = LoggerFactory
+            .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
     @Autowired
     public PaymentServiceImpl(ApiClientService apiClientService, EnvironmentReader environmentReader) {
@@ -53,6 +59,11 @@ public class PaymentServiceImpl implements PaymentService {
         paymentSessionApi.setState(UUID.randomUUID().toString());
 
         Matcher paymentUrlMatcher = PAYMENT_URL_PATTERN.matcher(paymentUrl);
+
+        LOGGER.trace("PAYMENT SESSION API "+ paymentSessionApi.getRedirectUri() +
+                " :::: "+paymentSessionApi.getResource());
+        LOGGER.trace("PAYMENT URL "+paymentUrl);
+
 
         String paymentEndpoint;
         if (paymentUrlMatcher.find()) {
