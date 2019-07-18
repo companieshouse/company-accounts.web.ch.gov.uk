@@ -1,5 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.transaction.impl;
-
+/*
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -361,3 +361,4 @@ public class TransactionServiceImplTests {
                 () -> transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
+*/

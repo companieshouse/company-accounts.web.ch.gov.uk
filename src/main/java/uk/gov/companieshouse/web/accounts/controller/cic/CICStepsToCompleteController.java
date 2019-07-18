@@ -55,7 +55,8 @@ public class CICStepsToCompleteController extends BaseController {
 
             cicReportService.createCicReport(transactionId, companyAccountsId);
 
-            transactionService.createResumeLink(companyNumber, transactionId, companyAccountsId);
+            String resumeLink = "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/resume";
+            transactionService.updateResumeLink(transactionId, resumeLink);
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 

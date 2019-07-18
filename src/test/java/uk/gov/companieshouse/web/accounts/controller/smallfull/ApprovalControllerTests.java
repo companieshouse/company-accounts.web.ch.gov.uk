@@ -192,7 +192,7 @@ public class ApprovalControllerTests {
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
-        when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(Optional.ofNullable(null));
+        when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(false);
 
         this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -208,9 +208,9 @@ public class ApprovalControllerTests {
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
-        when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(Optional.ofNullable(PAYMENT_URL));
+        when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(true);
 
-        when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, PAYMENT_URL)).thenReturn(PAYMENT_WEB_ENDPOINT);
+        when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)).thenReturn(PAYMENT_WEB_ENDPOINT);
 
         this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().is3xxRedirection())

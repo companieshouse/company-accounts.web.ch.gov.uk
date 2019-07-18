@@ -99,11 +99,15 @@ public class ApprovalController extends BaseController {
                 return getTemplateName();
             }
 
-            Optional<String> paymentUrl = transactionService.closeTransaction(transactionId);
-            if (paymentUrl.isPresent()) {
+            boolean paymentRequired = transactionService.closeTransaction(transactionId);
+            if (paymentRequired) {
+
+                String resumeLink = "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/do-you-want-to-make-a-payment";
+
+                transactionService.updateResumeLink(transactionId, resumeLink);
 
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                        paymentService.createPaymentSessionForTransaction(transactionId, paymentUrl.get());
+                        paymentService.createPaymentSessionForTransaction(transactionId);
             }
         } catch (ServiceException e) {
 

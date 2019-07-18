@@ -12,6 +12,6 @@ public interface PaymentService {
      * @return A URL to to which to redirect to perform the payment
      * @throws ServiceException if there's an error creating the payment session
      */
-    String createPaymentSessionForTransaction(String transactionId, String paymentUrl)
+    String createPaymentSessionForTransaction(String transactionId)
             throws ServiceException;
 }

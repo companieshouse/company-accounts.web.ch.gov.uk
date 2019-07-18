@@ -24,7 +24,7 @@ public interface TransactionService {
      * @return an {@link Optional<String>} containing the URL to be used to create a payment
      *         session, if the transaction is payable
      */
-    Optional<String> closeTransaction(String transactionId) throws ServiceException;
+    boolean closeTransaction(String transactionId) throws ServiceException;
 
     /**
      * Add a resume link to the transaction for resuming the web journey at
@@ -35,7 +35,7 @@ public interface TransactionService {
      * @param companyAccountsId the company accounts ID of the transaction to update
      * @throws ServiceException
      */
-    void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException;
+    void updateResumeLink(String transactionId, String resumeLink) throws ServiceException;
 
     /**
      * Determine whether a transaction is payable

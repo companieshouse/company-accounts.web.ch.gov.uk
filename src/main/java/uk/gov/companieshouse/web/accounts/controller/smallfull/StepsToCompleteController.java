@@ -82,7 +82,10 @@ public class StepsToCompleteController extends BaseController {
 
             smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
             statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
-            transactionService.createResumeLink(companyNumber, transactionID, companyAccountsID);
+
+            String resumeLink = "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/resume";
+
+            transactionService.updateResumeLink(transactionID, resumeLink);
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
         } catch (ServiceException e) {

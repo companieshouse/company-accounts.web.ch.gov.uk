@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+<head>
+  <title>Do you want to make a payment</title>
+</head>
+
+<body>
+<div id="do-you-want-to-make-a-payment-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form id="do-you-want-to-make-a-payment-form" class="form" th:object="${makePaymentChoice}" th:action="@{''}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <h1 id="page-title" class="govuk-heading-l">
+          Do you want to make a payment
+        </h1>
+
+        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('makePaymentChoice')} ? 'govuk-form-group--error' : ''">
+          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+                                  radioButtonsFieldName = 'makePaymentChoice'
+                                  )">
+          </div>
+        </div>
+        <button id="next-button" type="submit" class="govuk-button">
+          make payment
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>
