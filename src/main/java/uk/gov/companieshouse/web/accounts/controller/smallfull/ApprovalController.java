@@ -30,6 +30,8 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 public class ApprovalController extends BaseController {
 
     private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
+    private static final UriTemplate RESUME_URI = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/do-you-want-to-make-a-payment");
+
 
     private static final String APPROVAL = "approval";
     private static final String TRANSACTION_ID = "transaction_id";
@@ -102,9 +104,7 @@ public class ApprovalController extends BaseController {
             boolean paymentRequired = transactionService.closeTransaction(transactionId);
             if (paymentRequired) {
 
-                String resumeLink = "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/do-you-want-to-make-a-payment";
-
-                transactionService.updateResumeLink(transactionId, resumeLink);
+                transactionService.updateResumeLink(transactionId, RESUME_URI.expand(companyNumber, transactionId, companyAccountsId).toString());
 
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                         paymentService.createPaymentSessionForTransaction(transactionId);

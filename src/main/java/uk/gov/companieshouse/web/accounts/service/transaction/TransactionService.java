@@ -21,16 +21,14 @@ public interface TransactionService {
      *
      * @param transactionId The ID of the transaction to close
      * @throws ServiceException
-     * @return an {@link Optional<String>} containing the URL to be used to create a payment
-     *         session, if the transaction is payable
+     * @return an {@link boolean} indicating whether a transaction is payable
      */
     boolean closeTransaction(String transactionId) throws ServiceException;
 
     /**
-     * Add a resume link to the transaction for resuming the web journey at
+     * Updates a resume link for a transaction. Used for resuming the web journey at
      * a later time.
      *
-     * @param companyNumber     the company number
      * @param transactionId     the ID of the transaction to update
      * @param companyAccountsId the company accounts ID of the transaction to update
      * @throws ServiceException

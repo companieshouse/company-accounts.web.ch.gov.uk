@@ -30,9 +30,6 @@ public class MakePaymentControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private NavigatorService navigatorService;
-
-    @Mock
     private PaymentService paymentService;
 
     @InjectMocks
@@ -74,7 +71,8 @@ public class MakePaymentControllerTest {
     void postMakePaymentYesChoice() throws Exception {
         mockMvc.perform(post(MAKE_PAYMENT_PATH).
             param(MAKE_PAYMENT_MODEL_ATTR, "1"))
-            .andExpect(status().is3xxRedirection());
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX+paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)));
     }
 
     @Test

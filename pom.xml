@@ -5,7 +5,7 @@
 
     <groupId>uk.gov.companieshouse</groupId>
     <artifactId>company-accounts.web.ch.gov.uk</artifactId>
-    <version>unversioned</version>
+    <version>0eb41b83</version>
     <packaging>jar</packaging>
 
     <name>company-accounts-web</name>
