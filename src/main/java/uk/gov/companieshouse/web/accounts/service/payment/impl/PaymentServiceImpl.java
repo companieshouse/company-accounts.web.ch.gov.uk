@@ -29,7 +29,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static final String JOURNEY_LINK = "journey";
 
-    private static final String PAYMENT_URL = "/payment";
+    private static final String PAYMENT_URL = "/payments";
 
     protected static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
@@ -51,7 +51,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         PaymentSessionApi paymentSessionApi = new PaymentSessionApi();
         paymentSessionApi.setRedirectUri(chsUrl + "/transaction/" + transactionId + "/confirmation");
-        paymentSessionApi.setResource(apiUrl + "/transactions/" + transactionId + PAYMENT_URL);
+        paymentSessionApi.setResource(apiUrl + "/transactions/" + transactionId + "/payment");
         paymentSessionApi.setReference("cic_report_and_accounts_" + transactionId);
         paymentSessionApi.setState(UUID.randomUUID().toString());
 
