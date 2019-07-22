@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/baseLayout}">
 <head>
-  <title>Do you want to make a payment?</title>
+  <title>Do you want to pay the filing fee now?</title>
 </head>
 
 <body>
@@ -17,17 +17,51 @@
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
         <h1 id="page-title" class="govuk-heading-l">
-          Do you want to make a payment?
+          Do you want to pay the filing fee now?
         </h1>
+        <p>Payment for this filing was not completed. Your filing has not been submitted.</p>
 
         <div class="govuk-form-group" th:classappend="${#fields.hasErrors('makePaymentChoice')} ? 'govuk-form-group--error' : ''">
-          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
-                                  radioButtonsFieldName = 'makePaymentChoice'
-                                  )">
-          </div>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-visually-hidden">Do you want to pay the filing fee now?</legend>
+
+            <span class="govuk-error-message"
+                  id="makePaymentChoice-errorId"
+                  th:if="${#fields.hasErrors('makePaymentChoice')}"
+                  th:each="e : ${#fields.errors('makePaymentChoice')}" th:text="${e}" >
+                            </span>
+
+            <div class="govuk-radios">
+              <div class="govuk-radios__item">
+                <input id="yesButton"
+                       type="radio"
+                       value="1"
+                       th:field="*{makePaymentChoice}"
+                       th:errorclass="govuk-error-message"
+                       class="govuk-radios__input piwik-event" data-event-id="Yes"/>
+                <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
+                  Yes - pay now
+                </label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input id="noButton"
+                       type="radio"
+                       value="0"
+                       th:field="*{makePaymentChoice}"
+                       th:errorclass="govuk-error-message"
+                       class="govuk-radios__input piwik-event" data-event-id="No"/>
+                <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
+                  No - i'll pay and submit later
+                </label>
+              </div>
+
+            </div>
+          </fieldset>
         </div>
+
         <button id="next-button" type="submit" class="govuk-button">
-          continue
+          Continue
         </button>
       </form>
     </div>
