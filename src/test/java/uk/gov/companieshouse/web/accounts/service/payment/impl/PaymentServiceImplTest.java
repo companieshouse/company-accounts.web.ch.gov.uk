@@ -3,7 +3,10 @@ package uk.gov.companieshouse.web.accounts.service.payment.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
@@ -26,6 +29,7 @@ import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
+import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -36,6 +40,9 @@ public class PaymentServiceImplTest {
 
     @Mock
     private ApiClientService apiClientService;
+
+    @Mock
+    private SessionService sessionService;
 
     @Mock
     private EnvironmentReader environmentReader;
@@ -55,6 +62,9 @@ public class PaymentServiceImplTest {
     @Mock
     private Map<String, String> links;
 
+    @Mock
+    private Map<String, Object> sessionData;
+
     private PaymentService paymentService;
 
     private static final String PAYMENT_ENDPOINT = "/payments";
@@ -65,10 +75,12 @@ public class PaymentServiceImplTest {
 
     private static final String JOURNEY_URL = "journeyUrl";
 
+    private static final String PAYMENT_STATE = "payment_state";
+
     @BeforeEach
     private void setUp() {
 
-        paymentService = new PaymentServiceImpl(apiClientService, environmentReader);
+        paymentService = new PaymentServiceImpl(apiClientService, sessionService, environmentReader);
     }
 
     @Test
@@ -85,6 +97,8 @@ public class PaymentServiceImplTest {
 
         when(paymentCreate.execute()).thenReturn(apiResponse);
 
+        when(sessionService.getSessionDataFromContext()).thenReturn(sessionData);
+
         when(apiResponse.getData()).thenReturn(paymentApi);
 
         when(paymentApi.getLinks()).thenReturn(links);
@@ -94,6 +108,8 @@ public class PaymentServiceImplTest {
         String journeyUrl = paymentService.createPaymentSessionForTransaction(TRANSACTION_ID);
 
         assertEquals(JOURNEY_URL, journeyUrl);
+
+        verify(sessionData).put(eq(PAYMENT_STATE), anyString());
     }
 
     @Test
@@ -112,6 +128,8 @@ public class PaymentServiceImplTest {
 
         assertThrows(ServiceException.class, () ->
                 paymentService.createPaymentSessionForTransaction(TRANSACTION_ID));
+
+        verify(sessionData, never()).put(eq(PAYMENT_STATE), anyString());
     }
 
     @Test
@@ -130,5 +148,7 @@ public class PaymentServiceImplTest {
 
         assertThrows(ServiceException.class, () ->
                 paymentService.createPaymentSessionForTransaction(TRANSACTION_ID));
+
+        verify(sessionData, never()).put(eq(PAYMENT_STATE), anyString());
     }
 }
