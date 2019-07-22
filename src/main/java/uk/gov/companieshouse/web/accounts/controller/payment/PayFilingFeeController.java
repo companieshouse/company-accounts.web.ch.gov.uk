@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.payment.MakePayment;
+import uk.gov.companieshouse.web.accounts.model.payment.PayFilingFee;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 
 @Controller
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/do-you-want-to-make-a-payment")
-public class MakePaymentController extends BaseController {
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/pay-filing-fee")
+public class PayFilingFeeController extends BaseController {
 
-    private static final String TEMPLATE_NAME = "payment/makePayment";
+    private static final String TEMPLATE_NAME = "payment/payFilingFee";
 
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
 
@@ -34,21 +34,21 @@ public class MakePaymentController extends BaseController {
     }
 
     @GetMapping
-    public String getMakePayment(Model model) {
-        model.addAttribute("makePaymentChoice", new MakePayment());
+    public String getPayFilingFee(Model model) {
+        model.addAttribute("payFilingFeeChoice", new PayFilingFee());
         return getTemplateName();
     }
 
     @PostMapping
-    public String postMakePayment(@PathVariable String transactionId,
-        @ModelAttribute("makePaymentChoice") @Valid MakePayment makePaymentChoice, BindingResult bindingResult, HttpServletRequest request) {
+    public String postPayFilingFee(@PathVariable String transactionId,
+        @ModelAttribute("payFilingFeeChoice") @Valid PayFilingFee payFilingFee, BindingResult bindingResult, HttpServletRequest request) {
 
         if(bindingResult.hasErrors()) {
             return getTemplateName();
         }
 
         try {
-            if(makePaymentChoice.getMakePaymentChoice()) {
+            if(payFilingFee.getPayFilingFeeChoice()) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                     paymentService.createPaymentSessionForTransaction(transactionId);
             } else {

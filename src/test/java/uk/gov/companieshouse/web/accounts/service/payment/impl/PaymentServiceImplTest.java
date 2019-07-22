@@ -57,7 +57,7 @@ public class PaymentServiceImplTest {
 
     private PaymentService paymentService;
 
-    private static final String PAYMENT_ENDPOINT = "/payment";
+    private static final String PAYMENT_ENDPOINT = "/payments";
 
     private static final String TRANSACTION_ID = "transactionId";
 

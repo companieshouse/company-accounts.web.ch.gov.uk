@@ -12,7 +12,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <form id="do-you-want-to-make-a-payment-form" class="form" th:object="${makePaymentChoice}" th:action="@{''}" method="post">
+      <form id="do-you-want-to-make-a-payment-form" class="form" th:object="${payFilingFeeChoice}" th:action="@{''}" method="post">
 
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
@@ -21,14 +21,14 @@
         </h1>
         <p>Payment for this filing was not completed. Your filing has not been submitted.</p>
 
-        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('makePaymentChoice')} ? 'govuk-form-group--error' : ''">
+        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('payFilingFeeChoice')} ? 'govuk-form-group--error' : ''">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-visually-hidden">Do you want to pay the filing fee now?</legend>
 
             <span class="govuk-error-message"
-                  id="makePaymentChoice-errorId"
-                  th:if="${#fields.hasErrors('makePaymentChoice')}"
-                  th:each="e : ${#fields.errors('makePaymentChoice')}" th:text="${e}" >
+                  id="payFilingFeeChoice-errorId"
+                  th:if="${#fields.hasErrors('payFilingFeeChoice')}"
+                  th:each="e : ${#fields.errors('payFilingFeeChoice')}" th:text="${e}" >
                             </span>
 
             <div class="govuk-radios">
@@ -36,7 +36,7 @@
                 <input id="yesButton"
                        type="radio"
                        value="1"
-                       th:field="*{makePaymentChoice}"
+                       th:field="*{payFilingFeeChoice}"
                        th:errorclass="govuk-error-message"
                        class="govuk-radios__input piwik-event" data-event-id="Yes"/>
                 <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
@@ -48,11 +48,11 @@
                 <input id="noButton"
                        type="radio"
                        value="0"
-                       th:field="*{makePaymentChoice}"
+                       th:field="*{payFilingFeeChoice}"
                        th:errorclass="govuk-error-message"
                        class="govuk-radios__input piwik-event" data-event-id="No"/>
                 <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
-                  No - i'll pay and submit later
+                  No - I'll pay and submit later
                 </label>
               </div>
 
