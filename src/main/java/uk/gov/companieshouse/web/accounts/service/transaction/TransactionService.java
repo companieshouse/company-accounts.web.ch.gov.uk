@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.transaction;
 
+import java.util.Optional;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface TransactionService {
@@ -16,12 +17,14 @@ public interface TransactionService {
     String createTransactionWithDescription(String companyNumber, String description) throws ServiceException;
 
     /**
-     * Set the status to 'closed' for an accounts filing transaction
+     * Closes an accounts filing transaction
      *
      * @param transactionId The ID of the transaction to close
      * @throws ServiceException
+     * @return an {@link Optional<String>} containing the URL to be used to create a payment
+     *         session, if the transaction is payable
      */
-    void closeTransaction(String transactionId) throws ServiceException;
+    Optional<String> closeTransaction(String transactionId) throws ServiceException;
 
     /**
      * Add a resume link to the transaction for resuming the web journey at
@@ -33,4 +36,14 @@ public interface TransactionService {
      * @throws ServiceException
      */
     void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException;
+
+    /**
+     * Determine whether a transaction is payable
+     *
+     * @param transactionId     the ID of the CHS transaction
+     * @param companyAccountsId the company accounts identifier
+     * @return true if the transaction is payable
+     * @throws ServiceException if there's an error when fetching a transaction
+     */
+    boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException;
 }

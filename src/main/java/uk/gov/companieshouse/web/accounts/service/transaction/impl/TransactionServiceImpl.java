@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.service.transaction.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -19,6 +23,10 @@ public class TransactionServiceImpl implements TransactionService {
     private ApiClientService apiClientService;
 
     private static final UriTemplate TRANSACTIONS_URI = new UriTemplate("/transactions/{transactionId}");
+
+    private static final String PAYMENT_REQUIRED_HEADER = "x-payment-required";
+
+    private static final String COSTS_LINK = "costs";
 
     /**
      *
@@ -60,14 +68,28 @@ public class TransactionServiceImpl implements TransactionService {
      * {@inheritDoc}
      */
     @Override
-    public void closeTransaction(String transactionId) throws ServiceException {
+    public Optional<String> closeTransaction(String transactionId) throws ServiceException {
 
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
         try {
             Transaction transaction = apiClientService.getApiClient().transactions().get(uri).execute().getData();
             transaction.setStatus(TransactionStatus.CLOSED);
-            apiClientService.getApiClient().transactions().update(uri, transaction).execute();
+
+            Map<String, Object> headers =
+                    apiClientService.getApiClient()
+                            .transactions().update(uri, transaction)
+                                    .execute().getHeaders();
+
+            String paymentUrl = null;
+
+            List<String> paymentRequiredHeaders = (ArrayList) headers.get(PAYMENT_REQUIRED_HEADER);
+            if (paymentRequiredHeaders != null) {
+                paymentUrl = paymentRequiredHeaders.get(0);
+            }
+
+            return Optional.ofNullable(paymentUrl);
+
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error closing transaction", e);
@@ -101,6 +123,30 @@ public class TransactionServiceImpl implements TransactionService {
         } catch (URIValidationException e) {
 
             throw new ServiceException("Invalid URI for updating transactions resource", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException {
+
+        String uri = TRANSACTIONS_URI.expand(transactionId).toString();
+
+        try {
+            Transaction transaction =
+                    apiClientService.getApiClient().transactions().get(uri).execute().getData();
+
+            return transaction.getResources()
+                    .get("/transactions/" + transactionId + "/company-accounts/" + companyAccountsId)
+                            .getLinks().get(COSTS_LINK) != null;
+        } catch (URIValidationException e) {
+
+            throw new ServiceException("Error fetching transaction", e);
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException("Invalid URI for fetching transactions resource", e);
         }
     }
 }

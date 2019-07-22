@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
+import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -32,12 +34,16 @@ public class ApprovalController extends BaseController {
     private static final String APPROVAL = "approval";
     private static final String TRANSACTION_ID = "transaction_id";
     private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
+    private static final String IS_PAYABLE_TRANSACTION = "isPayableTransaction";
 
     @Autowired
     private TransactionService transactionService;
 
     @Autowired
     private ApprovalService approvalService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @Override
     protected String getTemplateName() {
@@ -48,9 +54,19 @@ public class ApprovalController extends BaseController {
     public String getApproval(@PathVariable String companyNumber,
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
-                              Model model) {
+                              Model model,
+                              HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        try {
+            model.addAttribute(IS_PAYABLE_TRANSACTION,
+                    transactionService.isPayableTransaction(transactionId, companyAccountsId));
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         model.addAttribute(APPROVAL, new Approval());
         model.addAttribute(TRANSACTION_ID, transactionId);
@@ -83,7 +99,12 @@ public class ApprovalController extends BaseController {
                 return getTemplateName();
             }
 
-            transactionService.closeTransaction(transactionId);
+            Optional<String> paymentUrl = transactionService.closeTransaction(transactionId);
+            if (paymentUrl.isPresent()) {
+
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                        paymentService.createPaymentSessionForTransaction(transactionId, paymentUrl.get());
+            }
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
