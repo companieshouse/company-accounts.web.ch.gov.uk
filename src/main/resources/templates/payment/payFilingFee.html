@@ -8,18 +8,18 @@
 </head>
 
 <body>
-<div id="do-you-want-to-make-a-payment-main-content" layout:fragment="content">
+<div id="payFilingFee-main-content" layout:fragment="content">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-      <form id="do-you-want-to-make-a-payment-form" class="form" th:object="${payFilingFeeChoice}" th:action="@{''}" method="post">
+      <form id="payFilingFee-form" class="form" th:object="${payFilingFeeChoice}" th:action="@{''}" method="post">
 
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
         <h1 id="page-title" class="govuk-heading-l">
           Do you want to pay the filing fee now?
         </h1>
-        <p>Payment for this filing was not completed. Your filing has not been submitted.</p>
+        <p id="payFilingFee-info-text">Payment for this filing was not completed. Your filing has not been submitted.</p>
 
         <div class="govuk-form-group" th:classappend="${#fields.hasErrors('payFilingFeeChoice')} ? 'govuk-form-group--error' : ''">
           <fieldset class="govuk-fieldset">
