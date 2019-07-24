@@ -68,7 +68,7 @@ public class TransactionServiceImpl implements TransactionService {
      * {@inheritDoc}
      */
     @Override
-    public Optional<String> closeTransaction(String transactionId) throws ServiceException {
+    public boolean closeTransaction(String transactionId) throws ServiceException {
 
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
@@ -81,14 +81,14 @@ public class TransactionServiceImpl implements TransactionService {
                             .transactions().update(uri, transaction)
                                     .execute().getHeaders();
 
-            String paymentUrl = null;
+            boolean paymentRequired = false;
 
             List<String> paymentRequiredHeaders = (ArrayList) headers.get(PAYMENT_REQUIRED_HEADER);
             if (paymentRequiredHeaders != null) {
-                paymentUrl = paymentRequiredHeaders.get(0);
+                paymentRequired = true;
             }
 
-            return Optional.ofNullable(paymentUrl);
+            return paymentRequired;
 
         } catch (ApiErrorResponseException e) {
 
@@ -103,14 +103,9 @@ public class TransactionServiceImpl implements TransactionService {
      * {@inheritDoc}
      */
     @Override
-    public void createResumeLink(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
+    public void updateResumeLink(String transactionId, String resumeLink) throws ServiceException {
 
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
-
-        String resumeLink = "/company/" + companyNumber +
-                "/transaction/" + transactionId +
-                "/company-accounts/" + companyAccountsId +
-                "/resume";
 
         Transaction transaction = new Transaction();
         transaction.setResumeJourneyUri(resumeLink);

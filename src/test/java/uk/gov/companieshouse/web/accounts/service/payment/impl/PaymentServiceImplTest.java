@@ -27,7 +27,6 @@ import uk.gov.companieshouse.api.model.payment.PaymentApi;
 import uk.gov.companieshouse.api.model.payment.PaymentSessionApi;
 import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
-import uk.gov.companieshouse.web.accounts.exception.MalformedPaymentUrlException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.session.SessionService;
@@ -68,9 +67,7 @@ public class PaymentServiceImplTest {
 
     private PaymentService paymentService;
 
-    private static final String PAYMENT_ENDPOINT = "/payment";
-
-    private static final String PAYMENT_URL = "https://domain" + PAYMENT_ENDPOINT;
+    private static final String PAYMENT_ENDPOINT = "/payments";
 
     private static final String TRANSACTION_ID = "transactionId";
 
@@ -84,14 +81,6 @@ public class PaymentServiceImplTest {
     private void setUp() {
 
         paymentService = new PaymentServiceImpl(apiClientService, sessionService, environmentReader);
-    }
-
-    @Test
-    @DisplayName("Create payment session with malformed payment url")
-    void createPaymentSessionMalformedPaymentUrl() {
-
-        assertThrows(MalformedPaymentUrlException.class, () ->
-                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, ""));
     }
 
     @Test
@@ -116,7 +105,7 @@ public class PaymentServiceImplTest {
 
         when(links.get(JOURNEY_LINK)).thenReturn(JOURNEY_URL);
 
-        String journeyUrl = paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, PAYMENT_URL);
+        String journeyUrl = paymentService.createPaymentSessionForTransaction(TRANSACTION_ID);
 
         assertEquals(JOURNEY_URL, journeyUrl);
 
@@ -138,7 +127,7 @@ public class PaymentServiceImplTest {
         when(paymentCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
-                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, PAYMENT_URL));
+                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID));
 
         verify(sessionData, never()).put(eq(PAYMENT_STATE), anyString());
     }
@@ -158,7 +147,7 @@ public class PaymentServiceImplTest {
         when(paymentCreate.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
-                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, PAYMENT_URL));
+                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID));
 
         verify(sessionData, never()).put(eq(PAYMENT_STATE), anyString());
     }

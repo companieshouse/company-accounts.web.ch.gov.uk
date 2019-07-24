@@ -28,3 +28,4 @@ routes:
    24: ^/company/(.*)/cic/
    25: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/resume
    26: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/cic/
+   27: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/pay-filing-fee

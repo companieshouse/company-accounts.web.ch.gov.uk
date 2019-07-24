@@ -8,10 +8,9 @@ public interface PaymentService {
      * Creates a payment session in order to pay to close a transaction
      *
      * @param transactionId The id of the CHS transaction
-     * @param paymentUrl The url to use to create a payment session
      * @return A URL to to which to redirect to perform the payment
      * @throws ServiceException if there's an error creating the payment session
      */
-    String createPaymentSessionForTransaction(String transactionId, String paymentUrl)
+    String createPaymentSessionForTransaction(String transactionId)
             throws ServiceException;
 }

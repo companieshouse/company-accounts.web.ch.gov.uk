@@ -1,8 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.payment.impl;
 
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -12,7 +10,6 @@ import uk.gov.companieshouse.api.model.payment.PaymentApi;
 import uk.gov.companieshouse.api.model.payment.PaymentSessionApi;
 import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
-import uk.gov.companieshouse.web.accounts.exception.MalformedPaymentUrlException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.session.SessionService;
@@ -32,9 +29,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static final String API_URL = "API_URL";
 
-    private static final Pattern PAYMENT_URL_PATTERN = Pattern.compile("^(http|https)://([^/]+)(.*)");
-
     private static final String JOURNEY_LINK = "journey";
+
+    private static final String PAYMENT_URL = "/payments";
 
     private static final String PAYMENT_STATE = "payment_state";
 
@@ -51,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
      * {@inheritDoc}
      */
     @Override
-    public String createPaymentSessionForTransaction(String transactionId, String paymentUrl)
+    public String createPaymentSessionForTransaction(String transactionId)
             throws ServiceException {
 
         String paymentState = UUID.randomUUID().toString();
@@ -62,25 +59,14 @@ public class PaymentServiceImpl implements PaymentService {
         paymentSessionApi.setReference("cic_report_and_accounts_" + transactionId);
         paymentSessionApi.setState(paymentState);
 
-        Matcher paymentUrlMatcher = PAYMENT_URL_PATTERN.matcher(paymentUrl);
-
-        String paymentEndpoint;
-        if (paymentUrlMatcher.find()) {
-            paymentEndpoint = paymentUrlMatcher.group(3);
-        } else {
-            throw new MalformedPaymentUrlException(
-                    "Invalid payment url for which to create payment session. Payment url: " + paymentUrl);
-        }
-
         try {
             ApiResponse<PaymentApi> apiResponse = apiClientService.getApiClient()
-                    .payment().create(paymentEndpoint, paymentSessionApi)
-                            .execute();
+                .payment().create(PAYMENT_URL, paymentSessionApi)
+                    .execute();
 
             setPaymentStateOnSession(paymentState);
 
             return apiResponse.getData().getLinks().get(JOURNEY_LINK);
-
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error creating payment session", e);

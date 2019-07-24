@@ -163,10 +163,9 @@ public class TransactionServiceImplTests {
 
         when(headers.get(PAYMENT_REQUIRED_HEADER)).thenReturn(paymentRequiredHeader);
 
-        Optional<String> paymentUrl = transactionService.closeTransaction(TRANSACTION_ID);
+        boolean paymentRequired = transactionService.closeTransaction(TRANSACTION_ID);
 
-        assertTrue(paymentUrl.isPresent());
-        assertEquals(PAYMENT_URL, paymentUrl.get());
+        assertTrue(paymentRequired);
     }
 
     @Test
@@ -193,9 +192,9 @@ public class TransactionServiceImplTests {
 
         when(headers.get(PAYMENT_REQUIRED_HEADER)).thenReturn(null);
 
-        Optional<String> paymentUrl = transactionService.closeTransaction(TRANSACTION_ID);
+        boolean paymentRequired = transactionService.closeTransaction(TRANSACTION_ID);
 
-        assertFalse(paymentUrl.isPresent());
+        assertFalse(paymentRequired);
     }
 
     @Test
@@ -267,13 +266,18 @@ public class TransactionServiceImplTests {
     }
 
     @Test
-    @DisplayName("Create transaction resume link")
-    void createTransactionResumeLink() throws ServiceException {
+    @DisplayName("Update transaction resume link")
+    void UpdateTransactionResumeLink() throws ServiceException {
+
+        String resumeLink = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/resume";
 
         when(transactionsResourceHandler.update(anyString(), any(Transaction.class)))
                 .thenReturn(transactionsUpdate);
 
-        transactionService.createResumeLink(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        transactionService.updateResumeLink(TRANSACTION_ID, resumeLink);
 
         ArgumentCaptor<Transaction> transactionCaptor = ArgumentCaptor.forClass(Transaction.class);
         verify(transactionsResourceHandler).update(anyString(), transactionCaptor.capture());
@@ -283,7 +287,7 @@ public class TransactionServiceImplTests {
                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                 "/resume";
 
-        assertEquals(expectedResumeJourneyUri, transactionCaptor.getValue().getResumeJourneyUri());
+        assertEquals(expectedResumeJourneyUri, resumeLink);
     }
 
     @Test
