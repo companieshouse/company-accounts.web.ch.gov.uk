@@ -210,7 +210,7 @@ public class ApprovalControllerTests {
 
         when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(true);
 
-        when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)).thenReturn(PAYMENT_WEB_ENDPOINT);
+        when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, COMPANY_NUMBER)).thenReturn(PAYMENT_WEB_ENDPOINT);
 
         this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().is3xxRedirection())

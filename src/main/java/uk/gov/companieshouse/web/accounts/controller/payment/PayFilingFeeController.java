@@ -35,13 +35,17 @@ public class PayFilingFeeController extends BaseController {
 
     @GetMapping
     public String getPayFilingFee(Model model) {
+
         model.addAttribute("payFilingFeeChoice", new PayFilingFee());
         return getTemplateName();
     }
 
     @PostMapping
-    public String postPayFilingFee(@PathVariable String transactionId,
-        @ModelAttribute("payFilingFeeChoice") @Valid PayFilingFee payFilingFee, BindingResult bindingResult, HttpServletRequest request) {
+    public String postPayFilingFee(@PathVariable("companyNumber") String companyNumber,
+                                   @PathVariable("transactionId") String transactionId,
+                                   @ModelAttribute("payFilingFeeChoice") @Valid PayFilingFee payFilingFee,
+                                   BindingResult bindingResult,
+                                   HttpServletRequest request) {
 
         if(bindingResult.hasErrors()) {
             return getTemplateName();
@@ -50,7 +54,7 @@ public class PayFilingFeeController extends BaseController {
         try {
             if(payFilingFee.getPayFilingFeeChoice()) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                    paymentService.createPaymentSessionForTransaction(transactionId);
+                    paymentService.createPaymentSessionForTransaction(transactionId, companyNumber);
             } else {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX
                     + YOUR_FILINGS_PATH;

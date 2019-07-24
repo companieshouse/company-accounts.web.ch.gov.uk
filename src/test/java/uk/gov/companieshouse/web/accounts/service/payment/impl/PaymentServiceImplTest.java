@@ -69,6 +69,8 @@ public class PaymentServiceImplTest {
 
     private static final String PAYMENT_ENDPOINT = "/payments";
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String JOURNEY_LINK = "journey";
@@ -105,7 +107,7 @@ public class PaymentServiceImplTest {
 
         when(links.get(JOURNEY_LINK)).thenReturn(JOURNEY_URL);
 
-        String journeyUrl = paymentService.createPaymentSessionForTransaction(TRANSACTION_ID);
+        String journeyUrl = paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, COMPANY_NUMBER);
 
         assertEquals(JOURNEY_URL, journeyUrl);
 
@@ -127,7 +129,7 @@ public class PaymentServiceImplTest {
         when(paymentCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
-                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID));
+                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, COMPANY_NUMBER));
 
         verify(sessionData, never()).put(eq(PAYMENT_STATE), anyString());
     }
@@ -147,7 +149,7 @@ public class PaymentServiceImplTest {
         when(paymentCreate.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
-                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID));
+                paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, COMPANY_NUMBER));
 
         verify(sessionData, never()).put(eq(PAYMENT_STATE), anyString());
     }

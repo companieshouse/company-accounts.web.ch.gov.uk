@@ -70,7 +70,7 @@ public class PayFilingFeeControllerTest {
         mockMvc.perform(post(PAY_FILING_FEE_PATH).
             param(PAY_FILING_FEE_MODEL_ATTR, "1"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX+paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)));
+            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX+paymentService.createPaymentSessionForTransaction(TRANSACTION_ID, COMPANY_NUMBER)));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class PayFilingFeeControllerTest {
     @DisplayName("Pay filing fee throws exception")
     void payFilingFeeThrowsException() throws Exception {
         doThrow(ServiceException.class)
-            .when(paymentService).createPaymentSessionForTransaction(TRANSACTION_ID);
+            .when(paymentService).createPaymentSessionForTransaction(TRANSACTION_ID, COMPANY_NUMBER);
 
         this.mockMvc.perform(post(PAY_FILING_FEE_PATH)
             .param(PAY_FILING_FEE_MODEL_ATTR, "1"))

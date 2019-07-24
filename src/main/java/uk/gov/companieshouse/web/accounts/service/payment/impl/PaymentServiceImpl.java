@@ -48,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
      * {@inheritDoc}
      */
     @Override
-    public String createPaymentSessionForTransaction(String transactionId)
+    public String createPaymentSessionForTransaction(String transactionId, String companyNumber)
             throws ServiceException {
 
         String paymentState = UUID.randomUUID().toString();
@@ -58,6 +58,7 @@ public class PaymentServiceImpl implements PaymentService {
         paymentSessionApi.setResource(apiUrl + "/transactions/" + transactionId + "/payment");
         paymentSessionApi.setReference("cic_report_and_accounts_" + transactionId);
         paymentSessionApi.setState(paymentState);
+        paymentSessionApi.setCompanyNumber(companyNumber);
 
         try {
             ApiResponse<PaymentApi> apiResponse = apiClientService.getApiClient()
