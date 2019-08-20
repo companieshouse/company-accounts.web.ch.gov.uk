@@ -88,15 +88,19 @@ public class ApprovalController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-        if (!validationErrors.isEmpty()) {
-            bindValidationErrors(bindingResult, validationErrors);
-            return getTemplateName();
-        }
-
         try {
+            List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
+            if (!validationErrors.isEmpty()) {
+                model.addAttribute(IS_PAYABLE_TRANSACTION,
+                        transactionService.isPayableTransaction(transactionId, companyAccountsId));
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
             validationErrors.addAll(approvalService.submitApproval(transactionId, companyAccountsId, approval));
             if (!validationErrors.isEmpty()) {
+                model.addAttribute(IS_PAYABLE_TRANSACTION,
+                        transactionService.isPayableTransaction(transactionId, companyAccountsId));
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
