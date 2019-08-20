@@ -136,7 +136,7 @@
         </fieldset>
 
         <input id="next-button" class="govuk-button" type="submit" role="button" th:value="${isPayableTransaction ? 'Save and continue to payment' : 'Submit your accounts'}"/>
-        <input th:value="${isPayableTransaction}" id="isPayableTransaction" name="isPayableTransaction" type="hidden"/>
+        <input th:field="${isPayableTransaction}" type="hidden"/>
 
       </div>
     </div>
