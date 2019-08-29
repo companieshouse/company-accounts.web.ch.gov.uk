@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 public class IntangibleAssetsGoodwillTransformerImpl extends
         IntangibleAssetsResourceTransformerImpl implements IntangibleAssetsResourceTransformer {
 
-
     @Override
     public void mapIntangibleAssetsResourceToWebModel(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
 
@@ -50,7 +49,7 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
     }
 
     @Override
-    public boolean hasIntangibleAssetsToMapToApiresource(IntangibleAssets intangibleAssets) {
+    public boolean hasIntangibleAssetsToMapToApiResource(IntangibleAssets intangibleAssets) {
         return hasCostResources(intangibleAssets);
     }
 

@@ -8,7 +8,7 @@ public interface IntangibleAssetsResourceTransformer {
 
     void mapIntangibleAssetsResourceToWebModel(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource);
 
-    boolean hasIntangibleAssetsToMapToApiresource(IntangibleAssets intangibleAssets);
+    boolean hasIntangibleAssetsToMapToApiResource(IntangibleAssets intangibleAssets);
 
     void mapIntangibleAssetsToApiResource(IntangibleAssets intangibleAssets, IntangibleApi intangibleApi);
 
