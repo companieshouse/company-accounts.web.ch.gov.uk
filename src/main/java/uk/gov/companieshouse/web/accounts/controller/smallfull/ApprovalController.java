@@ -98,9 +98,9 @@ public class ApprovalController extends BaseController {
             }
 
             validationErrors.addAll(approvalService.submitApproval(transactionId, companyAccountsId, approval));
-            model.addAttribute(IS_PAYABLE_TRANSACTION,
-                    transactionService.isPayableTransaction(transactionId, companyAccountsId));
             if (!validationErrors.isEmpty()) {
+                model.addAttribute(IS_PAYABLE_TRANSACTION,
+                        transactionService.isPayableTransaction(transactionId, companyAccountsId));
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
