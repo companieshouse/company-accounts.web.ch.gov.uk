@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tangible assets note</title>
+  <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
+
+  <link
+      th:href="@{{cdnUrl}/stylesheets/chs-styles.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      media="all" rel="stylesheet" type="text/css" />
+
+  <link
+      rel="icon"
+      th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      type="image/x-icon" />
+
+</head>
+<body>
+<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=default%2CNumber.isInteger"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<div class="entire-wrapper">
+  <div class="govuk-width-container govuk-width-container-override">
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <header role="banner" id="global-header" class="govuk-header">
+      <div class="govuk-header__container govuk-width-container govuk-width-container-override">
+        <div class="header-global">
+          <div class="govuk-header__logo">
+            <a href="/" title="Go to the companies house homepage" id="logo" class="govuk-header__link govuk-header__link--homepage">
+              <span class="govuk-header__logotype-text"> Companies House </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="govuk-header__content">
+          <a id="proposition-name" href="/" class="govuk-header__link govuk-header__link--service-name"> File your company accounts </a>
+        </div>
+
+      </div>
+    </header>
+    <div th:replace="fragments/betaBanner :: betaBanner"></div>
+    <div th:replace="fragments/userBar :: userBar"></div>
+    <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
+    <main id="content" role="main" class="govuk-main-wrapper">
+
+<div id="intangible-assets-note-main-content" layout:fragment="content" class="two-column-accounts">
+
+  <form id="intangible-assets-note-form" th:action="@{''}" th:object="${intangibleAssets}"
+        class="form currency-included-within-inputs govuk-body" method="post">
+
+
+    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+    <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Tangible assets note'
+                )">
+    </div>
+
+    <input th:field="*{lastAccountsPeriodEndOn}" type="hidden">
+    <input th:field="*{nextAccountsPeriodStartOn}" type="hidden">
+    <input th:field="*{nextAccountsPeriodEndOn}" type="hidden">
+
+    <p class="warning-note warning-note-large">You only need to enter items included in your
+      prepared accounts.</p>
+
+
+    <h2 class="govuk-heading-m">Cost</h2>
+
+    <div class="govuk-grid-row block-desktop-only" id="accounts-header-cost">
+      <div class="column-fifth">&nbsp;</div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Goodwill<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Other Intangible Assets<!--<br />£--></h2>
+      </div>
+      <div class="column-sixth">
+        <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
+      </div>
+    </div>
+    <!--Start Cost at start-->
+    <th:block th:if="*{lastAccountsPeriodEndOn != null}">
+      <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                        row = 'cost.atPeriodStart',
+                        isTopRow = true
+                        )">
+      </div>
+
+      <div class="govuk-grid-row">
+        <div class="column-fifth">
+          <div th:text="'Cost at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="cost.nextAccountsPeriodStartOn"></div>
+        </div>
+        <div class="column-sixth">
+          <div th:replace="fragments/numberInput :: numberInput (
+                                  id = 'cost.atPeriodStart.goodwill',
+                                  text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
+                                  class= 'govuk-input validate cost-ps-add cost-lab-add nbv-cp-lab-add',
+                                  )">
+
+          </div>
+        </div>
+        <div class="column-sixth">
+          <div th:replace="fragments/numberInput :: numberInput (
+                                  id = 'cost.atPeriodStart.otherIntangibleAssets',
+                                  text = 'Cost at ' + ${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
+                                  class= 'govuk-input validate cost-ps-add cost-pam-add nbv-cp-pam-add',
+                                  )">
+          </div>
+
+        </div>
+        <div class="column-sixth">
+          <div th:replace="fragments/numberInput :: numberInput (
+                                  id = 'cost.atPeriodStart.total',
+                                  text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
+                                  class= 'govuk-input validate cost-ps-add cost-faf-add nbv-cp-faf-add',
+                                  )">
+          </div>
+        </div>
+      </div>
+    </th:block>
+    <!--End Cost at start-->
+    <!--Start Additions -->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'cost.additions'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Additions
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets aquired during this accounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.goodwill',
+                                text = 'Additions - Goodwill',
+                                class= 'govuk-input validate cost-a-add cost-lab-add',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.otherIntangibleAssets',
+                                text = 'Additions - Other Intangible Assets',
+                                class= 'govuk-input validate cost-a-add cost-pam-add',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.additions.total',
+                                text = 'Additions - Total',
+                                class= 'govuk-input validate cost-a-add cost-faf-add',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Additions-->
+    <!--Start Disposals-->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'cost.disposals'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Disposals
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of tangible assets disposed of in this acccounting period. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.goodwill',
+                                text = 'Disposals - Goodwill',
+                                class= 'govuk-input validate cost-d-add cost-lab-subtract',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.otherIntangibleAssets',
+                                text = 'Disposals - Other Intangible Assets',
+                                class= 'govuk-input validate cost-d-add cost-pam-subtract',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.disposals.total',
+                                text = 'Disposals - Total',
+                                class= 'govuk-input validate cost-d-add cost-faf-subtract',
+                                )">
+        </div>
+
+      </div>
+    </div>
+
+    <!--End Disposals=-->
+    <!--Start Revaluations-->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'cost.revaluations'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!-- <details> <summary> <span class="summary">-->Revaluations
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> Valuation of any assets revalued during this accounting period. </p> <p> If the revaluation reduces the value of the asset, then enter a negative figure. </p> </div> </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.goodwill',
+                                text = 'Revaluations - Goodwill',
+                                class= 'govuk-input validate range-from-minus cost-r-add cost-lab-add',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.otherIntangibleAssets',
+                                text = 'Revaluations - Other Intangible Assets',
+                                class= 'govuk-input validate range-from-minus cost-r-add cost-pam-add',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.revaluations.total',
+                                text = 'Revaluations - Total',
+                                class= 'govuk-input validate range-from-minus cost-r-add cost-faf-add',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Revaluations=-->
+    <!--Start Transfers-->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'cost.transfers'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="column-fifth">
+        <!--<details> <summary> <span class="summary">-->Transfers
+        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost or valuation of any tangible assets that you've transferred during this accounting period. If the asset is being transferred out, enter a negative figure. </p> </div>
+        </details>-->
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.goodwill',
+                                text = 'Transfers - Goodwill',
+                                class= 'govuk-input validate range-from-minus cost-tr-add cost-lab-add',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.otherIntangibleAssets',
+                                text = 'Transfers - Other Intangible assets',
+                                class= 'govuk-input validate range-from-minus cost-tr-add cost-pam-add',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.transfers.total',
+                                text = 'Transfers - Total',
+                                class= 'govuk-input validate range-from-minus cost-tr-add cost-faf-add',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Transfers-->
+    <!--Start Cost at end-->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'cost.atPeriodEnd'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row accounts-total">
+      <div class="column-fifth">
+        <strong><div th:text="'Cost at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodEndOn"></div></strong>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.Goodwill',
+                                text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
+                                class= 'govuk-input cost-pe-add cost-lab-total nbv-pe-lab-add',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.otherIntangibleAssets',
+                                text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
+                                class= 'govuk-input cost-pe-add cost-pam-total nbv-pe-pam-add',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'cost.atPeriodEnd.total',
+                                text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
+                                class= 'govuk-input cost-pe-add cost-faf-total nbv-pe-faf-add',
+                                )">
+        </div>
+
+      </div>
+      <br>
+
+    </div>
+
+
+      <br>
+
+    </th:block>
+
+    <div class="form-group">
+      <input id="next-button" class="govuk-button piwik-event"
+             data-event-id="Intangible assets note - Save and continue" type="submit" role="button"
+             value="Save and continue"/>
+    </div>
+
+  </form>
+</div>
+</main>
+</div>
+<div class="push"></div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/radio-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/autocalculate-input-fields.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/tangible-note-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<div th:replace="fragments/piwik :: piwik"></div>
+</body>
+</html>
