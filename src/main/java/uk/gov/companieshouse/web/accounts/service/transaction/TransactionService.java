@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.transaction;
 
-import java.util.Optional;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface TransactionService {
