@@ -107,7 +107,7 @@ public class IntangibleAssetsTotalTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Tests tangible assets will be mapped for a fully populated web model")
+    @DisplayName("Tests intangible assets will be mapped for a fully populated web model")
     void hasIntangibleAssetsToMapToApiResource() {
 
         IntangibleAssets intangibleAssets =
@@ -117,7 +117,7 @@ public class IntangibleAssetsTotalTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Tests tangible assets will be mapped for a populated web model without any cost values")
+    @DisplayName("Tests intangible assets will be mapped for a populated web model without any cost values")
     void hasIntangibleAssetsToMapToApiResourceNoCost() {
 
         IntangibleAssets intangibleAssets =
