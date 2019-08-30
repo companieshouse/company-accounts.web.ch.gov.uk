@@ -13,6 +13,16 @@ public class IntangibleAssets {
 
     private LocalDate nextAccountsPeriodEndOn;
 
+    private LocalDate lastAccountsPeriodEndOn;
+
+    public IntangibleAssetsCost getCost() {
+        return cost;
+    }
+
+    public void setCost(IntangibleAssetsCost cost) {
+        this.cost = cost;
+    }
+
     public LocalDate getNextAccountsPeriodStartOn() {
         return nextAccountsPeriodStartOn;
     }
@@ -29,13 +39,11 @@ public class IntangibleAssets {
         this.nextAccountsPeriodEndOn = nextAccountsPeriodEndOn;
     }
 
-
-    public IntangibleAssetsCost getCost() {
-        return cost;
+    public LocalDate getLastAccountsPeriodEndOn() {
+        return lastAccountsPeriodEndOn;
     }
 
-    public void setCost(IntangibleAssetsCost cost) {
-        this.cost = cost;
+    public void setLastAccountsPeriodEndOn(LocalDate lastAccountsPeriodEndOn) {
+        this.lastAccountsPeriodEndOn = lastAccountsPeriodEndOn;
     }
-
 }

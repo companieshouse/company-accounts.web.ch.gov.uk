@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -11,6 +12,8 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
+import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
+import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
@@ -24,7 +27,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class IntangibleAssetsNoteServiceImpl implements IntangibleAssetsNoteService {
@@ -145,11 +147,14 @@ public class IntangibleAssetsNoteServiceImpl implements IntangibleAssetsNoteServ
     private void addCompanyDatesToIntangibleAssets(IntangibleAssets intangibleAssets, CompanyProfileApi companyProfile) {
         intangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
         intangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
+        intangibleAssets.setLastAccountsPeriodEndOn(Optional.of(companyProfile)
+                .map(CompanyProfileApi::getAccounts)
+                .map(CompanyAccountApi::getLastAccounts)
+                .map(LastAccountsApi::getPeriodEndOn)
+                .orElse(null));
     }
 
     private boolean hasIntangibleAssetNote(SmallFullLinks smallFullLinks) {
-        return smallFullLinks.getTangibleAssetsNote() != null;
+        return smallFullLinks.getIntangibleAssetsNote() != null;
     }
-
-
 }
