@@ -21,7 +21,7 @@ public class WebSecurityConfigurer {
         protected void configure(HttpSecurity http)
                 throws Exception {
 
-            http.antMatcher("/accounts/*")
+            http.antMatcher("/accounts/**")
                     .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class);
         }

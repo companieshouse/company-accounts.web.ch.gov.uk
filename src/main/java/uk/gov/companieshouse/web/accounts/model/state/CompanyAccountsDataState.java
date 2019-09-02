@@ -7,11 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class CompanyAccountsDataState implements Serializable {
 
     @JsonProperty("accounting_policies")
@@ -27,4 +23,37 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime created = LocalDateTime.now();
+
+    public AccountingPolicies getAccountingPolicies() {
+        return accountingPolicies;
+    }
+
+    public void setAccountingPolicies(
+        AccountingPolicies accountingPolicies) {
+        this.accountingPolicies = accountingPolicies;
+    }
+
+    public CicStatements getCicStatements() {
+        return cicStatements;
+    }
+
+    public void setCicStatements(CicStatements cicStatements) {
+        this.cicStatements = cicStatements;
+    }
+
+    public Boolean getHasSelectedEmployeesNote() {
+        return hasSelectedEmployeesNote;
+    }
+
+    public void setHasSelectedEmployeesNote(Boolean hasSelectedEmployeesNote) {
+        this.hasSelectedEmployeesNote = hasSelectedEmployeesNote;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
 }

@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
+import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
@@ -22,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,6 +46,9 @@ public class ApprovalControllerTests {
 
     @Mock
     private NavigatorService navigatorService;
+
+    @Mock
+    private PaymentService paymentService;
 
     @InjectMocks
     private ApprovalController approvalController;
@@ -75,9 +79,15 @@ public class ApprovalControllerTests {
 
     private static final String COMPANY_ACCOUNTS_ID_MODEL_ATTR = "company_accounts_id";
 
+    private static final String IS_PAYABLE_TRANSACTION_ATTR = "isPayableTransaction";
+
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
+    private static final String PAYMENT_URL = "paymentUrl";
+
+    private static final String PAYMENT_WEB_ENDPOINT = "/paymentWebEndpoint";
 
     @BeforeEach
     private void setup() {
@@ -95,7 +105,19 @@ public class ApprovalControllerTests {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
                 .andExpect(model().attributeExists(TRANSACTION_ID_MODEL_ATTR))
-                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR));
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR))
+                .andExpect(model().attributeExists(IS_PAYABLE_TRANSACTION_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get approval - throws service exception")
+    void getRequestServiceException() throws Exception {
+
+        when(transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(get(APPROVAL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -162,18 +184,36 @@ public class ApprovalControllerTests {
     }
 
     @Test
-    @DisplayName("Post approval success path")
-    void postRequestSuccess() throws Exception {
+    @DisplayName("Post approval success path for non-payable transaction")
+    void postRequestSuccessForNonPayableTransaction() throws Exception {
 
         when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
-        doNothing().when(transactionService).closeTransaction(TRANSACTION_ID);
+        when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(false);
 
         this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + CONFIRMATION_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post approval success path for payable transaction")
+    void postRequestSuccessForPayableTransaction() throws Exception {
+
+        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
+
+        when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
+                .thenReturn(new ArrayList<>());
+
+        when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(true);
+
+        when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)).thenReturn(PAYMENT_WEB_ENDPOINT);
+
+        this.mockMvc.perform(post(APPROVAL_PATH))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -24,6 +25,8 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 @PreviousController({CriteriaController.class, AccountStartController.class})
 @RequestMapping({"/company/{companyNumber}/small-full/steps-to-complete", "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/steps-to-complete"})
 public class StepsToCompleteController extends BaseController {
+
+    private static final UriTemplate RESUME_URI = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/resume");
 
     @Autowired
     private TransactionService transactionService;
@@ -82,7 +85,8 @@ public class StepsToCompleteController extends BaseController {
 
             smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
             statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
-            transactionService.createResumeLink(companyNumber, transactionID, companyAccountsID);
+
+            transactionService.updateResumeLink(transactionID, RESUME_URI.expand(companyNumber, transactionID, companyAccountsID).toString());
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
         } catch (ServiceException e) {
