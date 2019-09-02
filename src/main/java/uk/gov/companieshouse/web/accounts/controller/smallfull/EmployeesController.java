@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@NextController(TangibleAssetsNoteController.class)
+@NextController(IntangibleAssetsNoteController.class)
 @PreviousController(EmployeesQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/employees")
