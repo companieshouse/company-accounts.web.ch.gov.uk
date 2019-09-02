@@ -25,13 +25,15 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@NextController(FixedAssetsInvestmentsController.class)
+@NextController(TangibleAssetsNoteController.class)
 @PreviousController(EmployeesController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/intangible-assets")
 public class IntangibleAssetsNoteController extends BaseController implements ConditionalController {
 
     @Autowired
     private IntangibleAssetsNoteService intangibleAssetsNoteService;
+
+    private static final String INTANGIBLE_ASSETS_MODEL_ATTR = "intangibleAssets";
 
 
     @Override
@@ -50,7 +52,7 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
             IntangibleAssets intangibleAssets = intangibleAssetsNoteService
                     .getIntangibleAssets(transactionId, companyAccountsId, companyNumber);
 
-            model.addAttribute("intangibleAssets", intangibleAssets);
+            model.addAttribute(INTANGIBLE_ASSETS_MODEL_ATTR, intangibleAssets);
 
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -64,7 +66,7 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
     public String postIntangibleAssets(@PathVariable String companyNumber,
                                        @PathVariable String transactionId,
                                        @PathVariable String companyAccountsId,
-                                       @ModelAttribute("intangibleAssets") @Valid IntangibleAssets intangibleAssets,
+                                       @ModelAttribute(INTANGIBLE_ASSETS_MODEL_ATTR) @Valid IntangibleAssets intangibleAssets,
                                        BindingResult bindingResult,
                                        Model model,
                                        HttpServletRequest request) {
