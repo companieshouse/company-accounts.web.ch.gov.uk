@@ -16,13 +16,17 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @NextController(TangibleAssetsNoteController.class)
@@ -38,6 +42,9 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
 
     @Override
     protected String getTemplateName() { return "smallfull/intangibleAssetsNote"; }
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
     @GetMapping
     public String getIntangibleAssetsNote(@PathVariable String companyNumber,
@@ -99,6 +106,15 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
+
+        BalanceSheet balanceSheet =
+                balanceSheetService.getBalanceSheet(
+                        transactionId, companyAccountsId, companyNumber);
+
+        return hasIntangibleAssets(balanceSheet);
+    }
+
+    private boolean hasIntangibleAssets(BalanceSheet balanceSheet) {
 
         return false;
     }
