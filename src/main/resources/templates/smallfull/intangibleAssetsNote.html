@@ -26,16 +26,16 @@
 
     <h2 class="govuk-heading-m">Cost</h2>
 
-    <div class="govuk-grid-row block-desktop-only" id="accounts-header-cost">
+    <div class="govuk-grid-row block-desktop-only" id="accounts-header-padding-right">
       <div class="column-fifth">&nbsp;</div>
       <div class="govuk-grid-column-one-quarter">
-        <h2 class="govuk-heading-s">Goodwill<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Goodwill</h2>
       </div>
       <div class="govuk-grid-column-one-quarter">
-        <h2 class="govuk-heading-s">Other Intangible Assets<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Other</h2>
       </div>
       <div class="govuk-grid-column-one-quarter">
-        <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
+        <h2 class="govuk-heading-s">Total</h2>
       </div>
     </div>
     <!--Start Cost at start-->
@@ -86,10 +86,7 @@
     </div>
 
     <div class="govuk-grid-row">
-      <div class="column-fifth">
-        <!--<details> <summary> <span class="summary">-->Additions
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets aquired during this accounting period. </p> </div> </details>-->
-      </div>
+      <div class="column-fifth">Additions</div>
       <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.goodwill',
@@ -126,10 +123,7 @@
     </div>
 
     <div class="govuk-grid-row">
-      <div class="column-fifth">
-        <!--<details> <summary> <span class="summary">-->Disposals
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of tangible assets disposed of in this acccounting period. </p> </div> </details>-->
-      </div>
+      <div class="column-fifth">Disposals</div>
       <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.goodwill',
@@ -167,10 +161,7 @@
     </div>
 
     <div class="govuk-grid-row">
-      <div class="column-fifth">
-        <!-- <details> <summary> <span class="summary">-->Revaluations
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> Valuation of any assets revalued during this accounting period. </p> <p> If the revaluation reduces the value of the asset, then enter a negative figure. </p> </div> </details>-->
-      </div>
+      <div class="column-fifth">Revaluations</div>
       <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.goodwill',
@@ -207,11 +198,7 @@
     </div>
 
     <div class="govuk-grid-row">
-      <div class="column-fifth">
-        <!--<details> <summary> <span class="summary">-->Transfers
-        <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost or valuation of any tangible assets that you've transferred during this accounting period. If the asset is being transferred out, enter a negative figure. </p> </div>
-        </details>-->
-      </div>
+      <div class="column-fifth">Transfers</div>
       <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.goodwill',
