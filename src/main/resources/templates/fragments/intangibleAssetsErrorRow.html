@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title></title>
+</head>
+<body>
+<div th:fragment="intangibleAssetsErrorRow">
+  <div class="govuk-grid-row" th:classappend="${#fields.hasErrors('__${row}__' + '.goodwill') ||
+                                                    #fields.hasErrors('__${row}__' + '.otherIntangibleAssets') ||
+                                                    #fields.hasErrors('__${row}__' + '.total')} ? (${isTopRow} ? 'accounts-row-spacer' : '') : 'error-hidden'">
+    <div class="column-fifth block-desktop-only">&nbsp;</div>
+    <div class="column-sixth block-desktop-only">
+      <span th:if="${#fields.hasErrors('__${row}__' + '.goodwill')}"
+            th:id="${row} + '.goodwill-errorId'"
+            th:each="e : ${#fields.errors('__${row}__' + '.goodwill')}"
+            th:text="${e}"
+            class="govuk-error-message api">
+      </span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.goodwill')}"></span>
+      <span th:id="${row} + '.goodwill-error'" class="govuk-error-message hidden"></span>
+      <div class="height-one">&nbsp;</div>
+    </div>
+    <div class="column-sixth block-desktop-only">
+      <span th:if="${#fields.hasErrors('__${row}__' + '.otherIntangibleAssets')}"
+            th:id="${row} + '.otherIntangibleAssets-errorId'"
+            th:each="e : ${#fields.errors('__${row}__' + '.otherIntangibleAssets')}"
+            th:text="${e}"
+            class="govuk-error-message api">
+      </span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.otherIntangibleAssets')}"></span>
+      <span th:id="${row} + '.otherIntangibleAssets-error'" class="govuk-error-message hidden"></span>
+      <div class="height-one">&nbsp;</div>
+    </div>
+    <div class="column-sixth block-desktop-only">
+      <span th:if="${#fields.hasErrors('__${row}__' + '.total')}"
+            th:id="${row} + '.total-errorId'"
+            th:each="e : ${#fields.errors('__${row}__' + '.total')}"
+            th:text="${e}"
+            class="govuk-error-message api">
+      </span>
+      <span th:if="${!#fields.hasErrors('__${row}__' + '.total')}"></span>
+      <span th:id="${row} + '.total-error'" class="govuk-error-message hidden"></span>
+      <div class="height-one">&nbsp;</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
