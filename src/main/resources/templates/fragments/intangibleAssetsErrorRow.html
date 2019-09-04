@@ -8,7 +8,7 @@
   <div class="govuk-grid-row" th:classappend="${#fields.hasErrors('__${row}__' + '.goodwill') ||
                                                     #fields.hasErrors('__${row}__' + '.otherIntangibleAssets') ||
                                                     #fields.hasErrors('__${row}__' + '.total')} ? (${isTopRow} ? 'accounts-row-spacer' : '') : 'error-hidden'">
-    <div class="column-fifth block-desktop-only">&nbsp;</div>
+    <div class="govuk-grid-column-one-quarter block-desktop-only">&nbsp;</div>
     <div class="govuk-grid-column-one-quarter block-desktop-only">
       <span th:if="${#fields.hasErrors('__${row}__' + '.goodwill')}"
             th:id="${row} + '.goodwill-errorId'"
