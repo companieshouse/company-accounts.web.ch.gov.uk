@@ -54,7 +54,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.goodwill',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                  class= 'govuk-input validate cost-ps-add',
+                                  class= 'govuk-input validate cost-ps-add cost-lab-add',
                                   )">
 
           </div>
@@ -63,7 +63,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.otherIntangibleAssets',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
-                                  class= 'govuk-input validate cost-ps-add',
+                                  class= 'govuk-input validate cost-ps-add cost-pam-add',
                                   )">
           </div>
 
@@ -72,7 +72,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.total',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
-                                  class= 'govuk-input cost-ps-total',
+                                  class= 'govuk-input cost-ps-total cost-t-add',
                                   )">
           </div>
         </div>
@@ -91,7 +91,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.goodwill',
                                 text = 'Additions - Goodwill',
-                                class= 'govuk-input validate cost-a-add',
+                                class= 'govuk-input validate cost-a-add cost-lab-add',
                                 )">
 
         </div>
@@ -100,7 +100,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.otherIntangibleAssets',
                                 text = 'Additions - Other',
-                                class= 'govuk-input validate cost-a-add',
+                                class= 'govuk-input validate cost-a-add cost-pam-add',
                                 )">
         </div>
 
@@ -109,7 +109,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.total',
                                 text = 'Additions - Total',
-                                class= 'govuk-input cost-a-total',
+                                class= 'govuk-input cost-a-total cost-t-add',
                                 )">
         </div>
 
@@ -128,7 +128,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.goodwill',
                                 text = 'Disposals - Goodwill',
-                                class= 'govuk-input validate cost-d-add',
+                                class= 'govuk-input validate cost-d-add cost-lab-add',
                                 )">
 
         </div>
@@ -137,7 +137,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.otherIntangibleAssets',
                                 text = 'Disposals - Other',
-                                class= 'govuk-input validate cost-d-add',
+                                class= 'govuk-input validate cost-d-add cost-pam-add',
                                 )">
         </div>
 
@@ -146,7 +146,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.total',
                                 text = 'Disposals - Total',
-                                class= 'govuk-input cost-d-total',
+                                class= 'govuk-input cost-d-total cost-t-add',
                                 )">
         </div>
 
@@ -166,7 +166,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.goodwill',
                                 text = 'Revaluations - Goodwill',
-                                class= 'govuk-input validate cost-r-add',
+                                class= 'govuk-input validate cost-r-add cost-lab-add',
                                 )">
 
         </div>
@@ -175,7 +175,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.otherIntangibleAssets',
                                 text = 'Revaluations - Other',
-                                class= 'govuk-input validate cost-r-add',
+                                class= 'govuk-input validate cost-r-add cost-pam-add',
                                 )">
         </div>
 
@@ -184,7 +184,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.total',
                                 text = 'Revaluations - Total',
-                                class= 'govuk-input cost-r-total',
+                                class= 'govuk-input cost-r-total cost-t-add',
                                 )">
         </div>
 
@@ -203,7 +203,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.goodwill',
                                 text = 'Transfers - Goodwill',
-                                class= 'govuk-input validate cost-tr-add',
+                                class= 'govuk-input validate cost-tr-add cost-lab-add',
                                 )">
 
         </div>
@@ -212,7 +212,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.otherIntangibleAssets',
                                 text = 'Transfers - Other',
-                                class= 'govuk-input validate cost-tr-add',
+                                class= 'govuk-input validate cost-tr-add cost-pam-add',
                                 )">
         </div>
 
@@ -221,7 +221,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.total',
                                 text = 'Transfers - Total',
-                                class= 'govuk-input cost-tr-total',
+                                class= 'govuk-input cost-tr-total cost-t-add',
                                 )">
         </div>
 
@@ -242,7 +242,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.Goodwill',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                class= 'govuk-input cost-pe-add',
+                                class= 'govuk-input cost-pe-add cost-lab-total',
                                 )">
 
         </div>
@@ -251,7 +251,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.otherIntangibleAssets',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other',
-                                class= 'govuk-input cost-pe-add',
+                                class= 'govuk-input cost-pe-add cost-pam-total',
                                 )">
         </div>
 
@@ -260,7 +260,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.total',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
-                                class= 'govuk-input cost-pe-total',
+                                class= 'govuk-input cost-pe-total cost-t-total',
                                 )">
         </div>
 
