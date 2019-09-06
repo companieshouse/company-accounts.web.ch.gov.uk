@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -105,6 +106,6 @@ public class EmployeesController extends BaseController implements
             throws ServiceException {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return companyAccountsDataState.getHasSelectedEmployeesNote();
+        return BooleanUtils.isTrue(companyAccountsDataState.getHasSelectedEmployeesNote());
     }
 }

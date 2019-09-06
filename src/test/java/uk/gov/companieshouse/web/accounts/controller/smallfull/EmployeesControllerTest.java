@@ -237,4 +237,17 @@ public class EmployeesControllerTest {
 
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
+
+    @Test
+    @DisplayName("Test will not render without employees note")
+    void willNotRenderWithoutEmployeesNote() throws Exception {
+        CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
+        companyAccountsDataState.setHasSelectedEmployeesNote(null);
+
+        when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
+        when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
+            .thenReturn(companyAccountsDataState);
+
+        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
 }

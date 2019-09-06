@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -38,6 +39,9 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
 
     @Override
     protected String getTemplateName() { return "smallfull/intangibleAssetsNote"; }
+
+    @Autowired
+    private BalanceSheetService balanceSheetService;
 
     @GetMapping
     public String getIntangibleAssetsNote(@PathVariable String companyNumber,
