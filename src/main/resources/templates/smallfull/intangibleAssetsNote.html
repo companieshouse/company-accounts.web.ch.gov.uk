@@ -54,7 +54,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.goodwill',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                  class= 'govuk-input validate cost-ps-add cost-lab-add',
+                                  class= 'govuk-input validate cost-ps-add cost-gw-add',
                                   )">
 
           </div>
@@ -63,7 +63,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.otherIntangibleAssets',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
-                                  class= 'govuk-input validate cost-ps-add cost-pam-add',
+                                  class= 'govuk-input validate cost-ps-add cost-oth-add',
                                   )">
           </div>
 
@@ -91,7 +91,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.goodwill',
                                 text = 'Additions - Goodwill',
-                                class= 'govuk-input validate cost-a-add cost-lab-add',
+                                class= 'govuk-input validate cost-a-add cost-gw-add',
                                 )">
 
         </div>
@@ -100,7 +100,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.additions.otherIntangibleAssets',
                                 text = 'Additions - Other',
-                                class= 'govuk-input validate cost-a-add cost-pam-add',
+                                class= 'govuk-input validate cost-a-add cost-oth-add',
                                 )">
         </div>
 
@@ -128,7 +128,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.goodwill',
                                 text = 'Disposals - Goodwill',
-                                class= 'govuk-input validate cost-d-add cost-lab-add',
+                                class= 'govuk-input validate cost-d-add cost-gw-subtract',
                                 )">
 
         </div>
@@ -137,7 +137,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.otherIntangibleAssets',
                                 text = 'Disposals - Other',
-                                class= 'govuk-input validate cost-d-add cost-pam-add',
+                                class= 'govuk-input validate cost-d-add cost-oth-subtract',
                                 )">
         </div>
 
@@ -146,7 +146,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.total',
                                 text = 'Disposals - Total',
-                                class= 'govuk-input cost-d-total cost-t-add',
+                                class= 'govuk-input cost-d-total cost-t-subtract',
                                 )">
         </div>
 
@@ -166,7 +166,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.goodwill',
                                 text = 'Revaluations - Goodwill',
-                                class= 'govuk-input validate cost-r-add cost-lab-add',
+                                class= 'govuk-input validate cost-r-add cost-gw-add',
                                 )">
 
         </div>
@@ -175,7 +175,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.revaluations.otherIntangibleAssets',
                                 text = 'Revaluations - Other',
-                                class= 'govuk-input validate cost-r-add cost-pam-add',
+                                class= 'govuk-input validate cost-r-add cost-oth-add',
                                 )">
         </div>
 
@@ -203,7 +203,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.goodwill',
                                 text = 'Transfers - Goodwill',
-                                class= 'govuk-input validate cost-tr-add cost-lab-add',
+                                class= 'govuk-input validate cost-tr-add cost-gw-add',
                                 )">
 
         </div>
@@ -212,7 +212,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.transfers.otherIntangibleAssets',
                                 text = 'Transfers - Other',
-                                class= 'govuk-input validate cost-tr-add cost-pam-add',
+                                class= 'govuk-input validate cost-tr-add cost-oth-add',
                                 )">
         </div>
 
@@ -242,7 +242,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.Goodwill',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                class= 'govuk-input cost-pe-add cost-lab-total',
+                                class= 'govuk-input cost-pe-add cost-gw-total',
                                 )">
 
         </div>
@@ -251,7 +251,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.otherIntangibleAssets',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other',
-                                class= 'govuk-input cost-pe-add cost-pam-total',
+                                class= 'govuk-input cost-pe-add cost-oth-total',
                                 )">
         </div>
 
