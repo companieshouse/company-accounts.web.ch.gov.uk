@@ -1,11 +1,5 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,6 +9,12 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodEnd;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodStart;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.ChargeForYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.IntangibleAssetsAmortisation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OnDisposals;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OtherAdjustments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Additions;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodEnd;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodStart;
@@ -23,6 +23,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Revaluations;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Transfers;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.IntangibleAssetsTotalTransformerImpl;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -41,6 +47,12 @@ public class IntangibleAssetsTotalTransformerImplTests {
     private static final Long OTHER_REVALUATIONS = 400L;
     private static final Long OTHER_TRANSFERS = 500L;
     private static final Long OTHER_COST_AT_PERIOD_END = 600L;
+
+    private static final Long AMORTISATION_AT_PERIOD_START = 1L;
+    private static final Long AMORTISATION_CHARGE_FOR_YEAR = 6L;
+    private static final Long AMORTISATION_ON_DISPOSALS = 6L;
+    private static final Long AMORTISATION_OTHER_ADJUSTMENTS = 6L;
+    private static final Long AMORTISATION_AT_PERIOD_END = 7L;
 
     private IntangibleAssetsResourceTransformer transformer = new IntangibleAssetsTotalTransformerImpl();
 
@@ -85,7 +97,7 @@ public class IntangibleAssetsTotalTransformerImplTests {
     void mapFullWebModelToApiResource() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithTotalResources(true);
+                createIntangibleAssetsWithTotalResources(true, true);
 
         IntangibleApi intangibleApi = new IntangibleApi();
         transformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
@@ -98,7 +110,7 @@ public class IntangibleAssetsTotalTransformerImplTests {
     void mapWebModelWithoutCostToApiResource() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithTotalResources(false);
+                createIntangibleAssetsWithTotalResources(false, false);
 
         IntangibleApi intangibleApi = new IntangibleApi();
         transformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
@@ -111,17 +123,17 @@ public class IntangibleAssetsTotalTransformerImplTests {
     void hasIntangibleAssetsToMapToApiResource() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithTotalResources(true);
+                createIntangibleAssetsWithTotalResources(true, true);
 
         assertTrue(transformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets));
     }
 
     @Test
-    @DisplayName("Tests intangible assets will be mapped for a populated web model without any cost values")
-    void hasIntangibleAssetsToMapToApiResourceNoCost() {
+    @DisplayName("Tests intangible assets will be mapped for a populated web model without any cost and amortisation values")
+    void hasIntangibleAssetsToMapToApiResourceNoCostNoAmortisation() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithTotalResources(false);
+                createIntangibleAssetsWithTotalResources(false, false);
 
         assertFalse(transformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets));
     }
@@ -194,12 +206,15 @@ public class IntangibleAssetsTotalTransformerImplTests {
         assertEquals(OTHER_COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getGoodwill());
     }
 
-    private IntangibleAssets createIntangibleAssetsWithTotalResources(boolean includeCost) {
+    private IntangibleAssets createIntangibleAssetsWithTotalResources(boolean includeCost, boolean includeAmortisation) {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         IntangibleAssetsCost intangibleAssetsCost = new IntangibleAssetsCost();
         intangibleAssets.setCost(intangibleAssetsCost);
+
+        IntangibleAssetsAmortisation intangibleAssetsAmortisation = new IntangibleAssetsAmortisation();
+        intangibleAssets.setAmortisation(intangibleAssetsAmortisation);
 
         CostAtPeriodStart costAtPeriodStart = new CostAtPeriodStart();
         intangibleAssetsCost.setAtPeriodStart(costAtPeriodStart);
@@ -227,6 +242,30 @@ public class IntangibleAssetsTotalTransformerImplTests {
             revaluations.setTotal(REVALUATIONS);
             transfers.setTotal(TRANSFERS);
             costAtPeriodEnd.setTotal(COST_AT_PERIOD_END);
+        }
+
+        AmortisationAtPeriodStart amortisationAtPeriodStart = new AmortisationAtPeriodStart();
+        intangibleAssetsAmortisation.setAtPeriodStart(amortisationAtPeriodStart);
+
+        ChargeForYear chargeForYear = new ChargeForYear();
+        intangibleAssetsAmortisation.setChargeForYear(chargeForYear);
+
+        OnDisposals onDisposals = new OnDisposals();
+        intangibleAssetsAmortisation.setOnDisposals(onDisposals);
+
+        OtherAdjustments otherAdjustments = new OtherAdjustments();
+        intangibleAssetsAmortisation.setOtherAdjustments(otherAdjustments);
+
+        AmortisationAtPeriodEnd amortisationAtPeriodEnd = new AmortisationAtPeriodEnd();
+        intangibleAssetsAmortisation.setAtPeriodEnd(amortisationAtPeriodEnd);
+
+        if (includeAmortisation) {
+
+            amortisationAtPeriodStart.setOtherIntangibleAssets(AMORTISATION_AT_PERIOD_START);
+            chargeForYear.setOtherIntangibleAssets(AMORTISATION_CHARGE_FOR_YEAR);
+            onDisposals.setOtherIntangibleAssets(AMORTISATION_ON_DISPOSALS);
+            otherAdjustments.setOtherIntangibleAssets(AMORTISATION_OTHER_ADJUSTMENTS);
+            amortisationAtPeriodEnd.setOtherIntangibleAssets(AMORTISATION_AT_PERIOD_END);
         }
 
         return intangibleAssets;
