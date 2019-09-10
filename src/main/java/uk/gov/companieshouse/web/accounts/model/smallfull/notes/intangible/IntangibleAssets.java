@@ -3,9 +3,11 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible;
 
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.IntangibleAssetsAmortisation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.IntangibleAssetsCost;
+import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 import java.time.LocalDate;
 
+@ValidationModel
 public class IntangibleAssets {
 
     private IntangibleAssetsCost cost;
