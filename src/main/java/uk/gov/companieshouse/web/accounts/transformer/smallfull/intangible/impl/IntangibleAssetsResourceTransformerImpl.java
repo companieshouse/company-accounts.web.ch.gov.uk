@@ -2,6 +2,12 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl
 
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodEnd;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodStart;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.ChargeForYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.IntangibleAssetsAmortisation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OnDisposals;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OtherAdjustments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Additions;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodEnd;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodStart;
@@ -26,6 +32,22 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
         return intangibleAssetsCost;
     }
 
+    protected IntangibleAssetsAmortisation createAmortisation(IntangibleAssets intangibleAssets) {
+
+        IntangibleAssetsAmortisation intangibleAssetsAmortisation;
+
+        if (intangibleAssets.getAmortisation() == null) {
+            intangibleAssetsAmortisation = new IntangibleAssetsAmortisation();
+            intangibleAssets.setAmortisation(intangibleAssetsAmortisation);
+        } else {
+            intangibleAssetsAmortisation = intangibleAssets.getAmortisation();
+        }
+
+        return intangibleAssetsAmortisation;
+
+
+    }
+
     protected CostAtPeriodStart createCostAtPeriodStart(IntangibleAssetsCost intangibleAssetsCost) {
 
         CostAtPeriodStart atPeriodStart;
@@ -39,6 +61,8 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
 
         return atPeriodStart;
     }
+
+
 
     protected Additions createAdditions(IntangibleAssetsCost intangibleAssetsCost) {
 
@@ -110,7 +134,82 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
         return atPeriodEnd;
     }
 
+    protected AmortisationAtPeriodStart createAmortisationAtPeriodStart(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
+
+        AmortisationAtPeriodStart atPeriodStart;
+
+        if (intangibleAssetsAmortisation.getAtPeriodStart() == null) {
+            atPeriodStart = new AmortisationAtPeriodStart();
+            intangibleAssetsAmortisation.setAtPeriodStart(atPeriodStart);
+        } else {
+            atPeriodStart = intangibleAssetsAmortisation.getAtPeriodStart();
+        }
+
+        return atPeriodStart;
+
+    }
+
+    protected ChargeForYear createAmortisationChargeForYear(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
+
+        ChargeForYear chargeForYear;
+
+        if (intangibleAssetsAmortisation.getChargeForYear() == null) {
+            chargeForYear = new ChargeForYear();
+            intangibleAssetsAmortisation.setChargeForYear(chargeForYear);
+        } else {
+            chargeForYear = intangibleAssetsAmortisation.getChargeForYear();
+        }
+
+        return chargeForYear;
+    }
+
+    protected OnDisposals createOnDisposals(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
+
+        OnDisposals onDisposals;
+
+        if (intangibleAssetsAmortisation.getOnDisposals() == null) {
+            onDisposals = new OnDisposals();
+            intangibleAssetsAmortisation.setOnDisposals(onDisposals);
+        } else {
+            onDisposals = intangibleAssetsAmortisation.getOnDisposals();
+        }
+
+        return onDisposals;
+    }
+
+    protected OtherAdjustments createOtherAdjustments(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
+
+        OtherAdjustments otherAdjustments;
+
+        if (intangibleAssetsAmortisation.getOtherAdjustments() == null) {
+            otherAdjustments = new OtherAdjustments();
+            intangibleAssetsAmortisation.setOtherAdjustments(otherAdjustments);
+        } else {
+            otherAdjustments = intangibleAssetsAmortisation.getOtherAdjustments();
+        }
+
+        return otherAdjustments;
+    }
+
+    protected AmortisationAtPeriodEnd createAmortisationAtPeriodEnd(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
+
+        AmortisationAtPeriodEnd atPeriodEnd;
+
+        if (intangibleAssetsAmortisation.getAtPeriodEnd() == null) {
+            atPeriodEnd = new AmortisationAtPeriodEnd();
+            intangibleAssetsAmortisation.setAtPeriodEnd(atPeriodEnd);
+        } else {
+            atPeriodEnd = intangibleAssetsAmortisation.getAtPeriodEnd();
+        }
+
+        return atPeriodEnd;
+    }
+
     protected abstract boolean hasCostResources(IntangibleAssets intangibleAssets);
 
+    protected abstract boolean hasAmortisationResources(IntangibleAssets intangibleAssets);
+
     protected abstract void mapCostResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource);
+
+    protected abstract void mapAmortisationResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource);
 }
