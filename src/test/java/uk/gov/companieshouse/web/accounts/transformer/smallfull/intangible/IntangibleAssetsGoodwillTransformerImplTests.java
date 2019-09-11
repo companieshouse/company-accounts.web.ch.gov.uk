@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Amortisation;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleAssetsResource;
@@ -41,18 +42,24 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
     private static final Long TRANSFERS = 5L;
     private static final Long COST_AT_PERIOD_END = 6L;
 
-    private static final Long OTHER_COST_AT_PERIOD_START = 100L;
-    private static final Long OTHER_ADDITIONS = 200L;
-    private static final Long OTHER_DISPOSALS = 300L;
-    private static final Long OTHER_REVALUATIONS = 400L;
-    private static final Long OTHER_TRANSFERS = 500L;
-    private static final Long OTHER_COST_AT_PERIOD_END = 600L;
+    private static final Long GOODWILL_COST_AT_PERIOD_START = 100L;
+    private static final Long GOODWILL_ADDITIONS = 200L;
+    private static final Long GOODWILL_DISPOSALS = 300L;
+    private static final Long GOODWILL_REVALUATIONS = 400L;
+    private static final Long GOODWILL_TRANSFERS = 500L;
+    private static final Long GOODWILL_COST_AT_PERIOD_END = 600L;
 
     private static final Long AMORTISATION_AT_PERIOD_START = 1L;
     private static final Long AMORTISATION_CHARGE_FOR_YEAR = 6L;
     private static final Long AMORTISATION_ON_DISPOSALS = 6L;
     private static final Long AMORTISATION_OTHER_ADJUSTMENTS = 6L;
     private static final Long AMORTISATION_AT_PERIOD_END = 7L;
+
+    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_START = 100L;
+    private static final Long GOODWILL_AMORTISATION_CHARGE_FOR_YEAR = 200L;
+    private static final Long GOODWILL_AMORTISATION_ON_DISPOSALS = 200L;
+    private static final Long GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS = 200L;
+    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_END = 300L;
 
     private IntangibleAssetsResourceTransformer transformer = new IntangibleAssetsGoodwillTransformerImpl();
 
@@ -61,22 +68,24 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
     void mapFullApiResourceToEmptyWebModel() {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
-        IntangibleAssetsResource goodwill = createGoodwillApiResource(true);
+        IntangibleAssetsResource goodwill = createGoodwillApiResource(true, true);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, goodwill);
 
-        assertWebModelsMapped(intangibleAssets, true);
+        assertWebModelsMapped(intangibleAssets, true, true);
     }
 
     @Test
-    @DisplayName("Tests resources are mapped from an api resource which doesn't have a cost object to an empty web model")
-    void mapApiResourceWithoutCostToEmptyWebModel() {
+    @DisplayName("Tests resources are mapped from an api resource which doesn't have a cost or amortisation object to an empty web model")
+    void mapApiResourceWithoutCostOrAmortisationToEmptyWebModel() {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
-        IntangibleAssetsResource goodwill = createGoodwillApiResource(false);
+        IntangibleAssetsResource goodwill = createGoodwillApiResource(false, false);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, goodwill);
 
-        assertWebModelsMapped(intangibleAssets, false);
+        assertWebModelsMapped(intangibleAssets, false, false);
+
         assertNull(intangibleAssets.getCost());
+        assertNull(intangibleAssets.getAmortisation());
     }
 
     @Test
@@ -85,10 +94,10 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
 
         IntangibleAssets intangibleAssets = createIntangibleAssetsWithPreExistingResources();
 
-        IntangibleAssetsResource goodwill = createGoodwillApiResource(true);
+        IntangibleAssetsResource goodwill = createGoodwillApiResource(true, true);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, goodwill);
 
-        assertWebModelsMapped(intangibleAssets, true);
+        assertWebModelsMapped(intangibleAssets, true, true);
         assertPreExistingFieldsUnaffected(intangibleAssets);
     }
 
@@ -102,12 +111,12 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
         IntangibleApi intangibleApi = new IntangibleApi();
         transformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
 
-        assertApiFieldsMapped(intangibleApi.getGoodwill(), true);
+        assertApiFieldsMapped(intangibleApi.getGoodwill(), true, true);
     }
 
     @Test
     @DisplayName("Tests resources are mapped from a web model without cost to an api resource")
-    void mapWebModelWithoutCostToApiResource() {
+    void mapWebModelWithoutCostOrAmortisationToApiResource() {
 
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithGoodwillResources(false, false);
@@ -115,7 +124,7 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
         IntangibleApi intangibleApi = new IntangibleApi();
         transformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
 
-        assertApiFieldsMapped(intangibleApi.getGoodwill(), false);
+        assertApiFieldsMapped(intangibleApi.getGoodwill(), false, false);
     }
 
     @Test
@@ -129,7 +138,7 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
     }
 
     @Test
-    @DisplayName("Tests intangible assets will be mapped for a populated web model without any cost and amortisation values")
+    @DisplayName("Tests intangible assets will be mapped for a populated web model without any cost or amortisation values")
     void hasIntangibleAssetsToMapToApiResourceNoCostNoAmortisation() {
 
         IntangibleAssets intangibleAssets =
@@ -138,12 +147,16 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
         assertFalse(transformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets));
     }
 
-    private IntangibleAssetsResource createGoodwillApiResource(boolean includeCost) {
+    private IntangibleAssetsResource createGoodwillApiResource(boolean includeCost, boolean includeAmortisation) {
 
         IntangibleAssetsResource goodwill = new IntangibleAssetsResource();
 
         if (includeCost) {
             goodwill.setCost(createCostApiResource());
+        }
+
+        if(includeAmortisation) {
+            goodwill.setAmortisation(createAmortisationApiResource());
         }
 
         return goodwill;
@@ -161,49 +174,88 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
         return cost;
     }
 
+    private Amortisation createAmortisationApiResource() {
+
+        Amortisation amortisation = new Amortisation();
+        amortisation.setAtPeriodStart(AMORTISATION_AT_PERIOD_START);
+        amortisation.setChargeForYear(AMORTISATION_CHARGE_FOR_YEAR);
+        amortisation.setOnDisposals(AMORTISATION_ON_DISPOSALS);
+        amortisation.setOtherAdjustments(AMORTISATION_OTHER_ADJUSTMENTS);
+        amortisation.setAtPeriodEnd(AMORTISATION_AT_PERIOD_END);
+        return amortisation;
+    }
+
     private IntangibleAssets createIntangibleAssetsWithPreExistingResources() {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         IntangibleAssetsCost intangibleAssetsCost = new IntangibleAssetsCost();
+        IntangibleAssetsAmortisation intangibleAssetsAmortisation = new IntangibleAssetsAmortisation();
 
         CostAtPeriodStart costAtPeriodStart = new CostAtPeriodStart();
-        costAtPeriodStart.setOtherIntangibleAssets(OTHER_COST_AT_PERIOD_START);
+        costAtPeriodStart.setGoodwill(GOODWILL_COST_AT_PERIOD_START);
         intangibleAssetsCost.setAtPeriodStart(costAtPeriodStart);
 
         Additions additions = new Additions();
-        additions.setOtherIntangibleAssets(OTHER_ADDITIONS);
+        additions.setGoodwill(GOODWILL_ADDITIONS);
         intangibleAssetsCost.setAdditions(additions);
 
         Disposals disposals = new Disposals();
-        disposals.setOtherIntangibleAssets(OTHER_DISPOSALS);
+        disposals.setGoodwill(GOODWILL_DISPOSALS);
         intangibleAssetsCost.setDisposals(disposals);
 
         Revaluations revaluations = new Revaluations();
-        revaluations.setOtherIntangibleAssets(OTHER_REVALUATIONS);
+        revaluations.setGoodwill(GOODWILL_REVALUATIONS);
         intangibleAssetsCost.setRevaluations(revaluations);
 
         Transfers transfers = new Transfers();
-        transfers.setOtherIntangibleAssets(OTHER_TRANSFERS);
+        transfers.setGoodwill(GOODWILL_TRANSFERS);
         intangibleAssetsCost.setTransfers(transfers);
 
         CostAtPeriodEnd costAtPeriodEnd = new CostAtPeriodEnd();
-        costAtPeriodEnd.setOtherIntangibleAssets(OTHER_COST_AT_PERIOD_END);
+        costAtPeriodEnd.setGoodwill(GOODWILL_COST_AT_PERIOD_END);
         intangibleAssetsCost.setAtPeriodEnd(costAtPeriodEnd);
 
+        AmortisationAtPeriodStart amortisationAtPeriodStart = new AmortisationAtPeriodStart();
+        amortisationAtPeriodStart.setGoodwill(GOODWILL_AMORTISATION_AT_PERIOD_START);
+        intangibleAssetsAmortisation.setAtPeriodStart(amortisationAtPeriodStart);
+
+        ChargeForYear chargeForYear = new ChargeForYear();
+        chargeForYear.setGoodwill(GOODWILL_AMORTISATION_CHARGE_FOR_YEAR);
+        intangibleAssetsAmortisation.setChargeForYear(chargeForYear);
+
+        OnDisposals onDisposals = new OnDisposals();
+        onDisposals.setGoodwill(GOODWILL_AMORTISATION_ON_DISPOSALS);
+        intangibleAssetsAmortisation.setOnDisposals(onDisposals);
+
+        OtherAdjustments otherAdjustments = new OtherAdjustments();
+        otherAdjustments.setGoodwill(GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS);
+        intangibleAssetsAmortisation.setOtherAdjustments(otherAdjustments);
+
+        AmortisationAtPeriodEnd amortisationAtPeriodEnd = new AmortisationAtPeriodEnd();
+        amortisationAtPeriodEnd.setGoodwill(GOODWILL_AMORTISATION_AT_PERIOD_END);
+        intangibleAssetsAmortisation.setAtPeriodEnd(amortisationAtPeriodEnd);
+
         intangibleAssets.setCost(intangibleAssetsCost);
+        intangibleAssets.setAmortisation(intangibleAssetsAmortisation);
 
         return intangibleAssets;
     }
 
     private void assertPreExistingFieldsUnaffected(IntangibleAssets intangibleAssets) {
 
-        assertEquals(OTHER_COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
-        assertEquals(OTHER_ADDITIONS, intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
-        assertEquals(OTHER_DISPOSALS, intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
-        assertEquals(OTHER_REVALUATIONS, intangibleAssets.getCost().getRevaluations().getOtherIntangibleAssets());
-        assertEquals(OTHER_TRANSFERS, intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
-        assertEquals(OTHER_COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
+        assertEquals(COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getGoodwill());
+        assertEquals(ADDITIONS, intangibleAssets.getCost().getAdditions().getGoodwill());
+        assertEquals(DISPOSALS, intangibleAssets.getCost().getDisposals().getGoodwill());
+        assertEquals(REVALUATIONS, intangibleAssets.getCost().getRevaluations().getGoodwill());
+        assertEquals(TRANSFERS, intangibleAssets.getCost().getTransfers().getGoodwill());
+        assertEquals(COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getGoodwill());
+
+        assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getGoodwill());
+        assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getGoodwill());
+        assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getGoodwill());
+        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getGoodwill());
+        assertEquals(AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getGoodwill());
     }
 
     private IntangibleAssets createIntangibleAssetsWithGoodwillResources(boolean includeCost, boolean includeAmortisation) {
@@ -261,21 +313,25 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
 
         if (includeAmortisation) {
 
-            amortisationAtPeriodStart.setOtherIntangibleAssets(AMORTISATION_AT_PERIOD_START);
-            chargeForYear.setOtherIntangibleAssets(AMORTISATION_CHARGE_FOR_YEAR);
-            onDisposals.setOtherIntangibleAssets(AMORTISATION_ON_DISPOSALS);
-            otherAdjustments.setOtherIntangibleAssets(AMORTISATION_OTHER_ADJUSTMENTS);
-            amortisationAtPeriodEnd.setOtherIntangibleAssets(AMORTISATION_AT_PERIOD_END);
+            amortisationAtPeriodStart.setGoodwill(AMORTISATION_AT_PERIOD_START);
+            chargeForYear.setGoodwill(AMORTISATION_CHARGE_FOR_YEAR);
+            onDisposals.setGoodwill(AMORTISATION_ON_DISPOSALS);
+            otherAdjustments.setGoodwill(AMORTISATION_OTHER_ADJUSTMENTS);
+            amortisationAtPeriodEnd.setGoodwill(AMORTISATION_AT_PERIOD_END);
         }
 
         return intangibleAssets;
     }
 
     private void assertWebModelsMapped(IntangibleAssets intangibleAssets,
-                                       boolean expectCostFieldsMapped) {
+                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(intangibleAssets);
+        }
+
+        if(expectAmortisationFieldsMapped) {
+            assertAmortisationFieldsMappedToWebModel(intangibleAssets);
         }
     }
 
@@ -289,8 +345,17 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
         assertEquals(COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getGoodwill());
     }
 
+    private void assertAmortisationFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
+
+        assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getGoodwill());
+        assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getGoodwill());
+        assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getGoodwill());
+        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getGoodwill());
+        assertEquals(AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getGoodwill());
+    }
+
     private void assertApiFieldsMapped(IntangibleAssetsResource resource,
-                                       boolean expectCostFieldsMapped) {
+                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
@@ -298,6 +363,12 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
             assertNull(resource.getCost());
         }
 
+        if (expectAmortisationFieldsMapped) {
+            assertAmortisationFieldsMappedToApiResource(resource.getAmortisation());
+        }
+         else {
+            assertNull(resource.getAmortisation());
+        }
     }
 
     private void assertCostFieldsMappedToApiResource(Cost cost) {
@@ -307,5 +378,14 @@ public class IntangibleAssetsGoodwillTransformerImplTests {
         assertEquals(DISPOSALS, cost.getDisposals());
         assertEquals(REVALUATIONS, cost.getRevaluations());
         assertEquals(TRANSFERS, cost.getTransfers());
+    }
+
+    private void assertAmortisationFieldsMappedToApiResource(Amortisation amortisation) {
+        assertNotNull(amortisation);
+        assertEquals(AMORTISATION_AT_PERIOD_START, amortisation.getAtPeriodStart());
+        assertEquals(AMORTISATION_CHARGE_FOR_YEAR, amortisation.getChargeForYear());
+        assertEquals(AMORTISATION_ON_DISPOSALS, amortisation.getOnDisposals());
+        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, amortisation.getOtherAdjustments());
+        assertEquals(AMORTISATION_AT_PERIOD_END, amortisation.getAtPeriodEnd());
     }
 }
