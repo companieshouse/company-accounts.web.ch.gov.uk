@@ -106,14 +106,14 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
         return Stream
                 .of(Optional.of(cost)
-                                .map(IntangibleAssetsCost::getAtPeriodStart)
-                                .map(CostAtPeriodStart::getGoodwill)
-                                .orElse(null),
-                        cost.getAdditions().getGoodwill(),
-                        cost.getDisposals().getGoodwill(),
-                        cost.getRevaluations().getGoodwill(),
-                        cost.getTransfers().getGoodwill(),
-                        cost.getAtPeriodEnd().getGoodwill())
+                        .map(IntangibleAssetsCost::getAtPeriodStart)
+                        .map(CostAtPeriodStart::getGoodwill)
+                        .orElse(null),
+                cost.getAdditions().getGoodwill(),
+                cost.getDisposals().getGoodwill(),
+                cost.getRevaluations().getGoodwill(),
+                cost.getTransfers().getGoodwill(),
+                cost.getAtPeriodEnd().getGoodwill())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -123,13 +123,13 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
         return Stream
                 .of(Optional.of(amortisation)
-                                        .map(IntangibleAssetsAmortisation::getAtPeriodStart)
-                                        .map(AmortisationAtPeriodStart::getGoodwill)
-                                        .orElse(null),
-                        amortisation.getChargeForYear().getGoodwill(),
-                        amortisation.getOnDisposals().getGoodwill(),
-                        amortisation.getOtherAdjustments().getGoodwill(),
-                        amortisation.getAtPeriodEnd().getGoodwill())
+                        .map(IntangibleAssetsAmortisation::getAtPeriodStart)
+                        .map(AmortisationAtPeriodStart::getGoodwill)
+                        .orElse(null),
+                amortisation.getChargeForYear().getGoodwill(),
+                amortisation.getOnDisposals().getGoodwill(),
+                amortisation.getOtherAdjustments().getGoodwill(),
+                amortisation.getAtPeriodEnd().getGoodwill())
                 .anyMatch(Objects::nonNull);
     }
 

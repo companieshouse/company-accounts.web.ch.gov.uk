@@ -102,14 +102,14 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
 
         return Stream
                 .of(Optional.of(cost)
-                                .map(IntangibleAssetsCost::getAtPeriodStart)
-                                .map(CostAtPeriodStart::getOtherIntangibleAssets)
-                                .orElse(null),
-                        cost.getAdditions().getOtherIntangibleAssets(),
-                        cost.getDisposals().getOtherIntangibleAssets(),
-                        cost.getRevaluations().getOtherIntangibleAssets(),
-                        cost.getTransfers().getOtherIntangibleAssets(),
-                        cost.getAtPeriodEnd().getOtherIntangibleAssets())
+                        .map(IntangibleAssetsCost::getAtPeriodStart)
+                        .map(CostAtPeriodStart::getOtherIntangibleAssets)
+                        .orElse(null),
+                cost.getAdditions().getOtherIntangibleAssets(),
+                cost.getDisposals().getOtherIntangibleAssets(),
+                cost.getRevaluations().getOtherIntangibleAssets(),
+                cost.getTransfers().getOtherIntangibleAssets(),
+                cost.getAtPeriodEnd().getOtherIntangibleAssets())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -119,13 +119,13 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
 
         return Stream
                 .of(Optional.of(amortisation)
-                                .map(IntangibleAssetsAmortisation::getAtPeriodStart)
-                                .map(AmortisationAtPeriodStart::getOtherIntangibleAssets)
-                                .orElse(null),
-                        amortisation.getChargeForYear().getOtherIntangibleAssets(),
-                        amortisation.getOnDisposals().getOtherIntangibleAssets(),
-                        amortisation.getOtherAdjustments().getOtherIntangibleAssets(),
-                        amortisation.getAtPeriodEnd().getOtherIntangibleAssets())
+                        .map(IntangibleAssetsAmortisation::getAtPeriodStart)
+                        .map(AmortisationAtPeriodStart::getOtherIntangibleAssets)
+                        .orElse(null),
+                amortisation.getChargeForYear().getOtherIntangibleAssets(),
+                amortisation.getOnDisposals().getOtherIntangibleAssets(),
+                amortisation.getOtherAdjustments().getOtherIntangibleAssets(),
+                amortisation.getAtPeriodEnd().getOtherIntangibleAssets())
                 .anyMatch(Objects::nonNull);
     }
 
