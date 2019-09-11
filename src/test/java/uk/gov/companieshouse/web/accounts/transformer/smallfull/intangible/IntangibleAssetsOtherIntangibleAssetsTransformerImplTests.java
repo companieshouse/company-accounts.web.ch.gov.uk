@@ -49,17 +49,17 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     private static final Long GOODWILL_TRANSFERS = 500L;
     private static final Long GOODWILL_COST_AT_PERIOD_END = 600L;
 
-    private static final Long AMORTISATION_AT_PERIOD_START = 1L;
-    private static final Long AMORTISATION_CHARGE_FOR_YEAR = 6L;
-    private static final Long AMORTISATION_ON_DISPOSALS = 6L;
-    private static final Long AMORTISATION_OTHER_ADJUSTMENTS = 6L;
-    private static final Long AMORTISATION_AT_PERIOD_END = 7L;
+    private static final Long AMORTISATION_AT_PERIOD_START = 7L;
+    private static final Long AMORTISATION_CHARGE_FOR_YEAR = 8L;
+    private static final Long AMORTISATION_ON_DISPOSALS = 9L;
+    private static final Long AMORTISATION_OTHER_ADJUSTMENTS = 10L;
+    private static final Long AMORTISATION_AT_PERIOD_END = 11L;
 
-    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_START = 100L;
-    private static final Long GOODWILL_AMORTISATION_CHARGE_FOR_YEAR = 200L;
-    private static final Long GOODWILL_AMORTISATION_ON_DISPOSALS = 200L;
-    private static final Long GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS = 200L;
-    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_END = 300L;
+    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_START = 700L;
+    private static final Long GOODWILL_AMORTISATION_CHARGE_FOR_YEAR = 800L;
+    private static final Long GOODWILL_AMORTISATION_ON_DISPOSALS = 900L;
+    private static final Long GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS = 1000L;
+    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_END = 1100L;
 
 
     private IntangibleAssetsResourceTransformer transformer = new IntangibleAssetsOtherIntangibleAssetsTransformerImpl();
