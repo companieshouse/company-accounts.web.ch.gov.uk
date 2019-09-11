@@ -42,12 +42,12 @@ public class IntangibleAssetsTotalTransformerImplTests {
     private static final Long TRANSFERS = 5L;
     private static final Long COST_AT_PERIOD_END = 6L;
 
-    private static final Long TOTAL_COST_AT_PERIOD_START = 100L;
-    private static final Long TOTAL_ADDITIONS = 200L;
-    private static final Long TOTAL_DISPOSALS = 300L;
-    private static final Long TOTAL_REVALUATIONS = 400L;
-    private static final Long TOTAL_TRANSFERS = 500L;
-    private static final Long TOTAL_COST_AT_PERIOD_END = 600L;
+    private static final Long OTHER_COST_AT_PERIOD_START = 100L;
+    private static final Long OTHER_ADDITIONS = 200L;
+    private static final Long OTHER_DISPOSALS = 300L;
+    private static final Long OTHER_REVALUATIONS = 400L;
+    private static final Long OTHER_TRANSFERS = 500L;
+    private static final Long OTHER_COST_AT_PERIOD_END = 600L;
 
     private static final Long AMORTISATION_AT_PERIOD_START = 1L;
     private static final Long AMORTISATION_CHARGE_FOR_YEAR = 6L;
@@ -55,11 +55,11 @@ public class IntangibleAssetsTotalTransformerImplTests {
     private static final Long AMORTISATION_OTHER_ADJUSTMENTS = 6L;
     private static final Long AMORTISATION_AT_PERIOD_END = 7L;
 
-    private static final Long TOTAL_AMORTISATION_AT_PERIOD_START = 100L;
-    private static final Long TOTAL_AMORTISATION_CHARGE_FOR_YEAR = 200L;
-    private static final Long TOTAL_AMORTISATION_ON_DISPOSALS = 200L;
-    private static final Long TOTAL_AMORTISATION_OTHER_ADJUSTMENTS = 200L;
-    private static final Long TOTAL_AMORTISATION_AT_PERIOD_END = 300L;
+    private static final Long OTHER_AMORTISATION_AT_PERIOD_START = 100L;
+    private static final Long OTHER_AMORTISATION_CHARGE_FOR_YEAR = 200L;
+    private static final Long OTHER_AMORTISATION_ON_DISPOSALS = 200L;
+    private static final Long OTHER_AMORTISATION_OTHER_ADJUSTMENTS = 200L;
+    private static final Long OTHER_AMORTISATION_AT_PERIOD_END = 300L;
 
     private IntangibleAssetsResourceTransformer transformer = new IntangibleAssetsTotalTransformerImpl();
 
@@ -194,47 +194,47 @@ public class IntangibleAssetsTotalTransformerImplTests {
         IntangibleAssetsAmortisation intangibleAssetsAmortisation = new IntangibleAssetsAmortisation();
 
         CostAtPeriodStart costAtPeriodStart = new CostAtPeriodStart();
-        costAtPeriodStart.setTotal(TOTAL_COST_AT_PERIOD_START);
+        costAtPeriodStart.setOtherIntangibleAssets(OTHER_COST_AT_PERIOD_START);
         intangibleAssetsCost.setAtPeriodStart(costAtPeriodStart);
 
         Additions additions = new Additions();
-        additions.setTotal(TOTAL_ADDITIONS);
+        additions.setOtherIntangibleAssets(OTHER_ADDITIONS);
         intangibleAssetsCost.setAdditions(additions);
 
         Disposals disposals = new Disposals();
-        disposals.setTotal(TOTAL_DISPOSALS);
+        disposals.setOtherIntangibleAssets(OTHER_DISPOSALS);
         intangibleAssetsCost.setDisposals(disposals);
 
         Revaluations revaluations = new Revaluations();
-        revaluations.setTotal(TOTAL_REVALUATIONS);
+        revaluations.setOtherIntangibleAssets(OTHER_REVALUATIONS);
         intangibleAssetsCost.setRevaluations(revaluations);
 
         Transfers transfers = new Transfers();
-        transfers.setTotal(TOTAL_TRANSFERS);
+        transfers.setOtherIntangibleAssets(OTHER_TRANSFERS);
         intangibleAssetsCost.setTransfers(transfers);
 
         CostAtPeriodEnd costAtPeriodEnd = new CostAtPeriodEnd();
-        costAtPeriodEnd.setTotal(TOTAL_COST_AT_PERIOD_END);
+        costAtPeriodEnd.setOtherIntangibleAssets(OTHER_COST_AT_PERIOD_END);
         intangibleAssetsCost.setAtPeriodEnd(costAtPeriodEnd);
 
         AmortisationAtPeriodStart amortisationAtPeriodStart = new AmortisationAtPeriodStart();
-        amortisationAtPeriodStart.setTotal(TOTAL_AMORTISATION_AT_PERIOD_START);
+        amortisationAtPeriodStart.setOtherIntangibleAssets(OTHER_AMORTISATION_AT_PERIOD_START);
         intangibleAssetsAmortisation.setAtPeriodStart(amortisationAtPeriodStart);
 
         ChargeForYear chargeForYear = new ChargeForYear();
-        chargeForYear.setTotal(TOTAL_AMORTISATION_CHARGE_FOR_YEAR);
+        chargeForYear.setOtherIntangibleAssets(OTHER_AMORTISATION_CHARGE_FOR_YEAR);
         intangibleAssetsAmortisation.setChargeForYear(chargeForYear);
 
         OnDisposals onDisposals = new OnDisposals();
-        onDisposals.setTotal(TOTAL_AMORTISATION_ON_DISPOSALS);
+        onDisposals.setOtherIntangibleAssets(OTHER_AMORTISATION_ON_DISPOSALS);
         intangibleAssetsAmortisation.setOnDisposals(onDisposals);
 
         OtherAdjustments otherAdjustments = new OtherAdjustments();
-        otherAdjustments.setTotal(TOTAL_AMORTISATION_OTHER_ADJUSTMENTS);
+        otherAdjustments.setOtherIntangibleAssets(OTHER_AMORTISATION_OTHER_ADJUSTMENTS);
         intangibleAssetsAmortisation.setOtherAdjustments(otherAdjustments);
 
         AmortisationAtPeriodEnd amortisationAtPeriodEnd = new AmortisationAtPeriodEnd();
-        amortisationAtPeriodEnd.setTotal(TOTAL_AMORTISATION_AT_PERIOD_END);
+        amortisationAtPeriodEnd.setOtherIntangibleAssets(OTHER_AMORTISATION_AT_PERIOD_END);
         intangibleAssetsAmortisation.setAtPeriodEnd(amortisationAtPeriodEnd);
 
         intangibleAssets.setCost(intangibleAssetsCost);
@@ -245,18 +245,18 @@ public class IntangibleAssetsTotalTransformerImplTests {
 
     private void assertPreExistingFieldsUnaffected(IntangibleAssets intangibleAssets) {
 
-        assertEquals(COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getTotal());
-        assertEquals(ADDITIONS, intangibleAssets.getCost().getAdditions().getTotal());
-        assertEquals(DISPOSALS, intangibleAssets.getCost().getDisposals().getTotal());
-        assertEquals(REVALUATIONS, intangibleAssets.getCost().getRevaluations().getTotal());
-        assertEquals(TRANSFERS, intangibleAssets.getCost().getTransfers().getTotal());
-        assertEquals(COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getTotal());
+        assertEquals(OTHER_COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
+        assertEquals(OTHER_ADDITIONS, intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
+        assertEquals(OTHER_DISPOSALS, intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
+        assertEquals(OTHER_REVALUATIONS, intangibleAssets.getCost().getRevaluations().getOtherIntangibleAssets());
+        assertEquals(OTHER_TRANSFERS, intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
+        assertEquals(OTHER_COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
 
-        assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getTotal());
-        assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getTotal());
-        assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getTotal());
-        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getTotal());
-        assertEquals(AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getTotal());
+        assertEquals(OTHER_AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
     }
 
     private IntangibleAssets createIntangibleAssetsWithTotalResources(boolean includeCost, boolean includeAmortisation) {

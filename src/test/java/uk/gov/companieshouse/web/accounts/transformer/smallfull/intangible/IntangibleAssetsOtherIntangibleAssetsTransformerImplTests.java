@@ -42,12 +42,12 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     private static final Long TRANSFERS = 5L;
     private static final Long COST_AT_PERIOD_END = 6L;
 
-    private static final Long OTHER_COST_AT_PERIOD_START = 100L;
-    private static final Long OTHER_ADDITIONS = 200L;
-    private static final Long OTHER_DISPOSALS = 300L;
-    private static final Long OTHER_REVALUATIONS = 400L;
-    private static final Long OTHER_TRANSFERS = 500L;
-    private static final Long OTHER_COST_AT_PERIOD_END = 600L;
+    private static final Long GOODWILL_COST_AT_PERIOD_START = 100L;
+    private static final Long GOODWILL_ADDITIONS = 200L;
+    private static final Long GOODWILL_DISPOSALS = 300L;
+    private static final Long GOODWILL_REVALUATIONS = 400L;
+    private static final Long GOODWILL_TRANSFERS = 500L;
+    private static final Long GOODWILL_COST_AT_PERIOD_END = 600L;
 
     private static final Long AMORTISATION_AT_PERIOD_START = 1L;
     private static final Long AMORTISATION_CHARGE_FOR_YEAR = 6L;
@@ -55,11 +55,11 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     private static final Long AMORTISATION_OTHER_ADJUSTMENTS = 6L;
     private static final Long AMORTISATION_AT_PERIOD_END = 7L;
 
-    private static final Long OTHER_AMORTISATION_AT_PERIOD_START = 100L;
-    private static final Long OTHER_AMORTISATION_CHARGE_FOR_YEAR = 200L;
-    private static final Long OTHER_AMORTISATION_ON_DISPOSALS = 200L;
-    private static final Long OTHER_AMORTISATION_OTHER_ADJUSTMENTS = 200L;
-    private static final Long OTHER_AMORTISATION_AT_PERIOD_END = 300L;
+    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_START = 100L;
+    private static final Long GOODWILL_AMORTISATION_CHARGE_FOR_YEAR = 200L;
+    private static final Long GOODWILL_AMORTISATION_ON_DISPOSALS = 200L;
+    private static final Long GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS = 200L;
+    private static final Long GOODWILL_AMORTISATION_AT_PERIOD_END = 300L;
 
 
     private IntangibleAssetsResourceTransformer transformer = new IntangibleAssetsOtherIntangibleAssetsTransformerImpl();
@@ -194,47 +194,47 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         IntangibleAssetsAmortisation intangibleAssetsAmortisation = new IntangibleAssetsAmortisation();
 
         CostAtPeriodStart costAtPeriodStart = new CostAtPeriodStart();
-        costAtPeriodStart.setOtherIntangibleAssets(OTHER_COST_AT_PERIOD_START);
+        costAtPeriodStart.setGoodwill(GOODWILL_COST_AT_PERIOD_START);
         intangibleAssetsCost.setAtPeriodStart(costAtPeriodStart);
 
         Additions additions = new Additions();
-        additions.setOtherIntangibleAssets(OTHER_ADDITIONS);
+        additions.setGoodwill(GOODWILL_ADDITIONS);
         intangibleAssetsCost.setAdditions(additions);
 
         Disposals disposals = new Disposals();
-        disposals.setOtherIntangibleAssets(OTHER_DISPOSALS);
+        disposals.setGoodwill(GOODWILL_DISPOSALS);
         intangibleAssetsCost.setDisposals(disposals);
 
         Revaluations revaluations = new Revaluations();
-        revaluations.setOtherIntangibleAssets(OTHER_REVALUATIONS);
+        revaluations.setGoodwill(GOODWILL_REVALUATIONS);
         intangibleAssetsCost.setRevaluations(revaluations);
 
         Transfers transfers = new Transfers();
-        transfers.setOtherIntangibleAssets(OTHER_TRANSFERS);
+        transfers.setGoodwill(GOODWILL_TRANSFERS);
         intangibleAssetsCost.setTransfers(transfers);
 
         CostAtPeriodEnd costAtPeriodEnd = new CostAtPeriodEnd();
-        costAtPeriodEnd.setOtherIntangibleAssets(OTHER_COST_AT_PERIOD_END);
+        costAtPeriodEnd.setGoodwill(GOODWILL_COST_AT_PERIOD_END);
         intangibleAssetsCost.setAtPeriodEnd(costAtPeriodEnd);
 
         AmortisationAtPeriodStart amortisationAtPeriodStart = new AmortisationAtPeriodStart();
-        amortisationAtPeriodStart.setOtherIntangibleAssets(OTHER_AMORTISATION_AT_PERIOD_START);
+        amortisationAtPeriodStart.setGoodwill(GOODWILL_AMORTISATION_AT_PERIOD_START);
         intangibleAssetsAmortisation.setAtPeriodStart(amortisationAtPeriodStart);
 
         ChargeForYear chargeForYear = new ChargeForYear();
-        chargeForYear.setOtherIntangibleAssets(OTHER_AMORTISATION_CHARGE_FOR_YEAR);
+        chargeForYear.setGoodwill(GOODWILL_AMORTISATION_CHARGE_FOR_YEAR);
         intangibleAssetsAmortisation.setChargeForYear(chargeForYear);
 
         OnDisposals onDisposals = new OnDisposals();
-        onDisposals.setOtherIntangibleAssets(OTHER_AMORTISATION_ON_DISPOSALS);
+        onDisposals.setGoodwill(GOODWILL_AMORTISATION_ON_DISPOSALS);
         intangibleAssetsAmortisation.setOnDisposals(onDisposals);
 
         OtherAdjustments otherAdjustments = new OtherAdjustments();
-        otherAdjustments.setOtherIntangibleAssets(OTHER_AMORTISATION_OTHER_ADJUSTMENTS);
+        otherAdjustments.setGoodwill(GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS);
         intangibleAssetsAmortisation.setOtherAdjustments(otherAdjustments);
 
         AmortisationAtPeriodEnd amortisationAtPeriodEnd = new AmortisationAtPeriodEnd();
-        amortisationAtPeriodEnd.setOtherIntangibleAssets(OTHER_AMORTISATION_AT_PERIOD_END);
+        amortisationAtPeriodEnd.setGoodwill(GOODWILL_AMORTISATION_AT_PERIOD_END);
         intangibleAssetsAmortisation.setAtPeriodEnd(amortisationAtPeriodEnd);
 
         intangibleAssets.setCost(intangibleAssetsCost);
@@ -245,18 +245,18 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
 
     private void assertPreExistingFieldsUnaffected(IntangibleAssets intangibleAssets) {
 
-        assertEquals(COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
-        assertEquals(ADDITIONS, intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
-        assertEquals(DISPOSALS, intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
-        assertEquals(REVALUATIONS, intangibleAssets.getCost().getRevaluations().getOtherIntangibleAssets());
-        assertEquals(TRANSFERS, intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
-        assertEquals(COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
+        assertEquals(GOODWILL_COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getGoodwill());
+        assertEquals(GOODWILL_ADDITIONS, intangibleAssets.getCost().getAdditions().getGoodwill());
+        assertEquals(GOODWILL_DISPOSALS, intangibleAssets.getCost().getDisposals().getGoodwill());
+        assertEquals(GOODWILL_REVALUATIONS, intangibleAssets.getCost().getRevaluations().getGoodwill());
+        assertEquals(GOODWILL_TRANSFERS, intangibleAssets.getCost().getTransfers().getGoodwill());
+        assertEquals(GOODWILL_COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getGoodwill());
 
-        assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
+        assertEquals(GOODWILL_AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getGoodwill());
     }
 
     private IntangibleAssets createIntangibleAssetsWithOtherIntangibleAssetsResources(boolean includeCost, boolean includeAmortisation) {
