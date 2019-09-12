@@ -304,7 +304,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.goodwill',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                  class= 'govuk-input',
+                                  class= 'govuk-input validate amort-am-add amort-gw-add',
                                   )">
 
           </div>
@@ -313,7 +313,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.otherIntangibleAssets',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
-                                  class= 'govuk-input',
+                                  class= 'govuk-input validate amort-am-add amort-oth-add',
                                   )">
           </div>
 
@@ -322,13 +322,13 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.total',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
-                                  class= 'govuk-input',
+                                  class= 'govuk-input amort-am-total amort-tot-add',
                                   )">
           </div>
         </div>
       </div>
     </th:block>
-    <!--End Cost at start-->
+    <!--End Amortisation at start-->
     <!--Start Charge for year -->
     <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'amortisation.chargeForYear'
@@ -341,7 +341,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.chargeForYear.goodwill',
                                 text = 'Charge for year - Goodwill',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-cfy-add amort-gw-add',
                                 )">
 
         </div>
@@ -350,7 +350,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.chargeForYear.otherIntangibleAssets',
                                 text = 'Charge for year - Other',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-cfy-add amort-oth-add',
                                 )">
         </div>
 
@@ -359,13 +359,13 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.chargeForYear.total',
                                 text = 'Charge for year - Total',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-cfy-total amort-tot-add',
                                 )">
         </div>
 
       </div>
     </div>
-    <!--End Additions-->
+    <!--End Charge for year-->
     <!--Start On Disposals-->
     <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'amortisation.onDisposals'
@@ -378,7 +378,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.onDisposals.goodwill',
                                 text = 'On disposals - Goodwill',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-od-subtract amort-gw-subtract',
                                 )">
 
         </div>
@@ -387,7 +387,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.onDisposals.otherIntangibleAssets',
                                 text = 'On disposals - Other',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-od-subtract amort-oth-subtract',
                                 )">
         </div>
 
@@ -396,7 +396,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.onDisposals.total',
                                 text = 'On disposals - Total',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-od-total amort-tot-add',
                                 )">
         </div>
 
@@ -416,7 +416,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.otherAdjustments.goodwill',
                                 text = 'Other adjustments - Goodwill',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-oa-add amort-gw-add',
                                 )">
 
         </div>
@@ -425,7 +425,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.otherAdjustments.otherIntangibleAssets',
                                 text = 'Other adjustments - Other',
-                                class= 'govuk-input',
+                                class= 'govuk-input validate amort-oa-add amort-oth-add',
                                 )">
         </div>
 
@@ -434,7 +434,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.otherAdjustments.total',
                                 text = 'Other adjustments - Total',
-                                class= 'govuk-input',
+                                class= 'govuk-input amort-oa-total amort-tot-add',
                                 )">
         </div>
 
@@ -455,7 +455,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.atPeriodEnd.Goodwill',
                                 text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                class= 'govuk-input',
+                                class= 'govuk-input amort-eop-add amort-gw-total',
                                 )">
 
         </div>
@@ -464,7 +464,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.atPeriodEnd.otherIntangibleAssets',
                                 text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other',
-                                class= 'govuk-input',
+                                class= 'govuk-input amort-eop-add amort-oth-total',
                                 )">
         </div>
 
@@ -473,7 +473,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.atPeriodEnd.total',
                                 text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
-                                class= 'govuk-input',
+                                class= 'govuk-input amort-eop-total amort-tot-total',
                                 )">
         </div>
 
