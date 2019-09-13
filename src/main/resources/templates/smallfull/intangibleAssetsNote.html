@@ -240,7 +240,7 @@
       </div>
       <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'cost.atPeriodEnd.Goodwill',
+                                id = 'cost.atPeriodEnd.goodwill',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
                                 class= 'govuk-input cost-pe-add cost-gw-total',
                                 )">
@@ -453,7 +453,7 @@
       </div>
       <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
-                                id = 'amortisation.atPeriodEnd.Goodwill',
+                                id = 'amortisation.atPeriodEnd.goodwill',
                                 text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
                                 class= 'govuk-input',
                                 )">
