@@ -26,7 +26,7 @@
 
     <h2 class="govuk-heading-m">Cost</h2>
 
-    <div class="govuk-grid-row block-desktop-only" id="accounts-header-padding-right">
+    <div class="govuk-grid-row block-desktop-only accounts-header-padding-right">
       <div class="govuk-grid-column-one-quarter">&nbsp;</div>
       <div class="govuk-grid-column-one-quarter">
         <h2 class="govuk-heading-s">Goodwill</h2>
@@ -269,6 +269,218 @@
 
     </div>
 
+
+      <br>
+
+    <h2 class="govuk-heading-m">Amortisation</h2>
+
+    <div class="govuk-grid-row block-desktop-only accounts-header-padding-right">
+      <div class="govuk-grid-column-one-quarter">&nbsp;</div>
+      <div class="govuk-grid-column-one-quarter">
+        <h2 class="govuk-heading-s">Goodwill</h2>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <h2 class="govuk-heading-s">Other</h2>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <h2 class="govuk-heading-s">Total</h2>
+      </div>
+    </div>
+
+
+    <!--Start Amortisation at start-->
+    <th:block th:if="*{lastAccountsPeriodEndOn != null}">
+      <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                        row = 'amortisation.atPeriodStart',
+                        isTopRow = true
+                        )">
+      </div>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+          <div th:text="'Amortisation at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="amortisation.nextAccountsPeriodStartOn"></div>
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+          <div th:replace="fragments/numberInput :: numberInput (
+                                  id = 'amortisation.atPeriodStart.goodwill',
+                                  text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
+                                  class= 'govuk-input',
+                                  )">
+
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+          <div th:replace="fragments/numberInput :: numberInput (
+                                  id = 'amortisation.atPeriodStart.otherIntangibleAssets',
+                                  text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
+                                  class= 'govuk-input',
+                                  )">
+          </div>
+
+        </div>
+        <div class="govuk-grid-column-one-quarter accounts-total">
+          <div th:replace="fragments/numberInput :: numberInput (
+                                  id = 'amortisation.atPeriodStart.total',
+                                  text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
+                                  class= 'govuk-input',
+                                  )">
+          </div>
+        </div>
+      </div>
+    </th:block>
+    <!--End Cost at start-->
+    <!--Start Charge for year -->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'amortisation.chargeForYear'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">Charge for year</div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.chargeForYear.goodwill',
+                                text = 'Charge for year - Goodwill',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.chargeForYear.otherIntangibleAssets',
+                                text = 'Charge for year - Other',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="govuk-grid-column-one-quarter accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.chargeForYear.total',
+                                text = 'Charge for year - Total',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Additions-->
+    <!--Start On Disposals-->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'amortisation.onDisposals'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">On disposals</div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.onDisposals.goodwill',
+                                text = 'On disposals - Goodwill',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.onDisposals.otherIntangibleAssets',
+                                text = 'On disposals - Other',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="govuk-grid-column-one-quarter accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.onDisposals.total',
+                                text = 'On disposals - Total',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+
+    <!--End On Disposals=-->
+    <!--Start Other Adjustments-->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'amortisation.otherAdjustments'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter">Other adjustments</div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.otherAdjustments.goodwill',
+                                text = 'Other adjustments - Goodwill',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.otherAdjustments.otherIntangibleAssets',
+                                text = 'Other adjustments - Other',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="govuk-grid-column-one-quarter accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.otherAdjustments.total',
+                                text = 'Other adjustments - Total',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+    </div>
+    <!--End Other Adjustments=-->
+    <!--Start Amortisation at end-->
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'amortisation.atPeriodEnd'
+                      )">
+    </div>
+
+    <div class="govuk-grid-row accounts-total">
+      <div class="govuk-grid-column-one-quarter">
+        <strong><div th:text="'Amortisation at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="amortisation.nextAccountsPeriodEndOn"></div></strong>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.atPeriodEnd.Goodwill',
+                                text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.atPeriodEnd.otherIntangibleAssets',
+                                text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="govuk-grid-column-one-quarter accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'amortisation.atPeriodEnd.total',
+                                text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <br>
+
+    </div>
 
     <br>
     <input id="next-button" class="govuk-button piwik-event"

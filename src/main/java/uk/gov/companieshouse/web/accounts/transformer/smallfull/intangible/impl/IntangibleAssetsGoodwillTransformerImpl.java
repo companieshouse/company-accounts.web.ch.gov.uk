@@ -1,9 +1,16 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl;
 
+import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Amortisation;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodEnd;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodStart;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.ChargeForYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.IntangibleAssetsAmortisation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OnDisposals;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OtherAdjustments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Additions;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodEnd;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodStart;
@@ -46,11 +53,33 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
             CostAtPeriodEnd atPeriodEnd = createCostAtPeriodEnd(intangibleAssetsCost);
             atPeriodEnd.setGoodwill(intangibleAssetsResource.getCost().getAtPeriodEnd());
         }
+
+        if (intangibleAssetsResource.getAmortisation() != null) {
+
+            IntangibleAssetsAmortisation intangibleAssetsAmortisation = createAmortisation(intangibleAssets);
+
+            AmortisationAtPeriodStart atPeriodStart = createAmortisationAtPeriodStart(intangibleAssetsAmortisation);
+            atPeriodStart.setGoodwill(intangibleAssetsResource.getAmortisation().getAtPeriodStart());
+
+            ChargeForYear chargeForYear = createAmortisationChargeForYear(intangibleAssetsAmortisation);
+            chargeForYear.setGoodwill(intangibleAssetsResource.getAmortisation().getChargeForYear());
+
+            OnDisposals onDisposals = createOnDisposals(intangibleAssetsAmortisation);
+            onDisposals.setGoodwill(intangibleAssetsResource.getAmortisation().getOnDisposals());
+
+            OtherAdjustments otherAdjustments = createOtherAdjustments(intangibleAssetsAmortisation);
+            otherAdjustments.setGoodwill(intangibleAssetsResource.getAmortisation().getOtherAdjustments());
+
+            AmortisationAtPeriodEnd atPeriodEnd = createAmortisationAtPeriodEnd(intangibleAssetsAmortisation);
+            atPeriodEnd.setGoodwill(intangibleAssetsResource.getAmortisation().getAtPeriodEnd());
+        }
     }
 
     @Override
     public boolean hasIntangibleAssetsToMapToApiResource(IntangibleAssets intangibleAssets) {
-        return hasCostResources(intangibleAssets);
+
+        return (hasCostResources(intangibleAssets) || hasAmortisationResources(intangibleAssets));
+
     }
 
     @Override
@@ -62,7 +91,13 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
             mapCostResources(intangibleAssets, goodwill);
         }
 
+
+        if (hasAmortisationResources(intangibleAssets)) {
+            mapAmortisationResources(intangibleAssets, goodwill);
+        }
+
         intangibleApi.setGoodwill(goodwill);
+
     }
 
     @Override
@@ -71,14 +106,30 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
         return Stream
                 .of(Optional.of(cost)
-                                .map(IntangibleAssetsCost::getAtPeriodStart)
-                                .map(CostAtPeriodStart::getGoodwill)
-                                .orElse(null),
-                        cost.getAdditions().getGoodwill(),
-                        cost.getDisposals().getGoodwill(),
-                        cost.getRevaluations().getGoodwill(),
-                        cost.getTransfers().getGoodwill(),
-                        cost.getAtPeriodEnd().getGoodwill())
+                        .map(IntangibleAssetsCost::getAtPeriodStart)
+                        .map(CostAtPeriodStart::getGoodwill)
+                        .orElse(null),
+                cost.getAdditions().getGoodwill(),
+                cost.getDisposals().getGoodwill(),
+                cost.getRevaluations().getGoodwill(),
+                cost.getTransfers().getGoodwill(),
+                cost.getAtPeriodEnd().getGoodwill())
+                .anyMatch(Objects::nonNull);
+    }
+
+    @Override
+    protected boolean hasAmortisationResources(IntangibleAssets intangibleAssets) {
+        IntangibleAssetsAmortisation amortisation = intangibleAssets.getAmortisation();
+
+        return Stream
+                .of(Optional.of(amortisation)
+                        .map(IntangibleAssetsAmortisation::getAtPeriodStart)
+                        .map(AmortisationAtPeriodStart::getGoodwill)
+                        .orElse(null),
+                amortisation.getChargeForYear().getGoodwill(),
+                amortisation.getOnDisposals().getGoodwill(),
+                amortisation.getOtherAdjustments().getGoodwill(),
+                amortisation.getAtPeriodEnd().getGoodwill())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -97,5 +148,22 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
         cost.setTransfers(intangibleAssets.getCost().getTransfers().getGoodwill());
         cost.setAtPeriodEnd(intangibleAssets.getCost().getAtPeriodEnd().getGoodwill());
         intangibleAssetsResource.setCost(cost);
+    }
+
+    @Override
+    protected void mapAmortisationResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
+
+        Amortisation amortisation = new Amortisation();
+        amortisation.setAtPeriodStart(Optional.of(intangibleAssets)
+                .map(IntangibleAssets::getAmortisation)
+                .map(IntangibleAssetsAmortisation::getAtPeriodStart)
+                .map(AmortisationAtPeriodStart::getGoodwill)
+                .orElse(null));
+        amortisation.setChargeForYear(intangibleAssets.getAmortisation().getChargeForYear().getGoodwill());
+        amortisation.setOnDisposals(intangibleAssets.getAmortisation().getOnDisposals().getGoodwill());
+        amortisation.setOtherAdjustments(intangibleAssets.getAmortisation().getOtherAdjustments().getGoodwill());
+        amortisation.setAtPeriodEnd(intangibleAssets.getAmortisation().getAtPeriodEnd().getGoodwill());
+        intangibleAssetsResource.setAmortisation(amortisation);
+
     }
 }

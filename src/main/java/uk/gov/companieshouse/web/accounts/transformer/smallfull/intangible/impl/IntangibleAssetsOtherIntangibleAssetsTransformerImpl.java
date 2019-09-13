@@ -1,9 +1,16 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl;
 
+import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Amortisation;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodEnd;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.AmortisationAtPeriodStart;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.ChargeForYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.IntangibleAssetsAmortisation;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OnDisposals;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.OtherAdjustments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Additions;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodEnd;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.CostAtPeriodStart;
@@ -46,11 +53,31 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
             CostAtPeriodEnd atPeriodEnd = createCostAtPeriodEnd(intangibleAssetsCost);
             atPeriodEnd.setOtherIntangibleAssets(intangibleAssetsResource.getCost().getAtPeriodEnd());
         }
+
+        if (intangibleAssetsResource.getAmortisation() != null) {
+
+            IntangibleAssetsAmortisation intangibleAssetsAmortisation = createAmortisation(intangibleAssets);
+
+            AmortisationAtPeriodStart atPeriodStart = createAmortisationAtPeriodStart(intangibleAssetsAmortisation);
+            atPeriodStart.setOtherIntangibleAssets(intangibleAssetsResource.getAmortisation().getAtPeriodStart());
+
+            ChargeForYear chargeForYear = createAmortisationChargeForYear(intangibleAssetsAmortisation);
+            chargeForYear.setOtherIntangibleAssets(intangibleAssetsResource.getAmortisation().getChargeForYear());
+
+            OnDisposals onDisposals = createOnDisposals(intangibleAssetsAmortisation);
+            onDisposals.setOtherIntangibleAssets(intangibleAssetsResource.getAmortisation().getOnDisposals());
+
+            OtherAdjustments otherAdjustments = createOtherAdjustments(intangibleAssetsAmortisation);
+            otherAdjustments.setOtherIntangibleAssets(intangibleAssetsResource.getAmortisation().getOtherAdjustments());
+
+            AmortisationAtPeriodEnd atPeriodEnd = createAmortisationAtPeriodEnd(intangibleAssetsAmortisation);
+            atPeriodEnd.setOtherIntangibleAssets(intangibleAssetsResource.getAmortisation().getAtPeriodEnd());
+        }
     }
 
     @Override
     public boolean hasIntangibleAssetsToMapToApiResource(IntangibleAssets intangibleAssets) {
-        return hasCostResources(intangibleAssets);
+        return (hasCostResources(intangibleAssets) || hasAmortisationResources(intangibleAssets));
     }
 
     @Override
@@ -62,6 +89,10 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
             mapCostResources(intangibleAssets, otherIntangibleAssets);
         }
 
+        if (hasAmortisationResources(intangibleAssets)) {
+            mapAmortisationResources(intangibleAssets, otherIntangibleAssets);
+        }
+
         intangibleApi.setOtherIntangibleAssets(otherIntangibleAssets);
     }
 
@@ -71,14 +102,30 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
 
         return Stream
                 .of(Optional.of(cost)
-                                .map(IntangibleAssetsCost::getAtPeriodStart)
-                                .map(CostAtPeriodStart::getOtherIntangibleAssets)
-                                .orElse(null),
-                        cost.getAdditions().getOtherIntangibleAssets(),
-                        cost.getDisposals().getOtherIntangibleAssets(),
-                        cost.getRevaluations().getOtherIntangibleAssets(),
-                        cost.getTransfers().getOtherIntangibleAssets(),
-                        cost.getAtPeriodEnd().getOtherIntangibleAssets())
+                        .map(IntangibleAssetsCost::getAtPeriodStart)
+                        .map(CostAtPeriodStart::getOtherIntangibleAssets)
+                        .orElse(null),
+                cost.getAdditions().getOtherIntangibleAssets(),
+                cost.getDisposals().getOtherIntangibleAssets(),
+                cost.getRevaluations().getOtherIntangibleAssets(),
+                cost.getTransfers().getOtherIntangibleAssets(),
+                cost.getAtPeriodEnd().getOtherIntangibleAssets())
+                .anyMatch(Objects::nonNull);
+    }
+
+    @Override
+    protected boolean hasAmortisationResources(IntangibleAssets intangibleAssets) {
+        IntangibleAssetsAmortisation amortisation = intangibleAssets.getAmortisation();
+
+        return Stream
+                .of(Optional.of(amortisation)
+                        .map(IntangibleAssetsAmortisation::getAtPeriodStart)
+                        .map(AmortisationAtPeriodStart::getOtherIntangibleAssets)
+                        .orElse(null),
+                amortisation.getChargeForYear().getOtherIntangibleAssets(),
+                amortisation.getOnDisposals().getOtherIntangibleAssets(),
+                amortisation.getOtherAdjustments().getOtherIntangibleAssets(),
+                amortisation.getAtPeriodEnd().getOtherIntangibleAssets())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -97,5 +144,22 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
         cost.setTransfers(intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
         cost.setAtPeriodEnd(intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
         intangibleAssetsResource.setCost(cost);
+    }
+
+    @Override
+    protected void mapAmortisationResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
+
+        Amortisation amortisation = new Amortisation();
+        amortisation.setAtPeriodStart(Optional.of(intangibleAssets)
+                .map(IntangibleAssets::getAmortisation)
+                .map(IntangibleAssetsAmortisation::getAtPeriodStart)
+                .map(AmortisationAtPeriodStart::getOtherIntangibleAssets)
+                .orElse(null));
+        amortisation.setChargeForYear(intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
+        amortisation.setOnDisposals(intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
+        amortisation.setOtherAdjustments(intangibleAssets.getAmortisation().getOtherAdjustments().getOtherIntangibleAssets());
+        amortisation.setAtPeriodEnd(intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
+        intangibleAssetsResource.setAmortisation(amortisation);
+
     }
 }
