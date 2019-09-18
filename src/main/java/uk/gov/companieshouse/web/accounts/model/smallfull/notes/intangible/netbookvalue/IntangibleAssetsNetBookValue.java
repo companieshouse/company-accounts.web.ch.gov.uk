@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netb
 
 public class IntangibleAssetsNetBookValue {
 
-
     private CurrentPeriod currentPeriod;
 
     private PreviousPeriod previousPeriod;

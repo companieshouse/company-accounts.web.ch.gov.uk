@@ -32,4 +32,5 @@ public class PreviousPeriod {
         this.total = total;
     }
 
+
 }

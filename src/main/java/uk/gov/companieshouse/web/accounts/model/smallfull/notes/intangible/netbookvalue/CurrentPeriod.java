@@ -8,7 +8,6 @@ public class CurrentPeriod {
 
     private Long total;
 
-
     public Long getGoodwill() {
         return goodwill;
     }
