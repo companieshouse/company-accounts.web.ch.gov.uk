@@ -479,6 +479,7 @@
 
       </div>
       <br>
+      <br>
 
     </div>
 
@@ -510,7 +511,7 @@
       <div class="govuk-grid-column-one-quarter">
         <strong><div th:text="'Net book value at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodEndOn"></div></strong>
       </div>
-      <div class="column-sixth">
+      <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.goodwill',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
@@ -519,7 +520,7 @@
 
         </div>
       </div>
-      <div class="column-sixth">
+      <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.otherIntangibleAssets',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
@@ -528,7 +529,7 @@
         </div>
 
       </div>
-      <div class="column-sixth accounts-total">
+      <div class="govuk-grid-column-one-quarter accounts-total">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.total',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
@@ -552,7 +553,7 @@
       <div class="govuk-grid-column-one-quarter">
         <strong><div th:text="'Net book value at ' +${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
       </div>
-      <div class="column-sixth">
+      <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.goodwill',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
@@ -561,7 +562,7 @@
 
         </div>
       </div>
-      <div class="column-sixth">
+      <div class="govuk-grid-column-one-quarter">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.otherIntangibleAssets',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
@@ -570,7 +571,7 @@
         </div>
 
       </div>
-      <div class="column-sixth accounts-total">
+      <div class="govuk-grid-column-one-quarter accounts-total">
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.total',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
