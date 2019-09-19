@@ -23,6 +23,7 @@ public class IntangibleAssets {
 
     private LocalDate lastAccountsPeriodEndOn;
 
+
     public IntangibleAssetsNetBookValue getNetBookValue() {
         return netBookValue;
     }
@@ -39,7 +40,6 @@ public class IntangibleAssets {
         this.cost = cost;
     }
 
-
     public IntangibleAssetsAmortisation getAmortisation() {
         return amortisation;
     }
@@ -47,7 +47,6 @@ public class IntangibleAssets {
     public void setAmortisation(IntangibleAssetsAmortisation amortisation) {
         this.amortisation = amortisation;
     }
-
 
     public LocalDate getNextAccountsPeriodStartOn() {
         return nextAccountsPeriodStartOn;

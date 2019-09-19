@@ -4,7 +4,7 @@ public class PreviousPeriod {
 
     private Long goodwill;
 
-    private Long other;
+    private Long otherIntangibleAssets;
 
     private Long total;
 
@@ -17,11 +17,11 @@ public class PreviousPeriod {
     }
 
     public Long getOther() {
-        return other;
+        return otherIntangibleAssets;
     }
 
     public void setOther(Long other) {
-        this.other = other;
+        this.otherIntangibleAssets = other;
     }
 
     public Long getTotal() {

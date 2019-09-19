@@ -80,7 +80,7 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
         IntangibleAssetsNetBookValue intangibleAssetsNetBookValue = createNetBookValue(intangibleAssets);
 
         CurrentPeriod currentPeriod = createCurrentPeriod(intangibleAssetsNetBookValue);
-        currentPeriod.setOther(intangibleAssetsResource.getNetBookValueAtEndOfCurrentPeriod());
+        currentPeriod.setOtherIntangibleAssets(intangibleAssetsResource.getNetBookValueAtEndOfCurrentPeriod());
 
         PreviousPeriod previousPeriod = createPreviousPeriod(intangibleAssetsNetBookValue);
         previousPeriod.setOther(intangibleAssetsResource.getNetBookValueAtEndOfPreviousPeriod());
@@ -155,7 +155,7 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
                         .map(IntangibleAssetsNetBookValue::getPreviousPeriod)
                         .map(PreviousPeriod::getOther)
                         .orElse(null),
-                netBookValue.getCurrentPeriod().getOther())
+                netBookValue.getCurrentPeriod().getOtherIntangibleAssets())
                 .anyMatch(Objects::nonNull);
     }
 
@@ -203,6 +203,6 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
                         .map(PreviousPeriod::getOther)
                         .orElse( null));
         intangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
-                intangibleAssets.getNetBookValue().getCurrentPeriod().getOther());
+                intangibleAssets.getNetBookValue().getCurrentPeriod().getOtherIntangibleAssets());
     }
 }
