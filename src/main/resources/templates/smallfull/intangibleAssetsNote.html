@@ -482,6 +482,8 @@
 
     </div>
 
+    <!--End Amortisation at end-->
+
     <h2 class="govuk-heading-m">Net Book Value</h2>
 
     <div class="govuk-grid-row block-desktop-only accounts-header-padding-right">
@@ -497,9 +499,90 @@
       </div>
     </div>
 
-    
+    <!--Net Book Value End-->
+    <th:block th:if="*{lastAccountsPeriodEndOn != null}">
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'netBookValue.currentPeriod',
+                      )">
+    </div>
+
+    <div class="govuk-grid-row accounts-total">
+      <div class="govuk-grid-column-one-quarter">
+        <strong><div th:text="'Net book value at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodEndOn"></div></strong>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.goodwill',
+                                text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.otherIntangibleAssets',
+                                text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.currentPeriod.total',
+                                text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
 
     <br>
+    </div>
+    <!--Net Book Value Start-->
+
+    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+                      row = 'netBookValue.previousPeriod',
+                      isTopRow = true
+                      )">
+    </div>
+
+    <div class="govuk-grid-row accounts-total">
+      <div class="govuk-grid-column-one-quarter">
+        <strong><div th:text="'Net book value at ' +${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.goodwill',
+                                text = 'Net book value at ' + ${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
+                                class= 'govuk-input',
+                                )">
+
+        </div>
+      </div>
+      <div class="column-sixth">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.otherIntangibleAssets',
+                                text = 'Net book value at ' + ${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+      <div class="column-sixth accounts-total">
+        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'netBookValue.previousPeriod.total',
+                                text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
+                                class= 'govuk-input',
+                                )">
+        </div>
+
+      </div>
+
+      <br>
+    </div>
+
     <input id="next-button" class="govuk-button piwik-event"
            data-event-id="Intangible assets note - Save and continue" type="submit" role="button"
            value="Save and continue"/>
