@@ -269,7 +269,7 @@ public class IntangibleAssetsTotalTransformerImplTests {
         intangibleAssetsNetBookValue.setCurrentPeriod(currentPeriod);
 
         PreviousPeriod previousPeriod = new PreviousPeriod();
-        previousPeriod.setOther(OTHER_PREVIOUS_PERIOD);
+        previousPeriod.setOtherIntangibleAssets(OTHER_PREVIOUS_PERIOD);
         intangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         intangibleAssets.setNetBookValue(intangibleAssetsNetBookValue);

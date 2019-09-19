@@ -270,7 +270,7 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         intangibleAssetsNetBookValue.setCurrentPeriod(currentPeriod);
 
         PreviousPeriod previousPeriod = new PreviousPeriod();
-        previousPeriod.setOther(OTHER_PREVIOUS_PERIOD);
+        previousPeriod.setOtherIntangibleAssets(OTHER_PREVIOUS_PERIOD);
         intangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         intangibleAssets.setNetBookValue(intangibleAssetsNetBookValue);
@@ -369,7 +369,7 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         if (includeNetBookValue) {
 
             currentPeriod.setOtherIntangibleAssets(CURRENT_PERIOD);
-            previousPeriod.setOther(PREVIOUS_PERIOD);
+            previousPeriod.setOtherIntangibleAssets(PREVIOUS_PERIOD);
         }
 
         return intangibleAssets;
@@ -386,7 +386,7 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
             assertAmortisationFieldsMappedToWebModel(intangibleAssets);
         }
         assertEquals(CURRENT_PERIOD, intangibleAssets.getNetBookValue().getCurrentPeriod().getOtherIntangibleAssets());
-        assertEquals(PREVIOUS_PERIOD, intangibleAssets.getNetBookValue().getPreviousPeriod().getOther());
+        assertEquals(PREVIOUS_PERIOD, intangibleAssets.getNetBookValue().getPreviousPeriod().getOtherIntangibleAssets());
     }
 
     private void assertCostFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {

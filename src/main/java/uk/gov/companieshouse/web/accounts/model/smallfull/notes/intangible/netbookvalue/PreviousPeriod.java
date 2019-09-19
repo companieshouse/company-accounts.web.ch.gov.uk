@@ -16,12 +16,12 @@ public class PreviousPeriod {
         this.goodwill = goodwill;
     }
 
-    public Long getOther() {
+    public Long getOtherIntangibleAssets() {
         return otherIntangibleAssets;
     }
 
-    public void setOther(Long other) {
-        this.otherIntangibleAssets = other;
+    public void setOtherIntangibleAssets(Long otherIntangibleAssets) {
+        this.otherIntangibleAssets = otherIntangibleAssets;
     }
 
     public Long getTotal() {
