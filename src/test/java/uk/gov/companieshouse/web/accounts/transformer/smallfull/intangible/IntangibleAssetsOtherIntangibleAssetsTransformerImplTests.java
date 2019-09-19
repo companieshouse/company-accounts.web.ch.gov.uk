@@ -23,6 +23,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.IntangibleAssetsCost;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Revaluations;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Transfers;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.CurrentPeriod;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.IntangibleAssetsNetBookValue;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.IntangibleAssetsOtherIntangibleAssetsTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +44,10 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     private static final Long REVALUATIONS = 4L;
     private static final Long TRANSFERS = 5L;
     private static final Long COST_AT_PERIOD_END = 6L;
+    private static final Long CURRENT_PERIOD = 12L;
+    private static final Long PREVIOUS_PERIOD = 13L;
+    private static final Long OTHER_CURRENT_PERIOD = 1200L;
+    private static final Long OTHER_PREVIOUS_PERIOD = 1300L;
 
     private static final Long GOODWILL_COST_AT_PERIOD_START = 100L;
     private static final Long GOODWILL_ADDITIONS = 200L;
@@ -107,12 +114,12 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     void mapFullWebModelToApiResource() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true);
+                createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true, true);
 
         IntangibleApi intangibleApi = new IntangibleApi();
         transformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
 
-        assertApiFieldsMapped(intangibleApi.getOtherIntangibleAssets(), true, true);
+        assertApiFieldsMapped(intangibleApi.getOtherIntangibleAssets(), true, true, true);
     }
 
     @Test
@@ -120,12 +127,25 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     void mapWebModelWithoutCostOrAmortisationToApiResource() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithOtherIntangibleAssetsResources(false, false);
+                createIntangibleAssetsWithOtherIntangibleAssetsResources(false, false, true);
 
         IntangibleApi intangibleApi = new IntangibleApi();
         transformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
 
-        assertApiFieldsMapped(intangibleApi.getOtherIntangibleAssets(), false, false);
+        assertApiFieldsMapped(intangibleApi.getOtherIntangibleAssets(), false, false, true);
+    }
+
+    @Test
+    @DisplayName("Tests resources are mapped from a web model without net book values to an api resource")
+    void mapWebModelWithoutNetBookValuesToApiResource() {
+
+        IntangibleAssets intangibleAssets =
+                createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true, false);
+
+        IntangibleApi intangibleApi = new IntangibleApi();
+        transformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
+
+        assertApiFieldsMapped(intangibleApi.getOtherIntangibleAssets(), true, true, false);
     }
 
     @Test
@@ -133,7 +153,7 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     void hasIntangibleAssetsToMapToApiResource() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true);
+                createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true, true);
 
         assertTrue(transformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets));
     }
@@ -143,7 +163,7 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     void hasIntangibleAssetsToMapToApiResourceNoCostNoAmortisation() {
 
         IntangibleAssets intangibleAssets =
-                createIntangibleAssetsWithOtherIntangibleAssetsResources(false, false);
+                createIntangibleAssetsWithOtherIntangibleAssetsResources(false, false, false);
 
         assertFalse(transformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets));
     }
@@ -159,6 +179,9 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         if(includeAmortisation) {
             otherIntangibleAssets.setAmortisation(createAmortisationApiResource());
         }
+
+        otherIntangibleAssets.setNetBookValueAtEndOfPreviousPeriod(PREVIOUS_PERIOD);
+        otherIntangibleAssets.setNetBookValueAtEndOfCurrentPeriod(CURRENT_PERIOD);
 
         return otherIntangibleAssets;
     }
@@ -240,6 +263,18 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         intangibleAssets.setCost(intangibleAssetsCost);
         intangibleAssets.setAmortisation(intangibleAssetsAmortisation);
 
+        IntangibleAssetsNetBookValue intangibleAssetsNetBookValue = new IntangibleAssetsNetBookValue();
+
+        CurrentPeriod currentPeriod = new CurrentPeriod();
+        currentPeriod.setOther(OTHER_CURRENT_PERIOD);
+        intangibleAssetsNetBookValue.setCurrentPeriod(currentPeriod);
+
+        PreviousPeriod previousPeriod = new PreviousPeriod();
+        previousPeriod.setOther(OTHER_PREVIOUS_PERIOD);
+        intangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
+
+        intangibleAssets.setNetBookValue(intangibleAssetsNetBookValue);
+
         return intangibleAssets;
     }
 
@@ -259,7 +294,8 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         assertEquals(GOODWILL_AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getGoodwill());
     }
 
-    private IntangibleAssets createIntangibleAssetsWithOtherIntangibleAssetsResources(boolean includeCost, boolean includeAmortisation) {
+    private IntangibleAssets createIntangibleAssetsWithOtherIntangibleAssetsResources(boolean includeCost, boolean includeAmortisation,
+                                                                                      boolean includeNetBookValue) {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
@@ -321,6 +357,21 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
             amortisationAtPeriodEnd.setOtherIntangibleAssets(AMORTISATION_AT_PERIOD_END);
         }
 
+        IntangibleAssetsNetBookValue intangibleAssetsNetBookValue = new IntangibleAssetsNetBookValue();
+        intangibleAssets.setNetBookValue(intangibleAssetsNetBookValue);
+
+        CurrentPeriod currentPeriod = new CurrentPeriod();
+        intangibleAssetsNetBookValue.setCurrentPeriod(currentPeriod);
+
+        PreviousPeriod previousPeriod = new PreviousPeriod();
+        intangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
+
+        if (includeNetBookValue) {
+
+            currentPeriod.setOther(CURRENT_PERIOD);
+            previousPeriod.setOther(PREVIOUS_PERIOD);
+        }
+
         return intangibleAssets;
     }
 
@@ -334,6 +385,8 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         if(expectAmortisationFieldsMapped) {
             assertAmortisationFieldsMappedToWebModel(intangibleAssets);
         }
+        assertEquals(CURRENT_PERIOD, intangibleAssets.getNetBookValue().getCurrentPeriod().getOther());
+        assertEquals(PREVIOUS_PERIOD, intangibleAssets.getNetBookValue().getPreviousPeriod().getOther());
     }
 
     private void assertCostFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
@@ -356,7 +409,8 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private void assertApiFieldsMapped(IntangibleAssetsResource resource,
-                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
+                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped,
+                                       boolean expectNetBookValueFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
@@ -369,6 +423,12 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         }
         else {
             assertNull(resource.getAmortisation());
+        }
+        if (expectNetBookValueFieldsMapped) {
+            assertNetBookValueFieldsMappedToApiResource(resource);
+        } else {
+            assertNull(resource.getNetBookValueAtEndOfPreviousPeriod());
+            assertNull(resource.getNetBookValueAtEndOfCurrentPeriod());
         }
     }
 
@@ -388,5 +448,10 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         assertEquals(AMORTISATION_ON_DISPOSALS, amortisation.getOnDisposals());
         assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, amortisation.getOtherAdjustments());
         assertEquals(AMORTISATION_AT_PERIOD_END, amortisation.getAtPeriodEnd());
+    }
+
+    private void assertNetBookValueFieldsMappedToApiResource(IntangibleAssetsResource resource) {
+        assertEquals(CURRENT_PERIOD, resource.getNetBookValueAtEndOfCurrentPeriod());
+        assertEquals(PREVIOUS_PERIOD, resource.getNetBookValueAtEndOfPreviousPeriod());
     }
 }
