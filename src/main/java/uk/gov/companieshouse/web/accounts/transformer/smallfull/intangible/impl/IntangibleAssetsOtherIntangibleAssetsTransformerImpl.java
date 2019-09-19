@@ -18,6 +18,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.IntangibleAssetsCost;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Revaluations;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Transfers;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.CurrentPeriod;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.IntangibleAssetsNetBookValue;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsResourceTransformer;
 
 import java.util.Objects;
@@ -73,11 +76,21 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
             AmortisationAtPeriodEnd atPeriodEnd = createAmortisationAtPeriodEnd(intangibleAssetsAmortisation);
             atPeriodEnd.setOtherIntangibleAssets(intangibleAssetsResource.getAmortisation().getAtPeriodEnd());
         }
+
+        IntangibleAssetsNetBookValue intangibleAssetsNetBookValue = createNetBookValue(intangibleAssets);
+
+        CurrentPeriod currentPeriod = createCurrentPeriod(intangibleAssetsNetBookValue);
+        currentPeriod.setOther(intangibleAssetsResource.getNetBookValueAtEndOfCurrentPeriod());
+
+        PreviousPeriod previousPeriod = createPreviousPeriod(intangibleAssetsNetBookValue);
+        previousPeriod.setOther(intangibleAssetsResource.getNetBookValueAtEndOfPreviousPeriod());
     }
 
     @Override
     public boolean hasIntangibleAssetsToMapToApiResource(IntangibleAssets intangibleAssets) {
-        return (hasCostResources(intangibleAssets) || hasAmortisationResources(intangibleAssets));
+        return hasCostResources(intangibleAssets) ||
+                hasAmortisationResources(intangibleAssets) ||
+                hasNetBookValueResources(intangibleAssets);
     }
 
     @Override
@@ -91,6 +104,10 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
 
         if (hasAmortisationResources(intangibleAssets)) {
             mapAmortisationResources(intangibleAssets, otherIntangibleAssets);
+        }
+
+        if (hasNetBookValueResources(intangibleAssets)) {
+            mapNetBookValueResources(intangibleAssets, otherIntangibleAssets);
         }
 
         intangibleApi.setOtherIntangibleAssets(otherIntangibleAssets);
@@ -130,6 +147,19 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
     }
 
     @Override
+    protected boolean hasNetBookValueResources(IntangibleAssets intangibleAssets) {
+
+        IntangibleAssetsNetBookValue netBookValue = intangibleAssets.getNetBookValue();
+
+        return Stream.of(Optional.of(netBookValue)
+                        .map(IntangibleAssetsNetBookValue::getPreviousPeriod)
+                        .map(PreviousPeriod::getOther)
+                        .orElse(null),
+                netBookValue.getCurrentPeriod().getOther())
+                .anyMatch(Objects::nonNull);
+    }
+
+    @Override
     protected void mapCostResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
 
         Cost cost = new Cost();
@@ -161,5 +191,18 @@ public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
         amortisation.setAtPeriodEnd(intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
         intangibleAssetsResource.setAmortisation(amortisation);
 
+    }
+
+    @Override
+    protected void mapNetBookValueResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
+
+        intangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
+                Optional.of(intangibleAssets)
+                        .map(IntangibleAssets::getNetBookValue)
+                        .map(IntangibleAssetsNetBookValue::getPreviousPeriod)
+                        .map(PreviousPeriod::getOther)
+                        .orElse( null));
+        intangibleAssetsResource.setNetBookValueAtEndOfCurrentPeriod(
+                intangibleAssets.getNetBookValue().getCurrentPeriod().getOther());
     }
 }
