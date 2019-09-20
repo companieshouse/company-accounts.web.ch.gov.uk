@@ -54,7 +54,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.goodwill',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                  class= 'govuk-input validate cost-ps-add cost-gw-add',
+                                  class= 'govuk-input validate cost-ps-add cost-gw-add nbv-cp-gw-add',
                                   )">
 
           </div>
@@ -63,7 +63,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.otherIntangibleAssets',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
-                                  class= 'govuk-input validate cost-ps-add cost-oth-add',
+                                  class= 'govuk-input validate cost-ps-add cost-oth-add nbv-cp-oth-add',
                                   )">
           </div>
 
@@ -72,7 +72,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.total',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
-                                  class= 'govuk-input cost-ps-total cost-t-add',
+                                  class= 'govuk-input cost-ps-total cost-t-add nbv-cp-t-add',
                                   )">
           </div>
         </div>
@@ -242,7 +242,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.Goodwill',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                class= 'govuk-input cost-pe-add cost-gw-total',
+                                class= 'govuk-input cost-pe-add cost-gw-total nbv-pe-gw-add',
                                 )">
 
         </div>
@@ -251,7 +251,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.otherIntangibleAssets',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other',
-                                class= 'govuk-input cost-pe-add cost-oth-total',
+                                class= 'govuk-input cost-pe-add cost-oth-total nbv-pe-oth-add',
                                 )">
         </div>
 
@@ -260,7 +260,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'cost.atPeriodEnd.total',
                                 text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
-                                class= 'govuk-input cost-pe-total cost-t-total',
+                                class= 'govuk-input cost-pe-total cost-t-total nbv-pe-t-add',
                                 )">
         </div>
 
@@ -304,7 +304,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.goodwill',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                  class= 'govuk-input validate amort-am-add amort-gw-add',
+                                  class= 'govuk-input validate amort-am-add amort-gw-add nbv-cp-gw-subtract',
                                   )">
 
           </div>
@@ -313,7 +313,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.otherIntangibleAssets',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
-                                  class= 'govuk-input validate amort-am-add amort-oth-add',
+                                  class= 'govuk-input validate amort-am-add amort-oth-add nbv-cp-oth-subtract',
                                   )">
           </div>
 
@@ -322,7 +322,7 @@
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.total',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
-                                  class= 'govuk-input amort-am-total amort-tot-add',
+                                  class= 'govuk-input amort-am-total amort-tot-add nbv-cp-t-subtract',
                                   )">
           </div>
         </div>
@@ -455,7 +455,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.atPeriodEnd.Goodwill',
                                 text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                class= 'govuk-input amort-eop-add amort-gw-total',
+                                class= 'govuk-input amort-eop-add amort-gw-total nbv-pe-gw-subtract',
                                 )">
 
         </div>
@@ -464,7 +464,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.atPeriodEnd.otherIntangibleAssets',
                                 text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other',
-                                class= 'govuk-input amort-eop-add amort-oth-total',
+                                class= 'govuk-input amort-eop-add amort-oth-total nbv-pe-oth-subtract',
                                 )">
         </div>
 
@@ -473,7 +473,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.atPeriodEnd.total',
                                 text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
-                                class= 'govuk-input amort-eop-total amort-tot-total',
+                                class= 'govuk-input amort-eop-total amort-tot-total nbv-pe-t-subtract',
                                 )">
         </div>
 
@@ -514,7 +514,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.goodwill',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-gw-total',
                                 )">
 
         </div>
@@ -523,7 +523,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.otherIntangibleAssets',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-oth-total',
                                 )">
         </div>
 
@@ -532,7 +532,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.currentPeriod.total',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-pe-t-total',
                                 )">
         </div>
 
@@ -556,7 +556,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.goodwill',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Goodwill',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-gw-total',
                                 )">
 
         </div>
@@ -565,7 +565,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.otherIntangibleAssets',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Other Intangible Assets',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-oth-total',
                                 )">
         </div>
 
@@ -574,7 +574,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'netBookValue.previousPeriod.total',
                                 text = 'Net book value at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')} + ' - Total',
-                                class= 'govuk-input',
+                                class= 'govuk-input nbv-cp-t-total',
                                 )">
         </div>
 
