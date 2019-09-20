@@ -1,9 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue;
 
-import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
-
 public class PreviousPeriod {
-    
+
     private Long goodwill;
 
     private Long otherIntangibleAssets;
