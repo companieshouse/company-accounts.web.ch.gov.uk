@@ -501,7 +501,6 @@
     </div>
 
     <!--Net Book Value End-->
-    <th:block th:if="*{lastAccountsPeriodEndOn != null}">
     <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'netBookValue.currentPeriod',
                       )">
@@ -542,7 +541,7 @@
     <br>
     </div>
     <!--Net Book Value Start-->
-
+    <th:block th:if="*{lastAccountsPeriodEndOn != null}">
     <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'netBookValue.previousPeriod',
                       isTopRow = true
@@ -583,6 +582,7 @@
 
       <br>
     </div>
+    </th:block>
 
     <input id="next-button" class="govuk-button piwik-event"
            data-event-id="Intangible assets note - Save and continue" type="submit" role="button"
