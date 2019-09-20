@@ -41,7 +41,6 @@ public class IntangibleAssetsTotalTransformerImplTests {
     private static final Long REVALUATIONS = 4L;
     private static final Long TRANSFERS = 5L;
     private static final Long COST_AT_PERIOD_END = 6L;
-
     private static final Long OTHER_COST_AT_PERIOD_START = 100L;
     private static final Long OTHER_ADDITIONS = 200L;
     private static final Long OTHER_DISPOSALS = 300L;
