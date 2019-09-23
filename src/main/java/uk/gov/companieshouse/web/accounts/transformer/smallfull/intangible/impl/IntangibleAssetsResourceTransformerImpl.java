@@ -15,6 +15,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.IntangibleAssetsCost;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Revaluations;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Transfers;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.CurrentPeriod;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.IntangibleAssetsNetBookValue;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.PreviousPeriod;
 
 public abstract class IntangibleAssetsResourceTransformerImpl {
 
@@ -205,11 +208,58 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
         return atPeriodEnd;
     }
 
+    protected IntangibleAssetsNetBookValue createNetBookValue(IntangibleAssets intangibleAssets) {
+
+        IntangibleAssetsNetBookValue intangibleAssetsNetBookValue;
+
+        if (intangibleAssets.getNetBookValue() == null) {
+            intangibleAssetsNetBookValue = new IntangibleAssetsNetBookValue();
+            intangibleAssets.setNetBookValue(intangibleAssetsNetBookValue);
+        } else {
+            intangibleAssetsNetBookValue = intangibleAssets.getNetBookValue();
+        }
+
+        return intangibleAssetsNetBookValue;
+    }
+
+    protected CurrentPeriod createCurrentPeriod(IntangibleAssetsNetBookValue intangibleAssetsNetBookValue) {
+
+        CurrentPeriod currentPeriod;
+
+        if (intangibleAssetsNetBookValue.getCurrentPeriod() == null) {
+            currentPeriod = new CurrentPeriod();
+            intangibleAssetsNetBookValue.setCurrentPeriod(currentPeriod);
+        } else {
+            currentPeriod = intangibleAssetsNetBookValue.getCurrentPeriod();
+        }
+
+        return currentPeriod;
+    }
+
+    protected PreviousPeriod createPreviousPeriod(IntangibleAssetsNetBookValue intangibleAssetsNetBookValue) {
+
+        PreviousPeriod previousPeriod;
+
+        if (intangibleAssetsNetBookValue.getPreviousPeriod() == null) {
+            previousPeriod = new PreviousPeriod();
+            intangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
+        } else {
+            previousPeriod = intangibleAssetsNetBookValue.getPreviousPeriod();
+        }
+
+        return previousPeriod;
+    }
+
     protected abstract boolean hasCostResources(IntangibleAssets intangibleAssets);
 
     protected abstract boolean hasAmortisationResources(IntangibleAssets intangibleAssets);
 
+    protected abstract boolean hasNetBookValueResources(IntangibleAssets intangibleAssets);
+
     protected abstract void mapCostResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource);
 
     protected abstract void mapAmortisationResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource);
+
+    protected abstract void mapNetBookValueResources(IntangibleAssets intangibleAssets,
+                                                     IntangibleAssetsResource intangibleAssetsResource);
 }

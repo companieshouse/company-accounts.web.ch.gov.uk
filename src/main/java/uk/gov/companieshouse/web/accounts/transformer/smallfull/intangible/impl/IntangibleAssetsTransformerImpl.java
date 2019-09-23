@@ -58,10 +58,10 @@ public class IntangibleAssetsTransformerImpl implements IntangibleAssetsTransfor
 
         IntangibleApi intangibleApi = new IntangibleApi();
 
-        Stream.of(IntangibleAssetsResource.values()).forEach(tangibleAssetsResource -> {
+        Stream.of(IntangibleAssetsResource.values()).forEach(intangibleAssetsResource -> {
 
             IntangibleAssetsResourceTransformer resourceTransformer =
-                    factory.getResourceTransformer(tangibleAssetsResource);
+                    factory.getResourceTransformer(intangibleAssetsResource);
 
             if (resourceTransformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets)) {
 
