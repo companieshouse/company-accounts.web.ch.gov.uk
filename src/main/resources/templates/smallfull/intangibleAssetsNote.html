@@ -378,7 +378,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.onDisposals.goodwill',
                                 text = 'On disposals - Goodwill',
-                                class= 'govuk-input validate amort-od-subtract amort-gw-subtract',
+                                class= 'govuk-input validate amort-od-add amort-gw-subtract',
                                 )">
 
         </div>
@@ -387,7 +387,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.onDisposals.otherIntangibleAssets',
                                 text = 'On disposals - Other',
-                                class= 'govuk-input validate amort-od-subtract amort-oth-subtract',
+                                class= 'govuk-input validate amort-od-add amort-oth-subtract',
                                 )">
         </div>
 
@@ -396,7 +396,7 @@
         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'amortisation.onDisposals.total',
                                 text = 'On disposals - Total',
-                                class= 'govuk-input validate amort-od-total amort-tot-add',
+                                class= 'govuk-input validate amort-od-total amort-tot-subtract',
                                 )">
         </div>
 
@@ -501,7 +501,6 @@
     </div>
 
     <!--Net Book Value End-->
-    <th:block th:if="*{lastAccountsPeriodEndOn != null}">
     <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'netBookValue.currentPeriod',
                       )">
@@ -542,7 +541,7 @@
     <br>
     </div>
     <!--Net Book Value Start-->
-
+    <th:block th:if="*{lastAccountsPeriodEndOn != null}">
     <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'netBookValue.previousPeriod',
                       isTopRow = true
@@ -583,6 +582,8 @@
 
       <br>
     </div>
+
+    </th:block>
 
     <input id="next-button" class="govuk-button piwik-event"
            data-event-id="Intangible assets note - Save and continue" type="submit" role="button"
