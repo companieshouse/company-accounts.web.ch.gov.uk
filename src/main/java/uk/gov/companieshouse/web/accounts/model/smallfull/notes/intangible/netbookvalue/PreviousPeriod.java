@@ -4,13 +4,13 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class PreviousPeriod {
 
-    @ValidationMapping("$.intangible_assets.goodwill.net_book_value.previous_period")
+    @ValidationMapping("$.intangible_assets.goodwill.net_book_value_at_end_of_previous_period")
     private Long goodwill;
 
-    @ValidationMapping("$.intangible_assets.other_intangible_assets.net_book_value.previous_period")
+    @ValidationMapping("$.intangible_assets.other_intangible_assets.net_book_value_at_end_of_previous_period")
     private Long otherIntangibleAssets;
 
-    @ValidationMapping("$.intangible_assets.total.net_book_value.previous_period")
+    @ValidationMapping("$.intangible_assets.total.net_book_value_at_end_of_previous_period")
     private Long total;
 
     public Long getGoodwill() {
