@@ -12,7 +12,6 @@
   <form id="intangible-assets-note-form" th:action="@{''}" th:object="${intangibleAssets}"
         class="form currency-included-within-inputs govuk-body" method="post">
 
-
     <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
     <div th:replace="fragments/numberedHeading :: numberedHeading (
@@ -582,6 +581,7 @@
 
       <br>
     </div>
+    </th:block>
 
     </th:block>
 

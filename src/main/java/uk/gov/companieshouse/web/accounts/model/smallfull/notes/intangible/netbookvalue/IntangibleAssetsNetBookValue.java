@@ -22,5 +22,4 @@ public class IntangibleAssetsNetBookValue {
     public void setPreviousPeriod(PreviousPeriod previousPeriod) {
         this.previousPeriod = previousPeriod;
     }
-
 }
