@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl;
 
 import java.util.stream.Stream;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
@@ -20,6 +22,7 @@ public class IntangibleAssetsTransformerImpl implements IntangibleAssetsTransfor
     public IntangibleAssets getIntangibleAssets(IntangibleApi intangibleApi) {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
+        intangibleAssets.setAdditionalInformation(intangibleApi.getAdditionalInformation());
 
         IntangibleAssetsResourceTransformer intangibleAssetsResourceTransformer;
 
@@ -57,6 +60,10 @@ public class IntangibleAssetsTransformerImpl implements IntangibleAssetsTransfor
     public IntangibleApi getIntangibleApi(IntangibleAssets intangibleAssets) {
 
         IntangibleApi intangibleApi = new IntangibleApi();
+
+        if (StringUtils.isNotBlank(intangibleAssets.getAdditionalInformation())) {
+            intangibleApi.setAdditionalInformation(intangibleAssets.getAdditionalInformation());
+        }
 
         Stream.of(IntangibleAssetsResource.values()).forEach(intangibleAssetsResource -> {
 
