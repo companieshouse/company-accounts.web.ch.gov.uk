@@ -18,7 +18,7 @@
         <label class="govuk-visually-hidden" th:for="${id}" th:text="${dropDownText}"></label>
 
         <span class="govuk-error-message"
-              id="additional-information-errorId"
+              th:id="${id} + '-errorId'"
               th:if="${#fields.hasErrors('__${id}__')}"
               th:each="e : ${#fields.errors('__${id}__')}" th:text="${e}">
         </span>
