@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl;
 
-import java.util.stream.Stream;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +9,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.Intan
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsResourceTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsTransformerFactory;
+
+import java.util.stream.Stream;
 
 @Component
 public class IntangibleAssetsTransformerImpl implements IntangibleAssetsTransformer {
