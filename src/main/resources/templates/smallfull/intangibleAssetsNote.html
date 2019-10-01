@@ -583,7 +583,12 @@
     </div>
     </th:block>
 
-    </th:block>
+    <div th:replace="fragments/additionalInformation :: additionalInformation (
+                                id = 'additionalInformation',
+                                dropDownText = 'Add additional information about your \'intangible assets\' note?',
+                                helpText = 'Enter details of any other \'intangible assets\' information not already covered'
+                                )">
+    </div>
 
     <input id="next-button" class="govuk-button piwik-event"
            data-event-id="Intangible assets note - Save and continue" type="submit" role="button"
