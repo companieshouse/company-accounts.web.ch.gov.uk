@@ -51,7 +51,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
         FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssets();
 
-        // InTangible assets
+        // Intangible assets
         if (fixedAssetsApi.getIntangible() != null) {
 
             IntangibleAssets intangibleAssets = createIntangibleAssets(balanceSheet);
