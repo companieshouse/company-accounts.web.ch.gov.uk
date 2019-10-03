@@ -3,7 +3,11 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.FixedAssetsApi;
-import uk.gov.companieshouse.web.accounts.model.smallfull.*;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
 import java.util.Objects;
