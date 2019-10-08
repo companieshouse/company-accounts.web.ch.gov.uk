@@ -7,6 +7,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
 
         if (hasCurrentPeriodFixedAssets(balanceSheet)) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
-
+            fixedAssetsApi.setIntangible(balanceSheet.getFixedAssets().getIntangibleAssets().getCurrentAmount());
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
             fixedAssetsApi.setInvestments(balanceSheet.getFixedAssets().getInvestments().getCurrentAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getCurrentTotal());
@@ -34,7 +35,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
 
         if (hasPreviousPeriodFixedAssets(balanceSheet)) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
-
+            fixedAssetsApi.setIntangible(balanceSheet.getFixedAssets().getIntangibleAssets().getPreviousAmount());
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
             fixedAssetsApi.setInvestments(balanceSheet.getFixedAssets().getInvestments().getPreviousAmount());
             fixedAssetsApi.setTotal(balanceSheet.getFixedAssets().getPreviousTotal());
@@ -49,6 +50,13 @@ public class FixedAssetsTransformerImpl implements Transformer {
 
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
         FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssets();
+
+        // Intangible assets
+        if (fixedAssetsApi.getIntangible() != null) {
+
+            IntangibleAssets intangibleAssets = createIntangibleAssets(balanceSheet);
+            intangibleAssets.setCurrentAmount(fixedAssetsApi.getIntangible());
+        }
 
         // Tangible assets
         if (fixedAssetsApi.getTangible() != null) {
@@ -75,6 +83,12 @@ public class FixedAssetsTransformerImpl implements Transformer {
 
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
         FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssets();
+
+        // Intangible assets
+        if (fixedAssetsApi.getIntangible() != null) {
+            IntangibleAssets intangibleAssets = createIntangibleAssets(balanceSheet);
+            intangibleAssets.setPreviousAmount(fixedAssetsApi.getIntangible());
+        }
 
         // Tangible assets
         if (fixedAssetsApi.getTangible() != null) {
@@ -120,6 +134,20 @@ public class FixedAssetsTransformerImpl implements Transformer {
         }
 
         return tangibleAssets;
+    }
+
+    private IntangibleAssets createIntangibleAssets(BalanceSheet balanceSheet) {
+
+        IntangibleAssets intangibleAssets;
+
+        if (balanceSheet.getFixedAssets().getIntangibleAssets() == null) {
+            intangibleAssets = new IntangibleAssets();
+            balanceSheet.getFixedAssets().setIntangibleAssets(intangibleAssets);
+        } else {
+            intangibleAssets = balanceSheet.getFixedAssets().getIntangibleAssets();
+        }
+
+        return intangibleAssets;
     }
 
     private FixedInvestments createFixedInvestments(BalanceSheet balanceSheet){
