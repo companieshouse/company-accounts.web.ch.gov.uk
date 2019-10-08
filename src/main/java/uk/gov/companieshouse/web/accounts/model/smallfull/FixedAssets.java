@@ -5,6 +5,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 public class FixedAssets {
 
     private TangibleAssets tangibleAssets;
+    private IntangibleAssets intangibleAssets;
     private FixedInvestments investments;
 
     @ValidationMapping("$.previous_period.balance_sheet.fixed_assets.total")
@@ -20,6 +21,14 @@ public class FixedAssets {
     public void setTangibleAssets(
         TangibleAssets tangibleAssets) {
         this.tangibleAssets = tangibleAssets;
+    }
+
+    public IntangibleAssets getIntangibleAssets() {
+        return intangibleAssets;
+    }
+
+    public void setIntangibleAssets(IntangibleAssets intangibleAssets) {
+        this.intangibleAssets = intangibleAssets;
     }
 
     public FixedInvestments getInvestments() {

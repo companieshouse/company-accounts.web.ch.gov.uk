@@ -85,6 +85,35 @@
                     <h2 class="govuk-heading-m" id="fixed-assets-title">Fixed assets</h2>
 
                     <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'fixedAssets.intangibleAssets.currentAmount',
+                        previousField = 'fixedAssets.intangibleAssets.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half" id="fixed-assets-intangible-subtitle">
+                            Intangible assets
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'fixedAssets.intangibleAssets.currentAmount',
+                                text = 'Intangible assets current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current current-fixed-assets-add',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'fixedAssets.intangibleAssets.previousAmount',
+                                text = 'Intangible assets previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous previous-fixed-assets-add',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'fixedAssets.tangibleAssets.currentAmount',
                         previousField = 'fixedAssets.tangibleAssets.previousAmount'
                         )">

@@ -31,6 +31,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
@@ -41,6 +42,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYe
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
@@ -90,6 +92,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     @Autowired
     private StocksService stocksService;
+
+    @Autowired
+    private IntangibleAssetsNoteService intangibleAssetsNoteService;
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
@@ -372,6 +377,13 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             creditorsAfterOneYearService.deleteCreditorsAfterOneYear(transactionId, companyAccountsId);
         }
 
+        if ((isIntangibleAssetsCurrentAmountNullOrZero(balanceSheet)
+                && isIntangibleAssetsPreviousAmountNullOrZero(balanceSheet))
+                && smallFullLinks.getIntangibleAssetsNote() != null) {
+
+            intangibleAssetsNoteService.deleteIntangibleAssets(transactionId, companyAccountsId);
+        }
+
         if ((isTangibleAssetsCurrentAmountNullOrZero(balanceSheet)
                 && isTangibleAssetsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getTangibleAssetsNote() != null) {
@@ -446,6 +458,22 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .map(BalanceSheet::getOtherLiabilitiesOrAssets)
                 .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
                 .map(CreditorsAfterOneYear::getPreviousAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isIntangibleAssetsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getIntangibleAssets)
+                .map(IntangibleAssets::getCurrentAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isIntangibleAssetsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getIntangibleAssets)
+                .map(IntangibleAssets::getPreviousAmount)
                 .orElse(0L).equals(0L);
     }
 
