@@ -479,14 +479,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .orElse(0L).equals(0L);
     }
 
-    private boolean isIntangibleAssetsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
-        return Optional.of(balanceSheet)
-                .map(BalanceSheet::getFixedAssets)
-                .map(FixedAssets::getIntangibleAssets)
-                .map(IntangibleAssets::getPreviousAmount)
-                .orElse(0L).equals(0L);
-    }
-
     private boolean isTangibleAssetsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
                 .map(BalanceSheet::getFixedAssets)
@@ -500,14 +492,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .map(BalanceSheet::getFixedAssets)
                 .map(FixedAssets::getTangibleAssets)
                 .map(TangibleAssets::getPreviousAmount)
-                .orElse(0L).equals(0L);
-    }
-
-    private boolean isIntangibleAssetsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
-        return Optional.of(balanceSheet)
-                .map(BalanceSheet::getFixedAssets)
-                .map(FixedAssets::getIntangibleAssets)
-                .map(IntangibleAssets::getCurrentAmount)
                 .orElse(0L).equals(0L);
     }
 
