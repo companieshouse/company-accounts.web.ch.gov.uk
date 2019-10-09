@@ -94,6 +94,9 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private StocksService stocksService;
 
     @Autowired
+    private IntangibleAssetsNoteService intangibleAssetsNoteService;
+
+    @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @Autowired
@@ -377,6 +380,13 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             creditorsAfterOneYearService.deleteCreditorsAfterOneYear(transactionId, companyAccountsId);
         }
 
+        if ((isIntangibleAssetsCurrentAmountNullOrZero(balanceSheet)
+                && isIntangibleAssetsPreviousAmountNullOrZero(balanceSheet))
+                && smallFullLinks.getIntangibleAssetsNote() != null) {
+
+            intangibleAssetsNoteService.deleteIntangibleAssets(transactionId, companyAccountsId);
+        }
+
         if ((isTangibleAssetsCurrentAmountNullOrZero(balanceSheet)
                 && isTangibleAssetsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getTangibleAssetsNote() != null) {
@@ -458,6 +468,22 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .map(BalanceSheet::getOtherLiabilitiesOrAssets)
                 .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)
                 .map(CreditorsAfterOneYear::getPreviousAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isIntangibleAssetsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getIntangibleAssets)
+                .map(IntangibleAssets::getCurrentAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isIntangibleAssetsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getIntangibleAssets)
+                .map(IntangibleAssets::getPreviousAmount)
                 .orElse(0L).equals(0L);
     }
 

@@ -1,17 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -24,10 +12,29 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +56,12 @@ public class IntangibleAssetsNoteControllerTest {
 
     @Mock
     private List<ValidationError> validationErrors;
+
+    @Mock
+    private BalanceSheetService mockBalanceSheetService;
+
+    @InjectMocks
+    private IntangibleAssetsNoteController controller;
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -182,8 +195,85 @@ public class IntangibleAssetsNoteControllerTest {
     }
 
     @Test
-    @DisplayName("Will render")
-    void willRender() throws ServiceException {
-        assertFalse(intangibleAssetsNoteController.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    @DisplayName("Test will render with Intangible present on balancesheet")
+    void willRenderDebtorsPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertTrue(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will render with Intangible not present on balancesheet")
+    void willRenderDebtorsNotPresent() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoIntangibleAssets());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+
+    @Test
+    @DisplayName("Test will not render with 0 values in intangible on balance sheet")
+    void willNotRenderDebtorsZeroValues() throws Exception {
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
+
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertFalse(renderPage);
+    }
+    
+    private BalanceSheet getMockBalanceSheet() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        FixedAssets fixedAssets = new FixedAssets();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+
+        uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets intangibleAssets = new uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets();
+
+        intangibleAssets.setCurrentAmount(1L);
+        intangibleAssets.setPreviousAmount(1L);
+
+        fixedAssets.setIntangibleAssets(intangibleAssets);
+        balanceSheet.setFixedAssets(fixedAssets);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+        return balanceSheet;
+    }
+    private BalanceSheet getMockBalanceSheetNoIntangibleAssets() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        FixedAssets fixedAssets = new FixedAssets();
+
+        TangibleAssets tangibleAssets = new TangibleAssets();
+
+        tangibleAssets.setCurrentAmount(1L);
+        tangibleAssets.setPreviousAmount(1L);
+
+        fixedAssets.setTangibleAssets(tangibleAssets);
+        balanceSheet.setFixedAssets(fixedAssets);
+        return balanceSheet;
+    }
+
+    private BalanceSheet getMockBalanceSheetZeroValues() {
+        BalanceSheet balanceSheet = new BalanceSheet();
+        FixedAssets fixedAssets = new FixedAssets();
+        BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
+
+        uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets intangibleAssets = new uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets();
+
+        intangibleAssets.setCurrentAmount(0L);
+        intangibleAssets.setPreviousAmount(0L);
+
+        fixedAssets.setIntangibleAssets(intangibleAssets);
+        balanceSheet.setFixedAssets(fixedAssets);
+
+        balanceSheetHeadings.setCurrentPeriodHeading("currentBalanceSheetHeading");
+        balanceSheetHeadings.setPreviousPeriodHeading("previousBalanceSheetHeading");
+
+        balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
+        return balanceSheet;
     }
 }
