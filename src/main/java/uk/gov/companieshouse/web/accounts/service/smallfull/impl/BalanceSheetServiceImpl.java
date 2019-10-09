@@ -391,13 +391,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             tangibleAssetsNoteService.deleteTangibleAssets(transactionId, companyAccountsId);
         }
 
-        if ((isIntangibleAssetsCurrentAmountNullOrZero(balanceSheet)
-                && isIntangibleAssetsPreviousAmountNullOrZero(balanceSheet))
-                && smallFullLinks.getIntangibleAssetsNote() != null) {
-
-            intangibleAssetsNoteService.deleteIntangibleAssets(transactionId, companyAccountsId);
-        }
-
         if ((isFixedInvestmentsCurrentAmountNullOrZero(balanceSheet)
             && isFixedInvestmentsPreviousAmountNullOrZero(balanceSheet))
             && smallFullLinks.getFixedAssetsInvestmentsNote() != null) {
