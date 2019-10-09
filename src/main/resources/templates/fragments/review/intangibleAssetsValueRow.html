@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Intangible Assets Review Value Row</title>
+</head>
+<body>
+<div th:fragment="intangibleAssetsValueRow" class="app-check-your-answers__contents">
+    <dt class="app-check-your-answers__question" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : 'govuk-!-font-weight-regular'" th:text="${description}"></dt>
+
+    <dd class="app-check-your-answers__answer"
+        th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+        <span class="mobile-only-label">Goodwill:</span>
+        <span th:id="'review-' + ${identifier} + '-goodwill'"
+              th:text="${row?.goodwill != null ? '£' + #numbers.formatInteger(row.goodwill, 0, 'COMMA') : ''}">
+    </span>
+    </dd>
+    <dd class="app-check-your-answers__answer"
+        th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+        <span class="mobile-only-label">Other:</span>
+        <span th:id="'review-' + ${identifier} + '-other-intangible-assets'"
+              th:text="${row?.otherIntangibleAssets != null ? '£' + #numbers.formatInteger(row.otherIntangibleAssets, 0, 'COMMA') : ''}">
+    </span>
+    </dd>
+    <dd class="app-check-your-answers__answer"
+        th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+        <span class="mobile-only-label">Total:</span>
+        <span th:id="'review-' + ${identifier} + '-total'"
+              th:text="${row?.total != null ? '£' + #numbers.formatInteger(row.total, 0, 'COMMA') : ''}">
+    </span>
+    </dd>
+
+    <dd class="app-check-your-answers__change"></dd>
+</div>
+</body>
+</html>

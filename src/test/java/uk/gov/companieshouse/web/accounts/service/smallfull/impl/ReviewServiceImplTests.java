@@ -21,8 +21,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteron
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -31,9 +32,10 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
@@ -97,6 +99,9 @@ public class ReviewServiceImplTests {
 
     @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
+
+    @Mock
+    private IntangibleAssetsNoteService intangibleAssetsNoteService;
     
     @Mock
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
@@ -160,6 +165,10 @@ public class ReviewServiceImplTests {
         TangibleAssets mockTangibleAssets = new TangibleAssets();
         when(tangibleAssetsNoteService.getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
                 .thenReturn(mockTangibleAssets);
+
+        IntangibleAssets mockIntangibleAssets = new IntangibleAssets();
+        when(intangibleAssetsNoteService.getIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+                .thenReturn(mockIntangibleAssets);
         
         FixedAssetsInvestments mockFixedAssetsInvestments = new FixedAssetsInvestments();
         when(fixedAssetsInvestmentsService.getFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
@@ -183,6 +192,7 @@ public class ReviewServiceImplTests {
         assertEquals(mockCreditorsWithinOneYear, review.getCreditorsWithinOneYear());
         assertEquals(mockCreditorsAfterOneYear, review.getCreditorsAfterOneYear());
         assertEquals(mockTangibleAssets, review.getTangibleAssets());
+        assertEquals(mockIntangibleAssets, review.getIntangibleAssets());
         assertEquals(mockEmployees, review.getEmployees());
         assertEquals(mockDebtors, review.getDebtors());
         assertEquals(mockStocks, review.getStocks());

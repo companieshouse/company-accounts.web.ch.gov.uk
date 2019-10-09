@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -53,6 +52,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -469,14 +469,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .orElse(0L).equals(0L);
     }
 
-    private boolean isIntangibleAssetsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
-        return Optional.of(balanceSheet)
-                .map(BalanceSheet::getFixedAssets)
-                .map(FixedAssets::getIntangibleAssets)
-                .map(IntangibleAssets::getPreviousAmount)
-                .orElse(0L).equals(0L);
-    }
-
     private boolean isTangibleAssetsCurrentAmountNullOrZero(BalanceSheet balanceSheet) {
         return Optional.of(balanceSheet)
                 .map(BalanceSheet::getFixedAssets)
@@ -490,6 +482,14 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 .map(BalanceSheet::getFixedAssets)
                 .map(FixedAssets::getTangibleAssets)
                 .map(TangibleAssets::getPreviousAmount)
+                .orElse(0L).equals(0L);
+    }
+
+    private boolean isIntangibleAssetsPreviousAmountNullOrZero(BalanceSheet balanceSheet) {
+        return Optional.of(balanceSheet)
+                .map(BalanceSheet::getFixedAssets)
+                .map(FixedAssets::getIntangibleAssets)
+                .map(IntangibleAssets::getPreviousAmount)
                 .orElse(0L).equals(0L);
     }
 
