@@ -100,9 +100,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @Autowired
-    private IntangibleAssetsNoteService intangibleAssetsNoteService;
-
-    @Autowired
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Autowired
