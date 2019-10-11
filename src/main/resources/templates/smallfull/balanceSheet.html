@@ -27,18 +27,18 @@
                     <!-- Hidden input for form binding -->
                     <input th:field="*{lbg}" type="hidden">
 
-                    <div class="govuk-grid-row column-flex" id="accounts-header">
+                    <div class="govuk-grid-row" id="accounts-header">
                         <div class="govuk-grid-column-one-half">
                             &nbsp;
                         </div>
-                        <div class="govuk-grid-column-one-quarter column-flex">
+                        <div class="govuk-grid-column-one-quarter">
                             <h2 class="govuk-heading-s">
                                 <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'></span>
                                 <!-- Hidden input for form binding -->
                                 <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
                             </h2>
                         </div>
-                        <div class="govuk-grid-column-one-quarter column-flex">
+                        <div class="govuk-grid-column-one-quarter">
                             <h2 class="govuk-heading-s">
                                 <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'></span>
                                 <!-- Hidden input for form binding -->
