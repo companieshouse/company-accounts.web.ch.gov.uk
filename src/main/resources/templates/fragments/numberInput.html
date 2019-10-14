@@ -7,7 +7,7 @@
     <body>
         <div th:fragment="numberInput" class="govuk-form-group">
             <span th:if="${isEmployees != true}" class="currency-type cya-desktop-only">£</span>
-            <label th:for="${id}">
+            <label th:for="${id}" class="label-column-flex">
                 <span th:id="${id} + '-mobile-label'" th:text="${text}" class="mobile-only-label"></span>
                 <input th:field="*{__${id}__}"
                      th:id="${id}"
