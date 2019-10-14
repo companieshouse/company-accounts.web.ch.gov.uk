@@ -49,7 +49,7 @@
         <div class="govuk-grid-column-one-quarter">
           <div th:text="'Cost at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="cost.nextAccountsPeriodStartOn"></div>
         </div>
-        <div class="govuk-grid-column-one-quarter">
+        <div class="govuk-grid-column-one-quarter column-flex">
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.goodwill',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
@@ -58,7 +58,7 @@
 
           </div>
         </div>
-        <div class="govuk-grid-column-one-quarter">
+        <div class="govuk-grid-column-one-quarter column-flex">
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.otherIntangibleAssets',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
@@ -299,7 +299,7 @@
         <div class="govuk-grid-column-one-quarter">
           <div th:text="'Amortisation at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="amortisation.nextAccountsPeriodStartOn"></div>
         </div>
-        <div class="govuk-grid-column-one-quarter">
+        <div class="govuk-grid-column-one-quarter column-flex">
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.goodwill',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
@@ -308,7 +308,7 @@
 
           </div>
         </div>
-        <div class="govuk-grid-column-one-quarter">
+        <div class="govuk-grid-column-one-quarter column-flex">
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.otherIntangibleAssets',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
