@@ -233,7 +233,7 @@
                       )">
     </div>
 
-    <div class="govuk-grid-row accounts-total">
+    <div class="govuk-grid-row accounts-total column-flex">
       <div class="govuk-grid-column-one-quarter">
         <strong><div th:text="'Cost at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="cost.nextAccountsPeriodEndOn"></div></strong>
       </div>
@@ -317,7 +317,7 @@
           </div>
 
         </div>
-        <div class="govuk-grid-column-one-quarter accounts-total">
+        <div class="govuk-grid-column-one-quarter accounts-total column-flex">
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'amortisation.atPeriodStart.total',
                                   text = 'Amortisation at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
@@ -446,7 +446,7 @@
                       )">
     </div>
 
-    <div class="govuk-grid-row accounts-total">
+    <div class="govuk-grid-row accounts-total column-flex">
       <div class="govuk-grid-column-one-quarter">
         <strong><div th:text="'Amortisation at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="amortisation.nextAccountsPeriodEndOn"></div></strong>
       </div>
