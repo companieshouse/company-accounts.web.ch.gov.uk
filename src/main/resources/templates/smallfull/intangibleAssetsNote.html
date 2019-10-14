@@ -505,7 +505,7 @@
                       )">
     </div>
 
-    <div class="govuk-grid-row accounts-total">
+    <div class="govuk-grid-row accounts-total column-flex">
       <div class="govuk-grid-column-one-quarter">
         <strong><div th:text="'Net book value at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.nextAccountsPeriodEndOn"></div></strong>
       </div>
@@ -547,7 +547,7 @@
                       )">
     </div>
 
-    <div class="govuk-grid-row accounts-total">
+    <div class="govuk-grid-row accounts-total column-flex">
       <div class="govuk-grid-column-one-quarter">
         <strong><div th:text="'Net book value at ' +${#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')}" id="netBookValue.lastAccountsPeriodEndOn"></div></strong>
       </div>
