@@ -67,7 +67,7 @@
           </div>
 
         </div>
-        <div class="govuk-grid-column-one-quarter accounts-total">
+        <div class="govuk-grid-column-one-quarter accounts-total column-flex">
           <div th:replace="fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.total',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
