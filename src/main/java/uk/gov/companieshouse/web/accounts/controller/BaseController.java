@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +12,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -89,6 +90,7 @@ public abstract class BaseController {
 
     /**
      * Retrieve the client's {@link CompanyAccountsDataState} from the request session
+     *
      * @param request The request
      * @return the client's {@link CompanyAccountsDataState}
      */
@@ -100,11 +102,32 @@ public abstract class BaseController {
 
     /**
      * Update the client's {@link CompanyAccountsDataState} on the request session
-     * @param request The request
+     *
+     * @param request                  The request
      * @param companyAccountsDataState The client's {@link CompanyAccountsDataState}
      */
     protected void updateStateOnRequest(HttpServletRequest request, CompanyAccountsDataState companyAccountsDataState) {
 
         request.getSession().setAttribute(COMPANY_ACCOUNTS_DATA_STATE, companyAccountsDataState);
+    }
+
+    @ModelAttribute("metadata")
+    public String addMetadata(HttpServletRequest request) {
+
+        String metadata = "";
+        if (isCic(request)) {
+            metadata += "cic";
+        }
+
+        return metadata;
+    }
+
+    private boolean isCic(HttpServletRequest request) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+
+        String url = request.getRequestURL().toString();
+
+        return url.contains("cic") || (companyAccountsDataState != null && BooleanUtils.isTrue(companyAccountsDataState.getIsCic()));
     }
 }

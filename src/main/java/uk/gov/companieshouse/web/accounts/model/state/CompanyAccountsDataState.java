@@ -19,6 +19,9 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonProperty("has_selected_employees_note")
     private Boolean hasSelectedEmployeesNote;
 
+    @JsonProperty("is_cic")
+    private Boolean isCic;
+
     @JsonProperty("created")
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -47,6 +50,14 @@ public class CompanyAccountsDataState implements Serializable {
 
     public void setHasSelectedEmployeesNote(Boolean hasSelectedEmployeesNote) {
         this.hasSelectedEmployeesNote = hasSelectedEmployeesNote;
+    }
+
+    public Boolean getIsCic() {
+        return isCic;
+    }
+
+    public void setIsCic(Boolean isCic) {
+        this.isCic = isCic;
     }
 
     public LocalDateTime getCreated() {

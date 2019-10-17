@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +14,13 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CompanyActivitiesAndImpactService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @NextController(ConsultationWithStakeholdersSelectionController.class)
@@ -77,6 +79,14 @@ public class CompanyActivitiesAndImpactController extends BaseController {
             return ERROR_VIEW;
         }
 
+        cacheIsCicCompany(request);
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+    }
+
+    private void  cacheIsCicCompany(HttpServletRequest request) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.setIsCic(true);
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 }
