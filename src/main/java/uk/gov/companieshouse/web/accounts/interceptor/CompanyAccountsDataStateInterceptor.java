@@ -1,13 +1,6 @@
 package uk.gov.companieshouse.web.accounts.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.security.SignatureException;
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
@@ -19,6 +12,14 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataStates;
 import uk.gov.companieshouse.web.accounts.token.TokenManager;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.security.SignatureException;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapter {
 
@@ -28,7 +29,7 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
 
     private static final Pattern COMPANY_ACCOUNTS_REGEX = Pattern.compile("/company-accounts/([^/]*)");
 
-    private static final Pattern APPROVAL_REGEX = Pattern.compile("/approval$");
+    private static final Pattern SMALL_FULL_APPROVAL_REGEX = Pattern.compile("/small-full/approval$");
 
     //Used to expire the cookie 10 years in the future, therefore it's "never expiring"
     private static final Integer COOKIE_EXPIRY = 60 * 60 * 24 * 365 * 10;
@@ -111,7 +112,7 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
             // Get the state from the request session
             CompanyAccountsDataState companyAccountsDataState = (CompanyAccountsDataState) request.getSession().getAttribute(STATE_REQUEST_ATTRIBUTE);
 
-            if (isApprovalSubmission(request)) {
+            if (isAccountsApprovalSubmission(request)) {
                 // Remove the state for this company accounts id - it's not needed any more
                 companyAccountsDataStates.getCompanyAccountsDataStateMap().remove(companyAccountsId);
             } else {
@@ -167,9 +168,9 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
         return null;
     }
 
-    private boolean isApprovalSubmission(HttpServletRequest request) {
+    private boolean isAccountsApprovalSubmission(HttpServletRequest request) {
 
-        Matcher matcher = APPROVAL_REGEX.matcher(request.getRequestURI());
+        Matcher matcher = SMALL_FULL_APPROVAL_REGEX.matcher(request.getRequestURI());
         return matcher.find() && request.getMethod().equalsIgnoreCase("POST");
     }
 
