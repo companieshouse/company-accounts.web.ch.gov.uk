@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tangible assets note</title>
-  <div id="templateName" th:attr="data-id=${templateName}" hidden></div>
+  <div id="templateName" th:attr="data-id=${templateName},data-metadata=${metadata}" hidden></div>
 
   <link
       th:href="@{{cdnUrl}/stylesheets/chs-styles.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
