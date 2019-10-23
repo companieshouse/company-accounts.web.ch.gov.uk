@@ -96,8 +96,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     private String getPreviousPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
 
-        LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
         if (isMultiYearFiler(companyProfile)) {
+            LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
             LocalDate previousPeriodStartOn = lastAccountsApi.getPeriodStartOn();
             LocalDate previousPeriodEndOn = lastAccountsApi.getPeriodEndOn();
 
