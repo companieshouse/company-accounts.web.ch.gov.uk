@@ -51,21 +51,21 @@ public class GrossProfitAndLossTransformer {
             if (previousPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover() != null) {
 
                 Turnover turnover = createTurnover(profitAndLoss);
-                turnover.setCurrentAmount(
+                turnover.setPreviousAmount(
                         previousPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover());
             }
 
             if (previousPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales() != null) {
 
                 CostOfSales costOfSales = createCostOfSales(profitAndLoss);
-                costOfSales.setCurrentAmount(
+                costOfSales.setPreviousAmount(
                         previousPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales());
             }
 
             if (previousPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal() != null) {
 
                 GrossTotal grossTotal = createGrossTotal(profitAndLoss);
-                grossTotal.setCurrentAmount(
+                grossTotal.setPreviousAmount(
                         previousPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal());
             }
         }
