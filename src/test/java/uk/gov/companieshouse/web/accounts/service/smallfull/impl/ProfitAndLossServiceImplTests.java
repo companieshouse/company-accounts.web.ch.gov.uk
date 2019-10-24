@@ -1,12 +1,15 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,17 +19,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.error.ApiError;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiodprofitandloss.CurrentPeriodProfitAndLossResourceHandler;
+import uk.gov.companieshouse.api.handler.smallfull.currentperiodprofitandloss.request.CurrentPeriodProfitAndLossCreate;
 import uk.gov.companieshouse.api.handler.smallfull.currentperiodprofitandloss.request.CurrentPeriodProfitAndLossGet;
+import uk.gov.companieshouse.api.handler.smallfull.currentperiodprofitandloss.request.CurrentPeriodProfitAndLossUpdate;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiodprofitandloss.PreviousPeriodProfitAndLossResourceHandler;
+import uk.gov.companieshouse.api.handler.smallfull.previousperiodprofitandloss.request.PreviousPeriodProfitAndLossCreate;
 import uk.gov.companieshouse.api.handler.smallfull.previousperiodprofitandloss.request.PreviousPeriodProfitAndLossGet;
+import uk.gov.companieshouse.api.handler.smallfull.previousperiodprofitandloss.request.PreviousPeriodProfitAndLossUpdate;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -37,6 +47,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.ProfitAndLossTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +70,16 @@ public class ProfitAndLossServiceImplTests {
     private CurrentPeriodProfitAndLossGet currentPeriodProfitAndLossGet;
 
     @Mock
+    private CurrentPeriodProfitAndLossCreate currentPeriodProfitAndLossCreate;
+
+    @Mock
+    private CurrentPeriodProfitAndLossUpdate currentPeriodProfitAndLossUpdate;
+
+    @Mock
     private ApiResponse<ProfitAndLossApi> currentPeriodApiResponseWithData;
+
+    @Mock
+    private ApiResponse<Void> currentPeriodApiResponseNoData;
 
     @Mock
     private PreviousPeriodProfitAndLossResourceHandler previousPeriodProfitAndLossResourceHandler;
@@ -68,7 +88,16 @@ public class ProfitAndLossServiceImplTests {
     private PreviousPeriodProfitAndLossGet previousPeriodProfitAndLossGet;
 
     @Mock
+    private PreviousPeriodProfitAndLossCreate previousPeriodProfitAndLossCreate;
+
+    @Mock
+    private PreviousPeriodProfitAndLossUpdate previousPeriodProfitAndLossUpdate;
+
+    @Mock
     private ApiResponse<ProfitAndLossApi> previousPeriodApiResponseWithData;
+
+    @Mock
+    private ApiResponse<Void> previousPeriodApiResponseNoData;
 
     @Mock
     private CompanyService companyService;
@@ -89,7 +118,13 @@ public class ProfitAndLossServiceImplTests {
     private CurrentPeriodApi currentPeriod;
 
     @Mock
+    private CurrentPeriodLinks currentPeriodLinks;
+
+    @Mock
     private PreviousPeriodApi previousPeriod;
+
+    @Mock
+    private PreviousPeriodLinks previousPeriodLinks;
 
     @Mock
     private BalanceSheetHeadings balanceSheetHeadings;
@@ -99,6 +134,9 @@ public class ProfitAndLossServiceImplTests {
 
     @Mock
     private ProfitAndLossApi previousPeriodProfitAndLoss;
+
+    @Mock
+    private List<ApiError> apiErrors;
 
     @Mock
     private ProfitAndLossTransformer profitAndLossTransformer;
@@ -114,6 +152,9 @@ public class ProfitAndLossServiceImplTests {
 
     @Mock
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Mock
+    private ValidationContext validationContext;
 
     @InjectMocks
     private ProfitAndLossService profitAndLossService = new ProfitAndLossServiceImpl();
@@ -134,6 +175,9 @@ public class ProfitAndLossServiceImplTests {
 
     private static final String CURRENT_PERIOD_RESOURCE = "current period profit and loss";
     private static final String PREVIOUS_PERIOD_RESOURCE = "previous period profit and loss";
+
+    private static final String CURRENT_PERIOD_PROFIT_AND_LOSS_LINK = "currentPeriodProfitAndLossLink";
+    private static final String PREVIOUS_PERIOD_PROFIT_AND_LOSS_LINK = "previousPeriodProfitAndLossLink";
 
     @BeforeEach
     private void init() {
@@ -268,5 +312,299 @@ public class ProfitAndLossServiceImplTests {
 
         assertThrows(ServiceException.class, () ->
                 profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER));
+    }
+
+    @Test
+    @DisplayName("Create profit and loss - single year filer - success")
+    void createProfitAndLossSingleYearFilerSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(currentPeriodProfitAndLoss);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(currentPeriod.getLinks()).thenReturn(currentPeriodLinks);
+
+        when(currentPeriodLinks.getProfitAndLoss()).thenReturn(null);
+
+        when(smallFullResourceHandler.currentPeriodProfitAndLoss())
+                .thenReturn(currentPeriodProfitAndLossResourceHandler);
+
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+                .thenReturn(currentPeriodProfitAndLossCreate);
+
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+
+        when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(false);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(false);
+
+        assertEquals(0,
+                profitAndLossService
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
+                                .size());
+    }
+
+    @Test
+    @DisplayName("Create profit and loss - multi year filer - success")
+    void createProfitAndLossMultiYearFilerSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(currentPeriodProfitAndLoss);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(currentPeriod.getLinks()).thenReturn(currentPeriodLinks);
+
+        when(currentPeriodLinks.getProfitAndLoss()).thenReturn(null);
+
+        when(smallFullResourceHandler.currentPeriodProfitAndLoss())
+                .thenReturn(currentPeriodProfitAndLossResourceHandler);
+
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+                .thenReturn(currentPeriodProfitAndLossCreate);
+
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+
+        when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(false);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
+
+        when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(previousPeriodProfitAndLoss);
+
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(previousPeriod);
+
+        when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
+
+        when(previousPeriodLinks.getProfitAndLoss()).thenReturn(null);
+
+        when(smallFullResourceHandler.previousPeriodProfitAndLoss())
+                .thenReturn(previousPeriodProfitAndLossResourceHandler);
+
+        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+                .thenReturn(previousPeriodProfitAndLossCreate);
+
+        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(previousPeriodApiResponseWithData);
+
+        when(previousPeriodApiResponseWithData.hasErrors()).thenReturn(false);
+
+        assertEquals(0,
+                profitAndLossService
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
+                                .size());
+    }
+
+    @Test
+    @DisplayName("Update profit and loss - single year filer - success")
+    void updateProfitAndLossSingleYearFilerSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(currentPeriodProfitAndLoss);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(currentPeriod.getLinks()).thenReturn(currentPeriodLinks);
+
+        when(currentPeriodLinks.getProfitAndLoss()).thenReturn(CURRENT_PERIOD_PROFIT_AND_LOSS_LINK);
+
+        when(smallFullResourceHandler.currentPeriodProfitAndLoss())
+                .thenReturn(currentPeriodProfitAndLossResourceHandler);
+
+        when(currentPeriodProfitAndLossResourceHandler.update(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+                .thenReturn(currentPeriodProfitAndLossUpdate);
+
+        when(currentPeriodProfitAndLossUpdate.execute()).thenReturn(currentPeriodApiResponseNoData);
+
+        when(currentPeriodApiResponseNoData.hasErrors()).thenReturn(false);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(false);
+
+        assertEquals(0,
+                profitAndLossService
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
+                                .size());
+    }
+
+    @Test
+    @DisplayName("Update profit and loss - multi year filer - success")
+    void updateProfitAndLossMultiYearFilerSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(currentPeriodProfitAndLoss);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(currentPeriod.getLinks()).thenReturn(currentPeriodLinks);
+
+        when(currentPeriodLinks.getProfitAndLoss()).thenReturn(CURRENT_PERIOD_PROFIT_AND_LOSS_LINK);
+
+        when(smallFullResourceHandler.currentPeriodProfitAndLoss())
+                .thenReturn(currentPeriodProfitAndLossResourceHandler);
+
+        when(currentPeriodProfitAndLossResourceHandler.update(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+                .thenReturn(currentPeriodProfitAndLossUpdate);
+
+        when(currentPeriodProfitAndLossUpdate.execute()).thenReturn(currentPeriodApiResponseNoData);
+
+        when(currentPeriodApiResponseNoData.hasErrors()).thenReturn(false);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
+
+        when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(previousPeriodProfitAndLoss);
+
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(previousPeriod);
+
+        when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
+
+        when(previousPeriodLinks.getProfitAndLoss()).thenReturn(PREVIOUS_PERIOD_PROFIT_AND_LOSS_LINK);
+
+        when(smallFullResourceHandler.previousPeriodProfitAndLoss())
+                .thenReturn(previousPeriodProfitAndLossResourceHandler);
+
+        when(previousPeriodProfitAndLossResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+                .thenReturn(previousPeriodProfitAndLossUpdate);
+
+        when(previousPeriodProfitAndLossUpdate.execute()).thenReturn(previousPeriodApiResponseNoData);
+
+        when(previousPeriodApiResponseNoData.hasErrors()).thenReturn(false);
+
+        assertEquals(0,
+                profitAndLossService
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
+                                .size());
+    }
+
+    @Test
+    @DisplayName("Create profit and loss - multi year filer - current period validation errors")
+    void createProfitAndLossMultiYearFilerCurrentPeriodValidationErrors()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(currentPeriodProfitAndLoss);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(currentPeriod.getLinks()).thenReturn(currentPeriodLinks);
+
+        when(currentPeriodLinks.getProfitAndLoss()).thenReturn(null);
+
+        when(smallFullResourceHandler.currentPeriodProfitAndLoss())
+                .thenReturn(currentPeriodProfitAndLossResourceHandler);
+
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+                .thenReturn(currentPeriodProfitAndLossCreate);
+
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+
+        when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(true);
+
+        when(currentPeriodApiResponseWithData.getErrors()).thenReturn(apiErrors);
+
+        when(validationContext.getValidationErrors(apiErrors)).thenReturn(new ArrayList<>());
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
+
+        when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(previousPeriodProfitAndLoss);
+
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(previousPeriod);
+
+        when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
+
+        when(previousPeriodLinks.getProfitAndLoss()).thenReturn(null);
+
+        when(smallFullResourceHandler.previousPeriodProfitAndLoss())
+                .thenReturn(previousPeriodProfitAndLossResourceHandler);
+
+        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+                .thenReturn(previousPeriodProfitAndLossCreate);
+
+        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(previousPeriodApiResponseWithData);
+
+        when(previousPeriodApiResponseWithData.hasErrors()).thenReturn(false);
+
+        assertNotNull(profitAndLossService
+                .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss));
+    }
+
+    @Test
+    @DisplayName("Create profit and loss - multi year filer - previous period validation errors")
+    void createProfitAndLossMultiYearFilerPreviousPeriodValidationErrors()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(currentPeriodProfitAndLoss);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(currentPeriod.getLinks()).thenReturn(currentPeriodLinks);
+
+        when(currentPeriodLinks.getProfitAndLoss()).thenReturn(null);
+
+        when(smallFullResourceHandler.currentPeriodProfitAndLoss())
+                .thenReturn(currentPeriodProfitAndLossResourceHandler);
+
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+                .thenReturn(currentPeriodProfitAndLossCreate);
+
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+
+        when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(false);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
+
+        when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
+                .thenReturn(previousPeriodProfitAndLoss);
+
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(previousPeriod);
+
+        when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
+
+        when(previousPeriodLinks.getProfitAndLoss()).thenReturn(null);
+
+        when(smallFullResourceHandler.previousPeriodProfitAndLoss())
+                .thenReturn(previousPeriodProfitAndLossResourceHandler);
+
+        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+                .thenReturn(previousPeriodProfitAndLossCreate);
+
+        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(previousPeriodApiResponseWithData);
+
+        when(previousPeriodApiResponseWithData.hasErrors()).thenReturn(true);
+
+        when(previousPeriodApiResponseWithData.getErrors()).thenReturn(apiErrors);
+
+        when(validationContext.getValidationErrors(apiErrors)).thenReturn(new ArrayList<>());
+
+        assertNotNull(profitAndLossService
+                .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss));
     }
 }
