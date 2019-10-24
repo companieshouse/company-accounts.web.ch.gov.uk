@@ -69,7 +69,7 @@ public class CompanyServiceImpl implements CompanyService {
                 .map(CompanyProfileApi::getAccounts)
                 .map(CompanyAccountApi::getLastAccounts)
                 .map(LastAccountsApi::getPeriodEndOn)
-                .orElse(null) != null;
+                .isPresent();
     }
 
     @Override
