@@ -12,4 +12,7 @@ public interface ProfitAndLossService {
 
     List<ValidationError> submitProfitAndLoss(String transactionId, String companyAccountsId, String companyNumber, ProfitAndLoss profitAndLoss)
             throws ServiceException;
+
+    void deleteProfitAndLoss(String transactionId, String companyAccountsId, String companyNumber)
+            throws ServiceException;
 }

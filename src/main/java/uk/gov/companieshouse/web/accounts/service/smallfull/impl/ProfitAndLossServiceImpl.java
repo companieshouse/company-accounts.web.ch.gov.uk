@@ -114,6 +114,45 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
         return validationErrors;
     }
 
+    @Override
+    public void deleteProfitAndLoss(String transactionId, String companyAccountsId,
+            String companyNumber) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        if (StringUtils.isNotBlank(
+                currentPeriodService.getCurrentPeriod(
+                        apiClient, transactionId, companyAccountsId).getLinks()
+                                .getProfitAndLoss())) {
+
+            try {
+                apiClient.smallFull().currentPeriodProfitAndLoss()
+                        .delete(CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId)
+                                .toString()).execute();
+            } catch (ApiErrorResponseException e) {
+                serviceExceptionHandler.handleDeletionException(e, CURRENT_PERIOD_RESOURCE);
+            } catch (URIValidationException e) {
+                serviceExceptionHandler.handleURIValidationException(e, CURRENT_PERIOD_RESOURCE);
+            }
+        }
+
+        if (StringUtils.isNotBlank(
+                previousPeriodService.getPreviousPeriod(
+                        apiClient, transactionId, companyAccountsId).getLinks()
+                                .getProfitAndLoss())){
+
+            try {
+                apiClient.smallFull().previousPeriodProfitAndLoss()
+                        .delete(PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId)
+                                .toString()).execute();
+            } catch (ApiErrorResponseException e) {
+                serviceExceptionHandler.handleDeletionException(e, PREVIOUS_PERIOD_RESOURCE);
+            } catch (URIValidationException e) {
+                serviceExceptionHandler.handleURIValidationException(e, PREVIOUS_PERIOD_RESOURCE);
+            }
+        }
+    }
+
     private ProfitAndLossApi getProfitAndLoss(ApiClient apiClient,
                                               String transactionId,
                                               String companyAccountsId,

@@ -23,7 +23,7 @@ import java.util.List;
 
 @Controller
 @NextController(StatementsController.class)
-@PreviousController(StepsToCompleteController.class)
+@PreviousController(ProfitAndLossController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController extends BaseController {
 
@@ -41,6 +41,8 @@ public class BalanceSheetController extends BaseController {
                                   @PathVariable String companyAccountsId,
                                   Model model,
                                   HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
@@ -61,6 +63,8 @@ public class BalanceSheetController extends BaseController {
                                    BindingResult bindingResult,
                                    Model model,
                                    HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
