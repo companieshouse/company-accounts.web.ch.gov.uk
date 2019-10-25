@@ -30,6 +30,8 @@ public class BalanceSheetController extends BaseController {
     @Autowired
     private BalanceSheetService balanceSheetService;
 
+    private static final String BALANCE_SHEET = "balanceSheet";
+
     @Override
     protected String getTemplateName() {
         return "smallfull/balanceSheet";
@@ -45,7 +47,7 @@ public class BalanceSheetController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
+            model.addAttribute(BALANCE_SHEET, balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -59,7 +61,7 @@ public class BalanceSheetController extends BaseController {
     public String postBalanceSheet(@PathVariable String companyNumber,
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
-                                   @ModelAttribute("balanceSheet") @Valid BalanceSheet balanceSheet,
+                                   @ModelAttribute(BALANCE_SHEET) @Valid BalanceSheet balanceSheet,
                                    BindingResult bindingResult,
                                    Model model,
                                    HttpServletRequest request) {
