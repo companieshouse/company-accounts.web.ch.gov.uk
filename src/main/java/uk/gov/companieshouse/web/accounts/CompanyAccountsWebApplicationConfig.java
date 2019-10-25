@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
+import uk.gov.companieshouse.accountsdates.impl.AccountsDatesHelperImpl;
 import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.environment.impl.EnvironmentReaderImpl;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
@@ -24,8 +26,15 @@ public class CompanyAccountsWebApplicationConfig {
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public EnvironmentReader creatEnvironmentReader() {
+    public EnvironmentReader createEnvironmentReader() {
 
         return new EnvironmentReaderImpl();
+    }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public AccountsDatesHelper createAccountsDatesHelper() {
+
+        return new AccountsDatesHelperImpl();
     }
 }
