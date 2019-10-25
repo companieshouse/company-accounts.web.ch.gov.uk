@@ -116,7 +116,7 @@
                         <div class="govuk-grid-column-one-quarter column-flex">
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.grossTotal.currentAmount',
-                                text = 'Gross total current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                text = 'Gross profit (or loss) current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class = 'govuk-input current',
                                 )">
                             </div>
@@ -124,7 +124,7 @@
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.grossTotal.previousAmount',
-                                text = 'Gross total previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                text = 'Gross profit (or loss) previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous',
                                 )">
                             </div>
