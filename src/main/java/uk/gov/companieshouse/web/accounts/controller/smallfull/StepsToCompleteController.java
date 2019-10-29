@@ -22,6 +22,7 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.cic.AccountStartController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
@@ -105,12 +106,22 @@ public class StepsToCompleteController extends BaseController {
                 companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID);
             }
 
-            smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
-            statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
+            ApiClient apiClient = apiClientService.getApiClient();
+
+            SmallFullApi smallFull = smallFullService.getSmallFullAccounts(apiClient, transactionID, companyAccountsID);
+            if (smallFull == null) {
+                smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
+            }
+
+            Statements statements = statementsService.getBalanceSheetStatements(transactionID, companyAccountsID);
+            if (statements == null) {
+                statementsService
+                        .createBalanceSheetStatementsResource(transactionID, companyAccountsID);
+            }
 
             transactionService.updateResumeLink(transactionID, RESUME_URI.expand(companyNumber, transactionID, companyAccountsID).toString());
 
-            createEmptyPeriods(companyNumber, transactionID, companyAccountsID);
+            createEmptyPeriods(apiClient, smallFull, companyNumber, transactionID, companyAccountsID);
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
         } catch (ServiceException e) {
@@ -120,22 +131,24 @@ public class StepsToCompleteController extends BaseController {
         }
     }
 
-    private void createEmptyPeriods(String companyNumber, String transactionId, String companyAccountsId)
+    private void createEmptyPeriods(ApiClient apiClient, SmallFullApi smallFull, String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        ApiClient apiClient = apiClientService.getApiClient();
+        if (currentPeriodService.getCurrentPeriod(apiClient, transactionId, companyAccountsId) == null) {
 
-        SmallFullApi smallFull = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
-
-        currentPeriodService
-                .submitCurrentPeriod(apiClient, smallFull, transactionId, companyAccountsId,
-                        new CurrentPeriodApi(), new ArrayList<>());
+            currentPeriodService
+                    .submitCurrentPeriod(apiClient, smallFull, transactionId, companyAccountsId,
+                            new CurrentPeriodApi(), new ArrayList<>());
+        }
 
         CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
-        if (companyService.isMultiYearFiler(companyProfile)) {
+        if (companyService.isMultiYearFiler(companyProfile) &&
+            previousPeriodService.getPreviousPeriod(apiClient, transactionId, companyAccountsId) == null) {
+
             previousPeriodService
-                    .submitPreviousPeriod(apiClient, smallFull, transactionId, companyAccountsId,
-                            new PreviousPeriodApi(), new ArrayList<>());
+                    .submitPreviousPeriod(apiClient, smallFull, transactionId,
+                            companyAccountsId,
+                                    new PreviousPeriodApi(), new ArrayList<>());
         }
     }
 }
