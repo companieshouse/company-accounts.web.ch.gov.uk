@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.cic.AccountStartController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -39,6 +42,9 @@ public class StepsToCompleteController extends BaseController {
 
     @Autowired
     private StatementsService statementsService;
+
+    @Autowired
+    private ApiClientService apiClientService;
 
     @Override
     protected String getTemplateName() {
@@ -83,8 +89,16 @@ public class StepsToCompleteController extends BaseController {
                 companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID);
             }
 
-            smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
-            statementsService.createBalanceSheetStatementsResource(transactionID, companyAccountsID);
+            SmallFullApi smallFull = smallFullService.getSmallFullAccounts(apiClientService.getApiClient(), transactionID, companyAccountsID);
+            if (smallFull == null) {
+                smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
+            }
+
+            Statements statements = statementsService.getBalanceSheetStatements(transactionID, companyAccountsID);
+            if (statements == null) {
+                statementsService
+                        .createBalanceSheetStatementsResource(transactionID, companyAccountsID);
+            }
 
             transactionService.updateResumeLink(transactionID, RESUME_URI.expand(companyNumber, transactionID, companyAccountsID).toString());
 

@@ -54,6 +54,9 @@ public class SmallFullServiceImpl implements SmallFullService {
             return apiClient.smallFull().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
 
+            if (e.getStatusCode() == 404) {
+                return null;
+            }
             throw new ServiceException("Error retrieving small full accounts", e);
         } catch (URIValidationException e) {
 
