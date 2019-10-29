@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -73,6 +74,12 @@ public class BalanceSheetServiceImplTests {
 
     @Mock
     private PreviousPeriodApi previousPeriod;
+
+    @Mock
+    private BalanceSheetApi currentPeriodBalanceSheet;
+
+    @Mock
+    private BalanceSheetApi previousPeriodBalanceSheet;
 
     @Mock
     private BalanceSheet balanceSheet;
@@ -245,7 +252,10 @@ public class BalanceSheetServiceImplTests {
 
         when(companyService.isMultiYearFiler(companyProfile)).thenReturn(false);
 
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
@@ -253,7 +263,49 @@ public class BalanceSheetServiceImplTests {
                 balanceSheetService
                         .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
 
-        verify(transformer, never()).getPreviousPeriod(balanceSheet);
+        verify(previousPeriodService, never()).getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(transformer, never()).getPreviousPeriodBalanceSheet(balanceSheet);
+
+        verify(previousPeriodService, never())
+                .submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
+                        eq(COMPANY_ACCOUNTS_ID), any(PreviousPeriodApi.class), anyList());
+
+        verify(currentPeriod).setBalanceSheet(currentPeriodBalanceSheet);
+
+        verify(currentPeriodService)
+                .submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
+                        eq(COMPANY_ACCOUNTS_ID), eq(currentPeriod), anyList());
+    }
+
+    @Test
+    @DisplayName("Submit balance sheet - single year filer - not found")
+    void submitBalanceSheetSingleYearFilerNotFound() throws ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFull);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER))
+                .thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(false);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(null);
+
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
+
+        when(smallFull.getLinks()).thenReturn(smallFullLinks);
+
+        assertNotNull(
+                balanceSheetService
+                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
+
+        verify(previousPeriodService, never()).getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(transformer, never()).getPreviousPeriodBalanceSheet(balanceSheet);
 
         verify(previousPeriodService, never())
                 .submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
@@ -261,7 +313,7 @@ public class BalanceSheetServiceImplTests {
 
         verify(currentPeriodService)
                 .submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
-                        eq(COMPANY_ACCOUNTS_ID), eq(currentPeriod), anyList());
+                        eq(COMPANY_ACCOUNTS_ID), any(CurrentPeriodApi.class), anyList());
     }
 
     @Test
@@ -278,9 +330,58 @@ public class BalanceSheetServiceImplTests {
 
         when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
 
-        when(transformer.getPreviousPeriod(balanceSheet)).thenReturn(previousPeriod);
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(previousPeriod);
 
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(previousPeriodBalanceSheet);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
+
+        when(smallFull.getLinks()).thenReturn(smallFullLinks);
+
+        assertNotNull(
+                balanceSheetService
+                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
+
+        verify(previousPeriod).setBalanceSheet(previousPeriodBalanceSheet);
+
+        verify(previousPeriodService)
+                .submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
+                        eq(COMPANY_ACCOUNTS_ID), eq(previousPeriod), anyList());
+
+        verify(currentPeriod).setBalanceSheet(currentPeriodBalanceSheet);
+
+        verify(currentPeriodService)
+                .submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
+                        eq(COMPANY_ACCOUNTS_ID), eq(currentPeriod), anyList());
+    }
+
+    @Test
+    @DisplayName("Submit balance sheet - multi year filer - not found")
+    void submitBalanceSheetMultiYearFilerNotFound() throws ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFull);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER))
+                .thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
+
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(null);
+
+        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(previousPeriodBalanceSheet);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(null);
+
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
@@ -290,11 +391,11 @@ public class BalanceSheetServiceImplTests {
 
         verify(previousPeriodService)
                 .submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
-                        eq(COMPANY_ACCOUNTS_ID), eq(previousPeriod), anyList());
+                        eq(COMPANY_ACCOUNTS_ID), any(PreviousPeriodApi.class), anyList());
 
         verify(currentPeriodService)
                 .submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
-                        eq(COMPANY_ACCOUNTS_ID), eq(currentPeriod), anyList());
+                        eq(COMPANY_ACCOUNTS_ID), any(CurrentPeriodApi.class), anyList());
     }
 
     @Test
@@ -311,9 +412,15 @@ public class BalanceSheetServiceImplTests {
 
         when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
 
-        when(transformer.getPreviousPeriod(balanceSheet)).thenReturn(previousPeriod);
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(previousPeriod);
 
-        when(transformer.getCurrentPeriod(balanceSheet)).thenReturn(currentPeriod);
+        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(previousPeriodBalanceSheet);
+
+        when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(currentPeriod);
+
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
@@ -323,9 +430,13 @@ public class BalanceSheetServiceImplTests {
                 balanceSheetService
                         .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
 
+        verify(previousPeriod).setBalanceSheet(previousPeriodBalanceSheet);
+
         verify(previousPeriodService)
                 .submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
                         eq(COMPANY_ACCOUNTS_ID), eq(previousPeriod), anyList());
+
+        verify(currentPeriod).setBalanceSheet(currentPeriodBalanceSheet);
 
         verify(currentPeriodService)
                 .submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),

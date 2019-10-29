@@ -19,6 +19,9 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonProperty("has_selected_employees_note")
     private Boolean hasSelectedEmployeesNote;
 
+    @JsonProperty("has_included_profit_and_loss")
+    private Boolean hasIncludedProfitAndLoss;
+
     @JsonProperty("is_cic")
     private Boolean isCic;
 
@@ -50,6 +53,14 @@ public class CompanyAccountsDataState implements Serializable {
 
     public void setHasSelectedEmployeesNote(Boolean hasSelectedEmployeesNote) {
         this.hasSelectedEmployeesNote = hasSelectedEmployeesNote;
+    }
+
+    public Boolean getHasIncludedProfitAndLoss() {
+        return hasIncludedProfitAndLoss;
+    }
+
+    public void setHasIncludedProfitAndLoss(Boolean hasIncludedProfitAndLoss) {
+        this.hasIncludedProfitAndLoss = hasIncludedProfitAndLoss;
     }
 
     public Boolean getIsCic() {

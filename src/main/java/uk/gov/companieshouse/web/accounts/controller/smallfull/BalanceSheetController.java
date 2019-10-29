@@ -23,12 +23,14 @@ import java.util.List;
 
 @Controller
 @NextController(StatementsController.class)
-@PreviousController(StepsToCompleteController.class)
+@PreviousController(ProfitAndLossController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController extends BaseController {
 
     @Autowired
     private BalanceSheetService balanceSheetService;
+
+    private static final String BALANCE_SHEET = "balanceSheet";
 
     @Override
     protected String getTemplateName() {
@@ -42,8 +44,10 @@ public class BalanceSheetController extends BaseController {
                                   Model model,
                                   HttpServletRequest request) {
 
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
         try {
-            model.addAttribute("balanceSheet", balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
+            model.addAttribute(BALANCE_SHEET, balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -57,10 +61,12 @@ public class BalanceSheetController extends BaseController {
     public String postBalanceSheet(@PathVariable String companyNumber,
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
-                                   @ModelAttribute("balanceSheet") @Valid BalanceSheet balanceSheet,
+                                   @ModelAttribute(BALANCE_SHEET) @Valid BalanceSheet balanceSheet,
                                    BindingResult bindingResult,
                                    Model model,
                                    HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,19 +14,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
+import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
+@PreviousController(ProfitAndLossQuestionController.class)
 @NextController(BalanceSheetController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/profit-and-loss")
-public class ProfitAndLossController extends BaseController {
+public class ProfitAndLossController extends BaseController implements ConditionalController {
 
     @Autowired
     private ProfitAndLossService profitAndLossService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     private static final String PROFIT_AND_LOSS = "profitAndLoss";
 
@@ -38,8 +46,9 @@ public class ProfitAndLossController extends BaseController {
     public String getProfitAndLoss(@PathVariable String companyNumber,
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
-                                   Model model,
-                                   HttpServletRequest request) {
+                                   Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute(PROFIT_AND_LOSS, profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber));
@@ -59,7 +68,9 @@ public class ProfitAndLossController extends BaseController {
                                       @PathVariable String companyAccountsId,
                                       @ModelAttribute(PROFIT_AND_LOSS) @Valid ProfitAndLoss profitAndLoss,
                                       BindingResult bindingResult,
-                                      HttpServletRequest request) {
+                                      Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
@@ -80,5 +91,13 @@ public class ProfitAndLossController extends BaseController {
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+    }
+
+    @Override
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
+            throws ServiceException {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedProfitAndLoss());
     }
 }

@@ -54,7 +54,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     }
 
     @Override
-    public CurrentPeriodApi getCurrentPeriod(BalanceSheet balanceSheet) {
+    public BalanceSheetApi getCurrentPeriodBalanceSheet(BalanceSheet balanceSheet) {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
@@ -68,14 +68,11 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
             capitalAndReservesTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         }
 
-        CurrentPeriodApi currentPeriod = new CurrentPeriodApi();
-        currentPeriod.setBalanceSheet(balanceSheetApi);
-
-        return currentPeriod;
+        return balanceSheetApi;
     }
 
     @Override
-    public PreviousPeriodApi getPreviousPeriod(BalanceSheet balanceSheet) {
+    public BalanceSheetApi getPreviousPeriodBalanceSheet(BalanceSheet balanceSheet) {
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
@@ -90,10 +87,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
                 .addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         }
 
-        PreviousPeriodApi previousPeriodApi = new PreviousPeriodApi();
-        previousPeriodApi.setBalanceSheet(balanceSheetApi);
-
-        return previousPeriodApi;
+        return balanceSheetApi;
     }
 
     private void populateCurrentPeriodValues(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {

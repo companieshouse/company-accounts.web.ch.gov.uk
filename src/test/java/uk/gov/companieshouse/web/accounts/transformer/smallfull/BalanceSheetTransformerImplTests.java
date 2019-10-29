@@ -113,7 +113,7 @@ public class BalanceSheetTransformerImplTests {
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setLbg(true);
 
-        CurrentPeriodApi currentPeriodApi = transformer.getCurrentPeriod(balanceSheet);
+        BalanceSheetApi currentPeriodBalanceSheet = transformer.getCurrentPeriodBalanceSheet(balanceSheet);
 
         verifyCurrentPeriodWebToApiTransformersCalled(true);
         verifyPreviousPeriodWebToApiTransformersNotCalled();
@@ -121,7 +121,7 @@ public class BalanceSheetTransformerImplTests {
         verifyCurrentPeriodApiToWebTransformersNotCalled();
         verifyPreviousPeriodApiToWebTransformersNotCalled();
 
-        assertNotNull(currentPeriodApi);
+        assertNotNull(currentPeriodBalanceSheet);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class BalanceSheetTransformerImplTests {
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setLbg(true);
 
-        PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
+        BalanceSheetApi previousPeriodBalanceSheet = transformer.getPreviousPeriodBalanceSheet(balanceSheet);
 
         verifyCurrentPeriodWebToApiTransformersNotCalled();
         verifyPreviousPeriodWebToApiTransformersCalled(true);
@@ -139,7 +139,7 @@ public class BalanceSheetTransformerImplTests {
         verifyCurrentPeriodApiToWebTransformersNotCalled();
         verifyPreviousPeriodApiToWebTransformersNotCalled();
 
-        assertNotNull(previousPeriodApi);
+        assertNotNull(previousPeriodBalanceSheet);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class BalanceSheetTransformerImplTests {
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setLbg(false);
 
-        CurrentPeriodApi currentPeriodApi = transformer.getCurrentPeriod(balanceSheet);
+        BalanceSheetApi currentPeriodBalanceSheet = transformer.getCurrentPeriodBalanceSheet(balanceSheet);
 
         verifyCurrentPeriodWebToApiTransformersCalled(false);
         verifyPreviousPeriodWebToApiTransformersNotCalled();
@@ -157,7 +157,7 @@ public class BalanceSheetTransformerImplTests {
         verifyCurrentPeriodApiToWebTransformersNotCalled();
         verifyPreviousPeriodApiToWebTransformersNotCalled();
 
-        assertNotNull(currentPeriodApi);
+        assertNotNull(currentPeriodBalanceSheet);
     }
 
     @Test
@@ -167,7 +167,7 @@ public class BalanceSheetTransformerImplTests {
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setLbg(false);
 
-        PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
+        BalanceSheetApi previousPeriodBalanceSheet = transformer.getPreviousPeriodBalanceSheet(balanceSheet);
 
         verifyCurrentPeriodWebToApiTransformersNotCalled();
         verifyPreviousPeriodWebToApiTransformersCalled(false);
@@ -175,7 +175,7 @@ public class BalanceSheetTransformerImplTests {
         verifyCurrentPeriodApiToWebTransformersNotCalled();
         verifyPreviousPeriodApiToWebTransformersNotCalled();
 
-        assertNotNull(previousPeriodApi);
+        assertNotNull(previousPeriodBalanceSheet);
     }
 
     private void verifyCurrentPeriodWebToApiTransformersCalled(boolean isLbg) {

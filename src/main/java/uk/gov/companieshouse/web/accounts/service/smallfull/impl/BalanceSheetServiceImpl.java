@@ -150,14 +150,30 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         CompanyProfileApi companyProfileApi = companyService.getCompanyProfile(companyNumber);
+        
         if (companyService.isMultiYearFiler(companyProfileApi)) {
-            PreviousPeriodApi previousPeriodApi = transformer.getPreviousPeriod(balanceSheet);
+
+            PreviousPeriodApi previousPeriodApi =
+                    previousPeriodService.getPreviousPeriod(apiClient, transactionId, companyAccountsId);
+
+            if (previousPeriodApi == null) {
+                previousPeriodApi = new PreviousPeriodApi();
+            }
+
+            previousPeriodApi.setBalanceSheet(transformer.getPreviousPeriodBalanceSheet(balanceSheet));
 
             previousPeriodService.submitPreviousPeriod(
                     apiClient, smallFullApi, transactionId, companyAccountsId, previousPeriodApi, validationErrors);
         }
 
-        CurrentPeriodApi currentPeriod = transformer.getCurrentPeriod(balanceSheet);
+        CurrentPeriodApi currentPeriod =
+                currentPeriodService.getCurrentPeriod(apiClient, transactionId, companyAccountsId);
+
+        if (currentPeriod == null) {
+            currentPeriod = new CurrentPeriodApi();
+        }
+
+        currentPeriod.setBalanceSheet(transformer.getCurrentPeriodBalanceSheet(balanceSheet));
 
         currentPeriodService.submitCurrentPeriod(
                 apiClient, smallFullApi, transactionId, companyAccountsId, currentPeriod, validationErrors);
