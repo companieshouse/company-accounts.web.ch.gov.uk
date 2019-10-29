@@ -92,6 +92,10 @@ public class StatementsServiceImpl implements StatementsService {
             return transformer.getBalanceSheetStatements(statementsApi);
 
         } catch (ApiErrorResponseException e) {
+
+            if (e.getStatusCode() == 404) {
+                return null;
+            }
             throw new ServiceException("Error when retrieving balance sheet statements", e);
         } catch (URIValidationException e) {
             throw new ServiceException(INVALID_URI_ERROR, e);
