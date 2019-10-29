@@ -121,7 +121,7 @@ public class StepsToCompleteController extends BaseController {
 
             transactionService.updateResumeLink(transactionID, RESUME_URI.expand(companyNumber, transactionID, companyAccountsID).toString());
 
-            createEmptyPeriods(apiClient, smallFull, companyNumber, transactionID, companyAccountsID);
+            createEmptyPeriods(apiClient, companyNumber, transactionID, companyAccountsID);
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
         } catch (ServiceException e) {
@@ -131,8 +131,10 @@ public class StepsToCompleteController extends BaseController {
         }
     }
 
-    private void createEmptyPeriods(ApiClient apiClient, SmallFullApi smallFull, String companyNumber, String transactionId, String companyAccountsId)
+    private void createEmptyPeriods(ApiClient apiClient, String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
+
+        SmallFullApi smallFull = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         if (currentPeriodService.getCurrentPeriod(apiClient, transactionId, companyAccountsId) == null) {
 
