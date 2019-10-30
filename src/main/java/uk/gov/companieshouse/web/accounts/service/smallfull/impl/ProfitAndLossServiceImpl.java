@@ -136,10 +136,12 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
             }
         }
 
-        if (StringUtils.isNotBlank(
-                previousPeriodService.getPreviousPeriod(
-                        apiClient, transactionId, companyAccountsId).getLinks()
-                                .getProfitAndLoss())){
+        CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
+        if (companyService.isMultiYearFiler(companyProfile) &&
+                StringUtils.isNotBlank(
+                        previousPeriodService.getPreviousPeriod(
+                                apiClient, transactionId, companyAccountsId).getLinks()
+                                        .getProfitAndLoss())){
 
             try {
                 apiClient.smallFull().previousPeriodProfitAndLoss()
