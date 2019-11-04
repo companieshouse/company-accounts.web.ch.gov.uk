@@ -59,7 +59,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.turnover.currentAmount',
                                 text = 'Turnover current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current validate gross-c-add',
+                                class = 'govuk-input current validate gross-c-add range-from-minus',
                                 )">
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.turnover.previousAmount',
                                 text = 'Turnover previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous validate gross-p-add',
+                                class= 'govuk-input previous validate gross-p-add range-from-minus',
                                 )">
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.grossTotal.currentAmount',
                                 text = 'Gross profit (or loss) current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current gross-c-total',
+                                class = 'govuk-input current gross-c-total range-from-minus',
                                 )">
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.grossTotal.previousAmount',
                                 text = 'Gross profit (or loss) previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous gross-p-total',
+                                class= 'govuk-input previous gross-p-total range-from-minus',
                                 )">
                             </div>
                         </div>
