@@ -12,11 +12,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 @Component
-public class ProfitAndLossBeforeTaxTransformer {
+public class ProfitOrLossBeforeTaxTransformer {
 
     public void addCurrentPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
 
-        if (currentPeriodProfitAndLoss.getGrossProfitOrLoss() != null) {
+        if (currentPeriodProfitAndLoss.getProfitOrLossBeforeTax() != null) {
             createProfitOrLossBeforeTax(profitAndLoss);
             if (currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome() != null) {
                 InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome = createInterestReceivableAndSimilarIncome(profitAndLoss);
@@ -37,7 +37,7 @@ public class ProfitAndLossBeforeTaxTransformer {
 
     public void addPreviousPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
 
-        if (previousPeriodProfitAndLoss.getGrossProfitOrLoss() != null) {
+        if (previousPeriodProfitAndLoss.getProfitOrLossBeforeTax() != null) {
             createProfitOrLossBeforeTax(profitAndLoss);
             if (previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome() != null) {
                 InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome = createInterestReceivableAndSimilarIncome(profitAndLoss);
