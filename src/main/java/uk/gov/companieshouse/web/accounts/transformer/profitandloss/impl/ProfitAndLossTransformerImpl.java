@@ -12,6 +12,9 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
     @Autowired
     private GrossProfitAndLossTransformer grossProfitAndLossTransformer;
 
+    @Autowired
+    private OperatingProfitAndLossTransformer operatingProfitAndLossTransformer;
+
     @Override
     public ProfitAndLoss getProfitAndLoss(ProfitAndLossApi currentPeriodProfitAndLoss,
             ProfitAndLossApi previousPeriodProfitAndLoss) {
@@ -21,10 +24,14 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
         if (currentPeriodProfitAndLoss != null) {
             grossProfitAndLossTransformer
                     .addCurrentPeriodToWebModel(profitAndLoss, currentPeriodProfitAndLoss);
+            operatingProfitAndLossTransformer
+                    .addCurrentPeriodToWebModel(profitAndLoss, currentPeriodProfitAndLoss);
         }
 
         if (previousPeriodProfitAndLoss != null) {
             grossProfitAndLossTransformer
+                    .addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLoss);
+            operatingProfitAndLossTransformer
                     .addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLoss);
         }
 
@@ -37,6 +44,7 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         grossProfitAndLossTransformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
+        operatingProfitAndLossTransformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
 
         return currentPeriodProfitAndLoss;
     }
@@ -47,6 +55,7 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         grossProfitAndLossTransformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
+        operatingProfitAndLossTransformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
 
         return previousPeriodProfitAndLoss;
     }
