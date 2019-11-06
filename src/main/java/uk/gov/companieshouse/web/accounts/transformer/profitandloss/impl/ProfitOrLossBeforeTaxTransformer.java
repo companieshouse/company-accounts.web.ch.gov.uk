@@ -139,7 +139,7 @@ public class ProfitOrLossBeforeTaxTransformer {
 
     private TotalProfitOrLossBeforeTax createTotalProfitOrLossBeforeTax(ProfitAndLoss profitAndLoss) {
         TotalProfitOrLossBeforeTax totalProfitOrLossBeforeTax;
-        if (profitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges() == null) {
+        if (profitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax() == null) {
             totalProfitOrLossBeforeTax = new TotalProfitOrLossBeforeTax();
             profitAndLoss.getProfitOrLossBeforeTax().setTotalProfitOrLossBeforeTax(totalProfitOrLossBeforeTax);
         } else {
