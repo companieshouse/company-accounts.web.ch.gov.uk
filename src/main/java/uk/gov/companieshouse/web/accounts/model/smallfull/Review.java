@@ -14,7 +14,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employ
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 public class Review {
 
     BalanceSheet balanceSheet;
@@ -43,6 +43,8 @@ public class Review {
 
     TangibleAssets tangibleAssets;
 
+    IntangibleAssets intangibleAssets;
+
     StocksNote stocks;
 
     FixedAssetsInvestments fixedAssetsInvestments;
@@ -51,6 +53,14 @@ public class Review {
 
     public BalanceSheet getBalanceSheet() {
         return balanceSheet;
+    }
+
+    public IntangibleAssets getIntangibleAssets() {
+        return intangibleAssets;
+    }
+
+    public void setIntangibleAssets(IntangibleAssets intangibleAssets) {
+        this.intangibleAssets = intangibleAssets;
     }
 
     public void setBalanceSheet(BalanceSheet balanceSheet) {

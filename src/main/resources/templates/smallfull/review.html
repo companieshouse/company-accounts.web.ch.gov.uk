@@ -61,6 +61,14 @@
         </div>
 
         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Intangible assets',
+                            identifier = 'intangible-assets',
+                            currentAmount = *{balanceSheet?.fixedAssets?.intangibleAssets?.currentAmount},
+                            previousAmount = *{balanceSheet?.fixedAssets?.intangibleAssets?.previousAmount}
+                        )">
+        </div>
+
+        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Tangible assets',
                             identifier = 'tangible-assets',
                             currentAmount = *{balanceSheet?.fixedAssets?.tangibleAssets?.currentAmount},
@@ -517,6 +525,167 @@
     </div>
 
     <!-- Employees Note End -->
+
+    <!-- Start Intangible Assets -->
+
+    <div id="cya-small-full-intangible-assets-note">
+      <div th:if="*{intangibleAssets?.netBookValue?.currentPeriod?.total != null}">
+        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                            description = 'Intangible assets note',
+                            identifier= 'intangible-assets-note',
+                            resource = 'note/intangible-assets',
+                            marginTop = true
+                            )">
+        </div>
+
+        <dl class="app-check-your-answers app-check-your-answers--short">
+          <div class="app-check-your-answers__contents cya-desktop-only">
+            <dt class="app-check-your-answers__question">Cost</dt>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+            <dd class="app-check-your-answers__change"></dd>
+          </div>
+
+          <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
+            <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                    description = 'Cost at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
+                                    identifier = 'intangible-assets-cost-at-period-start',
+                                    row = *{intangibleAssets?.cost?.atPeriodStart}
+                                    )">
+            </div>
+          </th:block>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Additions',
+                                identifier = 'intangible-assets-additions',
+                                row = *{intangibleAssets?.cost?.additions}
+                                )">
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Disposals',
+                                identifier = 'intangible-assets-disposals',
+                                row = *{intangibleAssets?.cost?.disposals}
+                                )">
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Revaluations',
+                                identifier = 'intangible-assets-revaluations',
+                                row = *{intangibleAssets?.cost?.revaluations}
+                                )">
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                            description = 'Transfers',
+                                identifier = 'intangible-assets-transfers',
+                                row = *{intangibleAssets?.cost?.transfers}
+                                )">
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Cost at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                identifier = 'intangible-assets-cost-at-period-end',
+                                row = *{intangibleAssets?.cost?.atPeriodEnd},
+                                isTotalRow = true
+                                )">
+          </div>
+        </dl>
+
+        <dl class="app-check-your-answers app-check-your-answers--short">
+          <div class="app-check-your-answers__contents cya-desktop-only">
+            <dt class="app-check-your-answers__question">Amortisation</dt>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+            <dd class="app-check-your-answers__change"></dd>
+          </div>
+
+          <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
+            <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                    description = 'Amortisation at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
+                                    identifier = 'intangible-assets-amortisation-at-period-start',
+                                    row = *{intangibleAssets?.amortisation?.atPeriodStart}
+                                    )">
+            </div>
+          </th:block>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Charge for year',
+                                identifier = 'intangible-assets-charge-for-year',
+                                row = *{intangibleAssets?.amortisation?.chargeForYear}
+                                )">
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'On disposals',
+                                identifier = 'intangible-assets-on-disposals',
+                                row = *{intangibleAssets?.amortisation?.onDisposals}
+                                )">
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Other adjustments',
+                                identifier = 'intangible-assets-other-adjustments',
+                                row = *{intangibleAssets?.amortisation?.otherAdjustments}
+                                )">
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Amortisation at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                identifier = 'intangible-assets-amortisation-at-period-end',
+                                row = *{intangibleAssets?.amortisation?.atPeriodEnd},
+                                isTotalRow = true
+                                )">
+          </div>
+        </dl>
+
+        <dl class="app-check-your-answers app-check-your-answers--short">
+          <div class="app-check-your-answers__contents cya-desktop-only">
+            <dt class="app-check-your-answers__question">Net book value</dt>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
+            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+            <dd class="app-check-your-answers__change"></dd>
+          </div>
+
+          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                description = 'Net book value at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                identifier = 'intangible-assets-net-book-value-current-period',
+                                row = *{intangibleAssets?.netBookValue?.currentPeriod},
+                                isTotalRow = true
+                                )">
+          </div>
+
+          <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
+            <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                                    description = 'Net book value at ' + *{#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')},
+                                    identifier = 'intangible-assets-net-book-value-previous-period',
+                                    row = *{intangibleAssets?.netBookValue?.previousPeriod},
+                                    isTotalRow = true
+                                    )">
+            </div>
+          </th:block>
+        </dl>
+
+        <div th:if="*{intangibleAssets.additionalInformation != null}">
+          <dl class="app-check-your-answers app-check-your-answers--short">
+            <div class="app-check-your-answers__contents">
+              <dt class="app-check-your-answers__question">Additional information</dt>
+              <dd class="app-check-your-answers__answer">
+                <p id="review-intangible-assets-additional-information"
+                   th:utext="*{#strings.replace(intangibleAssets?.additionalInformation,'&#10;','&lt;br&gt;')}">
+                </p>
+              </dd>
+              <dd class="app-check-your-answers__change"></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Intangible Assets -->
 
     <!-- Start Tangible Assets -->
 

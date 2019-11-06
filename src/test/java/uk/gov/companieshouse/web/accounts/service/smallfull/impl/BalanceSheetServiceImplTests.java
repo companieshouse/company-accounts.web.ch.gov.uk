@@ -37,6 +37,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNo
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -44,6 +45,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
@@ -140,6 +142,9 @@ public class BalanceSheetServiceImplTests {
     private TangibleAssetsNoteService tangibleAssetsNoteService;
 
     @Mock
+    private IntangibleAssetsNoteService intangibleAssetsNoteService;
+
+    @Mock
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Mock
@@ -199,6 +204,8 @@ public class BalanceSheetServiceImplTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertNotNull(balanceSheet.getFixedAssets());
+        assertNotNull(balanceSheet.getFixedAssets().getIntangibleAssets());
+        assertNotNull(balanceSheet.getFixedAssets().getIntangibleAssets().getCurrentAmount());
         assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets());
         assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
         assertNotNull(balanceSheet.getBalanceSheetHeadings());
@@ -339,6 +346,7 @@ public class BalanceSheetServiceImplTests {
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(intangibleAssetsNoteService, times(1)).deleteIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(fixedAssetsInvestmentsService, times(1)).deleteFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
@@ -513,6 +521,8 @@ public class BalanceSheetServiceImplTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertNotNull(balanceSheet.getFixedAssets());
+        assertNotNull(balanceSheet.getFixedAssets().getIntangibleAssets());
+        assertNotNull(balanceSheet.getFixedAssets().getIntangibleAssets().getCurrentAmount());
         assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets());
         assertNotNull(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
         assertNotNull(balanceSheet.getBalanceSheetHeadings());
@@ -635,6 +645,7 @@ public class BalanceSheetServiceImplTests {
         verify(debtorsService, times(1)).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsWithinOneYearService, times(1)).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsAfterOneYearService, times(1)).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(intangibleAssetsNoteService, times(1)).deleteIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(tangibleAssetsNoteService, times(1)).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(stocksService, times(1)).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
@@ -1094,6 +1105,7 @@ public class BalanceSheetServiceImplTests {
         smallFullLinks.setDebtorsNote("DEBTORS_LINK");
         smallFullLinks.setCreditorsWithinOneYearNote("CREDITORS_WITHIN_ONE_YEAR_LINK");
         smallFullLinks.setCreditorsAfterMoreThanOneYearNote("CREDITORS_AFTER_ONE_YEAR_LINK");
+        smallFullLinks.setIntangibleAssetsNote("INTANGIBLE_ASSETS_LINK");
         smallFullLinks.setTangibleAssetsNote("TANGIBLE_ASSETS_LINK");
         smallFullLinks.setFixedAssetsInvestmentsNote("FIXED_ASSETS_INVESTMENT_LINK");
         smallFullLinks.setStocksNote("STOCKS_LINK");
@@ -1141,10 +1153,13 @@ public class BalanceSheetServiceImplTests {
 
         FixedAssets fixedAssets = new FixedAssets();
         TangibleAssets tangibleAssets = new TangibleAssets();
+        IntangibleAssets intangibleAssets = new IntangibleAssets();
         CurrentAssets currentAssets = new CurrentAssets();
         Debtors debtors = new Debtors();
         tangibleAssets.setCurrentAmount((long)1000);
+        intangibleAssets.setCurrentAmount((long)1000);
         fixedAssets.setTangibleAssets(tangibleAssets);
+        fixedAssets.setIntangibleAssets(intangibleAssets);
         balanceSheet.setFixedAssets(fixedAssets);
 
         debtors.setCurrentAmount((long)1000);

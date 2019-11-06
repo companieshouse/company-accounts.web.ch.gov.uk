@@ -18,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinv
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -29,6 +30,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -82,6 +84,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
+
+    @Autowired
+    private IntangibleAssetsNoteService intangibleAssetsNoteService;
     
     @Autowired
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
@@ -120,6 +125,9 @@ public class ReviewServiceImpl implements ReviewService {
 
         TangibleAssets tangibleAssets =
                 tangibleAssetsNoteService.getTangibleAssets(transactionId, companyAccountsId, companyNumber);
+
+        IntangibleAssets intangibleAssets =
+                intangibleAssetsNoteService.getIntangibleAssets(transactionId, companyAccountsId, companyNumber);
         
         StocksNote stocks = stocksService.getStocks(transactionId,companyAccountsId, companyNumber);
 
@@ -142,6 +150,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setDebtors(debtors);
         review.setEmployees(employees);
         review.setTangibleAssets(tangibleAssets);
+        review.setIntangibleAssets(intangibleAssets);
         review.setStocks(stocks);
         review.setFixedAssetsInvestments(fixedAssetsInvestments);
         review.setCurrentAssetsInvestments(currentAssetsInvestments);
