@@ -15,22 +15,29 @@ import java.util.stream.Stream;
 public class ProfitOrLossBeforeTaxTransformer {
 
     public void addCurrentPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
-
         if (currentPeriodProfitAndLoss.getProfitOrLossBeforeTax() != null) {
+
             createProfitOrLossBeforeTax(profitAndLoss);
+
             if (currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome() != null) {
+
                 InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome = createInterestReceivableAndSimilarIncome(profitAndLoss);
-                interestReceivableAndSimilarIncome.setCurrentAmount(currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome());
+                interestReceivableAndSimilarIncome.setCurrentAmount(
+                        currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome());
             }
 
             if (currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges() != null) {
+
                 InterestPayableAndSimilarCharges interestPayableAndSimilarCharges = createInterestPayableAndSimilarCharges(profitAndLoss);
-                interestPayableAndSimilarCharges.setCurrentAmount(currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges());
+                interestPayableAndSimilarCharges.setCurrentAmount(
+                        currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges());
             }
 
             if (currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax() != null) {
+
                 TotalProfitOrLossBeforeTax totalProfitOrLossBeforeTax = createTotalProfitOrLossBeforeTax(profitAndLoss);
-                totalProfitOrLossBeforeTax.setCurrentAmount(currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax());
+                totalProfitOrLossBeforeTax.setCurrentAmount(
+                        currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax());
             }
         }
     }
@@ -38,37 +45,45 @@ public class ProfitOrLossBeforeTaxTransformer {
     public void addPreviousPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
 
         if (previousPeriodProfitAndLoss.getProfitOrLossBeforeTax() != null) {
+
             createProfitOrLossBeforeTax(profitAndLoss);
+
             if (previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome() != null) {
+
                 InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome = createInterestReceivableAndSimilarIncome(profitAndLoss);
-                interestReceivableAndSimilarIncome.setCurrentAmount(previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome());
+                interestReceivableAndSimilarIncome.setPreviousAmount(
+                        previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome());
             }
 
             if (previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges() != null) {
+
                 InterestPayableAndSimilarCharges interestPayableAndSimilarCharges = createInterestPayableAndSimilarCharges(profitAndLoss);
-                interestPayableAndSimilarCharges.setCurrentAmount(previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges());
+                interestPayableAndSimilarCharges.setPreviousAmount(
+                        previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges());
             }
 
             if (previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax() != null) {
+
                 TotalProfitOrLossBeforeTax totalProfitOrLossBeforeTax = createTotalProfitOrLossBeforeTax(profitAndLoss);
-                totalProfitOrLossBeforeTax.setCurrentAmount(previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax());
+                totalProfitOrLossBeforeTax.setPreviousAmount(
+                        previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax());
             }
         }
     }
 
     public void addCurrentPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
 
-        if (hasCurrentPeriodProfitAndLossBeforeTax(profitAndLoss)) {
+        if (hasCurrentPeriodProfitOrLossBeforeTax(profitAndLoss)) {
 
             uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossBeforeTax profitOrLossBeforeTax =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossBeforeTax();
 
-            profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(
-                    profitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome().getCurrentAmount());
-            profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(
-                    profitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges().getCurrentAmount());
-            profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(
-                    profitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax().getCurrentAmount());
+            profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(profitAndLoss.getProfitOrLossBeforeTax().
+                    getInterestReceivableAndSimilarIncome().getCurrentAmount());
+            profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(profitAndLoss.getProfitOrLossBeforeTax().
+                    getInterestPayableAndSimilarCharges().getCurrentAmount());
+            profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(profitAndLoss.getProfitOrLossBeforeTax().
+                    getTotalProfitOrLossBeforeTax().getCurrentAmount());
 
             currentPeriodProfitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTax);
         }
@@ -76,17 +91,17 @@ public class ProfitOrLossBeforeTaxTransformer {
 
     public void addPreviousPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
 
-        if (hasPreviousPeriodProfitAndLossBeforeTax(profitAndLoss)) {
+        if (hasPreviousPeriodProfitOrLossBeforeTax(profitAndLoss)) {
 
             uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossBeforeTax profitOrLossBeforeTax =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossBeforeTax();
 
-            profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(
-                    profitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome().getPreviousAmount());
-            profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(
-                    profitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges().getPreviousAmount());
-            profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(
-                    profitAndLoss.getProfitOrLossBeforeTax().getTotalProfitOrLossBeforeTax().getPreviousAmount());
+            profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(profitAndLoss.getProfitOrLossBeforeTax().
+                    getInterestReceivableAndSimilarIncome().getPreviousAmount());
+            profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(profitAndLoss.getProfitOrLossBeforeTax().
+                    getInterestPayableAndSimilarCharges().getPreviousAmount());
+            profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(profitAndLoss.getProfitOrLossBeforeTax().
+                    getTotalProfitOrLossBeforeTax().getPreviousAmount());
 
             previousPeriodProfitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTax);
         }
@@ -101,6 +116,7 @@ public class ProfitOrLossBeforeTaxTransformer {
 
     private InterestReceivableAndSimilarIncome createInterestReceivableAndSimilarIncome(ProfitAndLoss profitAndLoss) {
         InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome;
+
         if (profitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome() == null) {
             interestReceivableAndSimilarIncome = new InterestReceivableAndSimilarIncome();
             profitAndLoss.getProfitOrLossBeforeTax().setInterestReceivableAndSimilarIncome(interestReceivableAndSimilarIncome);
@@ -132,7 +148,7 @@ public class ProfitOrLossBeforeTaxTransformer {
         return totalProfitOrLossBeforeTax;
     }
 
-    private boolean hasCurrentPeriodProfitAndLossBeforeTax(ProfitAndLoss profitAndLoss) {
+    private boolean hasCurrentPeriodProfitOrLossBeforeTax(ProfitAndLoss profitAndLoss) {
 
         return Stream.of(profitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome().getCurrentAmount(),
                 profitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges().getCurrentAmount(),
@@ -140,7 +156,7 @@ public class ProfitOrLossBeforeTaxTransformer {
                 anyMatch(Objects::nonNull);
     }
 
-    private boolean hasPreviousPeriodProfitAndLossBeforeTax(ProfitAndLoss profitAndLoss) {
+    private boolean hasPreviousPeriodProfitOrLossBeforeTax(ProfitAndLoss profitAndLoss) {
 
         return Stream.of(profitAndLoss.getProfitOrLossBeforeTax().getInterestReceivableAndSimilarIncome().getPreviousAmount(),
                 profitAndLoss.getProfitOrLossBeforeTax().getInterestPayableAndSimilarCharges().getPreviousAmount(),
