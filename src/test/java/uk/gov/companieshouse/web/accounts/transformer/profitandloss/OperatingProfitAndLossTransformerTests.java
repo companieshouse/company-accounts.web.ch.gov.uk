@@ -193,16 +193,16 @@ public class OperatingProfitAndLossTransformerTests {
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.OperatingProfitOrLoss();
 
         AdministrativeExpenses administrativeExpenses = new AdministrativeExpenses();
-        administrativeExpenses.setPreviousAmount(CURRENT_ADMINISTRATIVE_EXPENSES);
+        administrativeExpenses.setPreviousAmount(PREVIOUS_ADMINISTRATIVE_EXPENSES);
 
         DistributionCosts distributionCosts = new DistributionCosts();
-        distributionCosts.setPreviousAmount(CURRENT_DISTRIBUTION_COSTS);
+        distributionCosts.setPreviousAmount(PREVIOUS_DISTRIBUTION_COSTS);
 
         OtherOperatingIncome otherOperatingIncome = new OtherOperatingIncome();
-        otherOperatingIncome.setPreviousAmount(CURRENT_OTHER_OPERATING_INCOME);
+        otherOperatingIncome.setPreviousAmount(PREVIOUS_OTHER_OPERATING_INCOME);
 
         OperatingTotal operatingTotal = new OperatingTotal();
-        operatingTotal.setPreviousAmount(CURRENT_OPERATING_TOTAL);
+        operatingTotal.setPreviousAmount(PREVIOUS_OPERATING_TOTAL);
 
         operatingProfitOrLoss.setAdministrativeExpenses(administrativeExpenses);
         operatingProfitOrLoss.setDistributionCosts(distributionCosts);
@@ -213,13 +213,13 @@ public class OperatingProfitAndLossTransformerTests {
 
         transformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
 
-        assertEquals(CURRENT_ADMINISTRATIVE_EXPENSES, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+        assertEquals(PREVIOUS_ADMINISTRATIVE_EXPENSES, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
                 getAdministrativeExpenses());
-        assertEquals(CURRENT_DISTRIBUTION_COSTS, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+        assertEquals(PREVIOUS_DISTRIBUTION_COSTS, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
                 getDistributionCosts());
-        assertEquals(CURRENT_OTHER_OPERATING_INCOME, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+        assertEquals(PREVIOUS_OTHER_OPERATING_INCOME, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
                 getOtherOperatingIncome());
-        assertEquals(CURRENT_OPERATING_TOTAL, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+        assertEquals(PREVIOUS_OPERATING_TOTAL, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
                 getOperatingTotal());
     }
 
