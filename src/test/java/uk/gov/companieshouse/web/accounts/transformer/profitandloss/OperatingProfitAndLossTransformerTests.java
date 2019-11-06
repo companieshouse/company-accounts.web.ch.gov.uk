@@ -2,8 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.profitandloss;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import uk.gov.companieshouse.api.model.accounts.profitandloss.GrossProfitOrLoss;
+
 import uk.gov.companieshouse.api.model.accounts.profitandloss.OperatingProfitOrLoss;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -11,7 +10,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorl
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.DistributionCosts;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OperatingTotal;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OtherOperatingIncome;
-import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.GrossProfitAndLossTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.OperatingProfitAndLossTransformer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class OperatingProfitAndLossTransformerTests {
-
-    private static final Long CURRENT_GROSS_TOTAL = 1L;
 
     private static final Long CURRENT_ADMINISTRATIVE_EXPENSES = 1L;
     private static final Long CURRENT_DISTRIBUTION_COSTS = 1L;
@@ -41,10 +37,8 @@ public class OperatingProfitAndLossTransformerTests {
 
         ProfitAndLossApi currentPeriodProfitAndLossApi = new ProfitAndLossApi();
 
-        GrossProfitOrLoss grossProfitOrLoss = new GrossProfitOrLoss();
         OperatingProfitOrLoss operatingProfitOrLoss = new OperatingProfitOrLoss();
 
-        grossProfitOrLoss.setGrossTotal(CURRENT_GROSS_TOTAL);
         operatingProfitOrLoss.setDistributionCosts(CURRENT_DISTRIBUTION_COSTS);
         operatingProfitOrLoss.setAdministrativeExpenses(CURRENT_ADMINISTRATIVE_EXPENSES);
         operatingProfitOrLoss.setOtherOperatingIncome(CURRENT_OTHER_OPERATING_INCOME);
