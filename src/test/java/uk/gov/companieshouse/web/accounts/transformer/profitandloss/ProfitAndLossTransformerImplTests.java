@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.GrossProfitAndLossTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.OperatingProfitAndLossTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.ProfitAndLossTransformerImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +25,9 @@ public class ProfitAndLossTransformerImplTests {
 
     @Mock
     private GrossProfitAndLossTransformer grossProfitAndLossTransformer;
+
+    @Mock
+    OperatingProfitAndLossTransformer operatingProfitAndLossTransformer;
 
     @InjectMocks
     private ProfitAndLossTransformer transformer = new ProfitAndLossTransformerImpl();
@@ -41,6 +45,11 @@ public class ProfitAndLossTransformerImplTests {
                 .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), eq(currentPeriodProfitAndLoss));
         verify(grossProfitAndLossTransformer)
                 .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), eq(previousPeriodProfitAndLoss));
+
+        verify(operatingProfitAndLossTransformer)
+                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), eq(currentPeriodProfitAndLoss));
+        verify(operatingProfitAndLossTransformer)
+                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), eq(previousPeriodProfitAndLoss));
     }
 
     @Test
@@ -53,6 +62,11 @@ public class ProfitAndLossTransformerImplTests {
                 .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), any(ProfitAndLossApi.class));
         verify(grossProfitAndLossTransformer, never())
                 .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), any(ProfitAndLossApi.class));
+
+        verify(operatingProfitAndLossTransformer, never())
+                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), any(ProfitAndLossApi.class));
+        verify(operatingProfitAndLossTransformer, never())
+                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), any(ProfitAndLossApi.class));
     }
 
     @Test
@@ -64,6 +78,7 @@ public class ProfitAndLossTransformerImplTests {
         assertNotNull(transformer.getCurrentPeriodProfitAndLoss(profitAndLoss));
 
         verify(grossProfitAndLossTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
+        verify(operatingProfitAndLossTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
     }
 
     @Test
@@ -75,6 +90,7 @@ public class ProfitAndLossTransformerImplTests {
         assertNotNull(transformer.getPreviousPeriodProfitAndLoss(profitAndLoss));
 
         verify(grossProfitAndLossTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
+        verify(operatingProfitAndLossTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
     }
 }
 
