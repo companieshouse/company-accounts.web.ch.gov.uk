@@ -59,7 +59,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.turnover.currentAmount',
                                 text = 'Turnover current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current validate range-from-minus gross-c-add',
+                                class = 'govuk-input current validate range-from-minus gross-c-add operating-c-add',
                                 )">
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.turnover.previousAmount',
                                 text = 'Turnover previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous validate range-from-minus gross-p-add',
+                                class= 'govuk-input previous validate range-from-minus gross-p-add operating-p-add',
                                 )">
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.costOfSales.currentAmount',
                                 text = 'Cost of sales current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current validate gross-c-subtract',
+                                class = 'govuk-input current validate gross-c-subtract operating-c-subtract',
                                 )">
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.costOfSales.previousAmount',
                                 text = 'Cost of sales previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous validate gross-p-subtract',
+                                class= 'govuk-input previous validate gross-p-subtract operating-p-subtract',
                                 )">
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.distributionCosts.currentAmount',
                                 text = 'Distribution costs current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current range-from-minus',
+                                class = 'govuk-input current range-from-minus operating-c-subtract',
                                 )">
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.distributionCosts.previousAmount',
                                 text = 'Distribution costs previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous range-from-minus',
+                                class= 'govuk-input previous range-from-minus operating-p-subtract',
                                 )">
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.administrativeExpenses.currentAmount',
                                 text = 'Administrative expenses current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current range-from-minus',
+                                class = 'govuk-input current range-from-minus operating-c-subtract',
                                 )">
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.administrativeExpenses.previousAmount',
                                 text = 'Administrative expenses previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous range-from-minus',
+                                class= 'govuk-input previous range-from-minus operating-p-subtract',
                                 )">
                             </div>
                         </div>
@@ -202,7 +202,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.otherOperatingIncome.currentAmount',
                                 text = 'Other operating income current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current',
+                                class = 'govuk-input current operating-c-add',
                                 )">
                             </div>
                         </div>
@@ -210,7 +210,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.otherOperatingIncome.previousAmount',
                                 text = 'Other operating income previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous',
+                                class= 'govuk-input previous operating-p-add',
                                 )">
                             </div>
                         </div>
@@ -230,7 +230,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.operatingTotal.currentAmount',
                                 text = 'Operating profit (or loss) current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current range-from-minus',
+                                class = 'govuk-input current range-from-minus operating-c-total',
                                 )">
                             </div>
                         </div>
@@ -238,7 +238,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'operatingProfitOrLoss.operatingTotal.previousAmount',
                                 text = 'Operating profit (or loss) previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous range-from-minus',
+                                class= 'govuk-input previous range-from-minus operating-p-total',
                                 )">
                             </div>
                         </div>
