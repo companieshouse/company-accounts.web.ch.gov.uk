@@ -10,7 +10,7 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfin
 import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.TotalProfitOrLossForFinancialYear;
 
 @Component
-public class ProfitOrLossForFinacialYearTransformer {
+public class ProfitOrLossForFinancialYearTransformer {
 
     public void addCurrentPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
 
