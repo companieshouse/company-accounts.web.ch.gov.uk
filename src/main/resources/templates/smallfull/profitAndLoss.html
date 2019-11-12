@@ -333,7 +333,7 @@
                 <br>
 
                 <div class="form-group">
-                    <input id="next-button" class="govuk-button piwik-event" data-event-id="Profit and loss account - Save and continue" type="submit" role="button" value="Save and continue"/>
+                    <input id="next-button" class="govuk-button piwik-event" data-event-id="Profit and loss account - Save and continue" type="submit" role="button" value="Save and continue" onclick="this.disabled=true;this.value='Please wait...'; this.form.submit();"/>
                 </div>
 
                 <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/two-column-accounts-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>

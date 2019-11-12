@@ -135,7 +135,7 @@
 
         </fieldset>
 
-        <input id="next-button" class="govuk-button piwik-event" data-event-id="Approval - Save and continue" type="submit" role="button" th:value="${isPayableTransaction ? 'Save and continue to payment' : 'Submit your accounts'}"/>
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Approval - Save and continue" type="submit" role="button" th:value="${isPayableTransaction ? 'Save and continue to payment' : 'Submit your accounts'}" onclick="this.disabled=true;this.value='Please wait...'; this.form.submit();"/>
 
       </div>
     </div>

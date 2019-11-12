@@ -592,7 +592,7 @@
 
     <input id="next-button" class="govuk-button piwik-event"
            data-event-id="Intangible assets note - Save and continue" type="submit" role="button"
-           value="Save and continue"/>
+           value="Save and continue" onclick="this.disabled=true;this.value='Please wait...'; this.form.submit();"/>
 
   </form>
 </div>
