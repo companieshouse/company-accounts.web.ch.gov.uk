@@ -16,6 +16,18 @@
 
   <form id="review-form" th:action="@{''}" class="govuk-body" method="post">
 
+
+    <!-- Start Profit and Loss-->
+
+    <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                     description = 'Profit And Loss',
+                     identifier = 'profit-and-loss',
+                     resource = 'profit-and-loss'
+                     )">
+
+    </div>
+
+    
     <!-- Start Balance Sheet -->
 
     <div th:replace="fragments/review/sectionHeader :: sectionHeader (

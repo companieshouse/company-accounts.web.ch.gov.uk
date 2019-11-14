@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
@@ -32,6 +33,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
@@ -42,6 +44,9 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformation
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
+
+    @Autowired
+    private ProfitAndLossService profitAndLossService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -96,6 +101,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
+        ProfitAndLoss profitAndLoss = profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber);
+
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);
 
         Statements statements = statementsService.getBalanceSheetStatements(transactionId, companyAccountsId);
@@ -137,6 +144,7 @@ public class ReviewServiceImpl implements ReviewService {
                 currentAssetsInvestmentsService.getCurrentAssetsInvestments(transactionId, companyAccountsId, companyNumber);
 
         Review review = new Review();
+        review.setProfitAndLoss(profitAndLoss);
         review.setBalanceSheet(balanceSheet);
         review.setStatements(statements);
         review.setBasisOfPreparation(basisOfPreparation);

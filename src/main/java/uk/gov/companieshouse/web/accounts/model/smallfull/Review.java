@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
+import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
@@ -17,39 +18,42 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.Tangibl
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 public class Review {
 
-    BalanceSheet balanceSheet;
+    private BalanceSheet balanceSheet;
 
-    Statements statements;
+    private Statements statements;
 
-    BasisOfPreparation basisOfPreparation;
+    private BasisOfPreparation basisOfPreparation;
 
-    TurnoverPolicy turnoverPolicy;
+    private TurnoverPolicy turnoverPolicy;
 
-    TangibleDepreciationPolicy tangibleDepreciationPolicy;
+    private TangibleDepreciationPolicy tangibleDepreciationPolicy;
 
-    IntangibleAmortisationPolicy intangibleAmortisationPolicy;
+    private IntangibleAmortisationPolicy intangibleAmortisationPolicy;
 
-    ValuationInformationPolicy valuationInformationPolicy;
+    private ValuationInformationPolicy valuationInformationPolicy;
 
-    OtherAccountingPolicy otherAccountingPolicy;
-    
-    CreditorsWithinOneYear creditorsWithinOneYear;
+    private OtherAccountingPolicy otherAccountingPolicy;
 
-    CreditorsAfterOneYear creditorsAfterOneYear;
+    private CreditorsWithinOneYear creditorsWithinOneYear;
 
-    Debtors debtors;
+    private CreditorsAfterOneYear creditorsAfterOneYear;
 
-    Employees employees;
+    private Debtors debtors;
 
-    TangibleAssets tangibleAssets;
+    private Employees employees;
 
-    IntangibleAssets intangibleAssets;
+    private TangibleAssets tangibleAssets;
 
-    StocksNote stocks;
+    private IntangibleAssets intangibleAssets;
 
-    FixedAssetsInvestments fixedAssetsInvestments;
+    private StocksNote stocks;
 
-    CurrentAssetsInvestments currentAssetsInvestments;
+    private FixedAssetsInvestments fixedAssetsInvestments;
+
+    private CurrentAssetsInvestments currentAssetsInvestments;
+
+    private ProfitAndLoss profitAndLoss;
+
 
     public BalanceSheet getBalanceSheet() {
         return balanceSheet;
@@ -197,5 +201,13 @@ public class Review {
     public void setCurrentAssetsInvestments(
         CurrentAssetsInvestments currentAssetsInvestments) {
         this.currentAssetsInvestments = currentAssetsInvestments;
+    }
+
+    public ProfitAndLoss getProfitAndLoss() {
+        return profitAndLoss;
+    }
+
+    public void setProfitAndLoss(ProfitAndLoss profitAndLoss) {
+        this.profitAndLoss = profitAndLoss;
     }
 }
