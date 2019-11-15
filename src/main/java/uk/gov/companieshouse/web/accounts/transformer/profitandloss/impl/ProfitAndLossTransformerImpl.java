@@ -18,6 +18,9 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
     @Autowired
     private ProfitOrLossBeforeTaxTransformer profitOrLossBeforeTaxTransformer;
 
+    @Autowired
+    private ProfitOrLossForFinancialYearTransformer profitOrLossForFinancialYearTransformer;
+
     @Override
     public ProfitAndLoss getProfitAndLoss(ProfitAndLossApi currentPeriodProfitAndLoss,
             ProfitAndLossApi previousPeriodProfitAndLoss) {
@@ -31,6 +34,8 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
                     .addCurrentPeriodToWebModel(profitAndLoss, currentPeriodProfitAndLoss);
             profitOrLossBeforeTaxTransformer
                     .addCurrentPeriodToWebModel(profitAndLoss, currentPeriodProfitAndLoss);
+            profitOrLossForFinancialYearTransformer
+                    .addCurrentPeriodToWebModel(profitAndLoss, currentPeriodProfitAndLoss);
         }
 
         if (previousPeriodProfitAndLoss != null) {
@@ -39,6 +44,8 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
             operatingProfitAndLossTransformer
                     .addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLoss);
             profitOrLossBeforeTaxTransformer
+                    .addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLoss);
+            profitOrLossForFinancialYearTransformer
                     .addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLoss);
         }
 
@@ -53,6 +60,7 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
         grossProfitAndLossTransformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
         operatingProfitAndLossTransformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
         profitOrLossBeforeTaxTransformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
+        profitOrLossForFinancialYearTransformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
 
         return currentPeriodProfitAndLoss;
     }
@@ -65,6 +73,7 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
         grossProfitAndLossTransformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
         operatingProfitAndLossTransformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
         profitOrLossBeforeTaxTransformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
+        profitOrLossForFinancialYearTransformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
 
         return previousPeriodProfitAndLoss;
     }

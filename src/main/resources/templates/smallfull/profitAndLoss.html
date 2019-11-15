@@ -332,6 +332,68 @@
 
                 <br>
 
+                <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'profitOrLossForFinancialYear.tax.currentAmount',
+                        previousField = 'profitOrLossForFinancialYear.tax.previousAmount'
+                        )">
+                </div>
+
+                <div class="govuk-grid-row column-flex">
+                    <div class="govuk-grid-column-one-half" id="profitOrLossForFinancialYear-tax-subtitle">
+                        Tax
+                    </div>
+
+                    <div class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.tax.currentAmount',
+                                text = 'Tax current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus',
+                                )">
+                        </div>
+                    </div>
+                    <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.tax.previousAmount',
+                                text = 'Tax previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus',
+                                )">
+                        </div>
+                    </div>
+                </div>
+
+                <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.currentAmount',
+                        previousField = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.previousAmount'
+                        )">
+                </div>
+
+                <div class="govuk-grid-row column-flex accounts-total">
+                    <div class="govuk-grid-column-one-half">
+                        <strong id="profitOrLossForFinancialYear-totalProfitOrLossForFinancialYear-subtitle">
+                            Profit (or loss) for the financial year
+                        </strong>
+                    </div>
+
+                    <div class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.currentAmount',
+                                text = 'Profit (or loss) for the financial year current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus',
+                                )">
+                        </div>
+                    </div>
+                    <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.previousAmount',
+                                text = 'Profit (or loss) for the financial year previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus',
+                                )">
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
                 <div class="form-group">
                     <input id="next-button" class="govuk-button piwik-event" data-event-id="Profit and loss account - Save and continue" type="submit" role="button" value="Save and continue"/>
                 </div>
