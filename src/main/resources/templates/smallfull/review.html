@@ -19,14 +19,64 @@
 
     <!-- Start Profit and Loss-->
 
-    <div th:replace="fragments/review/sectionHeader :: sectionHeader (
-                     description = 'Profit And Loss',
-                     identifier = 'profit-and-loss',
-                     resource = 'profit-and-loss'
-                     )">
+    <div id="cya-small-full-profit-and-loss" th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null">
+
+      <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                       description = 'Profit And Loss',
+                       identifier = 'profit-and-loss',
+                       resource = 'profit-and-loss'
+                       )">
+
+      </div>
+
+      <dl class="app-check-your-answers app-check-your-answers--short">
+
+        <div class="app-check-your-answers__contents cya-desktop-only">
+          <dt class="app-check-your-answers__question"></dt>
+          <dd class="app-check-your-answers__answer govuk-heading-s"
+              th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+              th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+          <dd class="app-check-your-answers__answer govuk-heading-s"
+              th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+              th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+          <dd class="app-check-your-answers__change"></dd>
+        </div>
+
+        <th:block
+            th:if="*{profitAndLoss?.grossProfitOrLoss?.grossTotal?.currentAmount != null or profitAndLoss?.grossProfitOrLoss?.grossTotal?.previousAmount != null}">
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Turnover',
+                            identifier = 'turnover',
+                            currentAmount = *{profitAndLoss?.grossProfitOrLoss?.turnover?.currentAmount},
+                            previousAmount = *{profitAndLoss?.grossProfitOrLoss?.turnover?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Cost of sales',
+                            identifier = 'cost-of-sales',
+                            currentAmount = *{profitAndLoss?.grossProfitOrLoss?.costOfSales?.currentAmount},
+                            previousAmount = *{profitAndLoss?.grossProfitOrLoss?.costOfSales?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Gross profit (or loss)',
+                            identifier = 'gross-profit-or-loss',
+                            currentAmount = *{profitAndLoss?.grossProfitOrLoss?.grossTotal?.currentAmount},
+                            previousAmount = *{profitAndLoss?.grossProfitOrLoss?.grossTotal?.previousAmount}
+                            isTotalRow = true
+                        )">
+          </div>
+
+        </th:block>
+
+      </dl>
 
     </div>
 
+    <!-- End Profit and Loss
     
     <!-- Start Balance Sheet -->
 

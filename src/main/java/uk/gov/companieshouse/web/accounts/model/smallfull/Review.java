@@ -16,6 +16,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinves
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+
 public class Review {
 
     private BalanceSheet balanceSheet;
@@ -53,7 +54,6 @@ public class Review {
     private CurrentAssetsInvestments currentAssetsInvestments;
 
     private ProfitAndLoss profitAndLoss;
-
 
     public BalanceSheet getBalanceSheet() {
         return balanceSheet;
