@@ -16,13 +16,12 @@
 
   <form id="review-form" th:action="@{''}" class="govuk-body" method="post">
 
-
     <!-- Start Profit and Loss-->
 
-    <div id="cya-small-full-profit-and-loss" th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null">
+    <div id="cya-small-full-profit-and-loss" th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null}">
 
       <div th:replace="fragments/review/sectionHeader :: sectionHeader (
-                       description = 'Profit And Loss',
+                       description = 'Profit and loss account',
                        identifier = 'profit-and-loss',
                        resource = 'profit-and-loss'
                        )">
@@ -65,7 +64,97 @@
                             description = 'Gross profit (or loss)',
                             identifier = 'gross-profit-or-loss',
                             currentAmount = *{profitAndLoss?.grossProfitOrLoss?.grossTotal?.currentAmount},
-                            previousAmount = *{profitAndLoss?.grossProfitOrLoss?.grossTotal?.previousAmount}
+                            previousAmount = *{profitAndLoss?.grossProfitOrLoss?.grossTotal?.previousAmount},
+                            isTotalRow = true
+                        )">
+          </div>
+
+        </th:block>
+
+        <th:block
+            th:if="*{profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.currentAmount != null or profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.previousAmount != null}">
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Distribution costs',
+                            identifier = 'distribution-costs',
+                            currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.distributionCosts?.currentAmount},
+                            previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.distributionCosts?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Administrative expenses',
+                            identifier = 'administrative-expenses',
+                            currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.administrativeExpenses?.currentAmount},
+                            previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.administrativeExpenses?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Other operating income',
+                            identifier = 'other-operating-income',
+                            currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.otherOperatingIncome?.currentAmount},
+                            previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.otherOperatingIncome?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Operating profit (or loss)',
+                            identifier = 'operating-profit-or-loss',
+                            currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.currentAmount},
+                            previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.previousAmount},
+                            isTotalRow = true
+                        )">
+          </div>
+
+        </th:block>
+
+        <th:block
+            th:if="*{profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.currentAmount != null or profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.previousAmount != null}">
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Interest receivable and similar income',
+                            identifier = 'interest-receivable-and-similar-income',
+                            currentAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestReceivableAndSimilarIncome?.currentAmount},
+                            previousAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestReceivableAndSimilarIncome?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Interest payable and similar charges',
+                            identifier = 'interest-payable-and-similar-charges',
+                            currentAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestPayableAndSimilarCharges?.currentAmount},
+                            previousAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestPayableAndSimilarCharges?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Profit (or loss) before tax',
+                            identifier = 'profit-or-loss-before-tax',
+                            currentAmount = *{profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.currentAmount},
+                            previousAmount = *{profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.previousAmount},
+                            isTotalRow = true
+                        )">
+          </div>
+
+        </th:block>
+
+        <th:block
+            th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null or profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.previousAmount != null}">
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Tax',
+                            identifier = 'tax',
+                            currentAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.tax?.currentAmount},
+                            previousAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.tax?.previousAmount}
+                        )">
+          </div>
+
+          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                            description = 'Profit (or loss) for the financial year',
+                            identifier = 'profit-or-loss-before-tax',
+                            currentAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount},
+                            previousAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.previousAmount},
                             isTotalRow = true
                         )">
           </div>
