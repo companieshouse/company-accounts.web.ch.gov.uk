@@ -315,7 +315,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'profitOrLossBeforeTax.totalProfitOrLossBeforeTax.currentAmount',
                                 text = 'Profit (or loss) before tax current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current range-from-minus before-c-total',
+                                class = 'govuk-input current range-from-minus before-c-total year-c-add',
                                 )">
                             </div>
                         </div>
@@ -323,7 +323,7 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'profitOrLossBeforeTax.totalProfitOrLossBeforeTax.previousAmount',
                                 text = 'Profit (or loss) before tax previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous range-from-minus before-p-total',
+                                class= 'govuk-input previous range-from-minus before-p-total year-p-add',
                                 )">
                             </div>
                         </div>
@@ -347,7 +347,7 @@
                         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'profitOrLossForFinancialYear.tax.currentAmount',
                                 text = 'Tax current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current range-from-minus',
+                                class = 'govuk-input current range-from-minus year-c-subtract',
                                 )">
                         </div>
                     </div>
@@ -355,7 +355,7 @@
                         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'profitOrLossForFinancialYear.tax.previousAmount',
                                 text = 'Tax previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous range-from-minus',
+                                class= 'govuk-input previous range-from-minus year-p-subtract',
                                 )">
                         </div>
                     </div>
@@ -378,7 +378,7 @@
                         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.currentAmount',
                                 text = 'Profit (or loss) for the financial year current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
-                                class = 'govuk-input current range-from-minus',
+                                class = 'govuk-input current range-from-minus year-c-total',
                                 )">
                         </div>
                     </div>
@@ -386,7 +386,7 @@
                         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.previousAmount',
                                 text = 'Profit (or loss) for the financial year previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
-                                class= 'govuk-input previous range-from-minus',
+                                class= 'govuk-input previous range-from-minus year-p-total',
                                 )">
                         </div>
                     </div>
