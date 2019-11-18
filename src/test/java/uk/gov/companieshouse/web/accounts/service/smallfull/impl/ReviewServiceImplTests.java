@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
@@ -37,6 +38,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
@@ -57,6 +59,9 @@ public class ReviewServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String COMPANY_NUMBER = "companyNumber";
+
+    @Mock
+    private ProfitAndLossService profitAndLossService;
 
     @Mock
     private BalanceSheetService balanceSheetService;
@@ -115,6 +120,10 @@ public class ReviewServiceImplTests {
     @Test
     @DisplayName("Get Review - Success Path")
     void getReview() throws ServiceException {
+
+        ProfitAndLoss mockProfitAndLoss = new ProfitAndLoss();
+        when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+                .thenReturn(mockProfitAndLoss);
 
         BalanceSheet mockBalanceSheet = new BalanceSheet();
         when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
@@ -181,6 +190,7 @@ public class ReviewServiceImplTests {
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(review);
+        assertEquals(mockProfitAndLoss, review.getProfitAndLoss());
         assertEquals(mockBalanceSheet, review.getBalanceSheet());
         assertEquals(mockStatements, review.getStatements());
         assertEquals(mockBasisOfPreparation, review.getBasisOfPreparation());
