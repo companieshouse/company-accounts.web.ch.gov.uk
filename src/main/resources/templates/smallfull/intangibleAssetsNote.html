@@ -5,8 +5,6 @@
 
 <head>
   <title>Intangible assets note</title>
-  <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/resource-numeric-field-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript" async></script>
-
 </head>
 <body>
 <div id="intangible-assets-note-main-content" layout:fragment="content" class="two-column-accounts">
@@ -595,8 +593,8 @@
     <input id="next-button" class="govuk-button piwik-event"
            data-event-id="Intangible assets note - Save and continue" type="submit" role="button"
            value="Save and continue"/>
-
   </form>
+    <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/resource-numeric-field-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
 </div>
 </body>
 </html>
