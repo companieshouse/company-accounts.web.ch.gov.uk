@@ -34,7 +34,7 @@
       <span th:id="${row} + '.plantAndMachinery-error'" class="govuk-error-message hidden"></span>
       <div class="height-one">&nbsp;</div>
     </div>
-    <div class="column-sixth block-desktop-only">
+    <div class="column-sixth block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.fixturesAndFittings')}"
             th:id="${row} + '.fixturesAndFittings-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.fixturesAndFittings')}"
@@ -45,7 +45,7 @@
       <span th:id="${row} + '.fixturesAndFittings-error'" class="govuk-error-message hidden"></span>
       <div class="height-one">&nbsp;</div>
     </div>
-    <div class="column-sixth block-desktop-only">
+    <div class="column-sixth block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.officeEquipment')}"
             th:id="${row} + '.officeEquipment-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.officeEquipment')}"
@@ -56,7 +56,7 @@
       <span th:id="${row} + '.officeEquipment-error'" class="govuk-error-message hidden"></span>
       <div class="height-one">&nbsp;</div>
     </div>
-    <div class="column-sixth block-desktop-only">
+    <div class="column-sixth block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.motorVehicles')}"
             th:id="${row} + '.motorVehicles-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.motorVehicles')}"
@@ -67,7 +67,7 @@
       <span th:id="${row} + '.motorVehicles-error'" class="govuk-error-message hidden"></span>
       <div class="height-one">&nbsp;</div>
     </div>
-    <div class="column-sixth block-desktop-only">
+    <div class="column-sixth block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.total')}"
             th:id="${row} + '.total-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.total')}"
