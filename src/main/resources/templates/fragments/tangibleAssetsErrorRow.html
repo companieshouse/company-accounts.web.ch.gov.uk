@@ -23,7 +23,7 @@
       <span th:id="${row} + '.landAndBuildings-error'" class="govuk-error-message hidden"></span>
       <div class="height-one">&nbsp;</div>
     </div>
-    <div class="column-sixth block-desktop-only">
+    <div class="column-sixth block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.plantAndMachinery')}"
             th:id="${row} + '.plantAndMachinery-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.plantAndMachinery')}"

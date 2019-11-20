@@ -9,7 +9,7 @@
                                                     #fields.hasErrors('__${row}__' + '.otherIntangibleAssets') ||
                                                     #fields.hasErrors('__${row}__' + '.total')} ? (${isTopRow} ? 'accounts-row-spacer' : '') : 'error-hidden'">
     <div class="govuk-grid-column-one-quarter block-desktop-only">&nbsp;</div>
-    <div class="govuk-grid-column-one-quarter block-desktop-only">
+    <div class="govuk-grid-column-one-quarter block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.goodwill')}"
             th:id="${row} + '.goodwill-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.goodwill')}"
