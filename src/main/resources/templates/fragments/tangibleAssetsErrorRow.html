@@ -12,7 +12,7 @@
                                                     #fields.hasErrors('__${row}__' + '.motorVehicles') ||
                                                     #fields.hasErrors('__${row}__' + '.total')} ? (${isTopRow} ? 'accounts-row-spacer' : '') : 'error-hidden'">
     <div class="column-fifth block-desktop-only">&nbsp;</div>
-    <div class="column-sixth block-desktop-only">
+    <div class="column-sixth block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.landAndBuildings')}"
             th:id="${row} + '.landAndBuildings-errorId'"
             th:each="e : ${#fields.errors('__${row}__' + '.landAndBuildings')}"
