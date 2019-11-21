@@ -5,10 +5,10 @@
 </head>
 <body>
 <div th:fragment="intangibleAssetsErrorRow">
-  <div class="govuk-grid-row block-desktop-only" th:classappend="${#fields.hasErrors('__${row}__' + '.goodwill') ||
+  <div class="govuk-grid-row" th:classappend="${#fields.hasErrors('__${row}__' + '.goodwill') ||
                                                     #fields.hasErrors('__${row}__' + '.otherIntangibleAssets') ||
                                                     #fields.hasErrors('__${row}__' + '.total')} ? (${isTopRow} ? 'accounts-row-spacer' : '') : 'error-hidden'">
-    <div class="govuk-grid-column-one-quarter block-desktop-only">&nbsp;</div>
+    <div class="govuk-grid-column-one-quarter">&nbsp;</div>
     <div class="govuk-grid-column-one-quarter block-desktop-only error-div">
       <span th:if="${#fields.hasErrors('__${row}__' + '.goodwill')}"
             th:id="${row} + '.goodwill-errorId'"
