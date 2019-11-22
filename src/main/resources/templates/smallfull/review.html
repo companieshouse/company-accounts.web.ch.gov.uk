@@ -152,7 +152,7 @@
 
           <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Profit (or loss) for the financial year',
-                            identifier = 'profit-or-loss-before-tax',
+                            identifier = 'profit-or-loss-for-the-financial-year',
                             currentAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount},
                             previousAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.previousAmount},
                             isTotalRow = true
