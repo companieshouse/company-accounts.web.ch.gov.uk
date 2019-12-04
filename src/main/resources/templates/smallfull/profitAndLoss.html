@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+    <head>
+        <title>Profit and loss account</title>
+    </head>
+
+        <div id="profitAndLoss-main-content" layout:fragment="content" class="two-column-accounts">
+
+            <form id="profitAndLoss-form" th:action="@{''}" th:object="${profitAndLoss}" class="form currency-included-within-inputs govuk-body" method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Profit and loss account'
+                )">
+                </div>
+
+                <div class="left-indent">
+                    <div class="panel panel-border-wide">
+                        <p id="profitAndLoss-help-text" class="warning-note warning-note-large">Complete all items that are included in your prepared accounts.</p>
+                    </div>
+
+                    <div class="govuk-grid-row" id="accounts-header">
+                        <div class="govuk-grid-column-one-half">
+                            &nbsp;
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <h2 class="govuk-heading-s">
+                                <span id="currentPeriodHeading" th:text='*{balanceSheetHeadings.currentPeriodHeading}'></span>
+                                <!-- Hidden input for form binding -->
+                                <input th:field="*{balanceSheetHeadings.currentPeriodHeading}" type="hidden">
+                            </h2>
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                            <h2 class="govuk-heading-s">
+                                <span id="previousPeriodHeading" th:text='*{balanceSheetHeadings.previousPeriodHeading}'></span>
+                                <!-- Hidden input for form binding -->
+                                <input th:field="*{balanceSheetHeadings.previousPeriodHeading}" type="hidden">
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'grossProfitOrLoss.turnover.currentAmount',
+                        previousField = 'grossProfitOrLoss.turnover.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="grossProfitOrLoss-turnover-subtitle">
+                            Turnover
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'grossProfitOrLoss.turnover.currentAmount',
+                                text = 'Turnover current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current validate range-from-minus gross-c-add operating-c-add',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'grossProfitOrLoss.turnover.previousAmount',
+                                text = 'Turnover previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous validate range-from-minus gross-p-add operating-p-add',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'grossProfitOrLoss.costOfSales.currentAmount',
+                        previousField = 'grossProfitOrLoss.costOfSales.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="grossProfitOrLoss-costOfSales-subtitle">
+                            Cost of sales
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'grossProfitOrLoss.costOfSales.currentAmount',
+                                text = 'Cost of sales current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current validate gross-c-subtract operating-c-subtract',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'grossProfitOrLoss.costOfSales.previousAmount',
+                                text = 'Cost of sales previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous validate gross-p-subtract operating-p-subtract',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'grossProfitOrLoss.grossTotal.currentAmount',
+                        previousField = 'grossProfitOrLoss.grossTotal.previousAmount'
+                        )">
+                    </div>
+
+                    <div class="govuk-grid-row column-flex accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong id="grossProfitOrLoss-grossTotal-subtitle">Gross profit (or loss)</strong>
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'grossProfitOrLoss.grossTotal.currentAmount',
+                                text = 'Gross profit (or loss) current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus gross-c-total',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'grossProfitOrLoss.grossTotal.previousAmount',
+                                text = 'Gross profit (or loss) previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus gross-p-total',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'operatingProfitOrLoss.distributionCosts.currentAmount',
+                        previousField = 'operatingProfitOrLoss.distributionCosts.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="operatingProfitOrLoss-distributionCosts-subtitle">
+                            Distribution costs
+                        </div>
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.distributionCosts.currentAmount',
+                                text = 'Distribution costs current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus operating-c-subtract',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.distributionCosts.previousAmount',
+                                text = 'Distribution costs previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus operating-p-subtract',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'operatingProfitOrLoss.administrativeExpenses.currentAmount',
+                        previousField = 'operatingProfitOrLoss.administrativeExpenses.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="operatingProfitOrLoss-administrativeExpenses-subtitle">
+                            Administrative expenses
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.administrativeExpenses.currentAmount',
+                                text = 'Administrative expenses current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus operating-c-subtract',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.administrativeExpenses.previousAmount',
+                                text = 'Administrative expenses previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus operating-p-subtract',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'operatingProfitOrLoss.otherOperatingIncome.currentAmount',
+                        previousField = 'operatingProfitOrLoss.otherOperatingIncome.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="operatingProfitOrLoss-otherOperatingIncome-subtitle">
+                            Other operating income
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.otherOperatingIncome.currentAmount',
+                                text = 'Other operating income current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current operating-c-add',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.otherOperatingIncome.previousAmount',
+                                text = 'Other operating income previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous operating-p-add',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'operatingProfitOrLoss.operatingTotal.currentAmount',
+                        previousField = 'operatingProfitOrLoss.operatingTotal.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row column-flex accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong id="operatingProfitOrLoss-operatingTotal-subtitle">Operating profit (or loss)</strong>
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.operatingTotal.currentAmount',
+                                text = 'Operating profit (or loss) current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus operating-c-total before-c-add',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'operatingProfitOrLoss.operatingTotal.previousAmount',
+                                text = 'Operating profit (or loss) previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus operating-p-total before-p-add',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'profitOrLossBeforeTax.interestReceivableAndSimilarIncome.currentAmount',
+                        previousField = 'profitOrLossBeforeTax.interestReceivableAndSimilarIncome.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="profitAndLossBeforeTax-interestReceivableAndSimilarIncome-subtitle">
+                            Interest receivable and similar income
+                        </div>
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossBeforeTax.interestReceivableAndSimilarIncome.currentAmount',
+                                text = 'Interest receivable and similar income current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current before-c-add',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossBeforeTax.interestReceivableAndSimilarIncome.previousAmount',
+                                text = 'Interest receivable and similar income previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous before-p-add',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'profitOrLossBeforeTax.interestPayableAndSimilarCharges.currentAmount',
+                        previousField = 'profitOrLossBeforeTax.interestPayableAndSimilarCharges.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="profitOrLossBeforeTax-interestPayableAndSimilarCharges">
+                            Interest payable and similar charges
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossBeforeTax.interestPayableAndSimilarCharges.currentAmount',
+                                text = 'Interest payable and similar charges current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current before-c-subtract',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossBeforeTax.interestPayableAndSimilarCharges.previousAmount',
+                                text = 'Interest payable and similar charges previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous before-p-subtract',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'profitOrLossBeforeTax.totalProfitOrLossBeforeTax.currentAmount',
+                        previousField = 'profitOrLossBeforeTax.totalProfitOrLossBeforeTax.previousAmount'
+                        )">
+                    </div>
+                    <div class="govuk-grid-row column-flex accounts-total">
+                        <div class="govuk-grid-column-one-half">
+                            <strong id="profitOrLossBeforeTax-totalProfitOrLossBeforeTax-subtitle">Profit (or loss) before tax</strong>
+                        </div>
+
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossBeforeTax.totalProfitOrLossBeforeTax.currentAmount',
+                                text = 'Profit (or loss) before tax current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus before-c-total year-c-add',
+                                )">
+                            </div>
+                        </div>
+                        <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossBeforeTax.totalProfitOrLossBeforeTax.previousAmount',
+                                text = 'Profit (or loss) before tax previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus before-p-total year-p-add',
+                                )">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'profitOrLossForFinancialYear.tax.currentAmount',
+                        previousField = 'profitOrLossForFinancialYear.tax.previousAmount'
+                        )">
+                </div>
+
+                <div class="govuk-grid-row column-flex">
+                    <div class="govuk-grid-column-one-half" id="profitOrLossForFinancialYear-tax-subtitle">
+                        Tax
+                    </div>
+
+                    <div class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.tax.currentAmount',
+                                text = 'Tax current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus year-c-subtract',
+                                )">
+                        </div>
+                    </div>
+                    <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.tax.previousAmount',
+                                text = 'Tax previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus year-p-subtract',
+                                )">
+                        </div>
+                    </div>
+                </div>
+
+                <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                        currentField = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.currentAmount',
+                        previousField = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.previousAmount'
+                        )">
+                </div>
+
+                <div class="govuk-grid-row column-flex accounts-total">
+                    <div class="govuk-grid-column-one-half">
+                        <strong id="profitOrLossForFinancialYear-totalProfitOrLossForFinancialYear-subtitle">
+                            Profit (or loss) for the financial year
+                        </strong>
+                    </div>
+
+                    <div class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.currentAmount',
+                                text = 'Profit (or loss) for the financial year current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
+                                class = 'govuk-input current range-from-minus year-c-total',
+                                )">
+                        </div>
+                    </div>
+                    <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'profitOrLossForFinancialYear.totalProfitOrLossForFinancialYear.previousAmount',
+                                text = 'Profit (or loss) for the financial year previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
+                                class= 'govuk-input previous range-from-minus year-p-total',
+                                )">
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="form-group">
+                    <input id="next-button" class="govuk-button piwik-event" data-event-id="Profit and loss account - Save and continue" type="submit" role="button" value="Save and continue"/>
+                </div>
+
+                <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/two-column-accounts-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+
+            </form>
+        </div>
+</html>
+
+

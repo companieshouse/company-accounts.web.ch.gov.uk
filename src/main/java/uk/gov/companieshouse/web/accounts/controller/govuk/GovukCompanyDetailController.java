@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,21 +8,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import uk.gov.companieshouse.web.accounts.annotation.NextController;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@NextController(StepsToCompleteController.class)
 @RequestMapping("/accounts/company/{companyNumber}/details")
 public class GovukCompanyDetailController extends BaseController {
 
     @Autowired
     private CompanyService companyService;
+
+    private static final UriTemplate SMALL_FULL_STEPS_TO_COMPLETE =
+            new UriTemplate("/company/{companyNumber}/small-full/steps-to-complete");
+
+    private static final UriTemplate CIC_STEPS_TO_COMPLETE =
+            new UriTemplate("/company/{companyNumber}/cic/steps-to-complete");
 
     private static final String TEMPLATE_HEADING = "Confirm company details";
 
@@ -52,8 +58,22 @@ public class GovukCompanyDetailController extends BaseController {
     }
 
     @PostMapping
-    public String postCompanyDetail(@PathVariable String companyNumber) {
+    public String postCompanyDetail(@PathVariable String companyNumber, HttpServletRequest request) {
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
+        try {
+            if (BooleanUtils.isTrue(companyService.getCompanyProfile(companyNumber)
+                    .isCommunityInterestCompany())) {
+
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                        CIC_STEPS_TO_COMPLETE.expand(companyNumber).toString();
+            } else {
+
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                        SMALL_FULL_STEPS_TO_COMPLETE.expand(companyNumber).toString();
+            }
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
     }
 }

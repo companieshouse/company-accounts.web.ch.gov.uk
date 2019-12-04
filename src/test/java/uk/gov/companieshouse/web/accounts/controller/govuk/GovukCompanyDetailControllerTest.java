@@ -11,10 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,14 +30,14 @@ public class GovukCompanyDetailControllerTest {
     @Mock
     private CompanyService companyService;
 
-    @Mock
-    private NavigatorService navigatorService;
-
     @InjectMocks
     private GovukCompanyDetailController controller;
 
     @Mock
     private CompanyDetail companyDetail;
+
+    @Mock
+    private CompanyProfileApi companyProfile;
 
     private static final String COMPANY_NUMBER = "number";
     private static final String COMPANY_DETAIL_PATH = "/accounts/company/" + COMPANY_NUMBER + "/details";
@@ -46,8 +46,13 @@ public class GovukCompanyDetailControllerTest {
     private static final String COMPANY_DETAIL_MODEL_ATTR = "companyDetail";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String TEMPLATE_HEADING_MODEL_ATTR = "templateHeading";
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
     private static final String TEMPLATE_SHOW_CONTINUE_MODEL_ATTR = "showContinue";
+
+    private static final String SMALL_FULL_STEPS_TO_COMPLETE_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + COMPANY_NUMBER + "/small-full/steps-to-complete";
+
+    private static final String CIC_STEPS_TO_COMPLETE_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + COMPANY_NUMBER + "/cic/steps-to-complete";
 
     @BeforeEach
     private void setup() {
@@ -82,14 +87,39 @@ public class GovukCompanyDetailControllerTest {
     }
 
     @Test
-    @DisplayName("Post Gov uk Company Details")
-    void postRequest() throws Exception {
+    @DisplayName("Post Gov uk Company Details - CIC Company")
+    void postRequestCicCompany() throws Exception {
 
-        when(navigatorService.getNextControllerRedirect(controller.getClass(), COMPANY_NUMBER))
-                .thenReturn(MOCK_CONTROLLER_PATH);
+        when(companyService.getCompanyProfile(COMPANY_NUMBER))
+                .thenReturn(companyProfile);
+        when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
 
         mockMvc.perform(post(COMPANY_DETAIL_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+                .andExpect(view().name(CIC_STEPS_TO_COMPLETE_PATH));
+    }
+
+    @Test
+    @DisplayName("Post Gov uk Company Details - Non-CIC Company")
+    void postRequestNonCicCompany() throws Exception {
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER))
+                .thenReturn(companyProfile);
+        when(companyProfile.isCommunityInterestCompany()).thenReturn(false);
+
+        mockMvc.perform(post(COMPANY_DETAIL_PATH))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(SMALL_FULL_STEPS_TO_COMPLETE_PATH));
+    }
+
+    @Test
+    @DisplayName("Post Gov uk Company Details - Throws Exception")
+    void postRequestThrowsException() throws Exception {
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenThrow(ServiceException.class);
+
+        mockMvc.perform(post(COMPANY_DETAIL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 }

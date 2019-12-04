@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -27,11 +29,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
@@ -69,6 +77,18 @@ public class StepsToCompleteControllerTests {
 
     @Mock
     private NavigatorService navigatorService;
+
+    @Mock
+    private CompanyService companyService;
+
+    @Mock
+    private CompanyProfileApi companyProfile;
+
+    @Mock
+    private CurrentPeriodService currentPeriodService;
+
+    @Mock
+    private PreviousPeriodService previousPeriodService;
 
     @InjectMocks
     private StepsToCompleteController controller;
@@ -112,8 +132,8 @@ public class StepsToCompleteControllerTests {
     }
 
     @Test
-    @DisplayName("Post steps to complete success path")
-    void postRequestSuccess() throws Exception {
+    @DisplayName("Post steps to complete success path - first year filer")
+    void postRequestSuccessFirstYearFiler() throws Exception {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
@@ -121,15 +141,15 @@ public class StepsToCompleteControllerTests {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
+        doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
 
-        doNothing().when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
-        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
-
-        doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(false);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -139,9 +159,54 @@ public class StepsToCompleteControllerTests {
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID);
 
-        verify(smallFullService, times(1)).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(currentPeriodService).submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                CurrentPeriodApi.class), anyList());
+
+        verify(previousPeriodService, never()).submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                PreviousPeriodApi.class), anyList());
+    }
+
+    @Test
+    @DisplayName("Post steps to complete success path - multi year filer")
+    void postRequestSuccessMultiYearFiler() throws Exception {
+
+        when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
+
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+
+        doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
+
+        this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(transactionService, times(1)).createTransaction(COMPANY_NUMBER);
+
+        verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID);
 
         verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(currentPeriodService).submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                CurrentPeriodApi.class), anyList());
+
+        verify(previousPeriodService).submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                PreviousPeriodApi.class), anyList());
     }
 
     @Test
