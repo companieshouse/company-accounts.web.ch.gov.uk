@@ -6,7 +6,7 @@ import java.time.format.ResolverStyle;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.cic.approval.CicApprovalApi;
 import uk.gov.companieshouse.web.accounts.model.cic.CicApproval;
-import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicApprovalTransformer;
 
 @Component
@@ -34,7 +34,7 @@ public class CicApprovalTransformerImpl implements CicApprovalTransformer {
     public CicApproval getCicApproval(CicApprovalApi cicApprovalApi) {
 
         CicApproval cicApproval = new CicApproval();
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         LocalDate apiDate = cicApprovalApi.getDate();
 
         approvalDate.setDay(Integer.toString(apiDate.getDayOfMonth()));

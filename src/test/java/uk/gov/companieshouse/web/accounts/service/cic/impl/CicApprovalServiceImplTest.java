@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -37,7 +36,7 @@ import uk.gov.companieshouse.api.model.accounts.cic.approval.CicApprovalApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.CicApproval;
-import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.cic.CicReportService;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicApprovalTransformer;
@@ -431,7 +430,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - No Fields Provided")
         void validateApprovalDateNoFieldsProvided() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
 
             CicApproval cicApproval = new CicApproval();
             cicApproval.setDate(approvalDate);
@@ -447,7 +446,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Day Not Provided")
         void validateApprovalDateDayNotProvided() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setMonth("12");
             approvalDate.setYear("2018");
 
@@ -465,7 +464,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Month Not Provided")
         void validateApprovalDateMonthNotProvided() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setDay("12");
             approvalDate.setYear("2018");
 
@@ -483,7 +482,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Year Not Provided")
         void validateApprovalDateYearNotProvided() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setDay("12");
             approvalDate.setMonth("12");
 
@@ -501,7 +500,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Invalid Day Format")
         void validateApprovalDateInvalidDayFormat() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setDay("1st");
             approvalDate.setMonth("3");
             approvalDate.setYear("2018");
@@ -520,7 +519,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Invalid Month Format")
         void validateApprovalDateInvalidMonthFormat() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setDay("12");
             approvalDate.setMonth("Mar");
             approvalDate.setYear("2018");
@@ -539,7 +538,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Invalid Year Format")
         void validateApprovalDateInvalidYearFormat() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setDay("12");
             approvalDate.setMonth("3");
             approvalDate.setYear("18");
@@ -558,7 +557,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Invalid Date")
         void validateApprovalDateInvalidDate() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setDay("12");
             approvalDate.setMonth("13");
             approvalDate.setYear("2018");
@@ -579,7 +578,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
         @DisplayName("Validate Approval Date - Valid Date")
         void validateApprovalDateValidDate() {
 
-            ApprovalDate approvalDate = new ApprovalDate();
+            Date approvalDate = new Date();
             approvalDate.setDay("12");
             approvalDate.setMonth("10");
             approvalDate.setYear("2018");

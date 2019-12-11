@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.cic;
 
-import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
@@ -11,7 +11,7 @@ public class CicApproval {
     private String directorName;
 
     @ValidationMapping("$.cic_approval.date")
-    private ApprovalDate date;
+    private Date date;
 
     public String getDirectorName() {
         return directorName;
@@ -21,11 +21,11 @@ public class CicApproval {
         this.directorName = directorName;
     }
 
-    public ApprovalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(ApprovalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

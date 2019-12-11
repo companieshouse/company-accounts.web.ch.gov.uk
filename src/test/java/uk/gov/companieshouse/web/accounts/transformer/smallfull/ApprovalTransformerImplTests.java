@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
-import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.ApprovalTransformerImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,7 +33,7 @@ public class ApprovalTransformerImplTests {
         Approval approval = new Approval();
         approval.setDirectorName(DIRECTOR_NAME);
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay(APPROVAL_DAY);
         approvalDate.setMonth(APPROVAL_MONTH);
         approvalDate.setYear(APPROVAL_YEAR);

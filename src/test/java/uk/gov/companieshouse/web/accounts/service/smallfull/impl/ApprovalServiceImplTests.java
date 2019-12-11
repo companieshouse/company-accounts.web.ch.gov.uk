@@ -31,7 +31,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
-import uk.gov.companieshouse.web.accounts.model.smallfull.ApprovalDate;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
@@ -388,7 +388,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - No Fields Provided")
     void validateApprovalDateNoFieldsProvided() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
 
         Approval approval = new Approval();
         approval.setDate(approvalDate);
@@ -404,7 +404,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Day Not Provided")
     void validateApprovalDateDayNotProvided() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setMonth("12");
         approvalDate.setYear("2018");
 
@@ -422,7 +422,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Month Not Provided")
     void validateApprovalDateMonthNotProvided() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay("12");
         approvalDate.setYear("2018");
 
@@ -440,7 +440,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Year Not Provided")
     void validateApprovalDateYearNotProvided() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay("12");
         approvalDate.setMonth("12");
 
@@ -458,7 +458,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Invalid Day Format")
     void validateApprovalDateInvalidDayFormat() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay("1st");
         approvalDate.setMonth("3");
         approvalDate.setYear("2018");
@@ -477,7 +477,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Invalid Month Format")
     void validateApprovalDateInvalidMonthFormat() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay("12");
         approvalDate.setMonth("Mar");
         approvalDate.setYear("2018");
@@ -496,7 +496,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Invalid Year Format")
     void validateApprovalDateInvalidYearFormat() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay("12");
         approvalDate.setMonth("3");
         approvalDate.setYear("18");
@@ -515,7 +515,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Invalid Date")
     void validateApprovalDateInvalidDate() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay("12");
         approvalDate.setMonth("13");
         approvalDate.setYear("2018");
@@ -536,7 +536,7 @@ public class ApprovalServiceImplTests {
     @DisplayName("Validate Approval Date - Valid Date")
     void validateApprovalDateValidDate() {
 
-        ApprovalDate approvalDate = new ApprovalDate();
+        Date approvalDate = new Date();
         approvalDate.setDay("12");
         approvalDate.setMonth("10");
         approvalDate.setYear("2018");

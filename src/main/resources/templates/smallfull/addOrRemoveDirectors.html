@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Directors' report
+  </title>
+</head>
+<div id="directorsReport-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="directorsReport-form" class="form" th:action="@{''}" th:object="${addOrRemoveDirectors}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div th:replace="fragments/numberedHeading :: numberedHeading (
+                    headingText = 'Directors\' report'
+                )">
+        </div>
+
+        <h2 id="directorsReport-subheading" class="govuk-heading-m">
+          Enter the name(s) of the directors who served in the accounting period you're filing for
+        </h2>
+
+        <span id="directorsReport-help-text" class="govuk-hint">
+          This includes directors who were appointed or resigned during the accounting period. You can add up to 20 directors.
+        </span>
+
+        <div id="directorsReport-directors" th:if="*{existingDirectors.length > 0}">
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">
+                  Director's name
+                </th>
+                <th class="govuk-table__header" scope="col">
+                  Appointed
+                </th>
+                <th class="govuk-table__header" scope="col">
+                  Resigned
+                </th>
+                <th class="govuk-table__header" scope="col"></th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row" th:each="director : *{existingDirectors}">
+                <th class="govuk-table__header" scope="row" th:text="${director.name}"></th>
+                <td class="govuk-table__cell" th:text="${#temporals.format(director.appointmentDate, 'd MMM yyyy')}"></td>
+                <td class="govuk-table__cell" th:text="${#temporals.format(director.resignationDate, 'd MMM yyyy')}"></td>
+                <td class="govuk-table__cell">
+                  <a href="javascript:void(0)" onclick="removeDirector(0)">
+                    Remove
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Directors report - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

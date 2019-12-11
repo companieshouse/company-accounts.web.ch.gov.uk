@@ -19,7 +19,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 
 @Controller
-@NextController(ProfitAndLossQuestionController.class)
+@NextController(AddOrRemoveDirectorsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report-question")
 public class DirectorsReportQuestionController extends BaseController {
 
@@ -52,14 +52,18 @@ public class DirectorsReportQuestionController extends BaseController {
             return getTemplateName();
         }
 
-        if (!directorsReportQuestion.getHasIncludedDirectorsReport()) {
-            try {
-                directorsReportService.deleteDirectorsReport(transactionId, companyAccountsId);
-            } catch (ServiceException e) {
+        try {
+            if (directorsReportQuestion.getHasIncludedDirectorsReport()) {
 
-                LOGGER.errorRequest(request, e.getMessage(), e);
-                return ERROR_VIEW;
+                directorsReportService.createDirectorsReport(transactionId, companyAccountsId);
+            } else {
+
+                directorsReportService.deleteDirectorsReport(transactionId, companyAccountsId);
             }
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
         }
 
         cacheIsDirectorsReportIncluded(request, directorsReportQuestion);
@@ -69,6 +73,7 @@ public class DirectorsReportQuestionController extends BaseController {
 
     @Override
     protected String getTemplateName() {
+
         return "smallfull/directorsReportQuestion";
     }
 
