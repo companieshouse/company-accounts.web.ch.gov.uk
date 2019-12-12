@@ -25,7 +25,7 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.DirectorsReportResourceHandler;
-import uk.gov.companieshouse.api.handler.smallfull.directorsreport.director.DirectorResourceHandler;
+import uk.gov.companieshouse.api.handler.smallfull.directorsreport.director.DirectorsResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.director.request.DirectorCreate;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.director.request.DirectorDelete;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.director.request.DirectorGetAll;
@@ -67,7 +67,7 @@ public class DirectorServiceImplTest {
     private DirectorsReportResourceHandler directorsReportResourceHandler;
 
     @Mock
-    private DirectorResourceHandler directorResourceHandler;
+    private DirectorsResourceHandler directorResourceHandler;
 
     @Mock
     private DirectorGetAll directorGetAll;
