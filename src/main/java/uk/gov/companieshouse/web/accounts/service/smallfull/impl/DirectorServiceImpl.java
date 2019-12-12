@@ -54,7 +54,7 @@ public class DirectorServiceImpl implements DirectorService {
         String uri = DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().directorsReport().director().getAll(uri).execute().getData();
+            return apiClient.smallFull().directorsReport().directors().getAll(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
@@ -96,7 +96,7 @@ public class DirectorServiceImpl implements DirectorService {
         DirectorApi directorApi = directorTransformer.getDirectorApi(directorToAdd);
 
         try {
-            ApiResponse<DirectorApi> apiResponse = apiClient.smallFull().directorsReport().director().create(uri, directorApi).execute();
+            ApiResponse<DirectorApi> apiResponse = apiClient.smallFull().directorsReport().directors().create(uri, directorApi).execute();
 
             if (apiResponse.hasErrors()) {
                 validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
@@ -119,7 +119,7 @@ public class DirectorServiceImpl implements DirectorService {
         String uri = DIRECTORS_URI_WITH_ID.expand(transactionId, companyAccountsId, directorId).toString();
 
         try {
-            apiClient.smallFull().directorsReport().director().delete(uri).execute();
+            apiClient.smallFull().directorsReport().directors().delete(uri).execute();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
