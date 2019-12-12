@@ -44,7 +44,7 @@
               <span class="mobile-only-label">Appointed: </span>
               <span th:text="${#temporals.format(director.appointmentDate, 'd MMM yyyy')}"></span>
             </dd>
-            <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+            <dd class="app-check-your-answers__answer">
               <span class="mobile-only-label">Resigned: </span>
               <span th:text="${#temporals.format(director.resignationDate, 'd MMM yyyy')}"></span>
             </dd>
