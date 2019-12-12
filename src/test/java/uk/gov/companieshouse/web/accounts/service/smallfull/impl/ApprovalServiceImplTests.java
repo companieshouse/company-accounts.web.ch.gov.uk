@@ -1,14 +1,11 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,11 +28,11 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
-import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.DateValidator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -80,6 +77,9 @@ public class ApprovalServiceImplTests {
     private ValidationContext validationContext;
 
     @Mock
+    private DateValidator dateValidator;
+
+    @Mock
     private ApiResponse<ApprovalApi> responseWithData;
 
     @Mock
@@ -110,23 +110,21 @@ public class ApprovalServiceImplTests {
     private static final String APPROVAL_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
                                                 COMPANY_ACCOUNTS_ID + "/small-full/approval";
 
-    private static final String APPROVAL_DATE_ERROR_LOCATION = ".approval.date";
-
-    private static final String DATE_MISSING = "validation.date.missing" + APPROVAL_DATE_ERROR_LOCATION;
-
-    private static final String DATE_INCOMPLETE = "validation.date.incomplete" + APPROVAL_DATE_ERROR_LOCATION;
-
-    private static final String DATE_FORMAT_INVALID = "validation.date.format" + APPROVAL_DATE_ERROR_LOCATION;
-
-    private static final String DATE_INVALID = "validation.date.nonExistent";
-
     private static final String MOCK_APPROVAL_LINK = "mockApprovalLink";
+
+    private static final String DATE_FIELD_PATH = "date";
+
+    private static final String DATE_JSON_PATH_SUFFIX = ".approval.date";
 
     private static final String RESOURCE_NAME = "approval";
 
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
     void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -156,9 +154,27 @@ public class ApprovalServiceImplTests {
     }
 
     @Test
+    @DisplayName("Submit Approval - POST - Date Validation Errors")
+    void createApprovalDateValidationErrors() throws ServiceException {
+
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(false);
+
+        List<ValidationError> validationErrors =
+                approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval);
+
+        assertEquals(mockValidationErrors, validationErrors);
+    }
+
+    @Test
     @DisplayName("Submit Approval - POST - URIValidationException Thrown")
     void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
                 ServiceException {
+
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -191,6 +207,10 @@ public class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - POST - Validation Errors")
     void createApprovalWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -227,6 +247,10 @@ public class ApprovalServiceImplTests {
     void createApprovalThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
+
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -257,6 +281,10 @@ public class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - PUT - Success Path")
     void updateApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -290,6 +318,10 @@ public class ApprovalServiceImplTests {
     void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException,
                     ServiceException {
 
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
+
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -321,6 +353,10 @@ public class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - PUT - Validation Errors")
     void updateApprovalWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -357,6 +393,10 @@ public class ApprovalServiceImplTests {
     void updateApprovalThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+
+        when(mockValidationErrors.isEmpty()).thenReturn(true);
+
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -382,173 +422,6 @@ public class ApprovalServiceImplTests {
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - No Fields Provided")
-    void validateApprovalDateNoFieldsProvided() {
-
-        Date approvalDate = new Date();
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_MISSING, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Day Not Provided")
-    void validateApprovalDateDayNotProvided() {
-
-        Date approvalDate = new Date();
-        approvalDate.setMonth("12");
-        approvalDate.setYear("2018");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Month Not Provided")
-    void validateApprovalDateMonthNotProvided() {
-
-        Date approvalDate = new Date();
-        approvalDate.setDay("12");
-        approvalDate.setYear("2018");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Year Not Provided")
-    void validateApprovalDateYearNotProvided() {
-
-        Date approvalDate = new Date();
-        approvalDate.setDay("12");
-        approvalDate.setMonth("12");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_INCOMPLETE, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Invalid Day Format")
-    void validateApprovalDateInvalidDayFormat() {
-
-        Date approvalDate = new Date();
-        approvalDate.setDay("1st");
-        approvalDate.setMonth("3");
-        approvalDate.setYear("2018");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Invalid Month Format")
-    void validateApprovalDateInvalidMonthFormat() {
-
-        Date approvalDate = new Date();
-        approvalDate.setDay("12");
-        approvalDate.setMonth("Mar");
-        approvalDate.setYear("2018");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Invalid Year Format")
-    void validateApprovalDateInvalidYearFormat() {
-
-        Date approvalDate = new Date();
-        approvalDate.setDay("12");
-        approvalDate.setMonth("3");
-        approvalDate.setYear("18");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_FORMAT_INVALID, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Invalid Date")
-    void validateApprovalDateInvalidDate() {
-
-        Date approvalDate = new Date();
-        approvalDate.setDay("12");
-        approvalDate.setMonth("13");
-        approvalDate.setYear("2018");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        when(approvalTransformer.getApprovalDate(approval)).thenThrow(DateTimeParseException.class);
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertNotNull(validationErrors);
-        assertEquals(1, validationErrors.size());
-        assertEquals(DATE_INVALID, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate Approval Date - Valid Date")
-    void validateApprovalDateValidDate() {
-
-        Date approvalDate = new Date();
-        approvalDate.setDay("12");
-        approvalDate.setMonth("10");
-        approvalDate.setYear("2018");
-
-        Approval approval = new Approval();
-        approval.setDate(approvalDate);
-
-        when(approvalTransformer.getApprovalDate(approval)).thenReturn(LocalDate.now());
-
-        List<ValidationError> validationErrors = approvalService.validateApprovalDate(approval);
-
-        assertEquals(0, validationErrors.size());
     }
 
 }
