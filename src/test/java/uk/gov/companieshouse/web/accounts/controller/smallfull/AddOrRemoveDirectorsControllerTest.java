@@ -3,6 +3,8 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,10 +62,14 @@ public class AddOrRemoveDirectorsControllerTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String DIRECTOR_ID = "directorId";
+
     private static final String ADD_OR_REMOVE_DIRECTORS_PATH = "/company/" + COMPANY_NUMBER +
                                                                 "/transaction/" + TRANSACTION_ID +
                                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                                 "/small-full/add-or-remove-directors";
+
+    private static final String REMOVE_DIRECTOR_PATH = ADD_OR_REMOVE_DIRECTORS_PATH + "/remove/" + DIRECTOR_ID;
 
     private static final String ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR = "addOrRemoveDirectors";
 
@@ -93,6 +99,9 @@ public class AddOrRemoveDirectorsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
                 .andExpect(model().attributeExists(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
@@ -103,6 +112,28 @@ public class AddOrRemoveDirectorsControllerTest {
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Delete director - success path")
+    void deleteDirectorSuccess() throws Exception {
+
+        this.mockMvc.perform(get(REMOVE_DIRECTOR_PATH))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_DIRECTORS_PATH));
+
+        verify(directorService).deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, DIRECTOR_ID);
+    }
+
+    @Test
+    @DisplayName("Delete director - service exception")
+    void deleteDirectorServiceException() throws Exception {
+
+        doThrow(ServiceException.class).when(directorService).deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, DIRECTOR_ID);
+
+        this.mockMvc.perform(get(REMOVE_DIRECTOR_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }

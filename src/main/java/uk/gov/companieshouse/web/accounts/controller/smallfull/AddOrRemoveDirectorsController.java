@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -30,6 +31,9 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     @Autowired
     private DirectorService directorService;
+
+    private static final UriTemplate URI =
+            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
 
@@ -73,7 +77,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId,
                                  @PathVariable String directorId,
-                                 Model model,
                                  HttpServletRequest request) {
 
         try {
@@ -85,7 +88,8 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
             return ERROR_VIEW;
         }
 
-        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/small-full/add-or-remove-directors";
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                        URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
     @PostMapping
