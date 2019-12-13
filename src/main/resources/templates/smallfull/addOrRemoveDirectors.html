@@ -47,10 +47,13 @@
           </dd>
           <dd class="app-check-your-answers__change">
             <form class="form"
-                  th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/remove/{directorId}(companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},directorId=${director.id})}"
+                  th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/remove/{directorId}
+                                (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},directorId=${director.id})}"
                   method="get">
-              <input id="remove-director-button" class="govuk-button piwik-event" data-event-id="Directors report - remove director"
-                     type="submit" role="button" value="Remove"/>
+              <div class="flex-container-center-align">
+                  <input id="remove-director-button" class="button-display-as-link piwik-event" data-event-id="Directors report - remove director"
+                        type="submit" role="button" value="Remove"/>
+              </div>
             </form>
           </dd>
         </div>
