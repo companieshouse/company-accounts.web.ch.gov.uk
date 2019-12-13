@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -32,6 +33,12 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String TRANSACTION_ID = "transactionId";
+
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
     @GetMapping
     public String getAddOrRemoveDirectors(@PathVariable String companyNumber,
                                           @PathVariable String transactionId,
@@ -54,8 +61,31 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         }
 
         model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
+        model.addAttribute(COMPANY_NUMBER, companyNumber);
+        model.addAttribute(TRANSACTION_ID, transactionId);
+        model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
 
         return getTemplateName();
+    }
+
+    @GetMapping("/remove/{directorId}")
+    public String removeDirector(@PathVariable String companyNumber,
+                                 @PathVariable String transactionId,
+                                 @PathVariable String companyAccountsId,
+                                 @PathVariable String directorId,
+                                 Model model,
+                                 HttpServletRequest request) {
+
+        try {
+            directorService.deleteDirector(transactionId, companyAccountsId, directorId);
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
+
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + companyNumber + "/transaction/" + transactionId + "/company-accounts/" + companyAccountsId + "/small-full/add-or-remove-directors";
     }
 
     @PostMapping
