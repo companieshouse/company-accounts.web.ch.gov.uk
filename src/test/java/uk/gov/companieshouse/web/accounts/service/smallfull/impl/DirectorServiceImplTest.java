@@ -33,6 +33,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorTransformer;
@@ -129,10 +130,12 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenReturn(responseWithMultipleDirectors);
         DirectorApi[] directors = new DirectorApi[1];
         when(responseWithMultipleDirectors.getData()).thenReturn(directors);
+        Director[] allDirectors = new Director[1];
+        when(directorTransformer.getAllDirectors(directors)).thenReturn(allDirectors);
 
-        DirectorApi[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        assertEquals(directors, response);
+        assertEquals(allDirectors, response);
     }
 
     @Test
@@ -148,7 +151,7 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenThrow(apiErrorResponseException);
         doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        DirectorApi[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(response);
         assertEquals(0, response.length);

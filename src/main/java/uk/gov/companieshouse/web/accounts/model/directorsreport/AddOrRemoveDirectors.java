@@ -1,20 +1,18 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
-import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorApi;
-
 public class AddOrRemoveDirectors {
 
-    private DirectorApi[] existingDirectors;
+    private Director[] existingDirectors;
 
     private DirectorToAdd directorToAdd;
 
     private String secretary;
 
-    public DirectorApi[] getExistingDirectors() {
+    public Director[] getExistingDirectors() {
         return existingDirectors;
     }
 
-    public void setExistingDirectors(DirectorApi[] existingDirectors) {
+    public void setExistingDirectors(Director[] existingDirectors) {
         this.existingDirectors = existingDirectors;
     }
 
