@@ -12,6 +12,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorTransformer;
@@ -47,21 +48,22 @@ public class DirectorServiceImpl implements DirectorService {
     private static final String RESOURCE_NAME = "directors";
 
     @Override
-    public DirectorApi[] getAllDirectors(String transactionId, String companyAccountsId) throws ServiceException {
+    public Director[] getAllDirectors(String transactionId, String companyAccountsId) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            return apiClient.smallFull().directorsReport().directors().getAll(uri).execute().getData();
+            DirectorApi[] directors = apiClient.smallFull().directorsReport().directors().getAll(uri).execute().getData();
+            return directorTransformer.getAllDirectors(directors);
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
 
-        return new DirectorApi[0];
+        return new Director[0];
     }
 
     @Override
