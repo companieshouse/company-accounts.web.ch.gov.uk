@@ -85,8 +85,6 @@ public class ApprovalControllerTests {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    private static final String PAYMENT_URL = "paymentUrl";
-
     private static final String PAYMENT_WEB_ENDPOINT = "/paymentWebEndpoint";
 
     @BeforeEach
@@ -121,25 +119,8 @@ public class ApprovalControllerTests {
     }
 
     @Test
-    @DisplayName("Post approval date validation failure path")
-    void postRequestApprovalDateValidationFailure() throws Exception {
-
-        List<ValidationError> validationErrors = new ArrayList<>();
-        validationErrors.add(new ValidationError());
-
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(validationErrors);
-
-        this.mockMvc.perform(post(APPROVAL_PATH))
-                .andExpect(status().isOk())
-                .andExpect(view().name(APPROVAL_VIEW))
-                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
-    }
-
-    @Test
     @DisplayName("Post approval api validation failure path")
     void postRequestApiValidationFailure() throws Exception {
-
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
 
         List<ValidationError> validationErrors = new ArrayList<>();
         validationErrors.add(new ValidationError());
@@ -157,8 +138,6 @@ public class ApprovalControllerTests {
     @DisplayName("Post approval submit approval exception failure path")
     void postRequestSubmitApprovalExceptionFailure() throws Exception {
 
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
-
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenThrow(ServiceException.class);
 
@@ -170,8 +149,6 @@ public class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval close transaction exception failure path")
     void postRequestCloseTransactionExceptionFailure() throws Exception {
-
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
@@ -187,8 +164,6 @@ public class ApprovalControllerTests {
     @DisplayName("Post approval success path for non-payable transaction")
     void postRequestSuccessForNonPayableTransaction() throws Exception {
 
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
-
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
@@ -202,8 +177,6 @@ public class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval success path for payable transaction")
     void postRequestSuccessForPayableTransaction() throws Exception {
-
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());

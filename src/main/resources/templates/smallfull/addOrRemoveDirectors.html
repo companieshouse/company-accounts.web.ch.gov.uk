@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Directors' report
+  </title>
+</head>
+<div id="directorsReport-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <div th:replace="fragments/numberedHeading :: numberedHeading (
+                  headingText = 'Directors\' report'
+              )">
+      </div>
+
+      <h2 id="directorsReport-subheading" class="govuk-heading-m">
+        Enter the name(s) of the directors who served in the accounting period you're filing for
+      </h2>
+
+      <span id="directorsReport-help-text" class="govuk-hint">
+        This includes directors who were appointed or resigned during the accounting period. You can add up to 20 directors.
+      </span>
+
+      <dl class="app-check-your-answers app-check-your-answers--short two-column-accounts" th:if="${addOrRemoveDirectors.existingDirectors.length > 0}">
+
+        <div class="app-check-your-answers__contents cya-desktop-only">
+          <dt class="app-check-your-answers__answer govuk-heading-s">Directors' name</dt>
+          <dd class="app-check-your-answers__answer govuk-heading-s govuk-!-font-weight-bold">Appointed</dd>
+          <dd class="app-check-your-answers__answer govuk-heading-s govuk-!-font-weight-bold">Resigned</dd>
+          <dd class="app-check-your-answers__change"></dd>
+        </div>
+
+        <div th:each="director : ${addOrRemoveDirectors.existingDirectors}" class="app-check-your-answers__contents">
+          <dt class="app-check-your-answers__question" th:text="${director.name}"></dt>
+          <dd class="app-check-your-answers__answer">
+            <span class="mobile-only-label">Appointed: </span>
+            <span th:text="${#temporals.format(director.appointmentDate, 'd MMM yyyy')}"></span>
+          </dd>
+          <dd class="app-check-your-answers__answer">
+            <span class="mobile-only-label">Resigned: </span>
+            <span th:text="${#temporals.format(director.resignationDate, 'd MMM yyyy')}"></span>
+          </dd>
+          <dd class="app-check-your-answers__change">
+            <form class="form"
+                  th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/remove/{directorId}
+                                (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},directorId=${director.id})}"
+                  method="get">
+              <div class="flex-container-center-align">
+                  <input id="remove-director-button" class="button-display-as-link piwik-event" data-event-id="Directors report - remove director"
+                        type="submit" role="button" value="Remove"/>
+              </div>
+            </form>
+          </dd>
+        </div>
+      </dl>
+
+      <form id="directorsReport-form" class="form" th:action="@{''}" th:object="${addOrRemoveDirectors}" method="post">
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Directors report - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

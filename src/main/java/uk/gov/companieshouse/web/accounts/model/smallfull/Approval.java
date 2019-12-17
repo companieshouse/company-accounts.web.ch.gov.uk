@@ -10,7 +10,7 @@ public class Approval {
     private String directorName;
 
     @ValidationMapping("$.approval.date")
-    private ApprovalDate date;
+    private Date date;
 
     public String getDirectorName() {
         return directorName;
@@ -20,11 +20,11 @@ public class Approval {
         this.directorName = directorName;
     }
 
-    public ApprovalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(ApprovalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

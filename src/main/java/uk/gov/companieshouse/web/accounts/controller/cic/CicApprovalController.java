@@ -71,30 +71,20 @@ public class CicApprovalController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        List<ValidationError> validationErrors = cicApprovalService
-            .validateCicApprovalDate(cicApproval);
-        if (!validationErrors.isEmpty()) {
-            bindValidationErrors(bindingResult, validationErrors);
-            return getTemplateName();
-        }
-
         try {
-            validationErrors.addAll(cicApprovalService
-                .submitCicApproval(transactionId, companyAccountsId, cicApproval));
+            List<ValidationError> validationErrors =
+                    cicApprovalService.submitCicApproval(transactionId, companyAccountsId, cicApproval);
+
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
-
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
 
-        return navigatorService
-            .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
-                companyAccountsId);
-
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 }

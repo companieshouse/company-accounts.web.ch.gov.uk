@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
+import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLossQuestion;
@@ -19,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 
 @Controller
+@PreviousController(AddOrRemoveDirectorsController.class)
 @NextController(ProfitAndLossController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/profit-and-loss-question")
 public class ProfitAndLossQuestionController extends BaseController {
@@ -29,8 +31,13 @@ public class ProfitAndLossQuestionController extends BaseController {
     private ProfitAndLossService profitAndLossService;
 
     @GetMapping
-    public String getProfitAndLossQuestion(Model model,
+    public String getProfitAndLossQuestion(@PathVariable String companyNumber,
+                                           @PathVariable String transactionId,
+                                           @PathVariable String companyAccountsId,
+                                           Model model,
                                            HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         ProfitAndLossQuestion profitAndLossQuestion = new ProfitAndLossQuestion();
         setIsProfitAndLossIncluded(request, profitAndLossQuestion);
@@ -46,7 +53,10 @@ public class ProfitAndLossQuestionController extends BaseController {
                                               @PathVariable String companyAccountsId,
                                               @ModelAttribute(PROFIT_AND_LOSS_QUESTION) @Valid ProfitAndLossQuestion profitAndLossQuestion,
                                               BindingResult bindingResult,
+                                              Model model,
                                               HttpServletRequest request) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

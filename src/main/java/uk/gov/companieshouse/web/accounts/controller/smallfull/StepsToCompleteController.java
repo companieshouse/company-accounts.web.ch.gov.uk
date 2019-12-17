@@ -32,7 +32,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
 @Controller
-@NextController(ProfitAndLossQuestionController.class)
+@NextController(DirectorsReportQuestionController.class)
 @PreviousController({CriteriaController.class, AccountStartController.class})
 @RequestMapping({"/company/{companyNumber}/small-full/steps-to-complete", "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/steps-to-complete"})
 public class StepsToCompleteController extends BaseController {

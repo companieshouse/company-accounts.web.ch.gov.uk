@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.cic;
 
-
 import java.util.List;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.CicApproval;
@@ -13,21 +12,13 @@ public interface CicApprovalService {
      *
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
-     * @param approval Approval to submit
+     * @param cicApproval Approval to submit
      * @return A list of validation errors. This will be empty for a successful submission
      * @throws ServiceException on submission failure
      */
     List<ValidationError> submitCicApproval(String transactionId, String companyAccountsId,
         CicApproval cicApproval)
         throws ServiceException;
-
-    /**
-     * Validate the provided approval date
-     *
-     * @param approval The approval to be submitted
-     * @return a list of validation errors, or an empty list if none are present
-     */
-    List<ValidationError> validateCicApprovalDate(CicApproval cicAproval);
 
     /**
      * Get CicApproval object if it exists

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Directors' report question
+  </title>
+</head>
+<div id="directorsReport-question-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="directorsReport-question-form" class="form" th:action="@{''}" th:object="${directorsReportQuestion}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('hasIncludedDirectorsReport')} ? 'govuk-form-group--error' : ''">
+
+          <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+              legendText = 'Do your prepared accounts include a directors\' report?',
+              radioButtonsFieldName = 'hasIncludedDirectorsReport'
+              )">
+          </div>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Directors report question - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

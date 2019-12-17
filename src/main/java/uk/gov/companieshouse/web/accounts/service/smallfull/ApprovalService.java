@@ -18,11 +18,4 @@ public interface ApprovalService {
     List<ValidationError> submitApproval(String transactionId, String companyAccountsId,
             Approval approval)
         throws ServiceException;
-
-    /**
-     * Validate the provided approval date
-     * @param approval The approval to be submitted
-     * @return a list of validation errors, or an empty list if none are present
-     */
-    List<ValidationError> validateApprovalDate(Approval approval);
 }

@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
-public class ApprovalDate {
+public class Date {
 
     private String day;
 
