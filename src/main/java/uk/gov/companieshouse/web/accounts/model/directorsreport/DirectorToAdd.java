@@ -15,14 +15,12 @@ public class DirectorToAdd {
     @NotNull(message = "{directorToAdd.appointment.selectionNotMade}")
     private Boolean wasDirectorAppointedDuringPeriod;
 
-    @NotNull(message = "{directorToAdd.validDate.selectionNotMade}")
     @ValidationMapping("$.director.appointment_date")
     private Date appointmentDate;
 
     @NotNull(message = "{directorToAdd.resignation.selectionNotMade}")
     private Boolean didDirectorResignDuringPeriod;
 
-    @NotNull(message = "{directorToAdd.validDate.selectionNotMade}")
     @ValidationMapping("$.director.resignation_date")
     private Date resignationDate;
 
