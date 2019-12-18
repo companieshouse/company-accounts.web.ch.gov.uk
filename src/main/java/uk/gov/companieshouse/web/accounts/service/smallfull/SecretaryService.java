@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface SecretaryService {
 
-    AddOrRemoveDirectors getSecretary(String transactionId, String companyAccountsId, String secretaryId) throws ServiceException;
+    String getSecretary(String transactionId, String companyAccountsId) throws ServiceException;
 
-    List<ValidationError> createSecretary(String transactionId, String companyAccountsId,
+    List<ValidationError> submitSecretary(String transactionId, String companyAccountsId,
                                           AddOrRemoveDirectors addOrRemoveDirectors) throws ServiceException;
 
     void deleteSecretary(String transactionId, String companyAccountsId, String secretaryId) throws ServiceException;

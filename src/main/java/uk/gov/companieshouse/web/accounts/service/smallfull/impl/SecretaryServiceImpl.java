@@ -38,31 +38,19 @@ public class SecretaryServiceImpl implements SecretaryService {
     private static final UriTemplate SECRETARY_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/secretary");
 
-    private static final UriTemplate SECRETARY_URI_WITH_ID =
-            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/secretary/{secretaryId}");
-
     private static final String RESOURCE_NAME = "secretaries";
 
     @Override
-    public AddOrRemoveDirectors getSecretary(String transactionId, String companyAccountsId, String secretaryId)
+    public String getSecretary(String transactionId, String companyAccountsId)
         throws ServiceException {
-
-        AddOrRemoveDirectors addOrRemoveDirectors;
 
         SecretaryApi secretaryApi = getSecretaryApi(transactionId, companyAccountsId);
 
-        if (secretaryApi != null) {
-            addOrRemoveDirectors = secretaryTransformer.getSecretary(secretaryApi);
-        } else {
-            addOrRemoveDirectors = new AddOrRemoveDirectors();
-        }
-
-        return addOrRemoveDirectors;
-
+        return secretaryApi.getName();
     }
 
     @Override
-    public List<ValidationError> createSecretary(String transactionId, String companyAccountsId,
+    public List<ValidationError> submitSecretary(String transactionId, String companyAccountsId,
                                                  AddOrRemoveDirectors addOrRemoveDirectors)
             throws ServiceException {
 
@@ -82,8 +70,10 @@ public class SecretaryServiceImpl implements SecretaryService {
             }
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+
         }
 
         return validationErrors;
@@ -95,7 +85,7 @@ public class SecretaryServiceImpl implements SecretaryService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        String uri = SECRETARY_URI_WITH_ID.expand(transactionId, companyAccountsId, secretaryId).toString();
+        String uri = SECRETARY_URI.expand(transactionId, companyAccountsId, secretaryId).toString();
 
         try {
             apiClient.smallFull().directorsReport().secretary().delete(uri).execute();

@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)
@@ -31,6 +33,9 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     @Autowired
     private DirectorService directorService;
+
+    @Autowired
+    private SecretaryService secretaryService;
 
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
@@ -57,6 +62,9 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId));
+
+            addOrRemoveDirectors.setSecretary(
+                    secretaryService.getSecretary(transactionId, companyAccountsId));
 
         } catch (ServiceException e) {
 
@@ -96,6 +104,10 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId) {
+
+        if () {
+
+        }
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
