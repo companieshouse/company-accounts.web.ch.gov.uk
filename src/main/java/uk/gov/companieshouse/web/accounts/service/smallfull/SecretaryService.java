@@ -13,5 +13,5 @@ public interface SecretaryService {
     List<ValidationError> submitSecretary(String transactionId, String companyAccountsId,
                                           AddOrRemoveDirectors addOrRemoveDirectors) throws ServiceException;
 
-    void deleteSecretary(String transactionId, String companyAccountsId, String secretaryId) throws ServiceException;
+    void deleteSecretary(String transactionId, String companyAccountsId) throws ServiceException;
 }

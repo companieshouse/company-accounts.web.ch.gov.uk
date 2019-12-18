@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -21,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirec
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)
@@ -36,6 +39,11 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     @Autowired
     private SecretaryService secretaryService;
+
+    @Autowired
+    private ServiceExceptionHandler serviceExceptionHandler;
+
+    private static final String RESOURCE_NAME = "secretaries";
 
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
@@ -103,11 +111,23 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     @PostMapping
     public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
-                                             @PathVariable String companyAccountsId) {
+                                             @PathVariable String companyAccountsId,
+                                             AddOrRemoveDirectors addOrRemoveDirectors) {
 
-        if () {
 
-        }
+        try {
+                if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
+
+                    secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors);
+                } else {
+
+                    secretaryService.deleteSecretary(transactionId, companyAccountsId);
+                }
+            } catch (ServiceException e) {
+
+                LOGGER.errorRequest(request, e.getMessage(), e);
+                return ERROR_VIEW;
+            }
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
