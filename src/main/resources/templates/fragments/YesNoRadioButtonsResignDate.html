@@ -61,12 +61,6 @@
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
 
-      <span class="govuk-error-message"
-            th:id="${textBoxFieldName} + '-errorId'"
-            th:if="${#fields.hasErrors('__${textBoxFieldName}__')}"
-            th:each="e : ${#fields.errors('__${textBoxFieldName}__')}" th:text="${e}">
-      </span>
-
             <div class="govuk-form-group" th:classappend="${#fields.hasErrors('resignationDate')} ? 'govuk-form-group--error' : ''">
                 <fieldset class="govuk-fieldset" aria-describedby="resignation-date-hint" role="group">
 

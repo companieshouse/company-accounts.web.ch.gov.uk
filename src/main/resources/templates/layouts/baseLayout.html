@@ -8,11 +8,12 @@
     <div id="templateName" th:attr="data-id=${templateName},data-metadata=${metadata}" hidden></div>
 
     <link
+            th:href="@{{cdnUrl}/stylesheets/application.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+            media="all" rel="stylesheet" type="text/css" />
+
+    <link
         th:href="@{{cdnUrl}/stylesheets/chs-styles.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
         media="all" rel="stylesheet" type="text/css" />
-    <link
-    th:href="@{{cdnUrl}/stylesheets/application.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
-    media="all" rel="stylesheet" type="text/css" />
 
     <link
         rel="icon"

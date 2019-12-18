@@ -4,6 +4,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @ValidationModel

@@ -21,6 +21,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
@@ -33,6 +34,7 @@ import java.util.List;
 @PreviousController(DirectorsReportQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors")
 public class AddOrRemoveDirectorsController extends BaseController implements ConditionalController {
+
 
     @Autowired
     private HttpServletRequest request;
@@ -54,6 +56,8 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String EXISTING_DIRECTORS = "existingDirectors";
+
     @GetMapping
     public String getAddOrRemoveDirectors(@PathVariable String companyNumber,
                                           @PathVariable String transactionId,
@@ -63,11 +67,15 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-      //  AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
-
+        Director[] existingDirectors = null;
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId));
+
+            if(addOrRemoveDirectors.getExistingDirectors() == null) {
+                addOrRemoveDirectors.setExistingDirectors(new Director[0]);
+            }
+
 
         } catch (ServiceException e) {
 
@@ -80,6 +88,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
         model.addAttribute(DIRECTOR_TO_ADD, new DirectorToAdd());
+        //model.addAttribute(EXISTING_DIRECTORS, existingDirectors);
 
         return getTemplateName();
     }
@@ -123,6 +132,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                               Model model,
                               HttpServletRequest request) {
 
+        model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
@@ -130,20 +140,21 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
+
         model.addAttribute(DIRECTOR_TO_ADD, directorToAdd);
 
         try {
 
             List<ValidationError> validationErrors = directorService.createDirector(transactionId, companyAccountsId, directorToAdd);
-            addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
-            addOrRemoveDirectors.setExistingDirectors(
-                    directorService.getAllDirectors(transactionId, companyAccountsId));
+
             if (!validationErrors.isEmpty()) {
-                model.addAttribute(DIRECTOR_TO_ADD, directorService.createDirector(transactionId, companyAccountsId, directorToAdd));
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
+
+            addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
+            addOrRemoveDirectors.setExistingDirectors(
+                    directorService.getAllDirectors(transactionId, companyAccountsId));
 
         } catch (ServiceException e) {
 
@@ -152,7 +163,8 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         }
 
-        return getTemplateName();
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
     @Override

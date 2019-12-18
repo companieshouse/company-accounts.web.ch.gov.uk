@@ -171,8 +171,8 @@ public class AddOrRemoveDirectorsControllerTest {
                 .param("wasDirectorAppointedDuringPeriod", "0")
                 .param("didDirectorResignDuringPeriod", "0")
                 .param("name", "name"))
-                .andExpect(status().isOk())
-                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_DIRECTORS_PATH));
     }
 
     @Test
