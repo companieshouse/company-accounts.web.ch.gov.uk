@@ -31,6 +31,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
@@ -72,6 +73,9 @@ public class AddOrRemoveDirectorsControllerTest {
 
     @Mock
     private DirectorToAdd directorToAdd;
+
+    @Mock
+    private AddOrRemoveDirectors addOrRemoveDirectors;
 
     @InjectMocks
     private AddOrRemoveDirectorsController controller;
