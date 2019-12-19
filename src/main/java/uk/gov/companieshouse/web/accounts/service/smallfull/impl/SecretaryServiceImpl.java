@@ -49,9 +49,17 @@ public class SecretaryServiceImpl implements SecretaryService {
     public String getSecretary(String transactionId, String companyAccountsId)
         throws ServiceException {
 
+        AddOrRemoveDirectors addOrRemoveDirectors;
+
         SecretaryApi secretaryApi = getSecretaryApi(transactionId, companyAccountsId);
 
-        return secretaryApi.getName();
+        if (secretaryApi != null) {
+            addOrRemoveDirectors = secretaryTransformer.getSecretary(secretaryApi);
+        } else {
+            addOrRemoveDirectors = new AddOrRemoveDirectors();
+        }
+
+        return addOrRemoveDirectors.getSecretary();
     }
 
     @Override

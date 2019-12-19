@@ -98,6 +98,8 @@ public class SecretaryServiceImplTest {
         when(secretaryTransformer.getSecretary(secretary)).thenReturn(newSecretary);
 
         String result = secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        
+
+        assertEquals(newSecretary, result);
+
     }
 }
