@@ -41,12 +41,14 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     @Autowired
     private DirectorService directorService;
 
-    AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
+    @Autowired
+    private AddOrRemoveDirectors addOrRemoveDirectors;
 
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
+
     private static final String DIRECTOR_TO_ADD = "directorToAdd";
 
     private static final String COMPANY_NUMBER = "companyNumber";
