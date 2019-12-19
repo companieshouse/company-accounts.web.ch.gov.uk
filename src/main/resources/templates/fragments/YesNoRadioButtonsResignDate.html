@@ -90,7 +90,8 @@
                                        th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
                                        id="resignation-date-day"
                                        th:field="*{resignationDate.day}"
-                                       type="text">
+                                       type="number"
+                                       pattern="[0-9]*">
                             </div>
                         </div>
 
@@ -104,7 +105,8 @@
                                        th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
                                        id="resignation-date-month"
                                        th:field="*{resignationDate.month}"
-                                       type="text">
+                                       type="number"
+                                       pattern="[0-9]*">
                             </div>
                         </div>
 
@@ -118,7 +120,8 @@
                                        th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
                                        id="resignation-date-year"
                                        th:field="*{resignationDate.year}"
-                                       type="text">
+                                       type="number"
+                                        pattern="[0-9]*">
                             </div>
                         </div>
                     </div>

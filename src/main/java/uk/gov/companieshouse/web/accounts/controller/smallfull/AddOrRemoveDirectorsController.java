@@ -21,7 +21,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
@@ -56,8 +55,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String EXISTING_DIRECTORS = "existingDirectors";
-
     @GetMapping
     public String getAddOrRemoveDirectors(@PathVariable String companyNumber,
                                           @PathVariable String transactionId,
@@ -67,15 +64,9 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        Director[] existingDirectors = null;
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId));
-
-            if(addOrRemoveDirectors.getExistingDirectors() == null) {
-                addOrRemoveDirectors.setExistingDirectors(new Director[0]);
-            }
-
 
         } catch (ServiceException e) {
 
@@ -88,7 +79,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
         model.addAttribute(DIRECTOR_TO_ADD, new DirectorToAdd());
-        //model.addAttribute(EXISTING_DIRECTORS, existingDirectors);
 
         return getTemplateName();
     }
@@ -113,16 +103,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                         URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
-    @PostMapping
-    public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
-                                             @PathVariable String transactionId,
-                                             @PathVariable String companyAccountsId) {
-
-        return navigatorService
-                .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
-                        companyAccountsId);
-    }
-
     @PostMapping("/add/add-director")
     public String addDirector(@PathVariable String companyNumber,
                               @PathVariable String transactionId,
@@ -140,7 +120,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-
         model.addAttribute(DIRECTOR_TO_ADD, directorToAdd);
 
         try {
@@ -153,8 +132,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
             }
 
             addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
-            addOrRemoveDirectors.setExistingDirectors(
-                    directorService.getAllDirectors(transactionId, companyAccountsId));
 
         } catch (ServiceException e) {
 
@@ -165,6 +142,16 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                 URI.expand(companyNumber, transactionId, companyAccountsId).toString();
+    }
+
+    @PostMapping
+    public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
+                                             @PathVariable String transactionId,
+                                             @PathVariable String companyAccountsId) {
+
+        return navigatorService
+                .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+                        companyAccountsId);
     }
 
     @Override

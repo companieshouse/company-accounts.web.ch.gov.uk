@@ -61,70 +61,74 @@
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
 
-    <div class="govuk-form-group" th:classappend="${#fields.hasErrors('appointmentDate')} ? 'govuk-form-group--error' : ''">
-        <fieldset class="govuk-fieldset" aria-describedby="appointment-date-hint" role="group">
+            <div class="govuk-form-group"
+                 th:classappend="${#fields.hasErrors('appointmentDate')} ? 'govuk-form-group--error' : ''">
+                <fieldset class="govuk-fieldset" aria-describedby="appointment-date-hint" role="group">
 
-            <legend id="appointment-date-heading" class="govuk-label">
-                Enter the date the director was appointed
-            </legend>
+                    <legend id="appointment-date-heading" class="govuk-label">
+                        Enter the date the director was appointed
+                    </legend>
 
-            <span id="appointment-date-hint" class="govuk-hint">
+                    <span id="appointment-date-hint" class="govuk-hint">
                   <p class="govuk-hint">For example, 31 3 2017</p>
               </span>
 
-            <span class="govuk-error-message"
-                  id="date-errorId"
-                  th:if="${#fields.hasErrors('appointmentDate')}"
-                  th:each="e : ${#fields.errors('appointmentDate')}" th:text="${e}">
+                    <span class="govuk-error-message"
+                          id="date-errorId"
+                          th:if="${#fields.hasErrors('appointmentDate')}"
+                          th:each="e : ${#fields.errors('appointmentDate')}" th:text="${e}">
               </span>
 
-            <div class="govuk-date-input" id="appointment-date">
+                    <div class="govuk-date-input" id="appointment-date">
 
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" for="appointment-date-day">
-                            Day
-                        </label>
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="appointment-date-day">
+                                    Day
+                                </label>
 
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2"
-                               th:classappend="${#fields.hasErrors('appointmentDate')} ? govuk-input--error : ''"
-                               id="appointment-date-day"
-                               th:field="*{appointmentDate.day}"
-                               type="text">
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                       th:classappend="${#fields.hasErrors('appointmentDate')} ? govuk-input--error : ''"
+                                       id="appointment-date-day"
+                                       th:field="*{appointmentDate.day}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="appointment-date-month">
+                                    Month
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                       th:classappend="${#fields.hasErrors('appointmentDate')} ? govuk-input--error : ''"
+                                       id="appointment-date-month"
+                                       th:field="*{appointmentDate.month}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="appointment-date-year">
+                                    Year
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                                       th:classappend="${#fields.hasErrors('appointmentDate')} ? govuk-input--error : ''"
+                                       id="appointment-date-year"
+                                       th:field="*{appointmentDate.year}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" for="appointment-date-month">
-                            Month
-                        </label>
-
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-2"
-                               th:classappend="${#fields.hasErrors('appointmentDate')} ? govuk-input--error : ''"
-                               id="appointment-date-month"
-                               th:field="*{appointmentDate.month}"
-                               type="text">
-                    </div>
-                </div>
-
-                <div class="govuk-date-input__item">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label govuk-date-input__label" for="appointment-date-year">
-                            Year
-                        </label>
-
-                        <input class="govuk-input govuk-date-input__input govuk-input--width-4"
-                               th:classappend="${#fields.hasErrors('appointmentDate')} ? govuk-input--error : ''"
-                               id="appointment-date-year"
-                               th:field="*{appointmentDate.year}"
-                               type="text">
-                    </div>
-                </div>
-
+                </fieldset>
             </div>
-        </fieldset>
-    </div>
         </div>
     </div>
 
