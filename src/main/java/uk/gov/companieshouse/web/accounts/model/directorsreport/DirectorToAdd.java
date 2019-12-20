@@ -1,17 +1,29 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
 import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
+import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
+import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+@ValidationModel
 public class DirectorToAdd {
 
+    @NotEmpty(message = "{directorToAdd.name.notEmpty}")
+    @ValidationMapping("$.director.name")
     private String name;
 
+    @NotNull(message = "{directorToAdd.appointment.selectionNotMade}")
     private Boolean wasDirectorAppointedDuringPeriod;
 
+    @ValidationMapping("$.director.appointment_date")
     private Date appointmentDate;
 
+    @NotNull(message = "{directorToAdd.resignation.selectionNotMade}")
     private Boolean didDirectorResignDuringPeriod;
 
+    @ValidationMapping("$.director.resignation_date")
     private Date resignationDate;
 
     public String getName() {

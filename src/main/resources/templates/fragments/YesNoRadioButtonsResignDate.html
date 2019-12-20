@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+</head>
+<body>
+<fieldset class="govuk-fieldset" th:fragment="YesNoRadioButtonsResignDate">
+
+    <legend>
+        <h2 class="govuk-heading-m">
+            <span th:id="page-title-heading" th:text=${legendText}></span>
+        </h2>
+    </legend>
+
+    <span class="govuk-error-message"
+          th:id="${radioButtonsFieldName} + '-errorId'"
+          th:if="${#fields.hasErrors('__${radioButtonsFieldName}__')}"
+          th:each="e : ${#fields.errors('__${radioButtonsFieldName}__')}" th:text="${e}">
+            </span>
+
+    <!-- Radio Buttons -->
+    <div class="govuk-radios govuk-radios--inline" data-module="radios">
+
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input show-text piwik-event"
+                   id="yesButton"
+                   type="radio"
+                   value="1"
+                   name="${radioButtonsFieldName}"
+                   th:field="*{__${radioButtonsFieldName}__}"
+                   th:errorclass="govuk-error-message"
+                   th:data-target-text-field="${dataTargetTextFieldName}"
+                   data-event-id="Yes"/>
+
+            <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
+                Yes
+            </label>
+        </div>
+
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input piwik-event"
+                   id="noButton"
+                   type="radio"
+                   value="0"
+                   name="${radioButtonsFieldName}"
+                   th:field="*{__${radioButtonsFieldName}__}"
+                   th:errorclass="govuk-error-message"
+                   th:data-target-text-field="${dataTargetTextFieldName}"
+                   data-event-id="No"/>
+
+            <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
+                No
+            </label>
+        </div>
+    </div>
+
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+         th:id="${dataTargetTextFieldName}" th:if="${dataTargetTextFieldName != null}">
+
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
+
+            <div class="govuk-form-group" th:classappend="${#fields.hasErrors('resignationDate')} ? 'govuk-form-group--error' : ''">
+                <fieldset class="govuk-fieldset" aria-describedby="resignation-date-hint" role="group">
+
+                    <legend id="resignation-date-heading" class="govuk-label">
+                        Enter the date the director resigned
+                    </legend>
+
+                    <span id="resignation-date-hint" class="govuk-hint">
+                  <p class="govuk-hint">For example, 31 3 2017</p>
+              </span>
+
+                    <span class="govuk-error-message"
+                          id="date-errorId"
+                          th:if="${#fields.hasErrors('resignationDate')}"
+                          th:each="e : ${#fields.errors('resignationDate')}" th:text="${e}">
+              </span>
+
+                    <div class="govuk-date-input" id="resignation-date">
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="resignation-date-day">
+                                    Day
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                       th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
+                                       id="resignation-date-day"
+                                       th:field="*{resignationDate.day}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="resignation-date-month">
+                                    Month
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                       th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
+                                       id="resignation-date-month"
+                                       th:field="*{resignationDate.month}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="resignation-date-year">
+                                    Year
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                                       th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
+                                       id="resignation-date-year"
+                                       th:field="*{resignationDate.year}"
+                                       type="number"
+                                        pattern="[0-9]*">
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+</fieldset>
+</body>
+</html>

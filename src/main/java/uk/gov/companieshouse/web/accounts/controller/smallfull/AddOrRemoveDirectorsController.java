@@ -1,12 +1,16 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +24,12 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -45,10 +53,15 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     private static final String RESOURCE_NAME = "secretaries";
 
+    @Autowired
+    private AddOrRemoveDirectors addOrRemoveDirectors;
+
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
+
+    private static final String DIRECTOR_TO_ADD = "directorToAdd";
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -64,8 +77,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                                           HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
-        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
 
         try {
             addOrRemoveDirectors.setExistingDirectors(
@@ -84,6 +95,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         model.addAttribute(COMPANY_NUMBER, companyNumber);
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
+        model.addAttribute(DIRECTOR_TO_ADD, new DirectorToAdd());
 
         return getTemplateName();
     }
@@ -106,6 +118,47 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                         URI.expand(companyNumber, transactionId, companyAccountsId).toString();
+    }
+
+    @PostMapping("/add/add-director")
+    public String addDirector(@PathVariable String companyNumber,
+                              @PathVariable String transactionId,
+                              @PathVariable String companyAccountsId,
+                              @ModelAttribute(DIRECTOR_TO_ADD) @Valid DirectorToAdd directorToAdd,
+                              BindingResult bindingResult,
+                              Model model,
+                              HttpServletRequest request) {
+
+        model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
+
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        model.addAttribute(DIRECTOR_TO_ADD, directorToAdd);
+
+        try {
+
+            List<ValidationError> validationErrors = directorService.createDirector(transactionId, companyAccountsId, directorToAdd);
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
+            addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+
+        }
+
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
     @PostMapping

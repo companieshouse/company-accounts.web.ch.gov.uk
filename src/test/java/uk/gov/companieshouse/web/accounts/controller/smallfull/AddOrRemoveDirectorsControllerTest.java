@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,12 +27,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -51,7 +60,22 @@ public class AddOrRemoveDirectorsControllerTest {
     private MockHttpSession session;
 
     @Mock
+    private BindingResult bindingResult;
+
+    @Mock
+    private Model model;
+
+    @Mock
+    private List<ValidationError> validationErrors;
+
+    @Mock
     private CompanyAccountsDataState companyAccountsDataState;
+
+    @Mock
+    private DirectorToAdd directorToAdd;
+
+    @Mock
+    private AddOrRemoveDirectors addOrRemoveDirectors;
 
     @InjectMocks
     private AddOrRemoveDirectorsController controller;
@@ -65,11 +89,14 @@ public class AddOrRemoveDirectorsControllerTest {
     private static final String DIRECTOR_ID = "directorId";
 
     private static final String ADD_OR_REMOVE_DIRECTORS_PATH = "/company/" + COMPANY_NUMBER +
-                                                                "/transaction/" + TRANSACTION_ID +
-                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                "/small-full/add-or-remove-directors";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/add-or-remove-directors";
 
     private static final String REMOVE_DIRECTOR_PATH = ADD_OR_REMOVE_DIRECTORS_PATH + "/remove/" + DIRECTOR_ID;
+
+    private static final String ADD_DIRECTOR_PATH = ADD_OR_REMOVE_DIRECTORS_PATH + "/add/add-director";
+
 
     private static final String ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR = "addOrRemoveDirectors";
 
@@ -117,6 +144,76 @@ public class AddOrRemoveDirectorsControllerTest {
     }
 
     @Test
+    @DisplayName("Post add director - throws service exception")
+    void postDirectorAddRequestThrowsServiceException() throws Exception {
+
+
+        when(directorService.createDirector(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorToAdd.class)))
+                .thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(post(ADD_DIRECTOR_PATH)
+                .param("wasDirectorAppointedDuringPeriod", "0")
+                .param("didDirectorResignDuringPeriod", "0")
+                .param("name", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post add director - success")
+    void postDirectorAddRequestSuccess() throws Exception {
+
+
+        when(directorService.createDirector(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorToAdd.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(true);
+
+        this.mockMvc.perform(post(ADD_DIRECTOR_PATH)
+                .param("wasDirectorAppointedDuringPeriod", "0")
+                .param("didDirectorResignDuringPeriod", "0")
+                .param("name", "name"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_DIRECTORS_PATH));
+    }
+
+    @Test
+    @DisplayName("Post add director - throws validation errors")
+    void postDirectorAddRequestThrowsValidationErrors() throws Exception {
+
+
+        when(directorService.createDirector(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorToAdd.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_DIRECTOR_PATH)
+                .param("wasDirectorAppointedDuringPeriod", "0")
+                .param("didDirectorResignDuringPeriod", "0")
+                .param("name", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post add director - has binding errors")
+    void postDirectorAddRequestHasBindingErrors() throws Exception {
+
+        String beanElement = "director.name";
+        // Mock non-numeric input to trigger binding result errors
+        String invalidData = "1";
+
+        this.mockMvc.perform(post(ADD_DIRECTOR_PATH)
+                .param(beanElement, invalidData))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));;
+    }
+
+    @Test
     @DisplayName("Delete director - success path")
     void deleteDirectorSuccess() throws Exception {
 
@@ -148,6 +245,7 @@ public class AddOrRemoveDirectorsControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
+
 
     @Test
     @DisplayName("Will render - false")

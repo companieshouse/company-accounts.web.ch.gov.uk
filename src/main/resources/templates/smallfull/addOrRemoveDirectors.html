@@ -18,6 +18,8 @@
               )">
       </div>
 
+      <input th:field="*{addOrRemoveDirectors.existingDirectors}" type="hidden" >
+
       <h2 id="directorsReport-subheading" class="govuk-heading-m">
         Enter the name(s) of the directors who served in the accounting period you're filing for
       </h2>
@@ -59,11 +61,56 @@
         </div>
       </dl>
 
-      <form id="directorsReport-form" class="form" th:action="@{''}" th:object="${addOrRemoveDirectors}" method="post">
+      <form id="directorsReport-add-or-remove-form" class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/add/add-director
+                                (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId})}" th:object="${directorToAdd}" method="post">
 
+      <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
+          <label id="appointment-director-heading" class="govuk-label govuk-label--m" for="directorToAdd-name">
+            Director's name
+          </label>
+
+          <input class="govuk-input"
+                 id="directorToAdd-name"
+                 th:field="*{name}"
+                 th:errorclass="govuk-input--error"
+                 type="text">
+        </div>
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('wasDirectorAppointedDuringPeriod')} ? 'govuk-form-group--error' : ''">
+          <div th:replace="fragments/YesNoRadioButtonsAppointedDate :: YesNoRadioButtonsAppointedDate (
+              legendText = 'Was the director appointed during the accounting period?',
+              boxLabelTextJavaScriptOn = '​Enter the date the director was appointed',
+              boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director was appointed For example, 12 02 2019',
+              radioButtonsFieldName = 'wasDirectorAppointedDuringPeriod',
+              textBoxFieldName = 'appointmentDate',
+              dataTargetTextFieldName = 'directors-report-appointment-text-date'
+              )">
+          </div>
+        </div>
+
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('didDirectorResignDuringPeriod')} ? 'govuk-form-group--error' : ''">
+          <div th:replace="fragments/YesNoRadioButtonsResignDate :: YesNoRadioButtonsResignDate (
+              legendText = 'Did the director resign during the accounting period?',
+              boxLabelTextJavaScriptOn = '​Enter the date the director resigned',
+              boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director resigned For example, 12 02 2019',
+              radioButtonsFieldName = 'didDirectorResignDuringPeriod',
+              textBoxFieldName = 'resignationDate',
+              dataTargetTextFieldName = 'directors-report-resign-text-date'
+              )">
+          </div>
+        </div>
+
+        <div class="govuk-form-group">
+          <input id="add-director-button" class="secondary-button piwik-event" data-event-id="Directors report - add director"
+                 type="submit" role="button" value="Add director"/>
+        </div>
+      </form>
+
+      <form>
         <input id="next-button" class="govuk-button piwik-event" data-event-id="Directors report - save and continue"
                type="submit" role="button" value="Save and continue"/>
-
       </form>
     </div>
   </div>
