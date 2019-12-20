@@ -23,9 +23,13 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.SecretaryTransformer;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,6 +61,9 @@ public class SecretaryServiceImplTest {
     private SecretaryUpdate secretaryUpdate;
 
     @Mock
+    private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Mock
     private ApiResponse<SecretaryApi> responseWithData;
 
     @Mock
@@ -68,12 +75,19 @@ public class SecretaryServiceImplTest {
     @Mock
     private SecretaryResourceHandler secretaryResourceHandler;
 
+    @Mock
+    private ApiErrorResponseException apiErrorResponseException;
+
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String SECRETARY_NAME = "name";
+
     private static final String SECRETARY_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
             COMPANY_ACCOUNTS_ID + "/small-full/directors-report/secretary";
+
+    private static final String RESOURCE_NAME = "secretary";
 
     @InjectMocks
     private SecretaryService secretaryService = new SecretaryServiceImpl();
@@ -81,7 +95,6 @@ public class SecretaryServiceImplTest {
     @Test
     @DisplayName("Get Secretary success")
     void getSecretarySuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -92,14 +105,33 @@ public class SecretaryServiceImplTest {
         when(secretaryGet.execute()).thenReturn(responseWithData);
 
         SecretaryApi secretary = new SecretaryApi();
+        secretary.setName(SECRETARY_NAME);
         when(responseWithData.getData()).thenReturn(secretary);
 
         AddOrRemoveDirectors newSecretary = new AddOrRemoveDirectors();
+        newSecretary.setSecretary(secretary.getName());
         when(secretaryTransformer.getSecretary(secretary)).thenReturn(newSecretary);
 
         String result = secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        assertEquals(newSecretary.getSecretary(), result);
 
-        assertEquals(newSecretary, result);
+    }
+
+    @Test
+    @DisplayName("Get secretary ApiErrorResponseException")
+    void getSecretaryNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(secretaryResourceHandler.get(SECRETARY_URI)).thenReturn(secretaryGet);
+        when(secretaryGet.execute()).thenThrow(apiErrorResponseException);
+        doThrow(ServiceException.class).when(serviceExceptionHandler).handleRetrievalException
+                (apiErrorResponseException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
     }
 }
