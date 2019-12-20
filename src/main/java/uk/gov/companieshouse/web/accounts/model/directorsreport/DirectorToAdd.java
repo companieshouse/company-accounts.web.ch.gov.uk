@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @ValidationModel
 public class DirectorToAdd {
 
+    @NotEmpty(message = "{directorToAdd.name.notEmpty}")
     @ValidationMapping("$.director.name")
     private String name;
 
