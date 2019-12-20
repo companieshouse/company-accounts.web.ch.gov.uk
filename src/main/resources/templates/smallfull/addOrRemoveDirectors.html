@@ -64,7 +64,9 @@
       <form id="directorsReport-add-or-remove-form" class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/add/add-director
                                 (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId})}" th:object="${directorToAdd}" method="post">
 
-      <div class="govuk-form-group"
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
           <label id="appointment-director-heading" class="govuk-label govuk-label--m" for="directorToAdd-name">
             Director's name
