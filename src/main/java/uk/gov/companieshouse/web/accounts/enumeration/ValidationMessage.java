@@ -25,7 +25,7 @@ public enum ValidationMessage {
     PREVIOUS_BALANCESHEET_NOT_EQUAL("value_not_equal_to_previous_period_on_balance_sheet", "previous.balancesheet.not.equal", false),
     VALUE_REQUIRED("value_required", "value.required", true),
     UNEXPECTED_DATA("unexpected_data", "validation.unexpected.data", false),
-    DATE_OUTSIDE_CURRENT_PERIOD("date_outside_current_period", "validation.date.outside.currentPeriod", true);
+    DATE_OUTSIDE_CURRENT_PERIOD("date_outside_current_period", "validation.date.outside.currentPeriod", false);
 
     private String messageKey;
     private String apiError;
