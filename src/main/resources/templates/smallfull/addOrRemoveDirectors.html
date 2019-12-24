@@ -64,6 +64,10 @@
                 </div>
             </dl>
 
+            <div id="direcotr-not-available" th:object="${addOrRemoveDirectors}">
+                <div th:if="${addOrRemoveDirectors.directorIsAvailable == false}" th:replace="fragments/globalErrors :: globalErrors"></div>
+            </div>
+
             <form id="directorsReport-add-or-remove-form" class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/add/add-director
                                 (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId})}"
                   th:object="${directorToAdd}" method="post">
@@ -116,6 +120,10 @@
                     </div>
                 </div>
 
+                <span th:if="${addOrRemoveDirectors.directorIsAvailable == false}"
+                      class="govuk-error-message"
+                      id="add-director-button-errorId"> You must add at least one director</span>
+
                 <div class="govuk-form-group">
                     <input id="add-director-button" class="secondary-button piwik-event"
                            data-event-id="Directors report - add director"
@@ -123,13 +131,7 @@
                 </div>
             </form>
 
-            <form id="approval-form" th:action="@{''}" class="form"  th:object="${addOrRemoveDirectors}"  method="post">
-
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
-
-                <span th:if="${addOrRemoveDirectors.directorIsAvailable == false}"
-                      class="govuk-error-message"
-                      id="add-director-button-errorId"> You must add a director</span>
+            <form id="approval-form" th:action="@{''}" class="form" th:object="${addOrRemoveDirectors}" method="post">
 
                 <input id="next-button" class="govuk-button piwik-event"
                        data-event-id="Directors report - save and continue"
