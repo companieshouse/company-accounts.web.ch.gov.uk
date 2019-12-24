@@ -123,7 +123,13 @@
                 </div>
             </form>
 
-            <form id="approval-form" th:action="@{''}" th:object="${addOrRemoveDirectors}" class="form" method="post">
+            <form id="approval-form" th:action="@{''}" class="form"  th:object="${addOrRemoveDirectors}"  method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                <span th:if="${addOrRemoveDirectors.directorIsAvailable == false}"
+                      class="govuk-error-message"
+                      id="add-director-button-errorId"> You must add a director</span>
 
                 <input id="next-button" class="govuk-button piwik-event"
                        data-event-id="Directors report - save and continue"

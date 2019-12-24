@@ -21,6 +21,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
@@ -69,6 +70,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId));
+            addOrRemoveDirectors.setDirectorIsAvailable(true);
 
         } catch (ServiceException e) {
 
@@ -134,6 +136,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
             }
 
             addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
+            addOrRemoveDirectors.setDirectorIsAvailable(true);
 
         } catch (ServiceException e) {
 
@@ -149,7 +152,39 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     @PostMapping
     public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
-                                             @PathVariable String companyAccountsId) {
+                                             @PathVariable String companyAccountsId,
+                                             @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) @Valid AddOrRemoveDirectors addOrRemoveDirectors,
+                                             BindingResult bindingResult,
+                                             Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        DirectorToAdd directorToAdd = new DirectorToAdd();
+
+        addOrRemoveDirectors.setExistingDirectors(new Director[0]);
+        addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
+
+        model.addAttribute(DIRECTOR_TO_ADD, new DirectorToAdd());
+        model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
+
+        if(bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
+
+        try {
+
+            List<ValidationError> validationErrors = directorService.submitDirectorsReport(transactionId, companyAccountsId, companyNumber, addOrRemoveDirectors);
+
+            if(!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                addOrRemoveDirectors.setDirectorIsAvailable(false);
+                return getTemplateName();
+            }
+
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
