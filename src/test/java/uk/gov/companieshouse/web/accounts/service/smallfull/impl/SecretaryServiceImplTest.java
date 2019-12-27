@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -99,8 +100,16 @@ public class SecretaryServiceImplTest {
     @InjectMocks
     private SecretaryServiceImpl secretaryService ;
 
-   @Mock
+    @Mock
     private DirectorsReportService directorsReportService ;
+
+    @Mock
+    private DirectorsReportApi directorsReportApi;
+
+    @Mock
+    private DirectorsReportLinks directorsReportLinks;
+
+    private static final String SECRETARY_LINK = "secretaryLink";
 
     private static final String TRANSACTION_ID = "transactionId";
 
@@ -130,12 +139,8 @@ public class SecretaryServiceImplTest {
         secretary.setName(SECRETARY_NAME);
         when(responseWithData.getData()).thenReturn(secretary);
 
-        AddOrRemoveDirectors newSecretary = new AddOrRemoveDirectors();
-        newSecretary.setSecretary(secretary.getName());
-        when(secretaryTransformer.getSecretary(secretary)).thenReturn(newSecretary);
-
         String result = secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        assertEquals(newSecretary.getSecretary(), result);
+        assertEquals(SECRETARY_NAME, result);
 
     }
 
@@ -278,7 +283,11 @@ public class SecretaryServiceImplTest {
     @Test
     @DisplayName("Delete secretary success")
     void deleteSecretarySuccess()
-        throws ApiErrorResponseException, URIValidationException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
+        when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
+        when(directorsReportLinks.getSecretary()).thenReturn(SECRETARY_LINK);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -294,9 +303,27 @@ public class SecretaryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Delete secretary not found")
+    void deleteSecretaryNotFound() throws ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
+        when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
+        when(directorsReportLinks.getSecretary()).thenReturn(null);
+
+        assertAll(() -> secretaryService.deleteSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+
+        verify(apiClient, never()).smallFull();
+    }
+
+    @Test
     @DisplayName("Delete secretary ApiErrorResponseException")
     void deleteSecretaryApiException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
+        when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
+        when(directorsReportLinks.getSecretary()).thenReturn(SECRETARY_LINK);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -316,6 +343,10 @@ public class SecretaryServiceImplTest {
     @DisplayName("Delete secretary URIValidationException")
     void deleteSecretaryUriException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
+        when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
+        when(directorsReportLinks.getSecretary()).thenReturn(SECRETARY_LINK);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
