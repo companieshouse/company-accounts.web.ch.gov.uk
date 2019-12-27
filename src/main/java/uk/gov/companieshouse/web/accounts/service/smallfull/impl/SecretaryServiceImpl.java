@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -104,14 +105,18 @@ public class SecretaryServiceImpl implements SecretaryService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        String uri = SECRETARY_URI.expand(transactionId, companyAccountsId).toString();
+        if (StringUtils.isNotBlank(directorsReportService.
+                getDirectorsReport(apiClient, transactionId, companyAccountsId).getLinks().getSecretary())) {
 
-        try {
-            apiClient.smallFull().directorsReport().secretary().delete(uri).execute();
-        } catch (ApiErrorResponseException e) {
-            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
-        } catch (URIValidationException e) {
-            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+            String uri = SECRETARY_URI.expand(transactionId, companyAccountsId).toString();
+
+            try {
+                apiClient.smallFull().directorsReport().secretary().delete(uri).execute();
+            } catch (ApiErrorResponseException e) {
+                serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
+            } catch (URIValidationException e) {
+                serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+            }
         }
     }
 

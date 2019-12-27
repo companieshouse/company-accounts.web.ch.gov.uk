@@ -53,9 +53,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     private static final String RESOURCE_NAME = "secretaries";
 
-    @Autowired
-    private AddOrRemoveDirectors addOrRemoveDirectors;
-
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
 
@@ -73,10 +70,11 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String getAddOrRemoveDirectors(@PathVariable String companyNumber,
                                           @PathVariable String transactionId,
                                           @PathVariable String companyAccountsId,
-                                          Model model,
-                                          HttpServletRequest request) {
+                                          Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
 
         try {
             addOrRemoveDirectors.setExistingDirectors(
@@ -95,7 +93,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         model.addAttribute(COMPANY_NUMBER, companyNumber);
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
-        model.addAttribute(DIRECTOR_TO_ADD, new DirectorToAdd());
 
         return getTemplateName();
     }
@@ -104,8 +101,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String removeDirector(@PathVariable String companyNumber,
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId,
-                                 @PathVariable String directorId,
-                                 HttpServletRequest request) {
+                                 @PathVariable String directorId) {
 
         try {
             directorService.deleteDirector(transactionId, companyAccountsId, directorId);
@@ -124,31 +120,20 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String addDirector(@PathVariable String companyNumber,
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
-                              @ModelAttribute(DIRECTOR_TO_ADD) @Valid DirectorToAdd directorToAdd,
+                              @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) @Valid AddOrRemoveDirectors addOrRemoveDirectors,
                               BindingResult bindingResult,
-                              Model model,
-                              HttpServletRequest request) {
-
-        model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
-
-        if (bindingResult.hasErrors()) {
-            return getTemplateName();
-        }
+                              Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        model.addAttribute(DIRECTOR_TO_ADD, directorToAdd);
-
         try {
 
-            List<ValidationError> validationErrors = directorService.createDirector(transactionId, companyAccountsId, directorToAdd);
+            List<ValidationError> validationErrors = directorService.createDirector(transactionId, companyAccountsId, addOrRemoveDirectors.getDirectorToAdd());
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
-
-            addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
 
         } catch (ServiceException e) {
 
@@ -165,13 +150,20 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
-                                             AddOrRemoveDirectors addOrRemoveDirectors) {
+                                             @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) AddOrRemoveDirectors addOrRemoveDirectors,
+                                             BindingResult bindingResult) {
 
 
         try {
                 if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
 
-                    secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors);
+                    List<ValidationError> validationErrors = secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors);
+
+                    if (!validationErrors.isEmpty()) {
+                        bindValidationErrors(bindingResult, validationErrors);
+                        return getTemplateName();
+                    }
+
                 } else {
 
                     secretaryService.deleteSecretary(transactionId, companyAccountsId);

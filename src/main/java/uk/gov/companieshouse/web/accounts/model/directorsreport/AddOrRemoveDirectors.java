@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class AddOrRemoveDirectors {
 
     private Director[] existingDirectors;
