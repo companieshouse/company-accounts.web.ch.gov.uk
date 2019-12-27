@@ -64,7 +64,7 @@
                 </div>
             </dl>
 
-            <div id="direcotr-not-available" th:object="${addOrRemoveDirectors}">
+            <div id="director-not-available" th:object="${addOrRemoveDirectors}">
                 <div th:if="${addOrRemoveDirectors.directorIsAvailable == false}" th:replace="fragments/globalErrors :: globalErrors"></div>
             </div>
 
@@ -122,7 +122,7 @@
 
                 <span th:if="${addOrRemoveDirectors.directorIsAvailable == false}"
                       class="govuk-error-message"
-                      id="add-director-button-errorId"> You must add at least one director</span>
+                      id="directorIsAvailable-errorId"> You must add at least one director</span>
 
                 <div class="govuk-form-group">
                     <input id="add-director-button" class="secondary-button piwik-event"
