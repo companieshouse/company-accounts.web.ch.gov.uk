@@ -3,21 +3,10 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.SecretaryApi;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
-import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.SecretaryTransformer;
 
 @Component
 public class SecretaryTransformerImpl implements SecretaryTransformer {
-
-    @Override
-    public AddOrRemoveDirectors getSecretary(SecretaryApi secretaryApi) {
-
-        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
-        addOrRemoveDirectors.setSecretary(secretaryApi.getName());
-
-        return addOrRemoveDirectors;
-
-    }
 
     @Override
     public SecretaryApi getSecretaryApi(AddOrRemoveDirectors addOrRemoveDirectors) {

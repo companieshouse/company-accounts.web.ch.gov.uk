@@ -5,7 +5,5 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirec
 
 public interface SecretaryTransformer {
 
-    AddOrRemoveDirectors getSecretary(SecretaryApi secretaryApi);
-
     SecretaryApi getSecretaryApi(AddOrRemoveDirectors addOrRemoveDirectors);
 }

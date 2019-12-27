@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -50,17 +49,19 @@ public class SecretaryServiceImpl implements SecretaryService {
     public String getSecretary(String transactionId, String companyAccountsId)
         throws ServiceException {
 
-        AddOrRemoveDirectors addOrRemoveDirectors;
+        ApiClient apiClient = apiClientService.getApiClient();
 
-        SecretaryApi secretaryApi = getSecretaryApi(transactionId, companyAccountsId);
+        String uri = SECRETARY_URI.expand(transactionId, companyAccountsId).toString();
 
-        if (secretaryApi != null) {
-            addOrRemoveDirectors = secretaryTransformer.getSecretary(secretaryApi);
-        } else {
-            addOrRemoveDirectors = new AddOrRemoveDirectors();
+        try {
+            return apiClient.smallFull().directorsReport().secretary().get(uri).execute().getData().getName();
+        } catch (ApiErrorResponseException e) {
+            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
+        } catch (URIValidationException e) {
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
 
-        return addOrRemoveDirectors.getSecretary();
+        return null;
     }
 
     @Override
@@ -105,8 +106,8 @@ public class SecretaryServiceImpl implements SecretaryService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        if (StringUtils.isNotBlank(directorsReportService.
-                getDirectorsReport(apiClient, transactionId, companyAccountsId).getLinks().getSecretary())) {
+        if (hasSecretary(directorsReportService.
+                getDirectorsReport(apiClient, transactionId, companyAccountsId).getLinks())) {
 
             String uri = SECRETARY_URI.expand(transactionId, companyAccountsId).toString();
 
@@ -120,31 +121,8 @@ public class SecretaryServiceImpl implements SecretaryService {
         }
     }
 
-
-    public SecretaryApi getSecretaryApi(String transactionId, String companyAccountsId)
-            throws ServiceException {
-
-        ApiClient apiClient = apiClientService.getApiClient();
-
-        String uri = SECRETARY_URI.expand(transactionId, companyAccountsId).toString();
-
-        try {
-            return apiClient.smallFull().directorsReport().secretary().get(uri).execute().getData();
-        } catch (ApiErrorResponseException e) {
-            serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
-        } catch (URIValidationException e) {
-            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
-        }
-
-        return null;
-
-    }
-
     private boolean hasSecretary(DirectorsReportLinks directorsReportLinks) {
 
         return directorsReportLinks.getSecretary() != null;
     }
-
-
-
 }

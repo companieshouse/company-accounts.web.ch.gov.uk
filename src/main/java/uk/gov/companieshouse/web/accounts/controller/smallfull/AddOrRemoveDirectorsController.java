@@ -16,22 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
-import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)
@@ -48,17 +44,10 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     @Autowired
     private SecretaryService secretaryService;
 
-    @Autowired
-    private ServiceExceptionHandler serviceExceptionHandler;
-
-    private static final String RESOURCE_NAME = "secretaries";
-
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
-
-    private static final String DIRECTOR_TO_ADD = "directorToAdd";
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
