@@ -35,4 +35,17 @@ public class SecretaryTransformerImplTest {
         assertEquals(NAME, secretaryApi.getName());
 
     }
+
+    @Test
+    @DisplayName("Get secretary")
+    void getSecretary() {
+
+        SecretaryApi secretaryApi = new SecretaryApi();
+        secretaryApi.setName(NAME);
+
+        AddOrRemoveDirectors addOrRemoveDirectors = secretaryTransformer.getSecretary(secretaryApi);
+
+        assertNotNull(addOrRemoveDirectors);
+        assertEquals(NAME, addOrRemoveDirectors.getSecretary());
+    }
 }

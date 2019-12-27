@@ -15,7 +15,6 @@ public class SecretaryTransformerImpl implements SecretaryTransformer {
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
         addOrRemoveDirectors.setSecretary(secretaryApi.getName());
 
-
         return addOrRemoveDirectors;
 
     }

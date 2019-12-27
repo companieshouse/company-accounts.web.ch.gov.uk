@@ -12,7 +12,6 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.DirectorsReportResourceHandler;
-import uk.gov.companieshouse.api.handler.smallfull.directorsreport.request.DirectorsReportGet;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.secretary.SecretaryResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.secretary.request.SecretaryCreate;
 import uk.gov.companieshouse.api.handler.smallfull.directorsreport.secretary.request.SecretaryDelete;
@@ -26,20 +25,20 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.SecretaryTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,9 +64,6 @@ public class SecretaryServiceImplTest {
     private SecretaryGet secretaryGet;
 
     @Mock
-    private DirectorsReportGet directorsReportGet;
-
-    @Mock
     private SecretaryDelete secretaryDelete;
 
     @Mock
@@ -83,9 +79,6 @@ public class SecretaryServiceImplTest {
     private ApiResponse responseWithData;
 
     @Mock
-    private ApiResponse<Void> responseNoData;
-
-    @Mock
     private SmallFullResourceHandler smallFullResourceHandler;
 
     @Mock
@@ -99,6 +92,9 @@ public class SecretaryServiceImplTest {
 
     @Mock
     private URIValidationException uriValidationException;
+
+    @Mock
+    private ValidationContext validationContext;
 
     @InjectMocks
     private SecretaryServiceImpl secretaryService ;
@@ -194,9 +190,6 @@ public class SecretaryServiceImplTest {
 
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(getDirectorsReport());
 
-
-
-
         when(secretaryResourceHandler.create(SECRETARY_URI, secretaryApi)).thenReturn(secretaryCreate);
         when(secretaryCreate.execute()).thenReturn(responseWithData);
         when(responseWithData.hasErrors()).thenReturn(false);
@@ -207,6 +200,135 @@ public class SecretaryServiceImplTest {
 
         assertTrue(validationErrors.isEmpty());
 
+    }
+
+    @Test
+    @DisplayName("Submit secretary with validation errors")
+    void submitSecretaryValidationErrors()
+        throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(getDirectorsReport());
+
+        when(secretaryResourceHandler.create(SECRETARY_URI, secretaryApi)).thenReturn(secretaryCreate);
+        when(secretaryCreate.execute()).thenReturn(responseWithData);
+        when(responseWithData.hasErrors()).thenReturn(true);
+
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> apiValidationErrors = new ArrayList<>();
+        apiValidationErrors.add(validationError);
+        when(validationContext.getValidationErrors(responseWithData.getErrors())).thenReturn(apiValidationErrors);
+
+        when(secretaryTransformer.getSecretaryApi(addOrRemoveDirectors)).thenReturn(secretaryApi);
+        List<ValidationError> validationErrors = secretaryService.
+                submitSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+
+        assertEquals(apiValidationErrors, validationErrors);
+
+    }
+
+    @Test
+    @DisplayName("Submit secretary with ApiErrorResponseException")
+    void submitSecretaryApiException()
+        throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(getDirectorsReport());
+
+        when(secretaryResourceHandler.create(SECRETARY_URI, null)).thenReturn(secretaryCreate);
+        when(secretaryCreate.execute()).thenThrow(apiErrorResponseException);
+        doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> secretaryService.submitSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors));
+
+    }
+
+    @Test
+    @DisplayName("Submit secretary with URIValidationException")
+    void submitSecretaryUriException()
+        throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(getDirectorsReport());
+
+        when(secretaryResourceHandler.create(SECRETARY_URI, null)).thenReturn(secretaryCreate);
+        when(secretaryCreate.execute()).thenThrow(uriValidationException);
+        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> secretaryService.submitSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors));
+
+
+    }
+
+    @Test
+    @DisplayName("Delete secretary success")
+    void deleteSecretarySuccess()
+        throws ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(secretaryResourceHandler.delete(SECRETARY_URI)).thenReturn(secretaryDelete);
+
+        assertAll(() -> secretaryService.deleteSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        verify(secretaryDelete).execute();
+
+    }
+
+    @Test
+    @DisplayName("Delete secretary ApiErrorResponseException")
+    void deleteSecretaryApiException()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(secretaryResourceHandler.delete(SECRETARY_URI)).thenReturn(secretaryDelete);
+        when(secretaryDelete.execute()).thenThrow(apiErrorResponseException);
+        doThrow(ServiceException.class).when(serviceExceptionHandler).
+                handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> secretaryService.deleteSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Delete secretary URIValidationException")
+    void deleteSecretaryUriException()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(secretaryResourceHandler.delete(SECRETARY_URI)).thenReturn(secretaryDelete);
+        when(secretaryDelete.execute()).thenThrow(uriValidationException);
+        doThrow(ServiceException.class).when(serviceExceptionHandler).
+                handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> secretaryService.deleteSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
 
