@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -12,6 +13,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
@@ -42,10 +44,19 @@ public class DirectorServiceImpl implements DirectorService {
     private static final UriTemplate DIRECTORS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/directors");
 
+    private static final String DIRECTOR_NOT_EXIST = "directorNotExist";
+
     private static final UriTemplate DIRECTORS_URI_WITH_ID =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/directors/{directorId}");
 
     private static final String RESOURCE_NAME = "directors";
+
+    private static final String DIRECTOR_ADDED_TO_LIST =
+            "directorIsAvailable";
+
+    private static final String DIRECTOR_NOT_FOUND_ERROR_MESSAGE =
+            "validation.length.minInvalid.directors.director_available";
+
 
     @Override
     public Director[] getAllDirectors(String transactionId, String companyAccountsId) throws ServiceException {
@@ -127,5 +138,34 @@ public class DirectorServiceImpl implements DirectorService {
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
+    }
+
+    @Override
+    public List<ValidationError> submitDirectorsReport(String transactionId, String companyAccountsId, String companyNumber, AddOrRemoveDirectors addOrRemoveDirectors) {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        DirectorApi[] directors = null;
+        try {
+            directors = apiClient.smallFull().directorsReport().directors().getAll(uri).execute().getData();
+        } catch (URIValidationException e) {
+            e.printStackTrace();
+        } catch (ApiErrorResponseException e) {
+            e.printStackTrace();
+        }
+
+
+        if (directors == null || directors.length < 1) {
+                ValidationError validationError = new ValidationError();
+                validationError.setFieldPath(DIRECTOR_ADDED_TO_LIST);
+                validationError.setMessageKey(DIRECTOR_NOT_FOUND_ERROR_MESSAGE);
+                validationErrors.add(validationError);
+            }
+
+        return validationErrors;
     }
 }

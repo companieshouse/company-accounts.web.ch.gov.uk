@@ -1,84 +1,102 @@
 <!DOCTYPE html>
 
 <html
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
-    layout:decorate="~{layouts/baseLayout}">
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">
 
 <head>
-  <title id="page-title-heading">
-    Directors' report
-  </title>
+    <title id="page-title-heading">
+        Directors' report
+    </title>
 </head>
 <div id="directorsReport-main-content" layout:fragment="content">
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-      <div th:replace="fragments/numberedHeading :: numberedHeading (
+            <div th:replace="fragments/numberedHeading :: numberedHeading (
                   headingText = 'Directors\' report'
               )">
-      </div>
+            </div>
 
-      <input th:field="*{addOrRemoveDirectors.existingDirectors}" type="hidden" >
+            <input th:field="*{addOrRemoveDirectors.existingDirectors}" type="hidden">
 
-      <h2 id="directorsReport-subheading" class="govuk-heading-m">
-        Enter the name(s) of the directors who served in the accounting period you're filing for
-      </h2>
+            <h2 id="directorsReport-subheading" class="govuk-heading-m">
+                Enter the name(s) of the directors who served in the accounting period you're filing for
+            </h2>
 
-      <span id="directorsReport-help-text" class="govuk-hint">
+            <span id="directorsReport-help-text" class="govuk-hint">
         This includes directors who were appointed or resigned during the accounting period. You can add up to 20 directors.
       </span>
 
-      <dl class="app-check-your-answers app-check-your-answers--short two-column-accounts" th:if="${addOrRemoveDirectors.existingDirectors.length > 0}">
+            <dl class="app-check-your-answers app-check-your-answers--short two-column-accounts"
+                th:if="${addOrRemoveDirectors.existingDirectors.length > 0}">
 
-        <div class="app-check-your-answers__contents cya-desktop-only">
-          <dt class="app-check-your-answers__answer govuk-heading-s">Directors' name</dt>
-          <dd class="app-check-your-answers__answer govuk-heading-s govuk-!-font-weight-bold">Appointed</dd>
-          <dd class="app-check-your-answers__answer govuk-heading-s govuk-!-font-weight-bold">Resigned</dd>
-          <dd class="app-check-your-answers__change"></dd>
-        </div>
+                <div class="app-check-your-answers__contents cya-desktop-only">
+                    <dt class="app-check-your-answers__answer govuk-heading-s">Directors' name</dt>
+                    <dd class="app-check-your-answers__answer govuk-heading-s govuk-!-font-weight-bold">Appointed</dd>
+                    <dd class="app-check-your-answers__answer govuk-heading-s govuk-!-font-weight-bold">Resigned</dd>
+                    <dd class="app-check-your-answers__change"></dd>
+                </div>
 
-        <div th:each="director : ${addOrRemoveDirectors.existingDirectors}" class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__question" th:text="${director.name}"></dt>
-          <dd class="app-check-your-answers__answer">
-            <span class="mobile-only-label">Appointed: </span>
-            <span th:text="${#temporals.format(director.appointmentDate, 'd MMM yyyy')}"></span>
-          </dd>
-          <dd class="app-check-your-answers__answer">
-            <span class="mobile-only-label">Resigned: </span>
-            <span th:text="${#temporals.format(director.resignationDate, 'd MMM yyyy')}"></span>
-          </dd>
-          <dd class="app-check-your-answers__change">
-            <form class="form"
-                  th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/remove/{directorId}
+                <div th:each="director : ${addOrRemoveDirectors.existingDirectors}"
+                     class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__question" th:text="${director.name}"></dt>
+                    <dd class="app-check-your-answers__answer">
+                        <span class="mobile-only-label">Appointed: </span>
+                        <span th:text="${#temporals.format(director.appointmentDate, 'd MMM yyyy')}"></span>
+                    </dd>
+                    <dd class="app-check-your-answers__answer">
+                        <span class="mobile-only-label">Resigned: </span>
+                        <span th:text="${#temporals.format(director.resignationDate, 'd MMM yyyy')}"></span>
+                    </dd>
+                    <dd class="app-check-your-answers__change">
+                        <form class="form"
+                              th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/remove/{directorId}
                                 (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},directorId=${director.id})}"
-                  method="get">
-              <div class="flex-container-center-align">
-                  <input id="remove-director-button" class="button-display-as-link piwik-event" data-event-id="Directors report - remove director"
-                        type="submit" role="button" value="Remove"/>
-              </div>
-            </form>
-          </dd>
-        </div>
-      </dl>
+                              method="get">
+                            <div class="flex-container-center-align">
+                                <input id="remove-director-button" class="button-display-as-link piwik-event"
+                                       data-event-id="Directors report - remove director"
+                                       type="submit" role="button" value="Remove"/>
+                            </div>
+                        </form>
+                    </dd>
+                </div>
+            </dl>
+
+            <div id="director-not-available" th:object="${addOrRemoveDirectors}">
+                <div th:if="${addOrRemoveDirectors.directorIsAvailable == false}" th:replace="fragments/globalErrors :: globalErrors"></div>
+            </div>
 
       <form id="directorsReport-add-or-remove-form" class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/add/add-director
                                 (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId})}" th:object="${addOrRemoveDirectors.directorToAdd}" method="post">
 
-      <div class="govuk-form-group"
-             th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
-          <label id="appointment-director-heading" class="govuk-label govuk-label--m" for="directorToAdd-name">
-            Director's name
-          </label>
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
-          <input class="govuk-input"
-                 id="directorToAdd-name"
-                 th:field="*{name}"
-                 th:errorclass="govuk-input--error"
-                 type="text">
-        </div>
-        <div class="govuk-form-group"
-             th:classappend="${#fields.hasErrors('wasDirectorAppointedDuringPeriod')} ? 'govuk-form-group--error' : ''">
-          <div th:replace="fragments/YesNoRadioButtonsAppointedDate :: YesNoRadioButtonsAppointedDate (
+
+                <div class="govuk-form-group"
+                     th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
+                    <label id="appointment-director-heading" class="govuk-label govuk-label--m"
+                           for="directorToAdd-name">
+                        Director's name
+                    </label>
+
+                    <span class="govuk-error-message"
+                          id="name-errorId"
+                          th:if="${#fields.hasErrors('name')}"
+                          th:each="e : ${#fields.errors('name')}" th:text="${e}">
+              </span>
+
+                    <input class="govuk-input"
+                           id="directorToAdd-name"
+                           th:field="*{name}"
+                           th:errorclass="govuk-input--error"
+                           type="text">
+                </div>
+
+                <div class="govuk-form-group"
+                     th:classappend="${#fields.hasErrors('wasDirectorAppointedDuringPeriod')} ? 'govuk-form-group--error' : ''">
+                    <div th:replace="fragments/YesNoRadioButtonsAppointedDate :: YesNoRadioButtonsAppointedDate (
               legendText = 'Was the director appointed during the accounting period?',
               boxLabelTextJavaScriptOn = '​Enter the date the director was appointed',
               boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director was appointed For example, 12 02 2019',
@@ -86,12 +104,12 @@
               textBoxFieldName = 'appointmentDate',
               dataTargetTextFieldName = 'directors-report-appointment-text-date'
               )">
-          </div>
-        </div>
+                    </div>
+                </div>
 
-        <div class="govuk-form-group"
-             th:classappend="${#fields.hasErrors('didDirectorResignDuringPeriod')} ? 'govuk-form-group--error' : ''">
-          <div th:replace="fragments/YesNoRadioButtonsResignDate :: YesNoRadioButtonsResignDate (
+                <div class="govuk-form-group"
+                     th:classappend="${#fields.hasErrors('didDirectorResignDuringPeriod')} ? 'govuk-form-group--error' : ''">
+                    <div th:replace="fragments/YesNoRadioButtonsResignDate :: YesNoRadioButtonsResignDate (
               legendText = 'Did the director resign during the accounting period?',
               boxLabelTextJavaScriptOn = '​Enter the date the director resigned',
               boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director resigned For example, 12 02 2019',
@@ -99,15 +117,22 @@
               textBoxFieldName = 'resignationDate',
               dataTargetTextFieldName = 'directors-report-resign-text-date'
               )">
-          </div>
-        </div>
+                    </div>
+                </div>
 
-        <div class="govuk-form-group">
-          <input id="add-director-button" class="secondary-button piwik-event" data-event-id="Directors report - add director"
-                 type="submit" role="button" value="Add director"/>
-        </div>
-      </form>
+                <span th:if="${addOrRemoveDirectors.directorIsAvailable == false}"
+                      class="govuk-error-message"
+                      id="directorIsAvailable-errorId"> You must add at least one director</span>
 
+                <div class="govuk-form-group">
+                    <input id="add-director-button" class="secondary-button piwik-event"
+                           data-event-id="Directors report - add director"
+                           type="submit" role="button" value="Add director"/>
+                </div>
+            </form>
+
+        </div>
+    </div>
       <form th:action="@{''}" th:object="${addOrRemoveDirectors}" method="post">
 
         <h2 id="directorsReport-secretary-subheading" class="govuk-heading-m">
@@ -121,8 +146,12 @@
         &nbsp
         <br>
 
-        <input id="next-button" class="govuk-button piwik-event" data-event-id="Directors report - save and continue"
-               type="submit" role="button" value="Save and continue"/>
+        <form id="approval-form" th:action="@{''}" class="form" th:object="${addOrRemoveDirectors}" method="post">
+
+          <input id="next-button" class="govuk-button piwik-event"
+                 data-event-id="Directors report - save and continue"
+                 type="submit" role="button" value="Save and continue"/>
+        </form>
       </form>
     </div>
   </div>

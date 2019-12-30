@@ -1,8 +1,10 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
+import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
+@Component
 @ValidationModel
 public class AddOrRemoveDirectors {
 
@@ -15,6 +17,18 @@ public class AddOrRemoveDirectors {
 
     public Director[] getExistingDirectors() {
         return existingDirectors;
+    }
+
+    @ValidationMapping("validation.length.minInvalid.directors.director_available")
+    public boolean directorIsAvailable;
+
+
+    public boolean isDirectorIsAvailable() {
+        return directorIsAvailable;
+    }
+
+    public void setDirectorIsAvailable(boolean directorIsAvailable) {
+        this.directorIsAvailable = directorIsAvailable;
     }
 
     public void setExistingDirectors(Director[] existingDirectors) {
