@@ -208,6 +208,33 @@ public class SecretaryServiceImplTest {
     }
 
     @Test
+    @DisplayName("Update secretary success")
+    void updateSecretarySuccess() throws
+            ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.secretary()).thenReturn(secretaryResourceHandler);
+
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
+        when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
+        when(directorsReportLinks.getSecretary()).thenReturn(SECRETARY_LINK);
+
+        when(secretaryResourceHandler.update(SECRETARY_URI, secretaryApi)).thenReturn(secretaryUpdate);
+        when(secretaryUpdate.execute()).thenReturn(responseWithData);
+        when(responseWithData.hasErrors()).thenReturn(false);
+
+        when(secretaryTransformer.getSecretaryApi(addOrRemoveDirectors)).thenReturn(secretaryApi);
+        List<ValidationError> validationErrors = secretaryService.
+                submitSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+
+        assertTrue(validationErrors.isEmpty());
+
+    }
+
+    @Test
     @DisplayName("Submit secretary with validation errors")
     void submitSecretaryValidationErrors()
         throws ServiceException, ApiErrorResponseException, URIValidationException {
