@@ -68,6 +68,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId));
+            addOrRemoveDirectors.setDirectorIsAvailable(true);
 
             addOrRemoveDirectors.setSecretary(
                     secretaryService.getSecretary(transactionId, companyAccountsId));
