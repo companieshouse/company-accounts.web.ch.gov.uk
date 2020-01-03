@@ -133,7 +133,7 @@
 
         </div>
     </div>
-      <form th:action="@{''}" th:object="${addOrRemoveDirectors}" method="post">
+    <form id="approval-form" th:action="@{''}" class="form" th:object="${addOrRemoveDirectors}" method="post">
 
         <h2 id="directorsReport-secretary-subheading" class="govuk-heading-m">
           Enter the name of the company secretary (optional)
@@ -146,13 +146,10 @@
         &nbsp
         <br>
 
-        <form id="approval-form" th:action="@{''}" class="form" th:object="${addOrRemoveDirectors}" method="post">
-
           <input id="next-button" class="govuk-button piwik-event"
                  data-event-id="Directors report - save and continue"
                  type="submit" role="button" value="Save and continue"/>
         </form>
-      </form>
     </div>
   </div>
 </div>
