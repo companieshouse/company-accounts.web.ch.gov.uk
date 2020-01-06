@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -68,7 +67,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId));
-            addOrRemoveDirectors.setDirectorIsAvailable(true);
 
             addOrRemoveDirectors.setSecretary(
                     secretaryService.getSecretary(transactionId, companyAccountsId));
@@ -110,7 +108,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String addDirector(@PathVariable String companyNumber,
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
-                              @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) @Valid AddOrRemoveDirectors addOrRemoveDirectors,
+                              @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) AddOrRemoveDirectors addOrRemoveDirectors,
                               BindingResult bindingResult,
                               Model model) {
 

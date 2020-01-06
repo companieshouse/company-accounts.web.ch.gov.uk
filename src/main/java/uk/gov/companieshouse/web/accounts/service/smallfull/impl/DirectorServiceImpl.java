@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -22,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.DateValidator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.DirectorValidator;
 
 @Service
 public class DirectorServiceImpl implements DirectorService {
@@ -39,12 +41,13 @@ public class DirectorServiceImpl implements DirectorService {
     private ValidationContext validationContext;
 
     @Autowired
+    private DirectorValidator directorValidator;
+
+    @Autowired
     private DateValidator dateValidator;
 
     private static final UriTemplate DIRECTORS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/directors");
-
-    private static final String DIRECTOR_NOT_EXIST = "directorNotExist";
 
     private static final UriTemplate DIRECTORS_URI_WITH_ID =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/directors/{directorId}");
@@ -80,9 +83,9 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public List<ValidationError> createDirector(String transactionId, String companyAccountsId, DirectorToAdd directorToAdd) throws ServiceException {
 
-        List<ValidationError> validationErrors = new ArrayList<>();
+        List<ValidationError> validationErrors = directorValidator.validateDirectorToAdd(directorToAdd);
 
-        if (directorToAdd.getWasDirectorAppointedDuringPeriod()) {
+        if (BooleanUtils.isTrue(directorToAdd.getWasDirectorAppointedDuringPeriod())) {
             validationErrors.addAll(
                     dateValidator.validateDate(
                             directorToAdd.getAppointmentDate(),
@@ -90,7 +93,7 @@ public class DirectorServiceImpl implements DirectorService {
                             ".director.appointment_date"));
         }
 
-        if (directorToAdd.getDidDirectorResignDuringPeriod()) {
+        if (BooleanUtils.isTrue(directorToAdd.getDidDirectorResignDuringPeriod())) {
             validationErrors.addAll(
                     dateValidator.validateDate(
                             directorToAdd.getResignationDate(),
