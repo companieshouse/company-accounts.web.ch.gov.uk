@@ -89,7 +89,7 @@ public class DirectorServiceImpl implements DirectorService {
             validationErrors.addAll(
                     dateValidator.validateDate(
                             directorToAdd.getAppointmentDate(),
-                            "appointmentDate",
+                            "directorToAdd.appointmentDate",
                             ".director.appointment_date"));
         }
 
@@ -97,7 +97,7 @@ public class DirectorServiceImpl implements DirectorService {
             validationErrors.addAll(
                     dateValidator.validateDate(
                             directorToAdd.getResignationDate(),
-                            "resignationDate",
+                            "directorToAdd.resignationDate",
                             ".director.resignation_date"));
         }
 
