@@ -142,33 +142,4 @@ public class DirectorServiceImpl implements DirectorService {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
     }
-
-    @Override
-    public List<ValidationError> submitDirectorsReport(String transactionId, String companyAccountsId, String companyNumber, AddOrRemoveDirectors addOrRemoveDirectors) {
-
-        ApiClient apiClient = apiClientService.getApiClient();
-
-        String uri = DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
-
-        List<ValidationError> validationErrors = new ArrayList<>();
-
-        DirectorApi[] directors = null;
-        try {
-            directors = apiClient.smallFull().directorsReport().directors().getAll(uri).execute().getData();
-        } catch (URIValidationException e) {
-            e.printStackTrace();
-        } catch (ApiErrorResponseException e) {
-            e.printStackTrace();
-        }
-
-
-        if (directors == null || directors.length < 1) {
-                ValidationError validationError = new ValidationError();
-                validationError.setFieldPath(DIRECTOR_ADDED_TO_LIST);
-                validationError.setMessageKey(DIRECTOR_NOT_FOUND_ERROR_MESSAGE);
-                validationErrors.add(validationError);
-            }
-
-        return validationErrors;
-    }
 }
