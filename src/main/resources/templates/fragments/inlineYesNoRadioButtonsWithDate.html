@@ -5,7 +5,7 @@
     <title></title>
 </head>
 <body>
-<fieldset class="govuk-fieldset" th:fragment="YesNoRadioButtonsResignDate">
+<fieldset class="govuk-fieldset" th:fragment="inlineYesNoRadioButtonsWithDate">
 
     <legend>
         <h2 class="govuk-heading-m">
@@ -61,35 +61,34 @@
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
 
-            <div class="govuk-form-group" th:classappend="${#fields.hasErrors('resignationDate')} ? 'govuk-form-group--error' : ''">
-                <fieldset class="govuk-fieldset" aria-describedby="resignation-date-hint" role="group">
+            <div class="govuk-form-group"
+                 th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
+                <fieldset class="govuk-fieldset" aria-describedby="appointment-date-hint" role="group">
 
-                    <legend id="resignation-date-heading" class="govuk-label">
-                        Enter the date the director resigned
-                    </legend>
+                    <legend th:id="${identifier} + '-heading'" class="govuk-label" th:text="${boxLabelTextJavaScriptOn}"></legend>
 
-                    <span id="resignation-date-hint" class="govuk-hint">
-                  <p class="govuk-hint">For example, 31 3 2017</p>
-              </span>
+                    <span th:id="${identifier} + '-hint'" class="govuk-hint">
+                        <p class="govuk-hint">For example, 31 3 2017</p>
+                    </span>
 
                     <span class="govuk-error-message"
-                          id="resignationDate-errorId"
-                          th:if="${#fields.hasErrors('resignationDate')}"
-                          th:each="e : ${#fields.errors('resignationDate')}" th:text="${e}">
-              </span>
+                          th:id="${textBoxFieldName} + '-errorId'"
+                          th:if="${#fields.hasErrors('__${textBoxFieldName}__')}"
+                          th:each="e : ${#fields.errors('__${textBoxFieldName}__')}" th:text="${e}">
+                    </span>
 
-                    <div class="govuk-date-input" id="resignation-date">
+                    <div class="govuk-date-input" th:id="${identifier}">
 
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="resignation-date-day">
+                                <label class="govuk-label govuk-date-input__label" th:for="__${identifier}__-day">
                                     Day
                                 </label>
 
                                 <input class="govuk-input govuk-date-input__input govuk-input--width-2"
-                                       th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
-                                       id="resignation-date-day"
-                                       th:field="*{resignationDate.day}"
+                                       th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? govuk-input--error : ''"
+                                       th:id="${identifier} + '-day'"
+                                       th:field="*{__${textBoxFieldName}__.day}"
                                        type="number"
                                        pattern="[0-9]*">
                             </div>
@@ -97,14 +96,14 @@
 
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="resignation-date-month">
+                                <label class="govuk-label govuk-date-input__label" th:for="__${identifier}__-month">
                                     Month
                                 </label>
 
                                 <input class="govuk-input govuk-date-input__input govuk-input--width-2"
-                                       th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
-                                       id="resignation-date-month"
-                                       th:field="*{resignationDate.month}"
+                                       th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? govuk-input--error : ''"
+                                       th:id="${identifier} + '-month'"
+                                       th:field="*{__${textBoxFieldName}__.month}"
                                        type="number"
                                        pattern="[0-9]*">
                             </div>
@@ -112,18 +111,19 @@
 
                         <div class="govuk-date-input__item">
                             <div class="govuk-form-group">
-                                <label class="govuk-label govuk-date-input__label" for="resignation-date-year">
+                                <label class="govuk-label govuk-date-input__label" th:for="__${identifier}__-year">
                                     Year
                                 </label>
 
                                 <input class="govuk-input govuk-date-input__input govuk-input--width-4"
-                                       th:classappend="${#fields.hasErrors('resignationDate')} ? govuk-input--error : ''"
-                                       id="resignation-date-year"
-                                       th:field="*{resignationDate.year}"
+                                       th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? govuk-input--error : ''"
+                                       th:id="${identifier} + '-year'"
+                                       th:field="*{__${textBoxFieldName}__.year}"
                                        type="number"
-                                        pattern="[0-9]*">
+                                       pattern="[0-9]*">
                             </div>
                         </div>
+
                     </div>
                 </fieldset>
             </div>

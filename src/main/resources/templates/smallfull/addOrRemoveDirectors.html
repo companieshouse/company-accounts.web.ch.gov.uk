@@ -62,8 +62,7 @@
                 </div>
             </dl>
 
-            <form id="directorsReport-add-or-remove-form" class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors/add/add-director
-                                (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId})}" th:object="${addOrRemoveDirectors.directorToAdd}" method="post">
+            <form id="data-submission-form" th:action="@{''}" class="form" th:object="${addOrRemoveDirectors}" method="post">
 
                 <div th:each="director, stat : ${addOrRemoveDirectors.existingDirectors}">
                     <input type="hidden" th:field="${addOrRemoveDirectors.existingDirectors[__${stat.index}__].name}" th:id="existingDirectors[__${stat.index}__].name"/>
@@ -75,7 +74,7 @@
                 <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
                 <div class="govuk-form-group"
-                     th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
+                     th:classappend="${#fields.hasErrors('directorToAdd.name')} ? 'govuk-form-group--error' : ''">
                     <label id="appointment-director-heading" class="govuk-label govuk-label--m"
                            for="directorToAdd-name">
                         Director's name
@@ -83,66 +82,66 @@
 
                     <span class="govuk-error-message"
                           id="name-errorId"
-                          th:if="${#fields.hasErrors('name')}"
-                          th:each="e : ${#fields.errors('name')}" th:text="${e}">
+                          th:if="${#fields.hasErrors('directorToAdd.name')}"
+                          th:each="e : ${#fields.errors('directorToAdd.name')}" th:text="${e}">
                     </span>
 
                     <input class="govuk-input"
                            id="directorToAdd-name"
-                           th:field="*{name}"
+                           th:field="*{directorToAdd.name}"
                            th:errorclass="govuk-input--error"
                            type="text">
                 </div>
 
                 <div class="govuk-form-group"
-                     th:classappend="${#fields.hasErrors('wasDirectorAppointedDuringPeriod')} ? 'govuk-form-group--error' : ''">
-                    <div th:replace="fragments/YesNoRadioButtonsAppointedDate :: YesNoRadioButtonsAppointedDate (
-              legendText = 'Was the director appointed during the accounting period?',
-              boxLabelTextJavaScriptOn = '​Enter the date the director was appointed',
-              boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director was appointed For example, 12 02 2019',
-              radioButtonsFieldName = 'wasDirectorAppointedDuringPeriod',
-              textBoxFieldName = 'appointmentDate',
-              dataTargetTextFieldName = 'directors-report-appointment-text-date'
-              )">
+                     th:classappend="${#fields.hasErrors('directorToAdd.wasDirectorAppointedDuringPeriod')} ? 'govuk-form-group--error' : ''">
+                    <div th:replace="fragments/inlineYesNoRadioButtonsWithDate :: inlineYesNoRadioButtonsWithDate (
+                      legendText = 'Was the director appointed during the accounting period?',
+                      boxLabelTextJavaScriptOn = '​Enter the date the director was appointed',
+                      boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director was appointed For example, 12 02 2019',
+                      radioButtonsFieldName = 'directorToAdd.wasDirectorAppointedDuringPeriod',
+                      textBoxFieldName = 'directorToAdd.appointmentDate',
+                      dataTargetTextFieldName = 'directors-report-appointment-text-date',
+                      identifier = appointment-date
+                      )">
                     </div>
                 </div>
 
                 <div class="govuk-form-group"
-                     th:classappend="${#fields.hasErrors('didDirectorResignDuringPeriod')} ? 'govuk-form-group--error' : ''">
-                    <div th:replace="fragments/YesNoRadioButtonsResignDate :: YesNoRadioButtonsResignDate (
-              legendText = 'Did the director resign during the accounting period?',
-              boxLabelTextJavaScriptOn = '​Enter the date the director resigned',
-              boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director resigned For example, 12 02 2019',
-              radioButtonsFieldName = 'didDirectorResignDuringPeriod',
-              textBoxFieldName = 'resignationDate',
-              dataTargetTextFieldName = 'directors-report-resign-text-date'
-              )">
+                     th:classappend="${#fields.hasErrors('directorToAdd.didDirectorResignDuringPeriod')} ? 'govuk-form-group--error' : ''">
+                    <div th:replace="fragments/inlineYesNoRadioButtonsWithDate :: inlineYesNoRadioButtonsWithDate (
+                      legendText = 'Did the director resign during the accounting period?',
+                      boxLabelTextJavaScriptOn = '​Enter the date the director resigned',
+                      boxLabelTextJavaScriptOff = 'If yes, ​Enter the date the director resigned For example, 12 02 2019',
+                      radioButtonsFieldName = 'directorToAdd.didDirectorResignDuringPeriod',
+                      textBoxFieldName = 'directorToAdd.resignationDate',
+                      dataTargetTextFieldName = 'directors-report-resign-text-date',
+                      identifier = resignation-date
+                      )">
                     </div>
                 </div>
 
                 <div class="govuk-form-group">
                     <input id="add-director-button" class="secondary-button piwik-event"
-                           data-event-id="Directors report - add director"
-                           type="submit" role="button" value="Add director"/>
+                            data-event-id="Directors report - add director" type="submit"
+                            name="add" role="button" value="Add director"/>
                 </div>
-            </form>
-
-            <form id="secretary-form" th:action="@{''}" class="form" th:object="${addOrRemoveDirectors}" method="post">
 
                 <h2 id="directorsReport-secretary-subheading" class="govuk-heading-m">
                   Enter the name of the company secretary (optional)
                 </h2>
+
                 <input class="govuk-input"
                        id="secretary-name"
                        th:field="*{secretary}"
                        th:errorclass="govuk-input--error"
                        type="text">
-                &nbsp
-                <br>
 
-                  <input id="next-button" class="govuk-button piwik-event"
-                         data-event-id="Directors report - save and continue"
-                         type="submit" role="button" value="Save and continue"/>
+                <div>&nbsp</div>
+
+                <input id="next-button" class="govuk-button piwik-event"
+                        data-event-id="Directors report - save and continue"
+                        type="submit" role="button" value="Save and continue"/>
             </form>
         </div>
     </div>

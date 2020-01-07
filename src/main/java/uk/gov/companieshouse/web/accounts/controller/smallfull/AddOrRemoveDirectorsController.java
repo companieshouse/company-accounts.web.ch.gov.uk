@@ -104,7 +104,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                         URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
-    @PostMapping("/add/add-director")
+    @PostMapping(params = "add")
     public String addDirector(@PathVariable String companyNumber,
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
@@ -143,24 +143,24 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
 
         try {
-                if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
+            if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
 
-                    List<ValidationError> validationErrors = secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors);
+                List<ValidationError> validationErrors = secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors);
 
-                    if (!validationErrors.isEmpty()) {
-                        bindValidationErrors(bindingResult, validationErrors);
-                        return getTemplateName();
-                    }
-
-                } else {
-
-                    secretaryService.deleteSecretary(transactionId, companyAccountsId);
+                if (!validationErrors.isEmpty()) {
+                    bindValidationErrors(bindingResult, validationErrors);
+                    return getTemplateName();
                 }
-            } catch (ServiceException e) {
 
-                LOGGER.errorRequest(request, e.getMessage(), e);
-                return ERROR_VIEW;
+            } else {
+
+                secretaryService.deleteSecretary(transactionId, companyAccountsId);
             }
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
