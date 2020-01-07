@@ -13,6 +13,10 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
+            <form th:object="${addOrRemoveDirectors}">
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+            </form>
+
             <div th:replace="fragments/numberedHeading :: numberedHeading (
                   headingText = 'Directors\' report'
               )">
@@ -70,8 +74,6 @@
                     <input type="hidden" th:field="${addOrRemoveDirectors.existingDirectors[__${stat.index}__].resignationDate}" th:id="existingDirectors[__${stat.index}__].resignationDate"/>
                     <input type="hidden" th:field="${addOrRemoveDirectors.existingDirectors[__${stat.index}__].id}" th:id="existingDirectors[__${stat.index}__].id"/>
                 </div>
-
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
                 <div class="govuk-form-group"
                      th:classappend="${#fields.hasErrors('directorToAdd.name')} ? 'govuk-form-group--error' : ''">
@@ -139,7 +141,7 @@
 
                 <div>&nbsp</div>
 
-                <input id="next-button" class="govuk-button piwik-event"
+                <input id="save-and-continue-button" class="govuk-button piwik-event"
                         data-event-id="Directors report - save and continue"
                         th:name = "submit"
                         type="submit" role="button" value="Save and continue"/>
