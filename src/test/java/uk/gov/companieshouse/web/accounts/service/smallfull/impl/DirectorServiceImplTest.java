@@ -35,7 +35,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.DateValidator;
@@ -105,7 +104,7 @@ public class DirectorServiceImplTest {
     private URIValidationException uriValidationException;
 
     @InjectMocks
-    private DirectorService directorService = new DirectorServiceImpl();
+    private DirectorServiceImpl directorService;
 
     private static final String TRANSACTION_ID = "transactionId";
 
