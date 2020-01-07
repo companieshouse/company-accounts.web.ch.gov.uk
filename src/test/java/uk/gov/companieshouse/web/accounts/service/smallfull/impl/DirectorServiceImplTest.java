@@ -201,7 +201,7 @@ public class DirectorServiceImplTest {
         when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(true);
-        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "appointmentDate", ".director.appointment_date"))
+        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "directorToAdd.appointmentDate", ".director.appointment_date"))
                         .thenReturn(new ArrayList<>());
 
         when(directorToAdd.getDidDirectorResignDuringPeriod()).thenReturn(false);
@@ -234,7 +234,7 @@ public class DirectorServiceImplTest {
         ValidationError validationError = new ValidationError();
         List<ValidationError> dateValidationErrors = new ArrayList<>();
         dateValidationErrors.add(validationError);
-        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "resignationDate", ".director.resignation_date"))
+        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "directorToAdd.resignationDate", ".director.resignation_date"))
                 .thenReturn(dateValidationErrors);
 
         List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorToAdd);

@@ -86,9 +86,6 @@ public class AddOrRemoveDirectorsControllerTest {
 
     private static final String REMOVE_DIRECTOR_PATH = ADD_OR_REMOVE_DIRECTORS_PATH + "/remove/" + DIRECTOR_ID;
 
-    private static final String ADD_DIRECTOR_PATH = ADD_OR_REMOVE_DIRECTORS_PATH + "/add/add-director";
-
-
     private static final String ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR = "addOrRemoveDirectors";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
@@ -145,7 +142,7 @@ public class AddOrRemoveDirectorsControllerTest {
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorToAdd.class)))
                 .thenThrow(ServiceException.class);
 
-        this.mockMvc.perform(post(ADD_DIRECTOR_PATH)
+        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?add")
                 .param("directorToAdd.wasDirectorAppointedDuringPeriod", "0")
                 .param("directorToAdd.didDirectorResignDuringPeriod", "0")
                 .param("directorToAdd.name", "name"))
@@ -163,7 +160,7 @@ public class AddOrRemoveDirectorsControllerTest {
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        this.mockMvc.perform(post(ADD_DIRECTOR_PATH)
+        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?add")
                 .param("directorToAdd.wasDirectorAppointedDuringPeriod", "0")
                 .param("directorToAdd.didDirectorResignDuringPeriod", "0")
                 .param("directorToAdd.name", "name"))
@@ -182,7 +179,7 @@ public class AddOrRemoveDirectorsControllerTest {
 
         when(validationErrors.isEmpty()).thenReturn(false);
 
-        this.mockMvc.perform(post(ADD_DIRECTOR_PATH)
+        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?add")
                 .param("directorToAdd.wasDirectorAppointedDuringPeriod", "0")
                 .param("directorToAdd.didDirectorResignDuringPeriod", "0")
                 .param("directorToAdd.name", "name"))
@@ -218,7 +215,7 @@ public class AddOrRemoveDirectorsControllerTest {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH))
+        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
