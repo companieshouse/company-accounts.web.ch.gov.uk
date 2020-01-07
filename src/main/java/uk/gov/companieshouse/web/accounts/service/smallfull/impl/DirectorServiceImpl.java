@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -14,7 +13,6 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
@@ -53,12 +51,6 @@ public class DirectorServiceImpl implements DirectorService {
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/directors/{directorId}");
 
     private static final String RESOURCE_NAME = "directors";
-
-    private static final String DIRECTOR_ADDED_TO_LIST =
-            "directorIsAvailable";
-
-    private static final String DIRECTOR_NOT_FOUND_ERROR_MESSAGE =
-            "validation.length.minInvalid.directors.director_available";
 
 
     @Override
