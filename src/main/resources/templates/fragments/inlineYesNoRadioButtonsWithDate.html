@@ -24,7 +24,7 @@
 
         <div class="govuk-radios__item">
             <input class="govuk-radios__input show-text piwik-event"
-                   id="yesButton"
+                   th:id="${identifier} + '-yesButton'"
                    type="radio"
                    value="1"
                    name="${radioButtonsFieldName}"
@@ -33,14 +33,14 @@
                    th:data-target-text-field="${dataTargetTextFieldName}"
                    data-event-id="Yes"/>
 
-            <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
+            <label class="govuk-label govuk-radios__label" th:for="${identifier} + '-yesButton'" id="yesButton-label">
                 Yes
             </label>
         </div>
 
         <div class="govuk-radios__item">
             <input class="govuk-radios__input piwik-event"
-                   id="noButton"
+                   id="${identifier} + '-noButton'"
                    type="radio"
                    value="0"
                    name="${radioButtonsFieldName}"
@@ -49,7 +49,7 @@
                    th:data-target-text-field="${dataTargetTextFieldName}"
                    data-event-id="No"/>
 
-            <label class="govuk-label govuk-radios__label" for="noButton" id="noButton-label">
+            <label class="govuk-label govuk-radios__label" th:for="${identifier} + '-noButton'" id="noButton-label">
                 No
             </label>
         </div>
