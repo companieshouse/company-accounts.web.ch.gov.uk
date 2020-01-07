@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
@@ -210,16 +211,62 @@ public class AddOrRemoveDirectorsControllerTest {
     }
 
     @Test
-    @DisplayName("Post add or remove directors view - success path")
-    void postRequestSuccess() throws Exception {
+    @DisplayName("Post add or remove directors view - remove secretary - success path")
+    void postRequestRemoveSecretarySuccess() throws Exception {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(secretaryService).deleteSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
+    @Test
+    @DisplayName("Post add or remove directors view - add secretary - success path")
+    void postRequestAddSecretarySuccess() throws Exception {
+
+        when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                AddOrRemoveDirectors.class))).thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(true);
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit")
+                .param("secretary", "name"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Post add or remove directors view - add secretary - validation errors")
+    void postRequestAddSecretaryValidationErrors() throws Exception {
+
+        when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                AddOrRemoveDirectors.class))).thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit")
+                .param("secretary", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post add or remove directors view - add secretary - service exception")
+    void postRequestAddSecretaryServiceException() throws Exception {
+
+        when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                AddOrRemoveDirectors.class))).thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit")
+                .param("secretary", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
 
     @Test
     @DisplayName("Will render - false")
