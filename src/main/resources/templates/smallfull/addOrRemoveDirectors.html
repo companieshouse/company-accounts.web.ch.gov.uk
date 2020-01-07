@@ -27,7 +27,7 @@
             </span>
 
             <dl class="app-check-your-answers app-check-your-answers--short two-column-accounts"
-                th:if="${addOrRemoveDirectors.existingDirectors.length > 0}">
+                th:if="${addOrRemoveDirectors.existingDirectors != null and addOrRemoveDirectors.existingDirectors.length > 0}">
 
                 <div class="app-check-your-answers__contents cya-desktop-only">
                     <dt class="app-check-your-answers__answer govuk-heading-s" id="directors-table-name-heading">Directors' name</dt>
@@ -123,8 +123,8 @@
 
                 <div class="govuk-form-group">
                     <input id="add-director-button" class="secondary-button piwik-event"
-                            data-event-id="Directors report - add director" type="submit"
-                            name="add" role="button" value="Add director"/>
+                            th:name= "add"
+                            data-event-id="Directors report - add director" type="submit" value="Add director"/>
                 </div>
 
                 <h2 id="directorsReport-secretary-subheading" class="govuk-heading-m">
@@ -141,6 +141,7 @@
 
                 <input id="next-button" class="govuk-button piwik-event"
                         data-event-id="Directors report - save and continue"
+                        th:name = "submit"
                         type="submit" role="button" value="Save and continue"/>
             </form>
         </div>

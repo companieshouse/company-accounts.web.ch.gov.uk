@@ -134,7 +134,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                 URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
-    @PostMapping
+    @PostMapping(params = "submit")
     public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
