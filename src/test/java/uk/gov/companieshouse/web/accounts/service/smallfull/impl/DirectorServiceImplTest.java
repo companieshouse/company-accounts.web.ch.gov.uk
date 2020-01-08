@@ -33,6 +33,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorTransformer;
@@ -54,6 +55,9 @@ public class DirectorServiceImplTest {
 
     @Mock
     private DirectorToAdd directorToAdd;
+
+    @Mock
+    private AddOrRemoveDirectors addOrRemoveDirectors;
 
     @Mock
     private DirectorApi directorApi;
@@ -369,5 +373,15 @@ public class DirectorServiceImplTest {
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> directorService.deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, DIRECTOR_ID));
+    }
+
+    @Test
+    @DisplayName("Submit add or remove directors")
+    void submitAddOrRemoveDirectors() {
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+        when(directorValidator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors)).thenReturn(validationErrors);
+
+        assertEquals(validationErrors, directorService.submitAddOrRemoveDirectors(addOrRemoveDirectors));
     }
 }

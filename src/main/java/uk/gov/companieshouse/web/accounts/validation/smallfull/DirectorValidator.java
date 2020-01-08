@@ -15,13 +15,13 @@ public class DirectorValidator {
     private static final String DIRECTOR_MUST_BE_ADDED = "validation.directorToAdd.submissionRequired";
     private static final String AT_LEAST_ONE_DIRECTOR_REQUIRED = "validation.addOrRemoveDirectors.oneRequired";
 
-    private static final String NAME = "directorToAdd.name";
+    private static final String NAME = DIRECTOR_TO_ADD + ".name";
     private static final String NAME_NOT_PRESENT = "validation.element.missing.director.name";
 
-    private static final String WAS_DIRECTOR_APPOINTED = "directorToAdd.wasDirectorAppointedDuringPeriod";
+    private static final String WAS_DIRECTOR_APPOINTED = DIRECTOR_TO_ADD + ".wasDirectorAppointedDuringPeriod";
     private static final String APPOINTED_NOT_SELECTED = "validation.directorToAdd.appointment.selectionNotMade";
 
-    private static final String DID_DIRECTOR_RESIGN = "directorToAdd.didDirectorResignDuringPeriod";
+    private static final String DID_DIRECTOR_RESIGN = DIRECTOR_TO_ADD + ".didDirectorResignDuringPeriod";
     private static final String RESIGNATION_NOT_SELECTED = "validation.directorToAdd.resignation.selectionNotMade";
 
     public List<ValidationError> validateDirectorToAdd(DirectorToAdd directorToAdd) {

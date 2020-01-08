@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -214,6 +215,8 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Post add or remove directors view - remove secretary - success path")
     void postRequestRemoveSecretarySuccess() throws Exception {
 
+        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
+
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit"))
@@ -227,10 +230,10 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Post add or remove directors view - add secretary - success path")
     void postRequestAddSecretarySuccess() throws Exception {
 
-        when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                AddOrRemoveDirectors.class))).thenReturn(validationErrors);
+        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
-        when(validationErrors.isEmpty()).thenReturn(true);
+        when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -244,10 +247,12 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Post add or remove directors view - add secretary - validation errors")
     void postRequestAddSecretaryValidationErrors() throws Exception {
 
-        when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                AddOrRemoveDirectors.class))).thenReturn(validationErrors);
+        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
-        when(validationErrors.isEmpty()).thenReturn(false);
+        List<ValidationError> secretaryValidationErrors = new ArrayList<>();
+        secretaryValidationErrors.add(new ValidationError());
+        when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                AddOrRemoveDirectors.class))).thenReturn(secretaryValidationErrors);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit")
                 .param("secretary", "name"))
@@ -258,6 +263,8 @@ public class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add or remove directors view - add secretary - service exception")
     void postRequestAddSecretaryServiceException() throws Exception {
+
+        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
                 AddOrRemoveDirectors.class))).thenThrow(ServiceException.class);
