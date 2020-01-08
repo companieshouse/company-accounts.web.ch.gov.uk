@@ -1,11 +1,15 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,10 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)
@@ -31,6 +39,9 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     @Autowired
     private DirectorService directorService;
+
+    @Autowired
+    private SecretaryService secretaryService;
 
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
@@ -47,8 +58,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String getAddOrRemoveDirectors(@PathVariable String companyNumber,
                                           @PathVariable String transactionId,
                                           @PathVariable String companyAccountsId,
-                                          Model model,
-                                          HttpServletRequest request) {
+                                          Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -57,6 +67,9 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId));
+
+            addOrRemoveDirectors.setSecretary(
+                    secretaryService.getSecretary(transactionId, companyAccountsId));
 
         } catch (ServiceException e) {
 
@@ -76,8 +89,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     public String removeDirector(@PathVariable String companyNumber,
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId,
-                                 @PathVariable String directorId,
-                                 HttpServletRequest request) {
+                                 @PathVariable String directorId) {
 
         try {
             directorService.deleteDirector(transactionId, companyAccountsId, directorId);
@@ -92,10 +104,63 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                         URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
-    @PostMapping
+    @PostMapping(params = "add")
+    public String addDirector(@PathVariable String companyNumber,
+                              @PathVariable String transactionId,
+                              @PathVariable String companyAccountsId,
+                              @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) AddOrRemoveDirectors addOrRemoveDirectors,
+                              BindingResult bindingResult,
+                              Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        try {
+
+            List<ValidationError> validationErrors = directorService.createDirector(transactionId, companyAccountsId, addOrRemoveDirectors.getDirectorToAdd());
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+
+        }
+
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                URI.expand(companyNumber, transactionId, companyAccountsId).toString();
+    }
+
+    @PostMapping(params = "submit")
     public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
-                                             @PathVariable String companyAccountsId) {
+                                             @PathVariable String companyAccountsId,
+                                             @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) AddOrRemoveDirectors addOrRemoveDirectors,
+                                             BindingResult bindingResult) {
+
+
+        try {
+            if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
+
+                List<ValidationError> validationErrors = secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors);
+
+                if (!validationErrors.isEmpty()) {
+                    bindValidationErrors(bindingResult, validationErrors);
+                    return getTemplateName();
+                }
+
+            } else {
+
+                secretaryService.deleteSecretary(transactionId, companyAccountsId);
+            }
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,

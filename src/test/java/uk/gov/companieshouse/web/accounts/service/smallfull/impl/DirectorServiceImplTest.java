@@ -35,12 +35,12 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.DateValidator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.DirectorValidator;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -86,6 +86,9 @@ public class DirectorServiceImplTest {
     private DateValidator dateValidator;
 
     @Mock
+    private DirectorValidator directorValidator;
+
+    @Mock
     private ServiceExceptionHandler serviceExceptionHandler;
 
     @Mock
@@ -101,7 +104,7 @@ public class DirectorServiceImplTest {
     private URIValidationException uriValidationException;
 
     @InjectMocks
-    private DirectorService directorService = new DirectorServiceImpl();
+    private DirectorServiceImpl directorService;
 
     private static final String TRANSACTION_ID = "transactionId";
 
@@ -194,8 +197,10 @@ public class DirectorServiceImplTest {
     void createDirectorSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
+        when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
+
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(true);
-        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "appointmentDate", ".director.appointment_date"))
+        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "directorToAdd.appointmentDate", ".director.appointment_date"))
                         .thenReturn(new ArrayList<>());
 
         when(directorToAdd.getDidDirectorResignDuringPeriod()).thenReturn(false);
@@ -220,13 +225,15 @@ public class DirectorServiceImplTest {
     @DisplayName("POST - director - invalid date")
     void createDirectorInvalidDate() throws ServiceException {
 
+        when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
+
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
         when(directorToAdd.getDidDirectorResignDuringPeriod()).thenReturn(true);
 
         ValidationError validationError = new ValidationError();
         List<ValidationError> dateValidationErrors = new ArrayList<>();
         dateValidationErrors.add(validationError);
-        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "resignationDate", ".director.resignation_date"))
+        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "directorToAdd.resignationDate", ".director.resignation_date"))
                 .thenReturn(dateValidationErrors);
 
         List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorToAdd);
@@ -240,6 +247,8 @@ public class DirectorServiceImplTest {
     @DisplayName("POST - director - validation errors")
     void createDirectorValidation()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
 
@@ -271,6 +280,8 @@ public class DirectorServiceImplTest {
     void createDirectorApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
+        when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
+
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
         when(directorToAdd.getDidDirectorResignDuringPeriod()).thenReturn(false);
 
@@ -292,6 +303,8 @@ public class DirectorServiceImplTest {
     @DisplayName("POST - director - URIValidationException")
     void createDirectorURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
         when(directorToAdd.getDidDirectorResignDuringPeriod()).thenReturn(false);

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+</head>
+<body>
+<fieldset class="govuk-fieldset" th:fragment="inlineYesNoRadioButtonsWithDate">
+
+    <legend>
+        <h2 class="govuk-heading-m">
+            <span th:id="page-title-heading" th:text=${legendText}></span>
+        </h2>
+    </legend>
+
+    <span class="govuk-error-message"
+          th:id="${radioButtonsFieldName} + '-errorId'"
+          th:if="${#fields.hasErrors('__${radioButtonsFieldName}__')}"
+          th:each="e : ${#fields.errors('__${radioButtonsFieldName}__')}" th:text="${e}">
+            </span>
+
+    <!-- Radio Buttons -->
+    <div class="govuk-radios govuk-radios--inline" data-module="radios">
+
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input show-text piwik-event"
+                   th:id="${identifier} + '-yesButton'"
+                   type="radio"
+                   value="1"
+                   name="${radioButtonsFieldName}"
+                   th:field="*{__${radioButtonsFieldName}__}"
+                   th:errorclass="govuk-error-message"
+                   th:data-target-text-field="${dataTargetTextFieldName}"
+                   data-event-id="Yes"/>
+
+            <label class="govuk-label govuk-radios__label" th:for="${identifier} + '-yesButton'" id="yesButton-label">
+                Yes
+            </label>
+        </div>
+
+        <div class="govuk-radios__item">
+            <input class="govuk-radios__input piwik-event"
+                   id="${identifier} + '-noButton'"
+                   type="radio"
+                   value="0"
+                   name="${radioButtonsFieldName}"
+                   th:field="*{__${radioButtonsFieldName}__}"
+                   th:errorclass="govuk-error-message"
+                   th:data-target-text-field="${dataTargetTextFieldName}"
+                   data-event-id="No"/>
+
+            <label class="govuk-label govuk-radios__label" th:for="${identifier} + '-noButton'" id="noButton-label">
+                No
+            </label>
+        </div>
+    </div>
+
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+         th:id="${dataTargetTextFieldName}" th:if="${dataTargetTextFieldName != null}">
+
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
+
+            <div class="govuk-form-group"
+                 th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? 'govuk-form-group--error' : ''">
+                <fieldset class="govuk-fieldset" aria-describedby="appointment-date-hint" role="group">
+
+                    <legend th:id="${identifier} + '-heading'" class="govuk-label" th:text="${boxLabelTextJavaScriptOn}"></legend>
+
+                    <span th:id="${identifier} + '-hint'" class="govuk-hint">
+                        <p class="govuk-hint">For example, 31 3 2017</p>
+                    </span>
+
+                    <span class="govuk-error-message"
+                          th:id="${textBoxFieldName} + '-errorId'"
+                          th:if="${#fields.hasErrors('__${textBoxFieldName}__')}"
+                          th:each="e : ${#fields.errors('__${textBoxFieldName}__')}" th:text="${e}">
+                    </span>
+
+                    <div class="govuk-date-input" th:id="${identifier}">
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" th:for="__${identifier}__-day">
+                                    Day
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                       th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? govuk-input--error : ''"
+                                       th:id="${identifier} + '-day'"
+                                       th:field="*{__${textBoxFieldName}__.day}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" th:for="__${identifier}__-month">
+                                    Month
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                                       th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? govuk-input--error : ''"
+                                       th:id="${identifier} + '-month'"
+                                       th:field="*{__${textBoxFieldName}__.month}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                        <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" th:for="__${identifier}__-year">
+                                    Year
+                                </label>
+
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                                       th:classappend="${#fields.hasErrors('__${textBoxFieldName}__')} ? govuk-input--error : ''"
+                                       th:id="${identifier} + '-year'"
+                                       th:field="*{__${textBoxFieldName}__.year}"
+                                       type="number"
+                                       pattern="[0-9]*">
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+</fieldset>
+</body>
+</html>

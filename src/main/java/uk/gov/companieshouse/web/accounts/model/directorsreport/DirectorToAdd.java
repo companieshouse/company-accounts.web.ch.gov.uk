@@ -1,17 +1,21 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
 import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
+import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class DirectorToAdd {
 
+    @ValidationMapping("$.director.name")
     private String name;
 
     private Boolean wasDirectorAppointedDuringPeriod;
 
+    @ValidationMapping("$.director.appointment_date")
     private Date appointmentDate;
 
     private Boolean didDirectorResignDuringPeriod;
 
+    @ValidationMapping("$.director.resignation_date")
     private Date resignationDate;
 
     public String getName() {
