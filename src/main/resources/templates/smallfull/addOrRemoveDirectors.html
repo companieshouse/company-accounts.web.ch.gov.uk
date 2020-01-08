@@ -75,7 +75,14 @@
                     <input type="hidden" th:field="${addOrRemoveDirectors.existingDirectors[__${stat.index}__].id}" th:id="existingDirectors[__${stat.index}__].id"/>
                 </div>
 
-                <th:block th:if="${addOrRemoveDirectors.existingDirectors == null or addOrRemoveDirectors.existingDirectors.length < 20}">
+                <div th:if="${addOrRemoveDirectors.existingDirectors == null or addOrRemoveDirectors.existingDirectors.length < 20}"
+                     th:classappend="${#fields.hasErrors('directorToAdd')} ? 'govuk-form-group--error' : ''">
+
+                    <span class="govuk-error-message"
+                          id="directorToAdd-errorId"
+                          th:if="${#fields.hasErrors('directorToAdd')}"
+                          th:each="e : ${#fields.errors('directorToAdd')}" th:text="${e}">
+                    </span>
 
                     <div class="govuk-form-group"
                          th:classappend="${#fields.hasErrors('directorToAdd.name')} ? 'govuk-form-group--error' : ''">
@@ -132,7 +139,7 @@
                                 role="button" type="submit" value="Add director"/>
                     </div>
 
-                </th:block>
+                </div>
 
                 <h2 id="directorsReport-secretary-subheading" class="govuk-heading-m">
                   Enter the name of the company secretary (optional)
