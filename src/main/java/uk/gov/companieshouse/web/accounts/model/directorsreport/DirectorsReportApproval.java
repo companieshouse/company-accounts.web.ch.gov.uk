@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
+import java.util.List;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
@@ -12,6 +13,8 @@ public class DirectorsReportApproval {
 
     @ValidationMapping("$.directors_approval.date")
     private Date date;
+
+    private List<String> approverOptions;
 
     public String getName() {
         return name;
@@ -27,5 +30,13 @@ public class DirectorsReportApproval {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public List<String> getApproverOptions() {
+        return approverOptions;
+    }
+
+    public void setApproverOptions(List<String> approverOptions) {
+        this.approverOptions = approverOptions;
     }
 }

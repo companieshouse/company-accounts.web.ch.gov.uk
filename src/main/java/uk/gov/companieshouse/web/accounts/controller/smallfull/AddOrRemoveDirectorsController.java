@@ -29,7 +29,7 @@ import java.util.List;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 
 @Controller
-@NextController(ProfitAndLossQuestionController.class)
+@NextController(DirectorsReportApprovalController.class)
 @PreviousController(DirectorsReportQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors")
 public class AddOrRemoveDirectorsController extends BaseController implements ConditionalController {
@@ -139,8 +139,10 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
                                              @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) AddOrRemoveDirectors addOrRemoveDirectors,
-                                             BindingResult bindingResult) {
+                                             BindingResult bindingResult,
+                                             Model model) {
 
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
