@@ -28,7 +28,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)
-@PreviousController(AddOrRemoveDirectorsController.class)
+@PreviousController(DirectorsReportApprovalController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/approval")
 public class DirectorsReportApprovalController extends BaseController {
 
@@ -44,11 +44,11 @@ public class DirectorsReportApprovalController extends BaseController {
     private static final String DIRECTORS_REPORT_APPROVAL = "directorsReportApproval";
 
     @GetMapping
-    public String getAddOrRemoveDirectors(@PathVariable String companyNumber,
-                                          @PathVariable String transactionId,
-                                          @PathVariable String companyAccountsId,
-                                          Model model,
-                                          HttpServletRequest request) {
+    public String getDirectorsReportApproval(@PathVariable String companyNumber,
+                                             @PathVariable String transactionId,
+                                             @PathVariable String companyAccountsId,
+                                             Model model,
+                                             HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -81,13 +81,13 @@ public class DirectorsReportApprovalController extends BaseController {
     }
 
     @PostMapping
-    public String submitAddOrRemoveDirectors(@PathVariable String companyNumber,
-                                             @PathVariable String transactionId,
-                                             @PathVariable String companyAccountsId,
-                                             @Valid @ModelAttribute(DIRECTORS_REPORT_APPROVAL) DirectorsReportApproval directorsReportApproval,
-                                             BindingResult bindingResult,
-                                             Model model,
-                                             HttpServletRequest request) {
+    public String submitDirectorsReportApproval(@PathVariable String companyNumber,
+                                                @PathVariable String transactionId,
+                                                @PathVariable String companyAccountsId,
+                                                @Valid @ModelAttribute(DIRECTORS_REPORT_APPROVAL) DirectorsReportApproval directorsReportApproval,
+                                                BindingResult bindingResult,
+                                                Model model,
+                                                HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
