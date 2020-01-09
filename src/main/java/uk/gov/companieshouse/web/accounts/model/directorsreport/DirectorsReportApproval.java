@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
 import java.util.List;
+import javax.validation.constraints.NotBlank;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
@@ -8,6 +9,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 @ValidationModel
 public class DirectorsReportApproval {
 
+    @NotBlank(message = "{directorsReportApproval.selectionNotMade}")
     @ValidationMapping("$.directors_approval.name")
     private String name;
 

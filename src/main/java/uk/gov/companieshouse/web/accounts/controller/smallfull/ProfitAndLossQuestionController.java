@@ -20,7 +20,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 
 @Controller
-@PreviousController(AddOrRemoveDirectorsController.class)
+@PreviousController(DirectorsReportApprovalController.class)
 @NextController(ProfitAndLossController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/profit-and-loss-question")
 public class ProfitAndLossQuestionController extends BaseController {
