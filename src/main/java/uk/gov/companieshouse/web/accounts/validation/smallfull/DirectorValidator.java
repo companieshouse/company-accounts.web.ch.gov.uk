@@ -59,9 +59,7 @@ public class DirectorValidator {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (StringUtils.isNotBlank(addOrRemoveDirectors.getDirectorToAdd().getName()) ||
-                addOrRemoveDirectors.getDirectorToAdd().getWasDirectorAppointedDuringPeriod() != null ||
-                addOrRemoveDirectors.getDirectorToAdd().getDidDirectorResignDuringPeriod() != null) {
+        if (StringUtils.isNotBlank(addOrRemoveDirectors.getDirectorToAdd().getName())) {
 
             ValidationError error = new ValidationError();
             error.setFieldPath(DIRECTOR_TO_ADD);

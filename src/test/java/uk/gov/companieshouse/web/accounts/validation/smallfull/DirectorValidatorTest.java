@@ -130,42 +130,6 @@ public class DirectorValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate submit add or remove directors - uncommitted was appointed")
-    void validateSubmitAddOrRemoveDirectorsUncommittedWasAppointed() {
-
-        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
-
-        DirectorToAdd directorToAdd = new DirectorToAdd();
-        directorToAdd.setWasDirectorAppointedDuringPeriod(true);
-        addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
-
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
-
-        assertFalse(validationErrors.isEmpty());
-        assertEquals(1, validationErrors.size());
-        assertEquals(DIRECTOR_TO_ADD, validationErrors.get(0).getFieldPath());
-        assertEquals(DIRECTOR_MUST_BE_ADDED, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
-    @DisplayName("Validate submit add or remove directors - uncommitted did resign")
-    void validateSubmitAddOrRemoveDirectorsUncommittedDidResign() {
-
-        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
-
-        DirectorToAdd directorToAdd = new DirectorToAdd();
-        directorToAdd.setDidDirectorResignDuringPeriod(false);
-        addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
-
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
-
-        assertFalse(validationErrors.isEmpty());
-        assertEquals(1, validationErrors.size());
-        assertEquals(DIRECTOR_TO_ADD, validationErrors.get(0).getFieldPath());
-        assertEquals(DIRECTOR_MUST_BE_ADDED, validationErrors.get(0).getMessageKey());
-    }
-
-    @Test
     @DisplayName("Validate submit add or remove directors - no directors present")
     void validateSubmitAddOrRemoveDirectorsNoDirectorsPresent() {
 
