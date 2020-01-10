@@ -145,18 +145,20 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
+            List<ValidationError> validationErrors = directorService.submitAddOrRemoveDirectors(addOrRemoveDirectors);
+
             if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
 
-                List<ValidationError> validationErrors = secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors);
-
-                if (!validationErrors.isEmpty()) {
-                    bindValidationErrors(bindingResult, validationErrors);
-                    return getTemplateName();
-                }
+                validationErrors.addAll(secretaryService.submitSecretary(transactionId, companyAccountsId, addOrRemoveDirectors));
 
             } else {
 
                 secretaryService.deleteSecretary(transactionId, companyAccountsId);
+            }
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
             }
         } catch (ServiceException e) {
 
