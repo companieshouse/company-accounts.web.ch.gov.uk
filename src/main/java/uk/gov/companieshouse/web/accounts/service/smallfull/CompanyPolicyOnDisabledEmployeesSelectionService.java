@@ -8,6 +8,6 @@ public interface CompanyPolicyOnDisabledEmployeesSelectionService {
     CompanyPolicyOnDisabledEmployeesSelection getCompanyPolicyOnDisabledEmployeesSelection(String transactionId,
             String companyAccountsId) throws ServiceException;
 
-    void submitCompanyPolicyOnDisabledEmployees(String transactionId, String companyAccountsId,
+    void submitCompanyPolicyOnDisabledEmployeesSelection(String transactionId, String companyAccountsId,
             CompanyPolicyOnDisabledEmployeesSelection companyPolicyOnDisabledEmployeesSelection) throws ServiceException;
 }

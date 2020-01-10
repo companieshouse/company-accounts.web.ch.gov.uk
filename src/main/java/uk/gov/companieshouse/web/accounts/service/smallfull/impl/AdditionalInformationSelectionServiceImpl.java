@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,10 @@ public class AdditionalInformationSelectionServiceImpl implements AdditionalInfo
 
         AdditionalInformationSelection additionalInformationSelection = new AdditionalInformationSelection();
 
-        if (directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId) != null) {
+        if (Optional.ofNullable(directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId))
+                .map(StatementsApi::getAdditionalInformation)
+                .isPresent()) {
+
             additionalInformationSelection.setHasAdditionalInformation(true);
         }
 
@@ -30,7 +34,7 @@ public class AdditionalInformationSelectionServiceImpl implements AdditionalInfo
     }
 
     @Override
-    public void submitAdditionalInformation(String transactionId, String companyAccountsId,
+    public void submitAdditionalInformationSelection(String transactionId, String companyAccountsId,
             AdditionalInformationSelection additionalInformationSelection) throws ServiceException {
 
         if (!additionalInformationSelection.getHasAdditionalInformation()) {

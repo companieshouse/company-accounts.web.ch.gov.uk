@@ -8,6 +8,6 @@ public interface PoliticalAndCharitableDonationsSelectionService {
     PoliticalAndCharitableDonationsSelection getPoliticalAndCharitableDonationsSelection(String transactionId,
             String companyAccountsId) throws ServiceException;
 
-    void submitPoliticalAndCharitableDonations(String transactionId, String companyAccountsId,
+    void submitPoliticalAndCharitableDonationsSelection(String transactionId, String companyAccountsId,
             PoliticalAndCharitableDonationsSelection politicalAndCharitableDonationsSelection) throws ServiceException;
 }

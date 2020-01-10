@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,10 @@ public class PoliticalAndCharitableDonationsSelectionServiceImpl implements Poli
 
         PoliticalAndCharitableDonationsSelection politicalAndCharitableDonations = new PoliticalAndCharitableDonationsSelection();
 
-        if (directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId) != null) {
+        if (Optional.ofNullable(directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId))
+                .map(StatementsApi::getPoliticalAndCharitableDonations)
+                .isPresent()) {
+
             politicalAndCharitableDonations.setHasPoliticalAndCharitableDonations(true);
         }
 
@@ -30,7 +34,7 @@ public class PoliticalAndCharitableDonationsSelectionServiceImpl implements Poli
     }
 
     @Override
-    public void submitPoliticalAndCharitableDonations(String transactionId, String companyAccountsId,
+    public void submitPoliticalAndCharitableDonationsSelection(String transactionId, String companyAccountsId,
             PoliticalAndCharitableDonationsSelection politicalAndCharitableDonations) throws ServiceException {
 
         if (!politicalAndCharitableDonations.getHasPoliticalAndCharitableDonations()) {

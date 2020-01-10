@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,10 @@ public class PrincipalActivitiesSelectionServiceImpl implements PrincipalActivit
 
         PrincipalActivitiesSelection principalActivitiesSelection = new PrincipalActivitiesSelection();
 
-        if (directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId) != null) {
+        if (Optional.ofNullable(directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId))
+                .map(StatementsApi::getPrincipalActivities)
+                .isPresent()) {
+
             principalActivitiesSelection.setHasPrincipalActivities(true);
         }
 
@@ -30,7 +34,7 @@ public class PrincipalActivitiesSelectionServiceImpl implements PrincipalActivit
     }
 
     @Override
-    public void submitPrincipalActivities(String transactionId, String companyAccountsId,
+    public void submitPrincipalActivitiesSelection(String transactionId, String companyAccountsId,
             PrincipalActivitiesSelection principalActivitiesSelection) throws ServiceException {
 
         if (!principalActivitiesSelection.getHasPrincipalActivities()) {

@@ -8,6 +8,6 @@ public interface AdditionalInformationSelectionService {
     AdditionalInformationSelection getAdditionalInformationSelection(String transactionId, String companyAccountsId)
             throws ServiceException;
 
-    void submitAdditionalInformation(String transactionId, String companyAccountsId,
+    void submitAdditionalInformationSelection(String transactionId, String companyAccountsId,
             AdditionalInformationSelection additionalInformationSelection) throws ServiceException;
 }

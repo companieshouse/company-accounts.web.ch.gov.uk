@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,10 @@ public class CompanyPolicyOnDisabledEmployeesSelectionServiceImpl implements Com
 
         CompanyPolicyOnDisabledEmployeesSelection companyPolicyOnDisabledEmployees = new CompanyPolicyOnDisabledEmployeesSelection();
 
-        if (directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId) != null) {
+        if (Optional.ofNullable(directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId))
+                .map(StatementsApi::getCompanyPolicyOnDisabledEmployees)
+                .isPresent()) {
+
             companyPolicyOnDisabledEmployees.setHasCompanyPolicyOnDisabledEmployees(true);
         }
 
@@ -30,7 +34,7 @@ public class CompanyPolicyOnDisabledEmployeesSelectionServiceImpl implements Com
     }
 
     @Override
-    public void submitCompanyPolicyOnDisabledEmployees(String transactionId, String companyAccountsId,
+    public void submitCompanyPolicyOnDisabledEmployeesSelection(String transactionId, String companyAccountsId,
             CompanyPolicyOnDisabledEmployeesSelection companyPolicyOnDisabledEmployees) throws ServiceException {
 
         if (!companyPolicyOnDisabledEmployees.getHasCompanyPolicyOnDisabledEmployees()) {

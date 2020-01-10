@@ -8,6 +8,6 @@ public interface PrincipalActivitiesSelectionService {
     PrincipalActivitiesSelection getPrincipalActivitiesSelection(String transactionId,
             String companyAccountsId) throws ServiceException;
 
-    void submitPrincipalActivities(String transactionId, String companyAccountsId,
+    void submitPrincipalActivitiesSelection(String transactionId, String companyAccountsId,
             PrincipalActivitiesSelection principalActivitiesSelection) throws ServiceException;
 }
