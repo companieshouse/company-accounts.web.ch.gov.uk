@@ -84,7 +84,7 @@
                           th:each="e : ${#fields.errors('directorToAdd')}" th:text="${e}">
                     </span>
 
-                    <div class="govuk-form-group"
+                    <div class="govuk-form-group govuk-form-group-block-important"
                          th:classappend="${#fields.hasErrors('directorToAdd.name')} ? 'govuk-form-group--error' : ''">
                         <label id="appointment-director-heading" class="govuk-label govuk-label--m"
                                for="directorToAdd-name">
