@@ -13,6 +13,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
@@ -133,5 +134,11 @@ public class DirectorServiceImpl implements DirectorService {
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
+    }
+
+    @Override
+    public List<ValidationError> submitAddOrRemoveDirectors(AddOrRemoveDirectors addOrRemoveDirectors) {
+
+        return directorValidator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
     }
 }
