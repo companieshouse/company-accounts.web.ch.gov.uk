@@ -139,8 +139,10 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
                                              @ModelAttribute(ADD_OR_REMOVE_DIRECTORS) AddOrRemoveDirectors addOrRemoveDirectors,
-                                             BindingResult bindingResult) {
+                                             BindingResult bindingResult,
+                                             Model model) {
 
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             List<ValidationError> validationErrors = directorService.submitAddOrRemoveDirectors(addOrRemoveDirectors);
