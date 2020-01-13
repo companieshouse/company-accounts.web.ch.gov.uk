@@ -20,7 +20,7 @@
 
         <fieldset class="govuk-fieldset">
 
-          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
+          <div class="govuk-form-group govuk-form-group-block-important" th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
             <label id="directorsReportApproval-director-heading" class="govuk-label govuk-label--m" for="approver-options">
               Who approved the directors' report?
             </label>
