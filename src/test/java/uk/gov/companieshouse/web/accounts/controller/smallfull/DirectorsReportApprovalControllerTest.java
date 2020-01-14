@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
@@ -13,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,12 +25,14 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
@@ -53,10 +58,19 @@ public class DirectorsReportApprovalControllerTest {
     private NavigatorService navigatorService;
 
     @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private MockHttpSession session;
+
+    @Mock
     private DirectorsReportApproval directorsReportApproval;
 
     @Mock
     private List<ValidationError> validationErrors;
+
+    @Mock
+    private CompanyAccountsDataState companyAccountsDataState;
 
     @InjectMocks
     private DirectorsReportApprovalController controller;
@@ -85,6 +99,8 @@ public class DirectorsReportApprovalControllerTest {
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
     private void setup() {
@@ -179,5 +195,27 @@ public class DirectorsReportApprovalControllerTest {
 
         verify(directorsReportApprovalService, never())
                 .submitDirectorsReportApproval(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorsReportApproval.class));
+    }
+
+    @Test
+    @DisplayName("Will render - false")
+    void willRenderFalse() throws ServiceException {
+
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(false);
+
+        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Will render - true")
+    void willRenderTrue() throws ServiceException {
+
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(true);
+
+        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }

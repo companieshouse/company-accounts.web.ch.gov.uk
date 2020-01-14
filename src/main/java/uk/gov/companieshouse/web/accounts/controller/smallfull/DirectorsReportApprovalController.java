@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
@@ -30,7 +33,10 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @NextController(ProfitAndLossQuestionController.class)
 @PreviousController(AddOrRemoveDirectorsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/approval")
-public class DirectorsReportApprovalController extends BaseController {
+public class DirectorsReportApprovalController extends BaseController implements ConditionalController {
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Autowired
     private DirectorsReportApprovalService directorsReportApprovalService;
@@ -47,8 +53,7 @@ public class DirectorsReportApprovalController extends BaseController {
     public String getDirectorsReportApproval(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
-                                             Model model,
-                                             HttpServletRequest request) {
+                                             Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -86,8 +91,7 @@ public class DirectorsReportApprovalController extends BaseController {
                                                 @PathVariable String companyAccountsId,
                                                 @Valid @ModelAttribute(DIRECTORS_REPORT_APPROVAL) DirectorsReportApproval directorsReportApproval,
                                                 BindingResult bindingResult,
-                                                Model model,
-                                                HttpServletRequest request) {
+                                                Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -116,5 +120,13 @@ public class DirectorsReportApprovalController extends BaseController {
     @Override
     protected String getTemplateName() {
         return "smallfull/directorsReportApproval";
+    }
+
+    @Override
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
+            throws ServiceException {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedDirectorsReport());
     }
 }
