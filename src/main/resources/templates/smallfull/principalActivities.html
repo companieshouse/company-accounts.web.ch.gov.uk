@@ -23,6 +23,11 @@
               Enter your directors' report principal activities of the company information
             </label>
 
+            <span class="govuk-error-message"
+                  id="principalActivitiesDetails-errorId"
+                  th:if="${#fields.hasErrors('principalActivitiesDetails')}"
+                  th:each="e : ${#fields.errors('principalActivitiesDetails')}" th:text="${e}">
+            </span>
 
             <textarea class="govuk-textarea"
                       id="principalActivitiesDetails"

@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,12 +71,16 @@ public class PrincipalActivitiesController extends BaseController implements Con
     public String submitPrincipalActivities(@PathVariable String companyNumber,
                                             @PathVariable String transactionId,
                                             @PathVariable String companyAccountsId,
-                                            @ModelAttribute(PRINCIPAL_ACTIVITIES) PrincipalActivities principalActivities,
+                                            @ModelAttribute(PRINCIPAL_ACTIVITIES) @Valid PrincipalActivities principalActivities,
                                             BindingResult bindingResult,
                                             Model model,
                                             HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
 
         try {
             List<ValidationError> validationErrors =
