@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title>Approve your directors' report</title>
+</head>
+<body>
+<div id="directorsReportApproval-main-content" layout:fragment="content">
+
+  <form id="directorsReportApproval-form" th:action="@{''}" th:object="${directorsReportApproval}" class="form" method="post">
+
+    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+    <div class="govuk-grid-row">
+
+      <div class="govuk-grid-column-two-thirds">
+
+        <fieldset class="govuk-fieldset">
+
+          <div class="govuk-form-group govuk-form-group-block-important" th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
+            <label id="directorsReportApproval-director-heading" class="govuk-label govuk-label--m" for="approver-options">
+              Who approved the directors' report?
+            </label>
+
+            <span class="govuk-error-message"
+                  id="name-errorId"
+                  th:if="${#fields.hasErrors('name')}"
+                  th:each="e : ${#fields.errors('name')}" th:text="${e}">
+            </span>
+
+            <div th:each="approver, stat : *{approverOptions}" class="govuk-radios__item" id="approver-options">
+              <input class="govuk-radios__input"
+                     th:id="${stat.index}"
+                     type="radio"
+                     th:value="${approver}"
+                     th:field="*{name}"/>
+
+              <label class="govuk-label govuk-radios__label"
+                     th:for="${stat.index}"
+                     th:id="${stat.index + '-label'}"
+                     th:text="${approver}"></label>
+            </div>
+
+            <div th:each="approver, stat : *{approverOptions}">
+              <input type="hidden" th:field="*{approverOptions[__${stat.index}__]}" th:id="approverOptions[__${stat.index}__]"/>
+            </div>
+          </div>
+
+          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('date')} ? 'govuk-form-group--error' : ''">
+            <fieldset class="govuk-fieldset" aria-describedby="directorsReportApproval-date-hint" role="group">
+
+              <legend id="directorsReportApproval-date-heading" class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                When was the directors' report approved?
+              </legend>
+
+              <span id="directorsReportApproval-date-hint" class="govuk-hint">
+                  <p class="govuk-hint">For example, 31 3 2017</p>
+              </span>
+
+              <span class="govuk-error-message"
+                    id="date-errorId"
+                    th:if="${#fields.hasErrors('date')}"
+                    th:each="e : ${#fields.errors('date')}" th:text="${e}">
+              </span>
+
+              <div class="govuk-date-input" id="directorsReportApproval-date">
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group govuk-form-group-block-important">
+                    <label class="govuk-label govuk-date-input__label" for="directorsReportApproval-date-day">
+                      Day
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="directorsReportApproval-date-day"
+                           th:field="*{date.day}"
+                           type="text">
+                  </div>
+                </div>
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group govuk-form-group-block-important">
+                    <label class="govuk-label govuk-date-input__label" for="directorsReportApproval-date-month">
+                      Month
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="directorsReportApproval-date-month"
+                           th:field="*{date.month}"
+                           type="text">
+                  </div>
+                </div>
+
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group govuk-form-group-block-important">
+                    <label class="govuk-label govuk-date-input__label" for="directorsReportApproval-date-year">
+                      Year
+                    </label>
+
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+                           th:classappend="${#fields.hasErrors('date')} ? govuk-input--error : ''"
+                           id="directorsReportApproval-date-year"
+                           th:field="*{date.year}"
+                           type="text">
+                  </div>
+                </div>
+
+              </div>
+            </fieldset>
+
+          </div>
+
+        </fieldset>
+
+        <input id="next-button" class="govuk-button piwik-event"
+               data-event-id="Directors report approval - Save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </div>
+    </div>
+  </form>
+
+</div>
+</body>
+</html>
