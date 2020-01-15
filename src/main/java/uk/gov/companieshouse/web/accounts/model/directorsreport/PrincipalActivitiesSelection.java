@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class PrincipalActivitiesSelection {
 
-    @NotNull(message = "directorsReport.principalActivities.selectionNotMade")
+    @NotNull(message = "{directorsReport.principalActivities.selectionNotMade}")
     private Boolean hasPrincipalActivities;
 
     public Boolean getHasPrincipalActivities() {
