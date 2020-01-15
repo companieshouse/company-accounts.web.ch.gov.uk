@@ -46,8 +46,7 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
     public String getPrincipalActivitiesSelection(@PathVariable String companyNumber,
                                                   @PathVariable String transactionId,
                                                   @PathVariable String companyAccountsId,
-                                                  Model model,
-                                                  HttpServletRequest request) {
+                                                  Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -76,8 +75,7 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
                                                      @PathVariable String companyAccountsId,
                                                      @ModelAttribute(PRINCIPAL_ACTIVITIES_SELECTION) @Valid PrincipalActivitiesSelection selection,
                                                      BindingResult bindingResult,
-                                                     Model model,
-                                                     HttpServletRequest request) {
+                                                     Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 

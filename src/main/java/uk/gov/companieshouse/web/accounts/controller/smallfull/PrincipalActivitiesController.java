@@ -47,8 +47,7 @@ public class PrincipalActivitiesController extends BaseController implements Con
     public String getPrincipalActivities(@PathVariable String companyNumber,
                                          @PathVariable String transactionId,
                                          @PathVariable String companyAccountsId,
-                                         Model model,
-                                         HttpServletRequest request) {
+                                         Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -73,8 +72,7 @@ public class PrincipalActivitiesController extends BaseController implements Con
                                             @PathVariable String companyAccountsId,
                                             @ModelAttribute(PRINCIPAL_ACTIVITIES) @Valid PrincipalActivities principalActivities,
                                             BindingResult bindingResult,
-                                            Model model,
-                                            HttpServletRequest request) {
+                                            Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
