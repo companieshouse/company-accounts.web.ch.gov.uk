@@ -484,8 +484,10 @@
                 th:text="*{statements.directorsResponsibility}"></span></li>
             <li id="review-statements-small-companies-regime"><span
                 th:text="*{statements.smallCompaniesRegime}"></span></li>
+            <div th:if="*{statements.noProfitAndLoss != null}">
             <li id="review-statements-no-profit-and-loss"><span
                 th:text="*{statements.noProfitAndLoss}"></span></li>
+            </div>
           </ul>
         </dt>
       </div>
