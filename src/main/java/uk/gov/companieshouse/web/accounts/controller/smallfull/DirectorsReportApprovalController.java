@@ -31,7 +31,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)
-@PreviousController(PrincipalActivitiesController.class)
+@PreviousController(DirectorsReportReviewController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/approval")
 public class DirectorsReportApprovalController extends BaseController implements ConditionalController {
 
