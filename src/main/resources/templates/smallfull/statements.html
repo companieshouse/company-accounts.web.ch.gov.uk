@@ -32,7 +32,7 @@
                         <li id="statements-audit-not-required-by-members" th:text="*{auditNotRequiredByMembers}"></li>
                         <li id="statements-directors-responsibility" th:text="*{directorsResponsibility}"></li>
                         <li id="statements-small-companies-regime" th:text="*{smallCompaniesRegime}"></li>
-                        <li id="statements-no-profit-and-loss" th:text="*{noProfitAndLoss}"></li>
+                        <li id="statements-no-profit-and-loss" th:if="*{noProfitAndLoss != null}" th:text="*{noProfitAndLoss}"></li>
                     </ul>
 
                     <input id="next-button" class="govuk-button piwik-event" data-event-id="Balance sheet statements - Save and continue" type="submit" role="button" value="Save and continue"/>
