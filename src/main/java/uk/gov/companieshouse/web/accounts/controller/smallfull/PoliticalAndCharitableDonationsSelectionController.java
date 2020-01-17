@@ -18,10 +18,12 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndCharitableDonationsSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsSelectionService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @NextController(PoliticalAndCharitableDonationsController.class)
@@ -100,11 +102,11 @@ public class PoliticalAndCharitableDonationsSelectionController extends BaseCont
     private void setHasProvidedPoliticalAndCharitableDonations(HttpServletRequest request, PoliticalAndCharitableDonationsSelection selection) {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-
-        companyAccountsDataState.getDirectorsReportStatements().setHasProvidedPoliticalAndCharitableDonations(
-                selection.getHasPoliticalAndCharitableDonations());
-
-        updateStateOnRequest(request, companyAccountsDataState);
+        selection.setHasPoliticalAndCharitableDonations(
+                Optional.of(companyAccountsDataState)
+                        .map(CompanyAccountsDataState::getDirectorsReportStatements)
+                        .map(DirectorsReportStatements::getHasProvidedPoliticalAndCharitableDonations)
+                        .orElse(null));
     }
 
     private void cacheHasProvidedPoliticalAndCharitableDonations(HttpServletRequest request, PoliticalAndCharitableDonationsSelection selection) {
