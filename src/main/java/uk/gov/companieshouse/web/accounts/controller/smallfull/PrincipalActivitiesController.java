@@ -25,7 +25,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesS
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(DirectorsReportReviewController.class)
+@NextController(PoliticalAndCharitableDonationsSelectionController.class)
 @PreviousController(PrincipalActivitiesSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/principal-activities")
 public class PrincipalActivitiesController extends BaseController implements ConditionalController {
