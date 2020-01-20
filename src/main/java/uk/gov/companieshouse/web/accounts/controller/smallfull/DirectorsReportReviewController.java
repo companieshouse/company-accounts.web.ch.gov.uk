@@ -19,7 +19,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportRevie
 
 @Controller
 @NextController(DirectorsReportApprovalController.class)
-@PreviousController(PrincipalActivitiesController.class)
+@PreviousController(PoliticalAndCharitableDonationsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/review")
 public class DirectorsReportReviewController extends BaseController implements ConditionalController {
 
