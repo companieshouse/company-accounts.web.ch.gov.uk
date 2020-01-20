@@ -22,7 +22,8 @@
           Directors who served in the accounting period
           <a id="directors-change-link"
              th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
-             class="govuk-body float-right">
+             class="govuk-body float-right piwik-event"
+             data-event-id="Change directors">
             Change
           </a>
         </h2>
@@ -52,7 +53,8 @@
             Company secretary
             <a id="secretary-change-link"
                th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
-               class="govuk-body float-right">
+               class="govuk-body float-right piwik-event"
+               data-event-id="Change secretary">
               Change
             </a>
           </h2>
@@ -83,7 +85,9 @@
               </dt>
               <dd th:text="*{principalActivities.principalActivitiesDetails}" class="app-check-your-answers__answer"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/principal-activities-question|}">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/principal-activities-question|}"
+                   class="piwik-event"
+                   data-event-id="Change principal activities">
                   Change<span class="govuk-visually-hidden">
                     Principal activities of the company
                   </span>
@@ -97,7 +101,9 @@
               </dt>
               <dd th:text="*{politicalAndCharitableDonations.politicalAndCharitableDonationsDetails}" class="app-check-your-answers__answer"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/political-and-charitable-donations-question|}">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/political-and-charitable-donations-question|}"
+                   class="piwik-event"
+                   data-event-id="Change political and charitable donations">
                   Change<span class="govuk-visually-hidden">
                     Political and charitable donations
                   </span>
@@ -111,7 +117,9 @@
               </dt>
               <dd th:text="*{companyPolicyOnDisabledEmployees.companyPolicyOnDisabledEmployeesDetails}" class="app-check-your-answers__answer"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees-question|}">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees-question|}"
+                   class="piwik-event"
+                   data-event-id="Change company policy on disabled employees">
                   Change<span class="govuk-visually-hidden">
                     Company policy on disabled employees
                   </span>
@@ -125,7 +133,9 @@
               </dt>
               <dd th:text="*{additionalInformation.additionalInformationDetails}" class="app-check-your-answers__answer"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/additional-information-question|}">
+                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/additional-information-question|}"
+                   class="piwik-event"
+                   data-event-id="Change additional information">
                   Change<span class="govuk-visually-hidden">
                     Additional information
                   </span>
