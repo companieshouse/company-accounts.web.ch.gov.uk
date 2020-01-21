@@ -87,7 +87,8 @@
               </dt>
               <dd th:text="*{principalActivities.principalActivitiesDetails}" class="app-check-your-answers__answer" id="directors-report-principal-answer"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/principal-activities-question|}"
+                <a id="principal-activities-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/principal-activities-question|}"
                    class="piwik-event"
                    data-event-id="Change principal activities">
                   Change<span class="govuk-visually-hidden">
@@ -103,7 +104,8 @@
               </dt>
               <dd th:text="*{politicalAndCharitableDonations.politicalAndCharitableDonationsDetails}" class="app-check-your-answers__answer" id="directors-report-political-answer"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/political-and-charitable-donations-question|}"
+                <a id="political-and-charitable-donations-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/political-and-charitable-donations-question|}"
                    class="piwik-event"
                    data-event-id="Change political and charitable donations">
                   Change<span class="govuk-visually-hidden">
@@ -119,7 +121,8 @@
               </dt>
               <dd th:text="*{companyPolicyOnDisabledEmployees.companyPolicyOnDisabledEmployeesDetails}" class="app-check-your-answers__answer" id="directors-report-disabled-answer"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees-question|}"
+                <a id="company-policy-on-disabled-employees-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees-question|}"
                    class="piwik-event"
                    data-event-id="Change company policy on disabled employees">
                   Change<span class="govuk-visually-hidden">
@@ -135,7 +138,8 @@
               </dt>
               <dd th:text="*{additionalInformation.additionalInformationDetails}" class="app-check-your-answers__answer" id="directors-report-add-info"></dd>
               <dd class="app-check-your-answers__change">
-                <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/additional-information-question|}"
+                <a id="additional-information-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/additional-information-question|}"
                    class="piwik-event"
                    data-event-id="Change additional information">
                   Change<span class="govuk-visually-hidden">
