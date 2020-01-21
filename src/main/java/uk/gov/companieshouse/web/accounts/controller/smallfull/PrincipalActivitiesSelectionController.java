@@ -119,6 +119,9 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
+        if (companyAccountsDataState.getDirectorsReportStatements() == null) {
+            companyAccountsDataState.setDirectorsReportStatements(new DirectorsReportStatements());
+        }
         companyAccountsDataState.getDirectorsReportStatements().setHasProvidedPrincipalActivities(
                 selection.getHasPrincipalActivities());
 

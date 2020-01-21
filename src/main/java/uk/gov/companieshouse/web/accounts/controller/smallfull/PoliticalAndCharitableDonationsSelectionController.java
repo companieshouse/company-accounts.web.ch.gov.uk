@@ -120,6 +120,10 @@ public class PoliticalAndCharitableDonationsSelectionController extends BaseCont
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
+        if (companyAccountsDataState.getDirectorsReportStatements() == null) {
+            companyAccountsDataState.setDirectorsReportStatements(new DirectorsReportStatements());
+        }
+
         companyAccountsDataState.getDirectorsReportStatements().setHasProvidedPoliticalAndCharitableDonations(
                 selection.getHasPoliticalAndCharitableDonations());
 
