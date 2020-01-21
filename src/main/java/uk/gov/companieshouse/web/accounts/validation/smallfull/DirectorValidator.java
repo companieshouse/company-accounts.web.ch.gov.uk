@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.validation.smallfull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
@@ -59,7 +60,10 @@ public class DirectorValidator {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (StringUtils.isNotBlank(addOrRemoveDirectors.getDirectorToAdd().getName())) {
+        if (StringUtils.isNotBlank(Optional.ofNullable(addOrRemoveDirectors)
+                                    .map(AddOrRemoveDirectors::getDirectorToAdd)
+                                    .map(DirectorToAdd::getName)
+                                    .orElse(null))) {
 
             ValidationError error = new ValidationError();
             error.setFieldPath(DIRECTOR_TO_ADD);
