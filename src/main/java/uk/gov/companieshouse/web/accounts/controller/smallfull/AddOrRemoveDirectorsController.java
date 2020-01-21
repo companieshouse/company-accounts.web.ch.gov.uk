@@ -29,7 +29,7 @@ import java.util.List;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 
 @Controller
-@NextController(DirectorsReportApprovalController.class)
+@NextController(PrincipalActivitiesSelectionController.class)
 @PreviousController(DirectorsReportQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors")
 public class AddOrRemoveDirectorsController extends BaseController implements ConditionalController {

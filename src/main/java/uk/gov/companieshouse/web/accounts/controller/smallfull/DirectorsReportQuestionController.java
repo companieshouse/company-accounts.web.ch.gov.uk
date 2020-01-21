@@ -16,6 +16,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 
 @Controller
@@ -87,6 +88,7 @@ public class DirectorsReportQuestionController extends BaseController {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedDirectorsReport(directorsReportQuestion.getHasIncludedDirectorsReport());
+        companyAccountsDataState.setDirectorsReportStatements(directorsReportQuestion.getHasIncludedDirectorsReport() ? new DirectorsReportStatements() : null);
 
         updateStateOnRequest(request, companyAccountsDataState);
     }
