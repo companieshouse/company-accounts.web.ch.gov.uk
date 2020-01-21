@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class PoliticalAndCharitableDonationsSelection {
 
-    @NotNull(message = "directorsReport.politicalAndCharitableDonations.selectionNotMade")
+    @NotNull(message = "{directorsReport.politicalAndCharitableDonations.selectionNotMade}")
     private Boolean hasPoliticalAndCharitableDonations;
 
     public Boolean getHasPoliticalAndCharitableDonations() {
