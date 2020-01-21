@@ -44,7 +44,7 @@
                     th:text="${'(appointed __${#temporals.format(director.appointmentDate, 'd MMM yyyy')}__, resigned __${#temporals.format(director.resignationDate, 'd MMM yyyy')}__)'}"
                     class="govuk-body govuk-!-font-weight-regular"></span>
             </dt>
-            <dd class="app-check-your-answers__change">&nbsp;</dd>
+            <dd class="app-check-your-answers__change" id="directors-report-director-answer">&nbsp;</dd>
           </div>
 
         </dl>
@@ -64,7 +64,7 @@
           <dl class="app-check-your-answers app-check-your-answers--very-long">
             <div class="app-check-your-answers__contents">
               <dt th:text="*{secretary}" class="app-check-your-answers__question"></dt>
-              <dd class="app-check-your-answers__change">&nbsp;</dd>
+              <dd class="app-check-your-answers__change" id="directors-report-secretary-answer">&nbsp;</dd>
             </div>
 
           </dl>
@@ -85,7 +85,7 @@
               <dt class="app-check-your-answers__question">
                 Principal activities of the company
               </dt>
-              <dd th:text="*{principalActivities.principalActivitiesDetails}" class="app-check-your-answers__answer"></dd>
+              <dd th:text="*{principalActivities.principalActivitiesDetails}" class="app-check-your-answers__answer" id="directors-report-principal-answer"></dd>
               <dd class="app-check-your-answers__change">
                 <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/principal-activities-question|}"
                    class="piwik-event"
@@ -101,7 +101,7 @@
               <dt class="app-check-your-answers__question">
                 Political and charitable donations
               </dt>
-              <dd th:text="*{politicalAndCharitableDonations.politicalAndCharitableDonationsDetails}" class="app-check-your-answers__answer"></dd>
+              <dd th:text="*{politicalAndCharitableDonations.politicalAndCharitableDonationsDetails}" class="app-check-your-answers__answer" id="directors-report-political-answer"></dd>
               <dd class="app-check-your-answers__change">
                 <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/political-and-charitable-donations-question|}"
                    class="piwik-event"
@@ -117,7 +117,7 @@
               <dt class="app-check-your-answers__question">
                 Company policy on disabled employees
               </dt>
-              <dd th:text="*{companyPolicyOnDisabledEmployees.companyPolicyOnDisabledEmployeesDetails}" class="app-check-your-answers__answer"></dd>
+              <dd th:text="*{companyPolicyOnDisabledEmployees.companyPolicyOnDisabledEmployeesDetails}" class="app-check-your-answers__answer" id="directors-report-disabled-answer"></dd>
               <dd class="app-check-your-answers__change">
                 <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees-question|}"
                    class="piwik-event"
@@ -133,7 +133,7 @@
               <dt class="app-check-your-answers__question">
                 Additional information
               </dt>
-              <dd th:text="*{additionalInformation.additionalInformationDetails}" class="app-check-your-answers__answer"></dd>
+              <dd th:text="*{additionalInformation.additionalInformationDetails}" class="app-check-your-answers__answer" id="directors-report-add-info"></dd>
               <dd class="app-check-your-answers__change">
                 <a th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/additional-information-question|}"
                    class="piwik-event"
