@@ -29,6 +29,9 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
@@ -36,6 +39,7 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -54,13 +58,22 @@ public class AddOrRemoveDirectorsControllerTest {
     private SecretaryService secretaryService;
 
     @Mock
+    private DirectorsReportService directorsReportService;
+
+    @Mock
+    private DirectorsReportApi directorsReportApi;
+
+    @Mock
     private NavigatorService navigatorService;
 
     @Mock
     private HttpServletRequest request;
 
     @Mock
-    private MockHttpSession session;
+    private ApiClient apiClient;
+
+    @Mock
+    private ApiClientService apiClientService;
 
     @Mock
     private List<ValidationError> validationErrors;
@@ -279,9 +292,8 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
 
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(false);
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -290,9 +302,8 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
 
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(true);
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }

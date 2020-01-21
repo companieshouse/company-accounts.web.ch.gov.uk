@@ -12,11 +12,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndCharitableDonationsSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsSelectionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +54,12 @@ public class PoliticalAndCharitableDonationsSelectionControllerTest {
     private PoliticalAndCharitableDonationsSelectionService service;
 
     @Mock
+    private DirectorsReportService directorsReportService;
+
+    @Mock
+    private DirectorsReportApi directorsReportApi;
+
+    @Mock
     private NavigatorService navigatorService;
 
     @InjectMocks
@@ -60,6 +70,12 @@ public class PoliticalAndCharitableDonationsSelectionControllerTest {
 
     @Mock
     private HttpSession httpSession;
+
+    @Mock
+    private ApiClient apiClient;
+
+    @Mock
+    private ApiClientService apiClientService;
 
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
@@ -207,9 +223,8 @@ public class PoliticalAndCharitableDonationsSelectionControllerTest {
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
 
-        when(request.getSession()).thenReturn(httpSession);
-        when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(false);
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -218,9 +233,8 @@ public class PoliticalAndCharitableDonationsSelectionControllerTest {
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
 
-        when(request.getSession()).thenReturn(httpSession);
-        when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(true);
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }

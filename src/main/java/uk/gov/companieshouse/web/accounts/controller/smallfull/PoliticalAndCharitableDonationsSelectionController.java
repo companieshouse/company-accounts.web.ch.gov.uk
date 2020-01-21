@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 
-import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndCharitableDonationsSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsSelectionService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,12 @@ public class PoliticalAndCharitableDonationsSelectionController extends BaseCont
 
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private DirectorsReportService directorsReportService;
+
+    @Autowired
+    private ApiClientService apiClientService;
 
     @Autowired
     private PoliticalAndCharitableDonationsSelectionService selectionService;
@@ -113,6 +120,10 @@ public class PoliticalAndCharitableDonationsSelectionController extends BaseCont
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
+        if (companyAccountsDataState.getDirectorsReportStatements() == null) {
+            companyAccountsDataState.setDirectorsReportStatements(new DirectorsReportStatements());
+        }
+
         companyAccountsDataState.getDirectorsReportStatements().setHasProvidedPoliticalAndCharitableDonations(
                 selection.getHasPoliticalAndCharitableDonations());
 
@@ -123,8 +134,7 @@ public class PoliticalAndCharitableDonationsSelectionController extends BaseCont
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedDirectorsReport());
+        return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 
 }

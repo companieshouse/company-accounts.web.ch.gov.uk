@@ -20,15 +20,18 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportReview;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportReviewService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -46,7 +49,16 @@ public class DirectorsReportReviewControllerTest {
     private HttpServletRequest request;
 
     @Mock
-    private MockHttpSession session;
+    private DirectorsReportService directorsReportService;
+
+    @Mock
+    private DirectorsReportApi directorsReportApi;
+
+    @Mock
+    private ApiClient apiClient;
+
+    @Mock
+    private ApiClientService apiClientService;
 
     @Mock
     private DirectorsReportReview directorsReportReview;
@@ -130,9 +142,8 @@ public class DirectorsReportReviewControllerTest {
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
 
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(false);
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -141,9 +152,8 @@ public class DirectorsReportReviewControllerTest {
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
 
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(true);
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }

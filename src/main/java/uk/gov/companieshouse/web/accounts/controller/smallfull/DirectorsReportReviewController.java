@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportReviewService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 
 @Controller
 @NextController(DirectorsReportApprovalController.class)
@@ -25,6 +27,12 @@ public class DirectorsReportReviewController extends BaseController implements C
 
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private DirectorsReportService directorsReportService;
+
+    @Autowired
+    private ApiClientService apiClientService;
 
     @Autowired
     private DirectorsReportReviewService directorsReportReviewService;
@@ -78,7 +86,6 @@ public class DirectorsReportReviewController extends BaseController implements C
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedDirectorsReport());
+        return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 }

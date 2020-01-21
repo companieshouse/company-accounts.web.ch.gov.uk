@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivitiesSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesSelectionService;
 
 @Controller
@@ -34,6 +36,12 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
 
     @Autowired
     private PrincipalActivitiesSelectionService selectionService;
+
+    @Autowired
+    private DirectorsReportService directorsReportService;
+
+    @Autowired
+    private ApiClientService apiClientService;
 
     private static final String PRINCIPAL_ACTIVITIES_SELECTION = "principalActivitiesSelection";
 
@@ -111,6 +119,9 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
+        if (companyAccountsDataState.getDirectorsReportStatements() == null) {
+            companyAccountsDataState.setDirectorsReportStatements(new DirectorsReportStatements());
+        }
         companyAccountsDataState.getDirectorsReportStatements().setHasProvidedPrincipalActivities(
                 selection.getHasPrincipalActivities());
 
@@ -121,7 +132,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedDirectorsReport());
+        return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 }
