@@ -32,8 +32,8 @@
 
         <dl class="app-check-your-answers app-check-your-answers--very-long">
           <div th:each="director, stat : *{directors}" class="app-check-your-answers__contents">
-            <dt class="app-check-your-answers__question" th:id="'director-' + ${stat.index}">
-              <span th:text="${director.name}"></span>
+            <dt class="app-check-your-answers__question">
+              <span th:text="${director.name}" th:id="'director-' + ${stat.index}"></span>
               <span th:if="${director.appointmentDate != null and director.resignationDate == null}"
                     th:text="${'(appointed __${#temporals.format(director.appointmentDate, 'd MMM yyyy')}__)'}"
                     class="govuk-body govuk-!-font-weight-regular"></span>
