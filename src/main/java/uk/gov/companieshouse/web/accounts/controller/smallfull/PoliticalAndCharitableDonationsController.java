@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@NextController(DirectorsReportReviewController.class)
+@NextController(CompanyPolicyOnDisabledEmployeesSelectionController.class)
 @PreviousController(PoliticalAndCharitableDonationsSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/political-and-charitable-donations")
 public class PoliticalAndCharitableDonationsController extends BaseController implements ConditionalController {
