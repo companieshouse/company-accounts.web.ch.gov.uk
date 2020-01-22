@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -109,13 +110,16 @@ public class DirectorsReportApprovalControllerTest {
     }
 
     @Test
-    @DisplayName("Get directors report approval view - success path")
-    void getRequestSuccess() throws Exception {
+    @DisplayName("Get directors report approval view - success path - multiple approvers")
+    void getRequestSuccessMultipleApprovers() throws Exception {
 
         when(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(directorsReportApproval);
 
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Director[0]);
+        Director director = new Director();
+        director.setName(DIRECTOR_NAME);
+        Director[] directors = new Director[]{director};
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directors);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
 
@@ -126,6 +130,31 @@ public class DirectorsReportApprovalControllerTest {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(directorsReportApproval).setApproverOptions(anyList());
+        verify(directorsReportApproval, never()).setName(anyString());
+    }
+
+    @Test
+    @DisplayName("Get directors report approval view - success path - single approver")
+    void getRequestSuccessSingleApprover() throws Exception {
+
+        when(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApproval);
+
+        Director director = new Director();
+        director.setName(DIRECTOR_NAME);
+        Director[] directors = new Director[]{director};
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directors);
+
+        when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+
+        this.mockMvc.perform(get(DIRECTORS_REPORT_APPROVAL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(DIRECTORS_REPORT_APPROVAL_VIEW))
+                .andExpect(model().attributeExists(DIRECTORS_REPORT_APPROVAL_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+
+        verify(directorsReportApproval).setApproverOptions(anyList());
+        verify(directorsReportApproval).setName(DIRECTOR_NAME);
     }
 
     @Test

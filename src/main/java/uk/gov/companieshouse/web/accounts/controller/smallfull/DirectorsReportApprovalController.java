@@ -73,6 +73,9 @@ public class DirectorsReportApprovalController extends BaseController implements
             }
 
             directorsReportApproval.setApproverOptions(approverOptions);
+            if (approverOptions.size() == 1) {
+                directorsReportApproval.setName(approverOptions.get(0));
+            }
 
             model.addAttribute(DIRECTORS_REPORT_APPROVAL, directorsReportApproval);
 
