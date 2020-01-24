@@ -28,7 +28,7 @@ import java.util.Optional;
 
 @Controller
 @NextController(DirectorsReportAdditionalInformationController.class)
-@PreviousController(PoliticalAndCharitableDonationsController.class)
+@PreviousController(CompanyPolicyOnDisabledEmployeesController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/additional-information-question")
 public class DirectorsReportAdditionalInformationSelectionController extends BaseController implements ConditionalController {
 
