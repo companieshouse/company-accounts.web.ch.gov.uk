@@ -58,7 +58,14 @@
             <dl class="app-check-your-answers app-check-your-answers--very-long">
               <div class="app-check-your-answers__contents">
                 <dt class="app-check-your-answers__question" th:text="*{name}" th:id="0-label"></dt>
-                <dd class="app-check-your-answers__change">&nbsp;</dd>
+                <dd class="app-check-your-answers__change">
+                  <a id="director-change-link"
+                     th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
+                     class="govuk-body float-right piwik-event"
+                     data-event-id="Change director">
+                    Change
+                  </a>
+                </dd>
               </div>
               <input th:field="*{name}" type="hidden">
             </dl>

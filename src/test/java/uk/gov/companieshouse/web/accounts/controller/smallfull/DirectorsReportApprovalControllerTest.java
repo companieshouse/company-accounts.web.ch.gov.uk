@@ -127,7 +127,10 @@ public class DirectorsReportApprovalControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(DIRECTORS_REPORT_APPROVAL_VIEW))
                 .andExpect(model().attributeExists(DIRECTORS_REPORT_APPROVAL_MODEL_ATTR))
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID));
 
         verify(directorsReportApproval).setApproverOptions(anyList());
         verify(directorsReportApproval, never()).setName(anyString());
