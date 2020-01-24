@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Company policy on disabled employees
+  </title>
+</head>
+<div id="companyPolicyOnDisabledEmployees-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="companyPolicyOnDisabledEmployees-form" class="form" th:action="@{''}" th:object="${companyPolicyOnDisabledEmployees}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group govuk-form-group-block-important"
+             th:classappend="${#fields.hasErrors('companyPolicyOnDisabledEmployeesDetails')} ? 'govuk-form-group--error' : ''">
+
+            <label id="companyPolicyOnDisabledEmployeesDetails-heading" class="govuk-label govuk-label--l" for="companyPolicyOnDisabledEmployeesDetails">
+              Enter your directors' report company policy on disabled employees
+            </label>
+
+            <span class="govuk-error-message"
+                  id="companyPolicyOnDisabledEmployeesDetails-errorId"
+                  th:if="${#fields.hasErrors('companyPolicyOnDisabledEmployeesDetails')}"
+                  th:each="e : ${#fields.errors('companyPolicyOnDisabledEmployeesDetails')}" th:text="${e}">
+            </span>
+
+            <textarea class="govuk-textarea"
+                      id="companyPolicyOnDisabledEmployeesDetails"
+                      th:field="*{companyPolicyOnDisabledEmployeesDetails}"
+                      rows="5">
+            </textarea>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Company policy on disabled employees - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

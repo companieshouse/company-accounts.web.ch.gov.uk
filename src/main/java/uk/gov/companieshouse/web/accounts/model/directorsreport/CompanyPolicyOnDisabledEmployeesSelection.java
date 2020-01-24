@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class CompanyPolicyOnDisabledEmployeesSelection {
 
-    @NotNull(message = "directorsReport.companyPolicyOnDisabledEmployees.selectionNotMade")
+    @NotNull(message = "{directorsReport.companyPolicyOnDisabledEmployees.selectionNotMade}")
     private Boolean hasCompanyPolicyOnDisabledEmployees;
 
     public Boolean getHasCompanyPolicyOnDisabledEmployees() {
