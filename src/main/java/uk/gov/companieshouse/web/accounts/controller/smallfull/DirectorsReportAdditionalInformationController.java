@@ -14,10 +14,10 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndCharitableDonations;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.AdditionalInformation;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
-import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformationService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,37 +26,35 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@NextController(CompanyPolicyOnDisabledEmployeesSelectionController.class)
-@PreviousController(PoliticalAndCharitableDonationsSelectionController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/political-and-charitable-donations")
-public class PoliticalAndCharitableDonationsController extends BaseController implements ConditionalController {
+@NextController(DirectorsReportReviewController.class)
+@PreviousController(DirectorsReportAdditionalInformationSelectionController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/additional-information")
+public class DirectorsReportAdditionalInformationController extends BaseController implements ConditionalController {
 
     @Autowired
     private HttpServletRequest request;
 
     @Autowired
-    private PoliticalAndCharitableDonationsService politicalAndCharitableDonationsService;
+    private AdditionalInformationService additionalInformationService;
 
-    private static final String POLITICAL_AND_CHARITABLE_DONATIONS = "politicalAndCharitableDonations";
+    private static final String ADDITIONAL_INFORMATION = "additionalInformation";
 
     @Override
-    protected String getTemplateName() {
-        return "smallfull/politicalAndCharitableDonations";
-    }
+    protected String getTemplateName() { return "smallfull/additionalInformation"; }
 
     @GetMapping
-    public String getPoliticalAndCharitableDonations(@PathVariable String companyNumber,
-                                                     @PathVariable String transactionId,
-                                                     @PathVariable String companyAccountsId,
-                                                     Model model) {
+    public String getAdditionalInformation(@PathVariable String companyNumber,
+                                           @PathVariable String transactionId,
+                                           @PathVariable String companyAccountsId,
+                                           Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            PoliticalAndCharitableDonations politicalAndCharitableDonations =
-                    politicalAndCharitableDonationsService.getPoliticalAndCharitableDonations(transactionId, companyAccountsId);
+            AdditionalInformation additionalInformation =
+                    additionalInformationService.getAdditionalInformation(transactionId, companyAccountsId);
 
-            model.addAttribute(POLITICAL_AND_CHARITABLE_DONATIONS, politicalAndCharitableDonations);
+            model.addAttribute(ADDITIONAL_INFORMATION, additionalInformation);
 
         } catch (ServiceException e) {
 
@@ -69,13 +67,12 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
     }
 
     @PostMapping
-    public String submitPoliticalAndCharitableDonations(@PathVariable String companyNumber,
-                                                        @PathVariable String transactionId,
-                                                        @PathVariable String companyAccountsId,
-                                                        @ModelAttribute(POLITICAL_AND_CHARITABLE_DONATIONS)
-                                                        @Valid PoliticalAndCharitableDonations politicalAndCharitableDonations,
-                                                        BindingResult bindingResult,
-                                                        Model model) {
+    public String submitAdditionalInformation(@PathVariable String companyNumber,
+                                              @PathVariable String transactionId,
+                                              @PathVariable String companyAccountsId,
+                                              @ModelAttribute(ADDITIONAL_INFORMATION) @Valid AdditionalInformation additionalInformation,
+                                              BindingResult bindingResult,
+                                              Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -85,13 +82,13 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
 
         try {
             List<ValidationError> validationErrors =
-                    politicalAndCharitableDonationsService.submitPoliticalAndCharitableDonations(transactionId, companyAccountsId,
-                            politicalAndCharitableDonations);
+                    additionalInformationService.submitAdditionalInformation(transactionId, companyAccountsId, additionalInformation);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }
+
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -99,18 +96,22 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+
+
     }
 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
-        throws ServiceException {
+            throws ServiceException {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return Optional.ofNullable(companyAccountsDataState)
                 .map(CompanyAccountsDataState::getDirectorsReportStatements)
-                .map(DirectorsReportStatements::getHasProvidedPoliticalAndCharitableDonations)
+                .map(DirectorsReportStatements::getHasProvidedAdditionalInformation)
                 .orElse(false);
+
     }
+
 
 
 

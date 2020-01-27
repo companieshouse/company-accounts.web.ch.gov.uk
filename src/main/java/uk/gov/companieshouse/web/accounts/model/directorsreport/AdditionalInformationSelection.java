@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class AdditionalInformationSelection {
 
-    @NotNull(message = "directorsReport.additionalInformation.selectionNotMade")
+    @NotNull(message = "{directorsReport.additionalInformation.selectionNotMade}")
     private Boolean hasAdditionalInformation;
 
     public Boolean getHasAdditionalInformation() {

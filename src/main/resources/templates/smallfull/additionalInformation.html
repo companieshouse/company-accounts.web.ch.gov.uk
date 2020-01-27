@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title id="page-title-heading">
+        Additional information
+    </title>
+</head>
+<div id="additionalInformation-main-content" layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form id="additionalInformation-form" class="form" th:action="@{''}" th:object="${additionalInformation}" method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                <div class="govuk-form-group govuk-form-group-block-important"
+                     th:classappend="${#fields.hasErrors('additionalInformationDetails')} ? 'govuk-form-group--error' : ''">
+
+                    <label id="additionalInformationDetails-heading" class="govuk-label govuk-label--l" for="additionalInformationDetails">
+                        Enter your directors' report additional information
+                    </label>
+
+                    <span class="govuk-error-message"
+                          id="additionalInformationDetails-errorId"
+                          th:if="${#fields.hasErrors('additionalInformationDetails')}"
+                          th:each="e : ${#fields.errors('additionalInformationDetails')}" th:text="${e}">
+            </span>
+
+                    <textarea class="govuk-textarea"
+                              id="additionalInformationDetails"
+                              th:field="*{additionalInformationDetails}"
+                              rows="5">
+            </textarea>
+                </div>
+
+                <input id="next-button" class="govuk-button piwik-event" data-event-id="Additional information - save and continue"
+                       type="submit" role="button" value="Save and continue"/>
+
+            </form>
+        </div>
+    </div>
+</div>
