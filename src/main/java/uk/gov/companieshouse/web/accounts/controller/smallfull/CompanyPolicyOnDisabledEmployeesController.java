@@ -25,7 +25,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CompanyPolicyOnDisab
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
-@NextController(DirectorsReportReviewController.class)
+@NextController(DirectorsReportAdditionalInformationSelectionController.class)
 @PreviousController(CompanyPolicyOnDisabledEmployeesSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees")
 public class CompanyPolicyOnDisabledEmployeesController extends BaseController implements ConditionalController {
