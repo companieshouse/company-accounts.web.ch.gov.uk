@@ -49,6 +49,12 @@ public class DirectorsReportApprovalController extends BaseController implements
 
     private static final String DIRECTORS_REPORT_APPROVAL = "directorsReportApproval";
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String TRANSACTION_ID = "transactionId";
+
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
     @GetMapping
     public String getDirectorsReportApproval(@PathVariable String companyNumber,
                                              @PathVariable String transactionId,
@@ -73,8 +79,14 @@ public class DirectorsReportApprovalController extends BaseController implements
             }
 
             directorsReportApproval.setApproverOptions(approverOptions);
+            if (approverOptions.size() == 1) {
+                directorsReportApproval.setName(approverOptions.get(0));
+            }
 
             model.addAttribute(DIRECTORS_REPORT_APPROVAL, directorsReportApproval);
+            model.addAttribute(COMPANY_NUMBER, companyNumber);
+            model.addAttribute(TRANSACTION_ID, transactionId);
+            model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
 
             return getTemplateName();
 
