@@ -10,10 +10,18 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private DirectorsReportService directorsReportService;
 
     @Autowired
     private ApiClientService apiClientService;
@@ -24,21 +32,19 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public String getResumeRedirect(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
 
+        CompanyProfileApi company = companyService.getCompanyProfile(companyNumber);
 
-        ApiClient apiClient = apiClientService.getApiClient();
-        CompanyProfileApi company = null;
-
-        try {
-            company = apiClient.company().get("/company/" + companyNumber).execute().getData();
-        } catch (ApiErrorResponseException | URIValidationException e) {
-            throw new ServiceException("Error when trying to retrieve company data", e);
-        }
-
-
-        if (company != null && company.isCommunityInterestCompany()) {
+        if (company.isCommunityInterestCompany()) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                     RESUME_URI.expand(companyNumber, transactionId,
                             companyAccountsId, "cic/company-activity").toString();
+        }
+
+        if (directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+            RESUME_URI.expand(companyNumber, transactionId,
+                    companyAccountsId, "small-full/add-or-remove-directors").toString();
+
         }
 
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +

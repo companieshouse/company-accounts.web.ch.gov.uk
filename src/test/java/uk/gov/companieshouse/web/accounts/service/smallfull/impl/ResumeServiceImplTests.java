@@ -14,9 +14,12 @@ import uk.gov.companieshouse.api.handler.company.CompanyResourceHandler;
 import uk.gov.companieshouse.api.handler.company.request.CompanyGet;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,19 +32,19 @@ public class ResumeServiceImplTests {
     private ApiClientService apiClientService;
 
     @Mock
-    private ApiClient apiClient;
-
-    @Mock
-    private CompanyResourceHandler companyResourceHandler;
-
-    @Mock
-    private CompanyGet companyGet;
+    private CompanyService companyService;
 
     @Mock
     private ApiResponse<CompanyProfileApi> responseWithData;
 
     @Mock
     private CompanyProfileApi companyProfileApi;
+
+    @Mock
+    private DirectorsReportService directorsReportService;
+
+    @Mock
+    private DirectorsReportApi directorsReportApi;
 
     @InjectMocks
     private ResumeServiceImpl resumeService = new ResumeServiceImpl();
@@ -53,12 +56,8 @@ public class ResumeServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @BeforeEach
-    void setUp() throws ApiErrorResponseException, URIValidationException {
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(apiClient.company()).thenReturn(companyResourceHandler);
-        when(companyResourceHandler.get(any(String.class))).thenReturn(companyGet);
-        when(companyGet.execute()).thenReturn(responseWithData);
-        when(responseWithData.getData()).thenReturn(companyProfileApi);
+    void setUp() throws ApiErrorResponseException, URIValidationException, ServiceException {
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
     }
     
     @Test
@@ -66,6 +65,7 @@ public class ResumeServiceImplTests {
     void getResumeRedirect() throws ServiceException {
 
         when(companyProfileApi.isCommunityInterestCompany()).thenReturn(false);
+        when(directorsReportService.getDirectorsReport(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
         String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -93,5 +93,24 @@ public class ResumeServiceImplTests {
                 "/cic/company-activity";
 
         assertEquals(expectedRedirect, redirect);
+    }
+
+    @Test
+    @DisplayName("Get resume redirect success path for company with Directors Report")
+    void getResumeRedirectDirectorsReport() throws ServiceException {
+
+        when(companyProfileApi.isCommunityInterestCompany()).thenReturn(false);
+        when(directorsReportService.getDirectorsReport(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
+
+        String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        String expectedRedirect = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                "/company/" + COMPANY_NUMBER +
+                "/transaction/" + TRANSACTION_ID +
+                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                "/small-full/add-or-remove-directors";
+
+        assertEquals(expectedRedirect, redirect);
+
     }
 }
