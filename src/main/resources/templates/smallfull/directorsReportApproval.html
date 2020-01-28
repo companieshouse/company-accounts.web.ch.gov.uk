@@ -20,7 +20,7 @@
 
         <fieldset class="govuk-fieldset">
 
-          <th:block th:if="*{approverOptions.size() > 1}">
+          <th:block th:if="*{approverOptions != null and approverOptions.size() > 1}">
             <div class="govuk-form-group govuk-form-group-block-important" th:classappend="${#fields.hasErrors('name')} ? 'govuk-form-group--error' : ''">
               <label id="directorsReportApproval-director-heading" class="govuk-label govuk-label--m" for="approver-options">
                 Who approved the directors' report?
@@ -50,7 +50,7 @@
               </div>
             </div>
           </th:block>
-          <th:block th:unless="*{approverOptions.size() > 1}">
+          <th:block th:unless="*{approverOptions != null and approverOptions.size() > 1}">
             <h2 id="directorsReportApproval-director-heading" class="govuk-heading-l">
               Officer who approved the directors' report
             </h2>
