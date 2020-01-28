@@ -116,8 +116,8 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
                 // Remove the state for this company accounts id - it's not needed any more
                 companyAccountsDataStates.getCompanyAccountsDataStateMap().remove(companyAccountsId);
             } else {
-                // Remove the oldest 'state' if more than 5 are present to prevent bloating the JWT
-                if (companyAccountsDataStates.getCompanyAccountsDataStateMap().size() >= 5) {
+                // Remove the oldest 'state' if more than 2 are present to prevent bloating the JWT
+                while (companyAccountsDataStates.getCompanyAccountsDataStateMap().size() >= 2) {
                     removeOldestState(companyAccountsDataStates);
                 }
                 // Update / insert the state object on the state map, using the company accounts id as the key
