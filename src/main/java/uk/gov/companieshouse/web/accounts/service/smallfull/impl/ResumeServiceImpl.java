@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
-import uk.gov.companieshouse.api.ApiClient;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -18,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportServi
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
