@@ -15,11 +15,14 @@ import uk.gov.companieshouse.api.handler.company.request.CompanyGet;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
+import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,7 +47,13 @@ public class ResumeServiceImplTests {
     private DirectorsReportService directorsReportService;
 
     @Mock
+    private ProfitAndLossService profitAndLossService;
+
+    @Mock
     private DirectorsReportApi directorsReportApi;
+
+    @Mock
+    private ProfitAndLoss profitAndLoss;
 
     @InjectMocks
     private ResumeServiceImpl resumeService = new ResumeServiceImpl();
@@ -109,6 +118,25 @@ public class ResumeServiceImplTests {
                 "/transaction/" + TRANSACTION_ID +
                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                 "/small-full/add-or-remove-directors";
+
+        assertEquals(expectedRedirect, redirect);
+
+    }
+
+    @Test
+    @DisplayName("Get resume redirect success path for company with Profit and Loss")
+    void getResumeRedirectProfitAndLoss() throws ServiceException {
+
+        when(companyProfileApi.isCommunityInterestCompany()).thenReturn(false);
+        when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(profitAndLoss);
+
+        String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        String expectedRedirect = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                "/company/" + COMPANY_NUMBER +
+                "/transaction/" + TRANSACTION_ID +
+                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                "/small-full/profit-and-loss";
 
         assertEquals(expectedRedirect, redirect);
 
