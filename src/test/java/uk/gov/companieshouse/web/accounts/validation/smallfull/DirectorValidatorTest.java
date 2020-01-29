@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -134,6 +135,24 @@ public class DirectorValidatorTest {
     void validateSubmitAddOrRemoveDirectorsNoDirectorsPresent() {
 
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
+        addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
+
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(DIRECTOR_TO_ADD, validationErrors.get(0).getFieldPath());
+        assertEquals(AT_LEAST_ONE_DIRECTOR_REQUIRED, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate submit add or remove directors - all directors have resigned")
+    void validateSubmitAddOrRemoveDirectorsAllDirectorsHaveResigned() {
+
+        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
+        Director director = new Director();
+        director.setResignationDate(LocalDate.now());
+        addOrRemoveDirectors.setExistingDirectors(new Director[]{director});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
         List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
