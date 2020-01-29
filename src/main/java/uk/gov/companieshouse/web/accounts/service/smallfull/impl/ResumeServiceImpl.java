@@ -10,10 +10,16 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.ProfitOrLossForFinancialYear;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.TotalProfitOrLossForFinancialYear;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
@@ -45,12 +51,6 @@ public class ResumeServiceImpl implements ResumeService {
                             companyAccountsId, "cic/company-activity").toString();
         }
 
-        if (profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber) != null) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                    RESUME_URI.expand(companyNumber, transactionId,
-                            companyAccountsId, "small-full/profit-and-loss").toString();
-        }
-
         if (directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                     RESUME_URI.expand(companyNumber, transactionId,
@@ -58,8 +58,24 @@ public class ResumeServiceImpl implements ResumeService {
 
         }
 
+        if (hasProfitAndLoss(profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber))) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                    RESUME_URI.expand(companyNumber, transactionId,
+                            companyAccountsId, "small-full/profit-and-loss").toString();
+        }
+
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                 RESUME_URI.expand(companyNumber, transactionId,
                         companyAccountsId, "small-full/balance-sheet").toString();
+    }
+
+
+    private boolean hasProfitAndLoss(ProfitAndLoss profitAndLoss) {
+
+        return Optional.of(profitAndLoss)
+            .map(ProfitAndLoss::getProfitOrLossForFinancialYear)
+            .map(ProfitOrLossForFinancialYear::getTotalProfitOrLossForFinancialYear)
+            .map(TotalProfitOrLossForFinancialYear::getCurrentAmount).isPresent();
+
     }
 }
