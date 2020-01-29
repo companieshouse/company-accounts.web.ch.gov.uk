@@ -12,6 +12,7 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
 @Service
@@ -25,6 +26,10 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Autowired
     private ApiClientService apiClientService;
+
+    @Autowired
+    private ProfitAndLossService profitAndLossService;
+
 
     private static final UriTemplate RESUME_URI = new UriTemplate(
             "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/{endpoint}");
@@ -40,15 +45,21 @@ public class ResumeServiceImpl implements ResumeService {
                             companyAccountsId, "cic/company-activity").toString();
         }
 
+        if (profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber) != null) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                    RESUME_URI.expand(companyNumber, transactionId,
+                            companyAccountsId, "small-full/profit-and-loss").toString();
+        }
+
         if (directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-            RESUME_URI.expand(companyNumber, transactionId,
-                    companyAccountsId, "small-full/add-or-remove-directors").toString();
+                    RESUME_URI.expand(companyNumber, transactionId,
+                            companyAccountsId, "small-full/add-or-remove-directors").toString();
 
         }
 
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                 RESUME_URI.expand(companyNumber, transactionId,
-                                companyAccountsId, "small-full/balance-sheet").toString();
+                        companyAccountsId, "small-full/balance-sheet").toString();
     }
 }
