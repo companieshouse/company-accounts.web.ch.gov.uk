@@ -8,24 +8,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.company.CompanyResourceHandler;
-import uk.gov.companieshouse.api.handler.company.request.CompanyGet;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
-import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.ProfitOrLossForFinancialYear;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.TotalProfitOrLossForFinancialYear;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,9 +33,6 @@ public class ResumeServiceImplTests {
 
     @Mock
     private CompanyService companyService;
-
-    @Mock
-    private ApiResponse<CompanyProfileApi> responseWithData;
 
     @Mock
     private CompanyProfileApi companyProfileApi;
@@ -55,6 +49,12 @@ public class ResumeServiceImplTests {
     @Mock
     private ProfitAndLoss profitAndLoss;
 
+    @Mock
+    private ProfitOrLossForFinancialYear profitOrLossForFinancialYear;
+
+    @Mock
+    private TotalProfitOrLossForFinancialYear totalProfitOrLossForFinancialYear;
+
     @InjectMocks
     private ResumeServiceImpl resumeService = new ResumeServiceImpl();
 
@@ -63,6 +63,8 @@ public class ResumeServiceImplTests {
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
+    private static final Long CURRENT_AMOUNT = 111L;
 
     @BeforeEach
     void setUp() throws ApiErrorResponseException, URIValidationException, ServiceException {
@@ -75,6 +77,11 @@ public class ResumeServiceImplTests {
 
         when(companyProfileApi.isCommunityInterestCompany()).thenReturn(false);
         when(directorsReportService.getDirectorsReport(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+
+        when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(profitAndLoss);
+        when(profitAndLoss.getProfitOrLossForFinancialYear()).thenReturn(profitOrLossForFinancialYear);
+        when(profitOrLossForFinancialYear.getTotalProfitOrLossForFinancialYear()).thenReturn(totalProfitOrLossForFinancialYear);
+        when(totalProfitOrLossForFinancialYear.getCurrentAmount()).thenReturn(null);
 
         String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -129,6 +136,10 @@ public class ResumeServiceImplTests {
 
         when(companyProfileApi.isCommunityInterestCompany()).thenReturn(false);
         when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(profitAndLoss);
+        when(profitAndLoss.getProfitOrLossForFinancialYear()).thenReturn(profitOrLossForFinancialYear);
+        when(profitOrLossForFinancialYear.getTotalProfitOrLossForFinancialYear()).thenReturn(totalProfitOrLossForFinancialYear);
+        when(totalProfitOrLossForFinancialYear.getCurrentAmount()).thenReturn(CURRENT_AMOUNT);
+
 
         String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
