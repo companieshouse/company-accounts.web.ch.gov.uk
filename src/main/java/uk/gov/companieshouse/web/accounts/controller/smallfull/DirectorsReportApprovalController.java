@@ -70,8 +70,9 @@ public class DirectorsReportApprovalController extends BaseController implements
 
             List<String> approverOptions =
                     Arrays.stream(directorService.getAllDirectors(transactionId, companyAccountsId))
-                            .map(Director::getName)
-                                    .collect(Collectors.toList());
+                            .filter(d -> d.getResignationDate() == null)
+                                    .map(Director::getName)
+                                            .collect(Collectors.toList());
 
             String secretary = secretaryService.getSecretary(transactionId, companyAccountsId);
             if (StringUtils.isNotBlank(secretary)) {

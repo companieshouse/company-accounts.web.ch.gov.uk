@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.validation.smallfull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang.StringUtils;
@@ -70,7 +71,9 @@ public class DirectorValidator {
             error.setMessageKey(DIRECTOR_MUST_BE_ADDED);
             validationErrors.add(error);
 
-        } else if (addOrRemoveDirectors.getExistingDirectors() == null) {
+        } else if (addOrRemoveDirectors.getExistingDirectors() == null ||
+                !Arrays.stream(addOrRemoveDirectors.getExistingDirectors())
+                        .filter(d -> d.getResignationDate() == null).findFirst().isPresent()) {
 
             ValidationError error = new ValidationError();
             error.setFieldPath(DIRECTOR_TO_ADD);
