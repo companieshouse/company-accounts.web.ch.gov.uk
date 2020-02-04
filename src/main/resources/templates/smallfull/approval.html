@@ -29,22 +29,45 @@
               Which director approved the accounts?
             </label>
 
-            <span id="approval-director-hint" class="govuk-hint">
-              If the company has two or more directors, give the name of the director acting on their behalf.
-            </span>
 
-            <span class="govuk-error-message"
+            <th:block th:if="*{approverOptions != null and approverOptions.size() >= 1}">
+
+              <span class="govuk-error-message"
+                    id="directorName-errorId"
+                    th:if="${#fields.hasErrors('directorName')}"
+                    th:each="e : ${#fields.errors('directorName')}" th:text="${e}">
+              </span>
+
+              <div th:each="approver, stat : *{approverOptions}" class="govuk-radios__item" id="approver-options">
+                <input class="govuk-radios__input"
+                       th:id="${stat.index}"
+                       type="radio"
+                       th:value="${approver}"
+                       th:field="*{directorName}"/>
+
+                <label class="govuk-label govuk-radios__label"
+                       th:for="${stat.index}"
+                       th:id="${stat.index + '-label'}"
+                       th:text="${approver}"></label>
+              </div>
+              
+            </th:block>
+
+            <th:block th:if="*{approverOptions = null}">
+              <span class="govuk-error-message"
                   id="directorName-errorId"
                   th:if="${#fields.hasErrors('directorName')}"
                   th:each="e : ${#fields.errors('directorName')}" th:text="${e}">
-            </span>
+              </span>
 
-            <input class="govuk-input"
+              <input class="govuk-input"
                    id="approval-director"
                    th:field="*{directorName}"
                    th:errorclass="govuk-input--error"
                    type="text">
+            </th:block>
           </div>
+
 
           <div class="govuk-form-group" th:classappend="${#fields.hasErrors('date')} ? 'govuk-form-group--error' : ''">
             <fieldset class="govuk-fieldset" aria-describedby="approval-date-hint" role="group">
