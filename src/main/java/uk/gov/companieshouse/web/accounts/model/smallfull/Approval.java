@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 import javax.validation.constraints.NotBlank;
-import java.awt.*;
 import java.util.List;
 
 @ValidationModel

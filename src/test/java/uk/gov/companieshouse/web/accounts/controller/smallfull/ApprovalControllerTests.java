@@ -168,7 +168,7 @@ public class ApprovalControllerTests {
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param("directorName", "blah"))
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -183,7 +183,7 @@ public class ApprovalControllerTests {
         doThrow(ServiceException.class).when(transactionService).closeTransaction(TRANSACTION_ID);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param("directorName", "blah"))
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -198,7 +198,7 @@ public class ApprovalControllerTests {
         when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(false);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param("directorName", "blah"))
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + CONFIRMATION_VIEW));
     }
@@ -215,7 +215,7 @@ public class ApprovalControllerTests {
         when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)).thenReturn(PAYMENT_WEB_ENDPOINT);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param("directorName", "blah"))
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT));
     }
