@@ -50,10 +50,14 @@
                        th:id="${stat.index + '-label'}"
                        th:text="${approver}"></label>
               </div>
+
+              <div th:each="approver, stat : *{approverOptions}">
+                <input type="hidden" th:field="*{approverOptions[__${stat.index}__]}" th:id="approverOptions[__${stat.index}__]"/>
+              </div>
               
             </th:block>
 
-            <th:block th:if="*{approverOptions == null or approverOptions.size() == 0}">
+            <th:block th:if="*{approverOptions = null or approverOptions.size() = 0}">
               <span class="govuk-error-message"
                   id="directorName-errorId"
                   th:if="${#fields.hasErrors('directorName')}"
