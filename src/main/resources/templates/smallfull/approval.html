@@ -57,7 +57,7 @@
               
             </th:block>
 
-            <th:block th:if="*{approverOptions == null or approverOptions.size() == 0}">
+            <th:block th:if="*{approverOptions = null} OR *{approverOptions.size() = 0}">
               <span class="govuk-error-message"
                   id="directorName-errorId"
                   th:if="${#fields.hasErrors('directorName')}"
