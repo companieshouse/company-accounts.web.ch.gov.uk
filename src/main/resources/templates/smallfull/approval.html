@@ -162,6 +162,7 @@
 
         </fieldset>
 
+        <input type="hidden" th:field="*{isPayableTransaction}"/>
         <input id="next-button" class="govuk-button piwik-event" data-event-id="Approval - Save and continue" type="submit" role="button" th:value="${isPayableTransaction ? 'Save and continue to payment' : 'Submit your accounts'}"/>
 
       </div>
