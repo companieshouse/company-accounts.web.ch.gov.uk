@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,13 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -46,6 +52,9 @@ public class ApprovalController extends BaseController {
     @Autowired
     private PaymentService paymentService;
 
+    @Autowired
+    private DirectorService directorService;
+
     @Override
     protected String getTemplateName() {
         return "smallfull/approval";
@@ -63,13 +72,27 @@ public class ApprovalController extends BaseController {
         try {
             model.addAttribute(IS_PAYABLE_TRANSACTION,
                     transactionService.isPayableTransaction(transactionId, companyAccountsId));
+
+            List<String> approverOptions =
+                    Arrays.stream(directorService.getAllDirectors(transactionId, companyAccountsId))
+                            .filter(d -> d.getResignationDate() == null)
+                            .map(Director::getName)
+                            .collect(Collectors.toList());
+
+            Approval approval = new Approval();
+            approval.setApproverOptions(approverOptions);
+
+            model.addAttribute(APPROVAL, approval);
+
+
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
 
-        model.addAttribute(APPROVAL, new Approval());
+
+
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
 
@@ -88,6 +111,13 @@ public class ApprovalController extends BaseController {
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
+            if (bindingResult.hasErrors()) {
+
+                model.addAttribute(IS_PAYABLE_TRANSACTION,
+                        transactionService.isPayableTransaction(transactionId, companyAccountsId));
+                return getTemplateName();
+            }
+
             List<ValidationError> validationErrors = approvalService.submitApproval(transactionId, companyAccountsId, approval);
             if (!validationErrors.isEmpty()) {
                 model.addAttribute(IS_PAYABLE_TRANSACTION,
