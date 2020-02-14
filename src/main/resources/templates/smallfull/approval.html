@@ -24,7 +24,7 @@
             Approve your accounts
           </legend>
 
-          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('directorName')} ? 'govuk-form-group--error' : ''">
+          <div class="govuk-form-group govuk-form-group-block-important" th:classappend="${#fields.hasErrors('directorName')} ? 'govuk-form-group--error' : ''">
             <label id="approval-director-heading" class="govuk-label govuk-label--m" for="approval-director">
               Which director approved the accounts?
             </label>
@@ -73,7 +73,7 @@
           </div>
 
 
-          <div class="govuk-form-group" th:classappend="${#fields.hasErrors('date')} ? 'govuk-form-group--error' : ''">
+          <div class="govuk-form-group govuk-form-group-block-important" th:classappend="${#fields.hasErrors('date')} ? 'govuk-form-group--error' : ''">
             <fieldset class="govuk-fieldset" aria-describedby="approval-date-hint" role="group">
 
               <legend id="approval-date-heading" class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -94,7 +94,7 @@
               <div class="govuk-date-input" id="approval-date">
 
                 <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
+                  <div class="govuk-form-group govuk-form-group-block-important">
                     <label class="govuk-label govuk-date-input__label" for="approval-date-day">
                       Day
                     </label>
@@ -108,7 +108,7 @@
                 </div>
 
                 <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
+                  <div class="govuk-form-group govuk-form-group-block-important">
                     <label class="govuk-label govuk-date-input__label" for="approval-date-month">
                       Month
                     </label>
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
+                  <div class="govuk-form-group govuk-form-group-block-important">
                     <label class="govuk-label govuk-date-input__label" for="approval-date-year">
                       Year
                     </label>
