@@ -42,6 +42,14 @@
             due within one year', or 'creditors - amounts falling due after one year'</li>
         </ul>
 
+        <p id="criteria-additional-requirements">Your company must also meet at least 2 of the following:</p>
+
+        <ul class="govuk-list govuk-list--bullet" id="criteria-additional-requirements-list">
+          <li>turnover is not over £10.2 million</li>
+          <li>balance sheet total is not over £5.1 million</li>
+          <li>average number of employees is not over 50</li>
+        </ul>
+
         <h2 class="govuk-heading-m" id="criteria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
 
         <div class="govuk-form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'govuk-form-group--error' : ''">
