@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Principal activities
+  </title>
+</head>
+<div id="principalActivities-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="principalActivities-form" class="form" th:action="@{''}" th:object="${principalActivities}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group govuk-form-group-block-important"
+             th:classappend="${#fields.hasErrors('principalActivitiesDetails')} ? 'govuk-form-group--error' : ''">
+
+            <label id="principalActivitiesDetails-heading" class="govuk-label govuk-label--l" for="principalActivitiesDetails">
+              Enter your directors' report principal activities of the company information
+            </label>
+
+            <span class="govuk-error-message"
+                  id="principalActivitiesDetails-errorId"
+                  th:if="${#fields.hasErrors('principalActivitiesDetails')}"
+                  th:each="e : ${#fields.errors('principalActivitiesDetails')}" th:text="${e}">
+            </span>
+
+            <textarea class="govuk-textarea"
+                      id="principalActivitiesDetails"
+                      th:field="*{principalActivitiesDetails}"
+                      rows="5">
+            </textarea>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Principal activities - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

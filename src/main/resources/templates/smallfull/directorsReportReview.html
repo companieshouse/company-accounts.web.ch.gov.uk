@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Directors' report review
+  </title>
+</head>
+<div id="directorsReport-review-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="directorsReport-review-form" class="form" th:action="@{''}" th:object="${directorsReportReview}" method="post">
+
+        <h1 id="page-title" class="govuk-heading-l">
+          <span>Check your answers -</span>
+          <br>
+          <span>directors' report</span>
+        </h1>
+
+        <h2 id="directors-heading" class="govuk-heading-m">
+          Directors who served in the accounting period
+          <a id="directors-change-link"
+             th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
+             class="govuk-body float-right piwik-event"
+             data-event-id="Change directors">
+            Change
+          </a>
+        </h2>
+
+        <dl class="app-check-your-answers app-check-your-answers--very-long">
+          <div th:each="director, stat : *{directors}" class="app-check-your-answers__contents">
+            <dt class="app-check-your-answers__question">
+              <span th:text="${director.name}" th:id="'director-' + ${stat.index}"></span>
+              <span th:if="${director.appointmentDate != null and director.resignationDate == null}"
+                    th:text="${'(appointed __${#temporals.format(director.appointmentDate, 'd MMM yyyy')}__)'}"
+                    class="govuk-body govuk-!-font-weight-regular"></span>
+              <span th:if="${director.appointmentDate == null and director.resignationDate != null}"
+                    th:text="${'(resigned __${#temporals.format(director.resignationDate, 'd MMM yyyy')}__)'}"
+                    class="govuk-body govuk-!-font-weight-regular"></span>
+              <span th:if="${director.appointmentDate != null and director.resignationDate != null}"
+                    th:text="${'(appointed __${#temporals.format(director.appointmentDate, 'd MMM yyyy')}__, resigned __${#temporals.format(director.resignationDate, 'd MMM yyyy')}__)'}"
+                    class="govuk-body govuk-!-font-weight-regular"></span>
+            </dt>
+            <dd class="app-check-your-answers__change">&nbsp;</dd>
+          </div>
+
+        </dl>
+
+        <th:block th:if="*{secretary != null}">
+
+          <h2 id="secretary-heading" class="govuk-heading-m">
+            Company secretary
+            <a id="secretary-change-link"
+               th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
+               class="govuk-body float-right piwik-event"
+               data-event-id="Change secretary">
+              Change
+            </a>
+          </h2>
+
+          <dl class="app-check-your-answers app-check-your-answers--very-long">
+            <div class="app-check-your-answers__contents">
+              <dt th:text="*{secretary}" class="app-check-your-answers__question" id="secretary"></dt>
+              <dd class="app-check-your-answers__change">&nbsp;</dd>
+            </div>
+
+          </dl>
+
+        </th:block>
+
+        <th:block th:if="*{principalActivities.principalActivitiesDetails != null or
+                            politicalAndCharitableDonations.politicalAndCharitableDonationsDetails != null or
+                            companyPolicyOnDisabledEmployees.companyPolicyOnDisabledEmployeesDetails != null or
+                            additionalInformation.additionalInformationDetails != null}">
+
+          <h2 id="statements-heading" class="govuk-heading-m">
+            Directors' report notes
+          </h2>
+
+          <dl class="app-check-your-answers app-check-your-answers--short">
+            <div th:if="*{principalActivities.principalActivitiesDetails != null}" class="app-check-your-answers__contents">
+              <dt class="app-check-your-answers__question">
+                Principal activities of the company
+              </dt>
+              <dd th:text="*{principalActivities.principalActivitiesDetails}" class="app-check-your-answers__answer" id="directors-report-principal-answer"></dd>
+              <dd class="app-check-your-answers__change">
+                <a id="principal-activities-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/principal-activities-question|}"
+                   class="piwik-event"
+                   data-event-id="Change principal activities">
+                  Change<span class="govuk-visually-hidden">
+                    Principal activities of the company
+                  </span>
+                </a>
+              </dd>
+            </div>
+
+            <div th:if="*{politicalAndCharitableDonations.politicalAndCharitableDonationsDetails != null}" class="app-check-your-answers__contents">
+              <dt class="app-check-your-answers__question">
+                Political and charitable donations
+              </dt>
+              <dd th:text="*{politicalAndCharitableDonations.politicalAndCharitableDonationsDetails}" class="app-check-your-answers__answer" id="directors-report-political-answer"></dd>
+              <dd class="app-check-your-answers__change">
+                <a id="political-and-charitable-donations-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/political-and-charitable-donations-question|}"
+                   class="piwik-event"
+                   data-event-id="Change political and charitable donations">
+                  Change<span class="govuk-visually-hidden">
+                    Political and charitable donations
+                  </span>
+                </a>
+              </dd>
+            </div>
+
+            <div th:if="*{companyPolicyOnDisabledEmployees.companyPolicyOnDisabledEmployeesDetails != null}" class="app-check-your-answers__contents">
+              <dt class="app-check-your-answers__question">
+                Company policy on disabled employees
+              </dt>
+              <dd th:text="*{companyPolicyOnDisabledEmployees.companyPolicyOnDisabledEmployeesDetails}" class="app-check-your-answers__answer" id="directors-report-disabled-answer"></dd>
+              <dd class="app-check-your-answers__change">
+                <a id="company-policy-on-disabled-employees-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees-question|}"
+                   class="piwik-event"
+                   data-event-id="Change company policy on disabled employees">
+                  Change<span class="govuk-visually-hidden">
+                    Company policy on disabled employees
+                  </span>
+                </a>
+              </dd>
+            </div>
+
+            <div th:if="*{additionalInformation.additionalInformationDetails != null}" class="app-check-your-answers__contents">
+              <dt class="app-check-your-answers__question">
+                Additional information
+              </dt>
+              <dd th:text="*{additionalInformation.additionalInformationDetails}" class="app-check-your-answers__answer" id="directors-report-add-info"></dd>
+              <dd class="app-check-your-answers__change">
+                <a id="additional-information-change-link"
+                   th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/directors-report/additional-information-question|}"
+                   class="piwik-event"
+                   data-event-id="Change additional information">
+                  Change<span class="govuk-visually-hidden">
+                    Additional information
+                  </span>
+                </a>
+              </dd>
+            </div>
+          </dl>
+
+        </th:block>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Directors report review - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

@@ -1,9 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -20,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
+import uk.gov.companieshouse.web.accounts.validation.DateValidator;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
@@ -36,6 +34,9 @@ public class ApprovalServiceImpl implements ApprovalService {
     private ValidationContext validationContext;
 
     @Autowired
+    private DateValidator dateValidator;
+
+    @Autowired
     private ApprovalTransformer transformer;
 
     @Autowired
@@ -43,22 +44,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     private static final UriTemplate APPROVAL_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval");
-
-    private static final String DAY_MONTH_REGEX = "\\d{1,2}";
-
-    private static final String YEAR_REGEX = "\\d{4}";
-
-    private static final String APPROVAL_DATE_FIELD_PATH = "date";
-
-    private static final String APPROVAL_DATE_ERROR_LOCATION = ".approval.date";
-
-    private static final String DATE_MISSING = "validation.date.missing" + APPROVAL_DATE_ERROR_LOCATION;
-
-    private static final String DATE_INCOMPLETE = "validation.date.incomplete" + APPROVAL_DATE_ERROR_LOCATION;
-
-    private static final String DATE_FORMAT_INVALID = "validation.date.format" + APPROVAL_DATE_ERROR_LOCATION;
-
-    private static final String DATE_INVALID = "validation.date.nonExistent";
 
     private static final String RESOURCE_NAME = "approval";
 
@@ -68,6 +53,11 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Override
     public List<ValidationError> submitApproval(String transactionId, String companyAccountsId,
             Approval approval) throws ServiceException {
+
+        List<ValidationError> validationErrors = dateValidator.validateDate(approval.getDate(), "date", ".approval.date");
+        if (!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
 
         ApiClient apiClient = apiClientService.getApiClient();
 
@@ -88,59 +78,12 @@ public class ApprovalServiceImpl implements ApprovalService {
             }
 
             if (apiResponse.hasErrors()) {
-                return validationContext.getValidationErrors(apiResponse.getErrors());
+                validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
             }
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
-        }
-
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<ValidationError> validateApprovalDate(Approval approval) {
-
-        List<ValidationError> validationErrors = new ArrayList<>();
-
-        if (StringUtils.isBlank(approval.getDate().getDay()) &&
-            StringUtils.isBlank(approval.getDate().getMonth()) &&
-                StringUtils.isBlank(approval.getDate().getYear())) {
-
-            ValidationError error = new ValidationError();
-            error.setFieldPath(APPROVAL_DATE_FIELD_PATH);
-            error.setMessageKey(DATE_MISSING);
-            validationErrors.add(error);
-
-        } else if (StringUtils.isBlank(approval.getDate().getDay()) ||
-                StringUtils.isBlank(approval.getDate().getMonth()) ||
-                StringUtils.isBlank(approval.getDate().getYear())) {
-
-            ValidationError error = new ValidationError();
-            error.setFieldPath(APPROVAL_DATE_FIELD_PATH);
-            error.setMessageKey(DATE_INCOMPLETE);
-            validationErrors.add(error);
-
-        } else if (!approval.getDate().getDay().matches(DAY_MONTH_REGEX) ||
-                !approval.getDate().getMonth().matches(DAY_MONTH_REGEX) ||
-                !approval.getDate().getYear().matches(YEAR_REGEX)) {
-
-            ValidationError error = new ValidationError();
-            error.setFieldPath(APPROVAL_DATE_FIELD_PATH);
-            error.setMessageKey(DATE_FORMAT_INVALID);
-            validationErrors.add(error);
-
-        } else {
-
-            try {
-                transformer.getApprovalDate(approval);
-            } catch (DateTimeParseException e) {
-                ValidationError error = new ValidationError();
-                error.setFieldPath(APPROVAL_DATE_FIELD_PATH);
-                error.setMessageKey(DATE_INVALID);
-                validationErrors.add(error);
-            }
         }
 
         return validationErrors;

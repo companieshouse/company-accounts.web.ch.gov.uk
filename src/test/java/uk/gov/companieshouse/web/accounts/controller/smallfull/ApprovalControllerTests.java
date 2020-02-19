@@ -13,11 +13,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -49,6 +52,9 @@ public class ApprovalControllerTests {
 
     @Mock
     private PaymentService paymentService;
+
+    @Mock
+    private DirectorService directorService;
 
     @InjectMocks
     private ApprovalController approvalController;
@@ -85,9 +91,11 @@ public class ApprovalControllerTests {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    private static final String PAYMENT_URL = "paymentUrl";
-
     private static final String PAYMENT_WEB_ENDPOINT = "/paymentWebEndpoint";
+
+    private static final String DIRECTOR_NAME = "directorName";
+
+    private static final String NAME = "name";
 
     @BeforeEach
     private void setup() {
@@ -98,6 +106,9 @@ public class ApprovalControllerTests {
     @Test
     @DisplayName("Get approval view success path")
     void getRequestSuccess() throws Exception {
+
+        when (directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Director[]{});
+
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(APPROVAL_VIEW))
@@ -121,25 +132,8 @@ public class ApprovalControllerTests {
     }
 
     @Test
-    @DisplayName("Post approval date validation failure path")
-    void postRequestApprovalDateValidationFailure() throws Exception {
-
-        List<ValidationError> validationErrors = new ArrayList<>();
-        validationErrors.add(new ValidationError());
-
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(validationErrors);
-
-        this.mockMvc.perform(post(APPROVAL_PATH))
-                .andExpect(status().isOk())
-                .andExpect(view().name(APPROVAL_VIEW))
-                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
-    }
-
-    @Test
     @DisplayName("Post approval api validation failure path")
     void postRequestApiValidationFailure() throws Exception {
-
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
 
         List<ValidationError> validationErrors = new ArrayList<>();
         validationErrors.add(new ValidationError());
@@ -147,22 +141,34 @@ public class ApprovalControllerTests {
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(validationErrors);
 
-        this.mockMvc.perform(post(APPROVAL_PATH))
+        this.mockMvc.perform(post(APPROVAL_PATH)
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(APPROVAL_VIEW))
                 .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
     }
 
     @Test
+    @DisplayName("Post request with BindingResult errors")
+    void postRequestBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(APPROVAL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(APPROVAL_VIEW));
+
+    }
+
+    @Test
     @DisplayName("Post approval submit approval exception failure path")
     void postRequestSubmitApprovalExceptionFailure() throws Exception {
 
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
+
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenThrow(ServiceException.class);
 
-        this.mockMvc.perform(post(APPROVAL_PATH))
+        this.mockMvc.perform(post(APPROVAL_PATH)
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -171,14 +177,13 @@ public class ApprovalControllerTests {
     @DisplayName("Post approval close transaction exception failure path")
     void postRequestCloseTransactionExceptionFailure() throws Exception {
 
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
-
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
         doThrow(ServiceException.class).when(transactionService).closeTransaction(TRANSACTION_ID);
 
-        this.mockMvc.perform(post(APPROVAL_PATH))
+        this.mockMvc.perform(post(APPROVAL_PATH)
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -187,14 +192,13 @@ public class ApprovalControllerTests {
     @DisplayName("Post approval success path for non-payable transaction")
     void postRequestSuccessForNonPayableTransaction() throws Exception {
 
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
-
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
         when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(false);
 
-        this.mockMvc.perform(post(APPROVAL_PATH))
+        this.mockMvc.perform(post(APPROVAL_PATH)
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + CONFIRMATION_VIEW));
     }
@@ -203,8 +207,6 @@ public class ApprovalControllerTests {
     @DisplayName("Post approval success path for payable transaction")
     void postRequestSuccessForPayableTransaction() throws Exception {
 
-        when(approvalService.validateApprovalDate(any(Approval.class))).thenReturn(new ArrayList<>());
-
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
@@ -212,7 +214,8 @@ public class ApprovalControllerTests {
 
         when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)).thenReturn(PAYMENT_WEB_ENDPOINT);
 
-        this.mockMvc.perform(post(APPROVAL_PATH))
+        this.mockMvc.perform(post(APPROVAL_PATH)
+                .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT));
     }

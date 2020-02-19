@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title id="page-title-heading">
+        Political and charitable donations
+    </title>
+</head>
+<div id="politicalAndCharitableDonations-main-content" layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form id="politicalAndCharitableDonations-form" class="form" th:action="@{''}" th:object="${politicalAndCharitableDonations}" method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                <div class="govuk-form-group govuk-form-group-block-important"
+                     th:classappend="${#fields.hasErrors('politicalAndCharitableDonationsDetails')} ? 'govuk-form-group--error' : ''">
+
+                    <label id="politicalAndCharitableDonationsDetails-heading" class="govuk-label govuk-label--l" for="politicalAndCharitableDonationsDetails">
+                        Enter your directors' report political and charitable donations information
+                    </label>
+
+                    <span class="govuk-error-message"
+                          id="politicalAndCharitableDonationsDetails-errorId"
+                          th:if="${#fields.hasErrors('politicalAndCharitableDonationsDetails')}"
+                          th:each="e : ${#fields.errors('politicalAndCharitableDonationsDetails')}" th:text="${e}">
+            </span>
+
+                    <textarea class="govuk-textarea"
+                              id="politicalAndCharitableDonationsDetails"
+                              th:field="*{politicalAndCharitableDonationsDetails}"
+                              rows="5">
+            </textarea>
+                </div>
+
+                <input id="next-button" class="govuk-button piwik-event" data-event-id="Political and charitable donations - save and continue"
+                       type="submit" role="button" value="Save and continue"/>
+
+            </form>
+        </div>
+    </div>
+</div>
+</html>
