@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employ
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.EmployeesValidator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
@@ -31,9 +32,6 @@ public class EmployeesController extends BaseController {
     @Autowired
     private EmployeesService employeesService;
 
-    @Autowired
-    private HttpServletRequest request;
-
     @Override
     protected String getTemplateName() {
         return "smallfull/employees";
@@ -43,7 +41,7 @@ public class EmployeesController extends BaseController {
     public String getEmployees(
             @PathVariable String companyNumber,
             @PathVariable String transactionId, @PathVariable String companyAccountsId,
-            Model model) {
+            Model model, HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -66,7 +64,7 @@ public class EmployeesController extends BaseController {
             @PathVariable String transactionId,
             @PathVariable String companyAccountsId,
             @ModelAttribute("employees") @Valid Employees employees,
-            BindingResult bindingResult, Model model) {
+            BindingResult bindingResult, Model model, HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
