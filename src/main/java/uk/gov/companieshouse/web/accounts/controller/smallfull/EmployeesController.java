@@ -29,8 +29,7 @@ import java.util.List;
 @PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/employees")
-public class EmployeesController extends BaseController implements
-        ConditionalController {
+public class EmployeesController extends BaseController {
 
     @Autowired
     private EmployeesService employeesService;
@@ -100,7 +99,6 @@ public class EmployeesController extends BaseController implements
                 companyAccountsId);
     }
 
-    @Override
     public boolean willRender(String companyNumber, String transactionId, String
             companyAccountsId)
             throws ServiceException {
