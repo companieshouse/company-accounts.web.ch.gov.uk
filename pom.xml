@@ -3,7 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>uk.gov.companieshouse</groupId>
     <artifactId>company-accounts.web.ch.gov.uk</artifactId>
     <version>unversioned</version>
     <packaging>jar</packaging>
@@ -51,7 +50,7 @@
         <junit-jupiter-engine.version>5.2.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>2.18.0</mockito-junit-jupiter.version>
 
-        <spring-security-core.version>5.0.12.RELEASE</spring-security-core.version>
+        <spring-security-core.version>5.2.1.RELEASE</spring-security-core.version>
 
         <spring-test.version>4.3.3.RELEASE</spring-test.version>
 
@@ -60,19 +59,6 @@
         <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
         <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
         <junit-platform-surefire-provider.version>1.2.0</junit-platform-surefire-provider.version>
-
-        <!-- Sonar -->
-        <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
-        <sonar.host.url>${CODE_ANALYSIS_HOST_URL}</sonar.host.url>
-        <sonar.login>${CODE_ANALYSIS_LOGIN}</sonar.login>
-        <sonar.password>${CODE_ANALYSIS_PASSWORD}</sonar.password>
-
-        <!-- Jacoco -->
-        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
-
-        <!-- Repositories -->
-        <artifactoryResolveSnapshotRepo>libs-snapshot-local</artifactoryResolveSnapshotRepo>
-        <artifactoryResolveReleaseRepo>libs-release-local</artifactoryResolveReleaseRepo>
     </properties>
 
     <dependencies>
@@ -275,39 +261,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>default-prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>default-report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>ch-artifactory-release</id>
-            <url>${MAVEN_REPOSITORY_URL}/${artifactoryResolveReleaseRepo}</url>
-        </repository>
-        <repository>
-            <id>ch-artifactory-snapshot</id>
-            <url>${MAVEN_REPOSITORY_URL}/${artifactoryResolveSnapshotRepo}</url>
-        </repository>
-    </repositories>
-
 
 </project>
