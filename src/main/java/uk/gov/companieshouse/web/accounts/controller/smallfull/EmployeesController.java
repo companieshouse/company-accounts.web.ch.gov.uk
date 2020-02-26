@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
-import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.EmployeesValidator;
@@ -26,11 +23,10 @@ import java.util.List;
 
 @Controller
 @NextController(IntangibleAssetsNoteController.class)
-@PreviousController(EmployeesQuestionController.class)
+@PreviousController(OtherAccountingPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/employees")
-public class EmployeesController extends BaseController implements
-        ConditionalController {
+public class EmployeesController extends BaseController {
 
     @Autowired
     private EmployeesService employeesService;
@@ -100,12 +96,4 @@ public class EmployeesController extends BaseController implements
                 companyAccountsId);
     }
 
-    @Override
-    public boolean willRender(String companyNumber, String transactionId, String
-            companyAccountsId)
-            throws ServiceException {
-
-        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return BooleanUtils.isTrue(companyAccountsDataState.getHasSelectedEmployeesNote());
-    }
 }
