@@ -51,18 +51,6 @@ public class EmployeesControllerTest {
     @Mock
     private NavigatorService mockNavigatorService;
 
-    @Mock
-    private MockHttpServletRequest mockHttpServletRequest;
-
-    @Mock
-    private MockHttpSession mockHttpSession;
-
-    @Mock
-    private Model mockModel;
-
-    @Mock
-    private Employees mockEmployees;
-
     @InjectMocks
     private EmployeesController controller;
 
@@ -189,43 +177,4 @@ public class EmployeesControllerTest {
             .andExpect(view().name(EMPLOYEES_VIEW));
     }
 
-    @Test
-    @DisplayName("Test will render with selected employees note")
-    void willRenderWithSelectedEmployeesNote() throws Exception {
-
-        CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
-        companyAccountsDataState.setHasSelectedEmployeesNote(true);
-
-        when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
-        when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
-        .thenReturn(companyAccountsDataState);
-
-        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("Test will not render with unselected employees note")
-    void willNotRenderWithUnselectedEmployeesNote() throws Exception {
-        CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
-        companyAccountsDataState.setHasSelectedEmployeesNote(false);
-
-        when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
-        when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
-        .thenReturn(companyAccountsDataState);
-
-        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("Test will not render without employees note")
-    void willNotRenderWithoutEmployeesNote() throws Exception {
-        CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
-        companyAccountsDataState.setHasSelectedEmployeesNote(null);
-
-        when(mockHttpServletRequest.getSession()).thenReturn(mockHttpSession);
-        when(mockHttpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE))
-            .thenReturn(companyAccountsDataState);
-
-        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
-    }
 }
