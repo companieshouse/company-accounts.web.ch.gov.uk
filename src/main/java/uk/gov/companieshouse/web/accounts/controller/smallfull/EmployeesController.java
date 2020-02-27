@@ -16,8 +16,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.EmployeesValidator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
@@ -67,9 +65,6 @@ public class EmployeesController extends BaseController {
             BindingResult bindingResult, Model model, HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
-
-        EmployeesValidator employeesValidator = new EmployeesValidator();
-        employeesValidator.validate(employees, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();

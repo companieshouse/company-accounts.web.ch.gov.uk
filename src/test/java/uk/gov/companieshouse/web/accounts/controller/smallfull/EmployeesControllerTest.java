@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.accounts.controller.smallfull.EmployeesController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
@@ -154,27 +153,6 @@ public class EmployeesControllerTest {
 
         this.mockMvc.perform(post(EMPLOYEES_PATH)
             .param(beanElement, invalidData))
-            .andExpect(status().isOk())
-            .andExpect(view().name(EMPLOYEES_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
-    }
-    
-    @Test
-    @DisplayName("Post employees without populated values")
-    void postRequestWithEmptyNoteReturnsBindingResultErrors() throws Exception {
-
-        this.mockMvc.perform(post(EMPLOYEES_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(EMPLOYEES_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
-    }
-    
-    @Test
-    @DisplayName("Post employees with just blank details")
-    void postRequestWithOnlyBlankDetailsReturnsBindingResultErrors() throws Exception {
-
-        this.mockMvc.perform(post(EMPLOYEES_PATH)
-            .param("details", ""))
             .andExpect(status().isOk())
             .andExpect(view().name(EMPLOYEES_VIEW))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
