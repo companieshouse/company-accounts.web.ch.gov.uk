@@ -9,6 +9,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Averag
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.EmployeesTransformer;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 @Component
 public class EmployeesTransformerImpl implements EmployeesTransformer {
 
@@ -74,12 +77,21 @@ public class EmployeesTransformerImpl implements EmployeesTransformer {
     }
 
     private void setPreviousPeriodEmployeesOnApiModel(Employees employees, EmployeesApi employeesApi) {
-        PreviousPeriod previousPeriod = new PreviousPeriod();
 
-        if (employees.getAverageNumberOfEmployees() != null && employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees() != null) {
-            previousPeriod.setAverageNumberOfEmployees(employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees());
+        if (hasPreviousPeriodEmployees(employees)) {
+            PreviousPeriod previousPeriod = new PreviousPeriod();
+
+            if (employees.getAverageNumberOfEmployees() != null && employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees() != null) {
+                previousPeriod.setAverageNumberOfEmployees(employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees());
+            }
+
+            employeesApi.setPreviousPeriod(previousPeriod);
         }
+    }
 
-        employeesApi.setPreviousPeriod(previousPeriod);
+    private boolean hasPreviousPeriodEmployees(Employees employees) {
+
+        return Stream.of(employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees()
+                ).anyMatch(Objects::nonNull);
     }
 }

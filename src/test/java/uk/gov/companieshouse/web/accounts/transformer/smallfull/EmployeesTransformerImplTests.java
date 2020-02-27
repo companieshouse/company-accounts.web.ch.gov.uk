@@ -12,6 +12,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.EmployeesTr
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
 
 public class EmployeesTransformerImplTests {
     
@@ -125,6 +126,10 @@ public class EmployeesTransformerImplTests {
 
         Employees employees = new Employees();
         employees.setDetails("");
+
+        AverageNumberOfEmployees averageNumberOfEmployees = new AverageNumberOfEmployees();
+
+        employees.setAverageNumberOfEmployees(averageNumberOfEmployees);
 
         EmployeesApi employeesApi = transformer.getEmployeesApi(employees);
 
