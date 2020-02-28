@@ -69,7 +69,7 @@ public class CICStepsToCompleteControllerTests {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    private static final String TRANSACTION_DESCRIPTION = "CIC Report and Small Full Accounts";
+    private static final String TRANSACTION_DESCRIPTION = "CIC report and full accounts";
 
     @BeforeEach
     private void setup() {
