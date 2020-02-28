@@ -82,6 +82,10 @@ public class ApprovalController extends BaseController {
             Approval approval = new Approval();
             approval.setApproverOptions(approverOptions);
 
+            if (approverOptions.size() == 1) {
+                approval.setDirectorName(approverOptions.get(0));
+            }
+
             model.addAttribute(APPROVAL, approval);
 
 
