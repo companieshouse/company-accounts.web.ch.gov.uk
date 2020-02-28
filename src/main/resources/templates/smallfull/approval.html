@@ -30,7 +30,7 @@
             </label>
 
 
-            <th:block th:if="*{approverOptions != null and approverOptions.size() >= 1}">
+            <th:block th:if="*{approverOptions != null and approverOptions.size() > 1}">
 
               <span class="govuk-error-message"
                     id="directorName-errorId"
@@ -55,6 +55,27 @@
                 <input type="hidden" th:field="*{approverOptions[__${stat.index}__]}" th:id="approverOptions[__${stat.index}__]"/>
               </div>
               
+            </th:block>
+
+            <th:block th:if="*{approverOptions != null and approverOptions.size() == 1}">
+              <h2 id="directorsReportApproval-director-heading" class="govuk-heading-l">
+                Officer who approved the accounts
+              </h2>
+
+              <dl class="app-check-your-answers app-check-your-answers--very-long">
+                <div class="app-check-your-answers__contents">
+                  <dt class="app-check-your-answers__question" th:text="*{directorName}" th:id="0-label"></dt>
+                  <dd class="app-check-your-answers__change">
+                    <a id="director-change-link"
+                       th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
+                       class="govuk-body piwik-event"
+                       data-event-id="Change director">
+                      Change
+                    </a>
+                  </dd>
+                </div>
+                <input th:field="*{directorName}" type="hidden">
+              </dl>
             </th:block>
 
             <th:block th:if="*{approverOptions == null or approverOptions.size() == 0}">
