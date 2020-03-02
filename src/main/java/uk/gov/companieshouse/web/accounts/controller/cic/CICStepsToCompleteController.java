@@ -52,7 +52,7 @@ public class CICStepsToCompleteController extends BaseController {
 
         try {
             String transactionId = transactionService.createTransactionWithDescription(companyNumber,
-                    "CIC Report and Small Full Accounts");
+                    "CIC report and full accounts");
 
             String companyAccountsId = companyAccountsService.createCompanyAccounts(transactionId);
 

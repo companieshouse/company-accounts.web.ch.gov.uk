@@ -34,7 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public String createTransaction(String companyNumber) throws ServiceException {
 
-        return createTransactionWithDescription(companyNumber, "Small Full Accounts");
+        return createTransactionWithDescription(companyNumber, "Full accounts");
     }
 
     /**
