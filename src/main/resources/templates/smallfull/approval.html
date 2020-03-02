@@ -58,9 +58,10 @@
             </th:block>
 
             <th:block th:if="*{approverOptions != null and approverOptions.size() == 1}">
-              <h2 id="directorsReportApproval-director-heading" class="govuk-heading-l">
+
+              <label id="approval-director-heading" class="govuk-label govuk-label--m" for="approval-director">
                 Officer who approved the accounts
-              </h2>
+              </label>
 
               <dl class="app-check-your-answers app-check-your-answers--very-long">
                 <div class="app-check-your-answers__contents">
