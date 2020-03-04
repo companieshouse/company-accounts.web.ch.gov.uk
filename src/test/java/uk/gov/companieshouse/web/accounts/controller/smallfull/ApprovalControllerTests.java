@@ -25,6 +25,8 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -129,6 +131,26 @@ public class ApprovalControllerTests {
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Get approval - approver options is equal to 1")
+    void getRequestApproverOptionsIsOne() throws Exception {
+
+        Director director = new Director();
+        director.setName(DIRECTOR_NAME);
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Director[]{director});
+
+        this.mockMvc.perform(get(APPROVAL_PATH))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute(APPROVAL_MODEL_ATTR, hasProperty(DIRECTOR_NAME, is(DIRECTOR_NAME))))
+                .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
+                .andExpect(model().attributeExists(TRANSACTION_ID_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR))
+                .andExpect(model().attributeExists(IS_PAYABLE_TRANSACTION_ATTR));
+
     }
 
     @Test
