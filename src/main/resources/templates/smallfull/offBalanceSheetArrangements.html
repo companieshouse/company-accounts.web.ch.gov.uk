@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Off balance sheet arrangements
+  </title>
+</head>
+<div id="offBalanceSheetArrangements-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="offBalanceSheetArrangements-form" class="form" th:action="@{''}" th:object="${offBalanceSheetArrangements}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group govuk-form-group-block-important"
+             th:classappend="${#fields.hasErrors('offBalanceSheetArrangementsDetails')} ? 'govuk-form-group--error' : ''">
+
+            <label id="offBalanceSheetArrangements-heading" class="govuk-label govuk-label--l" for="offBalanceSheetArrangementsDetails">
+              Enter your 'off balance sheet arrangements' information
+            </label>
+
+            <span class="govuk-error-message"
+                  id="offBalanceSheetArrangementsDetails-errorId"
+                  th:if="${#fields.hasErrors('offBalanceSheetArrangementsDetails')}"
+                  th:each="e : ${#fields.errors('offBalanceSheetArrangementsDetails')}" th:text="${e}">
+            </span>
+
+            <textarea class="govuk-textarea"
+                      id="offBalanceSheetArrangementsDetails"
+                      th:field="*{offBalanceSheetArrangementsDetails}"
+                      rows="5">
+            </textarea>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Off balance sheet arrangements - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>

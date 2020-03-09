@@ -80,7 +80,7 @@ public class OffBalanceSheetArrangementsServiceImpl implements OffBalanceSheetAr
 
         OffBalanceSheetApi offBalanceSheetApi = transformer.getOffBalanceSheetArrangementsApi(arrangements);
 
-        boolean offBalanceSheetArrangementsResourceExists = StringUtils.isNotBlank(smallFullApi.getLinks().getOffBalanceSheetArrangements());
+        boolean offBalanceSheetArrangementsResourceExists = StringUtils.isNotBlank(smallFullApi.getLinks().getOffBalanceSheetArrangementsNote());
 
         try {
             ApiResponse apiResponse;
@@ -110,7 +110,7 @@ public class OffBalanceSheetArrangementsServiceImpl implements OffBalanceSheetAr
 
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
-        if (StringUtils.isNotBlank(smallFullApi.getLinks().getOffBalanceSheetArrangements())) {
+        if (StringUtils.isNotBlank(smallFullApi.getLinks().getOffBalanceSheetArrangementsNote())) {
 
             String uri = OFF_BALANCE_SHEET_ARRANGEMENTS_URI.expand(transactionId, companyAccountsId)
                     .toString();

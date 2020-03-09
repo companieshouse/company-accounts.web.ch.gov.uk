@@ -23,7 +23,7 @@ public class OffBalanceSheetArrangementsTransformerImplTest {
         OffBalanceSheetArrangements arrangements = transformer.getOffBalanceSheetArrangements(null);
 
         assertNotNull(arrangements);
-        assertNull(arrangements.getDetails());
+        assertNull(arrangements.getOffBalanceSheetArrangementsDetails());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class OffBalanceSheetArrangementsTransformerImplTest {
         OffBalanceSheetArrangements arrangements = transformer.getOffBalanceSheetArrangements(offBalanceSheetApi);
 
         assertNotNull(arrangements);
-        assertEquals(DETAILS, arrangements.getDetails());
+        assertEquals(DETAILS, arrangements.getOffBalanceSheetArrangementsDetails());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class OffBalanceSheetArrangementsTransformerImplTest {
     void getOffBalanceSheetArrangementsApi() {
 
         OffBalanceSheetArrangements arrangements = new OffBalanceSheetArrangements();
-        arrangements.setDetails(DETAILS);
+        arrangements.setOffBalanceSheetArrangementsDetails(DETAILS);
 
         OffBalanceSheetApi offBalanceSheetApi = transformer.getOffBalanceSheetArrangementsApi(arrangements);
 

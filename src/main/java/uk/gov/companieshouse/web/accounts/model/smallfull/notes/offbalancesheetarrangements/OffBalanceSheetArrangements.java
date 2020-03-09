@@ -9,13 +9,13 @@ public class OffBalanceSheetArrangements {
 
     @NotBlank(message = "{offBalanceSheetArrangements.details.missing}")
     @ValidationMapping("$.off_balance_sheet_arrangements.details")
-    private String details;
+    private String offBalanceSheetArrangementsDetails;
 
-    public String getDetails() {
-        return details;
+    public String getOffBalanceSheetArrangementsDetails() {
+        return offBalanceSheetArrangementsDetails;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setOffBalanceSheetArrangementsDetails(String offBalanceSheetArrangementsDetails) {
+        this.offBalanceSheetArrangementsDetails = offBalanceSheetArrangementsDetails;
     }
 }
