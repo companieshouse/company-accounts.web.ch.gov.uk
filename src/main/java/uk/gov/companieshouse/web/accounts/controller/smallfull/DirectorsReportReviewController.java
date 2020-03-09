@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 

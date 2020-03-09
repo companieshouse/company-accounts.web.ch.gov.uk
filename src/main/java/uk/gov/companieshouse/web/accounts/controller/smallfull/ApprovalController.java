@@ -20,12 +20,10 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 

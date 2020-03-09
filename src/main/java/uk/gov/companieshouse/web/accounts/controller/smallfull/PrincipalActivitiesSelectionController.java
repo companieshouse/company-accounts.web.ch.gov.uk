@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
