@@ -1394,6 +1394,32 @@
     </div>
     <!-- End Creditors After One Year Note -->
 
+    <!-- Start Off Balance Sheet Arrangements -->
+
+    <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                      description = 'Off Balance Sheet Arrangements',
+                      identifier = 'off-balance-sheet-arrangements',
+                      resource = 'off-balance-sheet-arrangements',
+                      marginTop = true)">
+    </div>
+
+    <dl class="app-check-your-answers app-check-your-answers--short">
+      <div class="app-check-your-answers__contents">
+        < class="app-check-your-answers__answer">
+          <p id="review-offBalanceSheetArrangements"
+             th:utext="*{offBalanceSheetArrangements.}"
+          >
+
+
+        </p>
+        </dt>
+      </div>
+    </dl>
+
+
+
+    <!-- End Off Balance Sheet Arrangements -->
+
     <div class="govuk-form-group">
       <input id="next-button" class="govuk-button piwik-event" data-event-id="CYA - Save and continue" type="submit" role="button" value="Continue"/>
     </div>
