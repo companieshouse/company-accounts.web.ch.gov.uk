@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(OffBalanceSheetArrangementsQuestionController.class)
 @PreviousController(CreditorsWithinOneYearController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/creditors-after-more-than-one-year")
