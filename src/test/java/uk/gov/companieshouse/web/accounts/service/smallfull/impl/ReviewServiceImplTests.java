@@ -25,6 +25,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -37,6 +38,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.OffBalanceSheetArrangementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -114,6 +116,9 @@ public class ReviewServiceImplTests {
     @Mock
     private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
 
+    @Mock
+    private OffBalanceSheetArrangementsService OffBalanceSheetArrangementsService;
+
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
 
@@ -187,6 +192,10 @@ public class ReviewServiceImplTests {
         when(currentAssetsInvestmentsService.getCurrentAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
                 .thenReturn(mockCurrentAssetsInvestments);
 
+        OffBalanceSheetArrangements mockOffBalanceSheetArrangements = new OffBalanceSheetArrangements();
+        when(OffBalanceSheetArrangementsService.getOffBalanceSheetArrangements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(mockOffBalanceSheetArrangements);
+
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(review);
@@ -208,5 +217,6 @@ public class ReviewServiceImplTests {
         assertEquals(mockStocks, review.getStocks());
         assertEquals(mockFixedAssetsInvestments, review.getFixedAssetsInvestments());
         assertEquals(mockCurrentAssetsInvestments, review.getCurrentAssetsInvestments());
+        assertEquals(mockOffBalanceSheetArrangements, review.getOffBalanceSheetArrangements());
     }
 }
