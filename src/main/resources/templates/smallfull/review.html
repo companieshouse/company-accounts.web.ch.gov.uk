@@ -1396,22 +1396,26 @@
 
     <!-- Start Off Balance Sheet Arrangements -->
 
-    <div th:replace="fragments/review/sectionHeader :: sectionHeader (
-                      description = 'Off balance sheet arrangements',
-                      identifier = 'off-balance-sheet-arrangements',
-                      resource = 'off-balance-sheet-arrangements-question',
-                      marginTop = true)">
-    </div>
-
-    <dl class="app-check-your-answers app-check-your-answers--short">
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__answer">
-          <p id="review-offBalanceSheetArrangements"
-             th:utext="*{offBalanceSheetArrangementsDetails}">
-        </p>
-        </dt>
+    <div th:if="*{offBalanceSheetArrangements.offBalanceSheetArrangementsDetails != null}">
+      <div
+              th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Off balance sheet arrangements',
+                        identifier= 'off-balance-sheet-arrangements',
+                        resource = 'off-balance-sheet-arrangements-question',
+                        marginTop = true
+                        )">
       </div>
-    </dl>
+
+      <dl class="app-check-your-answers app-check-your-answers--short">
+        <div class="app-check-your-answers__contents">
+          <dt class="app-check-your-answers__answer">
+            <p id="review-off-balance-sheet-arrangements"
+               th:utext="*{#strings.replace(offBalanceSheetArrangements.offBalanceSheetArrangementsDetails,'&#10;','&lt;br&gt;')}">
+            </p>
+          </dt>
+        </div>
+      </dl>
+    </div>
 
     <!-- End Off Balance Sheet Arrangements -->
 
