@@ -19,7 +19,7 @@ public class OffBalanceSheetArrangementsTransformerImpl implements
             return arrangements;
         }
 
-        arrangements.setDetails(offBalanceSheetApi.getDetails());
+        arrangements.setOffBalanceSheetArrangementsDetails(offBalanceSheetApi.getDetails());
         return arrangements;
     }
 
@@ -29,7 +29,7 @@ public class OffBalanceSheetArrangementsTransformerImpl implements
 
         OffBalanceSheetApi offBalanceSheetApi = new OffBalanceSheetApi();
 
-        offBalanceSheetApi.setDetails(offBalanceSheetArrangements.getDetails());
+        offBalanceSheetApi.setDetails(offBalanceSheetArrangements.getOffBalanceSheetArrangementsDetails());
 
         return offBalanceSheetApi;
     }

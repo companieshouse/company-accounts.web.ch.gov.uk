@@ -100,7 +100,7 @@ public class OffBalanceSheetArrangementsQuestionControllerTest {
         when(offBalanceSheetArrangementsService.getOffBalanceSheetArrangements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(offBalanceSheetArrangements);
 
-        when(offBalanceSheetArrangements.getDetails()).thenReturn(ARRANGEMENTS);
+        when(offBalanceSheetArrangements.getOffBalanceSheetArrangementsDetails()).thenReturn(ARRANGEMENTS);
 
         mockMvc.perform(get(OFF_BALANCE_SHEET_ARRANGEMENTS_QUESTION_PATH))
                 .andExpect(status().isOk())
@@ -120,7 +120,7 @@ public class OffBalanceSheetArrangementsQuestionControllerTest {
         when(offBalanceSheetArrangementsService.getOffBalanceSheetArrangements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(offBalanceSheetArrangements);
 
-        when(offBalanceSheetArrangements.getDetails()).thenReturn(null);
+        when(offBalanceSheetArrangements.getOffBalanceSheetArrangementsDetails()).thenReturn(null);
 
         when(request.getSession()).thenReturn(httpSession);
 

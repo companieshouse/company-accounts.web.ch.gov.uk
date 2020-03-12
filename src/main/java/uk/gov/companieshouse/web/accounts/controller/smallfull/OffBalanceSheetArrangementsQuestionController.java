@@ -21,7 +21,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OffBalanceSheetArrangementsService;
 
 @Controller
-@NextController(ReviewController.class)
+@NextController(OffBalanceSheetArrangementsController.class)
 @PreviousController(CreditorsAfterOneYearController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/off-balance-sheet-arrangements-question")
 public class OffBalanceSheetArrangementsQuestionController extends BaseController {
@@ -47,7 +47,7 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
         try {
             if (StringUtils.isNotBlank(offBalanceSheetArrangementsService
                     .getOffBalanceSheetArrangements(transactionId, companyAccountsId)
-                            .getDetails())) {
+                            .getOffBalanceSheetArrangementsDetails())) {
 
                 offBalanceSheetArrangementsQuestion.setHasIncludedOffBalanceSheetArrangements(true);
             } else {

@@ -199,7 +199,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(null);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(null);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -228,7 +228,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(null);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(null);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -260,7 +260,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(null);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(null);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -289,7 +289,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(null);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(null);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -318,7 +318,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -347,7 +347,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -379,7 +379,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -408,7 +408,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetArrangementsTransformer.getOffBalanceSheetArrangementsApi(offBalanceSheetArrangements))
                 .thenReturn(offBalanceSheetApi);
@@ -437,7 +437,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetResourceHandler.delete(OFF_BALANCE_SHEET_ARRANGEMENTS_URI))
                 .thenReturn(offBalanceSheetDelete);
@@ -459,7 +459,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetResourceHandler.delete(OFF_BALANCE_SHEET_ARRANGEMENTS_URI))
                 .thenReturn(offBalanceSheetDelete);
@@ -485,7 +485,7 @@ public class OffBalanceSheetArrangementsServiceImplTest {
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
 
-        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetResourceHandler.delete(OFF_BALANCE_SHEET_ARRANGEMENTS_URI))
                 .thenReturn(offBalanceSheetDelete);
