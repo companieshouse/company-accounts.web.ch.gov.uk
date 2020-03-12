@@ -108,14 +108,20 @@ public class OffBalanceSheetArrangementsServiceImpl implements OffBalanceSheetAr
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        String uri = OFF_BALANCE_SHEET_ARRANGEMENTS_URI.expand(transactionId, companyAccountsId).toString();
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
-        try {
-            apiClient.smallFull().offBalanceSheet().delete(uri).execute();
-        } catch (URIValidationException e) {
-            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
-        } catch (ApiErrorResponseException e) {
-            serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
+        if (StringUtils.isNotBlank(smallFullApi.getLinks().getOffBalanceSheetArrangements())) {
+
+            String uri = OFF_BALANCE_SHEET_ARRANGEMENTS_URI.expand(transactionId, companyAccountsId)
+                    .toString();
+
+            try {
+                apiClient.smallFull().offBalanceSheet().delete(uri).execute();
+            } catch (URIValidationException e) {
+                serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+            } catch (ApiErrorResponseException e) {
+                serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
+            }
         }
     }
 }

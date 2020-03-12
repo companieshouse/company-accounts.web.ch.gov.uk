@@ -430,7 +430,14 @@ public class OffBalanceSheetArrangementsServiceImplTest {
     @Test
     @DisplayName("Delete off balance sheet arrangements - success")
     void deleteOffBalanceSheetArrangementsSuccess()
-            throws ApiErrorResponseException, URIValidationException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetResourceHandler.delete(OFF_BALANCE_SHEET_ARRANGEMENTS_URI))
                 .thenReturn(offBalanceSheetDelete);
@@ -446,6 +453,13 @@ public class OffBalanceSheetArrangementsServiceImplTest {
     @DisplayName("Delete off balance sheet arrangements - ApiErrorResponseException")
     void deleteOffBalanceSheetArrangementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetResourceHandler.delete(OFF_BALANCE_SHEET_ARRANGEMENTS_URI))
                 .thenReturn(offBalanceSheetDelete);
@@ -465,6 +479,13 @@ public class OffBalanceSheetArrangementsServiceImplTest {
     @DisplayName("Delete off balance sheet arrangements - URIValidationException")
     void deleteOffBalanceSheetArrangementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(smallFullLinks.getOffBalanceSheetArrangements()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_LINK);
 
         when(offBalanceSheetResourceHandler.delete(OFF_BALANCE_SHEET_ARRANGEMENTS_URI))
                 .thenReturn(offBalanceSheetDelete);

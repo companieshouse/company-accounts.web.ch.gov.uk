@@ -13,6 +13,13 @@
         </h1>
     </legend>
 
+    <span class="govuk-hint"
+          th:id="${radioButtonsFieldName} + '-hint'"
+          th:if="${hint != null}"
+          th:text="${hint}">
+    </span>
+
+
     <span class="govuk-error-message"
           th:id="${radioButtonsFieldName} + '-errorId'"
           th:if="${#fields.hasErrors('__${radioButtonsFieldName}__')}"
