@@ -20,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -32,6 +33,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.OffBalanceSheetArrangementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
@@ -99,6 +101,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
 
+    @Autowired
+    private OffBalanceSheetArrangementsService offBalanceSheetArrangementsService;
+
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
         ProfitAndLoss profitAndLoss = profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber);
@@ -143,6 +148,9 @@ public class ReviewServiceImpl implements ReviewService {
         CurrentAssetsInvestments currentAssetsInvestments =
                 currentAssetsInvestmentsService.getCurrentAssetsInvestments(transactionId, companyAccountsId, companyNumber);
 
+        OffBalanceSheetArrangements offBalanceSheetArrangements =
+                offBalanceSheetArrangementsService.getOffBalanceSheetArrangements(transactionId, companyAccountsId);
+
         Review review = new Review();
         review.setProfitAndLoss(profitAndLoss);
         review.setBalanceSheet(balanceSheet);
@@ -162,6 +170,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setStocks(stocks);
         review.setFixedAssetsInvestments(fixedAssetsInvestments);
         review.setCurrentAssetsInvestments(currentAssetsInvestments);
+        review.setOffBalanceSheetArrangements(offBalanceSheetArrangements);
 
         return review;
     }

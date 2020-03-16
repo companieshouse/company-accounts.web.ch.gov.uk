@@ -13,6 +13,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinv
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
@@ -54,6 +55,16 @@ public class Review {
     private CurrentAssetsInvestments currentAssetsInvestments;
 
     private ProfitAndLoss profitAndLoss;
+
+    private OffBalanceSheetArrangements offBalanceSheetArrangements;
+
+    public OffBalanceSheetArrangements getOffBalanceSheetArrangements() {
+        return offBalanceSheetArrangements;
+    }
+
+    public void setOffBalanceSheetArrangements(OffBalanceSheetArrangements offBalanceSheetArrangements) {
+        this.offBalanceSheetArrangements = offBalanceSheetArrangements;
+    }
 
     public BalanceSheet getBalanceSheet() {
         return balanceSheet;
