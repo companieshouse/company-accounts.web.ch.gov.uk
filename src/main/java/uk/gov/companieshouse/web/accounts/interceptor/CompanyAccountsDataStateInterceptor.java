@@ -130,6 +130,7 @@ public class CompanyAccountsDataStateInterceptor extends HandlerInterceptorAdapt
                 String token = tokenManager.createJWT(companyAccountsDataStates);
                 stateCookie.setValue(token);
                 stateCookie.setPath("/");
+                stateCookie.setHttpOnly(true);
                 stateCookie.setMaxAge(COOKIE_EXPIRY);
 
                 // Add the cookie to the response to save it
