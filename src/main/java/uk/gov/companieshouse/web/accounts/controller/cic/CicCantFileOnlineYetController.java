@@ -24,7 +24,7 @@ public class CicCantFileOnlineYetController extends BaseController {
     private static final UriTemplate LINK_URL_COMP_NUM = new UriTemplate("/accounts/cic/{companyNumber}/cics-file-paper");
 
     @GetMapping
-    String getCantFileOnlineYetRequest(@RequestParam("backLink") String backLink, @RequestParam("accountType") String accountType, @PathVariable Optional<String> companyNumber, Model model) {
+    public String getCantFileOnlineYetRequest(@RequestParam("backLink") String backLink, @RequestParam("accountType") String accountType, @PathVariable Optional<String> companyNumber, Model model) {
 
         if(companyNumber.isPresent()) {
             model.addAttribute("link", LINK_URL_COMP_NUM.expand(companyNumber.get()));
