@@ -4,10 +4,10 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class FinanceLeasesAndHirePurchaseContracts {
 
-    @ValidationMapping("$.creditors_after_one_year.current_period.finance_leases_and_hire_purchase_contracts")
+    @ValidationMapping("$.creditors_after_more_than_one_year.current_period.finance_leases_and_hire_purchase_contracts")
     private Long currentFinanceLeasesAndHirePurchaseContracts;
 
-    @ValidationMapping("$.creditors_after_one_year.previous_period.finance_leases_and_hire_purchase_contracts")
+    @ValidationMapping("$.creditors_after_more_than_one_year.previous_period.finance_leases_and_hire_purchase_contracts")
     private Long previousFinanceLeasesAndHirePurchaseContracts;
 
     public Long getCurrentFinanceLeasesAndHirePurchaseContracts() {

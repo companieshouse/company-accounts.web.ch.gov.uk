@@ -4,10 +4,10 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class BankLoansAndOverdrafts {
 
-    @ValidationMapping("$.creditors_after_one_year.current_period.bank_loans_and_overdrafts")
+    @ValidationMapping("$.creditors_after_more_than_one_year.current_period.bank_loans_and_overdrafts")
     private Long currentBankLoansAndOverdrafts;
 
-    @ValidationMapping("$.creditors_after_one_year.previous_period.bank_loans_and_overdrafts")
+    @ValidationMapping("$.creditors_after_more_than_one_year.previous_period.bank_loans_and_overdrafts")
     private Long previousBankLoansAndOverdrafts;
 
     public Long getCurrentBankLoansAndOverdrafts() {

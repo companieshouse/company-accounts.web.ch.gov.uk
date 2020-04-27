@@ -9,7 +9,7 @@ public class CreditorsAfterOneYear {
 
     private BalanceSheetHeadings balanceSheetHeadings;
 
-    @ValidationMapping("$.creditors_after_one_year.current_period.details")
+    @ValidationMapping("$.creditors_after_more_than_one_year.current_period.details")
     private String details;
 
     private BankLoansAndOverdrafts bankLoansAndOverdrafts;
