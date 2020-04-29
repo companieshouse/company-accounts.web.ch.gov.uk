@@ -40,12 +40,10 @@ public class CurrentPeriodServiceImpl implements CurrentPeriodService {
                     .get(CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString())
                             .execute().getData();
         } catch (ApiErrorResponseException e) {
-            serviceExceptionHandler.handleRetrievalException(e, CURRENT_PERIOD_RESOURCE);
+            throw new ServiceException("Error retrieving resource: " + CURRENT_PERIOD_RESOURCE, e);
         } catch (URIValidationException e) {
-            serviceExceptionHandler.handleURIValidationException(e, CURRENT_PERIOD_RESOURCE);
+            throw new ServiceException("Invalid URI for resource: " + CURRENT_PERIOD_RESOURCE, e);
         }
-
-        return null;
     }
 
     @Override

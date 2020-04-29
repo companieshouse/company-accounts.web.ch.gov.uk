@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import java.util.ArrayList;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -108,8 +110,8 @@ public class StepsToCompleteController extends BaseController {
 
             ApiClient apiClient = apiClientService.getApiClient();
 
-            SmallFullApi smallFull = smallFullService.getSmallFullAccounts(apiClient, transactionID, companyAccountsID);
-            if (smallFull == null) {
+            CompanyAccountsApi companyAccountsApi = companyAccountsService.getCompanyAccounts(transactionID, companyAccountsID);
+            if (StringUtils.isBlank(companyAccountsApi.getLinks().getSmallFullAccounts())) {
                 smallFullService.createSmallFullAccounts(transactionID, companyAccountsID);
             }
 
@@ -136,7 +138,7 @@ public class StepsToCompleteController extends BaseController {
 
         SmallFullApi smallFull = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
-        if (currentPeriodService.getCurrentPeriod(apiClient, transactionId, companyAccountsId) == null) {
+        if (StringUtils.isBlank(smallFull.getLinks().getCurrentPeriod())) {
 
             currentPeriodService
                     .submitCurrentPeriod(apiClient, smallFull, transactionId, companyAccountsId,
@@ -145,7 +147,7 @@ public class StepsToCompleteController extends BaseController {
 
         CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
         if (companyService.isMultiYearFiler(companyProfile) &&
-            previousPeriodService.getPreviousPeriod(apiClient, transactionId, companyAccountsId) == null) {
+                StringUtils.isBlank(smallFull.getLinks().getPreviousPeriod())) {
 
             previousPeriodService
                     .submitPreviousPeriod(apiClient, smallFull, transactionId,

@@ -24,6 +24,9 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
     private static final UriTemplate CREATE_COMPANY_ACCOUNTS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts");
 
+    private static final UriTemplate GET_COMPANY_ACCOUNTS_URI =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}");
+
     @Override
     public String createCompanyAccounts(String transactionId) throws ServiceException {
 
@@ -49,5 +52,24 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
         matcher.find();
 
         return matcher.group(1);
+    }
+
+    @Override
+    public CompanyAccountsApi getCompanyAccounts(String transactionId, String companyAccountsId)
+            throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = GET_COMPANY_ACCOUNTS_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            return apiClient.companyAccounts().get(uri).execute().getData();
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException("Error retrieving company accounts", e);
+        } catch (URIValidationException e) {
+
+            throw new ServiceException("Invalid URI for company accounts resource", e);
+        }
     }
 }

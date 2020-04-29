@@ -40,12 +40,10 @@ public class PreviousPeriodServiceImpl implements PreviousPeriodService {
                     .get(PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString())
                             .execute().getData();
         } catch (ApiErrorResponseException e) {
-            serviceExceptionHandler.handleRetrievalException(e, PREVIOUS_PERIOD_RESOURCE);
+            throw new ServiceException("Error retrieving resource: " + PREVIOUS_PERIOD_RESOURCE, e);
         } catch (URIValidationException e) {
-            serviceExceptionHandler.handleURIValidationException(e, PREVIOUS_PERIOD_RESOURCE);
+            throw new ServiceException("Invalid URI for resource: " + PREVIOUS_PERIOD_RESOURCE, e);
         }
-
-        return null;
     }
 
     @Override

@@ -3,10 +3,8 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -139,29 +137,11 @@ public class PreviousPeriodServiceImplTests {
     }
 
     @Test
-    @DisplayName("Get previous period - not found")
-    void getPreviousPeriodNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
-        when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
-        when(previousPeriodGet.execute()).thenThrow(apiErrorResponseException);
-
-        doNothing()
-                .when(serviceExceptionHandler)
-                        .handleRetrievalException(apiErrorResponseException, PREVIOUS_PERIOD_RESOURCE);
-
-        assertNull(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
     @DisplayName("Get previous period - api error response exception")
-    void getPreviousPeriodApiErrorResponseException() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void getPreviousPeriodApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
 
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenThrow(apiErrorResponseException);
-
-        doThrow(serviceException)
-                .when(serviceExceptionHandler)
-                        .handleRetrievalException(apiErrorResponseException, PREVIOUS_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class,
                 () -> previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -169,14 +149,10 @@ public class PreviousPeriodServiceImplTests {
 
     @Test
     @DisplayName("Get previous period - uri validation exception")
-    void getPreviousPeriodURIValidationException() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void getPreviousPeriodURIValidationException() throws ApiErrorResponseException, URIValidationException {
 
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenThrow(uriValidationException);
-
-        doThrow(serviceException)
-                .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, PREVIOUS_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class,
                 () -> previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
