@@ -5,15 +5,18 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod;
+import uk.gov.companieshouse.api.model.common.ApiResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.AverageNumberOfEmployees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.service.smallfull.impl.Note;
+import uk.gov.companieshouse.web.accounts.service.smallfull.impl.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.EmployeesTransformer;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
 @Component
-public class EmployeesTransformerImpl implements EmployeesTransformer {
+public class EmployeesTransformerImpl implements EmployeesTransformer, NoteTransformer {
 
     @Override
     public Employees getEmployees(EmployeesApi employeesApi) {
@@ -93,5 +96,26 @@ public class EmployeesTransformerImpl implements EmployeesTransformer {
 
         return Stream.of(employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees()
                 ).anyMatch(Objects::nonNull);
+    }
+
+    @Override
+    public String getNoteType() {
+        return "employees";
+    }
+
+    @Override
+    public EmployeesApi getApi(Note note) {
+
+        Employees employees = (Employees) note;
+
+        return getEmployeesApi(employees);
+    }
+
+    @Override
+    public Object getResource(ApiResource resource) {
+
+        EmployeesApi employeesApi = (EmployeesApi) resource;
+
+        return getEmployees(employeesApi);
     }
 }
