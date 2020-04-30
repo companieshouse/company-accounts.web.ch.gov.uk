@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.companyaccounts.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -18,6 +19,7 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.companyaccount.CompanyAccountsResourceHandler;
 import uk.gov.companieshouse.api.handler.companyaccount.request.CompanyAccountsCreate;
+import uk.gov.companieshouse.api.handler.companyaccount.request.CompanyAccountsGet;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
@@ -41,6 +43,12 @@ public class CompanyAccountsServiceImplTests {
 
     @Mock
     private CompanyAccountsCreate companyAccountsCreate;
+    
+    @Mock
+    private CompanyAccountsGet companyAccountsGet;
+
+    @Mock
+    private CompanyAccountsApi companyAccountsApi;
 
     @Mock
     private ApiResponse<CompanyAccountsApi> responseWithData;
@@ -112,5 +120,48 @@ public class CompanyAccountsServiceImplTests {
 
         assertThrows(ServiceException.class, () ->
                 companyAccountsService.createCompanyAccounts(TRANSACTION_ID));
+    }
+
+    @Test
+    @DisplayName("Get company accounts - success")
+    void getCompanyAccountsSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
+
+        when(companyAccountsResourceHandler.get(anyString())).thenReturn(companyAccountsGet);
+        when(companyAccountsGet.execute()).thenReturn(responseWithData);
+        when(responseWithData.getData()).thenReturn(companyAccountsApi);
+
+        CompanyAccountsApi returnedCompanyAccounts =
+                companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertNotNull(returnedCompanyAccounts);
+        assertEquals(companyAccountsApi, returnedCompanyAccounts);
+    }
+
+    @Test
+    @DisplayName("Get company accounts - api error response exception")
+    void getCompanyAccountsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+
+        when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
+
+        when(companyAccountsResourceHandler.get(anyString())).thenReturn(companyAccountsGet);
+        when(companyAccountsGet.execute()).thenThrow(ApiErrorResponseException.class);
+
+        assertThrows(ServiceException.class,
+                () -> companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Get company accounts - uri validation exception")
+    void getCompanyAccountsURIValidationException() throws ApiErrorResponseException, URIValidationException {
+
+        when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
+
+        when(companyAccountsResourceHandler.get(anyString())).thenReturn(companyAccountsGet);
+        when(companyAccountsGet.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(ServiceException.class,
+                () -> companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
