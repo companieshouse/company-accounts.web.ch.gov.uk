@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangementsQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.OffBalanceSheetArrangementsService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 
 @Controller
 @NextController(OffBalanceSheetArrangementsController.class)
@@ -32,7 +34,7 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
     private HttpServletRequest request;
     
     @Autowired
-    private OffBalanceSheetArrangementsService offBalanceSheetArrangementsService;
+    private NoteService<OffBalanceSheetArrangements> noteService;
 
     @GetMapping
     public String getOffBalanceSheetArrangementsQuestion(@PathVariable String companyNumber,
@@ -45,9 +47,10 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
         OffBalanceSheetArrangementsQuestion offBalanceSheetArrangementsQuestion = new OffBalanceSheetArrangementsQuestion();
 
         try {
-            if (StringUtils.isNotBlank(offBalanceSheetArrangementsService
-                    .getOffBalanceSheetArrangements(transactionId, companyAccountsId)
-                            .getOffBalanceSheetArrangementsDetails())) {
+            if (StringUtils.isNotBlank(
+                    noteService.get(transactionId, companyAccountsId, NoteType.OFF_BALANCE_SHEET_ARRANGEMENTS)
+                            .orElse(new OffBalanceSheetArrangements())
+                                    .getOffBalanceSheetArrangementsDetails())) {
 
                 offBalanceSheetArrangementsQuestion.setHasIncludedOffBalanceSheetArrangements(true);
             } else {
@@ -83,7 +86,7 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
         try {
             if (!offBalanceSheetArrangementsQuestion.getHasIncludedOffBalanceSheetArrangements()) {
                 
-                offBalanceSheetArrangementsService.deleteOffBalanceSheetArrangements(transactionId, companyAccountsId);
+                noteService.delete(transactionId, companyAccountsId, NoteType.OFF_BALANCE_SHEET_ARRANGEMENTS);
             }
         } catch (ServiceException e) {
 
