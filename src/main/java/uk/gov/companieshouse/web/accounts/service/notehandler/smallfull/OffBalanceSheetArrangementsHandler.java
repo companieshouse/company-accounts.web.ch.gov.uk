@@ -1,21 +1,20 @@
-package uk.gov.companieshouse.web.accounts.temp;
+package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.Executor;
-import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.offBalanceSheet.OffBalanceSheetApi;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.service.notehandler.NoteResourceHandler;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
-public class OffBalanceSheetArrangementsHelper implements NoteHelper<OffBalanceSheetApi> {
+public class OffBalanceSheetArrangementsHandler implements NoteResourceHandler<OffBalanceSheetApi> {
 
     @Autowired
     private SmallFullService smallFullService;

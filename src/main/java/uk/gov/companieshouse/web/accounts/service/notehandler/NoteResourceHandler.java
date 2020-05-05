@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.temp;
+package uk.gov.companieshouse.web.accounts.service.notehandler;
 
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.handler.Executor;
@@ -7,7 +7,7 @@ import uk.gov.companieshouse.api.model.common.ApiResource;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
-public interface NoteHelper<A extends ApiResource> {
+public interface NoteResourceHandler<A extends ApiResource> {
 
     String getUri(String transactionId, String companyAccountsId);
 
