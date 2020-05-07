@@ -30,7 +30,7 @@ public class AccountingPoliciesServiceImpl implements AccountingPoliciesService 
     private ValidationContext validationContext;
 
     private static final UriTemplate ACCOUNTING_POLICIES_URI =
-            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/accounting-policy");
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/accounting-policies");
 
     private static final String RESOURCE_NAME = "accounting policies";
 
