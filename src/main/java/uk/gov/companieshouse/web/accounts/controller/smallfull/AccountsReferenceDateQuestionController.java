@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.AccountsReferenceDateQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -31,31 +35,49 @@ public class AccountsReferenceDateQuestionController extends BaseController {
     @Autowired
     CompanyService companyService;
 
+    @Autowired
+    SmallFullServiceImpl smallFullService;
+
+    @Autowired
+    ApiClientService apiClientService;
+
     private static final String ACCOUNTS_REFERENCE_DATE_QUESTION = "accountsReferenceDateQuestion";
 
     @GetMapping
     public String getAccountsReferenceDateQuestion(@PathVariable String companyNumber,
+                                                   @PathVariable String transactionId,
+                                                   @PathVariable String companyAccountsId,
                                                    Model model,
                                                    HttpServletRequest request) {
 
-        AccountsReferenceDateQuestion accountsReferenceDateQuestion = new AccountsReferenceDateQuestion();
-        setHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
-
         CompanyProfileApi companyProfile;
+        SmallFullApi smallFullAccounts;
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        AccountsReferenceDateQuestion accountsReferenceDateQuestion = new AccountsReferenceDateQuestion();
 
         try {
             companyProfile = companyService.getCompanyProfile(companyNumber);
+            smallFullAccounts = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
         } catch (ServiceException e) {
                 LOGGER.errorRequest(request, e.getMessage(), e);
                 return ERROR_VIEW;
         }
 
-        LocalDate periodStartOn = companyProfile.getAccounts().getNextAccounts().getPeriodStartOn();
-        LocalDate periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+        LocalDate companyProfilePeriodStartOn = companyProfile.getAccounts().getNextAccounts().getPeriodStartOn();
+        LocalDate companyProfilePeriodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+
+        LocalDate smallFullPeriodEndOn = smallFullAccounts.getNextAccounts().getPeriodEndOn();
+
+        if (companyProfilePeriodEndOn != smallFullPeriodEndOn) {
+            //set radio button choice to NO - As the user has changed them so the date must not be the correct date.
+        } else {
+            setHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
+        }
 
         model.addAttribute(ACCOUNTS_REFERENCE_DATE_QUESTION, accountsReferenceDateQuestion);
-        model.addAttribute("start_date", periodStartOn);
-        model.addAttribute("end_date", periodEndOn);
+        model.addAttribute("startDate", companyProfilePeriodStartOn);
+        model.addAttribute("endDate", companyProfilePeriodEndOn);
 
         return getTemplateName();
     }
@@ -70,6 +92,32 @@ public class AccountsReferenceDateQuestionController extends BaseController {
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
+        }
+
+        CompanyProfileApi companyProfile;
+        SmallFullApi smallFullAccounts;
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        try {
+            companyProfile = companyService.getCompanyProfile(companyNumber);
+            smallFullAccounts = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
+
+        LocalDate companyProfilePeriodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+        LocalDate smallFullPeriodEndOn = smallFullAccounts.getNextAccounts().getPeriodEndOn();
+
+        if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
+            if (companyProfilePeriodEndOn != smallFullPeriodEndOn) {
+                try {
+                    smallFullService.updateSmallFullAccounts(smallFullAccounts, transactionId, companyAccountsId );
+                } catch (ServiceException e) {
+                    LOGGER.errorRequest(request, e.getMessage(), e);
+                    return ERROR_VIEW;
+                }
+            }
         }
 
         cacheHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
