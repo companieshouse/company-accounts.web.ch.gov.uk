@@ -15,6 +15,15 @@ public interface SmallFullService {
     void createSmallFullAccounts(String transactionId, String companyAccountsId) throws ServiceException;
 
     /**
+     * Update a small full resource
+     * @param smallFullApi The updated resource you want to submit
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException on creation failure
+     */
+    void updateSmallFullAccounts(SmallFullApi smallFullApi, String transactionId, String companyAccountsId) throws ServiceException;
+
+    /**
      * Retrieve a small full resource
      *
      * @param apiClient The api client with which to execute the get request

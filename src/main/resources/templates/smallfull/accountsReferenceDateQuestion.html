@@ -27,6 +27,9 @@
                     </div>
                 </div>
 
+                <p th:text="${#temporals.format(startDate, 'd-MMMM-yyyy')}"></p>
+                <p th:text="${#temporals.format(endDate, 'd-MMMM-yyyy')}"></p>
+
                 <input id="next-button" class="govuk-button piwik-event" data-event-id="Accounts reference date question - save and continue"
                        type="submit" role="button" value="Save and continue"/>
 

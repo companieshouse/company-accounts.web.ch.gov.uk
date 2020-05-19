@@ -45,6 +45,26 @@ public class SmallFullServiceImpl implements SmallFullService {
      * {@inheritDoc}
      */
     @Override
+    public void updateSmallFullAccounts(SmallFullApi smallFullApi, String transactionId, String companyAccountsId) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            apiClient.smallFull().update(uri, smallFullApi).execute();
+        } catch (ApiErrorResponseException e) {
+
+            throw new ServiceException("Error updating small full accounts", e);
+        } catch (URIValidationException e) {
+
+            throw new ServiceException("Invalid URI for small full resource", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public SmallFullApi getSmallFullAccounts(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
 
