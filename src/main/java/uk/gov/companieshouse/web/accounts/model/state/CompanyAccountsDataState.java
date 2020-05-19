@@ -31,6 +31,9 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonProperty("has_included_off_balance_sheet_arrangements")
     private Boolean hasIncludedOffBalanceSheetArrangements;
 
+    @JsonProperty("has_confirmed_accounting_reference_date")
+    private Boolean hasConfirmedAccountingReferenceDate;
+
     @JsonProperty("is_cic")
     private Boolean isCic;
 
@@ -96,6 +99,14 @@ public class CompanyAccountsDataState implements Serializable {
     public void setHasIncludedOffBalanceSheetArrangements(
             Boolean hasIncludedOffBalanceSheetArrangements) {
         this.hasIncludedOffBalanceSheetArrangements = hasIncludedOffBalanceSheetArrangements;
+    }
+
+    public Boolean getHasConfirmedAccountingReferenceDate() {
+        return hasConfirmedAccountingReferenceDate;
+    }
+
+    public void setHasConfirmedAccountingReferenceDate(Boolean hasConfirmedAccountingReferenceDate) {
+        this.hasConfirmedAccountingReferenceDate = hasConfirmedAccountingReferenceDate;
     }
 
     public Boolean getIsCic() {

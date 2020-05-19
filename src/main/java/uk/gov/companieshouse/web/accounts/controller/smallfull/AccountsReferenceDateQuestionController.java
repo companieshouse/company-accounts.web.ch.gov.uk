@@ -4,12 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.AccountsReferenceDateQuestion;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +39,9 @@ public class AccountsReferenceDateQuestionController extends BaseController {
                                                    HttpServletRequest request) {
 
         AccountsReferenceDateQuestion accountsReferenceDateQuestion = new AccountsReferenceDateQuestion();
+        setHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
 
-
-        CompanyProfileApi companyProfile = null;
+        CompanyProfileApi companyProfile;
 
         try {
             companyProfile = companyService.getCompanyProfile(companyNumber);
@@ -65,11 +72,27 @@ public class AccountsReferenceDateQuestionController extends BaseController {
             return getTemplateName();
         }
 
+        cacheHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
+
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override
     protected String getTemplateName() {
         return "smallfull/accountsReferenceDateQuestion";
+    }
+
+    private void setHasConfirmedAccountingReferenceDate(HttpServletRequest request, AccountsReferenceDateQuestion accountsReferenceDateQuestion) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        accountsReferenceDateQuestion.setHasConfirmedAccountingReferenceDate(companyAccountsDataState.getHasConfirmedAccountingReferenceDate());
+    }
+
+    private void  cacheHasConfirmedAccountingReferenceDate(HttpServletRequest request, AccountsReferenceDateQuestion accountsReferenceDateQuestion) {
+
+        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
+        companyAccountsDataState.setHasConfirmedAccountingReferenceDate(accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate());
+
+        updateStateOnRequest(request, companyAccountsDataState);
     }
 }
