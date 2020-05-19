@@ -54,7 +54,7 @@ public class SmallFullServiceImpl implements SmallFullService {
             apiClient.smallFull().update(uri, smallFullApi).execute();
         } catch (ApiErrorResponseException e) {
 
-            throw new ServiceException("Error updated small full accounts", e);
+            throw new ServiceException("Error updating small full accounts", e);
         } catch (URIValidationException e) {
 
             throw new ServiceException("Invalid URI for small full resource", e);

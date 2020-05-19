@@ -33,13 +33,13 @@ import java.time.LocalDate;
 public class AccountsReferenceDateQuestionController extends BaseController {
 
     @Autowired
-    CompanyService companyService;
+    private CompanyService companyService;
 
     @Autowired
-    SmallFullServiceImpl smallFullService;
+    private SmallFullServiceImpl smallFullService;
 
     @Autowired
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     private static final String ACCOUNTS_REFERENCE_DATE_QUESTION = "accountsReferenceDateQuestion";
 
@@ -94,29 +94,22 @@ public class AccountsReferenceDateQuestionController extends BaseController {
             return getTemplateName();
         }
 
-        CompanyProfileApi companyProfile;
-        SmallFullApi smallFullAccounts;
         ApiClient apiClient = apiClientService.getApiClient();
+        SmallFullApi smallFullAccounts;
 
         try {
-            companyProfile = companyService.getCompanyProfile(companyNumber);
             smallFullAccounts = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
 
-        LocalDate companyProfilePeriodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
-        LocalDate smallFullPeriodEndOn = smallFullAccounts.getNextAccounts().getPeriodEndOn();
-
         if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
-            if (companyProfilePeriodEndOn != smallFullPeriodEndOn) {
-                try {
-                    smallFullService.updateSmallFullAccounts(smallFullAccounts, transactionId, companyAccountsId );
-                } catch (ServiceException e) {
-                    LOGGER.errorRequest(request, e.getMessage(), e);
-                    return ERROR_VIEW;
-                }
+            try {
+                smallFullService.updateSmallFullAccounts(smallFullAccounts, transactionId, companyAccountsId );
+            } catch (ServiceException e) {
+                LOGGER.errorRequest(request, e.getMessage(), e);
+                return ERROR_VIEW;
             }
         }
 
