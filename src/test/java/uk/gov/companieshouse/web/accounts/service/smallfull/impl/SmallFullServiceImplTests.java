@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,11 +23,14 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullCreate;
 import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullGet;
+import uk.gov.companieshouse.api.handler.smallfull.request.SmallFullUpdate;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+
+import java.time.LocalDate;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -43,6 +47,9 @@ public class SmallFullServiceImplTests {
 
     @Mock
     private SmallFullCreate smallFullCreate;
+
+    @Mock
+    private SmallFullUpdate smallFullUpdate;
 
     @Mock
     private SmallFullGet smallFullGet;
@@ -144,5 +151,51 @@ public class SmallFullServiceImplTests {
 
         assertThrows(ServiceException.class, () ->
                 smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Update Small Full Accounts - Success Path")
+    void updateSmallFullSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        LocalDate newPeriodEndOn = LocalDate.now();
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullResourceHandler.update(anyString(), any(SmallFullApi.class)))
+                .thenReturn(smallFullUpdate);
+
+        smallFullService.updateSmallFullAccounts(newPeriodEndOn, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        verify(smallFullUpdate, times(1)).execute();
+    }
+
+    @Test
+    @DisplayName("Update Small Full Accounts - Throws ApiErrorResponseException")
+    void updateSmallFullApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullResourceHandler.update(anyString(), any(SmallFullApi.class)))
+                .thenReturn(smallFullUpdate);
+
+        when(smallFullUpdate.execute()).thenThrow(ApiErrorResponseException.class);
+
+        assertThrows(ServiceException.class, () ->
+                smallFullService.updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Update Small Full Accounts - Throws URIValidationException")
+    void updateSmallFullURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullResourceHandler.update(anyString(), any(SmallFullApi.class)))
+                .thenReturn(smallFullUpdate);
+
+        when(smallFullUpdate.execute()).thenThrow(URIValidationException.class);
+
+        assertThrows(ServiceException.class, () ->
+                smallFullService.updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
