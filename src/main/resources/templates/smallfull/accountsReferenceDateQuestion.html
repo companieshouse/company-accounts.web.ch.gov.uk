@@ -21,14 +21,11 @@
                      th:classappend="${#fields.hasErrors('hasConfirmedAccountingReferenceDate')} ? 'govuk-form-group--error' : ''">
 
                     <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Have the accounts been prepared for the period of ' + ${#temporals.format(start_date, 'dd-MM-yyyy')} + ' to ' + ${#temporals.format(end_date, 'dd-MM-yyyy')},
+              legendText = 'Have the accounts been prepared for the period of ' + ${#temporals.format(startDate, 'd MMMM yyyy')} + ' to ' + ${#temporals.format(endDate, 'd MMMM yyyy')},
               radioButtonsFieldName = 'hasConfirmedAccountingReferenceDate'
               )">
                     </div>
                 </div>
-
-                <p th:text="${#temporals.format(startDate, 'd-MMMM-yyyy')}"></p>
-                <p th:text="${#temporals.format(endDate, 'd-MMMM-yyyy')}"></p>
 
                 <input id="next-button" class="govuk-button piwik-event" data-event-id="Accounts reference date question - save and continue"
                        type="submit" role="button" value="Save and continue"/>

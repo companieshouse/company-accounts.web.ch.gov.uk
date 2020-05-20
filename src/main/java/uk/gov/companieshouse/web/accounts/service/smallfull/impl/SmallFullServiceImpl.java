@@ -6,10 +6,14 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+
+import java.time.LocalDate;
 
 @Service
 public class SmallFullServiceImpl implements SmallFullService {
@@ -45,13 +49,22 @@ public class SmallFullServiceImpl implements SmallFullService {
      * {@inheritDoc}
      */
     @Override
-    public void updateSmallFullAccounts(SmallFullApi smallFullApi, String transactionId, String companyAccountsId) throws ServiceException {
+    public void updateSmallFullAccounts(LocalDate periodEndOn, String transactionId, String companyAccountsId) throws ServiceException {
+
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
 
+        SmallFullApi smallFull = new SmallFullApi();
+
+        if (periodEndOn != null) {
+            AccountingPeriodApi nextAccounts = new AccountingPeriodApi();
+            nextAccounts.setPeriodEndOn(periodEndOn);
+            smallFull.setNextAccounts(nextAccounts);
+        }
+
         try {
-            apiClient.smallFull().update(uri, smallFullApi).execute();
+            apiClient.smallFull().update(uri, smallFull).execute();
         } catch (ApiErrorResponseException e) {
 
             throw new ServiceException("Error updating small full accounts", e);

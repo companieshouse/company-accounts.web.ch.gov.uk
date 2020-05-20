@@ -70,7 +70,7 @@ public class AccountsReferenceDateQuestionController extends BaseController {
         LocalDate smallFullPeriodEndOn = smallFullAccounts.getNextAccounts().getPeriodEndOn();
 
         if (companyProfilePeriodEndOn != smallFullPeriodEndOn) {
-            //set radio button choice to NO - As the user has changed them so the date must not be the correct date.
+            accountsReferenceDateQuestion.setHasConfirmedAccountingReferenceDate(false);
         } else {
             setHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
         }
@@ -94,19 +94,9 @@ public class AccountsReferenceDateQuestionController extends BaseController {
             return getTemplateName();
         }
 
-        ApiClient apiClient = apiClientService.getApiClient();
-        SmallFullApi smallFullAccounts;
-
-        try {
-            smallFullAccounts = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
-        } catch (ServiceException e) {
-            LOGGER.errorRequest(request, e.getMessage(), e);
-            return ERROR_VIEW;
-        }
-
         if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
             try {
-                smallFullService.updateSmallFullAccounts(smallFullAccounts, transactionId, companyAccountsId );
+                smallFullService.updateSmallFullAccounts(null, transactionId, companyAccountsId );
             } catch (ServiceException e) {
                 LOGGER.errorRequest(request, e.getMessage(), e);
                 return ERROR_VIEW;
