@@ -4,6 +4,8 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
+import java.time.LocalDate;
+
 public interface SmallFullService {
 
     /**
@@ -13,6 +15,15 @@ public interface SmallFullService {
      * @throws ServiceException on creation failure
      */
     void createSmallFullAccounts(String transactionId, String companyAccountsId) throws ServiceException;
+
+    /**
+     * Update a small full resource
+     * @param periodEndOn The updated period end date you want to submit, if null is provided, the date will be defaulted to that of the company
+     * @param transactionId The id of the CHS transaction
+     * @param companyAccountsId The company accounts identifier
+     * @throws ServiceException on creation failure
+     */
+    void updateSmallFullAccounts(LocalDate periodEndOn, String transactionId, String companyAccountsId) throws ServiceException;
 
     /**
      * Retrieve a small full resource

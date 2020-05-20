@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title id="page-title-heading">
+        Accounts Reference Date Question
+    </title>
+</head>
+<div id="accounts-reference-date-question-main-content" layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form id="accounts-reference-date-question--form" class="form" th:action="@{''}" th:object="${accountsReferenceDateQuestion}" method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+
+                <!-- Hidden input for form binding -->
+                <input th:field="${accountsReferenceDateQuestion.periodStartOn}" type="hidden">
+                <input th:field="${accountsReferenceDateQuestion.periodEndOn}" type="hidden">
+
+                <div class="govuk-form-group"
+                     th:classappend="${#fields.hasErrors('hasConfirmedAccountingReferenceDate')} ? 'govuk-form-group--error' : ''">
+
+                    <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+              legendText = 'Have the accounts been prepared for the period of ' + ${#temporals.format(accountsReferenceDateQuestion.periodStartOn, 'd MMMM yyyy')} + ' to ' + ${#temporals.format(accountsReferenceDateQuestion.periodEndOn, 'd MMMM yyyy')} + '?',
+              radioButtonsFieldName = 'hasConfirmedAccountingReferenceDate'
+              )">
+                    </div>
+                </div>
+
+                <input id="next-button" class="govuk-button piwik-event" data-event-id="Accounts reference date question - save and continue"
+                       type="submit" role="button" value="Save and continue"/>
+
+            </form>
+        </div>
+    </div>
+</div>
+</html>
