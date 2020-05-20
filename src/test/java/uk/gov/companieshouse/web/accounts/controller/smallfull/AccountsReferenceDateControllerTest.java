@@ -37,6 +37,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 
 @ExtendWith({MockitoExtension.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -162,7 +164,8 @@ public class AccountsReferenceDateControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ARD_QUESTION_VIEW))
                 .andExpect(model().attributeExists(ARD_QUESTION_MODEL_ATTR))
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attribute(ARD_QUESTION_MODEL_ATTR, hasProperty(ARD_SELECTION, is(false))));
     }
 
     @Test

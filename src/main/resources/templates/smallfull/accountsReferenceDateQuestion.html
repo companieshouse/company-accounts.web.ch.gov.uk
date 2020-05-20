@@ -17,6 +17,8 @@
 
                 <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
+
+                <!-- Hidden input for form binding -->
                 <input th:field="${accountsReferenceDateQuestion.periodStartOn}" type="hidden">
                 <input th:field="${accountsReferenceDateQuestion.periodEndOn}" type="hidden">
 

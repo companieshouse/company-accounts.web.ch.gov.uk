@@ -50,34 +50,34 @@ public class AccountsReferenceDateQuestionController extends BaseController {
                                                    Model model,
                                                    HttpServletRequest request) {
 
-        CompanyProfileApi companyProfile;
-        SmallFullApi smallFullAccounts;
-        ApiClient apiClient = apiClientService.getApiClient();
-
-        AccountsReferenceDateQuestion accountsReferenceDateQuestion = new AccountsReferenceDateQuestion();
-
         try {
-            companyProfile = companyService.getCompanyProfile(companyNumber);
-            smallFullAccounts = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+            AccountsReferenceDateQuestion accountsReferenceDateQuestion = new AccountsReferenceDateQuestion();
+
+            ApiClient apiClient = apiClientService.getApiClient();
+
+            CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
+            SmallFullApi smallFullAccounts = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+            accountsReferenceDateQuestion.setPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+            accountsReferenceDateQuestion.setPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
+
+            LocalDate smallFullPeriodEndOn = smallFullAccounts.getNextAccounts().getPeriodEndOn();
+
+            if (! accountsReferenceDateQuestion.getPeriodEndOn().equals(smallFullPeriodEndOn)) {
+                accountsReferenceDateQuestion.setHasConfirmedAccountingReferenceDate(false);
+            } else {
+                setHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
+            }
+
+            model.addAttribute(ACCOUNTS_REFERENCE_DATE_QUESTION, accountsReferenceDateQuestion);
+
+            return getTemplateName();
+
         } catch (ServiceException e) {
                 LOGGER.errorRequest(request, e.getMessage(), e);
                 return ERROR_VIEW;
         }
-
-        accountsReferenceDateQuestion.setPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        accountsReferenceDateQuestion.setPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
-
-        LocalDate smallFullPeriodEndOn = smallFullAccounts.getNextAccounts().getPeriodEndOn();
-
-        if (! accountsReferenceDateQuestion.getPeriodEndOn().equals(smallFullPeriodEndOn)) {
-            accountsReferenceDateQuestion.setHasConfirmedAccountingReferenceDate(false);
-        } else {
-            setHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
-        }
-
-        model.addAttribute(ACCOUNTS_REFERENCE_DATE_QUESTION, accountsReferenceDateQuestion);
-
-        return getTemplateName();
     }
 
     @PostMapping
@@ -92,18 +92,18 @@ public class AccountsReferenceDateQuestionController extends BaseController {
             return getTemplateName();
         }
 
-        if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
-            try {
-                smallFullService.updateSmallFullAccounts(null, transactionId, companyAccountsId );
-            } catch (ServiceException e) {
-                LOGGER.errorRequest(request, e.getMessage(), e);
-                return ERROR_VIEW;
+        try {
+            if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
+                    smallFullService.updateSmallFullAccounts(null, transactionId, companyAccountsId );
             }
+
+            cacheHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
+
+            return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
         }
-
-        cacheHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
-
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override

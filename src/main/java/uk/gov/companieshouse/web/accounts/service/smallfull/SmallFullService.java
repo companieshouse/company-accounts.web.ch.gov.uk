@@ -18,7 +18,7 @@ public interface SmallFullService {
 
     /**
      * Update a small full resource
-     * @param periodEndOn The updated period end date you want to submit
+     * @param periodEndOn The updated period end date you want to submit, if null is provided, the date will be defaulted to that of the company
      * @param transactionId The id of the CHS transaction
      * @param companyAccountsId The company accounts identifier
      * @throws ServiceException on creation failure
