@@ -64,20 +64,18 @@ public class AccountsReferenceDateQuestionController extends BaseController {
                 return ERROR_VIEW;
         }
 
-        LocalDate companyProfilePeriodStartOn = companyProfile.getAccounts().getNextAccounts().getPeriodStartOn();
-        LocalDate companyProfilePeriodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+        accountsReferenceDateQuestion.setPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
+        accountsReferenceDateQuestion.setPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
 
         LocalDate smallFullPeriodEndOn = smallFullAccounts.getNextAccounts().getPeriodEndOn();
 
-        if (companyProfilePeriodEndOn != smallFullPeriodEndOn) {
+        if (! accountsReferenceDateQuestion.getPeriodEndOn().equals(smallFullPeriodEndOn)) {
             accountsReferenceDateQuestion.setHasConfirmedAccountingReferenceDate(false);
         } else {
             setHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
         }
 
         model.addAttribute(ACCOUNTS_REFERENCE_DATE_QUESTION, accountsReferenceDateQuestion);
-        model.addAttribute("startDate", companyProfilePeriodStartOn);
-        model.addAttribute("endDate", companyProfilePeriodEndOn);
 
         return getTemplateName();
     }
