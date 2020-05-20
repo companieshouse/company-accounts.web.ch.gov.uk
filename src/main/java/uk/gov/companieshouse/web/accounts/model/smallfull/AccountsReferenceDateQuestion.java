@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 

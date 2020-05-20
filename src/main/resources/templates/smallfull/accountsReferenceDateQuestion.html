@@ -24,7 +24,7 @@
                      th:classappend="${#fields.hasErrors('hasConfirmedAccountingReferenceDate')} ? 'govuk-form-group--error' : ''">
 
                     <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Have the accounts been prepared for the period of ' + ${#temporals.format(accountsReferenceDateQuestion.periodStartOn, 'd MMMM yyyy')} + ' to ' + ${#temporals.format(accountsReferenceDateQuestion.periodEndOn, 'd MMMM yyyy')},
+              legendText = 'Have the accounts been prepared for the period of ' + ${#temporals.format(accountsReferenceDateQuestion.periodStartOn, 'd MMMM yyyy')} + ' to ' + ${#temporals.format(accountsReferenceDateQuestion.periodEndOn, 'd MMMM yyyy')} + '?',
               radioButtonsFieldName = 'hasConfirmedAccountingReferenceDate'
               )">
                     </div>
