@@ -72,10 +72,10 @@ public class AccountsReferenceDateController extends BaseController implements C
             CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
             SmallFullApi smallFullAccounts = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
-            accountsReferenceDate.setPastDates(getPastValidDates(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn()));
-            accountsReferenceDate.setFutureDates(getFutureValidDates(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn()));
+            accountsReferenceDate.setPastDates(companyService.getPastDatesForArd(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn()));
+            accountsReferenceDate.setFutureDates(companyService.getFutureDatesForArd(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn()));
 
-            if(!companyProfile.getAccounts().getNextAccounts().getPeriodEndOn().equals(smallFullAccounts.getNextAccounts().getPeriodEndOn())) {
+            if(! smallFullPeriodEndMatchesCompanyProfilePeriodEnd(companyProfile, smallFullAccounts)) {
                 accountsReferenceDate.setChosenDate(smallFullAccounts.getNextAccounts().getPeriodEndOn());
             }
 
@@ -126,38 +126,10 @@ public class AccountsReferenceDateController extends BaseController implements C
         return BooleanUtils.isFalse(companyAccountsDataState.getHasConfirmedAccountingReferenceDate());
     }
 
-    private List<LocalDate> getFutureValidDates(LocalDate periodEndOn) {
+    private Boolean smallFullPeriodEndMatchesCompanyProfilePeriodEnd(CompanyProfileApi companyProfile, SmallFullApi smallFull) {
+        LocalDate companyProfilePeriodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+        LocalDate smallFullPeriodEndOn = smallFull.getNextAccounts().getPeriodEndOn();
 
-        List<LocalDate> futureValidDates = new ArrayList<>();
-
-
-        futureValidDates.add(periodEndOn.plusDays(1));
-        futureValidDates.add(periodEndOn.plusDays(2));
-        futureValidDates.add(periodEndOn.plusDays(3));
-        futureValidDates.add(periodEndOn.plusDays(4));
-        futureValidDates.add(periodEndOn.plusDays(5));
-        futureValidDates.add(periodEndOn.plusDays(6));
-        futureValidDates.add(periodEndOn.plusDays(7));
-
-        Collections.sort(futureValidDates);
-
-        return  futureValidDates;
-    }
-
-    private List<LocalDate> getPastValidDates(LocalDate periodEndOn) {
-
-        List<LocalDate> pastValidDates = new ArrayList<>();
-
-        pastValidDates.add(periodEndOn.minusDays(1));
-        pastValidDates.add(periodEndOn.minusDays(2));
-        pastValidDates.add(periodEndOn.minusDays(3));
-        pastValidDates.add(periodEndOn.minusDays(4));
-        pastValidDates.add(periodEndOn.minusDays(5));
-        pastValidDates.add(periodEndOn.minusDays(6));
-        pastValidDates.add(periodEndOn.minusDays(7));
-
-        Collections.sort(pastValidDates);
-
-        return pastValidDates;
+        return companyProfilePeriodEndOn.equals(smallFullPeriodEndOn);
     }
 }

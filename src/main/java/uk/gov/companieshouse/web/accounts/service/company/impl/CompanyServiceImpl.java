@@ -1,6 +1,9 @@
 package uk.gov.companieshouse.web.accounts.service.company.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,5 +123,42 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         return false;
+    }
+
+    @Override
+    public List<LocalDate> getFutureDatesForArd(LocalDate periodEndOn) {
+
+        List<LocalDate> futureValidDates = new ArrayList<>();
+
+
+        futureValidDates.add(periodEndOn.plusDays(1));
+        futureValidDates.add(periodEndOn.plusDays(2));
+        futureValidDates.add(periodEndOn.plusDays(3));
+        futureValidDates.add(periodEndOn.plusDays(4));
+        futureValidDates.add(periodEndOn.plusDays(5));
+        futureValidDates.add(periodEndOn.plusDays(6));
+        futureValidDates.add(periodEndOn.plusDays(7));
+
+        Collections.sort(futureValidDates);
+
+        return  futureValidDates;
+    }
+
+    @Override
+    public List<LocalDate> getPastDatesForArd(LocalDate periodEndOn) {
+
+        List<LocalDate> pastValidDates = new ArrayList<>();
+
+        pastValidDates.add(periodEndOn.minusDays(1));
+        pastValidDates.add(periodEndOn.minusDays(2));
+        pastValidDates.add(periodEndOn.minusDays(3));
+        pastValidDates.add(periodEndOn.minusDays(4));
+        pastValidDates.add(periodEndOn.minusDays(5));
+        pastValidDates.add(periodEndOn.minusDays(6));
+        pastValidDates.add(periodEndOn.minusDays(7));
+
+        Collections.sort(pastValidDates);
+
+        return pastValidDates;
     }
 }
