@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportServi
 
 @Controller
 @NextController(AddOrRemoveDirectorsController.class)
-@PreviousController(AccountsReferenceDateQuestionController.class)
+@PreviousController(AccountsReferenceDateController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report-question")
 public class DirectorsReportQuestionController extends BaseController {
 

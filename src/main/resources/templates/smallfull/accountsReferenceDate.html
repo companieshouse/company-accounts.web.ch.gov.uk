@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title id="page-title-heading">
+        Confirm your new company account date
+    </title>
+</head>
+<div id="accounts-reference-date-main-content" layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form id="accounts-reference-date-form" class="form" th:action="@{''}" th:object="${accountsReferenceDate}" method="post">
+
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+                <h1 id="page-title" class="govuk-heading-l">
+                    <span>Confirm your new company account date</span>
+                </h1>
+                <span id="new-company-account-date-hint" class="govuk-hint">
+                  You can change the end date of the period you're filing for by up to 7 days.
+                </span>
+
+
+                <div class="govuk-form-group"
+                     th:classappend="${#fields.hasErrors('chosenDate')} ? 'govuk-form-group--error' : ''">
+                    <div class="govuk-radios">
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-one-half">
+                                <th:block th:each="pastDate, stat : ${accountsReferenceDate.pastDates}">
+                                    <div class="govuk-radios__item">
+                                        <input class="govuk-radios__input" type="radio"
+                                               th:id="${'pastDate-' + stat.index}"
+                                               th:value="${{pastDate}}"
+                                               th:field="*{chosenDate}">
+                                        <label class="govuk-label govuk-radios__label"
+                                               th:for="${'pastDate-' + stat.index}"
+                                               th:id="${'pastDate-' + stat.index + '-label'}"
+                                               th:text="${#temporals.format(pastDate, 'd MMMM yyyy')}">
+                                        </label>
+                                    </div>
+                                </th:block>
+
+                                <div th:each="pastDate, stat : *{pastDates}">
+                                    <input type="hidden" th:field="*{pastDates[__${stat.index}__]}" th:id="pastDates[__${stat.index}__]"/>
+                                </div>
+                            </div>
+                            <div class="govuk-grid-column-one-half">
+                                <th:block th:each="futureDate, stat : ${accountsReferenceDate.futureDates}">
+                                    <div class="govuk-radios__item">
+                                        <input class="govuk-radios__input" type="radio"
+                                               th:id="${'futureDate-' + stat.index}"
+                                               th:value="${{futureDate}}"
+                                               th:field="*{chosenDate}">
+                                        <label class="govuk-label govuk-radios__label"
+                                               th:for="${'futureDate-' + stat.index}"
+                                               th:id="${'futureDate-' + stat.index + '-label'}"
+                                               th:text="${#temporals.format(futureDate, 'd MMMM yyyy')}">
+                                        </label>
+                                    </div>
+                                </th:block>
+
+                                <div th:each="futureDate, stat : *{futureDates}">
+                                    <input type="hidden" th:field="*{futureDates[__${stat.index}__]}" th:id="futureDates[__${stat.index}__]"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <input id="next-button" class="govuk-button piwik-event" data-event-id="Accounts reference date - save and continue"
+                       type="submit" role="button" value="Save and continue"/>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

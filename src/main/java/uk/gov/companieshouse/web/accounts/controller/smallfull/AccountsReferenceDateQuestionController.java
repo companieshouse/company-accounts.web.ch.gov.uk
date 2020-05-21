@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 
 @Controller
-@NextController(DirectorsReportQuestionController.class)
+@NextController(AccountsReferenceDateController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/accounts-reference-date-question")
 public class AccountsReferenceDateQuestionController extends BaseController {
 

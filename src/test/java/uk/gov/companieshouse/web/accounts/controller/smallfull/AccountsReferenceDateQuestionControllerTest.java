@@ -9,7 +9,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -26,12 +25,8 @@ import uk.gov.companieshouse.web.accounts.service.company.impl.CompanyServiceImp
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -42,24 +37,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 
 @ExtendWith({MockitoExtension.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AccountsReferenceDateControllerTest {
+public class AccountsReferenceDateQuestionControllerTest {
 
     private MockMvc mockMvc;
 
     @Mock
     private NavigatorService navigatorService;
-
-    @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private MockHttpSession session;
-
-    @Mock
-    private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
     private CompanyServiceImpl companyService;
@@ -89,11 +77,12 @@ public class AccountsReferenceDateControllerTest {
     private NextAccountsApi nextAccounts;
 
     @InjectMocks
-    private AccountsReferenceDateController controller;
+    private AccountsReferenceDateQuestionController controller;
+
+    private static final LocalDate NEXT_ACCOUNTS_PERIOD_START = LocalDate.of(2019, 1, 1);
 
     private static final LocalDate NEXT_ACCOUNTS_PERIOD_END = LocalDate.of(2019, 12, 31);
     private static final LocalDate NEXT_ACCOUNTS_PERIOD_END_DIFF = LocalDate.of(2019, 11, 1);
-    private static final LocalDate CHOSEN_DATE = LocalDate.of(2015, 01, 01);
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -101,18 +90,20 @@ public class AccountsReferenceDateControllerTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String ARD_PATH = "/company/" + COMPANY_NUMBER +
+    private static final String ARD_QUESTION_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-            "/small-full/accounts-reference-date";
+            "/small-full/accounts-reference-date-question";
 
-    private static final String ARD_MODEL_ATTR = "accountsReferenceDate";
+    private static final String ARD_QUESTION_MODEL_ATTR = "accountsReferenceDateQuestion";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
-    private static final String ARD_VIEW = "smallfull/accountsReferenceDate";
+    private static final String ARD_QUESTION_VIEW = "smallfull/accountsReferenceDateQuestion";
 
     private static final String ERROR_VIEW = "error";
+
+    private static final String ARD_SELECTION = "hasConfirmedAccountingReferenceDate";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
@@ -125,7 +116,7 @@ public class AccountsReferenceDateControllerTest {
     }
 
     @Test
-    @DisplayName("Get ARD page")
+    @DisplayName("Get ARD question page")
     void getRequest() throws Exception {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -136,22 +127,23 @@ public class AccountsReferenceDateControllerTest {
 
         when(accounts.getNextAccounts()).thenReturn(nextAccounts);
 
+        when(nextAccounts.getPeriodStartOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_START);
         when(nextAccounts.getPeriodEndOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_END);
 
         when(smallFull.getNextAccounts()).thenReturn(accountingPeriodApi);
         when(accountingPeriodApi.getPeriodEndOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_END);
 
-        this.mockMvc.perform(get(ARD_PATH)
+        this.mockMvc.perform(get(ARD_QUESTION_PATH)
                 .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(ARD_VIEW))
-                .andExpect(model().attributeExists(ARD_MODEL_ATTR))
+                .andExpect(view().name(ARD_QUESTION_VIEW))
+                .andExpect(model().attributeExists(ARD_QUESTION_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
-    @DisplayName("Get ARD page - with different dates")
-    void getRequestWithDifferentDates() throws Exception {
+    @DisplayName("Get ARD question page - different periodEndOn Dates")
+    void getRequestWithDifferentEndDates() throws Exception {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
@@ -161,56 +153,74 @@ public class AccountsReferenceDateControllerTest {
 
         when(accounts.getNextAccounts()).thenReturn(nextAccounts);
 
+        when(nextAccounts.getPeriodStartOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_START);
         when(nextAccounts.getPeriodEndOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_END);
 
         when(smallFull.getNextAccounts()).thenReturn(accountingPeriodApi);
         when(accountingPeriodApi.getPeriodEndOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_END_DIFF);
 
-        this.mockMvc.perform(get(ARD_PATH)
+        this.mockMvc.perform(get(ARD_QUESTION_PATH)
                 .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().isOk())
-                .andExpect(view().name(ARD_VIEW))
-                .andExpect(model().attributeExists(ARD_MODEL_ATTR))
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(view().name(ARD_QUESTION_VIEW))
+                .andExpect(model().attributeExists(ARD_QUESTION_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attribute(ARD_QUESTION_MODEL_ATTR, hasProperty(ARD_SELECTION, is(false))));
     }
 
     @Test
-    @DisplayName("Get ARD page - Throws exception")
+    @DisplayName("Get ARD question page - Throws exception")
     void getRequestThrowsException() throws Exception {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
-        this.mockMvc.perform(get(ARD_PATH))
+        this.mockMvc.perform(get(ARD_QUESTION_PATH)
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
-    @DisplayName("Post ARD - has chosen date")
-    void postRequestHasConfirmedArdDate() throws Exception {
+    @DisplayName("Post ARD question - has chosen NO")
+    void postRequestHasConfirmedNoOnArdDate() throws Exception {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(post(ARD_PATH)
-                .param("chosenDate", CHOSEN_DATE.format(DateTimeFormatter.ofPattern("d/M/yy"))))
+        this.mockMvc.perform(post(ARD_QUESTION_PATH)
+                .param(ARD_SELECTION, "0")
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
-        verify(smallFullService).updateSmallFullAccounts(CHOSEN_DATE, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
-    @DisplayName("Post ARD - service exception")
+    @DisplayName("Post ARD question - has chosen YES")
+    void postRequestHasConfirmedYesOnArdDate() throws Exception {
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(ARD_QUESTION_PATH)
+                .param(ARD_SELECTION, "1")
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(smallFullService).updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
+    @Test
+    @DisplayName("Post ARD question - service exception")
     void postRequestServiceException() throws Exception {
 
         doThrow(ServiceException.class)
                 .when(smallFullService)
-                .updateSmallFullAccounts(CHOSEN_DATE, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                .updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        this.mockMvc.perform(post(ARD_PATH)
-                .param("chosenDate", CHOSEN_DATE.format(DateTimeFormatter.ofPattern("d/M/yy"))))
+        this.mockMvc.perform(post(ARD_QUESTION_PATH)
+                .param(ARD_SELECTION, "1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
@@ -218,33 +228,11 @@ public class AccountsReferenceDateControllerTest {
     }
 
     @Test
-    @DisplayName("Post ARD - binding result errors")
+    @DisplayName("Post ARD question - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        this.mockMvc.perform(post(ARD_PATH))
+        this.mockMvc.perform(post(ARD_QUESTION_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(ARD_VIEW));
-    }
-
-    @Test
-    @DisplayName("Will render - false")
-    void willRenderFalse() throws ServiceException {
-
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasConfirmedAccountingReferenceDate()).thenReturn(true);
-
-        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
-    }
-
-    @Test
-    @DisplayName("Will render - true")
-    void willRenderTrue() throws ServiceException {
-
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasConfirmedAccountingReferenceDate()).thenReturn(false);
-
-        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                .andExpect(view().name(ARD_QUESTION_VIEW));
     }
 }
