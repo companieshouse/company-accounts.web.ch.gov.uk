@@ -7,11 +7,11 @@ import java.util.List;
 public class AccountsReferenceDate {
 
     @NotNull(message = "{accountsReferenceDate.selectionNotMade}")
-    LocalDate chosenDate;
+    private LocalDate chosenDate;
 
-    List<LocalDate> pastDates;
+    private List<LocalDate> pastDates;
 
-    List<LocalDate> futureDates;
+    private List<LocalDate> futureDates;
 
     public LocalDate getChosenDate() {
         return chosenDate;

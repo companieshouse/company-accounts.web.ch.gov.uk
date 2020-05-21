@@ -20,7 +20,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.AccountsReferenceDate;
-import uk.gov.companieshouse.web.accounts.model.smallfull.AccountsReferenceDateQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.company.impl.CompanyServiceImpl;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
@@ -124,7 +123,7 @@ public class AccountsReferenceDateController extends BaseController implements C
             throws ServiceException {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return BooleanUtils.isTrue(!companyAccountsDataState.getHasConfirmedAccountingReferenceDate());
+        return BooleanUtils.isFalse(companyAccountsDataState.getHasConfirmedAccountingReferenceDate());
     }
 
     private List<LocalDate> getFutureValidDates(LocalDate periodEndOn) {
@@ -132,13 +131,13 @@ public class AccountsReferenceDateController extends BaseController implements C
         List<LocalDate> futureValidDates = new ArrayList<>();
 
 
-        futureValidDates.add(periodEndOn);
         futureValidDates.add(periodEndOn.plusDays(1));
         futureValidDates.add(periodEndOn.plusDays(2));
         futureValidDates.add(periodEndOn.plusDays(3));
         futureValidDates.add(periodEndOn.plusDays(4));
         futureValidDates.add(periodEndOn.plusDays(5));
         futureValidDates.add(periodEndOn.plusDays(6));
+        futureValidDates.add(periodEndOn.plusDays(7));
 
         Collections.sort(futureValidDates);
 
