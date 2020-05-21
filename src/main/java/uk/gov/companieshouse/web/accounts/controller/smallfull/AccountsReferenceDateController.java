@@ -40,13 +40,13 @@ import java.util.List;
 public class AccountsReferenceDateController extends BaseController implements ConditionalController {
 
     @Autowired
-    NavigatorService navigatorService;
+    private NavigatorService navigatorService;
 
     @Autowired
-    CompanyServiceImpl companyService;
+    private CompanyServiceImpl companyService;
 
     @Autowired
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     @Autowired
     private SmallFullServiceImpl smallFullService;
