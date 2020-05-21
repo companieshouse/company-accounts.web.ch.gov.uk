@@ -28,9 +28,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServic
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @NextController(DirectorsReportQuestionController.class)
@@ -57,11 +54,11 @@ public class AccountsReferenceDateController extends BaseController implements C
 
 
     @GetMapping
-    public String getAccountsReferenceDateQuestion(@PathVariable String companyNumber,
-                                                   @PathVariable String transactionId,
-                                                   @PathVariable String companyAccountsId,
-                                                   Model model,
-                                                   HttpServletRequest request) {
+    public String getAccountsReferenceDate(@PathVariable String companyNumber,
+                                           @PathVariable String transactionId,
+                                           @PathVariable String companyAccountsId,
+                                           Model model,
+                                           HttpServletRequest request) {
 
         try {
             addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
@@ -89,13 +86,13 @@ public class AccountsReferenceDateController extends BaseController implements C
     }
 
     @PostMapping
-    public String submitAccountsReferenceDateQuestion(@PathVariable String companyNumber,
-                                                      @PathVariable String transactionId,
-                                                      @PathVariable String companyAccountsId,
-                                                      @ModelAttribute(ACCOUNTS_REFERENCE_DATE) @Valid AccountsReferenceDate accountsReferenceDate,
-                                                      BindingResult bindingResult,
-                                                      Model model,
-                                                      HttpServletRequest request) {
+    public String submitAccountsReferenceDate(@PathVariable String companyNumber,
+                                              @PathVariable String transactionId,
+                                              @PathVariable String companyAccountsId,
+                                              @ModelAttribute(ACCOUNTS_REFERENCE_DATE) @Valid AccountsReferenceDate accountsReferenceDate,
+                                              BindingResult bindingResult,
+                                              Model model,
+                                              HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
