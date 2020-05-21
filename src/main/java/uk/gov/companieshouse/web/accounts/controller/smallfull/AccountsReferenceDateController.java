@@ -92,9 +92,9 @@ public class AccountsReferenceDateController extends BaseController implements C
     public String submitAccountsReferenceDateQuestion(@PathVariable String companyNumber,
                                                       @PathVariable String transactionId,
                                                       @PathVariable String companyAccountsId,
-                                                      Model model,
                                                       @ModelAttribute(ACCOUNTS_REFERENCE_DATE) @Valid AccountsReferenceDate accountsReferenceDate,
                                                       BindingResult bindingResult,
+                                                      Model model,
                                                       HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
