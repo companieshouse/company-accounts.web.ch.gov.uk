@@ -30,7 +30,7 @@
                      th:classappend="${#fields.hasErrors('chosenDate')} ? 'govuk-form-group--error' : ''">
 
                     <span class="govuk-error-message"
-                          id="choosenDate-errorId"
+                          id="chosenDate-errorId"
                           th:if="${#fields.hasErrors('chosenDate')}"
                           th:each="e : ${#fields.errors('chosenDate')}" th:text="${e}">
                     </span>
