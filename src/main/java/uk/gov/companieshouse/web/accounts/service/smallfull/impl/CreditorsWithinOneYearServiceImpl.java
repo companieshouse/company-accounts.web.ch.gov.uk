@@ -59,10 +59,7 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
         CreditorsWithinOneYear creditorsWithinOneYear =
                 transformer.getCreditorsWithinOneYear(creditorsWithinOneYearApi);
 
-        BalanceSheet balanceSheet =
-                balanceSheetService
-                        .getBalanceSheet(transactionId, companyAccountsId, companyNumber);
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
+        BalanceSheetHeadings balanceSheetHeadings = getCreditorsWithinOneYearBalanceSheetHeadings(transactionId, companyAccountsId);
         creditorsWithinOneYear.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return creditorsWithinOneYear;
@@ -147,5 +144,14 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
         SmallFullApi smallFullApi =
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
         return smallFullApi.getLinks().getCreditorsWithinOneYearNote() != null;
+    }
+
+    private BalanceSheetHeadings getCreditorsWithinOneYearBalanceSheetHeadings(String transactionId, String companyAccountsId) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+        return smallFullService.getBalanceSheetHeadings(smallFullApi);
     }
 }
