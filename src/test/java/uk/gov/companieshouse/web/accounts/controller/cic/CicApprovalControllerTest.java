@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -92,6 +94,23 @@ public class CicApprovalControllerTest {
             .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get approval view success path with invalidated date")
+    void getRequestSuccessWithInvalidatedDate() throws Exception {
+
+        when(cicApprovalService
+                .getCicApproval(anyString(), anyString()))
+                .thenReturn(new CicApproval());
+
+        this.mockMvc.perform(get(APPROVAL_PATH + "?dateInvalidated=true"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(APPROVAL_VIEW))
+                .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
+                .andExpect(model().attribute(APPROVAL_MODEL_ATTR, hasProperty("dateInvalidated", is(true))));
     }
 
     @Test

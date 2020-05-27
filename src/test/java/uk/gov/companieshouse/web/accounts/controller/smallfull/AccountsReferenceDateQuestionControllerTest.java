@@ -20,7 +20,9 @@ import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
 import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.cic.CicApproval;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.company.impl.CompanyServiceImpl;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServiceImpl;
@@ -76,6 +78,12 @@ public class AccountsReferenceDateQuestionControllerTest {
     @Mock
     private NextAccountsApi nextAccounts;
 
+    @Mock
+    private CicApprovalService cicApprovalService;
+
+    @Mock
+    private CicApproval cicApproval;
+
     @InjectMocks
     private AccountsReferenceDateQuestionController controller;
 
@@ -94,6 +102,11 @@ public class AccountsReferenceDateQuestionControllerTest {
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full/accounts-reference-date-question";
+
+    private static final String CIC_APPROVAL_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/cic/approval?dateInvalidated=true";
 
     private static final String ARD_QUESTION_MODEL_ATTR = "accountsReferenceDateQuestion";
 
@@ -200,6 +213,10 @@ public class AccountsReferenceDateQuestionControllerTest {
     @DisplayName("Post ARD question - has chosen YES")
     void postRequestHasConfirmedYesOnArdDate() throws Exception {
 
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyProfile.isCommunityInterestCompany()).thenReturn(false);
+
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_QUESTION_PATH)
@@ -207,6 +224,91 @@ public class AccountsReferenceDateQuestionControllerTest {
                 .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(smallFullService).updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
+    @Test
+    @DisplayName("Post ARD question - has chosen YES - is CIC with valid approval date")
+    void postRequestHasConfirmedYesOnArdDateIsCicWithValidApprovalDate() throws Exception {
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
+
+        when(companyProfile.getAccounts()).thenReturn(accounts);
+
+        when(accounts.getNextAccounts()).thenReturn(nextAccounts);
+
+        when(nextAccounts.getPeriodEndOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_END);
+
+        when(cicApprovalService.getCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(cicApproval);
+
+        when(cicApproval.getLocalDate()).thenReturn(NEXT_ACCOUNTS_PERIOD_END.plusDays(1));
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(ARD_QUESTION_PATH)
+                .param(ARD_SELECTION, "1")
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(smallFullService).updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
+    @Test
+    @DisplayName("Post ARD question - has chosen YES - is CIC with null approval date")
+    void postRequestHasConfirmedYesOnArdDateIsCicWithNullApprovalDate() throws Exception {
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
+
+        when(companyProfile.getAccounts()).thenReturn(accounts);
+
+        when(accounts.getNextAccounts()).thenReturn(nextAccounts);
+
+        when(nextAccounts.getPeriodEndOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_END);
+
+        when(cicApprovalService.getCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(cicApproval);
+
+        when(cicApproval.getLocalDate()).thenReturn(null);
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(ARD_QUESTION_PATH)
+                .param(ARD_SELECTION, "1")
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(smallFullService).updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+    }
+
+    @Test
+    @DisplayName("Post ARD question - has chosen YES - is CIC with invalidated approval date")
+    void postRequestHasConfirmedYesOnArdDateIsCicWithInvalidatedApprovalDate() throws Exception {
+
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
+
+        when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
+
+        when(companyProfile.getAccounts()).thenReturn(accounts);
+
+        when(accounts.getNextAccounts()).thenReturn(nextAccounts);
+
+        when(nextAccounts.getPeriodEndOn()).thenReturn(NEXT_ACCOUNTS_PERIOD_END);
+
+        when(cicApprovalService.getCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(cicApproval);
+
+        when(cicApproval.getLocalDate()).thenReturn(NEXT_ACCOUNTS_PERIOD_END.minusDays(1));
+
+        this.mockMvc.perform(post(ARD_QUESTION_PATH)
+                .param(ARD_SELECTION, "1")
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + CIC_APPROVAL_PATH));
 
         verify(smallFullService).updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
@@ -220,7 +322,8 @@ public class AccountsReferenceDateQuestionControllerTest {
                 .updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(ARD_QUESTION_PATH)
-                .param(ARD_SELECTION, "1"))
+                .param(ARD_SELECTION, "1")
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
