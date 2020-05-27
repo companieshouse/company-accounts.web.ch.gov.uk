@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
@@ -20,6 +22,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.AccountsReferenceDateQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServiceImpl;
 
@@ -39,9 +42,14 @@ public class AccountsReferenceDateQuestionController extends BaseController {
     private SmallFullServiceImpl smallFullService;
 
     @Autowired
+    private CicApprovalService cicApprovalService;
+
+    @Autowired
     private ApiClientService apiClientService;
 
     private static final String ACCOUNTS_REFERENCE_DATE_QUESTION = "accountsReferenceDateQuestion";
+
+    private static final UriTemplate CIC_APPROVAL = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/approval?dateInvalidated=true");
 
     @GetMapping
     public String getAccountsReferenceDateQuestion(@PathVariable String companyNumber,
@@ -93,11 +101,30 @@ public class AccountsReferenceDateQuestionController extends BaseController {
         }
 
         try {
-            if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
-                    smallFullService.updateSmallFullAccounts(null, transactionId, companyAccountsId );
-            }
-
             cacheHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
+
+            // If the user elects not to change their ARD
+            if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
+
+                // Default the period end date
+                smallFullService.updateSmallFullAccounts(null, transactionId, companyAccountsId);
+
+                CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
+
+                // If the filing is for a CIC
+                if (companyProfile.isCommunityInterestCompany()) {
+
+                    LocalDate periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
+                    LocalDate cicApprovalDate = cicApprovalService.getCicApproval(transactionId, companyAccountsId).getLocalDate();
+
+                    // And CIC approval date is before the default period end date
+                    if (cicApprovalDate != null && !cicApprovalDate.isAfter(periodEndOn)) {
+
+                        // Return the user to CIC approval
+                        return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CIC_APPROVAL.expand(companyNumber, transactionId, companyAccountsId).toString();
+                    }
+                }
+            }
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
         } catch (ServiceException e) {
