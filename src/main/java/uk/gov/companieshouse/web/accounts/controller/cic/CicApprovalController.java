@@ -55,7 +55,7 @@ public class CicApprovalController extends BaseController {
 
         try {
             CicApproval cicApproval = cicApprovalService.getCicApproval(transactionId, companyAccountsId);
-            dateInvalidated.ifPresent((dateInvalidatedString) -> cicApproval.setDateInvalidated(true));
+            dateInvalidated.ifPresent(dateInvalidatedString -> cicApproval.setDateInvalidated(true));
             model.addAttribute(APPROVAL, cicApproval);
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
