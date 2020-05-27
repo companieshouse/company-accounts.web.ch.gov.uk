@@ -12,16 +12,16 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
@@ -31,9 +31,6 @@ public class StocksServiceImpl implements StocksService {
 
     @Autowired
     private StocksTransformer stocksTransformer;
-
-    @Autowired
-    private BalanceSheetService balanceSheetService;
 
     @Autowired
     private ApiClientService apiClientService;
@@ -59,9 +56,7 @@ public class StocksServiceImpl implements StocksService {
         StocksApi stocksApi = getStocksApi(transactionId, companyAccountsId);
         StocksNote stocksNote = stocksTransformer.getStocks(stocksApi);
 
-        BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(
-            transactionId, companyAccountsId, companyNumber);
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
+        BalanceSheetHeadings balanceSheetHeadings = getStocksBalanceSheetHeadings(transactionId, companyAccountsId);
         stocksNote.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return stocksNote;
@@ -136,4 +131,15 @@ public class StocksServiceImpl implements StocksService {
             serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
         }
     }
+
+    private BalanceSheetHeadings getStocksBalanceSheetHeadings(String transactionId, String companyAccountsId)
+            throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+        return smallFullService.getBalanceSheetHeadings(smallFullApi);
+    }
+
 }
