@@ -51,10 +51,12 @@ public class StocksServiceImpl implements StocksService {
     public StocksNote getStocks(String transactionId, String companyAccountsId, String companyNumber)
         throws ServiceException {
 
-        StocksApi stocksApi = getStocksApi(transactionId, companyAccountsId);
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        StocksApi stocksApi = getStocksApi(apiClient, transactionId, companyAccountsId);
         StocksNote stocksNote = stocksTransformer.getStocks(stocksApi);
 
-        BalanceSheetHeadings balanceSheetHeadings = getStocksBalanceSheetHeadings(transactionId, companyAccountsId);
+        BalanceSheetHeadings balanceSheetHeadings = getStocksBalanceSheetHeadings(apiClient, transactionId, companyAccountsId);
         stocksNote.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return stocksNote;
@@ -94,9 +96,8 @@ public class StocksServiceImpl implements StocksService {
         return new ArrayList<>();
     }
 
-    private StocksApi getStocksApi(String transactionId, String companyAccountsId) throws ServiceException {
-
-        ApiClient apiClient = apiClientService.getApiClient();
+    private StocksApi getStocksApi(ApiClient apiClient, String transactionId, String companyAccountsId)
+            throws ServiceException {
 
         String uri = STOCKS_URI.expand(transactionId, companyAccountsId).toString();
 
@@ -130,10 +131,8 @@ public class StocksServiceImpl implements StocksService {
         }
     }
 
-    private BalanceSheetHeadings getStocksBalanceSheetHeadings(String transactionId, String companyAccountsId)
+    private BalanceSheetHeadings getStocksBalanceSheetHeadings(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException {
-
-        ApiClient apiClient = apiClientService.getApiClient();
 
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
