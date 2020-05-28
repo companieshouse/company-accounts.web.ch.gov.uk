@@ -54,10 +54,12 @@ public class DebtorsServiceImpl implements DebtorsService {
     @Override
     public Debtors getDebtors(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
-        DebtorsApi debtorsApi = getDebtorsApi(transactionId, companyAccountsId);
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        DebtorsApi debtorsApi = getDebtorsApi(apiClient, transactionId, companyAccountsId);
         Debtors debtors = transformer.getDebtors(debtorsApi);
 
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber).getBalanceSheetHeadings();
+        BalanceSheetHeadings balanceSheetHeadings = getDebtorsBalanceSheetHeadings(apiClient, transactionId, companyAccountsId);
         debtors.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return debtors;
@@ -112,8 +114,7 @@ public class DebtorsServiceImpl implements DebtorsService {
         }
     }
 
-    private DebtorsApi getDebtorsApi(String transactionId, String companyAccountsId) throws ServiceException {
-        ApiClient apiClient = apiClientService.getApiClient();
+    private DebtorsApi getDebtorsApi(ApiClient apiClient, String transactionId, String companyAccountsId) throws ServiceException {
 
         String uri = DEBTORS_URI.expand(transactionId, companyAccountsId).toString();
 
@@ -130,5 +131,13 @@ public class DebtorsServiceImpl implements DebtorsService {
 
     private boolean hasDebtors(SmallFullLinks smallFullLinks) {
         return smallFullLinks.getDebtorsNote() != null;
+    }
+
+    private BalanceSheetHeadings getDebtorsBalanceSheetHeadings(ApiClient apiClient, String transactionId, String companyAccountsId)
+            throws ServiceException {
+
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+        return smallFullService.getBalanceSheetHeadings(smallFullApi);
     }
 }
