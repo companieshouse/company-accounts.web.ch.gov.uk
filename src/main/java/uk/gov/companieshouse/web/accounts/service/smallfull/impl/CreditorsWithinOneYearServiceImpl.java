@@ -11,7 +11,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -20,9 +19,10 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsWithinOneYearTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+
 import java.util.ArrayList;
 import java.util.List;
-import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @Service
 public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYearService {
@@ -54,15 +54,15 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
     @Override
     public CreditorsWithinOneYear getCreditorsWithinOneYear(String transactionId,
             String companyAccountsId, String companyNumber) throws ServiceException {
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
         CreditorsWithinOneYearApi creditorsWithinOneYearApi =
-                getCreditorsWithinOneYearApi(transactionId, companyAccountsId);
+                getCreditorsWithinOneYearApi(apiClient, transactionId, companyAccountsId);
         CreditorsWithinOneYear creditorsWithinOneYear =
                 transformer.getCreditorsWithinOneYear(creditorsWithinOneYearApi);
 
-        BalanceSheet balanceSheet =
-                balanceSheetService
-                        .getBalanceSheet(transactionId, companyAccountsId, companyNumber);
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
+        BalanceSheetHeadings balanceSheetHeadings = getCreditorsWithinOneYearBalanceSheetHeadings(apiClient, transactionId, companyAccountsId);
         creditorsWithinOneYear.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return creditorsWithinOneYear;
@@ -124,9 +124,8 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
         }
     }
 
-    private CreditorsWithinOneYearApi getCreditorsWithinOneYearApi(String transactionId,
+    private CreditorsWithinOneYearApi getCreditorsWithinOneYearApi(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-        ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = CREDITORS_WITHIN_ONE_YEAR_URI.expand(transactionId, companyAccountsId)
                 .toString();
@@ -147,5 +146,12 @@ public class CreditorsWithinOneYearServiceImpl implements CreditorsWithinOneYear
         SmallFullApi smallFullApi =
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
         return smallFullApi.getLinks().getCreditorsWithinOneYearNote() != null;
+    }
+
+    private BalanceSheetHeadings getCreditorsWithinOneYearBalanceSheetHeadings(ApiClient apiClient, String transactionId, String companyAccountsId) throws ServiceException {
+
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+        return smallFullService.getBalanceSheetHeadings(smallFullApi);
     }
 }
