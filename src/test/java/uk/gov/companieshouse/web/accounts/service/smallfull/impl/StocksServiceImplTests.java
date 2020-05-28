@@ -78,12 +78,6 @@ public class StocksServiceImplTests {
     private StocksTransformer mockStocksTransformer;
 
     @Mock
-    private BalanceSheetService mockBalanceSheetService;
-
-    @Mock
-    private BalanceSheet mockBalanceSheet;
-
-    @Mock
     private SmallFullService mockSmallFullService;
 
     @Mock
@@ -136,9 +130,6 @@ public class StocksServiceImplTests {
         getMockStocksApi(stocksApi);
 
         when(mockStocksTransformer.getStocks(stocksApi)).thenReturn(createStocks());
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
-            .thenReturn(mockBalanceSheet);
-        when(mockBalanceSheet.getBalanceSheetHeadings()).thenReturn(new BalanceSheetHeadings());
 
         StocksNote stocksNote = stocksService.getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -157,9 +148,6 @@ public class StocksServiceImplTests {
         doNothing()
                 .when(serviceExceptionHandler)
                         .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
-
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
-            COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
 
         when(mockStocksTransformer.getStocks(null))
             .thenReturn(createStocks());

@@ -91,7 +91,7 @@ public class AccountingPoliciesServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String ACCOUNTING_POLICIES_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-                                                    COMPANY_ACCOUNTS_ID + "/small-full/notes/accounting-policy";
+                                                    COMPANY_ACCOUNTS_ID + "/small-full/notes/accounting-policies";
 
     private static final String RESOURCE_NAME = "accounting policies";
 

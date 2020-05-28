@@ -137,9 +137,6 @@ public class CreditorsAfterOneYearServiceImplTests {
 
         when(mockTransformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi)).
                 thenReturn(createCreditorsAfterOneYear());
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
-                COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
-        when(mockBalanceSheet.getBalanceSheetHeadings()).thenReturn(new BalanceSheetHeadings());
 
         CreditorsAfterOneYear creditorsAfterOneYear =
                 creditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID,
@@ -160,9 +157,6 @@ public class CreditorsAfterOneYearServiceImplTests {
         doNothing()
                 .when(serviceExceptionHandler)
                 .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
-
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
-                COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
 
         when(mockTransformer.getCreditorsAfterOneYear(null))
                 .thenReturn(createCreditorsAfterOneYear());

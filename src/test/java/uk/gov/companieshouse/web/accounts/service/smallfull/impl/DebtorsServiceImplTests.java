@@ -89,12 +89,6 @@ public class DebtorsServiceImplTests {
     private SmallFullService smallFullService;
 
     @Mock
-    private BalanceSheetService mockBalanceSheetService;
-
-    @Mock
-    private BalanceSheet mockBalanceSheet;
-
-    @Mock
     private List<ValidationError> mockValidationErrors;
 
     @Mock
@@ -134,8 +128,6 @@ public class DebtorsServiceImplTests {
         getMockDebtorsApi(debtorsApi);
 
         when(mockDebtorsTransformer.getDebtors(debtorsApi)).thenReturn(createDebtors());
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
-        when(mockBalanceSheet.getBalanceSheetHeadings()).thenReturn(new BalanceSheetHeadings());
 
         Debtors debtors = debtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -158,8 +150,6 @@ public class DebtorsServiceImplTests {
         doNothing()
                 .when(serviceExceptionHandler)
                 .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
-
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
 
         when(mockDebtorsTransformer.getDebtors(null)).thenReturn(createDebtors());
 
