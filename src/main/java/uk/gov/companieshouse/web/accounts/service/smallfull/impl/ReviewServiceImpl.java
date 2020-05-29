@@ -150,7 +150,7 @@ public class ReviewServiceImpl implements ReviewService {
                 currentAssetsInvestmentsService.getCurrentAssetsInvestments(transactionId, companyAccountsId, companyNumber);
 
         OffBalanceSheetArrangements offBalanceSheetArrangements =
-                offBalanceSheetArrangementsService.get(transactionId, companyAccountsId, NoteType.OFF_BALANCE_SHEET_ARRANGEMENTS).orElse(new OffBalanceSheetArrangements());
+                offBalanceSheetArrangementsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS).orElse(new OffBalanceSheetArrangements());
 
         Review review = new Review();
         review.setProfitAndLoss(profitAndLoss);

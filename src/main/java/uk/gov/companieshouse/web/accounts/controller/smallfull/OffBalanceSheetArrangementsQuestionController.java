@@ -48,7 +48,7 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
 
         try {
             if (StringUtils.isNotBlank(
-                    noteService.get(transactionId, companyAccountsId, NoteType.OFF_BALANCE_SHEET_ARRANGEMENTS)
+                    noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)
                             .orElse(new OffBalanceSheetArrangements())
                                     .getOffBalanceSheetArrangementsDetails())) {
 
@@ -86,7 +86,7 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
         try {
             if (!offBalanceSheetArrangementsQuestion.getHasIncludedOffBalanceSheetArrangements()) {
                 
-                noteService.delete(transactionId, companyAccountsId, NoteType.OFF_BALANCE_SHEET_ARRANGEMENTS);
+                noteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
             }
         } catch (ServiceException e) {
 

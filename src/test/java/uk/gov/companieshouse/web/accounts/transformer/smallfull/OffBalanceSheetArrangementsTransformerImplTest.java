@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,18 +17,8 @@ public class OffBalanceSheetArrangementsTransformerImplTest {
     private NoteTransformer<OffBalanceSheetArrangements, OffBalanceSheetApi> transformer = new OffBalanceSheetArrangementsTransformerImpl();
 
     @Test
-    @DisplayName("Get off balance sheet arrangements - null api resource")
-    void getOffBalanceSheetArrangementsForNullApiResource() {
-
-        OffBalanceSheetArrangements arrangements = transformer.toWeb(null);
-
-        assertNotNull(arrangements);
-        assertNull(arrangements.getOffBalanceSheetArrangementsDetails());
-    }
-
-    @Test
-    @DisplayName("Get off balance sheet arrangements - existing api resource")
-    void getOffBalanceSheetArrangementsForExistingApiResource() {
+    @DisplayName("Get off balance sheet arrangements")
+    void getOffBalanceSheetArrangements() {
 
         OffBalanceSheetApi offBalanceSheetApi = new OffBalanceSheetApi();
         offBalanceSheetApi.setDetails(DETAILS);

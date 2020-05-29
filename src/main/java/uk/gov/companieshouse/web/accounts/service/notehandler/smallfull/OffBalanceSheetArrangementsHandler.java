@@ -65,6 +65,6 @@ public class OffBalanceSheetArrangementsHandler implements NoteResourceHandler<O
     @Override
     public NoteType getNoteType() {
 
-        return NoteType.OFF_BALANCE_SHEET_ARRANGEMENTS;
+        return NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS;
     }
 }

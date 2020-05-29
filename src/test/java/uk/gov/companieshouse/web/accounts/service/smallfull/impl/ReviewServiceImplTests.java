@@ -195,7 +195,7 @@ public class ReviewServiceImplTests {
                 .thenReturn(mockCurrentAssetsInvestments);
 
         OffBalanceSheetArrangements mockOffBalanceSheetArrangements = new OffBalanceSheetArrangements();
-        when(OffBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.OFF_BALANCE_SHEET_ARRANGEMENTS))
+        when(OffBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenReturn(Optional.of(mockOffBalanceSheetArrangements));
 
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);

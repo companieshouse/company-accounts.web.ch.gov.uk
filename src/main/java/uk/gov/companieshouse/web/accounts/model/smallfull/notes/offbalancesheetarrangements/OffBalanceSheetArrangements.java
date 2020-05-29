@@ -6,7 +6,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
-public class OffBalanceSheetArrangements extends Note {
+public class OffBalanceSheetArrangements implements Note {
 
     @NotBlank(message = "{offBalanceSheetArrangements.details.missing}")
     @ValidationMapping("$.off_balance_sheet_arrangements.details")
