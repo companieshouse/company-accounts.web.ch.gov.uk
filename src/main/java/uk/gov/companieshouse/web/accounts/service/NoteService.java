@@ -59,9 +59,9 @@ public class NoteService<N extends Note> {
             if (e.getStatusCode() == 404) {
                 return Optional.empty();
             }
-            throw new ServiceException("Error fetching resource", e);
+            throw new ServiceException("Error fetching resource of type " + noteType.toString(), e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI", e);
+            throw new ServiceException("Invalid URI for resource of type " + noteType.toString(), e);
         }
     }
 
@@ -98,9 +98,9 @@ public class NoteService<N extends Note> {
                 return validationContext.getValidationErrors(apiResponse.getErrors());
             }
         } catch (ApiErrorResponseException e) {
-            throw new ServiceException("Error submitting resource", e);
+            throw new ServiceException("Error submitting resource of type " + noteType.toString(), e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI", e);
+            throw new ServiceException("Invalid URI for resource of type " + noteType.toString(), e);
         }
 
         return new ArrayList<>();
@@ -129,9 +129,9 @@ public class NoteService<N extends Note> {
             try {
                 noteResourceHandler.delete(apiClient, uri).execute();
             } catch (ApiErrorResponseException e) {
-                throw new ServiceException("Error deleting resource", e);
+                throw new ServiceException("Error deleting resource of type " + noteType.toString(), e);
             } catch (URIValidationException e) {
-                throw new ServiceException("Invalid URI", e);
+                throw new ServiceException("Invalid URI for resource of type " + noteType.toString(), e);
             }
         }
     }
