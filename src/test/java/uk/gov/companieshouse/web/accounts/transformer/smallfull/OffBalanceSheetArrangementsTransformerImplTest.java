@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.smallfull.offBalanceSheet.OffBalanceSheetApi;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.OffBalanceSheetArrangementsTransformerImpl;
@@ -40,5 +41,13 @@ public class OffBalanceSheetArrangementsTransformerImplTest {
 
         assertNotNull(offBalanceSheetApi);
         assertEquals(DETAILS, offBalanceSheetApi.getDetails());
+    }
+
+    @Test
+    @DisplayName("Get note type")
+    void getNoteType() {
+
+        assertEquals(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS,
+                        transformer.getNoteType());
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.common.ApiResource;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
+import uk.gov.companieshouse.web.accounts.exception.MissingInfrastructureException;
 import uk.gov.companieshouse.web.accounts.model.Note;
 
 @Component
@@ -25,7 +26,7 @@ public class NoteTransformerFactory<W extends Note, A extends ApiResource> {
 
         NoteTransformer<W, A> noteTransformer = noteTransformerMap.get(noteType);
         if (noteTransformer == null) {
-            throw new RuntimeException();
+            throw new MissingInfrastructureException("No note transformer found for note type: " + noteType.toString());
         }
         return noteTransformer;
     }

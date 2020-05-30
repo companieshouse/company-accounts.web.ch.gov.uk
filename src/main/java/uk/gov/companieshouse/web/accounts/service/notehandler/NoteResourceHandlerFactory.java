@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.common.ApiResource;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
+import uk.gov.companieshouse.web.accounts.exception.MissingInfrastructureException;
 
 @Component
 public class NoteResourceHandlerFactory<A extends ApiResource> {
@@ -26,7 +27,7 @@ public class NoteResourceHandlerFactory<A extends ApiResource> {
 
         NoteResourceHandler<A> noteResourceHandler = noteHelperMap.get(noteType);
         if (noteResourceHandler == null) {
-            throw new RuntimeException();
+            throw new MissingInfrastructureException("No note resource handler found for note type: " + noteType.toString());
         }
         return noteResourceHandler;
     }
