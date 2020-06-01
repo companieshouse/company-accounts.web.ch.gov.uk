@@ -14,13 +14,14 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +38,7 @@ public class StocksController extends BaseController implements ConditionalContr
     private BalanceSheetService balanceSheetService;
 
     @Autowired
-    private StocksService stocksService;
+    private NoteService<StocksNote> noteService;
 
     @Override
     protected String getTemplateName() {
@@ -53,8 +54,7 @@ public class StocksController extends BaseController implements ConditionalContr
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            StocksNote stocksNote = stocksService.getStocks(transactionId, companyAccountsId, companyNumber);
-            model.addAttribute("stocksNote", stocksNote);
+            model.addAttribute("stocksNote", noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_STOCKS));
         } catch (ServiceException se) {
             LOGGER.errorRequest(request, se.getMessage(), se);
             return ERROR_VIEW;
@@ -80,7 +80,7 @@ public class StocksController extends BaseController implements ConditionalContr
 
         try {
             List<ValidationError> validationErrors =
-                stocksService.submitStocks(transactionId, companyAccountsId, stocksNote, companyNumber);
+                    noteService.submit(transactionId, companyAccountsId, stocksNote, NoteType.SMALL_FULL_STOCKS);
 
             if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

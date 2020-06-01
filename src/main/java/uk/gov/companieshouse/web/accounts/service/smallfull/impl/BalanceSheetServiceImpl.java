@@ -12,6 +12,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsAfterOneYear;
@@ -25,6 +26,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
@@ -36,7 +39,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -69,7 +71,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private CreditorsAfterOneYearService creditorsAfterOneYearService;
 
     @Autowired
-    private StocksService stocksService;
+    private NoteService<StocksNote> stocksService;
 
     @Autowired
     private IntangibleAssetsNoteService intangibleAssetsNoteService;
@@ -245,7 +247,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && isStocksPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getStocksNote() != null) {
 
-            stocksService.deleteStocks(transactionId, companyAccountsId);
+            stocksService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_STOCKS);
         }
 
         if ((isCurrentAssetsInvestmentsCurrentAmountNullOrZero(balanceSheet)

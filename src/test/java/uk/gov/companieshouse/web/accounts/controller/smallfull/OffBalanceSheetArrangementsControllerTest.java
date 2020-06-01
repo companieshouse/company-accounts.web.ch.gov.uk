@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.List;
-import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,7 +102,7 @@ public class OffBalanceSheetArrangementsControllerTest {
     void getOffBalanceSheetArrangementsSuccess() throws Exception {
 
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
-                .thenReturn(Optional.of(offBalanceSheetArrangements));
+                .thenReturn(offBalanceSheetArrangements);
 
         mockMvc.perform(get(OFF_BALANCE_SHEET_ARRANGEMENTS_PATH))
                 .andExpect(status().isOk())

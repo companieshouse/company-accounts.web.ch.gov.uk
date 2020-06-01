@@ -16,6 +16,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.service.notehandler.NoteResourceHandler;
 import uk.gov.companieshouse.web.accounts.service.notehandler.NoteResourceHandlerFactory;
+import uk.gov.companieshouse.web.accounts.service.notehandler.dates.DateHandlerFactory;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformerFactory;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -33,6 +34,9 @@ public class NoteService<N extends Note> {
     private NoteTransformerFactory<N, ApiResource> noteTransformerFactory;
 
     @Autowired
+    private DateHandlerFactory<N> dateHandlerFactory;
+
+    @Autowired
     private ValidationContext validationContext;
 
     /**
@@ -40,10 +44,10 @@ public class NoteService<N extends Note> {
      * @param transactionId the transaction identifier
      * @param companyAccountsId the company accounts identifier
      * @param noteType the type of note to fetch
-     * @return an optional containing resource data, or an empty optional if no data is found
+     * @return a web resource
      * @throws ServiceException on retrieval error
      */
-    public Optional<N> get(String transactionId, String companyAccountsId, NoteType noteType) throws ServiceException {
+    public N get(String transactionId, String companyAccountsId, NoteType noteType) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
@@ -51,18 +55,26 @@ public class NoteService<N extends Note> {
 
         String uri = noteResourceHandler.getUri(transactionId, companyAccountsId);
 
+        ApiResource apiResource = null;
+
         try {
-            ApiResource apiResource = noteResourceHandler.get(apiClient, uri).execute().getData();
-            return Optional.of(noteTransformerFactory.getNoteTransformer(noteType).toWeb(apiResource));
+            apiResource = noteResourceHandler.get(apiClient, uri).execute().getData();
 
         } catch (ApiErrorResponseException e) {
-            if (e.getStatusCode() == 404) {
-                return Optional.empty();
+            if (e.getStatusCode() != 404) {
+                throw new ServiceException("Error fetching resource of type " + noteType.toString(), e);
             }
-            throw new ServiceException("Error fetching resource of type " + noteType.toString(), e);
         } catch (URIValidationException e) {
             throw new ServiceException("Invalid URI for resource of type " + noteType.toString(), e);
         }
+
+        N note = noteTransformerFactory.getNoteTransformer(noteType).toWeb(apiResource);
+
+        if (noteType.hasIncludedDates()) {
+            dateHandlerFactory.getDateHandler(noteType).addDates(apiClient, transactionId, companyAccountsId, note);
+        }
+
+        return note;
     }
 
     /**

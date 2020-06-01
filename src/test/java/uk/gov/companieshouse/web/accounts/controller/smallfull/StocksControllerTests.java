@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -20,9 +21,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -32,9 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -52,7 +52,7 @@ public class StocksControllerTests {
     private NavigatorService mockNavigatorService;
 
     @Mock
-    private StocksService mockStocksService;
+    private NoteService<StocksNote> mockStocksService;
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
@@ -95,7 +95,7 @@ public class StocksControllerTests {
     void getRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockStocksService.getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(mockStocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS))
             .thenReturn(new StocksNote());
 
         this.mockMvc.perform(get(SMALL_FULL_STOCKS_PATH))
@@ -104,16 +104,13 @@ public class StocksControllerTests {
             .andExpect(model().attributeExists(STOCKS_MODEL_ATTR))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
-
-        verify(mockStocksService, times(1))
-            .getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
     }
 
     @Test
     @DisplayName("Get stocks view failure path due to error on stocks retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
-        when(mockStocksService.getStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(mockStocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS))
             .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(SMALL_FULL_STOCKS_PATH))
@@ -128,7 +125,7 @@ public class StocksControllerTests {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
             .thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockStocksService.submitStocks(anyString(), anyString(), any(StocksNote.class), anyString()))
+        when(mockStocksService.submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS)))
             .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
@@ -141,7 +138,7 @@ public class StocksControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockStocksService).submitStocks(anyString(), anyString(), any(StocksNote.class), anyString());
+            .when(mockStocksService).submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS));
 
         this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
             .andExpect(status().isOk())
@@ -160,7 +157,7 @@ public class StocksControllerTests {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockStocksService.submitStocks(anyString(), anyString(), any(StocksNote.class), anyString()))
+        when(mockStocksService.submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS)))
             .thenReturn(errors);
 
         this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))

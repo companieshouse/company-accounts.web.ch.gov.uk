@@ -14,6 +14,11 @@ public class OffBalanceSheetArrangementsTransformerImpl implements
     public OffBalanceSheetArrangements toWeb(OffBalanceSheetApi offBalanceSheetApi) {
 
         OffBalanceSheetArrangements arrangements = new OffBalanceSheetArrangements();
+
+        if (offBalanceSheetApi == null) {
+            return arrangements;
+        }
+
         arrangements.setOffBalanceSheetArrangementsDetails(offBalanceSheetApi.getDetails());
         return arrangements;
     }

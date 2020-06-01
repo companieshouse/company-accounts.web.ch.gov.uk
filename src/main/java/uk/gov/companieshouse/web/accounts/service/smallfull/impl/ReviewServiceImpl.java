@@ -39,7 +39,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolic
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
@@ -88,7 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
     private EmployeesService employeesService;
 
     @Autowired
-    private StocksService stocksService;
+    private NoteService<StocksNote> stocksService;
 
     @Autowired
     private TangibleAssetsNoteService tangibleAssetsNoteService;
@@ -142,7 +141,7 @@ public class ReviewServiceImpl implements ReviewService {
         IntangibleAssets intangibleAssets =
                 intangibleAssetsNoteService.getIntangibleAssets(transactionId, companyAccountsId, companyNumber);
         
-        StocksNote stocks = stocksService.getStocks(transactionId,companyAccountsId, companyNumber);
+        StocksNote stocks = stocksService.get(transactionId,companyAccountsId, NoteType.SMALL_FULL_STOCKS);
 
         FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.getFixedAssetsInvestments(transactionId, companyAccountsId, companyNumber);
 
@@ -150,7 +149,7 @@ public class ReviewServiceImpl implements ReviewService {
                 currentAssetsInvestmentsService.getCurrentAssetsInvestments(transactionId, companyAccountsId, companyNumber);
 
         OffBalanceSheetArrangements offBalanceSheetArrangements =
-                offBalanceSheetArrangementsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS).orElse(new OffBalanceSheetArrangements());
+                offBalanceSheetArrangementsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         Review review = new Review();
         review.setProfitAndLoss(profitAndLoss);

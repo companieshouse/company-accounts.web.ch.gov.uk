@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,7 +99,7 @@ public class OffBalanceSheetArrangementsQuestionControllerTest {
     void getOffBalanceSheetArrangementsQuestionHasArrangements() throws Exception {
 
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
-                .thenReturn(Optional.of(offBalanceSheetArrangements));
+                .thenReturn(offBalanceSheetArrangements);
 
         when(offBalanceSheetArrangements.getOffBalanceSheetArrangementsDetails()).thenReturn(ARRANGEMENTS);
 
@@ -120,7 +119,7 @@ public class OffBalanceSheetArrangementsQuestionControllerTest {
     void getOffBalanceSheetArrangementsQuestionDoesNotHaveArrangements() throws Exception {
 
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
-                .thenReturn(Optional.of(offBalanceSheetArrangements));
+                .thenReturn(offBalanceSheetArrangements);
 
         when(offBalanceSheetArrangements.getOffBalanceSheetArrangementsDetails()).thenReturn(null);
 
