@@ -5,19 +5,20 @@ import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.PreviousPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.PaymentsOnAccount;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Total;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.StocksTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class StocksTransformerImplTests {
 
-    private StocksTransformer transformer = new StocksTransformerImpl();
+    private NoteTransformer<StocksNote, StocksApi> transformer = new StocksTransformerImpl();
 
     private static final Long PAYMENT_ON_ACCOUNT_VALUE = 5L;
     private static final Long STOCKS_VALUE = 10L;
@@ -37,7 +38,7 @@ public class StocksTransformerImplTests {
 
         stocksApi.setCurrentPeriod(stocksCurrentPeriod);
 
-        StocksNote stocksNote = transformer.getStocks(stocksApi);
+        StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
@@ -58,7 +59,7 @@ public class StocksTransformerImplTests {
 
         stocksApi.setCurrentPeriod(stocksCurrentPeriod);
 
-        StocksNote stocksNote = transformer.getStocks(stocksApi);
+        StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
@@ -79,7 +80,7 @@ public class StocksTransformerImplTests {
 
         stocksApi.setPreviousPeriod(stocksPreviousPeriod);
 
-        StocksNote stocksNote = transformer.getStocks(stocksApi);
+        StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
@@ -100,7 +101,7 @@ public class StocksTransformerImplTests {
 
         stocksApi.setPreviousPeriod(stocksPreviousPeriod);
 
-        StocksNote stocksNote = transformer.getStocks(stocksApi);
+        StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
@@ -114,7 +115,7 @@ public class StocksTransformerImplTests {
         StocksNote stocksNote = new StocksNote();
         createFullCurrentDebtors(stocksNote);
 
-        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+        StocksApi stocksApi = transformer.toApi(stocksNote);
 
         assertNotNull(stocksApi);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getCurrentPeriod().getPaymentsOnAccount());
@@ -129,7 +130,7 @@ public class StocksTransformerImplTests {
         StocksNote stocksNote = new StocksNote();
         createFullPreviousDebtors(stocksNote);
 
-        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+        StocksApi stocksApi = transformer.toApi(stocksNote);
 
         assertNotNull(stocksApi);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getPreviousPeriod().getPaymentsOnAccount());
@@ -153,7 +154,7 @@ public class StocksTransformerImplTests {
         total.setCurrentTotal(TOTAL_VALUE);
         stocksNote.setTotal(total);
 
-        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+        StocksApi stocksApi = transformer.toApi(stocksNote);
 
         assertNotNull(stocksApi);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getCurrentPeriod().getPaymentsOnAccount());
@@ -176,11 +177,18 @@ public class StocksTransformerImplTests {
         total.setPreviousTotal(TOTAL_VALUE);
         stocksNote.setTotal(total);
 
-        StocksApi stocksApi = transformer.getStocksApi(stocksNote);
+        StocksApi stocksApi = transformer.toApi(stocksNote);
 
         assertNotNull(stocksApi);
         assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getPreviousPeriod().getPaymentsOnAccount());
         assertEquals(TOTAL_VALUE, stocksApi.getPreviousPeriod().getTotal());
+    }
+
+    @Test
+    @DisplayName("Get note type")
+    void getNoteType() {
+
+        assertEquals(NoteType.SMALL_FULL_STOCKS, transformer.getNoteType());
     }
 
     private void createFullCurrentDebtors(StocksNote stocksNote) {

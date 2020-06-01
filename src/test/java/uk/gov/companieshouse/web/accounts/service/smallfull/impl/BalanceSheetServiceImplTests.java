@@ -16,9 +16,12 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
@@ -30,7 +33,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StocksService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 
@@ -97,7 +99,7 @@ public class BalanceSheetServiceImplTests {
     private CreditorsAfterOneYearService creditorsAfterOneYearService;
 
     @Mock
-    private StocksService stocksService;
+    private NoteService<StocksNote> stocksService;
 
     @Mock
     private TangibleAssetsNoteService tangibleAssetsNoteService;
@@ -465,7 +467,7 @@ public class BalanceSheetServiceImplTests {
         verify(intangibleAssetsNoteService).deleteIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(tangibleAssetsNoteService).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(fixedAssetsInvestmentsService).deleteFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(stocksService).deleteStocks(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(stocksService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS);
         verify(currentAssetsInvestmentsService).deleteCurrentAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 }

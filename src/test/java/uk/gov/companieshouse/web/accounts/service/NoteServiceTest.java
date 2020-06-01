@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,7 +12,6 @@ import static org.mockito.Mockito.when;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -119,11 +117,10 @@ public class NoteServiceTest {
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toWeb(apiResource)).thenReturn(note);
 
-        Optional<Note> response = noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NOTE_TYPE);
+        Note response = noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NOTE_TYPE);
 
         assertNotNull(response);
-        assertTrue(response.isPresent());
-        assertEquals(note, response.get());
+        assertEquals(note, response);
     }
 
     @Test
@@ -140,10 +137,13 @@ public class NoteServiceTest {
 
         when(executorWithResponseBody.execute()).thenThrow(apiErrorResponseException);
 
-        Optional<Note> response = noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NOTE_TYPE);
+        when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
+        when(noteTransformer.toWeb(null)).thenReturn(note);
+
+        Note response = noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NOTE_TYPE);
 
         assertNotNull(response);
-        assertFalse(response.isPresent());
+        assertEquals(note, response);
     }
 
     @Test

@@ -4,20 +4,21 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.PreviousPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.PaymentsOnAccount;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Total;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.StocksTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
 @Component
-public class StocksTransformerImpl implements StocksTransformer {
+public class StocksTransformerImpl implements NoteTransformer<StocksNote, StocksApi> {
 
     @Override
-    public StocksNote getStocks(StocksApi stocksApi) {
+    public StocksNote toWeb(StocksApi stocksApi) {
 
         StocksNote stocksNote = new StocksNote();
 
@@ -32,7 +33,7 @@ public class StocksTransformerImpl implements StocksTransformer {
     }
 
     @Override
-    public StocksApi getStocksApi(StocksNote stocksNote) {
+    public StocksApi toApi(StocksNote stocksNote) {
 
         StocksApi stocksApi = new StocksApi();
 
@@ -40,6 +41,11 @@ public class StocksTransformerImpl implements StocksTransformer {
         setPreviousPeriodDebtorsOnApiModel(stocksNote, stocksApi);
 
         return stocksApi;
+    }
+
+    @Override
+    public NoteType getNoteType() {
+        return NoteType.SMALL_FULL_STOCKS;
     }
 
     private void setPreviousPeriodDebtorsOnApiModel(StocksNote stocksNote, StocksApi stocksApi) {

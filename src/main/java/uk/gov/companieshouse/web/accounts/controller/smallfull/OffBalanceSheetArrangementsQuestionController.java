@@ -49,8 +49,7 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
         try {
             if (StringUtils.isNotBlank(
                     noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)
-                            .orElse(new OffBalanceSheetArrangements())
-                                    .getOffBalanceSheetArrangementsDetails())) {
+                            .getOffBalanceSheetArrangementsDetails())) {
 
                 offBalanceSheetArrangementsQuestion.setHasIncludedOffBalanceSheetArrangements(true);
             } else {
