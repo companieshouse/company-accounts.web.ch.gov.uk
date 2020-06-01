@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
@@ -23,6 +24,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.Intan
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
@@ -33,7 +35,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.OffBalanceSheetArrangementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
@@ -102,7 +103,7 @@ public class ReviewServiceImpl implements ReviewService {
     private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
 
     @Autowired
-    private OffBalanceSheetArrangementsService offBalanceSheetArrangementsService;
+    private NoteService<OffBalanceSheetArrangements> offBalanceSheetArrangementsService;
 
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
 
@@ -149,7 +150,7 @@ public class ReviewServiceImpl implements ReviewService {
                 currentAssetsInvestmentsService.getCurrentAssetsInvestments(transactionId, companyAccountsId, companyNumber);
 
         OffBalanceSheetArrangements offBalanceSheetArrangements =
-                offBalanceSheetArrangementsService.getOffBalanceSheetArrangements(transactionId, companyAccountsId);
+                offBalanceSheetArrangementsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS).orElse(new OffBalanceSheetArrangements());
 
         Review review = new Review();
         review.setProfitAndLoss(profitAndLoss);

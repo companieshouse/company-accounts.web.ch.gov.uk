@@ -17,10 +17,11 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.OffBalanceSheetArrangementsService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -36,7 +37,7 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
     private HttpServletRequest request;
 
     @Autowired
-    private OffBalanceSheetArrangementsService offBalanceSheetArrangementsService;
+    private NoteService<OffBalanceSheetArrangements> noteService;
 
     @GetMapping
     public String getOffBalanceSheetArrangements(@PathVariable String companyNumber,
@@ -48,7 +49,8 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
 
         try {
             model.addAttribute(OFF_BALANCE_SHEET_ARRANGEMENTS,
-                    offBalanceSheetArrangementsService.getOffBalanceSheetArrangements(transactionId, companyAccountsId));
+                    noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)
+                            .orElse(new OffBalanceSheetArrangements()));
 
         } catch (ServiceException e) {
 
@@ -75,8 +77,7 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
 
         try {
             List<ValidationError> validationErrors =
-                    offBalanceSheetArrangementsService.submitOffBalanceSheetArrangements(
-                            transactionId, companyAccountsId, offBalanceSheetArrangements);
+                    noteService.submit(transactionId, companyAccountsId, offBalanceSheetArrangements, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
