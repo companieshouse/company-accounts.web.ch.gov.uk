@@ -12,14 +12,17 @@ import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.ProfitAndLossTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -53,6 +56,9 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
     private ProfitAndLossTransformer profitAndLossTransformer;
 
     @Autowired
+    private SmallFullService smallFullService;
+
+    @Autowired
     private ValidationContext validationContext;
 
     private static final String CURRENT_PERIOD_RESOURCE = "current period profit and loss";
@@ -82,7 +88,9 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
         ProfitAndLoss profitAndLoss =
                 profitAndLossTransformer.getProfitAndLoss(currentPeriod, previousPeriod);
 
-        profitAndLoss.setBalanceSheetHeadings(companyService.getBalanceSheetHeadings(companyProfile));
+        BalanceSheetHeadings balanceSheetHeadings = 
+                        getProfitAndLossAfterOneYearBalanceSheetHeadings(apiClient, transactionId, companyAccountsId);
+        profitAndLoss.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return profitAndLoss;
     }
@@ -256,4 +264,12 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
             serviceExceptionHandler.handleURIValidationException(e, PREVIOUS_PERIOD_RESOURCE);
         }
     }
+
+    private BalanceSheetHeadings getProfitAndLossAfterOneYearBalanceSheetHeadings(ApiClient apiClient,
+                    String transactionId, String companyAccountsId) throws ServiceException {
+
+            SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+            return smallFullService.getBalanceSheetHeadings(smallFullApi);
+        }
 }
+
