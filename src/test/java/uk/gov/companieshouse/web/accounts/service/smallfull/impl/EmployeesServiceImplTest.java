@@ -24,11 +24,9 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.AverageNumberOfEmployees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.EmployeesTransformer;
@@ -89,12 +87,6 @@ public class EmployeesServiceImplTest {
     private SmallFullService smallFullService;
 
     @Mock
-    private BalanceSheetService mockBalanceSheetService;
-
-    @Mock
-    private BalanceSheet mockBalanceSheet;
-
-    @Mock
     private ApiResponse<EmployeesApi> responseWithData;
 
     @Mock
@@ -133,8 +125,6 @@ public class EmployeesServiceImplTest {
         getMockEmployeesApi(employeesApi);
 
         when(mockEmployeesTransformer.getEmployees(employeesApi)).thenReturn(createEmployees());
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
-        when(mockBalanceSheet.getBalanceSheetHeadings()).thenReturn(new BalanceSheetHeadings());
 
         Employees employees = employeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -156,8 +146,6 @@ public class EmployeesServiceImplTest {
         doNothing()
                 .when(serviceExceptionHandler)
                 .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
-
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheet);
 
         when(mockEmployeesTransformer.getEmployees(null)).thenReturn(new Employees());
 
