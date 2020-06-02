@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -19,9 +20,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class DebtorsControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private DebtorsService mockDebtorsService;
+    private NoteService<Debtors> mockDebtorsService;
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
@@ -96,7 +97,7 @@ public class DebtorsControllerTest {
     void getRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Debtors());
+        when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenReturn(new Debtors());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
@@ -105,14 +106,14 @@ public class DebtorsControllerTest {
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
-        verify(mockDebtorsService, times(1)).getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        verify(mockDebtorsService, times(1)).get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
     }
 
     @Test
     @DisplayName("Get debtors view failure path due to error on debtors retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
-        when(mockDebtorsService.getDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
+        when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(DEBTORS_PATH))
             .andExpect(status().isOk())
@@ -125,7 +126,7 @@ public class DebtorsControllerTest {
     void postRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockDebtorsService.submitDebtors(anyString(), anyString(), any(Debtors.class), anyString())).thenReturn(new ArrayList<>());
+        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), NoteType.SMALL_FULL_DEBTORS)).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().is3xxRedirection())
@@ -137,7 +138,7 @@ public class DebtorsControllerTest {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockDebtorsService).submitDebtors(anyString(), anyString(), any(Debtors.class), anyString());
+            .when(mockDebtorsService).submit(anyString(), anyString(), any(Debtors.class), NoteType.SMALL_FULL_DEBTORS);
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().isOk())
@@ -156,7 +157,7 @@ public class DebtorsControllerTest {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockDebtorsService.submitDebtors(anyString(), anyString(), any(Debtors.class), anyString())).thenReturn(errors);
+        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), NoteType.SMALL_FULL_DEBTORS)).thenReturn(errors);
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().isOk())

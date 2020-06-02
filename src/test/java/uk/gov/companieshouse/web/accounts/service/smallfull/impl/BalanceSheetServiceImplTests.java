@@ -20,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
@@ -28,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
@@ -90,7 +90,7 @@ public class BalanceSheetServiceImplTests {
     private BalanceSheetHeadings balanceSheetHeadings;
 
     @Mock
-    private DebtorsService debtorsService;
+    private NoteService<Debtors> debtorsService;
 
     @Mock
     private CreditorsWithinOneYearService creditorsWithinOneYearService;
@@ -461,7 +461,7 @@ public class BalanceSheetServiceImplTests {
 
     private void assertAllConditionalNotesDeleted() throws ServiceException {
 
-        verify(debtorsService).deleteDebtors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(debtorsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
         verify(creditorsWithinOneYearService).deleteCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(creditorsAfterOneYearService).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(intangibleAssetsNoteService).deleteIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);

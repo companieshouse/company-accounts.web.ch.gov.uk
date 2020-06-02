@@ -14,12 +14,13 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ import java.util.List;
 public class DebtorsController extends BaseController implements ConditionalController {
 
     @Autowired
-    private DebtorsService debtorsService;
+    private NoteService<Debtors> debtorsService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -53,8 +54,8 @@ public class DebtorsController extends BaseController implements ConditionalCont
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId,
-                    companyNumber);
+            Debtors debtors = debtorsService.get(transactionId, companyAccountsId,
+                    NoteType.SMALL_FULL_DEBTORS);
 
             model.addAttribute("debtors", debtors);
 
@@ -84,8 +85,8 @@ public class DebtorsController extends BaseController implements ConditionalCont
 
         try {
             List<ValidationError> validationErrors =
-                    debtorsService.submitDebtors(transactionId, companyAccountsId,
-                            debtors, companyNumber);
+                    debtorsService.submit(transactionId, companyAccountsId,
+                            debtors, NoteType.SMALL_FULL_DEBTORS);
 
             if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

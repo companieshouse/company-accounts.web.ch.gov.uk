@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.PrepaymentsAndAccruedIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
@@ -31,7 +32,7 @@ public class DebtorsTransformerImplTests {
     private static final long GREATER_THAN_ONE_YEAR_PREVIOUS = 40L;
     private static final long TOTAL_PREVIOUS = 60L;
     private static final String DETAILS = "DETAILS";
-    private DebtorsTransformer transformer = new DebtorsTransformerImpl();
+    private DebtorsTransformerImpl transformer = new DebtorsTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to debtors sheet web model")
@@ -50,7 +51,7 @@ public class DebtorsTransformerImplTests {
 
         debtorsApi.setDebtorsCurrentPeriod(debtorsCurrentPeriod);
 
-        Debtors debtors = transformer.getDebtors(debtorsApi);
+        Debtors debtors = transformer.toWeb(debtorsApi);
 
         assertEquals(TRADE_DEBTORS_CURRENT, debtors.getTradeDebtors().getCurrentTradeDebtors().longValue());
         assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome().longValue());
@@ -75,7 +76,7 @@ public class DebtorsTransformerImplTests {
 
         debtorsApi.setDebtorsCurrentPeriod(debtorsCurrentPeriod);
 
-        Debtors debtors = transformer.getDebtors(debtorsApi);
+        Debtors debtors = transformer.toWeb(debtorsApi);
 
         assertEquals(TRADE_DEBTORS_CURRENT, debtors.getTradeDebtors().getCurrentTradeDebtors().longValue());
         assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome().longValue());
@@ -99,7 +100,7 @@ public class DebtorsTransformerImplTests {
 
         debtorsApi.setDebtorsPreviousPeriod(debtorsPreviousPeriod);
 
-        Debtors debtors = transformer.getDebtors(debtorsApi);
+        Debtors debtors = transformer.toWeb(debtorsApi);
 
         assertEquals(TRADE_DEBTORS_PREVIOUS, debtors.getTradeDebtors().getPreviousTradeDebtors().longValue());
         assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS, debtors.getPrepaymentsAndAccruedIncome().getPreviousPrepaymentsAndAccruedIncome().longValue());
@@ -150,7 +151,7 @@ public class DebtorsTransformerImplTests {
         total.setPreviousTotal(TOTAL_PREVIOUS);
         debtors.setTotal(total);
 
-        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
+        DebtorsApi debtorsApi = transformer.toApi(debtors);
 
         assertEquals(TRADE_DEBTORS_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors().longValue());
         assertEquals(GREATER_THAN_ONE_YEAR_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear().longValue());
@@ -180,7 +181,7 @@ public class DebtorsTransformerImplTests {
         total.setCurrentTotal(TOTAL_CURRENT);
         debtors.setTotal(total);
 
-        DebtorsApi debtorsApi = transformer.getDebtorsApi(debtors);
+        DebtorsApi debtorsApi = transformer.toApi(debtors);
 
         assertEquals(TRADE_DEBTORS_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors().longValue());
         assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome().longValue());
@@ -188,4 +189,12 @@ public class DebtorsTransformerImplTests {
         assertEquals(OTHER_DEBTORS_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getOtherDebtors().longValue());
         assertEquals(TOTAL_CURRENT, debtors.getTotal().getCurrentTotal().longValue());
     }
+
+    @Test
+    @DisplayName("Get note type")
+    void getNoteType() {
+
+        assertEquals(NoteType.SMALL_FULL_DEBTORS, transformer.getNoteType());
+    }
+
 }
