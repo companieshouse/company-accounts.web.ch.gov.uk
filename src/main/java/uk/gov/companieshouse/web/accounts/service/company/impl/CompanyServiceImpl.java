@@ -132,10 +132,10 @@ public class CompanyServiceImpl implements CompanyService {
         List<LocalDate> futureValidDates = new ArrayList<>();
 
         for(int i = 1; i <= 7; i++) {
-        	if(periodEndOn.plusDays(i).isBefore(todaysDate) ||
-        		periodEndOn.plusDays(i).isEqual(todaysDate)) {
-                futureValidDates.add(periodEndOn.plusDays(i));
+        	if(periodEndOn.plusDays(i).isAfter(todaysDate)) {
+        		break;
         	}
+            futureValidDates.add(periodEndOn.plusDays(i));
         }
 
         Collections.sort(futureValidDates);
