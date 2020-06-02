@@ -35,7 +35,7 @@ public class DebtorsDateHandlerTest {
     private SmallFullApi smallFullApi;
 
     @Mock
-    private uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors debtors;
+    private Debtors debtors;
 
     @Mock
     private BalanceSheetHeadings balanceSheetHeadings;
