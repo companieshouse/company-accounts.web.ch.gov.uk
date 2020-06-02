@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -126,7 +127,7 @@ public class DebtorsControllerTest {
     void postRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), NoteType.SMALL_FULL_DEBTORS)).thenReturn(new ArrayList<>());
+        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().is3xxRedirection())
@@ -138,7 +139,7 @@ public class DebtorsControllerTest {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockDebtorsService).submit(anyString(), anyString(), any(Debtors.class), NoteType.SMALL_FULL_DEBTORS);
+            .when(mockDebtorsService).submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS));
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().isOk())
@@ -157,7 +158,7 @@ public class DebtorsControllerTest {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), NoteType.SMALL_FULL_DEBTORS)).thenReturn(errors);
+        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS))).thenReturn(errors);
 
         this.mockMvc.perform(post(DEBTORS_PATH))
             .andExpect(status().isOk())
