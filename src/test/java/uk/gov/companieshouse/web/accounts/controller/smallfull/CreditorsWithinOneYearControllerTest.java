@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -20,17 +21,20 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -48,7 +52,7 @@ public class CreditorsWithinOneYearControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private CreditorsWithinOneYearService mockCreditorsWithinOneYearService;
+    private NoteService<CreditorsWithinOneYear> mockCreditorsWithinOneYearService;
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
@@ -96,7 +100,7 @@ public class CreditorsWithinOneYearControllerTest {
     void getRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockCreditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new CreditorsWithinOneYear());
+        when(mockCreditorsWithinOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR)).thenReturn(new CreditorsWithinOneYear());
 
         this.mockMvc.perform(get(CREDITORS_WITHIN_ONE_YEAR_PATH))
             .andExpect(status().isOk())
@@ -105,14 +109,14 @@ public class CreditorsWithinOneYearControllerTest {
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
-        verify(mockCreditorsWithinOneYearService, times(1)).getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        verify(mockCreditorsWithinOneYearService, times(1)).get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
     }
 
     @Test
     @DisplayName("Get creditors within one year view failure path due to error on creditors within one year retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
-        when(mockCreditorsWithinOneYearService.getCreditorsWithinOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
+        when(mockCreditorsWithinOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(CREDITORS_WITHIN_ONE_YEAR_PATH))
             .andExpect(status().isOk())
@@ -125,7 +129,7 @@ public class CreditorsWithinOneYearControllerTest {
     void postRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockCreditorsWithinOneYearService.submitCreditorsWithinOneYear(anyString(), anyString(), any(CreditorsWithinOneYear.class), anyString())).thenReturn(new ArrayList<>());
+        when(mockCreditorsWithinOneYearService.submit(anyString(), anyString(), any(CreditorsWithinOneYear.class), eq(NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(CREDITORS_WITHIN_ONE_YEAR_PATH))
             .andExpect(status().is3xxRedirection())
@@ -137,7 +141,7 @@ public class CreditorsWithinOneYearControllerTest {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockCreditorsWithinOneYearService).submitCreditorsWithinOneYear(anyString(), anyString(), any(CreditorsWithinOneYear.class), anyString());
+            .when(mockCreditorsWithinOneYearService).submit(anyString(), anyString(), any(CreditorsWithinOneYear.class), eq(NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR));
 
         this.mockMvc.perform(post(CREDITORS_WITHIN_ONE_YEAR_PATH))
             .andExpect(status().isOk())
@@ -156,7 +160,7 @@ public class CreditorsWithinOneYearControllerTest {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockCreditorsWithinOneYearService.submitCreditorsWithinOneYear(anyString(), anyString(), any(CreditorsWithinOneYear.class), anyString())).thenReturn(errors);
+        when(mockCreditorsWithinOneYearService.submit(anyString(), anyString(), any(CreditorsWithinOneYear.class), eq(NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR))).thenReturn(errors);
 
         this.mockMvc.perform(post(CREDITORS_WITHIN_ONE_YEAR_PATH))
             .andExpect(status().isOk())

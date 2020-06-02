@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
@@ -75,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
     private OtherAccountingPolicyService otherAccountingPolicyService;
     
     @Autowired
-    private CreditorsWithinOneYearService creditorsWithinOneYearService;
+    private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
 
     @Autowired
     private CreditorsAfterOneYearService creditorsAfterOneYearService;
@@ -127,7 +126,7 @@ public class ReviewServiceImpl implements ReviewService {
         OtherAccountingPolicy otherAccountingPolicy =
                 otherAccountingPolicyService.getOtherAccountingPolicy(transactionId, companyAccountsId);
         
-        CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.getCreditorsWithinOneYear(transactionId, companyAccountsId, companyNumber);
+        CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
 
         CreditorsAfterOneYear creditorsAfterOneYear = creditorsAfterOneYearService.getCreditorsAfterOneYear(transactionId, companyAccountsId, companyNumber);
 

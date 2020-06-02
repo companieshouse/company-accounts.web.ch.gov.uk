@@ -4,7 +4,8 @@ public enum NoteType {
 
     SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS(false),
     SMALL_FULL_CURRENT_ASSETS_INVESTMENTS(false),
-    SMALL_FULL_STOCKS(true);
+    SMALL_FULL_STOCKS(true),
+    SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR(true) ;
 
     private boolean includedDates;
 
