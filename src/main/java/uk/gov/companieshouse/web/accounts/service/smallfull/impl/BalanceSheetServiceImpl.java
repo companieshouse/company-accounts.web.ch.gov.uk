@@ -34,7 +34,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
@@ -62,7 +61,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private CompanyService companyService;
 
     @Autowired
-    private DebtorsService debtorsService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors> debtorsService;
 
     @Autowired
     private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
@@ -204,7 +203,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && isDebtorsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getDebtorsNote() != null) {
 
-            debtorsService.deleteDebtors(transactionId, companyAccountsId);
+            debtorsService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_DEBTORS);
         }
 
         if ((isCreditorsWithinOneYearCurrentAmountNullOrZero(balanceSheet)

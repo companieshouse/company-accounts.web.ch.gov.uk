@@ -5,22 +5,23 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDebtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.PrepaymentsAndAccruedIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.DebtorsTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
 @Component
-public class DebtorsTransformerImpl implements DebtorsTransformer {
+public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsApi> {
 
     @Override
-    public Debtors getDebtors(DebtorsApi debtorsApi) {
+    public Debtors toWeb(DebtorsApi debtorsApi) {
 
         Debtors debtors = new Debtors();
 
@@ -177,7 +178,7 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
     }
 
     @Override
-    public DebtorsApi getDebtorsApi(Debtors debtors) {
+    public DebtorsApi toApi(Debtors debtors) {
 
         DebtorsApi debtorsApi = new DebtorsApi();
 
@@ -246,5 +247,10 @@ public class DebtorsTransformerImpl implements DebtorsTransformer {
                 previousPeriod.getPrepaymentsAndAccruedIncome(),
                 previousPeriod.getTotal(),
                 previousPeriod.getTradeDebtors()).anyMatch(Objects::nonNull);
+    }
+
+    @Override
+    public NoteType getNoteType() {
+        return NoteType.SMALL_FULL_DEBTORS;
     }
 }

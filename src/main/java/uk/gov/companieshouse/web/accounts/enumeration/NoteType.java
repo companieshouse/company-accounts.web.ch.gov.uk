@@ -6,6 +6,7 @@ public enum NoteType {
     SMALL_FULL_CURRENT_ASSETS_INVESTMENTS(false),
     SMALL_FULL_STOCKS(true),
     SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR(true) ;
+    SMALL_FULL_DEBTORS(true);
 
     private boolean includedDates;
 

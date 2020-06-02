@@ -29,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DebtorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
@@ -80,7 +79,7 @@ public class ReviewServiceImpl implements ReviewService {
     private CreditorsAfterOneYearService creditorsAfterOneYearService;
 
     @Autowired
-    private DebtorsService debtorsService;
+    private NoteService<Debtors> debtorsService;
 
     @Autowired
     private EmployeesService employeesService;
@@ -130,7 +129,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         CreditorsAfterOneYear creditorsAfterOneYear = creditorsAfterOneYearService.getCreditorsAfterOneYear(transactionId, companyAccountsId, companyNumber);
 
-        Debtors debtors = debtorsService.getDebtors(transactionId, companyAccountsId, companyNumber);
+        Debtors debtors = debtorsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_DEBTORS);
 
         Employees employees = employeesService.getEmployees(transactionId, companyAccountsId, companyNumber);
 

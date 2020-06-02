@@ -12,7 +12,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
@@ -57,14 +56,14 @@ public class EmployeesServiceImpl implements EmployeesService {
     @Override
     public Employees getEmployees(String transactionId, String companyAccountsId,
             String companyNumber) throws ServiceException {
+        ApiClient apiClient = apiClientService.getApiClient();
 
-        EmployeesApi employeesApi = getEmployeesApi(transactionId, companyAccountsId);
+        EmployeesApi employeesApi = getEmployeesApi(apiClient, transactionId, companyAccountsId);
         Employees employees = transformer.getEmployees(employeesApi);
 
-        BalanceSheet balanceSheet =
-                balanceSheetService.getBalanceSheet(transactionId, companyAccountsId,
-                        companyNumber);
-        BalanceSheetHeadings balanceSheetHeadings = balanceSheet.getBalanceSheetHeadings();
+
+        BalanceSheetHeadings balanceSheetHeadings =
+                getEmployeesBalanceSheetHeadings(apiClient, transactionId, companyAccountsId);
         employees.setBalanceSheetHeadings(balanceSheetHeadings);
 
         return employees;
@@ -105,9 +104,8 @@ public class EmployeesServiceImpl implements EmployeesService {
         return new ArrayList<>();
     }
 
-    private EmployeesApi getEmployeesApi(String transactionId,
+    private EmployeesApi getEmployeesApi(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-        ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = EMPLOYEES_URI.expand(transactionId, companyAccountsId).toString();
 
@@ -139,5 +137,13 @@ public class EmployeesServiceImpl implements EmployeesService {
 
     private boolean hasEmployees(SmallFullLinks smallFullLinks) {
         return smallFullLinks.getEmployeesNote() != null;
+    }
+
+    private BalanceSheetHeadings getEmployeesBalanceSheetHeadings(ApiClient apiClient, String transactionId, String companyAccountsId)
+            throws ServiceException {
+
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+        return smallFullService.getBalanceSheetHeadings(smallFullApi);
     }
 }
