@@ -37,6 +37,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodLinks;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -46,6 +47,7 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.ProfitAndLossTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
@@ -136,6 +138,12 @@ public class ProfitAndLossServiceImplTests {
     private ProfitAndLossApi previousPeriodProfitAndLoss;
 
     @Mock
+    private SmallFullService smallFullService;
+
+    @Mock
+    private SmallFullApi smallFullApi;
+
+    @Mock
     private List<ApiError> apiErrors;
 
     @Mock
@@ -209,7 +217,8 @@ public class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getProfitAndLoss(currentPeriodProfitAndLoss, null))
                 .thenReturn(profitAndLoss);
 
-        when(companyService.getBalanceSheetHeadings(companyProfile)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
 
         ProfitAndLoss returnedProfitAndLoss =
                 profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -251,7 +260,8 @@ public class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getProfitAndLoss(currentPeriodProfitAndLoss, previousPeriodProfitAndLoss))
                 .thenReturn(profitAndLoss);
 
-        when(companyService.getBalanceSheetHeadings(companyProfile)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
 
         ProfitAndLoss returnedProfitAndLoss =
                 profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -284,7 +294,8 @@ public class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getProfitAndLoss(null, null))
                 .thenReturn(profitAndLoss);
 
-        when(companyService.getBalanceSheetHeadings(companyProfile)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
 
         ProfitAndLoss returnedProfitAndLoss =
                 profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
