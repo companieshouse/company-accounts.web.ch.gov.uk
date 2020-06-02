@@ -128,16 +128,15 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<LocalDate> getFutureDatesForArd(LocalDate periodEndOn) {
 
+    	LocalDate todaysDate = LocalDate.now();
         List<LocalDate> futureValidDates = new ArrayList<>();
 
-
-        futureValidDates.add(periodEndOn.plusDays(1));
-        futureValidDates.add(periodEndOn.plusDays(2));
-        futureValidDates.add(periodEndOn.plusDays(3));
-        futureValidDates.add(periodEndOn.plusDays(4));
-        futureValidDates.add(periodEndOn.plusDays(5));
-        futureValidDates.add(periodEndOn.plusDays(6));
-        futureValidDates.add(periodEndOn.plusDays(7));
+        for(int i = 1; i <= 7; i++) {
+        	if(periodEndOn.plusDays(i).isBefore(todaysDate) ||
+        		periodEndOn.plusDays(i).isEqual(todaysDate)) {
+                futureValidDates.add(periodEndOn.plusDays(i));
+        	}
+        }
 
         Collections.sort(futureValidDates);
 
