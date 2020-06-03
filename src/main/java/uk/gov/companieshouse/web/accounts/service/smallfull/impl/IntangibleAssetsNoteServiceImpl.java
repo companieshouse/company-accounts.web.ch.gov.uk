@@ -14,7 +14,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleA
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsTransformer;
@@ -34,9 +33,6 @@ public class IntangibleAssetsNoteServiceImpl implements IntangibleAssetsNoteServ
 
     @Autowired
     private SmallFullService smallFullService;
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
