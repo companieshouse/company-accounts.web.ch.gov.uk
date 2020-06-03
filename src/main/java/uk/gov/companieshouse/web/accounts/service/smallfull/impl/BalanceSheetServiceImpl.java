@@ -26,12 +26,12 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
@@ -64,7 +64,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors> debtorsService;
 
     @Autowired
-    private CreditorsWithinOneYearService creditorsWithinOneYearService;
+    private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
 
     @Autowired
     private CreditorsAfterOneYearService creditorsAfterOneYearService;
@@ -211,7 +211,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && smallFullLinks.getCreditorsWithinOneYearNote() != null) {
 
             creditorsWithinOneYearService
-                    .deleteCreditorsWithinOneYear(transactionId, companyAccountsId);
+                    .delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
         }
 
         if ((isCreditorsAfterOneYearCurrentAmountNullOrZero(balanceSheet)

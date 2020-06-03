@@ -1,13 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.AccrualsAndDeferredIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.BankLoansAndOverdrafts;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
@@ -16,13 +14,16 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.TaxationAndSocialSecurity;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.TradeCreditors;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsWithinOneYearTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
-public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOneYearTransformer {
+public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<CreditorsWithinOneYear, CreditorsWithinOneYearApi> {
 
     @Override
-    public CreditorsWithinOneYear getCreditorsWithinOneYear(
+    public CreditorsWithinOneYear toWeb(
             CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
 
         CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
@@ -246,7 +247,7 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
     }
 
     @Override
-    public CreditorsWithinOneYearApi getCreditorsWithinOneYearApi(
+    public CreditorsWithinOneYearApi toApi(
             CreditorsWithinOneYear creditorsWithinOneYear) {
 
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
@@ -256,6 +257,11 @@ public class CreditorsWithinOneYearTransformerImpl implements CreditorsWithinOne
         setPreviousPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
 
         return creditorsWithinOneYearApi;
+    }
+
+    @Override
+    public NoteType getNoteType() {
+        return NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR;
     }
 
     private void setCurrentPeriodOnApiModel(CreditorsWithinOneYear creditorsWithinOneYear,

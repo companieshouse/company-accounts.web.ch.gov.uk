@@ -1,11 +1,12 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear;
 
+import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
-public class CreditorsWithinOneYear {
+public class CreditorsWithinOneYear implements Note {
 	
     private BalanceSheetHeadings balanceSheetHeadings;
 

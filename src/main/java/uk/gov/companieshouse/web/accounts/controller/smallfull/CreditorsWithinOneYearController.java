@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,16 +13,19 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsWithinOneYearService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @NextController(CreditorsAfterOneYearController.class)
@@ -33,7 +35,7 @@ public class CreditorsWithinOneYearController extends BaseController implements
         ConditionalController {
 
     @Autowired
-    private CreditorsWithinOneYearService creditorsWithinOneYearService;
+    private NoteService<CreditorsWithinOneYear> noteService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -51,12 +53,8 @@ public class CreditorsWithinOneYearController extends BaseController implements
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            CreditorsWithinOneYear creditorsWithinOneYear =
-                    creditorsWithinOneYearService
-                            .getCreditorsWithinOneYear(transactionId, companyAccountsId,
-                                    companyNumber);
 
-            model.addAttribute("creditorsWithinOneYear", creditorsWithinOneYear);
+            model.addAttribute("creditorsWithinOneYear", noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR));
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
@@ -80,8 +78,7 @@ public class CreditorsWithinOneYearController extends BaseController implements
 
         try {
             List<ValidationError> validationErrors =
-                    creditorsWithinOneYearService.submitCreditorsWithinOneYear(transactionId,
-                            companyAccountsId, creditorsWithinOneYear, companyNumber);
+                    noteService.submit(transactionId, companyAccountsId, creditorsWithinOneYear, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
