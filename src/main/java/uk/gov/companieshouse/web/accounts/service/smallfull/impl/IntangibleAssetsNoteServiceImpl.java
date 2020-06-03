@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -8,12 +7,10 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
-import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
-import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
@@ -27,6 +24,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IntangibleAssetsNoteServiceImpl implements IntangibleAssetsNoteService {
@@ -60,21 +58,21 @@ public class IntangibleAssetsNoteServiceImpl implements IntangibleAssetsNoteServ
     public IntangibleAssets getIntangibleAssets(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
         IntangibleAssets intangibleAssets;
 
-        IntangibleApi intangibleApi = getIntangibleApi(transactionId, companyAccountsId);
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        IntangibleApi intangibleApi = getIntangibleApi(apiClient, transactionId, companyAccountsId);
         if (intangibleApi != null) {
             intangibleAssets = intangibleAssetsTransformer.getIntangibleAssets(intangibleApi);
         } else {
             intangibleAssets = new IntangibleAssets();
         }
 
-        addCompanyDatesToIntangibleAssets(intangibleAssets, getCompanyProfile(companyNumber));
+        addCompanyDatesToIntangibleAssets(intangibleAssets, smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId));
 
         return intangibleAssets;
     }
 
-    private IntangibleApi getIntangibleApi(String transactionId, String companyAccountsId) throws ServiceException {
-
-        ApiClient apiClient = apiClientService.getApiClient();
+    private IntangibleApi getIntangibleApi(ApiClient apiClient, String transactionId, String companyAccountsId) throws ServiceException {
 
         String uri = INTANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
 
@@ -140,17 +138,12 @@ public class IntangibleAssetsNoteServiceImpl implements IntangibleAssetsNoteServ
         }
     }
 
-    private CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException {
-        return companyService.getCompanyProfile(companyNumber);
-    }
-
-    private void addCompanyDatesToIntangibleAssets(IntangibleAssets intangibleAssets, CompanyProfileApi companyProfile) {
-        intangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        intangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
-        intangibleAssets.setLastAccountsPeriodEndOn(Optional.of(companyProfile)
-                .map(CompanyProfileApi::getAccounts)
-                .map(CompanyAccountApi::getLastAccounts)
-                .map(LastAccountsApi::getPeriodEndOn)
+    private void addCompanyDatesToIntangibleAssets(IntangibleAssets intangibleAssets, SmallFullApi smallFullApi) {
+        intangibleAssets.setNextAccountsPeriodStartOn(smallFullApi.getNextAccounts().getPeriodStartOn());
+        intangibleAssets.setNextAccountsPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
+        intangibleAssets.setLastAccountsPeriodEndOn(Optional.of(smallFullApi)
+                .map(SmallFullApi::getLastAccounts)
+                .map(AccountingPeriodApi::getPeriodEndOn)
                 .orElse(null));
     }
 
