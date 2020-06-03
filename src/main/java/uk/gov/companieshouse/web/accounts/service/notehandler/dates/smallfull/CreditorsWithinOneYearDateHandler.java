@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.dates.smallfull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
@@ -9,6 +10,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.service.notehandler.dates.DateHandler;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
+@Component
 public class CreditorsWithinOneYearDateHandler implements DateHandler<CreditorsWithinOneYear> {
 
     @Autowired
