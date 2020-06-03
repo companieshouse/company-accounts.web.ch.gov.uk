@@ -1,16 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +18,7 @@ import uk.gov.companieshouse.api.handler.smallfull.intangible.request.Intangible
 import uk.gov.companieshouse.api.handler.smallfull.intangible.request.IntangibleGet;
 import uk.gov.companieshouse.api.handler.smallfull.intangible.request.IntangibleUpdate;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
@@ -40,12 +30,24 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -89,6 +91,12 @@ public class IntangibleAssetsNoteServiceImplTest {
 
     @Mock
     private SmallFullService smallFullService;
+
+    @Mock
+    private AccountingPeriodApi accountingPeriodApi;
+
+    @Mock
+    private AccountingPeriodApi lastAccountingPeriodApi;
 
     @Mock
     private CompanyService companyService;
@@ -155,7 +163,7 @@ public class IntangibleAssetsNoteServiceImplTest {
 
         when(intangibleAssetsTransformer.getIntangibleAssets(intangibleApi)).thenReturn(new IntangibleAssets());
 
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(getCompanyProfile());
+        smallFullServiceAccountsDate();
 
         IntangibleAssets testResult = intangibleAssetsNoteService
             .getIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -176,13 +184,23 @@ public class IntangibleAssetsNoteServiceImplTest {
                 .when(serviceExceptionHandler)
                         .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(getCompanyProfile());
+
+        smallFullServiceAccountsDate();
 
         IntangibleAssets testResult = intangibleAssetsNoteService
             .getIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(testResult);
         assertCompanyDatesSetOnIntangibleAssets(testResult);
+    }
+
+    private void smallFullServiceAccountsDate() throws ServiceException {
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullApi.getNextAccounts()).thenReturn(accountingPeriodApi);
+        when(accountingPeriodApi.getPeriodStartOn()).thenReturn(NEXT_PERIOD_START_ON);
+        when(accountingPeriodApi.getPeriodEndOn()).thenReturn(NEXT_PERIOD_END_ON);
+        when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);
+        when(lastAccountingPeriodApi.getPeriodEndOn()).thenReturn(LAST_PERIOD_END_ON);
     }
 
     @Test
@@ -367,6 +385,30 @@ public class IntangibleAssetsNoteServiceImplTest {
 
         assertThrows(ServiceException.class, () -> intangibleAssetsNoteService
                 .deleteIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("CREATE - Intangible failure path due to thrown URIValidationException")
+    void createIntangibleURIValidationException() throws Exception {
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+        when(smallFullLinks.getIntangibleAssetsNote()).thenReturn(null);
+
+        when(intangibleAssetsTransformer.getIntangibleApi(intangibleAssets)).thenReturn(intangibleApi);
+
+        when(intangibleResourceHandler.create(INTANGIBLE_URI, intangibleApi)).thenReturn(intangibleCreate);
+
+        when(intangibleCreate.execute()).thenThrow(uriValidationException);
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> intangibleAssetsNoteService
+                .postIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, intangibleAssets, COMPANY_NUMBER));
     }
 
     private void assertCompanyDatesSetOnIntangibleAssets(IntangibleAssets intangibleAssets) {
