@@ -13,12 +13,13 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ import java.util.Optional;
 public class CurrentAssetsInvestmentsController extends BaseController implements ConditionalController {
 
     @Autowired
-    private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
+    private NoteService<CurrentAssetsInvestments> noteService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -52,8 +53,7 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
 
         try {
             CurrentAssetsInvestments currentAssetsInvestments =
-                currentAssetsInvestmentsService.getCurrentAssetsInvestments(transactionId,
-                    companyAccountsId, companyNumber);
+                noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
 
             model.addAttribute("currentAssetsInvestments", currentAssetsInvestments);
 
@@ -79,8 +79,7 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
 
         try {
             List<ValidationError> validationErrors =
-                currentAssetsInvestmentsService.submitCurrentAssetsInvestments(transactionId,
-                    companyAccountsId, currentAssetsInvestments, companyNumber);
+                noteService.submit(transactionId, companyAccountsId, currentAssetsInvestments, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

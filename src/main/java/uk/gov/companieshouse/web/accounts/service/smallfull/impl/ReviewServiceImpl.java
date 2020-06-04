@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
@@ -97,7 +96,7 @@ public class ReviewServiceImpl implements ReviewService {
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Autowired
-    private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
+    private NoteService<CurrentAssetsInvestments> currentAssetsInvestmentsService;
 
     @Autowired
     private NoteService<OffBalanceSheetArrangements> offBalanceSheetArrangementsService;
@@ -144,7 +143,7 @@ public class ReviewServiceImpl implements ReviewService {
         FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.getFixedAssetsInvestments(transactionId, companyAccountsId, companyNumber);
 
         CurrentAssetsInvestments currentAssetsInvestments =
-                currentAssetsInvestmentsService.getCurrentAssetsInvestments(transactionId, companyAccountsId, companyNumber);
+                currentAssetsInvestmentsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
 
         OffBalanceSheetArrangements offBalanceSheetArrangements =
                 offBalanceSheetArrangementsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);

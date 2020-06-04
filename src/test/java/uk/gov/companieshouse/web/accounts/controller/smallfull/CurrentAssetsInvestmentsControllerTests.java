@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -19,9 +20,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -51,7 +53,7 @@ public class CurrentAssetsInvestmentsControllerTests {
     private NavigatorService mockNavigatorService;
 
     @Mock
-    private CurrentAssetsInvestmentsService mockCurrentAssetsInvestmentsService;
+    private NoteService<CurrentAssetsInvestments> mockCurrentAssetsInvestmentsService;
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
@@ -96,9 +98,9 @@ public class CurrentAssetsInvestmentsControllerTests {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any()))
             .thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockCurrentAssetsInvestmentsService.getCurrentAssetsInvestments(
-            TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
-            .thenReturn(new CurrentAssetsInvestments());
+        when(mockCurrentAssetsInvestmentsService.get(
+            TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS))
+                .thenReturn(new CurrentAssetsInvestments());
 
         this.mockMvc.perform(get(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH))
             .andExpect(status().isOk())
@@ -106,18 +108,15 @@ public class CurrentAssetsInvestmentsControllerTests {
             .andExpect(model().attributeExists(CURRENT_ASSETS_INVESTMENTS_MODEL_ATTR))
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
-
-        verify(mockCurrentAssetsInvestmentsService, times(1))
-            .getCurrentAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
     }
 
     @Test
     @DisplayName("Get currentAssetsInvestments view failure path due to error on currentAssetsInvestments retrieval")
     void getRequestFailureInGetFixedAssetsInvestments() throws Exception {
 
-        when(mockCurrentAssetsInvestmentsService.getCurrentAssetsInvestments(
-            TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
-            .thenThrow(ServiceException.class);
+        when(mockCurrentAssetsInvestmentsService.get(
+            TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS))
+                .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH))
             .andExpect(status().isOk())
@@ -131,9 +130,9 @@ public class CurrentAssetsInvestmentsControllerTests {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
             .thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockCurrentAssetsInvestmentsService.submitCurrentAssetsInvestments(
-            anyString(), anyString(), any(CurrentAssetsInvestments.class), anyString()))
-            .thenReturn(new ArrayList<>());
+        when(mockCurrentAssetsInvestmentsService.submit(
+            anyString(), anyString(), any(CurrentAssetsInvestments.class), eq(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS)))
+                .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
             .param(TEST_PATH, "Test"))
@@ -146,8 +145,8 @@ public class CurrentAssetsInvestmentsControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockCurrentAssetsInvestmentsService).submitCurrentAssetsInvestments(
-                anyString(), anyString(), any(CurrentAssetsInvestments.class), anyString());
+            .when(mockCurrentAssetsInvestmentsService).submit(
+                anyString(), anyString(), any(CurrentAssetsInvestments.class), eq(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
 
         this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
             .param(TEST_PATH, "Test"))
@@ -167,8 +166,8 @@ public class CurrentAssetsInvestmentsControllerTests {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockCurrentAssetsInvestmentsService.submitCurrentAssetsInvestments(
-            anyString(), anyString(), any(CurrentAssetsInvestments.class), anyString()))
+        when(mockCurrentAssetsInvestmentsService.submit(
+            anyString(), anyString(), any(CurrentAssetsInvestments.class), eq(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS)))
             .thenReturn(errors);
 
         this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
