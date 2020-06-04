@@ -23,7 +23,7 @@
                     <label class="govuk-label govuk-label govuk-label--l" th:for="currentAssetsInvestmentsDetails">Enter your 'current assets investments' note</label>
 
                     <span class="govuk-error-message"
-                          id="details-errorId"
+                          id="currentAssetsInvestmentsDetails-errorId"
                           th:if="${#fields.hasErrors('__currentAssetsInvestmentsDetails__')}"
                           th:each="e : ${#fields.errors('__currentAssetsInvestmentsDetails__')}" th:text="${e}">
                     </span>
