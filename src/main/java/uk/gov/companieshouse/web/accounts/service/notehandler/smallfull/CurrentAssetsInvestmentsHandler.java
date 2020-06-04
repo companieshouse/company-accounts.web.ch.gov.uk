@@ -20,14 +20,14 @@ public class CurrentAssetsInvestmentsHandler implements
     @Autowired
     private SmallFullService smallFullService;
 
-    private static final UriTemplate STOCKS_URI =
+    private static final UriTemplate CURRENT_ASSETS_URI =
             new UriTemplate(
                     "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/current-assets-investments");
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
 
-        return STOCKS_URI.expand(transactionId, companyAccountsId).toString();
+        return CURRENT_ASSETS_URI.expand(transactionId, companyAccountsId).toString();
     }
 
     @Override
