@@ -1,16 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +18,7 @@ import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleDele
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleGet;
 import uk.gov.companieshouse.api.handler.smallfull.tangible.request.TangibleUpdate;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
@@ -39,13 +29,24 @@ import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -91,7 +92,10 @@ public class TangibleAssetsNoteServiceImplTest {
     private SmallFullService smallFullService;
 
     @Mock
-    private CompanyService companyService;
+    private AccountingPeriodApi accountingPeriodApi;
+
+    @Mock
+    private AccountingPeriodApi lastAccountingPeriodApi;
 
     @Mock
     private SmallFullLinks smallFullLinks;
@@ -155,7 +159,7 @@ public class TangibleAssetsNoteServiceImplTest {
 
         when(tangibleAssetsTransformer.getTangibleAssets(tangibleApi)).thenReturn(new TangibleAssets());
 
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(getCompanyProfile());
+        smallFullServiceAccountsDate();
 
         TangibleAssets testResult = tangibleAssetsNoteService
             .getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -176,7 +180,7 @@ public class TangibleAssetsNoteServiceImplTest {
                 .when(serviceExceptionHandler)
                         .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(getCompanyProfile());
+        smallFullServiceAccountsDate();
 
         TangibleAssets testResult = tangibleAssetsNoteService
             .getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -369,6 +373,29 @@ public class TangibleAssetsNoteServiceImplTest {
                 .deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
+    @Test
+    @DisplayName("CREATE - Tangible failure path due to thrown URIValidationException")
+    void createTangibleURIValidationException() throws Exception {
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(tangibleAssetsTransformer.getTangibleApi(tangibleAssets)).thenReturn(tangibleApi);
+
+        when(tangibleResourceHandler.create(TANGIBLE_URI, tangibleApi)).thenReturn(tangibleCreate);
+
+        when(tangibleCreate.execute()).thenThrow(uriValidationException);
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () -> tangibleAssetsNoteService
+                .postTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets, COMPANY_NUMBER));
+    }
+
     private void assertCompanyDatesSetOnTangibleAssets(TangibleAssets tangibleAssets) {
 
         assertEquals(NEXT_PERIOD_START_ON, tangibleAssets.getNextAccountsPeriodStartOn());
@@ -393,5 +420,14 @@ public class TangibleAssetsNoteServiceImplTest {
         companyProfile.setAccounts(companyAccounts);
 
         return companyProfile;
+    }
+
+    private void smallFullServiceAccountsDate() throws ServiceException {
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullApi.getNextAccounts()).thenReturn(accountingPeriodApi);
+        when(accountingPeriodApi.getPeriodStartOn()).thenReturn(NEXT_PERIOD_START_ON);
+        when(accountingPeriodApi.getPeriodEndOn()).thenReturn(NEXT_PERIOD_END_ON);
+        when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);
+        when(lastAccountingPeriodApi.getPeriodEndOn()).thenReturn(LAST_PERIOD_END_ON);
     }
 }

@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -10,22 +7,23 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
-import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
-import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService {
@@ -35,9 +33,6 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
 
     @Autowired
     private SmallFullService smallFullService;
-
-    @Autowired
-    private CompanyService companyService;
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
@@ -58,23 +53,23 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
     public TangibleAssets getTangibleAssets(String transactionId, String companyAccountsId,
         String companyNumber) throws ServiceException {
 
+        ApiClient apiClient = apiClientService.getApiClient();
+
         TangibleAssets tangibleAssets;
 
-        TangibleApi tangibleApi = getTangibleApi(transactionId, companyAccountsId);
+        TangibleApi tangibleApi = getTangibleApi(apiClient, transactionId, companyAccountsId);
         if (tangibleApi != null) {
             tangibleAssets = tangibleAssetsTransformer.getTangibleAssets(tangibleApi);
         } else {
             tangibleAssets = new TangibleAssets();
         }
 
-        addCompanyDatesToTangibleAssets(tangibleAssets, getCompanyProfile(companyNumber));
+        addCompanyDatesToTangibleAssets(tangibleAssets, smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId));
 
         return tangibleAssets;
     }
 
-    private TangibleApi getTangibleApi(String transactionId, String companyAccountsId) throws ServiceException {
-
-        ApiClient apiClient = apiClientService.getApiClient();
+    private TangibleApi getTangibleApi(ApiClient apiClient, String transactionId, String companyAccountsId) throws ServiceException {
 
         String uri = TANGIBLE_ASSET_NOTE.expand(transactionId, companyAccountsId).toString();
 
@@ -128,18 +123,13 @@ public class TangibleAssetsNoteServiceImpl implements TangibleAssetsNoteService 
         return smallFullLinks.getTangibleAssetsNote() != null;
     }
 
-    private CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException {
-        return companyService.getCompanyProfile(companyNumber);
-    }
-
-    private void addCompanyDatesToTangibleAssets(TangibleAssets tangibleAssets, CompanyProfileApi companyProfile) {
-        tangibleAssets.setLastAccountsPeriodEndOn(Optional.of(companyProfile)
-            .map(CompanyProfileApi::getAccounts)
-            .map(CompanyAccountApi::getLastAccounts)
-            .map(LastAccountsApi::getPeriodEndOn)
+    private void addCompanyDatesToTangibleAssets(TangibleAssets tangibleAssets, SmallFullApi smallFullApi) {
+        tangibleAssets.setLastAccountsPeriodEndOn(Optional.of(smallFullApi)
+            .map(SmallFullApi::getLastAccounts)
+            .map(AccountingPeriodApi::getPeriodEndOn)
             .orElse(null));
-        tangibleAssets.setNextAccountsPeriodStartOn(companyProfile.getAccounts().getNextAccounts().getPeriodStartOn());
-        tangibleAssets.setNextAccountsPeriodEndOn(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn());
+        tangibleAssets.setNextAccountsPeriodStartOn(smallFullApi.getNextAccounts().getPeriodStartOn());
+        tangibleAssets.setNextAccountsPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
     }
 
     public void deleteTangibleAssets(String transactionId, String companyAccountsId) throws ServiceException {

@@ -22,14 +22,9 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
-import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
-import uk.gov.companieshouse.api.model.company.account.CompanyAccountApi;
-import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
-import uk.gov.companieshouse.api.model.company.account.NextAccountsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsTransformer;
@@ -97,9 +92,6 @@ public class IntangibleAssetsNoteServiceImplTest {
 
     @Mock
     private AccountingPeriodApi lastAccountingPeriodApi;
-
-    @Mock
-    private CompanyService companyService;
 
     @Mock
     private SmallFullLinks smallFullLinks;
@@ -192,15 +184,6 @@ public class IntangibleAssetsNoteServiceImplTest {
 
         assertNotNull(testResult);
         assertCompanyDatesSetOnIntangibleAssets(testResult);
-    }
-
-    private void smallFullServiceAccountsDate() throws ServiceException {
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
-        when(smallFullApi.getNextAccounts()).thenReturn(accountingPeriodApi);
-        when(accountingPeriodApi.getPeriodStartOn()).thenReturn(NEXT_PERIOD_START_ON);
-        when(accountingPeriodApi.getPeriodEndOn()).thenReturn(NEXT_PERIOD_END_ON);
-        when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);
-        when(lastAccountingPeriodApi.getPeriodEndOn()).thenReturn(LAST_PERIOD_END_ON);
     }
 
     @Test
@@ -395,7 +378,6 @@ public class IntangibleAssetsNoteServiceImplTest {
                 .thenReturn(smallFullApi);
 
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-        when(smallFullLinks.getIntangibleAssetsNote()).thenReturn(null);
 
         when(intangibleAssetsTransformer.getIntangibleApi(intangibleAssets)).thenReturn(intangibleApi);
 
@@ -418,22 +400,12 @@ public class IntangibleAssetsNoteServiceImplTest {
         assertEquals(LAST_PERIOD_END_ON, intangibleAssets.getLastAccountsPeriodEndOn());
     }
 
-    private CompanyProfileApi getCompanyProfile() {
-
-        NextAccountsApi nextAccounts = new NextAccountsApi();
-        nextAccounts.setPeriodStartOn(NEXT_PERIOD_START_ON);
-        nextAccounts.setPeriodEndOn(NEXT_PERIOD_END_ON);
-
-        LastAccountsApi lastAccounts = new LastAccountsApi();
-        lastAccounts.setPeriodEndOn(LAST_PERIOD_END_ON);
-
-        CompanyAccountApi companyAccounts = new CompanyAccountApi();
-        companyAccounts.setNextAccounts(nextAccounts);
-        companyAccounts.setLastAccounts(lastAccounts);
-
-        CompanyProfileApi companyProfile = new CompanyProfileApi();
-        companyProfile.setAccounts(companyAccounts);
-
-        return companyProfile;
+    private void smallFullServiceAccountsDate() throws ServiceException {
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullApi.getNextAccounts()).thenReturn(accountingPeriodApi);
+        when(accountingPeriodApi.getPeriodStartOn()).thenReturn(NEXT_PERIOD_START_ON);
+        when(accountingPeriodApi.getPeriodEndOn()).thenReturn(NEXT_PERIOD_END_ON);
+        when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);
+        when(lastAccountingPeriodApi.getPeriodEndOn()).thenReturn(LAST_PERIOD_END_ON);
     }
 }
