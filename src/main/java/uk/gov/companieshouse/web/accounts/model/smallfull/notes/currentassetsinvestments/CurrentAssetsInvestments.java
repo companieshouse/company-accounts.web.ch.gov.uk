@@ -1,12 +1,13 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments;
 
+import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 import javax.validation.constraints.NotBlank;
 
 @ValidationModel
-public class CurrentAssetsInvestments {
+public class CurrentAssetsInvestments implements Note {
 
     @NotBlank(message = "{currentAssetsInvestments.details.missing}")
     @ValidationMapping("$.current_assets_investments.details")

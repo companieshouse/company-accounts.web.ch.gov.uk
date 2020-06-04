@@ -21,13 +21,13 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
@@ -111,7 +111,7 @@ public class BalanceSheetServiceImplTests {
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Mock
-    private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
+    private NoteService<CurrentAssetsInvestments> currentAssetsInvestmentsService;
 
     @Mock
     private SmallFullService smallFullService;
@@ -468,6 +468,6 @@ public class BalanceSheetServiceImplTests {
         verify(tangibleAssetsNoteService).deleteTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(fixedAssetsInvestmentsService).deleteFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(stocksService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS);
-        verify(currentAssetsInvestmentsService).deleteCurrentAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(currentAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
     }
 }

@@ -6,7 +6,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.currentassetsinvestments.CurrentAssetsInvestmentsApi;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CurrentAssetsInvestmentsTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +21,7 @@ public class CurrentAssetsInvestmentsTransformerImplTests {
 
     private static final String TEST_DETAILS = "test details";
 
-    private CurrentAssetsInvestmentsTransformer transformer = new CurrentAssetsInvestmentsTransformerImpl();
+    private NoteTransformer<CurrentAssetsInvestments, CurrentAssetsInvestmentsApi> transformer = new CurrentAssetsInvestmentsTransformerImpl();
 
     @Test
     @DisplayName("Transform api model to web model")
@@ -28,7 +30,7 @@ public class CurrentAssetsInvestmentsTransformerImplTests {
         currentAssetsInvestmentsApi.setDetails(TEST_DETAILS);
 
         CurrentAssetsInvestments currentAssetsInvestments =
-            transformer.getCurrentAssetsInvestments(currentAssetsInvestmentsApi);
+            transformer.toWeb(currentAssetsInvestmentsApi);
 
         assertNotNull(currentAssetsInvestments);
         assertNotNull(currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
@@ -39,7 +41,7 @@ public class CurrentAssetsInvestmentsTransformerImplTests {
     @DisplayName("Transform api model to web model when api model is null")
     void transformNullCurrentAssetsInvestmentsApiToWeb() {
         CurrentAssetsInvestments currentAssetsInvestments =
-            transformer.getCurrentAssetsInvestments(null);
+            transformer.toWeb(null);
 
         assertNotNull(currentAssetsInvestments);
         assertNull(currentAssetsInvestments.getCurrentAssetsInvestmentsDetails());
@@ -52,10 +54,17 @@ public class CurrentAssetsInvestmentsTransformerImplTests {
         currentAssetsInvestments.setCurrentAssetsInvestmentsDetails(TEST_DETAILS);
 
         CurrentAssetsInvestmentsApi currentAssetsInvestmentsApi =
-            transformer.getCurrentAssetsInvestmentsApi(currentAssetsInvestments);
+            transformer.toApi(currentAssetsInvestments);
 
         assertNotNull(currentAssetsInvestmentsApi);
         assertNotNull(currentAssetsInvestmentsApi.getDetails());
         assertEquals(TEST_DETAILS, currentAssetsInvestmentsApi.getDetails());
+    }
+
+    @Test
+    @DisplayName("Get note type")
+    void getNoteType() {
+
+        assertEquals(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS, transformer.getNoteType());
     }
 }

@@ -33,7 +33,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
@@ -112,10 +111,10 @@ public class ReviewServiceImplTests {
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Mock
-    private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
+    private NoteService<CurrentAssetsInvestments> currentAssetsInvestmentsService;
 
     @Mock
-    private NoteService<OffBalanceSheetArrangements> OffBalanceSheetArrangementsService;
+    private NoteService<OffBalanceSheetArrangements> offBalanceSheetArrangementsService;
 
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
@@ -187,11 +186,11 @@ public class ReviewServiceImplTests {
                 .thenReturn(mockFixedAssetsInvestments);
 
         CurrentAssetsInvestments mockCurrentAssetsInvestments = new CurrentAssetsInvestments();
-        when(currentAssetsInvestmentsService.getCurrentAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(currentAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS))
                 .thenReturn(mockCurrentAssetsInvestments);
 
         OffBalanceSheetArrangements mockOffBalanceSheetArrangements = new OffBalanceSheetArrangements();
-        when(OffBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
+        when(offBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenReturn(mockOffBalanceSheetArrangements);
 
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);

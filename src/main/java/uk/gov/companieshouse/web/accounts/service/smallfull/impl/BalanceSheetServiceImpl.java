@@ -32,7 +32,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
@@ -82,7 +81,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
     @Autowired
-    private CurrentAssetsInvestmentsService currentAssetsInvestmentsService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments> currentAssetsInvestmentsService;
 
     @Autowired
     private SmallFullService smallFullService;
@@ -253,7 +252,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && isCurrentAssetsInvestmentsPreviousAmountNullOrZero(balanceSheet)
                 && smallFullLinks.getCurrentAssetsInvestmentsNote() != null)) {
 
-            currentAssetsInvestmentsService.deleteCurrentAssetsInvestments(transactionId, companyAccountsId);
+            currentAssetsInvestmentsService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
         }
     }
 
