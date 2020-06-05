@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
@@ -81,7 +80,7 @@ public class ReviewServiceImpl implements ReviewService {
     private NoteService<Debtors> debtorsService;
 
     @Autowired
-    private EmployeesService employeesService;
+    private NoteService<Employees> employeesService;
 
     @Autowired
     private NoteService<StocksNote> stocksService;
@@ -130,7 +129,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Debtors debtors = debtorsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_DEBTORS);
 
-        Employees employees = employeesService.getEmployees(transactionId, companyAccountsId, companyNumber);
+        Employees employees = employeesService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_EMPLOYEES);
 
         TangibleAssets tangibleAssets =
                 tangibleAssetsNoteService.getTangibleAssets(transactionId, companyAccountsId, companyNumber);
