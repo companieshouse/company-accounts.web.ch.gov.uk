@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.AverageNumberOfEmployees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.EmployeesTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +24,7 @@ public class EmployeesTransformerImplTests {
 
     private static final String DETAILS = "DETAILS";
     
-    private EmployeesTransformer transformer = new EmployeesTransformerImpl();
+    private NoteTransformer<Employees, EmployeesApi>  transformer = new EmployeesTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to employees web model")
@@ -36,7 +38,7 @@ public class EmployeesTransformerImplTests {
 
         employeesApi.setCurrentPeriod(currentPeriod);
 
-        Employees employees = transformer.getEmployees(employeesApi);
+        Employees employees = transformer.toWeb(employeesApi);
 
         assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT, employees.getAverageNumberOfEmployees().getCurrentAverageNumberOfEmployees());
         assertEquals(DETAILS, employees.getDetails());
@@ -53,7 +55,7 @@ public class EmployeesTransformerImplTests {
 
         employeesApi.setCurrentPeriod(currentPeriod);
 
-        Employees employees = transformer.getEmployees(employeesApi);
+        Employees employees = transformer.toWeb(employeesApi);
 
         assertNotNull(employees.getAverageNumberOfEmployees());
         assertNull(employees.getAverageNumberOfEmployees().getCurrentAverageNumberOfEmployees());
@@ -72,7 +74,7 @@ public class EmployeesTransformerImplTests {
 
         employeesApi.setPreviousPeriod(previousPeriod);
 
-        Employees employees = transformer.getEmployees(employeesApi);
+        Employees employees = transformer.toWeb(employeesApi);
 
         assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS, employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees());
     }
@@ -80,7 +82,7 @@ public class EmployeesTransformerImplTests {
     @Test
     @DisplayName("When employees API model is null the returned web model is non null")
     void NonNullEmployeesWebModelWhenNullAPIModel() {
-        Employees employees = transformer.getEmployees(null);
+        Employees employees = transformer.toWeb(null);
 
         assertNotNull(employees);
     }
@@ -95,7 +97,7 @@ public class EmployeesTransformerImplTests {
         averageNumberOfEmployees.setCurrentAverageNumberOfEmployees(AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT);
         employees.setAverageNumberOfEmployees(averageNumberOfEmployees);
 
-        EmployeesApi employeesApi = transformer.getEmployeesApi(employees);
+        EmployeesApi employeesApi = transformer.toApi(employees);
 
         assertNull(employeesApi.getCurrentPeriod().getDetails());
         uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod currentPeriod = employeesApi.getCurrentPeriod();
@@ -113,7 +115,7 @@ public class EmployeesTransformerImplTests {
         averageNumberOfEmployees.setPreviousAverageNumberOfEmployees(AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS);
         employees.setAverageNumberOfEmployees(averageNumberOfEmployees);
 
-        EmployeesApi employeesApi = transformer.getEmployeesApi(employees);
+        EmployeesApi employeesApi = transformer.toApi(employees);
 
         uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod previousPeriod = employeesApi.getPreviousPeriod();
 
@@ -131,8 +133,15 @@ public class EmployeesTransformerImplTests {
 
         employees.setAverageNumberOfEmployees(averageNumberOfEmployees);
 
-        EmployeesApi employeesApi = transformer.getEmployeesApi(employees);
+        EmployeesApi employeesApi = transformer.toApi(employees);
 
         assertNull(employeesApi.getCurrentPeriod().getDetails());
+    }
+
+    @Test
+    @DisplayName("Test employees type returned")
+    void testEmployeesReturned() {
+
+        assertEquals(NoteType.SMALL_FULL_EMPLOYEES, transformer.getNoteType());
     }
 }

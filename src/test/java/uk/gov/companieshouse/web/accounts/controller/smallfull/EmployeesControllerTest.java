@@ -9,17 +9,14 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
-import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -29,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -46,7 +44,7 @@ public class EmployeesControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private EmployeesService mockEmployeesService;
+    private NoteService<Employees> mockEmployeesService;
 
     @Mock
     private NavigatorService mockNavigatorService;
@@ -93,7 +91,7 @@ public class EmployeesControllerTest {
     void getRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockEmployeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new Employees());
+        when(mockEmployeesService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_EMPLOYEES)).thenReturn(new Employees());
 
         this.mockMvc.perform(get(EMPLOYEES_PATH))
             .andExpect(status().isOk())
@@ -102,14 +100,14 @@ public class EmployeesControllerTest {
             .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
-        verify(mockEmployeesService, times(1)).getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        verify(mockEmployeesService, times(1)).get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_EMPLOYEES);
     }
 
     @Test
     @DisplayName("Get employees view failure path due to error on employees retrieval")
     void getRequestFailure() throws Exception {
 
-        when(mockEmployeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
+        when(mockEmployeesService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_EMPLOYEES)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(EMPLOYEES_PATH))
             .andExpect(status().isOk())
@@ -134,7 +132,7 @@ public class EmployeesControllerTest {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockEmployeesService).submitEmployees(anyString(), anyString(), any(Employees.class), anyString());
+            .when(mockEmployeesService).submit(anyString(), anyString(), any(Employees.class), eq(NoteType.SMALL_FULL_EMPLOYEES));
 
         this.mockMvc.perform(post(EMPLOYEES_PATH)
             .param("details", "test"))
@@ -169,7 +167,7 @@ public class EmployeesControllerTest {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockEmployeesService.submitEmployees(anyString(), anyString(), any(Employees.class), anyString())).thenReturn(errors);
+        when(mockEmployeesService.submit(anyString(), anyString(), any(Employees.class), eq(NoteType.SMALL_FULL_EMPLOYEES))).thenReturn(errors);
 
         this.mockMvc.perform(post(EMPLOYEES_PATH)
             .param("details", "test"))

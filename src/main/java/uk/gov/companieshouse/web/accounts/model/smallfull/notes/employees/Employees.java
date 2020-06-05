@@ -1,11 +1,12 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees;
 
+import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
-public class Employees {
+public class Employees implements Note {
     
     private BalanceSheetHeadings balanceSheetHeadings;
 
