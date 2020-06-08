@@ -28,8 +28,6 @@ public class TangibleAssets implements Note {
 
     private LocalDate nextAccountsPeriodEndOn;
 
-    private BalanceSheetHeadings balanceSheetHeadings;
-
     public TangibleAssetsCost getCost() {
         return cost;
     }
@@ -88,12 +86,4 @@ public class TangibleAssets implements Note {
     public void setNextAccountsPeriodEndOn(LocalDate nextAccountsPeriodEndOn) {
         this.nextAccountsPeriodEndOn = nextAccountsPeriodEndOn;
     }
-
-	public BalanceSheetHeadings getBalanceSheetHeadings() {
-		return balanceSheetHeadings;
-	}
-
-	public void setBalanceSheetHeadings(BalanceSheetHeadings balanceSheetHeadings) {
-		this.balanceSheetHeadings = balanceSheetHeadings;
-	}
 }

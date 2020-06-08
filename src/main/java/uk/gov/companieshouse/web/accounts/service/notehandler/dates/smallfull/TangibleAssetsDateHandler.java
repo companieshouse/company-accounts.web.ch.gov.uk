@@ -22,7 +22,7 @@ public class TangibleAssetsDateHandler implements DateHandler<TangibleAssets> {
 
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
-        note.setBalanceSheetHeadings(smallFullService.getBalanceSheetHeadings(smallFullApi));
+        note.setLastAccountsPeriodEndOn(smallFullApi.getLastAccounts().getPeriodEndOn());
         note.setNextAccountsPeriodStartOn(smallFullApi.getNextAccounts().getPeriodStartOn());
         note.setNextAccountsPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
     }

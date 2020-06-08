@@ -58,16 +58,21 @@ public class TangibleAssetsDateHandlerTest {
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
-        AccountingPeriodApi accountPeriodApi = new AccountingPeriodApi();
-        accountPeriodApi.setPeriodStartOn(LocalDate.now().minusYears(1));
-        accountPeriodApi.setPeriodEndOn(LocalDate.now());
+        AccountingPeriodApi lastAccountingPeriodApi = new AccountingPeriodApi();
+        lastAccountingPeriodApi.setPeriodEndOn(LocalDate.now().minusYears(1).minusDays(1));
+
+        AccountingPeriodApi nextAccountingPeriodApi = new AccountingPeriodApi();
+        nextAccountingPeriodApi.setPeriodStartOn(LocalDate.now().minusYears(1));
+        nextAccountingPeriodApi.setPeriodEndOn(LocalDate.now());
         
-        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
-        when(smallFullApi.getNextAccounts()).thenReturn(accountPeriodApi);
+        when(smallFullApi.getLastAccounts()).thenReturn(nextAccountingPeriodApi);        
+        when(smallFullApi.getNextAccounts()).thenReturn(nextAccountingPeriodApi);
 
         assertAll(() -> tangibleAssetsDateHandler.addDates(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets));
 
-        verify(tangibleAssets).setBalanceSheetHeadings(balanceSheetHeadings);
+        verify(tangibleAssets).setLastAccountsPeriodEndOn(smallFullApi.getLastAccounts().getPeriodEndOn());
+        verify(tangibleAssets).setNextAccountsPeriodStartOn(smallFullApi.getNextAccounts().getPeriodStartOn());
+        verify(tangibleAssets).setNextAccountsPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
     }
 
     @Test

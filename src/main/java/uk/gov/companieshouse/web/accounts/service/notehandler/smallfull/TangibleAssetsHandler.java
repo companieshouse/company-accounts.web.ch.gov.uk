@@ -61,7 +61,7 @@ public class TangibleAssetsHandler implements
 
         return StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
-                        .getLinks().getCurrentAssetsInvestmentsNote());
+                        .getLinks().getTangibleAssetsNote());
     }
 
     @Override

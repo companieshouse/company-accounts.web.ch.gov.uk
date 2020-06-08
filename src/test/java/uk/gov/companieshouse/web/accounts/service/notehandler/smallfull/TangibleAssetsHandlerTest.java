@@ -73,7 +73,7 @@ class TangibleAssetsHandlerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/note/tangible-assets";
+    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/notes/tangible-assets";
 
     private static final String TANGIBLE_ASSETS = "tangibleAssets";
 
@@ -85,8 +85,8 @@ class TangibleAssetsHandlerTest {
     }
 
     @Test
-    @DisplayName("Get CurrentAssetsInvestments Resource")
-    void getCurrentAssetsInvestmentsResource() {
+    @DisplayName("Get TangibleAssets Resource")
+    void getTangibleAssetsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
@@ -99,8 +99,8 @@ class TangibleAssetsHandlerTest {
     }
 
     @Test
-    @DisplayName("Update CurrentAssetsInvestments Resource")
-    void updateCurrentAssetsInvestmentsResource() {
+    @DisplayName("Update TangibleAssets Resource")
+    void updateTangibleAssetsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
@@ -113,8 +113,8 @@ class TangibleAssetsHandlerTest {
     }
 
     @Test
-    @DisplayName("Create CurrentAssetsInvestments Resource")
-    void createCurrentAssetsInvestmentsResource() {
+    @DisplayName("Create TangibleAssets Resource")
+    void createTangibleAssetsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
@@ -127,8 +127,8 @@ class TangibleAssetsHandlerTest {
     }
 
     @Test
-    @DisplayName("Delete CurrentAssetsInvestments Resource")
-    void deleteCurrentAssetsInvestmentsResource() {
+    @DisplayName("Delete TangibleAssets Resource")
+    void deleteTangibleAssetsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
@@ -146,7 +146,7 @@ class TangibleAssetsHandlerTest {
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-        when(smallFullLinks.getCurrentAssetsInvestmentsNote()).thenReturn(TANGIBLE_ASSETS);
+        when(smallFullLinks.getTangibleAssetsNote()).thenReturn(TANGIBLE_ASSETS);
 
         assertTrue(tangibleAssetsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -157,7 +157,7 @@ class TangibleAssetsHandlerTest {
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-        when(smallFullLinks.getCurrentAssetsInvestmentsNote()).thenReturn(null);
+        when(smallFullLinks.getTangibleAssetsNote()).thenReturn(null);
 
         assertFalse(tangibleAssetsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
