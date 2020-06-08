@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -36,7 +37,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolic
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
@@ -87,7 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
     private NoteService<StocksNote> stocksService;
 
     @Autowired
-    private TangibleAssetsNoteService tangibleAssetsNoteService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets> tangibleAssetsNoteService;
 
     @Autowired
     private IntangibleAssetsNoteService intangibleAssetsNoteService;
@@ -133,7 +133,7 @@ public class ReviewServiceImpl implements ReviewService {
         Employees employees = employeesService.getEmployees(transactionId, companyAccountsId, companyNumber);
 
         TangibleAssets tangibleAssets =
-                tangibleAssetsNoteService.getTangibleAssets(transactionId, companyAccountsId, companyNumber);
+                tangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.TANGIBLE_ASSETS);
 
         IntangibleAssets intangibleAssets =
                 intangibleAssetsNoteService.getIntangibleAssets(transactionId, companyAccountsId, companyNumber);

@@ -1,10 +1,16 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
+
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
@@ -37,14 +43,8 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -75,7 +75,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private IntangibleAssetsNoteService intangibleAssetsNoteService;
 
     @Autowired
-    private TangibleAssetsNoteService tangibleAssetsNoteService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets> tangibleAssetsNoteService;
 
     @Autowired
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
@@ -231,7 +231,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && isTangibleAssetsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getTangibleAssetsNote() != null) {
 
-            tangibleAssetsNoteService.deleteTangibleAssets(transactionId, companyAccountsId);
+            tangibleAssetsNoteService.delete(transactionId, companyAccountsId, NoteType.TANGIBLE_ASSETS);
         }
 
         if ((isFixedInvestmentsCurrentAmountNullOrZero(balanceSheet)

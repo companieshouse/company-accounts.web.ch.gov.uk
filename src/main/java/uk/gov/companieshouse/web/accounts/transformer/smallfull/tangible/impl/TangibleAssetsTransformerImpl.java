@@ -1,26 +1,34 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl;
 
 import java.util.stream.Stream;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.enumeration.TangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsResourceTransformer;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsTransformerFactory;
 
 @Component
-public class TangibleAssetsTransformerImpl implements TangibleAssetsTransformer {
+public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAssets, TangibleApi> {
 
     @Autowired
     private TangibleAssetsTransformerFactory factory;
 
     @Override
-    public TangibleAssets getTangibleAssets(TangibleApi tangibleApi) {
+    public TangibleAssets toWeb(TangibleApi tangibleApi) {
 
-        TangibleAssets tangibleAssets = new TangibleAssets();
+    	TangibleAssets tangibleAssets = new TangibleAssets();
+
+        if (tangibleApi == null) {
+          return tangibleAssets;
+        }
+
         tangibleAssets.setAdditionalInformation(tangibleApi.getAdditionalInformation());
 
         TangibleAssetsResourceTransformer tangibleAssetsResourceTransformer;
@@ -83,7 +91,7 @@ public class TangibleAssetsTransformerImpl implements TangibleAssetsTransformer 
     }
 
     @Override
-    public TangibleApi getTangibleApi(TangibleAssets tangibleAssets) {
+    public TangibleApi toApi(TangibleAssets tangibleAssets) {
 
         TangibleApi tangibleApi = new TangibleApi();
 
@@ -104,4 +112,9 @@ public class TangibleAssetsTransformerImpl implements TangibleAssetsTransformer 
 
         return tangibleApi;
     }
+
+	@Override
+	public NoteType getNoteType() {
+		return NoteType.TANGIBLE_ASSETS;
+	}
 }
