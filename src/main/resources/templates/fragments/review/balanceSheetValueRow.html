@@ -11,7 +11,7 @@
                 <span class="mobile-only-label" th:text="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading + ':'}"></span>
 
                 <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null" th:if="${isEmployees==true}" th:text="${currentAmount != null ? #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"></span>
-                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null" th:unless="${isEmployees==true}" th:text="${currentAmount != null ? new java.text.DecimalFormat('£#0;-£#0').format(previousAmount) : ''}"></span>
+                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null" th:unless="${isEmployees==true}" th:text="${currentAmount != null ? new java.text.DecimalFormat('£#0;-£#0').format(currentAmount) : ''}"></span>
 
             </dd>
             <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
