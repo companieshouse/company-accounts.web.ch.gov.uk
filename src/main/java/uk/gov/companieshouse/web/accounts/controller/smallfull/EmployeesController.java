@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
-import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -28,7 +29,7 @@ import java.util.List;
 public class EmployeesController extends BaseController {
 
     @Autowired
-    private EmployeesService employeesService;
+    private NoteService<Employees> employeesService;
 
     @Override
     protected String getTemplateName() {
@@ -45,8 +46,8 @@ public class EmployeesController extends BaseController {
 
         try {
             Employees employees =
-                    employeesService.getEmployees(transactionId, companyAccountsId,
-                            companyNumber);
+                    employeesService.get(transactionId, companyAccountsId,
+                            NoteType.SMALL_FULL_EMPLOYEES);
 
             model.addAttribute("employees", employees);
         } catch (ServiceException e) {
@@ -72,8 +73,8 @@ public class EmployeesController extends BaseController {
 
         try {
             List<ValidationError> validationErrors =
-                    employeesService.submitEmployees(transactionId, companyAccountsId,
-                            employees, companyNumber);
+                    employeesService.submit(transactionId, companyAccountsId,
+                            employees, NoteType.SMALL_FULL_EMPLOYEES);
 
             if ((! validationErrors.isEmpty())) {
                 bindValidationErrors(bindingResult, validationErrors);

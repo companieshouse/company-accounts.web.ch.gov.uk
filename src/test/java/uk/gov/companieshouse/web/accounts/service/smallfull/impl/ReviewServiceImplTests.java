@@ -38,7 +38,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.EmployeesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
@@ -96,7 +95,7 @@ public class ReviewServiceImplTests {
     private NoteService<Debtors> debtorsService;
 
     @Mock
-    private EmployeesService employeesService;
+    private NoteService<Employees> employeesService;
 
     @Mock
     private NoteService<StocksNote> stocksService;
@@ -168,7 +167,7 @@ public class ReviewServiceImplTests {
         when(debtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenReturn(mockDebtors);
 
         Employees mockEmployees = new Employees();
-        when(employeesService.getEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockEmployees);
+        when(employeesService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_EMPLOYEES)).thenReturn(mockEmployees);
 
         StocksNote mockStocks = new StocksNote();
         when(stocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS)).thenReturn(mockStocks);

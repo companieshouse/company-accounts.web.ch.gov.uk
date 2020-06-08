@@ -5,18 +5,19 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.AverageNumberOfEmployees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.EmployeesTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
 @Component
-public class EmployeesTransformerImpl implements EmployeesTransformer {
+public class EmployeesTransformerImpl implements NoteTransformer<Employees, EmployeesApi> {
 
     @Override
-    public Employees getEmployees(EmployeesApi employeesApi) {
+    public Employees toWeb(EmployeesApi employeesApi) {
 
       Employees employees = new Employees();
 
@@ -35,7 +36,7 @@ public class EmployeesTransformerImpl implements EmployeesTransformer {
     }
 
     @Override
-    public EmployeesApi getEmployeesApi(Employees employees) {
+    public EmployeesApi toApi(Employees employees) {
 
         EmployeesApi employeesApi = new EmployeesApi();
 
@@ -43,6 +44,11 @@ public class EmployeesTransformerImpl implements EmployeesTransformer {
         setPreviousPeriodEmployeesOnApiModel(employees, employeesApi);
 
         return employeesApi;
+    }
+
+    @Override
+    public NoteType getNoteType() {
+        return NoteType.SMALL_FULL_EMPLOYEES;
     }
 
     private void populateCurrentPeriodForWeb(EmployeesApi employeesApi, Employees employees, AverageNumberOfEmployees averageNumberOfEmployees) {
