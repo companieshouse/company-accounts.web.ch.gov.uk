@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible;
 
 import java.time.LocalDate;
+
+import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.TangibleAssetsCost;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.TangibleAssetsDepreciation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.TangibleAssetsNetBookValue;
@@ -8,7 +10,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
-public class TangibleAssets {
+public class TangibleAssets implements Note {
 
     private TangibleAssetsCost cost;
 

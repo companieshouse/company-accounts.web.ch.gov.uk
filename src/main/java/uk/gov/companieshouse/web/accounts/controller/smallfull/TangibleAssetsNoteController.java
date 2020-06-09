@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,22 +15,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @NextController(FixedAssetsInvestmentsController.class)
@@ -33,7 +36,7 @@ import java.util.Optional;
 public class TangibleAssetsNoteController extends BaseController implements ConditionalController {
 
     @Autowired
-    private TangibleAssetsNoteService tangibleAssetsNoteService;
+    private NoteService<TangibleAssets> noteService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -53,8 +56,8 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            TangibleAssets tangibleAssets = tangibleAssetsNoteService
-                .getTangibleAssets(transactionId, companyAccountsId, companyNumber);
+            TangibleAssets tangibleAssets = noteService
+                .get(transactionId, companyAccountsId, NoteType.TANGIBLE_ASSETS);
 
             model.addAttribute("tangibleAssets", tangibleAssets);
 
@@ -82,9 +85,9 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         }
 
         try {
-            List<ValidationError> validationErrors = tangibleAssetsNoteService
-                .postTangibleAssets(transactionId, companyAccountsId, tangibleAssets,
-                    companyNumber);
+            List<ValidationError> validationErrors = noteService
+                .submit(transactionId, companyAccountsId, tangibleAssets,
+                    NoteType.TANGIBLE_ASSETS);
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();

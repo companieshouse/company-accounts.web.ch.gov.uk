@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,10 +24,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleAssetsNoteService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,7 +38,7 @@ public class TangibleAssetsNoteControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private TangibleAssetsNoteService tangibleAssetsNoteService;
+    private NoteService<TangibleAssets> tangibleAssetsNoteService;
 
     @Mock
     private TangibleAssets tangibleAssets;
@@ -82,7 +86,7 @@ public class TangibleAssetsNoteControllerTest {
     void getRequestSuccess() throws Exception {
 
         when(tangibleAssetsNoteService
-            .getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.TANGIBLE_ASSETS))
             .thenReturn(tangibleAssets);
 
         this.mockMvc.perform(get(TANGIBLE_PATH))
@@ -99,8 +103,8 @@ public class TangibleAssetsNoteControllerTest {
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
 
         when(
-            tangibleAssetsNoteService.postTangibleAssets(anyString(), anyString(), any(
-                TangibleAssets.class), anyString()))
+            tangibleAssetsNoteService.submit(anyString(), anyString(), any(
+                TangibleAssets.class), eq(NoteType.TANGIBLE_ASSETS)))
             .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(TANGIBLE_PATH))
@@ -114,7 +118,7 @@ public class TangibleAssetsNoteControllerTest {
 
         doThrow(ServiceException.class)
             .when(tangibleAssetsNoteService)
-            .getTangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.TANGIBLE_ASSETS);
 
         this.mockMvc.perform(get(TANGIBLE_PATH))
             .andExpect(status().isOk())
@@ -127,8 +131,8 @@ public class TangibleAssetsNoteControllerTest {
 
         doThrow(ServiceException.class)
             .when(tangibleAssetsNoteService)
-            .postTangibleAssets(anyString(), anyString(), any(
-                TangibleAssets.class), anyString());
+            .submit(anyString(), anyString(), any(
+                TangibleAssets.class), eq(NoteType.TANGIBLE_ASSETS));
 
         this.mockMvc.perform(post(TANGIBLE_PATH))
             .andExpect(status().isOk())
