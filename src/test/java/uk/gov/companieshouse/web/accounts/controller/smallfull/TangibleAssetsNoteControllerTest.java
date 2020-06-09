@@ -86,7 +86,7 @@ public class TangibleAssetsNoteControllerTest {
     void getRequestSuccess() throws Exception {
 
         when(tangibleAssetsNoteService
-            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.TANGIBLE_ASSETS))
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS))
             .thenReturn(tangibleAssets);
 
         this.mockMvc.perform(get(TANGIBLE_PATH))
@@ -104,7 +104,7 @@ public class TangibleAssetsNoteControllerTest {
 
         when(
             tangibleAssetsNoteService.submit(anyString(), anyString(), any(
-                TangibleAssets.class), eq(NoteType.TANGIBLE_ASSETS)))
+                TangibleAssets.class), eq(NoteType.SMALL_FULL_TANGIBLE_ASSETS)))
             .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(TANGIBLE_PATH))
@@ -118,7 +118,7 @@ public class TangibleAssetsNoteControllerTest {
 
         doThrow(ServiceException.class)
             .when(tangibleAssetsNoteService)
-            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.TANGIBLE_ASSETS);
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
 
         this.mockMvc.perform(get(TANGIBLE_PATH))
             .andExpect(status().isOk())
@@ -132,7 +132,7 @@ public class TangibleAssetsNoteControllerTest {
         doThrow(ServiceException.class)
             .when(tangibleAssetsNoteService)
             .submit(anyString(), anyString(), any(
-                TangibleAssets.class), eq(NoteType.TANGIBLE_ASSETS));
+                TangibleAssets.class), eq(NoteType.SMALL_FULL_TANGIBLE_ASSETS));
 
         this.mockMvc.perform(post(TANGIBLE_PATH))
             .andExpect(status().isOk())

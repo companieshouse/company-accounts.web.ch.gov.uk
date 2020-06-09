@@ -34,6 +34,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
@@ -42,7 +43,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
@@ -106,7 +106,7 @@ public class BalanceSheetServiceImplTests {
     private NoteService<TangibleAssets> tangibleAssetsNoteService;
 
     @Mock
-    private IntangibleAssetsNoteService intangibleAssetsNoteService;
+    private NoteService<IntangibleAssets> intangibleAssetsNoteService;
 
     @Mock
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
@@ -465,8 +465,8 @@ public class BalanceSheetServiceImplTests {
         verify(creditorsWithinOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
         verify(debtorsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
         verify(creditorsAfterOneYearService).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(intangibleAssetsNoteService).deleteIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
-        verify(tangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.TANGIBLE_ASSETS);
+        verify(tangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
+        verify(intangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
         verify(fixedAssetsInvestmentsService).deleteFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(stocksService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS);
         verify(currentAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);

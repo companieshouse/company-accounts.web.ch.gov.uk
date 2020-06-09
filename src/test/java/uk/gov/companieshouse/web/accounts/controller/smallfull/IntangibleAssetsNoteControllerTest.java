@@ -1,29 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
-import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
-import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,6 +11,29 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +42,7 @@ public class IntangibleAssetsNoteControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private IntangibleAssetsNoteService intangibleAssetsNoteService;
+    private NoteService<IntangibleAssets> intangibleAssetsNoteService;
 
     @Mock
     private IntangibleAssets intangibleAssets;
@@ -100,7 +99,7 @@ public class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         when(intangibleAssetsNoteService
-            .getIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
             .thenReturn(intangibleAssets);
 
         mockMvc.perform(get(INTANGIBLE_PATH))
@@ -119,7 +118,7 @@ public class IntangibleAssetsNoteControllerTest {
 
         doThrow(ServiceException.class)
             .when(intangibleAssetsNoteService)
-            .getIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
 
         mockMvc.perform(get(INTANGIBLE_PATH))
             .andExpect(status().isOk())
@@ -135,8 +134,8 @@ public class IntangibleAssetsNoteControllerTest {
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
 
         when(
-            intangibleAssetsNoteService.postIntangibleAssets(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(COMPANY_NUMBER)))
+            intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
             .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
@@ -153,8 +152,8 @@ public class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         when(
-            intangibleAssetsNoteService.postIntangibleAssets(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(COMPANY_NUMBER)))
+            intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
             .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
@@ -173,8 +172,8 @@ public class IntangibleAssetsNoteControllerTest {
 
         doThrow(ServiceException.class)
             .when(intangibleAssetsNoteService)
-            .postIntangibleAssets(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(COMPANY_NUMBER));
+            .submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS));
 
         mockMvc.perform(post(INTANGIBLE_PATH))
             .andExpect(status().isOk())

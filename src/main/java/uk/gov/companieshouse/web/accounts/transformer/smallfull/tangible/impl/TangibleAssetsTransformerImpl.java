@@ -115,6 +115,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
 
 	@Override
 	public NoteType getNoteType() {
-		return NoteType.TANGIBLE_ASSETS;
+		return NoteType.SMALL_FULL_TANGIBLE_ASSETS;
 	}
 }

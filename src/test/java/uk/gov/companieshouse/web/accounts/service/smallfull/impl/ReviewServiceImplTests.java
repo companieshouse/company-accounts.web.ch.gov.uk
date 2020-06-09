@@ -40,7 +40,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationSe
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -104,8 +103,8 @@ public class ReviewServiceImplTests {
     private NoteService<TangibleAssets> tangibleAssetsNoteService;
 
     @Mock
-    private IntangibleAssetsNoteService intangibleAssetsNoteService;
-    
+    private NoteService<IntangibleAssets> intangibleAssetsNoteService;
+
     @Mock
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
@@ -173,11 +172,11 @@ public class ReviewServiceImplTests {
         when(stocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS)).thenReturn(mockStocks);
 
         TangibleAssets mockTangibleAssets = new TangibleAssets();
-        when(tangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.TANGIBLE_ASSETS))
+        when(tangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS))
                 .thenReturn(mockTangibleAssets);
 
         IntangibleAssets mockIntangibleAssets = new IntangibleAssets();
-        when(intangibleAssetsNoteService.getIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(intangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
                 .thenReturn(mockIntangibleAssets);
         
         FixedAssetsInvestments mockFixedAssetsInvestments = new FixedAssetsInvestments();

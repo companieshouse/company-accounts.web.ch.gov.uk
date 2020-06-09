@@ -40,7 +40,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
@@ -72,7 +71,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private NoteService<StocksNote> stocksService;
 
     @Autowired
-    private IntangibleAssetsNoteService intangibleAssetsNoteService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets> intangibleAssetsNoteService;
 
     @Autowired
     private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets> tangibleAssetsNoteService;
@@ -224,14 +223,14 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && isIntangibleAssetsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getIntangibleAssetsNote() != null) {
 
-            intangibleAssetsNoteService.deleteIntangibleAssets(transactionId, companyAccountsId);
+            intangibleAssetsNoteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
         }
 
         if ((isTangibleAssetsCurrentAmountNullOrZero(balanceSheet)
                 && isTangibleAssetsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getTangibleAssetsNote() != null) {
 
-            tangibleAssetsNoteService.delete(transactionId, companyAccountsId, NoteType.TANGIBLE_ASSETS);
+            tangibleAssetsNoteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
         }
 
         if ((isFixedInvestmentsCurrentAmountNullOrZero(balanceSheet)

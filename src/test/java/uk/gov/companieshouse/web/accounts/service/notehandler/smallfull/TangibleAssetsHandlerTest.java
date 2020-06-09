@@ -166,6 +166,6 @@ class TangibleAssetsHandlerTest {
     @DisplayName("Get NoteType")
     void getNoteType()  {
 
-        assertEquals(NoteType.TANGIBLE_ASSETS, tangibleAssetsHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_TANGIBLE_ASSETS, tangibleAssetsHandler.getNoteType());
     }
 }
