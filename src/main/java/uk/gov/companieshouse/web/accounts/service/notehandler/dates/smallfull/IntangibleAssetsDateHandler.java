@@ -33,6 +33,6 @@ public class IntangibleAssetsDateHandler implements DateHandler<IntangibleAssets
 
     @Override
     public NoteType getNoteType() {
-        return NoteType.SMALL_FULL_INTANGIBLE;
+        return NoteType.SMALL_FULL_INTANGIBLE_ASSETS;
     }
 }

@@ -99,7 +99,7 @@ public class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         when(intangibleAssetsNoteService
-            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE))
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
             .thenReturn(intangibleAssets);
 
         mockMvc.perform(get(INTANGIBLE_PATH))
@@ -118,7 +118,7 @@ public class IntangibleAssetsNoteControllerTest {
 
         doThrow(ServiceException.class)
             .when(intangibleAssetsNoteService)
-            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE);
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
 
         mockMvc.perform(get(INTANGIBLE_PATH))
             .andExpect(status().isOk())
@@ -135,7 +135,7 @@ public class IntangibleAssetsNoteControllerTest {
 
         when(
             intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE)))
+                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
             .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
@@ -153,7 +153,7 @@ public class IntangibleAssetsNoteControllerTest {
 
         when(
             intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE)))
+                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
             .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
@@ -173,7 +173,7 @@ public class IntangibleAssetsNoteControllerTest {
         doThrow(ServiceException.class)
             .when(intangibleAssetsNoteService)
             .submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE));
+                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS));
 
         mockMvc.perform(post(INTANGIBLE_PATH))
             .andExpect(status().isOk())

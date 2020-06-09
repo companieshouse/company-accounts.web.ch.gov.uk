@@ -19,13 +19,13 @@ public class IntangibleAssetsHandler implements NoteResourceHandler<IntangibleAp
     @Autowired
     private SmallFullService smallFullService;
 
-    private static final UriTemplate EMPLOYEES_URI = new UriTemplate(
+    private static final UriTemplate INTANGIBLE_ASSETS_URI = new UriTemplate(
                     "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/intangible-assets"
     );
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
-        return EMPLOYEES_URI.expand(transactionId, companyAccountsId).toString();
+        return INTANGIBLE_ASSETS_URI.expand(transactionId, companyAccountsId).toString();
     }
 
     @Override
@@ -34,13 +34,13 @@ public class IntangibleAssetsHandler implements NoteResourceHandler<IntangibleAp
     }
 
     @Override
-    public Executor<ApiResponse<Void>> update(ApiClient apiClient, String uri, IntangibleApi employeesApi) {
-        return apiClient.smallFull().intangible().update(uri, employeesApi);
+    public Executor<ApiResponse<Void>> update(ApiClient apiClient, String uri, IntangibleApi intangibleApi) {
+        return apiClient.smallFull().intangible().update(uri, intangibleApi);
     }
 
     @Override
-    public Executor<ApiResponse<IntangibleApi>> create(ApiClient apiClient, String uri, IntangibleApi employeesApi) {
-        return apiClient.smallFull().intangible().create(uri, employeesApi);
+    public Executor<ApiResponse<IntangibleApi>> create(ApiClient apiClient, String uri, IntangibleApi intangibleApi) {
+        return apiClient.smallFull().intangible().create(uri, intangibleApi);
     }
 
     @Override
@@ -57,6 +57,6 @@ public class IntangibleAssetsHandler implements NoteResourceHandler<IntangibleAp
 
     @Override
     public NoteType getNoteType() {
-        return NoteType.SMALL_FULL_INTANGIBLE;
+        return NoteType.SMALL_FULL_INTANGIBLE_ASSETS;
     }
 }

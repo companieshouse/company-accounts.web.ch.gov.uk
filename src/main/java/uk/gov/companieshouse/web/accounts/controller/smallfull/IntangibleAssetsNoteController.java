@@ -55,7 +55,7 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
 
         try {
             IntangibleAssets intangibleAssets = intangibleAssetsNoteService
-                    .get(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE);
+                    .get(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
 
             model.addAttribute(INTANGIBLE_ASSETS_MODEL_ATTR, intangibleAssets);
 
@@ -84,7 +84,7 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
         try {
             List<ValidationError> validationErrors = intangibleAssetsNoteService
                     .submit(transactionId, companyAccountsId, intangibleAssets,
-                            NoteType.SMALL_FULL_INTANGIBLE);
+                            NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();

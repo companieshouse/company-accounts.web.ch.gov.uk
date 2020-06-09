@@ -176,7 +176,7 @@ public class ReviewServiceImplTests {
                 .thenReturn(mockTangibleAssets);
 
         IntangibleAssets mockIntangibleAssets = new IntangibleAssets();
-        when(intangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE))
+        when(intangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
                 .thenReturn(mockIntangibleAssets);
         
         FixedAssetsInvestments mockFixedAssetsInvestments = new FixedAssetsInvestments();

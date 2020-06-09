@@ -21,39 +21,39 @@ public class IntangibleAssetsTransformerImpl implements NoteTransformer<Intangib
 
     @Override
     public IntangibleAssets toWeb(IntangibleApi intangibleApi) {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
-        intangibleAssets.setAdditionalInformation(intangibleApi.getAdditionalInformation());
+        if (intangibleApi != null) {
+            intangibleAssets.setAdditionalInformation(intangibleApi.getAdditionalInformation());
 
-        IntangibleAssetsResourceTransformer intangibleAssetsResourceTransformer;
+            IntangibleAssetsResourceTransformer intangibleAssetsResourceTransformer;
 
-        if (intangibleApi.getGoodwill() != null) {
+            if (intangibleApi.getGoodwill() != null) {
 
-            intangibleAssetsResourceTransformer =
-                    factory.getResourceTransformer(IntangibleAssetsResource.GOODWILL);
+                intangibleAssetsResourceTransformer =
+                                factory.getResourceTransformer(IntangibleAssetsResource.GOODWILL);
 
-            intangibleAssetsResourceTransformer
-                    .mapIntangibleAssetsResourceToWebModel(intangibleAssets, intangibleApi.getGoodwill());
+                intangibleAssetsResourceTransformer.mapIntangibleAssetsResourceToWebModel(
+                                intangibleAssets, intangibleApi.getGoodwill());
+            }
+
+            if (intangibleApi.getOtherIntangibleAssets() != null) {
+
+                intangibleAssetsResourceTransformer = factory.getResourceTransformer(
+                                IntangibleAssetsResource.OTHER_INTANGIBLE_ASSETS);
+
+                intangibleAssetsResourceTransformer.mapIntangibleAssetsResourceToWebModel(
+                                intangibleAssets, intangibleApi.getOtherIntangibleAssets());
+            }
+
+            if (intangibleApi.getTotal() != null) {
+
+                intangibleAssetsResourceTransformer =
+                                factory.getResourceTransformer(IntangibleAssetsResource.TOTAL);
+
+                intangibleAssetsResourceTransformer.mapIntangibleAssetsResourceToWebModel(
+                                intangibleAssets, intangibleApi.getTotal());
+            }
         }
-
-        if (intangibleApi.getOtherIntangibleAssets() != null) {
-
-            intangibleAssetsResourceTransformer =
-                    factory.getResourceTransformer(IntangibleAssetsResource.OTHER_INTANGIBLE_ASSETS);
-
-            intangibleAssetsResourceTransformer
-                    .mapIntangibleAssetsResourceToWebModel(intangibleAssets, intangibleApi.getOtherIntangibleAssets());
-        }
-
-        if (intangibleApi.getTotal() != null) {
-
-            intangibleAssetsResourceTransformer =
-                    factory.getResourceTransformer(IntangibleAssetsResource.TOTAL);
-
-            intangibleAssetsResourceTransformer
-                    .mapIntangibleAssetsResourceToWebModel(intangibleAssets, intangibleApi.getTotal());
-        }
-
         return intangibleAssets;
     }
 
@@ -82,6 +82,6 @@ public class IntangibleAssetsTransformerImpl implements NoteTransformer<Intangib
 
     @Override
     public NoteType getNoteType() {
-        return NoteType.SMALL_FULL_INTANGIBLE;
+        return NoteType.SMALL_FULL_INTANGIBLE_ASSETS;
     }
 }

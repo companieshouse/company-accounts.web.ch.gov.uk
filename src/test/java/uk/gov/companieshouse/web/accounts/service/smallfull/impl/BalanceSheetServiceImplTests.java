@@ -466,7 +466,7 @@ public class BalanceSheetServiceImplTests {
         verify(debtorsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
         verify(creditorsAfterOneYearService).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(tangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
-        verify(intangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE);
+        verify(intangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
         verify(fixedAssetsInvestmentsService).deleteFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
         verify(stocksService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS);
         verify(currentAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);

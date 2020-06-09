@@ -160,7 +160,7 @@ class IntangibleAssetsHandlerTest {
     @DisplayName("Test method returns Intangible as NoteType")
     void testIntangibleReturned()  {
 
-        assertEquals(NoteType.SMALL_FULL_INTANGIBLE, intangibleHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_INTANGIBLE_ASSETS, intangibleHandler.getNoteType());
     }
 
     private void setupIntangibleHandler() {

@@ -78,6 +78,6 @@ class IntangibleAssetsDateHandlerTest {
     @DisplayName("Get note type")
     void getNoteType() {
 
-        assertEquals(NoteType.SMALL_FULL_INTANGIBLE, intangibleAssetsDateHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_INTANGIBLE_ASSETS, intangibleAssetsDateHandler.getNoteType());
     }
 }

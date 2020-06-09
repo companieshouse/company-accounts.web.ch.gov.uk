@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -34,7 +35,7 @@ public class IntangibleAssetsTransformerImplTest {
 
     @Test
     @DisplayName("Asserts that the goodwill transformer is called when its api resource is not null")
-    void getIntangibleAssetsGoodwillTransformerCalled() {
+    void toWebGoodwillTransformerCalled() {
 
         IntangibleApi intangibleApi = new IntangibleApi();
         IntangibleAssetsResource goodwill = new IntangibleAssetsResource();
@@ -54,7 +55,7 @@ public class IntangibleAssetsTransformerImplTest {
 
     @Test
     @DisplayName("Asserts that the otherIntangibleAssets transformer is called when its api resource is not null")
-    void getIntangibleAssetsOtherIntangibleAssetsTransformerCalled() {
+    void toWebOtherIntangibleAssetsTransformerCalled() {
 
         IntangibleApi intangibleApi = new IntangibleApi();
         IntangibleAssetsResource otherIntangibleAssets = new IntangibleAssetsResource();
@@ -74,7 +75,7 @@ public class IntangibleAssetsTransformerImplTest {
 
     @Test
     @DisplayName("Asserts that the total transformer is called when its api resource is not null")
-    void getIntangibleAssetsTotalTransformerCalled() {
+    void toWebTotalTransformerCalled() {
 
         IntangibleApi intangibleApi = new IntangibleApi();
         IntangibleAssetsResource total = new IntangibleAssetsResource();
@@ -94,7 +95,7 @@ public class IntangibleAssetsTransformerImplTest {
 
     @Test
     @DisplayName("Tests that all resource transformers are called when the web model has resources to map")
-    void getIntangibleApiForWithResourcesToMapInWebModel() {
+    void toApiForWithResourcesToMapInWebModel() {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
@@ -115,7 +116,7 @@ public class IntangibleAssetsTransformerImplTest {
 
     @Test
     @DisplayName("Tests that no resource transformers are called when the web model doesn't have resources to map")
-    void getIntangibleApiForWithoutResourcesToMapInWebModel() {
+    void toApiForWithoutResourcesToMapInWebModel() {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
@@ -132,5 +133,21 @@ public class IntangibleAssetsTransformerImplTest {
 
         verify(resourceTransformer, never())
                 .mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
+    }
+
+    @Test
+    @DisplayName("Tests that a null api object is transformed into an empty web object")
+    void toWebApiForNullApiModel() {
+        IntangibleAssets intangibleApi = transformer.toWeb(null);
+
+        assertNotNull(intangibleApi);
+        assertNull(intangibleApi.getAdditionalInformation());
+        assertNull(intangibleApi.getAmortisation());
+        assertNull(intangibleApi.getCost());
+        assertNull(intangibleApi.getLastAccountsPeriodEndOn());
+        assertNull(intangibleApi.getNetBookValue());
+        assertNull(intangibleApi.getNextAccountsPeriodEndOn());
+        assertNull(intangibleApi.getNextAccountsPeriodStartOn());
+
     }
 }

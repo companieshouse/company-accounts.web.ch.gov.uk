@@ -134,7 +134,7 @@ public class ReviewServiceImpl implements ReviewService {
                 tangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
 
         IntangibleAssets intangibleAssets =
-                intangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE);
+                intangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
         
         StocksNote stocks = stocksService.get(transactionId,companyAccountsId, NoteType.SMALL_FULL_STOCKS);
 
