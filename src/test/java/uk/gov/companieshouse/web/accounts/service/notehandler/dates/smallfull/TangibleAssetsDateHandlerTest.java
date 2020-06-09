@@ -65,7 +65,7 @@ public class TangibleAssetsDateHandlerTest {
         nextAccountingPeriodApi.setPeriodStartOn(LocalDate.now().minusYears(1));
         nextAccountingPeriodApi.setPeriodEndOn(LocalDate.now());
         
-        when(smallFullApi.getLastAccounts()).thenReturn(nextAccountingPeriodApi);        
+        when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);        
         when(smallFullApi.getNextAccounts()).thenReturn(nextAccountingPeriodApi);
 
         assertAll(() -> tangibleAssetsDateHandler.addDates(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets));

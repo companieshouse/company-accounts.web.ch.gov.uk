@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible;
 import java.time.LocalDate;
 
 import uk.gov.companieshouse.web.accounts.model.Note;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost.TangibleAssetsCost;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation.TangibleAssetsDepreciation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.TangibleAssetsNetBookValue;
