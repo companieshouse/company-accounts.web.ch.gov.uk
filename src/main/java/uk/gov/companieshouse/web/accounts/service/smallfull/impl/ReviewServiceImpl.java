@@ -31,7 +31,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationSe
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
@@ -89,8 +88,8 @@ public class ReviewServiceImpl implements ReviewService {
     private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets> tangibleAssetsNoteService;
 
     @Autowired
-    private IntangibleAssetsNoteService intangibleAssetsNoteService;
-    
+    private NoteService<IntangibleAssets> intangibleAssetsNoteService;
+
     @Autowired
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
@@ -135,7 +134,7 @@ public class ReviewServiceImpl implements ReviewService {
                 tangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.TANGIBLE_ASSETS);
 
         IntangibleAssets intangibleAssets =
-                intangibleAssetsNoteService.getIntangibleAssets(transactionId, companyAccountsId, companyNumber);
+                intangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE);
         
         StocksNote stocks = stocksService.get(transactionId,companyAccountsId, NoteType.SMALL_FULL_STOCKS);
 

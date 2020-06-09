@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible;
 
 
+import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.IntangibleAssetsAmortisation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.IntangibleAssetsCost;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.IntangibleAssetsNetBookValue;
@@ -10,7 +11,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 import java.time.LocalDate;
 
 @ValidationModel
-public class IntangibleAssets {
+public class IntangibleAssets implements Note {
 
     private IntangibleAssetsCost cost;
 

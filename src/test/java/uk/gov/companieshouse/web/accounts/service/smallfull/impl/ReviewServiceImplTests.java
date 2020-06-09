@@ -40,7 +40,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationSe
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAssetsNoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -104,8 +103,8 @@ public class ReviewServiceImplTests {
     private NoteService<TangibleAssets> tangibleAssetsNoteService;
 
     @Mock
-    private IntangibleAssetsNoteService intangibleAssetsNoteService;
-    
+    private NoteService<IntangibleAssets> intangibleAssetsNoteService;
+
     @Mock
     private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
 
@@ -177,7 +176,7 @@ public class ReviewServiceImplTests {
                 .thenReturn(mockTangibleAssets);
 
         IntangibleAssets mockIntangibleAssets = new IntangibleAssets();
-        when(intangibleAssetsNoteService.getIntangibleAssets(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(intangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE))
                 .thenReturn(mockIntangibleAssets);
         
         FixedAssetsInvestments mockFixedAssetsInvestments = new FixedAssetsInvestments();

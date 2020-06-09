@@ -6,7 +6,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleAssetsResource;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.IntangibleAssetsTransformerImpl;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +30,7 @@ public class IntangibleAssetsTransformerImplTest {
     private IntangibleAssetsResourceTransformer resourceTransformer;
 
     @InjectMocks
-    private IntangibleAssetsTransformer transformer = new IntangibleAssetsTransformerImpl();
+    private NoteTransformer<IntangibleAssets, IntangibleApi> transformer = new IntangibleAssetsTransformerImpl();
 
     @Test
     @DisplayName("Asserts that the goodwill transformer is called when its api resource is not null")
@@ -44,7 +44,7 @@ public class IntangibleAssetsTransformerImplTest {
                 uk.gov.companieshouse.web.accounts.enumeration.IntangibleAssetsResource.GOODWILL))
                 .thenReturn(resourceTransformer);
 
-        IntangibleAssets intangibleAssets = transformer.getIntangibleAssets(intangibleApi);
+        IntangibleAssets intangibleAssets = transformer.toWeb(intangibleApi);
 
         assertNotNull(intangibleAssets);
 
@@ -64,7 +64,7 @@ public class IntangibleAssetsTransformerImplTest {
                 uk.gov.companieshouse.web.accounts.enumeration.IntangibleAssetsResource.OTHER_INTANGIBLE_ASSETS))
                 .thenReturn(resourceTransformer);
 
-        IntangibleAssets intangibleAssets = transformer.getIntangibleAssets(intangibleApi);
+        IntangibleAssets intangibleAssets = transformer.toWeb(intangibleApi);
 
         assertNotNull(intangibleAssets);
 
@@ -84,7 +84,7 @@ public class IntangibleAssetsTransformerImplTest {
                 uk.gov.companieshouse.web.accounts.enumeration.IntangibleAssetsResource.TOTAL))
                 .thenReturn(resourceTransformer);
 
-        IntangibleAssets intangibleAssets = transformer.getIntangibleAssets(intangibleApi);
+        IntangibleAssets intangibleAssets = transformer.toWeb(intangibleApi);
 
         assertNotNull(intangibleAssets);
 
@@ -105,7 +105,7 @@ public class IntangibleAssetsTransformerImplTest {
         when(resourceTransformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets))
                 .thenReturn(true);
 
-        IntangibleApi intangibleApi = transformer.getIntangibleApi(intangibleAssets);
+        IntangibleApi intangibleApi = transformer.toApi(intangibleAssets);
 
         assertNotNull(intangibleApi);
 
@@ -126,7 +126,7 @@ public class IntangibleAssetsTransformerImplTest {
         when(resourceTransformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets))
                 .thenReturn(false);
 
-        IntangibleApi intangibleApi = transformer.getIntangibleApi(intangibleAssets);
+        IntangibleApi intangibleApi = transformer.toApi(intangibleAssets);
 
         assertNotNull(intangibleApi);
 
