@@ -79,6 +79,6 @@ public class TangibleAssetsDateHandlerTest {
     @DisplayName("Get note type")
     void getNoteType() {
 
-        assertEquals(NoteType.TANGIBLE_ASSETS, tangibleAssetsDateHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_TANGIBLE_ASSETS, tangibleAssetsDateHandler.getNoteType());
     }
 }

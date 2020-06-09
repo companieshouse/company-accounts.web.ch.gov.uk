@@ -172,7 +172,7 @@ public class ReviewServiceImplTests {
         when(stocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS)).thenReturn(mockStocks);
 
         TangibleAssets mockTangibleAssets = new TangibleAssets();
-        when(tangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.TANGIBLE_ASSETS))
+        when(tangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS))
                 .thenReturn(mockTangibleAssets);
 
         IntangibleAssets mockIntangibleAssets = new IntangibleAssets();

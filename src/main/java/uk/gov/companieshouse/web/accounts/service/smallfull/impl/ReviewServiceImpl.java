@@ -131,7 +131,7 @@ public class ReviewServiceImpl implements ReviewService {
         Employees employees = employeesService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_EMPLOYEES);
 
         TangibleAssets tangibleAssets =
-                tangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.TANGIBLE_ASSETS);
+                tangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
 
         IntangibleAssets intangibleAssets =
                 intangibleAssetsNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE);

@@ -35,6 +35,6 @@ public class TangibleAssetsDateHandler implements DateHandler<TangibleAssets> {
 
     @Override
     public NoteType getNoteType() {
-        return NoteType.TANGIBLE_ASSETS;
+        return NoteType.SMALL_FULL_TANGIBLE_ASSETS;
     }
 }

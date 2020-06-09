@@ -57,7 +57,7 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
 
         try {
             TangibleAssets tangibleAssets = noteService
-                .get(transactionId, companyAccountsId, NoteType.TANGIBLE_ASSETS);
+                .get(transactionId, companyAccountsId, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
 
             model.addAttribute("tangibleAssets", tangibleAssets);
 
@@ -87,7 +87,7 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         try {
             List<ValidationError> validationErrors = noteService
                 .submit(transactionId, companyAccountsId, tangibleAssets,
-                    NoteType.TANGIBLE_ASSETS);
+                    NoteType.SMALL_FULL_TANGIBLE_ASSETS);
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
