@@ -16,6 +16,30 @@
 
   <form id="review-form" th:action="@{''}" class="govuk-body" method="post">
 
+    <!-- Start ARD -->
+
+    <div>
+      <div
+          th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Company accounts dates',
+                        identifier= 'accounts-reference-date',
+                        resource = 'accounts-reference-date-question'
+                        )">
+      </div>
+
+      <dl class="app-check-your-answers app-check-your-answers--short">
+        <div class="app-check-your-answers__contents">
+          <dt class="app-check-your-answers__answer">
+            <p id="review-accountsReferenceDate"
+               th:utext="*{#temporals.format(periodStartOn, 'd MMMM yyyy') + ' to ' + #temporals.format(periodEndOn, 'd MMMM yyyy')}">
+            </p>
+          </dt>
+        </div>
+      </dl>
+    </div>
+
+    <!-- End ARD -->
+
     <!-- Start Profit and Loss-->
 
     <div id="cya-small-full-profit-and-loss" th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null}">
@@ -23,7 +47,8 @@
       <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                        description = 'Profit and loss account',
                        identifier = 'profit-and-loss',
-                       resource = 'profit-and-loss'
+                       resource = 'profit-and-loss',
+                       marginTop = true
                        )">
 
       </div>
