@@ -13,13 +13,14 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ import java.util.Optional;
 public class FixedAssetsInvestmentsController extends BaseController implements ConditionalController {
     
     @Autowired
-    private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
+    private NoteService<FixedAssetsInvestments> fixedAssetsInvestmentsService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -53,7 +54,7 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.getFixedAssetsInvestments(transactionId, companyAccountsId, companyNumber);
+            FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
             model.addAttribute("fixedAssetsInvestments", fixedAssetsInvestments);
         } catch (ServiceException se) {
             LOGGER.errorRequest(request, se.getMessage(), se);
@@ -81,7 +82,7 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
         
         try {
             List<ValidationError> validationErrors =
-                fixedAssetsInvestmentsService.submitFixedAssetsInvestments(transactionId, companyAccountsId, fixedAssetsInvestments, companyNumber);
+                fixedAssetsInvestmentsService.submit(transactionId, companyAccountsId, fixedAssetsInvestments, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
 
             if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
