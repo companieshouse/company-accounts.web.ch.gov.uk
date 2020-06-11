@@ -135,34 +135,25 @@ public class ReviewServiceImplTests {
         Statements mockStatements = new Statements();
         when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(mockStatements);
 
-        BasisOfPreparation mockBasisOfPreparation = new BasisOfPreparation();
         when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
+
+        BasisOfPreparation mockBasisOfPreparation = new BasisOfPreparation();
         when(accountingPolicies.getBasisOfPreparation()).thenReturn(mockBasisOfPreparation);
 
         TurnoverPolicy mockTurnoverPolicy = new TurnoverPolicy();
-        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
-                .thenReturn(accountingPolicies);
         when(accountingPolicies.getTurnoverPolicy()).thenReturn(mockTurnoverPolicy);
 
         TangibleDepreciationPolicy mockTangibleDepreciationPolicy = new TangibleDepreciationPolicy();
-        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
-                .thenReturn(accountingPolicies);
         when(accountingPolicies.getTangibleDepreciationPolicy()).thenReturn(mockTangibleDepreciationPolicy);
 
         IntangibleAmortisationPolicy mockIntangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
-        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
-                .thenReturn(accountingPolicies);
         when(accountingPolicies.getIntangibleAmortisationPolicy()).thenReturn(mockIntangibleAmortisationPolicy);
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
-        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
-                .thenReturn(accountingPolicies);
         when(accountingPolicies.getValuationInformationPolicy()).thenReturn(valuationInformationPolicy);
 
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
-        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
-                .thenReturn(accountingPolicies);
         when(accountingPolicies.getOtherAccountingPolicy()).thenReturn(mockOtherAccounting);
         
         CreditorsWithinOneYear mockCreditorsWithinOneYear = new CreditorsWithinOneYear();

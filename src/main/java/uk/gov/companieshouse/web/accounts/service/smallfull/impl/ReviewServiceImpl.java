@@ -94,23 +94,19 @@ public class ReviewServiceImpl implements ReviewService {
 
         Statements statements = statementsService.getBalanceSheetStatements(transactionId, companyAccountsId);
 
-        BasisOfPreparation basisOfPreparation = accountingPoliciesNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
-                .getBasisOfPreparation();
+        AccountingPolicies accountingPolicies = accountingPoliciesNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
-        TurnoverPolicy turnoverPolicy = accountingPoliciesNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
-                .getTurnoverPolicy();
+        BasisOfPreparation basisOfPreparation = accountingPolicies.getBasisOfPreparation();
 
-        TangibleDepreciationPolicy tangibleDepreciationPolicy = accountingPoliciesNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
-                .getTangibleDepreciationPolicy();
+        TurnoverPolicy turnoverPolicy = accountingPolicies.getTurnoverPolicy();
 
-        IntangibleAmortisationPolicy intangibleAmortisationPolicy = accountingPoliciesNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
-                .getIntangibleAmortisationPolicy();
+        TangibleDepreciationPolicy tangibleDepreciationPolicy = accountingPolicies.getTangibleDepreciationPolicy();
 
-        ValuationInformationPolicy valuationInformationPolicy = accountingPoliciesNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
-                .getValuationInformationPolicy();
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy = accountingPolicies.getIntangibleAmortisationPolicy();
 
-        OtherAccountingPolicy otherAccountingPolicy = accountingPoliciesNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
-                .getOtherAccountingPolicy();
+        ValuationInformationPolicy valuationInformationPolicy = accountingPolicies.getValuationInformationPolicy();
+
+        OtherAccountingPolicy otherAccountingPolicy = accountingPolicies.getOtherAccountingPolicy();
         
         CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
 
