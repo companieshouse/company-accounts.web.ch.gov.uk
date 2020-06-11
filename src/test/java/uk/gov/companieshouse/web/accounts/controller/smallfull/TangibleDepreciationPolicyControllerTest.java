@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,11 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.impl.TangibleDepreciationPolicyServiceImpl;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -46,13 +46,16 @@ public class TangibleDepreciationPolicyControllerTest {
     private List<ValidationError> validationErrors;
 
     @Mock
-    private TangibleDepreciationPolicyServiceImpl tangibleDepreciationPolicyService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies> noteService;
 
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
-    private AccountingPolicies accountingPolicies;
+    private AccountingPolicies accountingPoliciesDataState;
+
+    @Mock
+    private uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies accountingPolicies;
 
     @Mock
     NavigatorService navigatorService;
@@ -88,9 +91,10 @@ public class TangibleDepreciationPolicyControllerTest {
 
         TangibleDepreciationPolicy tangibleDepreciationPolicy = new TangibleDepreciationPolicy();
         tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(true);
-        when(tangibleDepreciationPolicyService
-            .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(tangibleDepreciationPolicy);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getTangibleDepreciationPolicy()).thenReturn(tangibleDepreciationPolicy);
 
         when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -106,15 +110,16 @@ public class TangibleDepreciationPolicyControllerTest {
     @DisplayName("Get tangible depreciation policy view using state to determine whether policy is included - success path")
     void getRequestSuccessUsingState() throws Exception {
 
-        when(tangibleDepreciationPolicyService
-                .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(new TangibleDepreciationPolicy());
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getTangibleDepreciationPolicy()).thenReturn(new TangibleDepreciationPolicy());
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
-        when(accountingPolicies.getHasProvidedTangiblePolicy()).thenReturn(false);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
+        when(accountingPoliciesDataState.getHasProvidedTangiblePolicy()).thenReturn(false);
 
         when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -126,15 +131,14 @@ public class TangibleDepreciationPolicyControllerTest {
                 .andExpect(model().attributeExists(TANGIBLE_DEPRECIATION_POLICY_MODEL_ATTR));
 
         verify(companyAccountsDataState, times(1)).getAccountingPolicies();
-        verify(accountingPolicies, times(1)).getHasProvidedTangiblePolicy();
+        verify(accountingPoliciesDataState, times(1)).getHasProvidedTangiblePolicy();
     }
 
     @Test
     @DisplayName("Get tangible depreciation policy view - tangible depreciation policy service exception")
     void getRequestTangibleDepreciationPolicyServiceException() throws Exception {
-        when(tangibleDepreciationPolicyService
-            .getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenThrow(ServiceException.class);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenThrow(ServiceException.class);
         this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW));
@@ -144,17 +148,18 @@ public class TangibleDepreciationPolicyControllerTest {
     @DisplayName("Submit tangible depreciation policy - success path")
     void postRequestSuccess() throws Exception {
 
-        when(tangibleDepreciationPolicyService
-            .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(TangibleDepreciationPolicy.class)))
-            .thenReturn(validationErrors);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -162,7 +167,7 @@ public class TangibleDepreciationPolicyControllerTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
-        verify(accountingPolicies, times(1)).setHasProvidedTangiblePolicy(anyBoolean());
+        verify(accountingPoliciesDataState, times(1)).setHasProvidedTangiblePolicy(anyBoolean());
     }
 
     @Test
@@ -176,10 +181,12 @@ public class TangibleDepreciationPolicyControllerTest {
     @Test
     @DisplayName("Submit tangible depreciation policy - validation errors")
     void postRequestWithValidationErrors() throws Exception {
-        when(tangibleDepreciationPolicyService
-            .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(TangibleDepreciationPolicy.class)))
-            .thenReturn(validationErrors);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(validationErrors);
+
         when(validationErrors.isEmpty()).thenReturn(false);
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().isOk())
@@ -189,10 +196,12 @@ public class TangibleDepreciationPolicyControllerTest {
     @Test
     @DisplayName("Submit tangible depreciation policy - tangible depreciation policy service exception")
     void postRequestTangibleDepreciationPolicyServiceException() throws Exception {
-        when(tangibleDepreciationPolicyService
-            .submitTangibleDepreciationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(TangibleDepreciationPolicy.class)))
-            .thenThrow(ServiceException.class);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenThrow(ServiceException.class);
+
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW));

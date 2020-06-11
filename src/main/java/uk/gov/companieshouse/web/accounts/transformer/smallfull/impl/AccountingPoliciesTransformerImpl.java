@@ -1,217 +1,142 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.AccountingPoliciesTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 
 @Component
-public class AccountingPoliciesTransformerImpl implements AccountingPoliciesTransformer {
+public class AccountingPoliciesTransformerImpl implements NoteTransformer<AccountingPolicies, AccountingPoliciesApi> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public BasisOfPreparation getBasisOfPreparation(AccountingPoliciesApi accountingPoliciesApi) {
+    public AccountingPolicies toWeb(AccountingPoliciesApi apiResource) {
+
+        AccountingPolicies accountingPolicies = new AccountingPolicies();
+
+        if (apiResource == null) {
+            return accountingPolicies;
+        }
 
         BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
-        if (accountingPoliciesApi == null) {
-            return basisOfPreparation;
+        if(apiResource.getBasisOfMeasurementAndPreparation() != null) {
+            if (apiResource.getBasisOfMeasurementAndPreparation()
+                    .equalsIgnoreCase(basisOfPreparation.getPreparedStatement())) {
+
+                basisOfPreparation.setIsPreparedInAccordanceWithStandards(true);
+            } else {
+
+                basisOfPreparation.setIsPreparedInAccordanceWithStandards(false);
+                basisOfPreparation.setCustomStatement(apiResource.getBasisOfMeasurementAndPreparation());
+            }
         }
 
-        if (accountingPoliciesApi.getBasisOfMeasurementAndPreparation()
-                .equalsIgnoreCase(basisOfPreparation.getPreparedStatement())) {
-
-            basisOfPreparation.setIsPreparedInAccordanceWithStandards(true);
-        } else {
-
-            basisOfPreparation.setIsPreparedInAccordanceWithStandards(false);
-            basisOfPreparation.setCustomStatement(accountingPoliciesApi.getBasisOfMeasurementAndPreparation());
-        }
-
-        return basisOfPreparation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBasisOfPreparation(BasisOfPreparation basisOfPreparation,
-            AccountingPoliciesApi accountingPoliciesApi) {
-
-        if (basisOfPreparation.getIsPreparedInAccordanceWithStandards()) {
-            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(basisOfPreparation.getPreparedStatement());
-        } else {
-            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(basisOfPreparation.getCustomStatement());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TurnoverPolicy getTurnoverPolicy(AccountingPoliciesApi accountingPoliciesApi) {
+        accountingPolicies.setBasisOfPreparation(basisOfPreparation);
 
         TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
-        if (accountingPoliciesApi == null) {
-            return turnoverPolicy;
-        }
-
-        if (accountingPoliciesApi.getTurnoverPolicy() != null) {
+        if (apiResource.getTurnoverPolicy() != null) {
             turnoverPolicy.setIsIncludeTurnoverSelected(true);
-            turnoverPolicy.setTurnoverPolicyDetails(accountingPoliciesApi.getTurnoverPolicy());
+            turnoverPolicy.setTurnoverPolicyDetails(apiResource.getTurnoverPolicy());
         }
+        accountingPolicies.setTurnoverPolicy(turnoverPolicy);
 
-        return turnoverPolicy;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setTurnoverPolicy(TurnoverPolicy turnoverPolicy,
-        AccountingPoliciesApi accountingPoliciesApi) {
-
-        if (turnoverPolicy.getIsIncludeTurnoverSelected()) {
-            accountingPoliciesApi.setTurnoverPolicy(turnoverPolicy.getTurnoverPolicyDetails());
-        } else {
-            accountingPoliciesApi.setTurnoverPolicy(null);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public TangibleDepreciationPolicy getTangibleDepreciationPolicy(
-        AccountingPoliciesApi accountingPoliciesApi) {
         TangibleDepreciationPolicy tangibleDepreciationPolicy = new TangibleDepreciationPolicy();
-        if (accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy() != null) {
+        if (apiResource.getTangibleFixedAssetsDepreciationPolicy() != null) {
             tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(true);
             tangibleDepreciationPolicy.setTangibleDepreciationPolicyDetails(
-                accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy());
+                    apiResource.getTangibleFixedAssetsDepreciationPolicy());
         }
-        return tangibleDepreciationPolicy;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setTangibleDepreciationPolicy(TangibleDepreciationPolicy tangibleDepreciationPolicy,
-        AccountingPoliciesApi accountingPoliciesApi) {
-
-        if (tangibleDepreciationPolicy.getHasTangibleDepreciationPolicySelected()) {
-            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(
-                tangibleDepreciationPolicy.getTangibleDepreciationPolicyDetails());
-        } else {
-            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(null);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public IntangibleAmortisationPolicy getIntangibleAmortisationPolicy(
-            AccountingPoliciesApi accountingPoliciesApi) {
+        accountingPolicies.setTangibleDepreciationPolicy(tangibleDepreciationPolicy);
 
         IntangibleAmortisationPolicy intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
-
-        if (accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy() != null) {
+        if (apiResource.getIntangibleFixedAssetsAmortisationPolicy() != null) {
 
             intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(true);
             intangibleAmortisationPolicy.setIntangibleAmortisationPolicyDetails(
-                    accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy());
+                    apiResource.getIntangibleFixedAssetsAmortisationPolicy());
         }
-
-        return intangibleAmortisationPolicy;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setIntangibleAmortisationPolicy(IntangibleAmortisationPolicy intangibleAmortisationPolicy,
-            AccountingPoliciesApi accountingPoliciesApi) {
-
-        if (intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy()) {
-
-            accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(
-                    intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails());
-        } else {
-
-            accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(null);
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ValuationInformationPolicy getValuationInformationPolicy(
-            AccountingPoliciesApi accountingPoliciesApi) {
+        accountingPolicies.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
-
-        if (accountingPoliciesApi.getValuationInformationAndPolicy() != null) {
+        if (apiResource.getValuationInformationAndPolicy() != null) {
 
             valuationInformationPolicy.setIncludeValuationInformationPolicy(true);
             valuationInformationPolicy.setValuationInformationPolicyDetails(
-                    accountingPoliciesApi.getValuationInformationAndPolicy());
+                    apiResource.getValuationInformationAndPolicy());
         }
+        accountingPolicies.setValuationInformationPolicy(valuationInformationPolicy);
 
-        return valuationInformationPolicy;
+        OtherAccountingPolicy otherAccountingPolicy = new OtherAccountingPolicy();
+        if (apiResource.getOtherAccountingPolicy() != null) {
+            otherAccountingPolicy.setHasOtherAccountingPolicySelected(true);
+            otherAccountingPolicy.setOtherAccountingPolicyDetails(
+                    apiResource.getOtherAccountingPolicy());
+        }
+        accountingPolicies.setOtherAccountingPolicy(otherAccountingPolicy);
+
+        return accountingPolicies;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void setValuationInformationPolicy(ValuationInformationPolicy valuationInformationPolicy,
-            AccountingPoliciesApi accountingPoliciesApi) {
+    public AccountingPoliciesApi toApi(AccountingPolicies webResource) {
 
-        if (valuationInformationPolicy.getIncludeValuationInformationPolicy()) {
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+
+        if (BooleanUtils.isTrue(webResource.getBasisOfPreparation().getIsPreparedInAccordanceWithStandards())) {
+            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(webResource.getBasisOfPreparation().getPreparedStatement());
+        } else {
+            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(webResource.getBasisOfPreparation().getCustomStatement());
+        }
+
+        if (BooleanUtils.isTrue(webResource.getTurnoverPolicy().getIsIncludeTurnoverSelected())) {
+            accountingPoliciesApi.setTurnoverPolicy(webResource.getTurnoverPolicy().getTurnoverPolicyDetails());
+        } else {
+            accountingPoliciesApi.setTurnoverPolicy(null);
+        }
+
+        if (BooleanUtils.isTrue(webResource.getTangibleDepreciationPolicy().getHasTangibleDepreciationPolicySelected())) {
+            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(
+                    webResource.getTangibleDepreciationPolicy().getTangibleDepreciationPolicyDetails());
+        } else {
+            accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(null);
+        }
+
+        if (BooleanUtils.isTrue(webResource.getIntangibleAmortisationPolicy().getIncludeIntangibleAmortisationPolicy())) {
+
+            accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(
+                    webResource.getIntangibleAmortisationPolicy().getIntangibleAmortisationPolicyDetails());
+        } else {
+            accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(null);
+        }
+
+        if (BooleanUtils.isTrue(webResource.getValuationInformationPolicy().getIncludeValuationInformationPolicy())) {
 
             accountingPoliciesApi.setValuationInformationAndPolicy(
-                    valuationInformationPolicy.getValuationInformationPolicyDetails());
+                    webResource.getValuationInformationPolicy().getValuationInformationPolicyDetails());
         } else {
 
             accountingPoliciesApi.setValuationInformationAndPolicy(null);
         }
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public OtherAccountingPolicy getOtherAccountingPolicy(
-            AccountingPoliciesApi accountingPoliciesApi) {
-        OtherAccountingPolicy otherAccountingPolicy = new OtherAccountingPolicy();
-        if (accountingPoliciesApi.getOtherAccountingPolicy() != null) {
-            otherAccountingPolicy.setHasOtherAccountingPolicySelected(true);
-            otherAccountingPolicy.setOtherAccountingPolicyDetails(
-                    accountingPoliciesApi.getOtherAccountingPolicy());
-        }
-        return otherAccountingPolicy;
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setOtherAccountingPolicy(OtherAccountingPolicy otherAccountingPolicy,
-            AccountingPoliciesApi accountingPoliciesApi) {
-        if (otherAccountingPolicy.getHasOtherAccountingPolicySelected()) {
+        if (BooleanUtils.isTrue(webResource.getOtherAccountingPolicy().getHasOtherAccountingPolicySelected())) {
             accountingPoliciesApi.setOtherAccountingPolicy(
-                    otherAccountingPolicy.getOtherAccountingPolicyDetails());
+                    webResource.getOtherAccountingPolicy().getOtherAccountingPolicyDetails());
         } else {
             accountingPoliciesApi.setOtherAccountingPolicy(null);
         }
+
+        return accountingPoliciesApi;
+    }
+
+    @Override
+    public NoteType getNoteType() {
+        return NoteType.SMALL_FULL_ACCOUNTING_POLICIES;
     }
 }

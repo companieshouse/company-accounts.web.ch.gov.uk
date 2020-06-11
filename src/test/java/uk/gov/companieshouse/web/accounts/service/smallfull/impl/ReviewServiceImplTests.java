@@ -23,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
@@ -41,17 +42,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -73,23 +68,8 @@ public class ReviewServiceImplTests {
     private StatementsService statementsService;
 
     @Mock
-    private BasisOfPreparationService basisOfPreparationService;
+    private AccountingPolicies accountingPolicies;
 
-    @Mock
-    private TurnoverPolicyService turnoverPolicyService;
-
-    @Mock
-    private TangibleDepreciationPolicyService tangibleDepreciationPolicyService;
-
-    @Mock
-    private IntangibleAmortisationPolicyService intangibleAmortisationPolicyService;
-
-    @Mock
-    private ValuationInformationPolicyService valuationInformationPolicyService;
-
-    @Mock
-    private OtherAccountingPolicyService otherAccountingPolicyService;
-    
     @Mock
     private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
 
@@ -119,6 +99,9 @@ public class ReviewServiceImplTests {
 
     @Mock
     private NoteService<OffBalanceSheetArrangements> offBalanceSheetArrangementsService;
+
+    @Mock
+    private NoteService<AccountingPolicies> accountingPoliciesNoteService;
 
     @Mock
     private SmallFullService smallFullService;
@@ -154,26 +137,34 @@ public class ReviewServiceImplTests {
         when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(mockStatements);
 
         BasisOfPreparation mockBasisOfPreparation = new BasisOfPreparation();
-        when(basisOfPreparationService.getBasisOfPreparation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(mockBasisOfPreparation);
+        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getBasisOfPreparation()).thenReturn(mockBasisOfPreparation);
 
         TurnoverPolicy mockTurnoverPolicy = new TurnoverPolicy();
-        when(turnoverPolicyService.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(mockTurnoverPolicy);
+        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getTurnoverPolicy()).thenReturn(mockTurnoverPolicy);
 
         TangibleDepreciationPolicy mockTangibleDepreciationPolicy = new TangibleDepreciationPolicy();
-        when(tangibleDepreciationPolicyService.getTangibleDepreciationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(mockTangibleDepreciationPolicy);
+        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getTangibleDepreciationPolicy()).thenReturn(mockTangibleDepreciationPolicy);
 
         IntangibleAmortisationPolicy mockIntangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
-        when(intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(mockIntangibleAmortisationPolicy);
+        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getIntangibleAmortisationPolicy()).thenReturn(mockIntangibleAmortisationPolicy);
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
-        when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(valuationInformationPolicy);
+        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getValuationInformationPolicy()).thenReturn(valuationInformationPolicy);
 
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
-        when(otherAccountingPolicyService.getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(mockOtherAccounting);
+        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getOtherAccountingPolicy()).thenReturn(mockOtherAccounting);
         
         CreditorsWithinOneYear mockCreditorsWithinOneYear = new CreditorsWithinOneYear();
         when(creditorsWithinOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR))

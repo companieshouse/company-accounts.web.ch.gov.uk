@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -29,7 +31,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 public class TangibleDepreciationPolicyController extends BaseController {
 
     @Autowired
-    private TangibleDepreciationPolicyService tangibleDepreciationPolicyService;
+    private NoteService<AccountingPolicies> noteService;
 
     @GetMapping
     public String getTangibleDepreciationPolicy(@PathVariable String companyNumber,
@@ -42,8 +44,8 @@ public class TangibleDepreciationPolicyController extends BaseController {
 
         try {
             TangibleDepreciationPolicy tangibleDepreciationPolicy =
-                    tangibleDepreciationPolicyService
-                            .getTangibleDepreciationPolicy(transactionId, companyAccountsId);
+                    noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
+                            .getTangibleDepreciationPolicy();
 
             if (tangibleDepreciationPolicy.getHasTangibleDepreciationPolicySelected() == null) {
                 setIsPolicyIncluded(request, tangibleDepreciationPolicy);
@@ -75,10 +77,14 @@ public class TangibleDepreciationPolicyController extends BaseController {
         }
 
         try {
+            AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
+                    NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
+
+            accountingPolicies.setTangibleDepreciationPolicy(tangiblePolicy);
+
             List<ValidationError> validationErrors =
-                tangibleDepreciationPolicyService
-                    .submitTangibleDepreciationPolicy(transactionId, companyAccountsId,
-                        tangiblePolicy);
+                noteService.submit(transactionId, companyAccountsId, accountingPolicies,
+                        NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

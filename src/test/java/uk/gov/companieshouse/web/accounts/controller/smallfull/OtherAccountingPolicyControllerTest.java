@@ -28,11 +28,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -46,13 +47,16 @@ public class OtherAccountingPolicyControllerTest {
     private List<ValidationError> validationErrors;
 
     @Mock
-    private OtherAccountingPolicyService otherAccountingPolicyService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies> noteService;
 
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
-    private AccountingPolicies accountingPolicies;
+    private AccountingPolicies accountingPoliciesDataState;
+
+    @Mock
+    private uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies accountingPolicies;
 
     @Mock
     private NavigatorService navigatorService;
@@ -89,9 +93,12 @@ public class OtherAccountingPolicyControllerTest {
 
         OtherAccountingPolicy otherAccountingPolicy = new OtherAccountingPolicy();
         otherAccountingPolicy.setHasOtherAccountingPolicySelected(true);
-        when(otherAccountingPolicyService
-            .getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(otherAccountingPolicy);
+
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+            .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getOtherAccountingPolicy()).thenReturn(otherAccountingPolicy);
+
         when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(OTHER_ACCOUNTING_POLICY_PATH))
@@ -106,15 +113,16 @@ public class OtherAccountingPolicyControllerTest {
     @DisplayName("Get other accounting policy view using state to determine whether policy is provided - success path")
     void getRequestSuccessUsingState() throws Exception {
 
-        when(otherAccountingPolicyService
-                .getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(new OtherAccountingPolicy());
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getOtherAccountingPolicy()).thenReturn(new OtherAccountingPolicy());
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
-        when(accountingPolicies.getHasProvidedOtherAccountingPolicy()).thenReturn(false);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
+        when(accountingPoliciesDataState.getHasProvidedOtherAccountingPolicy()).thenReturn(false);
 
         when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -126,14 +134,13 @@ public class OtherAccountingPolicyControllerTest {
                 .andExpect(model().attributeExists(OTHER_ACCOUNTING_POLICY_MODEL_ATTR));
 
         verify(companyAccountsDataState, times(1)).getAccountingPolicies();
-        verify(accountingPolicies, times(1)).getHasProvidedOtherAccountingPolicy();
+        verify(accountingPoliciesDataState, times(1)).getHasProvidedOtherAccountingPolicy();
     }
 
     @Test
     @DisplayName("Get other accounting policy view - other accounting policy service exception")
     void getRequestOtherAccountingPolicyServiceException() throws Exception {
-        when(otherAccountingPolicyService
-            .getOtherAccountingPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
             .thenThrow(ServiceException.class);
         this.mockMvc.perform(get(OTHER_ACCOUNTING_POLICY_PATH))
             .andExpect(status().isOk())
@@ -144,24 +151,25 @@ public class OtherAccountingPolicyControllerTest {
     @DisplayName("Submit other accounting policy - success path")
     void postRequestSuccess() throws Exception {
 
-        when(otherAccountingPolicyService
-            .submitOtherAccountingPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                OtherAccountingPolicy.class)))
-            .thenReturn(validationErrors);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
         when(navigatorService.getNextControllerRedirect(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
-        verify(accountingPolicies, times(1)).setHasProvidedOtherAccountingPolicy(anyBoolean());
+        verify(accountingPoliciesDataState, times(1)).setHasProvidedOtherAccountingPolicy(anyBoolean());
     }
 
     @Test
@@ -175,10 +183,12 @@ public class OtherAccountingPolicyControllerTest {
     @Test
     @DisplayName("Submit other accounting policy - validation errors")
     void postRequestWithValidationErrors() throws Exception {
-        when(otherAccountingPolicyService
-            .submitOtherAccountingPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(OtherAccountingPolicy.class)))
-            .thenReturn(validationErrors);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(validationErrors);
+
         when(validationErrors.isEmpty()).thenReturn(false);
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().isOk())
@@ -188,10 +198,11 @@ public class OtherAccountingPolicyControllerTest {
     @Test
     @DisplayName("Submit other accounting policy - other accounting policy service exception")
     void postRequestOtherAccountingPolicyServiceException() throws Exception {
-        when(otherAccountingPolicyService
-            .submitOtherAccountingPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(OtherAccountingPolicy.class)))
-            .thenThrow(ServiceException.class);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenThrow(ServiceException.class);
         this.mockMvc.perform(postRequestWithValidData())
             .andExpect(status().isOk())
             .andExpect(view().name(ERROR_VIEW));
