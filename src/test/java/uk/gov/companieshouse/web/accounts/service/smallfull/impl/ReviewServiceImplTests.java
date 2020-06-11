@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,6 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -41,6 +46,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYea
 import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TangibleDepreciationPolicyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
@@ -112,6 +118,21 @@ public class ReviewServiceImplTests {
 
     @Mock
     private NoteService<OffBalanceSheetArrangements> offBalanceSheetArrangementsService;
+
+    @Mock
+    private SmallFullService smallFullService;
+
+    @Mock
+    private SmallFullApi smallFullApi;
+
+    @Mock
+    private AccountingPeriodApi nextAccounts;
+
+    @Mock
+    private ApiClientService apiClientService;
+
+    @Mock
+    private ApiClient apiClient;
 
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
@@ -190,6 +211,14 @@ public class ReviewServiceImplTests {
         when(offBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenReturn(mockOffBalanceSheetArrangements);
 
+        LocalDate periodStartOn = LocalDate.now().minusYears(1);
+        LocalDate periodEndOn = LocalDate.now();
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullApi.getNextAccounts()).thenReturn(nextAccounts);
+        when(nextAccounts.getPeriodStartOn()).thenReturn(periodStartOn);
+        when(nextAccounts.getPeriodEndOn()).thenReturn(periodEndOn);
+
         Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         assertNotNull(review);
@@ -212,5 +241,7 @@ public class ReviewServiceImplTests {
         assertEquals(mockFixedAssetsInvestments, review.getFixedAssetsInvestments());
         assertEquals(mockCurrentAssetsInvestments, review.getCurrentAssetsInvestments());
         assertEquals(mockOffBalanceSheetArrangements, review.getOffBalanceSheetArrangements());
+        assertEquals(periodStartOn, review.getPeriodStartOn());
+        assertEquals(periodEndOn, review.getPeriodEndOn());
     }
 }

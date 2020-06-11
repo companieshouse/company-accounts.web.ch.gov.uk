@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
+import java.time.LocalDate;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
@@ -57,6 +58,10 @@ public class Review {
     private ProfitAndLoss profitAndLoss;
 
     private OffBalanceSheetArrangements offBalanceSheetArrangements;
+
+    private LocalDate periodStartOn;
+
+    private LocalDate periodEndOn;
 
     public OffBalanceSheetArrangements getOffBalanceSheetArrangements() {
         return offBalanceSheetArrangements;
@@ -220,5 +225,21 @@ public class Review {
 
     public void setProfitAndLoss(ProfitAndLoss profitAndLoss) {
         this.profitAndLoss = profitAndLoss;
+    }
+
+    public LocalDate getPeriodStartOn() {
+        return periodStartOn;
+    }
+
+    public void setPeriodStartOn(LocalDate periodStartOn) {
+        this.periodStartOn = periodStartOn;
+    }
+
+    public LocalDate getPeriodEndOn() {
+        return periodEndOn;
+    }
+
+    public void setPeriodEndOn(LocalDate periodEndOn) {
+        this.periodEndOn = periodEndOn;
     }
 }
