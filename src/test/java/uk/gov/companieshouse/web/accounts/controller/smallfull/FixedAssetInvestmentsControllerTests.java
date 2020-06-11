@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
@@ -19,9 +20,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -51,7 +53,7 @@ public class FixedAssetInvestmentsControllerTests {
     private NavigatorService mockNavigatorService;
     
     @Mock
-    private FixedAssetsInvestmentsService mockFixedAssetsInvestmentsService;
+    private NoteService<FixedAssetsInvestments> mockFixedAssetsInvestmentsService;
 
     @Mock
     private BalanceSheetService mockBalanceSheetService;
@@ -94,7 +96,7 @@ public class FixedAssetInvestmentsControllerTests {
     void getRequestSuccess() throws Exception {
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockFixedAssetsInvestmentsService.getFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(mockFixedAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT))
             .thenReturn(new FixedAssetsInvestments());
 
         this.mockMvc.perform(get(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
@@ -105,14 +107,14 @@ public class FixedAssetInvestmentsControllerTests {
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(mockFixedAssetsInvestmentsService, times(1))
-            .getFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
     }
 
     @Test
     @DisplayName("Get fixedAssetsInvestments view failure path due to error on fixedAssetsInvestments retrieval")
     void getRequestFailureInGetFixedAssetsInvestments() throws Exception {
 
-        when(mockFixedAssetsInvestmentsService.getFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(mockFixedAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT))
             .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH))
@@ -127,7 +129,7 @@ public class FixedAssetInvestmentsControllerTests {
 
         when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
             .thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockFixedAssetsInvestmentsService.submitFixedAssetsInvestments(anyString(), anyString(), any(FixedAssetsInvestments.class), anyString()))
+        when(mockFixedAssetsInvestmentsService.submit(anyString(), anyString(), any(FixedAssetsInvestments.class), eq(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT)))
             .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH)
@@ -141,7 +143,7 @@ public class FixedAssetInvestmentsControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockFixedAssetsInvestmentsService).submitFixedAssetsInvestments(anyString(), anyString(), any(FixedAssetsInvestments.class), anyString());
+            .when(mockFixedAssetsInvestmentsService).submit(anyString(), anyString(), any(FixedAssetsInvestments.class), eq(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT));
 
         this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH)
             .param(TEST_PATH, "Test"))
@@ -161,7 +163,7 @@ public class FixedAssetInvestmentsControllerTests {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockFixedAssetsInvestmentsService.submitFixedAssetsInvestments(anyString(), anyString(), any(FixedAssetsInvestments.class), anyString()))
+        when(mockFixedAssetsInvestmentsService.submit(anyString(), anyString(), any(FixedAssetsInvestments.class), eq(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT)))
             .thenReturn(errors);
 
         this.mockMvc.perform(post(SMALL_FULL_FIXED_ASSETS_INVESTMENTS_PATH)

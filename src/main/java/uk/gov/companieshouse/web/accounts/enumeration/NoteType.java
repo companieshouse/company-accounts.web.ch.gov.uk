@@ -9,7 +9,8 @@ public enum NoteType {
     SMALL_FULL_DEBTORS(true),
     SMALL_FULL_EMPLOYEES(true),
     SMALL_FULL_TANGIBLE_ASSETS(true),
-    SMALL_FULL_INTANGIBLE_ASSETS(true);
+    SMALL_FULL_INTANGIBLE_ASSETS(true),
+    SMALL_FULL_FIXED_ASSETS_INVESTMENT(false);
 
     private boolean includedDates;
 

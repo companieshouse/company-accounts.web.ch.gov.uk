@@ -33,13 +33,13 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAsse
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
@@ -77,7 +77,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets> tangibleAssetsNoteService;
 
     @Autowired
-    private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
+    private NoteService<FixedAssetsInvestments> fixedAssetsInvestmentsService;
 
     @Autowired
     private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments> currentAssetsInvestmentsService;
@@ -237,7 +237,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
             && isFixedInvestmentsPreviousAmountNullOrZero(balanceSheet))
             && smallFullLinks.getFixedAssetsInvestmentsNote() != null) {
 
-            fixedAssetsInvestmentsService.deleteFixedAssetsInvestments(transactionId, companyAccountsId);
+            fixedAssetsInvestmentsService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
         }
 
         if ((isStocksCurrentAmountNullOrZero(balanceSheet)
