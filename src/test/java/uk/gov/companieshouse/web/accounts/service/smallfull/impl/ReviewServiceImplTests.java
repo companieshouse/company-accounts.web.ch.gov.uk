@@ -43,7 +43,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.Tangibl
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -92,7 +91,7 @@ public class ReviewServiceImplTests {
     private NoteService<IntangibleAssets> intangibleAssetsNoteService;
 
     @Mock
-    private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
+    private NoteService<FixedAssetsInvestments> fixedAssetsInvestmentsService;
 
     @Mock
     private NoteService<CurrentAssetsInvestments> currentAssetsInvestmentsService;
@@ -192,7 +191,7 @@ public class ReviewServiceImplTests {
                 .thenReturn(mockIntangibleAssets);
         
         FixedAssetsInvestments mockFixedAssetsInvestments = new FixedAssetsInvestments();
-        when(fixedAssetsInvestmentsService.getFixedAssetsInvestments(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(fixedAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT))
                 .thenReturn(mockFixedAssetsInvestments);
 
         CurrentAssetsInvestments mockCurrentAssetsInvestments = new CurrentAssetsInvestments();

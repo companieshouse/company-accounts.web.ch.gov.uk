@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
@@ -31,7 +30,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.Tangibl
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.FixedAssetsInvestmentsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -71,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
     private NoteService<IntangibleAssets> intangibleAssetsNoteService;
 
     @Autowired
-    private FixedAssetsInvestmentsService fixedAssetsInvestmentsService;
+    private NoteService<FixedAssetsInvestments> fixedAssetsInvestmentsService;
 
     @Autowired
     private NoteService<CurrentAssetsInvestments> currentAssetsInvestmentsService;
@@ -130,7 +128,7 @@ public class ReviewServiceImpl implements ReviewService {
         
         StocksNote stocks = stocksService.get(transactionId,companyAccountsId, NoteType.SMALL_FULL_STOCKS);
 
-        FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.getFixedAssetsInvestments(transactionId, companyAccountsId, companyNumber);
+        FixedAssetsInvestments fixedAssetsInvestments = fixedAssetsInvestmentsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
 
         CurrentAssetsInvestments currentAssetsInvestments =
                 currentAssetsInvestmentsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);

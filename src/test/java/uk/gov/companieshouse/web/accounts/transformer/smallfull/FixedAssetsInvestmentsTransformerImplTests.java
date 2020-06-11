@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.model.accounts.smallfull.fixedassetsinvestments.FixedAssetsInvestmentsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.FixedAssetsInvestmentsTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +15,7 @@ public class FixedAssetsInvestmentsTransformerImplTests {
     
     private static final String TEST_DETAILS = "test details";
 
-    private FixedAssetsInvestmentsTransformer transformer = new FixedAssetsInvestmentsTransformerImpl();
+    private NoteTransformer<FixedAssetsInvestments, FixedAssetsInvestmentsApi> transformer = new FixedAssetsInvestmentsTransformerImpl();
 
     @Test
     @DisplayName("Transform api model to web model")
@@ -22,7 +23,7 @@ public class FixedAssetsInvestmentsTransformerImplTests {
         FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi = new FixedAssetsInvestmentsApi();
         fixedAssetsInvestmentsApi.setDetails(TEST_DETAILS);
 
-        FixedAssetsInvestments fixedAssetsInvestments = transformer.getFixedAssetsInvestments(fixedAssetsInvestmentsApi);
+        FixedAssetsInvestments fixedAssetsInvestments = transformer.toWeb(fixedAssetsInvestmentsApi);
 
         assertNotNull(fixedAssetsInvestments);
         assertNotNull(fixedAssetsInvestments.getFixedAssetsDetails());
@@ -32,7 +33,7 @@ public class FixedAssetsInvestmentsTransformerImplTests {
     @Test
     @DisplayName("Transform api model to web model when api model is null")
     void transformNullFixedAssetsInvestmentsApiToWeb() {
-        FixedAssetsInvestments fixedAssetsInvestments = transformer.getFixedAssetsInvestments(null);
+        FixedAssetsInvestments fixedAssetsInvestments = transformer.toWeb(null);
 
         assertNotNull(fixedAssetsInvestments);
         assertNull(fixedAssetsInvestments.getFixedAssetsDetails());
@@ -44,7 +45,7 @@ public class FixedAssetsInvestmentsTransformerImplTests {
         FixedAssetsInvestments fixedAssetsInvestments = new FixedAssetsInvestments();
         fixedAssetsInvestments.setFixedAssetsDetails(TEST_DETAILS);
 
-        FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi = transformer.getFixedAssetsInvestmentsApi(fixedAssetsInvestments);
+        FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi = transformer.toApi(fixedAssetsInvestments);
 
         assertNotNull(fixedAssetsInvestmentsApi);
         assertNotNull(fixedAssetsInvestmentsApi.getDetails());
