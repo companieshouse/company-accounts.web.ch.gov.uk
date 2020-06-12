@@ -5,21 +5,23 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CreditorsAfterOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.PreviousPeriod;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.BankLoansAndOverdrafts;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.FinanceLeasesAndHirePurchaseContracts;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.OtherCreditors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.Total;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.CreditorsAfterOneYearTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
 @Component
-public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYearTransformer {
+public class CreditorsAfterOneYearTransformerImpl
+                implements NoteTransformer<CreditorsAfterOneYear, CreditorsAfterOneYearApi> {
 
     @Override
-    public CreditorsAfterOneYear getCreditorsAfterOneYear(CreditorsAfterOneYearApi creditorsAfterOneYearApi) {
+    public CreditorsAfterOneYear toWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi) {
 
         CreditorsAfterOneYear creditorsAfterOneYear = new CreditorsAfterOneYear();
 
@@ -34,7 +36,7 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
     }
 
     @Override
-    public CreditorsAfterOneYearApi getCreditorsAfterOneYearApi(CreditorsAfterOneYear creditorsAfterOneYear) {
+    public CreditorsAfterOneYearApi toApi(CreditorsAfterOneYear creditorsAfterOneYear) {
 
         CreditorsAfterOneYearApi creditorsAfterOneYearApi = new CreditorsAfterOneYearApi();
 
@@ -43,6 +45,11 @@ public class CreditorsAfterOneYearTransformerImpl implements CreditorsAfterOneYe
         setPreviousPeriodOnApiModel(creditorsAfterOneYear, creditorsAfterOneYearApi);
 
         return creditorsAfterOneYearApi;
+    }
+
+    @Override
+    public NoteType getNoteType() {
+        return NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR;
     }
 
     private void populateCurrentPeriodForWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi,

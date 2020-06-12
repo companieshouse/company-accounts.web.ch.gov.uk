@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
+import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CreditorsAfterOneYearTransformerImpl;
 
 public class CreditorsAfterOneYearTransformerTests {
@@ -25,7 +25,7 @@ public class CreditorsAfterOneYearTransformerTests {
 
     private static final String DETAILS = "DETAILS";
 
-    private CreditorsAfterOneYearTransformer transformer =
+    private NoteTransformer<CreditorsAfterOneYear, CreditorsAfterOneYearApi> transformer =
             new CreditorsAfterOneYearTransformerImpl();
 
     @Test
@@ -45,7 +45,7 @@ public class CreditorsAfterOneYearTransformerTests {
         creditorsAfterOneYearApi.setCurrentPeriod(currentPeriod);
 
         CreditorsAfterOneYear creditorsAfterOneYear =
-                transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
+                transformer.toWeb(creditorsAfterOneYearApi);
 
         assertEquals(BANK_LOANS_CURRENT,
                 creditorsAfterOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
@@ -73,7 +73,7 @@ public class CreditorsAfterOneYearTransformerTests {
         creditorsAfterOneYearApi.setCurrentPeriod(currentPeriod);
 
         CreditorsAfterOneYear creditorsAfterOneYear =
-                transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
+                transformer.toWeb(creditorsAfterOneYearApi);
 
         assertEquals(OTHER_CREDITORS_CURRENT,
                 creditorsAfterOneYear.getOtherCreditors().getCurrentOtherCreditors());
@@ -98,7 +98,7 @@ public class CreditorsAfterOneYearTransformerTests {
         creditorsAfterOneYearApi.setPreviousPeriod(previousPeriod);
 
         CreditorsAfterOneYear creditorsAfterOneYear =
-                transformer.getCreditorsAfterOneYear(creditorsAfterOneYearApi);
+                transformer.toWeb(creditorsAfterOneYearApi);
 
         assertEquals(BANK_LOANS_PREVIOUS,
                 creditorsAfterOneYear.getBankLoansAndOverdrafts().getPreviousBankLoansAndOverdrafts());

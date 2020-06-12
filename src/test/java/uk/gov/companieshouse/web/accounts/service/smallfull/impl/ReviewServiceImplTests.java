@@ -42,7 +42,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -73,7 +72,7 @@ public class ReviewServiceImplTests {
     private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
 
     @Mock
-    private CreditorsAfterOneYearService creditorsAfterOneYearService;
+    private NoteService<CreditorsAfterOneYear> creditorsAfterOneYearService;
 
     @Mock
     private NoteService<Debtors> debtorsService;
@@ -161,7 +160,7 @@ public class ReviewServiceImplTests {
             .thenReturn(mockCreditorsWithinOneYear);
 
         CreditorsAfterOneYear mockCreditorsAfterOneYear = new CreditorsAfterOneYear();
-        when(creditorsAfterOneYearService.getCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(creditorsAfterOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR))
             .thenReturn(mockCreditorsAfterOneYear);
 
         Debtors mockDebtors = new Debtors();

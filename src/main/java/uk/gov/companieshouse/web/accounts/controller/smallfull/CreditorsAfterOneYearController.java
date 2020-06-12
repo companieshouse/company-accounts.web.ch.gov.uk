@@ -13,12 +13,13 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.OtherLiabilitiesOrAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,7 @@ public class CreditorsAfterOneYearController extends BaseController implements
         ConditionalController {
 
     @Autowired
-    private CreditorsAfterOneYearService creditorsAfterOneYearService;
+    private NoteService<CreditorsAfterOneYear> creditorsAfterOneYearService;
 
     @Autowired
     private BalanceSheetService balanceSheetService;
@@ -54,9 +55,9 @@ public class CreditorsAfterOneYearController extends BaseController implements
 
         try {
             CreditorsAfterOneYear creditorsAfterOneYear =
-                    creditorsAfterOneYearService.getCreditorsAfterOneYear(transactionId,
+                    creditorsAfterOneYearService.get(transactionId,
                             companyAccountsId,
-                            companyNumber);
+                            NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
 
             model.addAttribute("creditorsAfterOneYear", creditorsAfterOneYear);
         } catch (ServiceException e) {
@@ -82,8 +83,8 @@ public class CreditorsAfterOneYearController extends BaseController implements
 
         try {
             List<ValidationError> validationErrors =
-                    creditorsAfterOneYearService.submitCreditorsAfterOneYear(transactionId,
-                            companyAccountsId, creditorsAfterOneYear);
+                    creditorsAfterOneYearService.submit(transactionId,
+                            companyAccountsId, creditorsAfterOneYear, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
 
             if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

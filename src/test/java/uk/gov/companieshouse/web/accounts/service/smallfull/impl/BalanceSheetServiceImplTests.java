@@ -9,7 +9,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -18,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
@@ -31,6 +29,7 @@ import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
@@ -41,7 +40,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.Tangibl
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -97,7 +95,7 @@ public class BalanceSheetServiceImplTests {
     private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
 
     @Mock
-    private CreditorsAfterOneYearService creditorsAfterOneYearService;
+    private NoteService<CreditorsAfterOneYear> creditorsAfterOneYearService;
 
     @Mock
     private NoteService<StocksNote> stocksService;
@@ -464,7 +462,7 @@ public class BalanceSheetServiceImplTests {
 
         verify(creditorsWithinOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
         verify(debtorsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
-        verify(creditorsAfterOneYearService).deleteCreditorsAfterOneYear(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(creditorsAfterOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
         verify(tangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
         verify(intangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
         verify(fixedAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
