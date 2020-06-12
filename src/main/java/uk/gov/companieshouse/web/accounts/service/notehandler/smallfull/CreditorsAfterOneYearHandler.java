@@ -17,7 +17,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 public class CreditorsAfterOneYearHandler implements NoteResourceHandler<CreditorsAfterOneYearApi> {
 
     private static final UriTemplate CREDITORS_AFTER_ONE_YEAR_URI = new UriTemplate(
-                    "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/creditors-after-one-year"
+                    "/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/creditors-after-more-than-one-year"
             );
 
     private final SmallFullService smallFullService;

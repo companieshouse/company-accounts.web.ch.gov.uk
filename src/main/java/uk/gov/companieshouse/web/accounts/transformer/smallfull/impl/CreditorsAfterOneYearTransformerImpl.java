@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 @Component
 public class CreditorsAfterOneYearTransformerImpl
-                implements NoteTransformer<CreditorsAfterOneYear, CreditorsAfterOneYearApi> {
+        implements NoteTransformer<CreditorsAfterOneYear, CreditorsAfterOneYearApi> {
 
     @Override
     public CreditorsAfterOneYear toWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi) {
@@ -45,11 +45,6 @@ public class CreditorsAfterOneYearTransformerImpl
         setPreviousPeriodOnApiModel(creditorsAfterOneYear, creditorsAfterOneYearApi);
 
         return creditorsAfterOneYearApi;
-    }
-
-    @Override
-    public NoteType getNoteType() {
-        return NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR;
     }
 
     private void populateCurrentPeriodForWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi,
@@ -235,5 +230,10 @@ public class CreditorsAfterOneYearTransformerImpl
                 previousPeriod.getFinanceLeasesAndHirePurchaseContracts(),
                 previousPeriod.getOtherCreditors(),
                 previousPeriod.getTotal()).anyMatch(Objects::nonNull);
+    }
+
+    @Override
+    public NoteType getNoteType() {
+        return NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR;
     }
 }

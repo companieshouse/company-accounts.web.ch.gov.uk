@@ -48,16 +48,16 @@ public class CreditorsAfterOneYearController extends BaseController implements
 
     @GetMapping
     public String getCreditorsAfterOneYear(@PathVariable String companyNumber,
-            @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model,
-            HttpServletRequest request) {
+                                           @PathVariable String transactionId,
+                                           @PathVariable String companyAccountsId,
+                                           Model model,
+                                           HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            CreditorsAfterOneYear creditorsAfterOneYear =
-                    creditorsAfterOneYearService.get(transactionId,
-                            companyAccountsId,
-                            NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
+            CreditorsAfterOneYear creditorsAfterOneYear = creditorsAfterOneYearService.get(transactionId, companyAccountsId,
+                    NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
 
             model.addAttribute("creditorsAfterOneYear", creditorsAfterOneYear);
         } catch (ServiceException e) {
@@ -82,9 +82,8 @@ public class CreditorsAfterOneYearController extends BaseController implements
         }
 
         try {
-            List<ValidationError> validationErrors =
-                    creditorsAfterOneYearService.submit(transactionId,
-                            companyAccountsId, creditorsAfterOneYear, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
+            List<ValidationError> validationErrors = creditorsAfterOneYearService.submit(transactionId,
+                    companyAccountsId, creditorsAfterOneYear, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
 
             if (! validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
@@ -95,9 +94,7 @@ public class CreditorsAfterOneYearController extends BaseController implements
             return ERROR_VIEW;
         }
 
-        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber,
-                transactionId,
-                companyAccountsId);
+        return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 
     @Override
