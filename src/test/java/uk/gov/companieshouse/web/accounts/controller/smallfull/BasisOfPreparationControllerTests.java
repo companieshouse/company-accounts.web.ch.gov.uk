@@ -23,9 +23,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -39,7 +41,10 @@ public class BasisOfPreparationControllerTests {
     private List<ValidationError> validationErrors;
 
     @Mock
-    private BasisOfPreparationService basisOfPreparationService;
+    private NoteService<AccountingPolicies> noteService;
+
+    @Mock
+    private AccountingPolicies accountingPolicies;
 
     @Mock
     private NavigatorService navigatorService;
@@ -82,8 +87,13 @@ public class BasisOfPreparationControllerTests {
     @DisplayName("Get basis of preparation view - success path")
     void getRequestSuccess() throws Exception {
 
-        when(basisOfPreparationService.getBasisOfPreparation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(new BasisOfPreparation());
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
+        basisOfPreparation.setIsPreparedInAccordanceWithStandards(true);
+
+        when(accountingPolicies.getBasisOfPreparation()).thenReturn(basisOfPreparation);
 
         this.mockMvc.perform(get(BASIS_OF_PREPARATION_PATH))
                 .andExpect(status().isOk())
@@ -97,7 +107,7 @@ public class BasisOfPreparationControllerTests {
     @DisplayName("Get basis of preparation view - basis of preparation service exception")
     void getRequestBasisOfPreparationServiceException() throws Exception {
 
-        when(basisOfPreparationService.getBasisOfPreparation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(BASIS_OF_PREPARATION_PATH))
@@ -109,8 +119,12 @@ public class BasisOfPreparationControllerTests {
     @DisplayName("Submit basis of preparation - success path")
     void postRequestSuccess() throws Exception {
 
-        when(basisOfPreparationService.submitBasisOfPreparation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(BasisOfPreparation.class)))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(validationErrors);
+
         when(validationErrors.isEmpty()).thenReturn(true);
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -132,7 +146,10 @@ public class BasisOfPreparationControllerTests {
     @DisplayName("Submit basis of preparation - validation errors")
     void postRequestWithValidationErrors() throws Exception {
 
-        when(basisOfPreparationService.submitBasisOfPreparation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(BasisOfPreparation.class)))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(validationErrors);
         when(validationErrors.isEmpty()).thenReturn(false);
 
@@ -145,7 +162,10 @@ public class BasisOfPreparationControllerTests {
     @DisplayName("Submit basis of preparation - basis of preparation service exception")
     void postRequestBasisOfPreparationServiceException() throws Exception {
 
-        when(basisOfPreparationService.submitBasisOfPreparation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(BasisOfPreparation.class)))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(postRequestWithValidData())

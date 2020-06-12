@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.OtherAccountingPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +31,7 @@ import java.util.List;
 public class OtherAccountingPolicyController extends BaseController {
 
     @Autowired
-    private OtherAccountingPolicyService otherAccountingPolicyService;
+    private NoteService<AccountingPolicies> noteService;
 
     @GetMapping
     public String getOtherAccountingPolicy(@PathVariable String companyNumber,
@@ -42,8 +44,8 @@ public class OtherAccountingPolicyController extends BaseController {
 
         try {
             OtherAccountingPolicy otherAccountingPolicy =
-                    otherAccountingPolicyService
-                            .getOtherAccountingPolicy(transactionId, companyAccountsId);
+                    noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
+                    .getOtherAccountingPolicy();
 
             if (otherAccountingPolicy.getHasOtherAccountingPolicySelected() == null) {
                 setIsPolicyIncluded(request, otherAccountingPolicy);
@@ -73,10 +75,14 @@ public class OtherAccountingPolicyController extends BaseController {
         }
 
         try {
+
+            AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
+                    NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
+
+            accountingPolicies.setOtherAccountingPolicy(otherAccountingPolicy);
+
             List<ValidationError> validationErrors =
-                otherAccountingPolicyService
-                    .submitOtherAccountingPolicy(transactionId, companyAccountsId,
-                        otherAccountingPolicy);
+                noteService.submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();

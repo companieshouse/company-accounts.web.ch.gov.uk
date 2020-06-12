@@ -27,11 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -45,13 +46,16 @@ public class IntangibleAmortisationPolicyControllerTests {
     private List<ValidationError> validationErrors;
 
     @Mock
-    private IntangibleAmortisationPolicyService intangibleAmortisationPolicyService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies> noteService;
 
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
-    private AccountingPolicies accountingPolicies;
+    private AccountingPolicies accountingPoliciesDataState;
+
+    @Mock
+    private uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies accountingPolicies;
 
     @Mock
     private NavigatorService navigatorService;
@@ -100,8 +104,12 @@ public class IntangibleAmortisationPolicyControllerTests {
 
         IntangibleAmortisationPolicy intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
         intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(true);
-        when(intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(intangibleAmortisationPolicy);
+
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getIntangibleAmortisationPolicy()).thenReturn(intangibleAmortisationPolicy);
+
         when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH))
@@ -116,14 +124,17 @@ public class IntangibleAmortisationPolicyControllerTests {
     @DisplayName("Get intangible amortisation policy view using state to determine whether policy is included - success path")
     void getRequestSuccessUsingState() throws Exception {
 
-        when(intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getIntangibleAmortisationPolicy())
                 .thenReturn(new IntangibleAmortisationPolicy());
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
-        when(accountingPolicies.getHasProvidedIntangiblePolicy()).thenReturn(false);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
+        when(accountingPoliciesDataState.getHasProvidedIntangiblePolicy()).thenReturn(false);
         when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH).session(session))
@@ -134,14 +145,14 @@ public class IntangibleAmortisationPolicyControllerTests {
                 .andExpect(model().attributeExists(INTANGIBLE_AMORTISATION_POLICY_MODEL_ATTR));
 
         verify(companyAccountsDataState, times(1)).getAccountingPolicies();
-        verify(accountingPolicies, times(1)).getHasProvidedIntangiblePolicy();
+        verify(accountingPoliciesDataState, times(1)).getHasProvidedIntangiblePolicy();
     }
 
     @Test
     @DisplayName("Get intangible amortisation policy view - intangible amortisation policy service exception")
     void getRequestIntangibleAmortisationPolicyServiceException() throws Exception {
 
-        when(intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH))
@@ -153,8 +164,10 @@ public class IntangibleAmortisationPolicyControllerTests {
     @DisplayName("Submit intangible amortisation policy - success path")
     void postRequestSuccess() throws Exception {
 
-        when(intangibleAmortisationPolicyService
-                .submitIntangibleAmortisationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(IntangibleAmortisationPolicy.class)))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
@@ -162,14 +175,14 @@ public class IntangibleAmortisationPolicyControllerTests {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
-        verify(accountingPolicies, times(1)).setHasProvidedIntangiblePolicy(anyBoolean());
+        verify(accountingPoliciesDataState, times(1)).setHasProvidedIntangiblePolicy(anyBoolean());
     }
 
     @Test
@@ -185,9 +198,12 @@ public class IntangibleAmortisationPolicyControllerTests {
     @DisplayName("Submit intangible amortisation policy - validation errors")
     void postRequestWithValidationErrors() throws Exception {
 
-        when(intangibleAmortisationPolicyService
-                .submitIntangibleAmortisationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(IntangibleAmortisationPolicy.class)))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(validationErrors);
+
         when(validationErrors.isEmpty()).thenReturn(false);
 
         this.mockMvc.perform(postRequestWithValidData())
@@ -199,9 +215,12 @@ public class IntangibleAmortisationPolicyControllerTests {
     @DisplayName("Submit intangible amortisation policy - intangible amortisation policy service exception")
     void postRequestIntangibleAmortisationPolicyServiceException() throws Exception {
 
-        when(intangibleAmortisationPolicyService
-                .submitIntangibleAmortisationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(IntangibleAmortisationPolicy.class)))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenThrow(ServiceException.class);
+
 
         this.mockMvc.perform(postRequestWithValidData())
                 .andExpect(status().isOk())

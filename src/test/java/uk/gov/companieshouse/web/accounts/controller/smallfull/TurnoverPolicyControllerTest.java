@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -30,11 +29,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -69,13 +69,16 @@ public class TurnoverPolicyControllerTest {
     private List<ValidationError> validationErrorsMock;
 
     @Mock
-    private TurnoverPolicyService turnoverPolicyServiceMock;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies> noteService;
 
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
-    private AccountingPolicies accountingPolicies;
+    private AccountingPolicies accountingPoliciesDataState;
+
+    @Mock
+    private uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies accountingPolicies;
 
     @Mock
     NavigatorService navigatorService;
@@ -95,8 +98,10 @@ public class TurnoverPolicyControllerTest {
 
         TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
         turnoverPolicy.setIsIncludeTurnoverSelected(true);
-        when(turnoverPolicyServiceMock.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(turnoverPolicy);
+
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getTurnoverPolicy()).thenReturn(turnoverPolicy);
 
         when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -113,14 +118,15 @@ public class TurnoverPolicyControllerTest {
     @DisplayName("Get the Include Turnover Policy view using the state to determine whether the policy is included")
     void shouldGetTurnoverPolicyUsingState() throws Exception {
 
-        when(turnoverPolicyServiceMock.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(new TurnoverPolicy());
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+        when(accountingPolicies.getTurnoverPolicy()).thenReturn(new TurnoverPolicy());
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
-        when(accountingPolicies.getHasProvidedTurnoverPolicy()).thenReturn(false);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
+        when(accountingPoliciesDataState.getHasProvidedTurnoverPolicy()).thenReturn(false);
 
         this.mockMvc
                 .perform(get(TURNOVER_POLICY_PATH).session(session))
@@ -131,16 +137,14 @@ public class TurnoverPolicyControllerTest {
                 .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
 
         verify(companyAccountsDataState, times(1)).getAccountingPolicies();
-        verify(accountingPolicies, times(1)).getHasProvidedTurnoverPolicy();
+        verify(accountingPoliciesDataState, times(1)).getHasProvidedTurnoverPolicy();
     }
 
     @Test
     @DisplayName("Get the Include Turnover Policy view fails due to service exception")
     void shouldNotGetTurnoverPolicyServiceException() throws Exception {
 
-        when(turnoverPolicyServiceMock.getTurnOverPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenThrow(ServiceException.class);
-
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)).thenThrow(ServiceException.class);
         this.mockMvc
             .perform(get(TURNOVER_POLICY_PATH))
             .andExpect(status().isOk())
@@ -152,17 +156,19 @@ public class TurnoverPolicyControllerTest {
     @Test
     @DisplayName("Post Turnover Policy call is successful")
     void shouldPostTurnoverPolicy() throws Exception {
-        doReturn(validationErrorsMock)
-            .when(turnoverPolicyServiceMock)
-            .postTurnoverPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(TurnoverPolicy.class));
+
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        doReturn(validationErrorsMock).when(noteService).submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies,
+                    NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
         when(validationErrorsMock.isEmpty()).thenReturn(true);
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -174,7 +180,8 @@ public class TurnoverPolicyControllerTest {
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
             .andExpect(model().attributeExists(TURNOVER_POLICY_MODEL_ATTR));
 
-        verify(accountingPolicies, times(1)).setHasProvidedTurnoverPolicy(anyBoolean());
+        verify(accountingPolicies).setTurnoverPolicy(any(TurnoverPolicy.class));
+        verify(accountingPoliciesDataState, times(1)).setHasProvidedTurnoverPolicy(anyBoolean());
     }
 
     @Test
@@ -193,10 +200,11 @@ public class TurnoverPolicyControllerTest {
     @DisplayName("Post Turnover Policy call is not redirected as there is a validation error")
     void shouldPostTurnoverPolicyFailsDueValidationErrors() throws Exception {
 
-        doReturn(validationErrorsMock)
-            .when(turnoverPolicyServiceMock)
-            .postTurnoverPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(TurnoverPolicy.class));
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        doReturn(validationErrorsMock).when(noteService).submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies,
+                NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
         when(validationErrorsMock.isEmpty()).thenReturn(false);
 
@@ -212,10 +220,12 @@ public class TurnoverPolicyControllerTest {
     @Test
     @DisplayName("Post Turnover Policy call is not redirected as there is service exception")
     void shouldPostTurnoverPolicyFailsDueException() throws Exception {
-        doThrow(ServiceException.class)
-            .when(turnoverPolicyServiceMock)
-            .postTurnoverPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(TurnoverPolicy.class));
+
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        doThrow(ServiceException.class).when(noteService).submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies,
+                NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
         this.mockMvc
             .perform(createPostRequestWithParam(false))

@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.IntangibleAmortisationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -30,7 +32,7 @@ public class IntangibleAmortisationPolicyController extends BaseController {
     private static final String INTANGIBLE_AMORTISATION_POLICY = "intangibleAmortisationPolicy";
 
     @Autowired
-    private IntangibleAmortisationPolicyService intangibleAmortisationPolicyService;
+    private NoteService<AccountingPolicies> noteService;
 
     @GetMapping
     public String getIntangibleAmortisationPolicy(@PathVariable String companyNumber,
@@ -43,7 +45,8 @@ public class IntangibleAmortisationPolicyController extends BaseController {
 
         try {
             IntangibleAmortisationPolicy intangibleAmortisationPolicy =
-                    intangibleAmortisationPolicyService.getIntangibleAmortisationPolicy(transactionId, companyAccountsId);
+                    noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
+                            .getIntangibleAmortisationPolicy();
 
             if (intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy() == null) {
                 setIsPolicyIncluded(request, intangibleAmortisationPolicy);
@@ -75,8 +78,14 @@ public class IntangibleAmortisationPolicyController extends BaseController {
         }
 
         try {
-            List<ValidationError> validationErrors = intangibleAmortisationPolicyService
-                    .submitIntangibleAmortisationPolicy(transactionId, companyAccountsId, intangibleAmortisationPolicy);
+
+            AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
+                    NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
+
+            accountingPolicies.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
+
+            List<ValidationError> validationErrors = noteService
+                    .submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

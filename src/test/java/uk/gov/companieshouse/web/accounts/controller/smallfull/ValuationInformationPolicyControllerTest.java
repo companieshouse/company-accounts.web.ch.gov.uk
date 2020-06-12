@@ -2,7 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,11 +28,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.ValuationInformationPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -67,13 +68,16 @@ public class ValuationInformationPolicyControllerTest {
     private List<ValidationError> validationErrors;
 
     @Mock
-    private ValuationInformationPolicyService valuationInformationPolicyService;
+    private NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies> noteService;
 
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
-    private AccountingPolicies accountingPolicies;
+    private AccountingPolicies accountingPoliciesState;
+
+    @Mock
+    private uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies accountingPolicies;
 
     @Mock
     private NavigatorService navigatorService;
@@ -92,8 +96,11 @@ public class ValuationInformationPolicyControllerTest {
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
         valuationInformationPolicy.setIncludeValuationInformationPolicy(true);
-        when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(valuationInformationPolicy);
+
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getValuationInformationPolicy()).thenReturn(valuationInformationPolicy);
 
         when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -110,14 +117,16 @@ public class ValuationInformationPolicyControllerTest {
     @DisplayName("Get valuation information policy view using state to determine whether policy is provided - success path")
     void getRequestSuccessUsingState() throws Exception {
 
-        when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                .thenReturn(new ValuationInformationPolicy());
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(accountingPolicies.getValuationInformationPolicy()).thenReturn(new ValuationInformationPolicy());
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
-        when(accountingPolicies.getHasProvidedValuationInformationPolicy()).thenReturn(false);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesState);
+        when(accountingPoliciesState.getHasProvidedValuationInformationPolicy()).thenReturn(false);
 
         when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -130,14 +139,14 @@ public class ValuationInformationPolicyControllerTest {
                 .andExpect(model().attributeExists(VALUATION_INFORMATION_POLICY_MODEL_ATTR));
 
         verify(companyAccountsDataState, times(1)).getAccountingPolicies();
-        verify(accountingPolicies, times(1)).getHasProvidedValuationInformationPolicy();
+        verify(accountingPoliciesState, times(1)).getHasProvidedValuationInformationPolicy();
     }
 
     @Test
     @DisplayName("Get valuation information policy view - valuation information policy service exception")
     void getRequestValuationInformationPolicyServiceException() throws Exception {
 
-        when(valuationInformationPolicyService.getValuationInformationPolicy(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
             .thenThrow(ServiceException.class);
 
         this.mockMvc
@@ -150,17 +159,18 @@ public class ValuationInformationPolicyControllerTest {
     @DisplayName("Submit valuation information policy - success path")
     void postRequestSuccess() throws Exception {
 
-        when(valuationInformationPolicyService
-            .submitValuationInformationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(ValuationInformationPolicy.class)))
-                    .thenReturn(validationErrors);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        doReturn(validationErrors).when(noteService).submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies,
+                NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
-        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPolicies);
+        when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesState);
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -168,7 +178,8 @@ public class ValuationInformationPolicyControllerTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
-        verify(accountingPolicies, times(1)).setHasProvidedValuationInformationPolicy(anyBoolean());
+        verify(accountingPolicies).setValuationInformationPolicy(any(ValuationInformationPolicy.class));
+        verify(accountingPoliciesState, times(1)).setHasProvidedValuationInformationPolicy(anyBoolean());
     }
 
     @Test
@@ -190,10 +201,11 @@ public class ValuationInformationPolicyControllerTest {
     @DisplayName("Submit valuation information policy - validation errors")
     void postRequestWithValidationErrors() throws Exception {
 
-        when(valuationInformationPolicyService
-            .submitValuationInformationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(ValuationInformationPolicy.class)))
-                    .thenReturn(validationErrors);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
 
@@ -212,10 +224,11 @@ public class ValuationInformationPolicyControllerTest {
     @DisplayName("Submit valuation information policy - valuation information policy service exception")
     void postRequestValuationInformationPolicyServiceException() throws Exception {
 
-        when(valuationInformationPolicyService
-            .submitValuationInformationPolicy(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
-                any(ValuationInformationPolicy.class)))
-                    .thenThrow(ServiceException.class);
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenReturn(accountingPolicies);
+
+        when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+                .thenThrow(ServiceException.class);
 
         this.mockMvc
             .perform(createPostRequestWithParam(true))

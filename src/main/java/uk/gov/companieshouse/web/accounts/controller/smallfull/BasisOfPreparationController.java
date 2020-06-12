@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BasisOfPreparationService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -27,7 +29,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 public class BasisOfPreparationController extends BaseController {
 
     @Autowired
-    private BasisOfPreparationService basisOfPreparationService;
+    private NoteService<AccountingPolicies> noteService;
 
     @GetMapping
     public String getBasisOfPreparation(@PathVariable String companyNumber,
@@ -40,9 +42,9 @@ public class BasisOfPreparationController extends BaseController {
 
         try {
             model.addAttribute("basisOfPreparation",
-                    basisOfPreparationService.getBasisOfPreparation(transactionId, companyAccountsId));
+                    noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
+                            .getBasisOfPreparation());
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -66,8 +68,14 @@ public class BasisOfPreparationController extends BaseController {
         }
 
         try {
+            AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
+                    NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
+
+            accountingPolicies.setBasisOfPreparation(basisOfPreparation);
+
             List<ValidationError> validationErrors =
-                    basisOfPreparationService.submitBasisOfPreparation(transactionId, companyAccountsId, basisOfPreparation);
+                    noteService.submit(transactionId, companyAccountsId, accountingPolicies,
+                            NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

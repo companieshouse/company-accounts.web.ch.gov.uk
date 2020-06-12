@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.service.smallfull.TurnoverPolicyService;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
@@ -28,7 +30,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 public class TurnoverPolicyController extends BaseController {
 
     @Autowired
-    private TurnoverPolicyService turnoverPolicyService;
+    private NoteService<AccountingPolicies> noteService;
 
     @GetMapping
     public String getTurnoverPolicy(@PathVariable String companyNumber,
@@ -41,7 +43,8 @@ public class TurnoverPolicyController extends BaseController {
 
         try {
             TurnoverPolicy turnoverPolicy =
-                    turnoverPolicyService.getTurnOverPolicy(transactionId, companyAccountsId);
+                    noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)
+                        .getTurnoverPolicy();
 
             if (turnoverPolicy.getIsIncludeTurnoverSelected() == null) {
                 setIsPolicyIncluded(request, turnoverPolicy);
@@ -73,8 +76,13 @@ public class TurnoverPolicyController extends BaseController {
         }
 
         try {
-            List<ValidationError> validationErrors = turnoverPolicyService
-                .postTurnoverPolicy(transactionId, companyAccountsId, turnoverPolicy);
+            AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
+                    NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
+
+            accountingPolicies.setTurnoverPolicy(turnoverPolicy);
+
+            List<ValidationError> validationErrors = noteService
+                .submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
