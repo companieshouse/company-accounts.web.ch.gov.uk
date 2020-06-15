@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
-
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.PreviousPeriodApi;
@@ -38,7 +36,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -65,7 +62,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
 
     @Autowired
-    private CreditorsAfterOneYearService creditorsAfterOneYearService;
+    private  NoteService<uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.CreditorsAfterOneYear>creditorsAfterOneYearService;
 
     @Autowired
     private NoteService<StocksNote> stocksService;
@@ -216,7 +213,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 && isCreditorsAfterOneYearPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getCreditorsAfterMoreThanOneYearNote() != null) {
 
-            creditorsAfterOneYearService.deleteCreditorsAfterOneYear(transactionId, companyAccountsId);
+            creditorsAfterOneYearService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
         }
 
         if ((isIntangibleAssetsCurrentAmountNullOrZero(balanceSheet)

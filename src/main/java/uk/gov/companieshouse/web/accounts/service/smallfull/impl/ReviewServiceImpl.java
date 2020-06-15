@@ -29,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CreditorsAfterOneYearService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -51,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
     private NoteService<CreditorsWithinOneYear> creditorsWithinOneYearService;
 
     @Autowired
-    private CreditorsAfterOneYearService creditorsAfterOneYearService;
+    private NoteService<CreditorsAfterOneYear> creditorsAfterOneYearService;
 
     @Autowired
     private NoteService<Debtors> debtorsService;
@@ -110,7 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
         
         CreditorsWithinOneYear creditorsWithinOneYear = creditorsWithinOneYearService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
 
-        CreditorsAfterOneYear creditorsAfterOneYear = creditorsAfterOneYearService.getCreditorsAfterOneYear(transactionId, companyAccountsId, companyNumber);
+        CreditorsAfterOneYear creditorsAfterOneYear = creditorsAfterOneYearService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
 
         Debtors debtors = debtorsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_DEBTORS);
 
