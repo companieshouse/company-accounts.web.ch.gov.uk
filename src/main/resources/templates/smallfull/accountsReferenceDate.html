@@ -41,12 +41,12 @@
                                 <th:block th:each="pastDate, stat : ${accountsReferenceDate.pastDates}">
                                     <div class="govuk-radios__item">
                                         <input class="govuk-radios__input" type="radio"
-                                               th:id="${'pastDate-' + stat.index}"
+                                               th:id="${'previousDate-' + stat.index}"
                                                th:value="${{pastDate}}"
                                                th:field="*{chosenDate}">
                                         <label class="govuk-label govuk-radios__label"
-                                               th:for="${'pastDate-' + stat.index}"
-                                               th:id="${'pastDate-' + stat.index + '-label'}"
+                                               th:for="${'previousDate-' + stat.index}"
+                                               th:id="${'previousDate-' + stat.index + '-label'}"
                                                th:text="${#temporals.format(pastDate, 'd MMMM yyyy')}">
                                         </label>
                                     </div>
