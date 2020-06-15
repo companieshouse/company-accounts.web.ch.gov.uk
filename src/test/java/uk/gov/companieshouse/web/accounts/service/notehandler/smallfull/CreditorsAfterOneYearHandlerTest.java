@@ -39,7 +39,7 @@ public class CreditorsAfterOneYearHandlerTest {
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-            COMPANY_ACCOUNTS_ID + "/small-full/notes/creditors-after-one-year";
+            COMPANY_ACCOUNTS_ID + "/small-full/notes/creditors-after-more-than-one-year";
 
     private static final String CREDITORS_AFTER_ONE_YEAR_NOTE = "creditorsAfterOneYear";
 
