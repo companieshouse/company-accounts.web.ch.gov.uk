@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +20,10 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.TurnoverPolicyValidator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @NextController(TangibleDepreciationPolicyController.class)
@@ -79,20 +80,20 @@ public class TurnoverPolicyController extends BaseController {
             return getTemplateName();
         }
 
+       /* List<ValidationError> validationErrors = turnoverPolicyValidator.validateTurnoverPolicy(turnoverPolicy);
+
+        if (!validationErrors.isEmpty()) {
+            bindValidationErrors(bindingResult, validationErrors);
+            return getTemplateName();
+        }*/
+
         try {
             AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
                     NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             accountingPolicies.setTurnoverPolicy(turnoverPolicy);
 
-            List<ValidationError> validationErrors = turnoverPolicyValidator.validateTurnoverPolicy(turnoverPolicy);
-
-            if (!validationErrors.isEmpty()) {
-                bindValidationErrors(bindingResult, validationErrors);
-                return getTemplateName();
-            }
-
-            validationErrors = noteService
+           List<ValidationError> validationErrors = noteService
                 .submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             if (!validationErrors.isEmpty()) {
@@ -140,5 +141,4 @@ public class TurnoverPolicyController extends BaseController {
 
         updateStateOnRequest(request, companyAccountsDataState);
     }
-
 }
