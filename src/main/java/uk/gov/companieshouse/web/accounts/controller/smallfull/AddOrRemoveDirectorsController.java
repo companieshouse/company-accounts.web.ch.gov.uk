@@ -151,7 +151,8 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-            List<ValidationError> validationErrors = directorService.submitAddOrRemoveDirectors(addOrRemoveDirectors);
+            List<ValidationError> validationErrors = directorService.submitAddOrRemoveDirectors(transactionId,
+                    companyAccountsId, addOrRemoveDirectors);
 
             if (StringUtils.isNotBlank(addOrRemoveDirectors.getSecretary())) {
 

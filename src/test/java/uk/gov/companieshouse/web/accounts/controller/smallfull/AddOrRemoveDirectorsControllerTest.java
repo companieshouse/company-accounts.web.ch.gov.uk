@@ -228,7 +228,7 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Post add or remove directors view - remove secretary - success path")
     void postRequestRemoveSecretarySuccess() throws Exception {
 
-        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
+        when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -243,7 +243,7 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Post add or remove directors view - add secretary - success path")
     void postRequestAddSecretarySuccess() throws Exception {
 
-        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
+        when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
                 AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
@@ -260,7 +260,7 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Post add or remove directors view - add secretary - validation errors")
     void postRequestAddSecretaryValidationErrors() throws Exception {
 
-        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
+        when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         List<ValidationError> secretaryValidationErrors = new ArrayList<>();
         secretaryValidationErrors.add(new ValidationError());
@@ -277,7 +277,7 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Post add or remove directors view - add secretary - service exception")
     void postRequestAddSecretaryServiceException() throws Exception {
 
-        when(directorService.submitAddOrRemoveDirectors(any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
+        when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
                 AddOrRemoveDirectors.class))).thenThrow(ServiceException.class);

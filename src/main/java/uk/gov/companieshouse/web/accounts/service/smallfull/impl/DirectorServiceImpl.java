@@ -137,8 +137,10 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public List<ValidationError> submitAddOrRemoveDirectors(AddOrRemoveDirectors addOrRemoveDirectors) {
+    public List<ValidationError> submitAddOrRemoveDirectors(String transactionsId,
+                                                            String companyAccountsId,
+                                                            AddOrRemoveDirectors addOrRemoveDirectors) throws ServiceException {
 
-        return directorValidator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
+        return directorValidator.validateSubmitAddOrRemoveDirectors(transactionsId, companyAccountsId, addOrRemoveDirectors);
     }
 }

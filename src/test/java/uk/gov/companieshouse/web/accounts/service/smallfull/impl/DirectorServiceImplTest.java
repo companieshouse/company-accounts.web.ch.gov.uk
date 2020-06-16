@@ -377,11 +377,11 @@ public class DirectorServiceImplTest {
 
     @Test
     @DisplayName("Submit add or remove directors")
-    void submitAddOrRemoveDirectors() {
+    void submitAddOrRemoveDirectors() throws ServiceException {
 
         List<ValidationError> validationErrors = new ArrayList<>();
-        when(directorValidator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors)).thenReturn(validationErrors);
+        when(directorValidator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors)).thenReturn(validationErrors);
 
-        assertEquals(validationErrors, directorService.submitAddOrRemoveDirectors(addOrRemoveDirectors));
+        assertEquals(validationErrors, directorService.submitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors));
     }
 }

@@ -16,5 +16,5 @@ public interface DirectorService {
 
     void deleteDirector(String transactionId, String companyAccountsId, String directorId) throws ServiceException;
 
-    List<ValidationError> submitAddOrRemoveDirectors(AddOrRemoveDirectors addOrRemoveDirectors);
+    List<ValidationError> submitAddOrRemoveDirectors(String transactionId, String companyAccountsId, AddOrRemoveDirectors addOrRemoveDirectors) throws  ServiceException;
 }
