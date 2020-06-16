@@ -172,8 +172,9 @@ public class BalanceSheetServiceImplTests {
 
         when(companyProfile.getType()).thenReturn(LBG_TYPE);
 
-        when(companyService.getBalanceSheetHeadings(companyProfile))
-                .thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+
+        when(smallFullService.getBalanceSheetHeadings(smallFull)).thenReturn(balanceSheetHeadings);
 
         BalanceSheet returnedBalanceSheet =
                 balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
@@ -208,8 +209,9 @@ public class BalanceSheetServiceImplTests {
 
         when(companyProfile.getType()).thenReturn(NON_LBG_TYPE);
 
-        when(companyService.getBalanceSheetHeadings(companyProfile))
-                .thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+
+        when(smallFullService.getBalanceSheetHeadings(smallFull)).thenReturn(balanceSheetHeadings);
 
         BalanceSheet returnedBalanceSheet =
                 balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
