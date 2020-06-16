@@ -23,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.TangibleDepreciationPolicyValidator;
 
 @Controller
 @NextController(IntangibleAmortisationPolicyController.class)
@@ -32,6 +33,9 @@ public class TangibleDepreciationPolicyController extends BaseController {
 
     @Autowired
     private NoteService<AccountingPolicies> noteService;
+
+    @Autowired
+    private TangibleDepreciationPolicyValidator tangibleDepreciationPolicyValidator;
 
     @GetMapping
     public String getTangibleDepreciationPolicy(@PathVariable String companyNumber,
@@ -82,7 +86,14 @@ public class TangibleDepreciationPolicyController extends BaseController {
 
             accountingPolicies.setTangibleDepreciationPolicy(tangiblePolicy);
 
-            List<ValidationError> validationErrors =
+            List<ValidationError> validationErrors = tangibleDepreciationPolicyValidator.validateTangibleDepreciationPolicy(tangiblePolicy);
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
+            validationErrors =
                 noteService.submit(transactionId, companyAccountsId, accountingPolicies,
                         NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 

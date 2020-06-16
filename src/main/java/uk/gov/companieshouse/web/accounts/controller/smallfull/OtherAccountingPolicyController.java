@@ -19,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.OtherAccountingPoliciesValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -32,6 +33,9 @@ public class OtherAccountingPolicyController extends BaseController {
 
     @Autowired
     private NoteService<AccountingPolicies> noteService;
+
+    @Autowired
+    private OtherAccountingPoliciesValidator otherAccountingPoliciesValidator;
 
     @GetMapping
     public String getOtherAccountingPolicy(@PathVariable String companyNumber,
@@ -81,7 +85,13 @@ public class OtherAccountingPolicyController extends BaseController {
 
             accountingPolicies.setOtherAccountingPolicy(otherAccountingPolicy);
 
-            List<ValidationError> validationErrors =
+            List<ValidationError> validationErrors = otherAccountingPoliciesValidator.validateOtherAccountingPolicy(otherAccountingPolicy);
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
+            validationErrors =
                 noteService.submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);

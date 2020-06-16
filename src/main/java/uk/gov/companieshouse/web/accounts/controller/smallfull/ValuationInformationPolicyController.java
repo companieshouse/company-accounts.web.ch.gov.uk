@@ -22,6 +22,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.ValuationInformationPolicyValidator;
 
 @Controller
 @NextController(OtherAccountingPolicyController.class)
@@ -31,6 +32,9 @@ public class ValuationInformationPolicyController extends BaseController {
 
     @Autowired
     private NoteService<AccountingPolicies> noteService;
+
+    @Autowired
+    private ValuationInformationPolicyValidator valuationInformationPolicyValidator;
 
     private static final String VALUATION_INFORMATION_POLICY = "valuationInformationPolicy";
 
@@ -83,7 +87,14 @@ public class ValuationInformationPolicyController extends BaseController {
 
             accountingPolicies.setValuationInformationPolicy(valuationInformationPolicy);
 
-            List<ValidationError> validationErrors =
+            List<ValidationError> validationErrors = valuationInformationPolicyValidator.validateValuationInformationPolicy(valuationInformationPolicy);
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
+            validationErrors =
                     noteService.submit(transactionId, companyAccountsId, accountingPolicies,
                             NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
