@@ -22,10 +22,10 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 public class DirectorValidator {
 
     @Autowired
-    SmallFullService smallFullService;
+    private SmallFullService smallFullService;
 
     @Autowired
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     private static final String DIRECTOR_TO_ADD = "directorToAdd";
     private static final String DIRECTOR_MUST_BE_ADDED = "validation.directorToAdd.submissionRequired";
@@ -128,15 +128,14 @@ public class DirectorValidator {
     private boolean isValidAppointmentOrResignationDate(Director director, LocalDate periodStartOn, LocalDate periodEndOn) {
         boolean isValid = true;
 
-        if (director.getResignationDate() != null) {
-            if (director.getResignationDate().isBefore(periodStartOn) || director.getResignationDate().isAfter(periodEndOn)) {
-                isValid = false;
-            }
+        if (director.getResignationDate() != null &&
+                (director.getResignationDate().isBefore(periodStartOn) || director.getResignationDate().isAfter(periodEndOn))) {
+            isValid = false;
         }
-        if (director.getAppointmentDate() != null) {
-            if (director.getAppointmentDate().isBefore(periodStartOn) || director.getAppointmentDate().isAfter(periodEndOn)) {
-                isValid = false;
-            }
+        if (director.getAppointmentDate() != null &&
+                (director.getAppointmentDate().isBefore(periodStartOn) || director.getAppointmentDate().isAfter(periodEndOn))) {
+
+            isValid = false;
         }
 
         return isValid;

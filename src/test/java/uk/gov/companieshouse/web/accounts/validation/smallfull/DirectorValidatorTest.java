@@ -14,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -31,16 +30,16 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 public class DirectorValidatorTest {
 
     @Mock
-    SmallFullService smallFullService;
+    private SmallFullService smallFullService;
 
     @Mock
-    ApiClientService apiClientService;
+    private ApiClientService apiClientService;
 
     @Mock
-    ApiClient apiClient;
+    private ApiClient apiClient;
 
     @InjectMocks
-    DirectorValidator validator;
+    private DirectorValidator validator;
 
     private static final String DIRECTOR_NAME = "directorName";
 
@@ -210,8 +209,8 @@ public class DirectorValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate submit add or remove directors - Change ARD invalid date")
-    void validateSubmitAddOrRemoveDirectorsArdChanges() throws ServiceException {
+    @DisplayName("Validate submit add or remove directors - Appointment date after period end")
+    void validateDirectorsArdAppAfterPeriodEnd() throws ServiceException {
         SmallFullApi smallFullApi = new SmallFullApi();
         smallFullApi.setNextAccounts(createNextAccounts());
 
@@ -224,6 +223,89 @@ public class DirectorValidatorTest {
         Director director = new Director();
         director.setAppointmentDate(NEXT_ACCOUNTS_PERIOD_END.plusDays(1));
         addOrRemoveDirectors.setExistingDirectors(new Director[]{director});
+        addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
+
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals("", validationErrors.get(0).getFieldPath());
+        assertEquals(OUTSIDE_VALID_DATE_RANGE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate submit add or remove directors - Appointment date before period start")
+    void validateDirectorsArdAppBeforePeriodStart() throws ServiceException {
+        SmallFullApi smallFullApi = new SmallFullApi();
+        smallFullApi.setNextAccounts(createNextAccounts());
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
+        Director director = new Director();
+        director.setAppointmentDate(NEXT_ACCOUNTS_PERIOD_START.minusDays(1));
+        addOrRemoveDirectors.setExistingDirectors(new Director[]{director});
+        addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
+
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals("", validationErrors.get(0).getFieldPath());
+        assertEquals(OUTSIDE_VALID_DATE_RANGE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate submit add or remove directors - Resignation date after period end")
+    void validateDirectorsArdResignationAfterPeriodEnd() throws ServiceException {
+        SmallFullApi smallFullApi = new SmallFullApi();
+        smallFullApi.setNextAccounts(createNextAccounts());
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
+        Director validDirector = new Director();
+        validDirector.setAppointmentDate(VALID_APPOINTMENT_DATE);
+
+        Director director = new Director();
+        director.setResignationDate(NEXT_ACCOUNTS_PERIOD_END.plusDays(1));
+
+        addOrRemoveDirectors.setExistingDirectors(new Director[]{director, validDirector});
+        addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
+
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals("", validationErrors.get(0).getFieldPath());
+        assertEquals(OUTSIDE_VALID_DATE_RANGE, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate submit add or remove directors - Resignation date before period start")
+    void validateDirectorsArdResignationBeforePeriodStart() throws ServiceException {
+        SmallFullApi smallFullApi = new SmallFullApi();
+        smallFullApi.setNextAccounts(createNextAccounts());
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
+        Director validDirector = new Director();
+        validDirector.setAppointmentDate(VALID_APPOINTMENT_DATE);
+
+        Director director = new Director();
+        director.setResignationDate(NEXT_ACCOUNTS_PERIOD_END.plusDays(1));
+
+        addOrRemoveDirectors.setExistingDirectors(new Director[]{director, validDirector});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
         List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
