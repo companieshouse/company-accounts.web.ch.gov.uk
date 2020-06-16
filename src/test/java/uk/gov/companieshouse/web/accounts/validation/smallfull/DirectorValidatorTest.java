@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
@@ -36,6 +37,9 @@ public class DirectorValidatorTest {
 
     private static final String DID_DIRECTOR_RESIGN = DIRECTOR_TO_ADD + ".didDirectorResignDuringPeriod";
     private static final String RESIGNATION_NOT_SELECTED = "validation.directorToAdd.resignation.selectionNotMade";
+
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @Test
     @DisplayName("Validate director to add - success")
@@ -101,20 +105,20 @@ public class DirectorValidatorTest {
 
     @Test
     @DisplayName("Validate submit add or remove directors - success")
-    void validateSubmitAddOrRemoveDirectorsSuccess() {
+    void validateSubmitAddOrRemoveDirectorsSuccess() throws ServiceException {
 
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
         addOrRemoveDirectors.setExistingDirectors(new Director[]{new Director()});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertTrue(validationErrors.isEmpty());
     }
 
     @Test
     @DisplayName("Validate submit add or remove directors - uncommitted director name")
-    void validateSubmitAddOrRemoveDirectorsUncommittedDirectorName() {
+    void validateSubmitAddOrRemoveDirectorsUncommittedDirectorName() throws ServiceException {
 
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
 
@@ -122,7 +126,7 @@ public class DirectorValidatorTest {
         directorToAdd.setName(DIRECTOR_NAME);
         addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -132,12 +136,12 @@ public class DirectorValidatorTest {
 
     @Test
     @DisplayName("Validate submit add or remove directors - no directors present")
-    void validateSubmitAddOrRemoveDirectorsNoDirectorsPresent() {
+    void validateSubmitAddOrRemoveDirectorsNoDirectorsPresent() throws ServiceException {
 
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -147,7 +151,7 @@ public class DirectorValidatorTest {
 
     @Test
     @DisplayName("Validate submit add or remove directors - all directors have resigned")
-    void validateSubmitAddOrRemoveDirectorsAllDirectorsHaveResigned() {
+    void validateSubmitAddOrRemoveDirectorsAllDirectorsHaveResigned() throws ServiceException {
 
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
         Director director = new Director();
@@ -155,7 +159,7 @@ public class DirectorValidatorTest {
         addOrRemoveDirectors.setExistingDirectors(new Director[]{director});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
