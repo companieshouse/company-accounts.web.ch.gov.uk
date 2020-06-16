@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -99,8 +100,11 @@ public class DirectorValidator {
         }
 
         if(addOrRemoveDirectors.getExistingDirectors() != null) {
+
+            ApiClient apiClient = apiClientService.getApiClient();
+
             SmallFullApi smallFullApi = smallFullService
-                    .getSmallFullAccounts(apiClientService.getApiClient(), transactionId, companyAccountsId);
+                    .getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
             LocalDate periodStartOn = smallFullApi.getNextAccounts().getPeriodStartOn();
             LocalDate periodEndOn = smallFullApi.getNextAccounts().getPeriodEndOn();
@@ -134,7 +138,6 @@ public class DirectorValidator {
                 isValid = false;
             }
         }
-
 
         return isValid;
     }
