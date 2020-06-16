@@ -19,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsAfterOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CreditorsDueWithinOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssets;
@@ -122,7 +123,7 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                 previousPeriodApi);
 
         balanceSheet.setLbg(lbgTypes.contains(companyProfileApi.getType()));
-        balanceSheet.setBalanceSheetHeadings(companyService.getBalanceSheetHeadings(companyProfileApi));
+        balanceSheet.setBalanceSheetHeadings(getBalanceSheetHeadings(apiClient, transactionId, companyAccountsId));
 
         cachedBalanceSheet = balanceSheet;
 
@@ -382,5 +383,13 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private void invalidateRequestScopedCache() {
         cachedBalanceSheet = null;
+    }
+
+    private BalanceSheetHeadings getBalanceSheetHeadings(ApiClient apiClient, String transactionId, String companyAccountsId)
+    		throws ServiceException {
+
+        SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+
+        return smallFullService.getBalanceSheetHeadings(smallFullApi);
     }
 }
