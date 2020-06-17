@@ -186,8 +186,6 @@ public class TurnoverPolicyControllerTest {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
-        BindingResult result = new BeanPropertyBindingResult(turnoverPolicy, "turnoverPolicy");
-
         this.mockMvc.perform(createPostRequestWithParam(false).session(session))
             .andExpect(status().is3xxRedirection())
             .andExpect(
