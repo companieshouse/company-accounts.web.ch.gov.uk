@@ -36,6 +36,7 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
@@ -54,6 +55,9 @@ public class OtherAccountingPolicyControllerTest {
 
     @Mock
     private AccountingPolicies accountingPoliciesDataState;
+
+    @Mock
+    private RadioAndTextValidator radioAndTextValidator;
 
     @Mock
     private uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies accountingPolicies;

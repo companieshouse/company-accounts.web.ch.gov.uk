@@ -19,7 +19,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.TurnoverPolicyValidator;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -35,7 +35,10 @@ public class TurnoverPolicyController extends BaseController {
     private NoteService<AccountingPolicies> noteService;
 
     @Autowired
-    private TurnoverPolicyValidator turnoverPolicyValidator;
+    private RadioAndTextValidator radioAndTextValidator;
+
+    private static final String TURNOVER_POLICY_DETAILS_FIELD_PATH = "turnoverPolicyDetails";
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE = "validation.length.minInvalid.accounting_policies.turnover_policy";
 
     @GetMapping
     public String getTurnoverPolicy(@PathVariable String companyNumber,
@@ -76,16 +79,11 @@ public class TurnoverPolicyController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        radioAndTextValidator.validate(turnoverPolicy.getIsIncludeTurnoverSelected(), turnoverPolicy.getTurnoverPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, TURNOVER_POLICY_DETAILS_FIELD_PATH);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
-
-       /* List<ValidationError> validationErrors = turnoverPolicyValidator.validateTurnoverPolicy(turnoverPolicy);
-
-        if (!validationErrors.isEmpty()) {
-            bindValidationErrors(bindingResult, validationErrors);
-            return getTemplateName();
-        }*/
 
         try {
             AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,

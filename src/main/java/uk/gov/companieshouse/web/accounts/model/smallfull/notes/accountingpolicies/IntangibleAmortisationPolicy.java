@@ -1,12 +1,11 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies;
 
-import javax.validation.constraints.NotNull;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.ValidateIntangibleAmortisationPolicy;
+
+import javax.validation.constraints.NotNull;
 
 @ValidationModel
-@ValidateIntangibleAmortisationPolicy
 public class IntangibleAmortisationPolicy {
 
     @NotNull(message = "{intangibleAmortisationPolicy.selectionNotMade}")

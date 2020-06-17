@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +19,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.ValuationInformationPolicyValidator;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @NextController(OtherAccountingPolicyController.class)
@@ -34,9 +35,15 @@ public class ValuationInformationPolicyController extends BaseController {
     private NoteService<AccountingPolicies> noteService;
 
     @Autowired
-    private ValuationInformationPolicyValidator valuationInformationPolicyValidator;
+    private RadioAndTextValidator radioAndTextValidator;
 
     private static final String VALUATION_INFORMATION_POLICY = "valuationInformationPolicy";
+
+    private static final String VALUATION_INFORMATION_POLICY_FIELD_PATH =
+            "valuationInformationPolicyDetails";
+
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
+            "validation.length.minInvalid.accounting_policies.valuation_information_and_policy";
 
     @GetMapping
     public String getValuationInformationPolicy(@PathVariable String companyNumber,
@@ -77,6 +84,8 @@ public class ValuationInformationPolicyController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        radioAndTextValidator.validate(valuationInformationPolicy.getIncludeValuationInformationPolicy(), valuationInformationPolicy.getValuationInformationPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, VALUATION_INFORMATION_POLICY_FIELD_PATH);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -87,14 +96,7 @@ public class ValuationInformationPolicyController extends BaseController {
 
             accountingPolicies.setValuationInformationPolicy(valuationInformationPolicy);
 
-            List<ValidationError> validationErrors = valuationInformationPolicyValidator.validateValuationInformationPolicy(valuationInformationPolicy);
-
-            if (!validationErrors.isEmpty()) {
-                bindValidationErrors(bindingResult, validationErrors);
-                return getTemplateName();
-            }
-
-            validationErrors =
+            List<ValidationError> validationErrors  =
                     noteService.submit(transactionId, companyAccountsId, accountingPolicies,
                             NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 

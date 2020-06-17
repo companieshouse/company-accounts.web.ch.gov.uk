@@ -1,9 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +20,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.TangibleDepreciationPolicyValidator;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @NextController(IntangibleAmortisationPolicyController.class)
@@ -31,11 +32,17 @@ import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.TangibleDepr
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/tangible-depreciation-policy")
 public class TangibleDepreciationPolicyController extends BaseController {
 
+    private static final String TANGIBLE_DEPRECIATION_POLICY_FIELD_PATH =
+            "tangibleDepreciationPolicyDetails";
+
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
+            "validation.length.minInvalid.accounting_policies.tangible_fixed_assets_depreciation_policy";
+
     @Autowired
     private NoteService<AccountingPolicies> noteService;
 
     @Autowired
-    private TangibleDepreciationPolicyValidator tangibleDepreciationPolicyValidator;
+    private RadioAndTextValidator radioAndTextValidator;
 
     @GetMapping
     public String getTangibleDepreciationPolicy(@PathVariable String companyNumber,
@@ -76,6 +83,8 @@ public class TangibleDepreciationPolicyController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        radioAndTextValidator.validate(tangiblePolicy.getHasTangibleDepreciationPolicySelected(), tangiblePolicy.getTangibleDepreciationPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, TANGIBLE_DEPRECIATION_POLICY_FIELD_PATH);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -86,14 +95,7 @@ public class TangibleDepreciationPolicyController extends BaseController {
 
             accountingPolicies.setTangibleDepreciationPolicy(tangiblePolicy);
 
-            List<ValidationError> validationErrors = tangibleDepreciationPolicyValidator.validateTangibleDepreciationPolicy(tangiblePolicy);
-
-            if (!validationErrors.isEmpty()) {
-                bindValidationErrors(bindingResult, validationErrors);
-                return getTemplateName();
-            }
-
-            validationErrors =
+            List<ValidationError>  validationErrors =
                 noteService.submit(transactionId, companyAccountsId, accountingPolicies,
                         NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 

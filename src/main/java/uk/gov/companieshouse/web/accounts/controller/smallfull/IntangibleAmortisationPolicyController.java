@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +19,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.impl.IntangibleAmortisationPolicyValidator;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @NextController(ValuationInformationPolicyController.class)
@@ -32,11 +33,18 @@ public class IntangibleAmortisationPolicyController extends BaseController {
 
     private static final String INTANGIBLE_AMORTISATION_POLICY = "intangibleAmortisationPolicy";
 
+    private static final String INTANGIBLE_AMORTISATION_POLICY_FIELD_PATH =
+            "intangibleAmortisationPolicyDetails";
+
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
+            "validation.length.minInvalid.accounting_policies.intangible_fixed_assets_amortisation_policy";
+
+
     @Autowired
     private NoteService<AccountingPolicies> noteService;
 
     @Autowired
-    private IntangibleAmortisationPolicyValidator intangibleAmortisationPolicyValidator;
+    private RadioAndTextValidator radioAndTextValidator;
 
     @GetMapping
     public String getIntangibleAmortisationPolicy(@PathVariable String companyNumber,
@@ -77,6 +85,8 @@ public class IntangibleAmortisationPolicyController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        radioAndTextValidator.validate(intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy(), intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, INTANGIBLE_AMORTISATION_POLICY_FIELD_PATH);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -88,14 +98,7 @@ public class IntangibleAmortisationPolicyController extends BaseController {
 
             accountingPolicies.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
 
-            List<ValidationError> validationErrors = intangibleAmortisationPolicyValidator.validateIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
-
-            if (!validationErrors.isEmpty()) {
-                bindValidationErrors(bindingResult, validationErrors);
-                return getTemplateName();
-            }
-
-            validationErrors = noteService
+            List<ValidationError>  validationErrors = noteService
                     .submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             if (!validationErrors.isEmpty()) {

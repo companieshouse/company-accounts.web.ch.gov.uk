@@ -1,12 +1,11 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies;
 
-import javax.validation.constraints.NotNull;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.ValidateTangibleDepreciationPolicy;
+
+import javax.validation.constraints.NotNull;
 
 @ValidationModel
-@ValidateTangibleDepreciationPolicy
 public class TangibleDepreciationPolicy {
 
     @NotNull(message = "{tangibleDepreciationPolicy.selectionNotMade}")
