@@ -14,6 +14,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -84,6 +86,12 @@ public class TangibleDepreciationPolicyControllerTest {
     private static final String MODEL_ELEMENT = "hasTangibleDepreciationPolicySelected";
     private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
+    private static final String TANGIBLE_DEPRECIATION_POLICY_FIELD_PATH =
+            "tangibleDepreciationPolicyDetails";
+
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
+            "validation.length.minInvalid.accounting_policies.tangible_fixed_assets_depreciation_policy";
 
     @BeforeEach
     private void setup() {
@@ -173,6 +181,8 @@ public class TangibleDepreciationPolicyControllerTest {
             .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(accountingPoliciesDataState, times(1)).setHasProvidedTangiblePolicy(anyBoolean());
+
+        verify(radioAndTextValidator).validate(eq(true), eq(null), any(BindingResult.class), eq(INVALID_STRING_SIZE_ERROR_MESSAGE), eq(TANGIBLE_DEPRECIATION_POLICY_FIELD_PATH));
     }
 
     @Test

@@ -37,7 +37,6 @@ public class OtherAccountingPolicyController extends BaseController {
     private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
             "validation.length.minInvalid.accounting_policies.other_accounting_policy";
 
-
     @Autowired
     private NoteService<AccountingPolicies> noteService;
 

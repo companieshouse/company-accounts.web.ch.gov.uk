@@ -13,6 +13,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -95,6 +97,12 @@ public class IntangibleAmortisationPolicyControllerTests {
     private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
+    private static final String INTANGIBLE_AMORTISATION_POLICY_FIELD_PATH =
+            "intangibleAmortisationPolicyDetails";
+
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
+            "validation.length.minInvalid.accounting_policies.intangible_fixed_assets_amortisation_policy";
 
     @BeforeEach
     private void setup() {
@@ -187,6 +195,8 @@ public class IntangibleAmortisationPolicyControllerTests {
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(accountingPoliciesDataState, times(1)).setHasProvidedIntangiblePolicy(anyBoolean());
+
+        verify(radioAndTextValidator).validate(eq(true), eq(null), any(BindingResult.class), eq(INVALID_STRING_SIZE_ERROR_MESSAGE), eq(INTANGIBLE_AMORTISATION_POLICY_FIELD_PATH));
     }
 
     @Test

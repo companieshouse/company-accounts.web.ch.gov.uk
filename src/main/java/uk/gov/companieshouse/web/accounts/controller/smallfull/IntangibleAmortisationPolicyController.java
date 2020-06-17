@@ -39,7 +39,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
     private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
             "validation.length.minInvalid.accounting_policies.intangible_fixed_assets_amortisation_policy";
 
-
     @Autowired
     private NoteService<AccountingPolicies> noteService;
 

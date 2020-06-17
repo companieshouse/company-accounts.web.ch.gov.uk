@@ -14,7 +14,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
@@ -31,6 +30,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -167,10 +168,6 @@ public class TurnoverPolicyControllerTest {
     @DisplayName("Post Turnover Policy call is successful")
     void shouldPostTurnoverPolicy() throws Exception {
 
-        TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
-
-        turnoverPolicy.setIsIncludeTurnoverSelected(true);
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -196,6 +193,8 @@ public class TurnoverPolicyControllerTest {
 
         verify(accountingPolicies).setTurnoverPolicy(any(TurnoverPolicy.class));
         verify(accountingPoliciesDataState, times(1)).setHasProvidedTurnoverPolicy(anyBoolean());
+
+        verify(radioAndTextValidator).validate(eq(true), eq(null), any(BindingResult.class), eq(INVALID_STRING_SIZE_ERROR_MESSAGE), eq(TURNOVER_POLICY_DETAILS_FIELD_PATH));
     }
 
     @Test
