@@ -19,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,8 +31,17 @@ import java.util.List;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/other-accounting-policies")
 public class OtherAccountingPolicyController extends BaseController {
 
+    private static final String OTHER_ACCOUNTING_POLICY_FIELD_PATH =
+            "otherAccountingPolicyDetails";
+
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE =
+            "validation.length.minInvalid.accounting_policies.other_accounting_policy";
+
     @Autowired
     private NoteService<AccountingPolicies> noteService;
+
+    @Autowired
+    private RadioAndTextValidator radioAndTextValidator;
 
     @GetMapping
     public String getOtherAccountingPolicy(@PathVariable String companyNumber,
@@ -70,6 +80,8 @@ public class OtherAccountingPolicyController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        radioAndTextValidator.validate(otherAccountingPolicy.getHasOtherAccountingPolicySelected(), otherAccountingPolicy.getOtherAccountingPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, OTHER_ACCOUNTING_POLICY_FIELD_PATH);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -83,6 +95,7 @@ public class OtherAccountingPolicyController extends BaseController {
 
             List<ValidationError> validationErrors =
                 noteService.submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
+
             if (!validationErrors.isEmpty()) {
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();

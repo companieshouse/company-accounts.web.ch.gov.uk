@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +19,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @NextController(TangibleDepreciationPolicyController.class)
@@ -31,6 +33,12 @@ public class TurnoverPolicyController extends BaseController {
 
     @Autowired
     private NoteService<AccountingPolicies> noteService;
+
+    @Autowired
+    private RadioAndTextValidator radioAndTextValidator;
+
+    private static final String TURNOVER_POLICY_DETAILS_FIELD_PATH = "turnoverPolicyDetails";
+    private static final String INVALID_STRING_SIZE_ERROR_MESSAGE = "validation.length.minInvalid.accounting_policies.turnover_policy";
 
     @GetMapping
     public String getTurnoverPolicy(@PathVariable String companyNumber,
@@ -71,6 +79,8 @@ public class TurnoverPolicyController extends BaseController {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        radioAndTextValidator.validate(turnoverPolicy.getIsIncludeTurnoverSelected(), turnoverPolicy.getTurnoverPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, TURNOVER_POLICY_DETAILS_FIELD_PATH);
+
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -81,7 +91,7 @@ public class TurnoverPolicyController extends BaseController {
 
             accountingPolicies.setTurnoverPolicy(turnoverPolicy);
 
-            List<ValidationError> validationErrors = noteService
+           List<ValidationError> validationErrors = noteService
                 .submit(transactionId, companyAccountsId, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
             if (!validationErrors.isEmpty()) {
@@ -129,5 +139,4 @@ public class TurnoverPolicyController extends BaseController {
 
         updateStateOnRequest(request, companyAccountsDataState);
     }
-
 }
