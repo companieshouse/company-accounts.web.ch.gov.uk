@@ -77,6 +77,9 @@ public class DirectorsReportApprovalControllerTest {
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
+    @Mock
+    private Director director;
+
     @InjectMocks
     private DirectorsReportApprovalController controller;
 
@@ -147,7 +150,7 @@ public class DirectorsReportApprovalControllerTest {
         when(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(directorsReportApproval);
 
-        Director director = new Director();
+        director = new Director();
         director.setName(DIRECTOR_NAME);
         director.setResignationDate(LocalDate.of(2018, 03, 01));
         director.setAppointmentDate(LocalDate.of(2018, 03, 03));
@@ -165,7 +168,7 @@ public class DirectorsReportApprovalControllerTest {
 
         verify(directorsReportApproval).setApproverOptions(anyList());
         verify(directorsReportApproval).setName(DIRECTOR_NAME);
-        assertNull(director.getResignationDate());
+        assertNull(directors[0].getResignationDate());
     }
 
     @Test
