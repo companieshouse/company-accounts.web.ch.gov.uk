@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -8,6 +10,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDate;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -145,6 +149,9 @@ public class DirectorsReportApprovalControllerTest {
 
         Director director = new Director();
         director.setName(DIRECTOR_NAME);
+        director.setResignationDate(LocalDate.of(2018, 03, 01));
+        director.setAppointmentDate(LocalDate.of(2018, 03, 03));
+
         Director[] directors = new Director[]{director};
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directors);
 
@@ -158,6 +165,7 @@ public class DirectorsReportApprovalControllerTest {
 
         verify(directorsReportApproval).setApproverOptions(anyList());
         verify(directorsReportApproval).setName(DIRECTOR_NAME);
+        assertNull(director.getResignationDate());
     }
 
     @Test

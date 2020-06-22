@@ -69,8 +69,19 @@ public class DirectorsReportApprovalController extends BaseController implements
                     directorsReportApprovalService.getDirectorsReportApproval(transactionId, companyAccountsId);
 
             List<String> approverOptions =
-                    Arrays.stream(directorService.getAllDirectors(transactionId, companyAccountsId))
-                            .filter(d -> d.getResignationDate() == null)
+                    Arrays.stream(directorService.getAllDirectors(transactionId, companyAccountsId)).map(
+                            dir -> {
+
+                                if(dir.getResignationDate() == null) {
+                                    return dir;
+                                }
+                                else if (dir.getAppointmentDate().isAfter(dir.getResignationDate())) {
+                                    dir.setResignationDate(null);
+                                    return dir;
+                                }
+                                return dir;
+                            }
+                    ).filter(d -> d.getResignationDate() == null)
                                     .map(Director::getName)
                                             .collect(Collectors.toList());
 
