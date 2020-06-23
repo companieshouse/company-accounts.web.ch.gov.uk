@@ -1,26 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.time.LocalDate;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,14 +14,35 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -150,12 +150,12 @@ public class DirectorsReportApprovalControllerTest {
         when(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(directorsReportApproval);
 
-        director = new Director();
-        director.setName(DIRECTOR_NAME);
-        director.setResignationDate(LocalDate.of(2018, 03, 01));
-        director.setAppointmentDate(LocalDate.of(2018, 03, 03));
+        Director[] directors = createReappointedDirector();
 
-        Director[] directors = new Director[]{director};
+        Director newDirector = new Director();
+        newDirector.setResignationDate(LocalDate.of(2017, 04, 01));
+        newDirector.setAppointmentDate(LocalDate.of(2017, 03, 01));
+
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directors);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
@@ -167,8 +167,10 @@ public class DirectorsReportApprovalControllerTest {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
         verify(directorsReportApproval).setApproverOptions(anyList());
-        verify(directorsReportApproval).setName(DIRECTOR_NAME);
-        assertNull(directors[0].getResignationDate());
+
+        assertNull(directors[2].getResignationDate());
+        assertNull(directors[1].getResignationDate());
+        assertEquals(newDirector.getResignationDate(), directors[0].getResignationDate());
     }
 
     @Test
@@ -260,5 +262,32 @@ public class DirectorsReportApprovalControllerTest {
         when(companyAccountsDataState.getHasIncludedDirectorsReport()).thenReturn(true);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    private Director[] createReappointedDirector() {
+
+        Director[] directors = new Director[3];
+
+        Director director = new Director();
+
+        director.setResignationDate(LocalDate.of(2017, 04, 01));
+        director.setAppointmentDate(LocalDate.of(2017, 03, 01));
+
+        directors[0] = director;
+
+        director = new Director();
+
+        director.setAppointmentDate(LocalDate.of(2017, 01, 01));
+
+        directors[1] = director;
+
+        director = new Director();
+
+        director.setResignationDate(LocalDate.of(2017, 03, 01));
+        director.setAppointmentDate(LocalDate.of(2017, 04, 01));
+
+        directors[2] = director;
+
+        return directors;
     }
 }
