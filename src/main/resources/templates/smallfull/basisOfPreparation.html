@@ -44,18 +44,19 @@
                             </span>
 
               <div class="govuk-radios__item">
+                <input class="govuk-radios__input show-text piwik-event" id="basisOfPreparation-custom-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="0" data-event-id="FRS101">
+                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-custom-statement-label" for="basisOfPreparation-custom-statement">
+                  These financial statements have been prepared in accordance with the provisions of Financial Reporting Standard 101
+                </label>
+              </div>
+
+              <div class="govuk-radios__item">
                 <input class="govuk-radios__input piwik-event" id="basisOfPreparation-prepared-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="1" data-event-id="FRS102">
                 <label class="govuk-label govuk-radios__label" id="basisOfPreparation-prepared-statement-label" for="basisOfPreparation-prepared-statement">
                   These financial statements have been prepared in accordance with the provisions of Section 1A (Small Entities) of Financial Reporting Standard 102
                 </label>
               </div>
 
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input show-text piwik-event" id="basisOfPreparation-custom-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="0" data-event-id="Another Standard">
-                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-custom-statement-label" for="basisOfPreparation-custom-statement">
-                  These accounts have been prepared in accordance with another standard
-                </label>
-              </div>
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="basisOfPreparation-custom-statement-field">
                 <div class="govuk-form-group" th:classappend="${#fields.hasErrors('customStatement')} ? 'govuk-form-group--error' : ''">
 
