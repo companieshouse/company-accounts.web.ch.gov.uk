@@ -30,8 +30,9 @@
                 </span>
               </summary>
               <div class="govuk-details__text" id="basisOfPreparation-help-text" aria-hidden="true">
-                This policy is about the accounting standards you've prepared your accounts to. As a small company you're likely to have prepared your full accounts for shareholders or members using the simpler provisions of Section 1A (Small Entities) of Financial
-                Reporting Standard 102. Your accounts should include a statement about the basis of measurement and preparation.
+                This policy is about the accounting standards you’ve prepared your accounts to.
+                Your accounts should include a statement about the basis of measurement and preparation.
+                If you’re unsure you should ask an accountant
               </div>
             </details>
 
@@ -44,7 +45,7 @@
                             </span>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input show-text piwik-event" id="basisOfPreparation-custom-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="0" data-event-id="FRS101">
+                <input class="govuk-radios__input piwik-event" id="basisOfPreparation-custom-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="0" data-event-id="FRS101">
                 <label class="govuk-label govuk-radios__label" id="basisOfPreparation-custom-statement-label" for="basisOfPreparation-custom-statement">
                   These financial statements have been prepared in accordance with the provisions of Financial Reporting Standard 101
                 </label>
