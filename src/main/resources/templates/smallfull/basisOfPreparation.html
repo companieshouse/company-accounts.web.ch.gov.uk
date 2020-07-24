@@ -57,21 +57,6 @@
                 </label>
               </div>
 
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="basisOfPreparation-custom-statement-field">
-                <div class="govuk-form-group" th:classappend="${#fields.hasErrors('customStatement')} ? 'govuk-form-group--error' : ''">
-
-                  <span class="govuk-error-message"
-                        id="customStatement-errorId"
-                        th:if="${#fields.hasErrors('customStatement')}"
-                        th:each="e : ${#fields.errors('customStatement')}" th:text="${e}" >
-                            </span>
-
-                  <label class="govuk-label govuk-visually-hidden" for="basisOfPreparation-custom-statement-text">
-                    Enter your other standard
-                  </label>
-                  <textarea class="govuk-textarea" id="basisOfPreparation-custom-statement-text" rows="5" th:field="*{customStatement}"></textarea>
-                </div>
-              </div>
             </div>
 
           </fieldset>
