@@ -36,28 +36,27 @@
               </div>
             </details>
 
-            <div class="govuk-radios" data-module="radios" th:classappend="${#fields.hasErrors('isPreparedInAccordanceWithStandards')} ? 'govuk-form-group--error' : ''">
+            <div class="govuk-radios" data-module="radios" th:classappend="${#fields.hasErrors('accountingRegulatoryStandard')} ? 'govuk-form-group--error' : ''">
 
               <span class="govuk-error-message"
-                    id="isPreparedInAccordanceWithStandards-errorId"
-                    th:if="${#fields.hasErrors('isPreparedInAccordanceWithStandards')}"
-                    th:each="e : ${#fields.errors('isPreparedInAccordanceWithStandards')}" th:text="${e}" >
+                    id="accountingRegulatoryStandard-errorId"
+                    th:if="${#fields.hasErrors('accountingRegulatoryStandard')}"
+                    th:each="e : ${#fields.errors('accountingRegulatoryStandard')}" th:text="${e}" >
                             </span>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input piwik-event" id="basisOfPreparation-custom-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="0" data-event-id="FRS101">
-                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-custom-statement-label" for="basisOfPreparation-custom-statement">
+                <input class="govuk-radios__input piwik-event" id="basisOfPreparation-frs101-statement" th:field="*{accountingRegulatoryStandard}" type="radio" value="FRS101" data-event-id="FRS101">
+                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-frs101-statement-label" for="basisOfPreparation-frs101-statement">
                   These financial statements have been prepared in accordance with the provisions of Financial Reporting Standard 101
                 </label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input piwik-event" id="basisOfPreparation-prepared-statement" data-target-text-field="basisOfPreparation-custom-statement-field" th:field="*{isPreparedInAccordanceWithStandards}" type="radio" value="1" data-event-id="FRS102">
-                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-prepared-statement-label" for="basisOfPreparation-prepared-statement">
+                <input class="govuk-radios__input piwik-event" id="basisOfPreparation-frs102-statement" th:field="*{accountingRegulatoryStandard}" type="radio" value="FRS102" data-event-id="FRS102">
+                <label class="govuk-label govuk-radios__label" id="basisOfPreparation-frs102-statement-label" for="basisOfPreparation-frs102-statement">
                   These financial statements have been prepared in accordance with the provisions of Section 1A (Small Entities) of Financial Reporting Standard 102
                 </label>
               </div>
-
             </div>
 
           </fieldset>

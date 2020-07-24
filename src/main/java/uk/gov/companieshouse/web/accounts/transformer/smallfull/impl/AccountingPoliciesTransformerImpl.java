@@ -3,12 +3,13 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
+import uk.gov.companieshouse.web.accounts.enumeration.AccountingRegulatoryStandard;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.BasisOfPreparation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.IntangibleAmortisationPolicy;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.OtherAccountingPolicy;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TangibleDepreciationPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
@@ -27,14 +28,18 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
 
         BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
         if(apiResource.getBasisOfMeasurementAndPreparation() != null) {
-            if (apiResource.getBasisOfMeasurementAndPreparation()
-                    .equalsIgnoreCase(basisOfPreparation.getPreparedStatement())) {
+            if (apiResource.getBasisOfMeasurementAndPreparation().trim()
+                    .equalsIgnoreCase(AccountingRegulatoryStandard.FRS102.toString())) {
 
-                basisOfPreparation.setIsPreparedInAccordanceWithStandards(true);
+                basisOfPreparation.setAccountingRegulatoryStandard(AccountingRegulatoryStandard.FRS102);
+
+            } else if (apiResource.getBasisOfMeasurementAndPreparation().trim()
+                    .equalsIgnoreCase(AccountingRegulatoryStandard.FRS101.toString())) {
+
+                basisOfPreparation.setAccountingRegulatoryStandard(AccountingRegulatoryStandard.FRS101);
             } else {
 
-                basisOfPreparation.setIsPreparedInAccordanceWithStandards(false);
-                basisOfPreparation.setCustomStatement(apiResource.getBasisOfMeasurementAndPreparation());
+                basisOfPreparation.setAccountingRegulatoryStandard(AccountingRegulatoryStandard.OTHER);
             }
         }
 
@@ -89,10 +94,10 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
 
-        if (BooleanUtils.isTrue(webResource.getBasisOfPreparation().getIsPreparedInAccordanceWithStandards())) {
-            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(webResource.getBasisOfPreparation().getPreparedStatement());
-        } else {
-            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(webResource.getBasisOfPreparation().getCustomStatement());
+        if (webResource.getBasisOfPreparation().getAccountingRegulatoryStandard().toString().equalsIgnoreCase(AccountingRegulatoryStandard.FRS102.toString())) {
+            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(AccountingRegulatoryStandard.FRS102.toString());
+        } else if (webResource.getBasisOfPreparation().getAccountingRegulatoryStandard().toString().equalsIgnoreCase(AccountingRegulatoryStandard.FRS101.toString())) {
+            accountingPoliciesApi.setBasisOfMeasurementAndPreparation(AccountingRegulatoryStandard.FRS101.toString());
         }
 
         if (BooleanUtils.isTrue(webResource.getTurnoverPolicy().getIsIncludeTurnoverSelected())) {
