@@ -1,15 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.enumeration.AccountingRegulatoryStandard;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.AccountingPolicies;
@@ -30,6 +21,16 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -91,7 +92,7 @@ public class BasisOfPreparationControllerTests {
                 .thenReturn(accountingPolicies);
 
         BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
-        basisOfPreparation.setIsPreparedInAccordanceWithStandards(true);
+        basisOfPreparation.setAccountingRegulatoryStandard(AccountingRegulatoryStandard.FRS101);
 
         when(accountingPolicies.getBasisOfPreparation()).thenReturn(basisOfPreparation);
 
@@ -175,9 +176,9 @@ public class BasisOfPreparationControllerTests {
 
     private MockHttpServletRequestBuilder postRequestWithValidData() {
 
-        String beanElement = "isPreparedInAccordanceWithStandards";
+        String beanElement = "accountingRegulatoryStandard";
         // Mock boolean field input
-        String validData = "1";
+        String validData = "FRS102";
 
         return post(BASIS_OF_PREPARATION_PATH).param(beanElement, validData);
     }
@@ -190,6 +191,4 @@ public class BasisOfPreparationControllerTests {
 
         return post(BASIS_OF_PREPARATION_PATH).param(beanElement, invalidData);
     }
-
-
 }

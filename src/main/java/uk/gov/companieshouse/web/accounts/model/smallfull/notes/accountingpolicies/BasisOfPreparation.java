@@ -1,43 +1,21 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies;
 
-import javax.validation.constraints.NotNull;
-import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
+import uk.gov.companieshouse.web.accounts.enumeration.AccountingRegulatoryStandard;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
+
+import javax.validation.constraints.NotNull;
 
 @ValidationModel
 public class BasisOfPreparation {
 
     @NotNull(message = "{basisOfPreparation.selectionNotMade}")
-    private Boolean isPreparedInAccordanceWithStandards;
+    private AccountingRegulatoryStandard accountingRegulatoryStandard;
 
-    @ValidationMapping("$.accounting_policies.basis_of_measurement_and_preparation")
-    private String customStatement;
-
-    private String preparedStatement =
-            "These financial statements have been prepared in accordance with the provisions of "
-                    + "Section 1A (Small Entities) of Financial Reporting Standard 102";
-
-    public Boolean getIsPreparedInAccordanceWithStandards() {
-        return isPreparedInAccordanceWithStandards;
+    public AccountingRegulatoryStandard getAccountingRegulatoryStandard() {
+        return accountingRegulatoryStandard;
     }
 
-    public void setIsPreparedInAccordanceWithStandards(Boolean preparedInAccordanceWithStandards) {
-        isPreparedInAccordanceWithStandards = preparedInAccordanceWithStandards;
-    }
-
-    public String getCustomStatement() {
-        return customStatement;
-    }
-
-    public void setCustomStatement(String customStatement) {
-        this.customStatement = customStatement;
-    }
-
-    public String getPreparedStatement() {
-        return preparedStatement;
-    }
-
-    public void setPreparedStatement(String preparedStatement) {
-        this.preparedStatement = preparedStatement;
+    public void setAccountingRegulatoryStandard(AccountingRegulatoryStandard accountingRegulatoryStandard) {
+        this.accountingRegulatoryStandard = accountingRegulatoryStandard;
     }
 }

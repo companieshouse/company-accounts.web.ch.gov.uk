@@ -207,7 +207,8 @@ public class ValidationContext {
         return !(clazz.isPrimitive()
                 || primitivesSet.contains(clazz)
                 || Collection.class.isAssignableFrom(clazz)
-                || Map.class.isAssignableFrom(clazz));
+                || Map.class.isAssignableFrom(clazz)
+                || clazz.isEnum());
     }
 
     /**
