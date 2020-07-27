@@ -534,9 +534,7 @@
       <div class="app-check-your-answers__contents">
         <dt class="app-check-your-answers__answer">
           <p id="review-basisOfPreparation"
-             th:utext="*{basisOfPreparation.isPreparedInAccordanceWithStandards} ?
-                                          *{basisOfPreparation.preparedStatement} :
-                                          *{#strings.replace(basisOfPreparation.customStatement,'&#10;','&lt;br&gt;')}">
+             th:utext="*{#strings.toString(basisOfPreparation.accountingRegulatoryStandard)}">
           </p>
         </dt>
       </div>
