@@ -39,18 +39,16 @@ public class LoansToDirectorsServiceImpl implements LoansToDirectorsService {
 
         LoansToDirectorsApi loansToDirectors = getLoansToDirectors(apiClient, transactionId, companyAccountsId);
 
-        if (loansToDirectors == null) {
 
-            String uri = LOANS_TO_DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
+        String uri = LOANS_TO_DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
 
-            try {
-                apiClient.smallFull().loansToDirectors().create(uri, new LoansToDirectorsApi())
-                        .execute();
-            } catch (ApiErrorResponseException e) {
-                serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
-            } catch (URIValidationException e) {
-                serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
-            }
+        try {
+            apiClient.smallFull().loansToDirectors().create(uri, new LoansToDirectorsApi())
+                    .execute();
+        } catch (ApiErrorResponseException e) {
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+        } catch (URIValidationException e) {
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
     }
 
