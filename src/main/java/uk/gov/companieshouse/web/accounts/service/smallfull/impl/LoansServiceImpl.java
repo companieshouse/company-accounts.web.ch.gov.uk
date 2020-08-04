@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 import java.util.List;
 
 @Service
-public class LoanServiceImpl implements LoanService {
+public class LoansServiceImpl implements LoanService {
 
     @Autowired
     private ApiClientService apiClientService;
@@ -39,7 +39,7 @@ public class LoanServiceImpl implements LoanService {
     private static final UriTemplate LOANS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans");
 
-    private static final UriTemplate LOANS_URI_WITH_ID =
+    private static final UriTemplate LOAN_URI_WITH_ID =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans/{loanId}");
 
     private static final String RESOURCE_NAME = "loans";
@@ -89,7 +89,7 @@ public class LoanServiceImpl implements LoanService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        String uri = LOANS_URI_WITH_ID.expand(transactionId, companyAccountsId, loanId).toString();
+        String uri = LOAN_URI_WITH_ID.expand(transactionId, companyAccountsId, loanId).toString();
 
         try {
             apiClient.smallFull().loansToDirectors().loans().delete(uri).execute();

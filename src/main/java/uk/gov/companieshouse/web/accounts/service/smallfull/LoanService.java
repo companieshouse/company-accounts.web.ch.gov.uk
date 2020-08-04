@@ -17,5 +17,4 @@ public interface LoanService {
     void deleteLoan(String transactionId, String companyAccountsId, String loanId) throws ServiceException;
 
     List<ValidationError> submitAddOrRemoveLoans(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws  ServiceException;
-
 }

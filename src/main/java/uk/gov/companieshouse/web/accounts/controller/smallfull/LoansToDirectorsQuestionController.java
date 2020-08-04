@@ -9,11 +9,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoansToDirectorsApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsQuestion;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -26,6 +32,15 @@ public class LoansToDirectorsQuestionController extends BaseController {
 
     private static final String LOANS_TO_DIRECTORS_QUESTION = "loansToDirectorsQuestion";
 
+    @Autowired
+    private LoansToDirectorsService loansToDirectorsService;
+
+    @Autowired
+    private LoanService loansService;
+
+    @Autowired
+    private ApiClientService apiClientService;
+
     @GetMapping
     public String getLoansToDirectorsQuestion(Model model,
                                              @PathVariable String companyNumber,
@@ -34,7 +49,19 @@ public class LoansToDirectorsQuestionController extends BaseController {
                                              HttpServletRequest request) {
 
         LoansToDirectorsQuestion loansToDirectorsQuestion = new LoansToDirectorsQuestion();
-        setIsLoansToDirectorsIncluded(request, loansToDirectorsQuestion);
+
+        ApiClient apiClient = apiClientService.getApiClient();
+        try {
+            LoansToDirectorsApi loansToDirectorsApi = loansToDirectorsService.getLoansToDirectors(apiClient, transactionId, companyAccountsId);
+            if (loansToDirectorsApi != null && loansToDirectorsApi.getLoans() != null && !loansToDirectorsApi.getLoans().isEmpty()) {
+                loansToDirectorsQuestion.setHasIncludedLoansToDirectors(true);
+            } else {
+                setIsLoansToDirectorsIncluded(request, loansToDirectorsQuestion);
+            }
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
         model.addAttribute(LOANS_TO_DIRECTORS_QUESTION, loansToDirectorsQuestion);
@@ -55,6 +82,31 @@ public class LoansToDirectorsQuestionController extends BaseController {
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
+        }
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        try {
+            LoansToDirectorsApi loansToDirectorsApi = loansToDirectorsService.getLoansToDirectors(apiClient, transactionId, companyAccountsId);
+            if (loansToDirectorsQuestion.getHasIncludedLoansToDirectors()) {
+                if (loansToDirectorsApi == null) {
+                    loansToDirectorsService.createLoansToDirectors(transactionId, companyAccountsId);
+                }
+
+            } else {
+                if (loansToDirectorsApi != null) {
+                    if (loansToDirectorsApi.getLinks().getAdditionalInformation() != null) {
+                        for (String loanId : loansToDirectorsApi.getLoans().keySet()) {
+                            loansService.deleteLoan(transactionId, companyAccountsId, loanId);
+                        }
+                    } else {
+                        loansToDirectorsService.deleteLoansToDirectors(transactionId, companyAccountsId);
+                    }
+                }
+            }
+        } catch (ServiceException e) {
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
         }
 
         cacheIsLoansToDirectorsIncluded(request, loansToDirectorsQuestion);
