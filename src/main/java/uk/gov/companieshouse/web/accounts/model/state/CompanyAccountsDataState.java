@@ -34,6 +34,9 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonProperty("has_confirmed_accounting_reference_date")
     private Boolean hasConfirmedAccountingReferenceDate;
 
+    @JsonProperty("has_included_loans_to_directors")
+    private Boolean hasIncludedLoansToDirectors;
+
     @JsonProperty("is_cic")
     private Boolean isCic;
 
@@ -123,5 +126,13 @@ public class CompanyAccountsDataState implements Serializable {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public Boolean getHasIncludedLoansToDirectors() {
+        return hasIncludedLoansToDirectors;
+    }
+
+    public void setHasIncludedLoansToDirectors(Boolean hasIncludedLoansToDirectors) {
+        this.hasIncludedLoansToDirectors = hasIncludedLoansToDirectors;
     }
 }
