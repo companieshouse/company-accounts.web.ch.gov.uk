@@ -18,7 +18,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@NextController(OffBalanceSheetArrangementsController.class)
+@NextController(OffBalanceSheetArrangementsQuestionController.class)
 @PreviousController(LoansToDirectorsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans")
 public class AddOrRemoveLoansController extends BaseController {
