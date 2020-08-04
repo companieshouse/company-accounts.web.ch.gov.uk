@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/baseLayout}">>
+<head>
+    <meta charset="UTF-8">
+    <title id="page-title-heading">
+        Loans to directors
+    </title>
+</head>
+<body>
+<div id="criteria-main-content" layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form id="correspondence-form" class="form" th:action="@{''}" method="post">
+                <div th:replace="fragments/numberedHeading :: numberedHeading (
+                  headingText = 'Loans to directors'
+              )">
+                </div>
+                <h2 id="directorsReport-subheading" class="govuk-heading-m">
+                    Enter the details for each individual loan to the director.
+                </h2>
+
+                <span id="directorsReport-help-text" class="govuk-hint">
+                You can report more loans for the same director or other directors later if you need to. You can report up to 20 loans.
+            </span>
+
+            <input id="save-and-continue-button" class="govuk-button piwik-event"
+                   data-event-id="Loans to directors - save and continue"
+                   th:name = "submit"
+                   type="submit" role="button" value="Save and continue"/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
