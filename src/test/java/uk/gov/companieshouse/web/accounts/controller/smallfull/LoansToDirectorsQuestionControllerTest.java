@@ -51,7 +51,7 @@ public class LoansToDirectorsQuestionControllerTest {
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     private static final String LOANS_TO_DIRECTORS_QUESTION_VIEW = "smallfull/loansToDirectorsQuestion";
-    
+
     private static final String LOANS_TO_DIRECTORS_SELECTION = "hasIncludedLoansToDirectors";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
