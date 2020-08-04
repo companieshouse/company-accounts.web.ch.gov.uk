@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+    layout:decorate="~{layouts/baseLayout}">
+
+<head>
+  <title id="page-title-heading">
+    Loans to Directors Question
+  </title>
+</head>
+<div id="loansToDirectors-question-main-content" layout:fragment="content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form id="loansToDirectors-question-form" class="form" th:action="@{''}" th:object="${loansToDirectorsQuestion}" method="post">
+
+        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
+        <div class="govuk-form-group"
+             th:classappend="${#fields.hasErrors('hasIncludedLoansToDirectors')} ? 'govuk-form-group--error' : ''">
+
+          <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+              legendText = 'Do your prepared accounts include any loans to directors?',
+              radioButtonsFieldName = 'hasIncludedLoansToDirectors'
+              )">
+          </div>
+        </div>
+
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Loans to directors question - save and continue"
+               type="submit" role="button" value="Save and continue"/>
+
+      </form>
+    </div>
+  </div>
+</div>
+</html>
