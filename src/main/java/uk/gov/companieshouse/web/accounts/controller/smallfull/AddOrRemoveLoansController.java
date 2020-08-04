@@ -6,6 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.web.accounts.annotation.NextController;
+import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
@@ -14,6 +18,9 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+@NextController(OffBalanceSheetArrangementsController.class)
+@PreviousController(LoansToDirectorsQuestionController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans")
 public class AddOrRemoveLoansController extends BaseController {
 
     @Autowired
@@ -43,12 +50,19 @@ public class AddOrRemoveLoansController extends BaseController {
         return getTemplateName();
     }
 
-    @PostMapping
-    public void submitAddOrRemoveLoans() {
+    @PostMapping(params = "submit")
+    public String submitAddOrRemoveLoans(@PathVariable String companyNumber,
+                                       @PathVariable String transactionId,
+                                       @PathVariable String companyAccountsId
+                                       ) {
+
+        return navigatorService
+                .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
+                        companyAccountsId);
     }
 
     @Override
     protected String getTemplateName() {
-        return "addOrRemoveLoans";
+        return "smallfull/addOrRemoveLoans";
     }
 }
