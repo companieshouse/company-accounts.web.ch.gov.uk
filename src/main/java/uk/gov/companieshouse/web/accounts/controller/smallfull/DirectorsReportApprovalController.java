@@ -77,7 +77,6 @@ public class DirectorsReportApprovalController extends BaseController implements
                     approverOptions.add(director.getName());
                 } else if (director.getAppointmentDate() != null) {
                     if (director.getAppointmentDate().isAfter(director.getResignationDate())) {
-                        director.setResignationDate(null);
                         approverOptions.add(director.getName());
                     }
                 }
