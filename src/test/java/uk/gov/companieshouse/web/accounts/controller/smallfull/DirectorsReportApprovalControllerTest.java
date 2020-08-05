@@ -168,7 +168,6 @@ public class DirectorsReportApprovalControllerTest {
 
         verify(directorsReportApproval).setApproverOptions(anyList());
 
-        assertNull(directors[2].getResignationDate());
         assertNull(directors[1].getResignationDate());
         assertEquals(newDirector.getResignationDate(), directors[0].getResignationDate());
     }
