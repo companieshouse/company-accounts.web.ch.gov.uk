@@ -17,7 +17,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.Loans
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
-import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
@@ -26,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsServ
 import javax.servlet.http.HttpServletRequest;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,25 +42,7 @@ class AddOrRemoveLoansControllerTest {
     private LoanService loanService;
 
     @Mock
-    private LoansToDirectorsService loansToDirectorsService;
-
-    @Mock
-    private LoansToDirectorsApi directorsReportApi;
-
-    @Mock
     private NavigatorService navigatorService;
-
-    @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private ApiClient apiClient;
-
-    @Mock
-    private ApiClientService apiClientService;
-
-    @Mock
-    private CompanyAccountsDataState companyAccountsDataState;
 
     @InjectMocks
     private AddOrRemoveLoansController controller;
