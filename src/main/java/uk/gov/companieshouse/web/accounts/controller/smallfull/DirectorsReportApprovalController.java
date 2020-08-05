@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,22 +69,18 @@ public class DirectorsReportApprovalController extends BaseController implements
             DirectorsReportApproval directorsReportApproval =
                     directorsReportApprovalService.getDirectorsReportApproval(transactionId, companyAccountsId);
 
-            List<String> approverOptions =
-                    Arrays.stream(directorService.getAllDirectors(transactionId, companyAccountsId)).map(
-                            dir -> {
+            List<String> approverOptions = new ArrayList<>();
 
-                                if(dir.getResignationDate() == null) {
-                                    return dir;
-                                }
-                                else if (dir.getAppointmentDate().isAfter(dir.getResignationDate())) {
-                                    dir.setResignationDate(null);
-                                    return dir;
-                                }
-                                return dir;
-                            }
-                    ).filter(d -> d.getResignationDate() == null)
-                                    .map(Director::getName)
-                                            .collect(Collectors.toList());
+            for(Director director : directorService.getAllDirectors(transactionId, companyAccountsId)) {
+
+                if (director.getResignationDate() == null) {
+                    approverOptions.add(director.getName());
+                } else if (director.getAppointmentDate() != null) {
+                    if (director.getAppointmentDate().isAfter(director.getResignationDate())) {
+                        approverOptions.add(director.getName());
+                    }
+                }
+            }
 
             String secretary = secretaryService.getSecretary(transactionId, companyAccountsId);
             if (StringUtils.isNotBlank(secretary)) {
