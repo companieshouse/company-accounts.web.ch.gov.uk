@@ -12,18 +12,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.ApiClient;
-import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoansToDirectorsApi;
-import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -40,6 +39,15 @@ class AddOrRemoveLoansControllerTest {
 
     @Mock
     private LoanService loanService;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpSession httpSession;
+
+    @Mock
+    private CompanyAccountsDataState companyAccountsDataState;
 
     @Mock
     private NavigatorService navigatorService;
@@ -65,6 +73,8 @@ class AddOrRemoveLoansControllerTest {
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     private static final String ERROR_VIEW = "error";
+
+    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
@@ -110,5 +120,25 @@ class AddOrRemoveLoansControllerTest {
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Will render - true")
+    void willRenderTrue() throws ServiceException {
+
+        when(request.getSession()).thenReturn(httpSession);
+        when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedLoansToDirectors()).thenReturn(true);
+        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Will render - false")
+    void willRenderFalse() throws ServiceException {
+
+        when(request.getSession()).thenReturn(httpSession);
+        when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedLoansToDirectors()).thenReturn(false);
+        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
