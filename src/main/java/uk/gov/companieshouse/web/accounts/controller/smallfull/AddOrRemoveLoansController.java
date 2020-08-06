@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,12 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoansToDirectorsApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,10 +27,13 @@ import javax.servlet.http.HttpServletRequest;
 @NextController(OffBalanceSheetArrangementsQuestionController.class)
 @PreviousController(LoansToDirectorsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans")
-public class AddOrRemoveLoansController extends BaseController {
+public class AddOrRemoveLoansController extends BaseController implements ConditionalController {
 
     @Autowired
     private LoanService loanService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     private static final String ADD_OR_REMOVE_LOANS = "addOrRemoveLoans";
 
@@ -64,9 +74,9 @@ public class AddOrRemoveLoansController extends BaseController {
 
     @PostMapping(params = "submit")
     public String submitAddOrRemoveLoans(@PathVariable String companyNumber,
-                                       @PathVariable String transactionId,
-                                       @PathVariable String companyAccountsId
-                                       ) {
+                                         @PathVariable String transactionId,
+                                         @PathVariable String companyAccountsId
+    ) {
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
@@ -76,5 +86,12 @@ public class AddOrRemoveLoansController extends BaseController {
     @Override
     protected String getTemplateName() {
         return "smallfull/addOrRemoveLoans";
+    }
+
+    @Override
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
+
+        CompanyAccountsDataState dataState = getStateFromRequest(request);
+        return BooleanUtils.isTrue(dataState.getHasIncludedLoansToDirectors());
     }
 }
