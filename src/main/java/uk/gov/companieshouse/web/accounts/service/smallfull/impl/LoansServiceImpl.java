@@ -19,6 +19,7 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -103,6 +104,6 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> submitAddOrRemoveLoans(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
 
-        return null;
+        return new ArrayList<>();
     }
 }

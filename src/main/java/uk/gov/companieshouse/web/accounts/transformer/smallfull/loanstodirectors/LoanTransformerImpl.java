@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class LoanTransformerImpl implements LoanTransformer {
 
     @Autowired
-    BreakdownTransformer breakdownTransformer;
+    private BreakdownTransformer breakdownTransformer;
 
     private static final Pattern LOAN_URI_PATTERN = Pattern.compile("/transactions/.+?/company-accounts/.+?/small-full/notes/loans-to-directors/loans/(.*)");
 
