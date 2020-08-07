@@ -26,7 +26,7 @@
                 You can report more loans for the same director or other directors later if you need to. You can report up to 20 loans.
             </span>
 
-            <dl class="app-check-your-answers app-check-your-answers--short two-column-accounts"
+            <dl class="app-check-your-answers app-check-your-answers--short"
                 th:if="${addOrRemoveLoans.existingLoans != null and addOrRemoveLoans.existingLoans.length > 0}">
 
                 <div class="app-check-your-answers__contents cya-desktop-only">
@@ -41,19 +41,42 @@
                     <dd class="app-check-your-answers__change"></dd>
                 </div>
 
-                <div th:each="loan, stat : ${addOrRemoveLoans.existingLoans}"
-                     class="app-check-your-answers__contents">
-                    <dt class="app-check-your-answers__question" th:text="${loan.directorName}"
-                        th:id="loan-table-name[__${stat.index}__]">
-                        <br/>
-                    </dt>
-                        <dd>
+                <div th:each="loan, stat : ${addOrRemoveLoans.existingLoans}" class="app-check-your-answers__contents">
+                     
+                    <div class="app-check-your-answers__contents">
+	                    <dt class="app-check-your-answers__question" th:text="${loan.directorName}"
+	                        th:id="loan-table-name[__${stat.index}__]">
+	                        <br/>
+	                    </dt>
+	
+	                    <dd class="app-check-your-answers__answer">
+	                        <span th:text="${loan.breakdown.balanceAtPeriodEnd}"
+	                              th:id="loan-table-balance-period-end[__${stat.index}__]"></span>
+	                    </dd>
+	
+	                    <dd class="app-check-your-answers__change">
+	                        <form class="form"
+	                              th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans/remove/{loanId}
+	                            (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},loanId=${loan.id})}"
+	                              method="get">
+	                            <div class="flex-container-center-align">
+	                                <input id="remove-loan-button" class="button-display-as-link piwik-event"
+	                                       data-event-id="Loans to directors - remove loan"
+	                                       type="submit" role="button" value="Remove"/>
+	                            </div>
+	
+	
+	                    </form>
+	                    </dd>
+	                    </div>
+                    
+                    <div class="app-check-your-answers__contents">
                         <details class="govuk-details" role="group">
                             <summary class="govuk-details__summary" role="button" aria-controls="loan-description-help-text"
                                      aria-expanded="false">
-                            <span id="loan-description-help-text-link left-indent" class="govuk-details__summary-text">
-                              Expand
-                            </span>
+	                            <span id="loan-description-help-text-link left-indent" class="govuk-details__summary-text">
+	                              Expand
+	                            </span>
                             </summary>
                             <div class="govuk-details__text" id="loan-description-help-text" aria-hidden="true">
                             <span id="loan-description-title-text" class="govuk-details__summary-text"
@@ -92,27 +115,7 @@
 
                             </div>
                         </details>
-                    </dd>
-
-                    <dd class="app-check-your-answers__answer">
-                        <span th:text="${loan.breakdown.balanceAtPeriodEnd}"
-                              th:id="loan-table-balance-period-end[__${stat.index}__]"></span>
-                    </dd>
-
-                    <dd class="app-check-your-answers__change">
-                        <form class="form"
-                              th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans/remove/{loanId}
-                            (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},loanId=${loan.id})}"
-                              method="get">
-                            <div class="flex-container-center-align">
-                                <input id="remove-loan-button" class="button-display-as-link piwik-event"
-                                       data-event-id="Loans to directors - remove loan"
-                                       type="submit" role="button" value="Remove"/>
-                            </div>
-
-
-                    </form>
-                    </dd>
+                    </div>
                 </div>
             </dl>
 
@@ -149,7 +152,7 @@
                         <textarea class="govuk-textarea"
                                   id="loanToAdd-description"
                                   th:field="*{loanToAdd.description}"
-                                  type="text">
+                                  type="text" rows="5">
                         </textarea>
                     </div>
                 </div>
@@ -219,16 +222,16 @@
                     </div>
 
                 <div class="govuk-form-group">
-                    <input id="add-loan-button" class="loan-button piwik-event"
+			        <input id="save-and-continue-button" class="govuk-button piwik-event"
+            			   data-event-id="Loans to directors - save and continue"
+              				th:name="submit"
+               				type="submit" role="button" value="Save and continue"/>
+                    <input id="add-loan-button" class="loan-button secondary-button piwik-event"
                            th:name="add"
                            data-event-id="Loans to directors - add loan"
                            role="button" type="submit" value="Add loan"/>
                 </div>
 
-        <input id="save-and-continue-button" class="govuk-button piwik-event"
-               data-event-id="Loans to directors - save and continue"
-               th:name="submit"
-               type="submit" role="button" value="Save and continue"/>
         </form>
     </div>
 </div>
