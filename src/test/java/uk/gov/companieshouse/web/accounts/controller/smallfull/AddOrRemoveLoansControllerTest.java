@@ -12,12 +12,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
-
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -51,7 +54,19 @@ class AddOrRemoveLoansControllerTest {
 
     @Mock
     private NavigatorService navigatorService;
-
+    
+    @Mock
+    private ApiClient apiClient;
+    
+    @Mock
+    private ApiClientService apiClientService;
+    
+    @Mock
+    private SmallFullService smallFullService;
+    
+    @Mock
+    private SmallFullApi smallFullApi;
+    
     @InjectMocks
     private AddOrRemoveLoansController controller;
 
@@ -88,6 +103,8 @@ class AddOrRemoveLoansControllerTest {
     @DisplayName("Get add or remove loans view - success path")
     void getRequestSuccess() throws Exception {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Loan[0]);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_LOAN_PATH))
@@ -104,6 +121,8 @@ class AddOrRemoveLoansControllerTest {
     @DisplayName("Get add or remove loans view - service exception")
     void getRequestServiceException() throws Exception {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_LOAN_PATH))
