@@ -158,8 +158,7 @@
                     <div class="govuk-grid-column-one-half" id="breakdown-balance-at-period-subtitle"
                         th:text = "'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMM yyyy')}" >
                     </div>
-
-                    <div class="govuk-grid-column-one-quarter">
+                    <div class="govuk-grid-column-one-half">
                         <div th:replace="fragments/numberInput :: numberInput (
                                 id = 'loanToAdd.breakdown.balanceAtPeriodStart',
                                 class = 'govuk-input current current-fixed-assets-add',
@@ -172,8 +171,7 @@
                         <div class="govuk-grid-column-one-half" id="breakdown-advances-credits-made-subtitle">
                             Advances and credits made
                         </div>
-                        <div class="govuk-grid-column-one-quarter column-flex">
-
+                        <div class="govuk-grid-column-one-half column-flex">
                             <div  th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.advancesCreditsMade',
                                       class= 'govuk-input',
@@ -187,7 +185,7 @@
                         <div class="govuk-grid-column-one-half" id="breakdown-advances-credits-repaid-subtitle">
                             Advances and credits repaid
                         </div>
-                        <div class="govuk-grid-column-one-quarter column-flex">
+                        <div class="govuk-grid-column-one-half column-flex">
                             <div th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.advancesCreditsRepaid',
                                       class= 'govuk-input',
@@ -198,11 +196,10 @@
                     </div>
 
                     <div class="govuk-grid-row column-flex">
-
                         <div class="govuk-grid-column-one-half" id="breakdown-balance-at-period-end-subtitle"
                              th:text = "'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMM yyyy')}" >
                         </div>
-                        <div class="govuk-grid-column-one-quarter column-flex">
+                        <div class="govuk-grid-column-one-half column-flex">
                             <div th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.balanceAtPeriodEnd',
                                       class= 'govuk-input',
