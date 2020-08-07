@@ -38,7 +38,7 @@
                     <th:block th:each="loan, stat : ${addOrRemoveLoans.existingLoans}">
                         <tr class="govuk-table__row">
                             <th class="govuk-table__header" scope="row" style="border-bottom: 1px solid white" th:text="${loan.directorName}"></th>
-                            <td class="govuk-table__cell" style="border-bottom: 1px solid white" th:text="${loan.breakdown.balanceAtPeriodEnd}"></td>
+                            <td class="govuk-table__cell" style="border-bottom: 1px solid white" th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodEnd)}"></td>
                             <td class="govuk-table__cell" style="border-bottom: 1px solid white">
                                 <form class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans/remove/{loanId}
                                       (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},loanId=${loan.id})}" method="get">
@@ -117,30 +117,35 @@
                            th:id="existingLoans[__${stat.index}__].id"/>
                 </div>
 
-                    <div class="govuk-form-group govuk-form-group-block-important">
+                <div class="govuk-form-group govuk-form-group-block-important">
+                      <div>
+                            <label id="loan-director-name-label" class="govuk-label govuk-label--m"
+                                   for="loanToAdd-name">
+                              Description of the loan
+                            </label>
 
-                        <label id="loan-director-name-label" class="govuk-label govuk-label--m"
-                               for="directorToAdd-name">
-                            Name of director receiving advance or credit
-                        </label>
+                            <textarea class="govuk-textarea"
+                                      id="loanToAdd-name"
+                                      th:field="*{loanToAdd.directorName}"
+                                      type="text" rows="1">
+                            </textarea>
+                      </div>
+                      <div>
+                          <label id="loan-director-description-label" class="govuk-label govuk-label--m"
+                                 for="loanToAdd-description">
+                              Description of the loan
+                          </label>
 
-                        <input class="govuk-input"
-                               id="directorToAdd-name"
-                               th:field="*{loanToAdd.directorName}"
-                               type="text">
+                          <span id="description-help-text" class="govuk-hint">
+                              A brief description of the loan, for example, an advance or loan for a car.
+                          </span>
 
-                    <div>
-                        <label id="loan-director-description-label" class="govuk-label govuk-label--m"
-                               for="loanToAdd-description">
-                            Description of the loan
-                        </label>
-
-                        <textarea class="govuk-textarea"
-                                  id="loanToAdd-description"
-                                  th:field="*{loanToAdd.description}"
-                                  type="text" rows="5">
-                        </textarea>
-                    </div>
+                          <textarea class="govuk-textarea"
+                                    id="loanToAdd-description"
+                                    th:field="*{loanToAdd.description}"
+                                    type="text" rows="5">
+                          </textarea>
+                      </div>
                 </div>
 
                 <label id="loan-breakdown-label" class="govuk-label govuk-label--m"
