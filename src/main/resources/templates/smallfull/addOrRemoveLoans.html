@@ -116,7 +116,7 @@
                 </div>
             </dl>
 
-            <form id="data-submission-form" th:action="@{''}" class="form" th:object="${addOrRemoveLoans}" method="post">
+            <form id="data-submission-form" th:action="@{''}" class="form currency-included-within-inputs govuk-body" th:object="${addOrRemoveLoans}" method="post">
 
                 <div th:each="loan, stat : ${addOrRemoveLoans.existingLoans}">
                     <input type="hidden" th:field="${addOrRemoveLoans.existingLoans[__${stat.index}__].directorName}"
@@ -152,48 +152,85 @@
                                   type="text">
                         </textarea>
                     </div>
+                </div>
 
                 <label id="loan-breakdown-label" class="govuk-label govuk-label--m"
                        for="loan-breakdown">
                     Breakdown of the loan
                 </label>
 
-                    <div class="govuk-grid-row column-flex" id="loan-breakdown">
-                        <div class="govuk-grid-column-one-half" th:replace="fragments/numberInput :: numberInput (
-                                  id = 'loanToAdd.breakdown.balanceAtPeriodStart',
-                                  text = 'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMM yyyy')},
-                                  class= 'govuk-input',
-                                  )">
-                        </div>
-                    </div>
-                    <div class="govuk-grid-row column-flex">
 
-                        <div class="govuk-grid-column-one-half"  th:replace="fragments/numberInput :: numberInput (
-                                  id = 'loanToAdd.breakdown.advancesCreditsMade',
-                                  text = 'Advances and credits made',
-                                  class= 'govuk-input',
-                                  )">
-                        </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-half" id="breakdown-balance-at-period-subtitle"
+                        th:text = "'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMM yyyy')}" >
                     </div>
-                    <div class="govuk-grid-row column-flex">
 
-                        <div class="govuk-grid-column-one-half" th:replace="fragments/numberInput :: numberInput (
-                                  id = 'loanToAdd.breakdown.advancesCreditsRepaid',
-                                  text = 'Advances and credits repaid',
-                                  class= 'govuk-input',
-                                  )">
-                        </div>
-                    </div>
-                    <div class="govuk-grid-row column-flex">
-
-                        <div class="govuk-grid-column-one-half"  th:replace="fragments/numberInput :: numberInput (
-                                  id = 'loanToAdd.breakdown.balanceAtPeriodEnd',
-                                  text = 'Balance at ' + ${#temporals.format(nextAccounts.periodEndOn, 'd MMM yyyy')},
-                                  class= 'govuk-input',
-                                  )">
+                    <div class="govuk-grid-column-one-quarter">
+                        <div th:replace="fragments/numberInput :: numberInput (
+                                id = 'loanToAdd.breakdown.balanceAtPeriodStart',
+                                class = 'govuk-input current current-fixed-assets-add',
+                                )">
                         </div>
                     </div>
                 </div>
+
+
+                <div class="govuk-grid-row column-flex" id="loan-breakdown">
+                        <div class="govuk-grid-column-one-half" id="breakdown-balance-at-period-subtitle1"
+                        th:text = "'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMM yyyy')}" >
+                        </div>
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                      id = 'loanToAdd.breakdown.balanceAtPeriodStart',
+                                      class = 'govuk-input',
+                                      )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="breakdown-advances-credits-made-subtitle">
+                            Advances and credits made
+                        </div>
+                        <div class="govuk-grid-column-one-quarter column-flex">
+
+                            <div  th:replace="fragments/numberInput :: numberInput (
+                                      id = 'loanToAdd.breakdown.advancesCreditsMade',
+                                      class= 'govuk-input',
+                                      isEmployees = true,
+                                      )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half" id="breakdown-advances-credits-repaid-subtitle">
+                            Advances and credits repaid
+                        </div>
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                      id = 'loanToAdd.breakdown.advancesCreditsRepaid',
+                                      class= 'govuk-input',
+                                      isEmployees = true,
+                                      )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-grid-row column-flex">
+
+                        <div class="govuk-grid-column-one-half" id="breakdown-balance-at-period-end-subtitle"
+                             th:text = "'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMM yyyy')}" >
+                        </div>
+                        <div class="govuk-grid-column-one-quarter column-flex">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                      id = 'loanToAdd.breakdown.balanceAtPeriodEnd',
+                                      class= 'govuk-input',
+                                      isEmployees = true,
+                                      )">
+                            </div>
+                        </div>
+                    </div>
 
                 <div class="govuk-form-group">
                     <input id="add-loan-button" class="loan-button piwik-event"
