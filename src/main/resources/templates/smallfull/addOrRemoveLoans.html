@@ -149,7 +149,7 @@
                 </div>
 
                 <label id="loan-breakdown-label" class="govuk-label govuk-label--m"
-                       for="loan-breakdown">
+                       >
                     Breakdown of the loan
                 </label>
 
@@ -175,7 +175,6 @@
                             <div  th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.advancesCreditsMade',
                                       class= 'govuk-input',
-                                      isEmployees = true,
                                       )">
                             </div>
                         </div>
@@ -189,7 +188,6 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.advancesCreditsRepaid',
                                       class= 'govuk-input',
-                                      isEmployees = true,
                                       )">
                             </div>
                         </div>
@@ -203,7 +201,6 @@
                             <div th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.balanceAtPeriodEnd',
                                       class= 'govuk-input',
-                                      isEmployees = true,
                                       )">
                             </div>
                         </div>
