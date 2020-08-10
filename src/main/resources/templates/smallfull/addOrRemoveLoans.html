@@ -87,16 +87,20 @@
                                         </span>
                                         <div class="govuk-grid-row">
                                             <div class="govuk-grid-column-one-half govuk-body"></div>
-                                            <div class="govuk-grid-column-one-half" style="text-align: right">
+                                            <div class="govuk-grid-column-one-half cya-desktop-only" style="text-align: right">
                                                 <strong th:id="loans-table-breakdown-currency[__${stat.index}__]">
                                                     £
                                                 </strong>
                                             </div>
                                         </div>
                                         <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body"
+                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
                                                  th:id="loans-table-breakdown-balance-at-period-start-heading[__${stat.index}__]"
                                                  th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')}">
+                                            </div>
+                                            <div class="mobile-only-label" style="padding: 0 15px;">
+                                                <span th:id="loans-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
+                                                      th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')} + ' in £'"></span>
                                             </div>
                                             <div class="govuk-grid-column-one-half" style="text-align: right;">
                                                 <span th:id="loans-table-breakdown-balance-at-period-start[__${stat.index}__]"
@@ -105,9 +109,14 @@
                                             </div>
                                         </div>
                                         <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body"
+                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
                                                  th:id="loans-table-breakdown-advances-and-credits-made-heading[__${stat.index}__]">
                                               Advances and credits made
+                                            </div>
+                                            <div class="mobile-only-label" style="padding: 0 15px;">
+                                                <span th:id="loans-table-breakdown-advances-and-credits-made-mobile-heading[__${stat.index}__]">
+                                                    Advances and credits made in £
+                                                </span>
                                             </div>
                                             <div class="govuk-grid-column-one-half" style="text-align: right;">
                                                 <span th:id="loans-table-breakdown-advances-and-credits-made[__${stat.index}__]"
@@ -116,9 +125,14 @@
                                             </div>
                                         </div>
                                         <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body"
+                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
                                                  th:id="loans-table-breakdown-advances-and-credits-repaid-heading[__${stat.index}__]">
                                               Advances and credits repaid
+                                            </div>
+                                            <div class="mobile-only-label" style="padding: 0 15px;">
+                                                <span th:id="loans-table-breakdown-advances-and-credits-repaid-mobile-heading[__${stat.index}__]">
+                                                    Advances and credits repaid in £
+                                                </span>
                                             </div>
                                             <div class="govuk-grid-column-one-half" style="text-align: right;">
                                                 <span th:id="loans-table-breakdown-advances-and-credits-repaid[__${stat.index}__]"
@@ -127,10 +141,14 @@
                                             </div>
                                         </div>
                                         <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body">
+                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only">
                                                 <strong th:id="loans-table-breakdown-balance-at-period-end-heading[__${stat.index}__]"
                                                         th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')}">
                                                 </strong>
+                                            </div>
+                                            <div class="mobile-only-label" style="padding: 0 15px;">
+                                                <strong th:id="loans-table-breakdown-balance-at-period-end-mobile-heading[__${stat.index}__]"
+                                                        th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodEndOn, 'd MMMM yyyy')} + ' in £'"></strong>
                                             </div>
                                             <div class="govuk-grid-column-one-half" style="text-align: right;">
                                                 <strong th:id="loans-table-breakdown-balance-at-period-end[__${stat.index}__]"
