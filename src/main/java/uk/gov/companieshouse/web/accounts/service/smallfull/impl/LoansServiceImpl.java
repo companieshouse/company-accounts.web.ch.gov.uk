@@ -80,6 +80,10 @@ public class LoansServiceImpl implements LoanService {
 
         List<ValidationError> validationErrors = loanValidator.validateDirectorToAdd(loanToAdd);
 
+        if(!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
+
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();
             if (apiResponse.hasErrors()) {
