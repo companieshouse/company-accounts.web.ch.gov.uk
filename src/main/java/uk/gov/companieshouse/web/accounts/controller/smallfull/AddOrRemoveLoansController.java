@@ -144,7 +144,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                              @PathVariable String transactionId,
                              @PathVariable String companyAccountsId,
                              @PathVariable String loanId,
-                             @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
                              Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
