@@ -18,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,9 @@ public class LoansServiceImpl implements LoanService {
 
     @Autowired
     private ServiceExceptionHandler serviceExceptionHandler;
+
+    @Autowired
+    private LoanValidator loanValidator;
 
     @Autowired
     private ValidationContext validationContext;
@@ -68,6 +72,7 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException {
 
+        List<ValidationError> validationErrors = loanValidator.validateDirectorToAdd(loanToAdd);
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
@@ -76,13 +81,18 @@ public class LoansServiceImpl implements LoanService {
 
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();
+
+            if (apiResponse.hasErrors()) {
+                List<ValidationError> errors = validationContext.getValidationErrors(apiResponse.getErrors());
+                validationErrors.addAll(errors);
+            }
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
 
-        return null;
+        return validationErrors;
     }
 
     @Override

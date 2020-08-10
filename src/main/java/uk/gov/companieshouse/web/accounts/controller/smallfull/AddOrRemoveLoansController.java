@@ -4,6 +4,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
-import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
@@ -52,8 +52,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
     private static final String ADD_OR_REMOVE_LOANS = "addOrRemoveLoans";
 
-    private static final String NEXT_ACCOUNTS = "nextAccounts";
-
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
@@ -68,25 +66,14 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        AccountingPeriodApi nextAccounts;
-
-        ApiClient apiClient = apiClientService.getApiClient();
-        try {
-            SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
-
-            nextAccounts = smallFullApi.getNextAccounts();
-
-        } catch (ServiceException e) {
-
-            LOGGER.errorRequest(request, e.getMessage(), e);
-            return ERROR_VIEW;
-        }
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
+        ApiClient apiClient = apiClientService.getApiClient();
+
         try {
-            addOrRemoveLoans.setExistingLoans(
-                    loanService.getAllLoans(transactionId, companyAccountsId));
+            SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+            addOrRemoveLoans.setNextAccounts(smallFullApi.getNextAccounts());
+            addOrRemoveLoans.setExistingLoans(loanService.getAllLoans(transactionId, companyAccountsId));
 
         } catch (ServiceException e) {
 
@@ -94,8 +81,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
             return ERROR_VIEW;
         }
 
-
-        model.addAttribute(NEXT_ACCOUNTS, nextAccounts);
         model.addAttribute(ADD_OR_REMOVE_LOANS, addOrRemoveLoans);
         model.addAttribute(COMPANY_NUMBER, companyNumber);
         model.addAttribute(TRANSACTION_ID, transactionId);
@@ -120,6 +105,7 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
                               @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
+                              BindingResult bindingResult,
                               Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
@@ -127,6 +113,11 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
         try {
 
             List<ValidationError> validationErrors = loanService.createLoan(transactionId, companyAccountsId, addOrRemoveLoans.getLoanToAdd());
+
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
 
         } catch (ServiceException e) {
 
