@@ -17,16 +17,22 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,6 +72,9 @@ class AddOrRemoveLoansControllerTest {
     
     @Mock
     private SmallFullApi smallFullApi;
+
+    @Mock
+    private List<ValidationError> validationErrors;
     
     @InjectMocks
     private AddOrRemoveLoansController controller;
@@ -131,8 +140,8 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
-    @DisplayName("Post add director - throws service exception")
-    void postDirectorAddRequestThrowsServiceException() throws Exception {
+    @DisplayName("Post submit loan - throws service exception")
+    void postDirectorSubmitRequestThrowsServiceException() throws Exception {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -140,6 +149,54 @@ class AddOrRemoveLoansControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
+
+    @Test
+    @DisplayName("Post add loan - throws validation errors")
+    void postDirectorAddRequestThrowsValidationErrors() throws Exception {
+
+
+        when(loanService.createLoan(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post add loan - success")
+    void postDirectorAddRequestSuccess() throws Exception {
+
+        when(loanService.createLoan(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(true);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_LOAN_PATH));
+    }
+
+    @Test
+    @DisplayName("Post add loan - throws service exception")
+    void postLoanAddRequestThrowsServiceException() throws Exception {
+
+        when(loanService.createLoan(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                .thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
 
     @Test
     @DisplayName("Will render - true")
