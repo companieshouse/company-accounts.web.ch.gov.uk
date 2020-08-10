@@ -4,6 +4,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,18 +48,22 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
     @Autowired
     private ApiClientService apiClientService;
 
+    private AccountingPeriodApi nextAccounts;
+
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans");
 
     private static final String ADD_OR_REMOVE_LOANS = "addOrRemoveLoans";
 
-    private static final String NEXT_ACCOUNTS = "nextAccounts";
+    private static final String NEXT_ACCOUNTS = "nextAccount";
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
+
 
     @GetMapping
     public String getAddOrRemoveLoans(@PathVariable String companyNumber,
@@ -68,7 +73,7 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-        AccountingPeriodApi nextAccounts;
+
 
         ApiClient apiClient = apiClientService.getApiClient();
         try {
@@ -83,6 +88,7 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
         }
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.setNextAccount(nextAccounts);
 
         try {
             addOrRemoveLoans.setExistingLoans(
@@ -94,8 +100,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
             return ERROR_VIEW;
         }
 
-
-        model.addAttribute(NEXT_ACCOUNTS, nextAccounts);
         model.addAttribute(ADD_OR_REMOVE_LOANS, addOrRemoveLoans);
         model.addAttribute(COMPANY_NUMBER, companyNumber);
         model.addAttribute(TRANSACTION_ID, transactionId);
@@ -120,6 +124,7 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
                               @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
+                              BindingResult bindingResult,
                               Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
@@ -128,11 +133,15 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
             List<ValidationError> validationErrors = loanService.createLoan(transactionId, companyAccountsId, addOrRemoveLoans.getLoanToAdd());
 
+            if(!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
-
         }
 
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
