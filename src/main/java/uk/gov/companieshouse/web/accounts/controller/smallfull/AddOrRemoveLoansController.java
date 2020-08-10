@@ -139,6 +139,30 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                 URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
 
+    @GetMapping("remove/{loanId}")
+    public String deleteLoan(@PathVariable String companyNumber,
+                             @PathVariable String transactionId,
+                             @PathVariable String companyAccountsId,
+                             @PathVariable String loanId,
+                             @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
+                             Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        try {
+
+            loanService.deleteLoan(transactionId, companyAccountsId, loanId);
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
+
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                URI.expand(companyNumber, transactionId, companyAccountsId).toString();
+    }
+
     @Override
     protected String getTemplateName() {
         return "smallfull/addOrRemoveLoans";

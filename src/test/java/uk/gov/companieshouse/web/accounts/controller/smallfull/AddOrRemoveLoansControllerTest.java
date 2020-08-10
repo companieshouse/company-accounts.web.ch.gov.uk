@@ -27,6 +27,8 @@ import javax.servlet.http.HttpSession;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -76,10 +78,17 @@ class AddOrRemoveLoansControllerTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String LOAN_ID = "loanId";
+
     private static final String ADD_OR_REMOVE_LOAN_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full/note/add-or-remove-loans";
+
+    private static final String REMOVE_LOAN_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/note/add-or-remove-loans/remove/" + LOAN_ID;
 
     private static final String ADD_OR_REMOVE_LOANS_VIEW = "smallfull/addOrRemoveLoans";
 
@@ -139,6 +148,28 @@ class AddOrRemoveLoansControllerTest {
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Delete loan - success path")
+    void deleteLoanSuccess() throws Exception {
+
+        this.mockMvc.perform(get(REMOVE_LOAN_PATH))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_LOAN_PATH));
+
+        verify(loanService).deleteLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, LOAN_ID);
+    }
+
+    @Test
+    @DisplayName("Delete loan - service exception")
+    void deleteLoanServiceException() throws Exception {
+
+        doThrow(ServiceException.class).when(loanService).deleteLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, LOAN_ID);
+
+        this.mockMvc.perform(get(REMOVE_LOAN_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
