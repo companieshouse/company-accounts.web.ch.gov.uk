@@ -22,8 +22,8 @@ public class LoanValidator {
 
     private static final String LOAN_TO_ADD = "loanToAdd";
 
-    private static final String NAME = LOAN_TO_ADD + ".director_name";
-    private static final String NAME_NOT_PRESENT = "validation.element.missing.director_name";
+    private static final String NAME = LOAN_TO_ADD + ".directorName";
+    private static final String NAME_NOT_PRESENT = "validation.element.missing.loanToAdd.directorName";
 
     public List<ValidationError> validateDirectorToAdd(LoanToAdd loanToAdd) {
 

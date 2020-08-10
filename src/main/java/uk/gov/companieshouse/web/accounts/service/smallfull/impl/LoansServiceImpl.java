@@ -73,6 +73,10 @@ public class LoansServiceImpl implements LoanService {
     public List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException {
 
         List<ValidationError> validationErrors = loanValidator.validateDirectorToAdd(loanToAdd);
+        if (!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
+        
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
