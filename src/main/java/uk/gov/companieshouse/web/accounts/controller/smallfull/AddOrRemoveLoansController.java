@@ -48,7 +48,7 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
     private ApiClientService apiClientService;
 
     private static final UriTemplate URI =
-            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
+            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans");
 
     private static final String ADD_OR_REMOVE_LOANS = "addOrRemoveLoans";
 
