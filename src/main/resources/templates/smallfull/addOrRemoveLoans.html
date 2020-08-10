@@ -178,12 +178,12 @@
                 <input th:field="*{nextAccount.periodEndOn}" type="hidden">
 
                 <div th:each="loan, stat : ${addOrRemoveLoans.existingLoans}">
-                    <input type="hidden" th:field="${addOrRemoveLoans.existingLoans[__${stat.index}__].directorName}"
+                    <input type="hidden" th:field="*{existingLoans[__${stat.index}__].directorName}"
                            th:id="existingLoans[__${stat.index}__].directorName"/>
                     <input type="hidden"
-                           th:field="${addOrRemoveLoans.existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd}"
+                           th:field="*{existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd}"
                            th:id="existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd"/>
-                    <input type="hidden" th:field="${addOrRemoveLoans.existingLoans[__${stat.index}__].id}"
+                    <input type="hidden" th:field="*{existingLoans[__${stat.index}__].id}"
                            th:id="existingLoans[__${stat.index}__].id"/>
                 </div>
 
@@ -284,12 +284,12 @@
                         <div class=" govuk-grid-row column-flex">
                             <div class="govuk-grid-column-one-half"
                                  id="loanToAdd-breakdown-balance-at-period-end-heading"
-                                 th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodEndOn, 'd MMMM yyyy')}">
+                                 th:text="'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')}">
                             </div>
                             <div class="govuk-grid-column-one-half column-flex govuk-!-display-block">
                                 <div th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.balanceAtPeriodEnd',
-                                      text = 'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodEndOn, 'd MMMM yyyy')} + ' in £',
+                                      text = 'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')} + ' in £',
                                       class= 'govuk-input',
                                       )">
                                 </div>

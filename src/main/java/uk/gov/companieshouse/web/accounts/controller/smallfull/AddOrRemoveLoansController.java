@@ -73,26 +73,18 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
-
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         ApiClient apiClient = apiClientService.getApiClient();
         try {
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
-            nextAccounts = smallFullApi.getNextAccounts();
 
-        } catch (ServiceException e) {
 
-            LOGGER.errorRequest(request, e.getMessage(), e);
-            return ERROR_VIEW;
-        }
-
-        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
-        addOrRemoveLoans.setNextAccount(nextAccounts);
-
-        try {
             addOrRemoveLoans.setExistingLoans(
                     loanService.getAllLoans(transactionId, companyAccountsId));
+
+            addOrRemoveLoans.setNextAccount(smallFullApi.getNextAccounts());
 
         } catch (ServiceException e) {
 
