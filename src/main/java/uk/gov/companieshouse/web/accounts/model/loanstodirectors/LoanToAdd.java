@@ -4,7 +4,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class LoanToAdd {
 
-    @ValidationMapping("$.loanToAdd.director_name")
+    @ValidationMapping("$.loan.director_name")
     private String directorName;
 
     private String description;

@@ -39,8 +39,8 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate director to add - missing name")
-    void validateDirectorToAddMissingName() {
+    @DisplayName("Validate loan to add - missing director name")
+    void validateLoanToAddMissingDirectorName() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
 

@@ -32,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -74,7 +76,7 @@ class AddOrRemoveLoansControllerTest {
 
     @Mock
     private List<ValidationError> validationErrors;
-    
+
     @InjectMocks
     private AddOrRemoveLoansController controller;
 
@@ -84,10 +86,17 @@ class AddOrRemoveLoansControllerTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String LOAN_ID = "loanId";
+
     private static final String ADD_OR_REMOVE_LOAN_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full/note/add-or-remove-loans";
+
+    private static final String REMOVE_LOAN_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/note/add-or-remove-loans/remove/" + LOAN_ID;
 
     private static final String ADD_OR_REMOVE_LOANS_VIEW = "smallfull/addOrRemoveLoans";
 
@@ -139,8 +148,8 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
-    @DisplayName("Post submit loan - throws service exception")
-    void postLoanSubmitRequestThrowsServiceException() throws Exception {
+    @DisplayName("Post submit - throws service exception")
+    void postSubmitRequestThrowsServiceException() throws Exception {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -153,7 +162,6 @@ class AddOrRemoveLoansControllerTest {
     @DisplayName("Post add loan - throws validation errors")
     void postLoanAddRequestThrowsValidationErrors() throws Exception {
 
-
         when(loanService.createLoan(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
                 .thenReturn(validationErrors);
@@ -164,6 +172,27 @@ class AddOrRemoveLoansControllerTest {
                 .param("loanToAdd.directorName", "name"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
+    }
+
+    @DisplayName("Delete loan - success path")
+    void deleteLoanSuccess() throws Exception {
+
+        this.mockMvc.perform(get(REMOVE_LOAN_PATH))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_LOAN_PATH));
+
+        verify(loanService).deleteLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, LOAN_ID);
+    }
+
+    @Test
+    @DisplayName("Delete loan - service exception")
+    void deleteLoanServiceException() throws Exception {
+
+        doThrow(ServiceException.class).when(loanService).deleteLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, LOAN_ID);
+
+        this.mockMvc.perform(get(REMOVE_LOAN_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -195,7 +224,6 @@ class AddOrRemoveLoansControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
-
 
     @Test
     @DisplayName("Will render - true")
