@@ -24,17 +24,21 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors.LoanTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,10 +77,10 @@ public class LoansServiceImplTest {
     private URIValidationException uriValidationException;
 
     @Mock
-    private ApiResponse<LoanApi[]> responseWithMultipleDirectors;
+    private ApiResponse<LoanApi[]> responseWithMultipleLoans;
 
     @Mock
-    private ApiResponse<LoanApi> responseWithSingleDirector;
+    private ApiResponse<LoanApi> responseWithSingleLoan;
 
     @Mock
     private LoanTransformer loanTransformer;
@@ -89,6 +93,12 @@ public class LoansServiceImplTest {
 
     @Mock
     private LoanCreate loanCreate;
+
+    @Mock
+    private LoanValidator loanValidator;
+
+    @Mock
+    private ValidationContext validationContext;
 
     @InjectMocks
     private LoansServiceImpl loansService;
@@ -107,6 +117,11 @@ public class LoansServiceImplTest {
 
     private static final String RESOURCE_NAME = "loans";
 
+    private static final String LOAN_TO_ADD = "loanToAdd";
+
+    private static final String DIRECTOR_NAME = LOAN_TO_ADD + ".directorName";
+    private static final String NAME_NOT_PRESENT = "validation.element.missing.loan.director_name";
+
     @Test
     @DisplayName("GET - all loans - success")
     void getAllLoansSuccess()
@@ -117,9 +132,9 @@ public class LoansServiceImplTest {
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
         when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
         when(loansResourceHandler.getAll(LOANS_URI)).thenReturn(loanGetAll);
-        when(loanGetAll.execute()).thenReturn(responseWithMultipleDirectors);
+        when(loanGetAll.execute()).thenReturn(responseWithMultipleLoans);
         LoanApi[] loanApi = new LoanApi[1];
-        when(responseWithMultipleDirectors.getData()).thenReturn(loanApi);
+        when(responseWithMultipleLoans.getData()).thenReturn(loanApi);
         Loan[] allLoans = new Loan[1];
         when(loanTransformer.getAllLoans(loanApi)).thenReturn(allLoans);
 
@@ -206,11 +221,56 @@ public class LoansServiceImplTest {
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
         when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
         when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
-        when(loanCreate.execute()).thenReturn(responseWithSingleDirector);
+        when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
 
         List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd);
 
-        assertNull(validationErrors);
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("POST - loan - validation errors")
+    void createLoanValidation()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(loanValidator.validateDirectorToAdd(loanToAdd)).thenReturn(new ArrayList<>());
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
+        when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
+        when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
+        when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
+        when(responseWithSingleLoan.hasErrors()).thenReturn(true);
+
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> apiValidationErrors = new ArrayList<>();
+        apiValidationErrors.add(validationError);
+        when(validationContext.getValidationErrors(responseWithSingleLoan.getErrors())).thenReturn(apiValidationErrors);
+
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd);
+
+        assertEquals(apiValidationErrors, validationErrors);
+    }
+
+    @Test
+    @DisplayName("POST - loan - director name validation failed")
+    void createLoanInvalidDirectorName() throws ServiceException {
+
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> nameValidationError = new ArrayList<>();
+        nameValidationError.add(validationError);
+
+        when(loanValidator.validateDirectorToAdd(loanToAdd)).thenReturn(nameValidationError);
+
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd);
+
+        assertEquals(nameValidationError, validationErrors);
+
+        verify(apiClientService, never()).getApiClient();
     }
 
     @Test

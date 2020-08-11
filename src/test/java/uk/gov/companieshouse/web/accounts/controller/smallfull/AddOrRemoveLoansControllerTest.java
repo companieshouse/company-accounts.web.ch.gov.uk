@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +22,11 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -158,6 +159,21 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
+    @DisplayName("Post add loan - throws validation errors")
+    void postLoanAddRequestThrowsValidationErrors() throws Exception {
+
+        when(loanService.createLoan(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
+    }
+
     @DisplayName("Delete loan - success path")
     void deleteLoanSuccess() throws Exception {
 
@@ -186,6 +202,8 @@ class AddOrRemoveLoansControllerTest {
         when(loanService.createLoan(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
                 .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(true);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
                 .param("loanToAdd.directorName", "name"))

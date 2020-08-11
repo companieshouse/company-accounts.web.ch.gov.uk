@@ -13,6 +13,10 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
 
+            <form th:object="${addOrRemoveLoans}">
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+            </form>
+
             <div th:replace="fragments/numberedHeading :: numberedHeading (
                   headingText = 'Loans to directors'
               )">
@@ -26,209 +30,237 @@
                 You can report more loans for the same director or other directors later if you need to. You can report up to 20 loans.
             </span>
 
-            <table id="loans-table" class="govuk-table" th:if="${addOrRemoveLoans.existingLoans != null and addOrRemoveLoans.existingLoans.length > 0}">
+            <table id="loans-table" class="govuk-table"
+                   th:if="${addOrRemoveLoans.existingLoans != null and addOrRemoveLoans.existingLoans.length > 0}">
                 <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th id="loans-table-director-name-heading"
-                            class="govuk-table__header"
-                            scope="col">
-                            Name of director
-                        </th>
-                        <th id="loans-table-balance-at-period-end-heading"
-                            class="govuk-table__header"
-                            scope="col"
-                            th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodEndOn, 'd MMMM yyyy')}">
-                        </th>
-                        <th class="govuk-table__header" scope="col"></th>
-                    </tr>
+                <tr class="govuk-table__row">
+                    <th id="loans-table-director-name-heading"
+                        class="govuk-table__header"
+                        scope="col">
+                        Name of director
+                    </th>
+                    <th id="loans-table-balance-at-period-end-heading"
+                        class="govuk-table__header"
+                        scope="col"
+                        th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodEndOn, 'd MMMM yyyy')}">
+                    </th>
+                    <th class="govuk-table__header" scope="col"></th>
+                </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                    <th:block th:each="loan, stat : ${addOrRemoveLoans.existingLoans}">
-                        <tr class="govuk-table__row">
-                            <th th:id="loans-table-director-name[__${stat.index}__]"
-                                class="govuk-table__header--summary"
-                                scope="row"
-                                th:text="${loan.directorName}">
-                            </th>
-                            <td th:id="loans-table-balance-at-period-end[__${stat.index}__]"
-                                class="govuk-table__cell--summary"
-                                th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodEnd)}">
-                            </td>
-                            <td class="govuk-table__cell--summary">
-                                <form class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans/remove/{loanId}
-                                      (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},loanId=${loan.id})}" method="get">
-                                    <div class="flex-container-center-align">
-                                        <input th:id="loans-table-remove[__${stat.index}__]"
-                                               class="button-display-as-link piwik-event"
-                                               data-event-id="Loans to directors - remove loan"
-                                               type="submit" role="button" value="Remove"/>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell" colspan="3">
-                                <details class="govuk-details" role="group">
-                                    <summary class="govuk-details__summary" role="button" th:aria-controls="loans-table-breakdown[__${stat.index}__]">
-                                          <span th:id="loans-table-breakdown-expand[__${stat.index}__]" class="govuk-details__summary-text">
+                <th:block th:each="loan, stat : ${addOrRemoveLoans.existingLoans}">
+                    <tr class="govuk-table__row">
+                        <th th:id="loans-table-director-name[__${stat.index}__]"
+                            class="govuk-table__header--summary"
+                            scope="row"
+                            th:text="${loan.directorName}">
+                        </th>
+                        <td th:id="loans-table-balance-at-period-end[__${stat.index}__]"
+                            class="govuk-table__cell--summary"
+                            th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodEnd)}">
+                        </td>
+                        <td class="govuk-table__cell--summary">
+                            <form class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans/remove/{loanId}
+                                      (companyNumber=${companyNumber},transactionId=${transactionId},companyAccountsId=${companyAccountsId},loanId=${loan.id})}"
+                                  method="get">
+                                <div class="flex-container-center-align">
+                                    <input th:id="loans-table-remove[__${stat.index}__]"
+                                           class="button-display-as-link piwik-event"
+                                           data-event-id="Loans to directors - remove loan"
+                                           type="submit" role="button" value="Remove"/>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell" colspan="3">
+                            <details class="govuk-details" role="group">
+                                <summary class="govuk-details__summary" role="button"
+                                         th:aria-controls="loans-table-breakdown[__${stat.index}__]">
+                                          <span th:id="loans-table-breakdown-expand[__${stat.index}__]"
+                                                class="govuk-details__summary-text">
                                             Expand
                                           </span>
-                                    </summary>
-                                    <div class="review-reveal govuk-body govuk-!-margin-top-4" th:id="loans-table-breakdown[__${stat.index}__]" aria-hidden="true">
-                                        <p>
+                                </summary>
+                                <div class="review-reveal govuk-body govuk-!-margin-top-4"
+                                     th:id="loans-table-breakdown[__${stat.index}__]" aria-hidden="true">
+                                    <p>
                                             <span th:id="loans-table-breakdown-description-header[__${stat.index}__]">
                                                 Description of the loan
                                             </span>
-                                        </p>
-                                        <span th:id="loans-table-breakdown-description[__${stat.index}__]"
-                                              th:text="${loan.description}">
+                                    </p>
+                                    <span th:id="loans-table-breakdown-description[__${stat.index}__]"
+                                          th:text="${loan.description}">
                                         </span>
-                                        <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body"></div>
-                                            <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right cya-desktop">
-                                                <strong th:id="loans-table-breakdown-currency[__${stat.index}__]">
-                                                    £
-                                                </strong>
-                                            </div>
+                                    <div class="govuk-grid-row">
+                                        <div class="govuk-grid-column-one-half govuk-body"></div>
+                                        <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right cya-desktop-only">
+                                            <strong th:id="loans-table-breakdown-currency[__${stat.index}__]">
+                                                £
+                                            </strong>
                                         </div>
-                                        <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
-                                                 th:id="loans-table-breakdown-balance-at-period-start-heading[__${stat.index}__]"
-                                                 th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')}">
-                                            </div>
-                                            <div class="mobile-only-label column-fifth">
+                                    </div>
+                                    <div class="govuk-grid-row">
+                                        <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                             th:id="loans-table-breakdown-balance-at-period-start-heading[__${stat.index}__]"
+                                             th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')}">
+                                        </div>
+                                        <div class="mobile-only-label column-fifth">
                                                 <span th:id="loans-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
-                                                      th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')} + ' in £'"></span>
-                                            </div>
-                                            <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
+                                                      th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')} + ' in £'"></span>
+                                        </div>
+                                        <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
                                                 <span th:id="loans-table-breakdown-balance-at-period-start[__${stat.index}__]"
                                                       th:text="${loan.breakdown.balanceAtPeriodStart}">
                                                 </span>
-                                            </div>
                                         </div>
-                                        <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
-                                                 th:id="loans-table-breakdown-advances-and-credits-made-heading[__${stat.index}__]">
-                                              Advances and credits made
-                                            </div>
-                                            <div class="mobile-only-label column-fifth">
+                                    </div>
+                                    <div class="govuk-grid-row">
+                                        <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                             th:id="loans-table-breakdown-advances-and-credits-made-heading[__${stat.index}__]">
+                                            Advances and credits made
+                                        </div>
+                                        <div class="mobile-only-label column-fifth">
                                                 <span th:id="loans-table-breakdown-advances-and-credits-made-mobile-heading[__${stat.index}__]">
                                                     Advances and credits made in £
                                                 </span>
-                                            </div>
-                                            <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
+                                        </div>
+                                        <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
                                                 <span th:id="loans-table-breakdown-advances-and-credits-made[__${stat.index}__]"
                                                       th:text="${loan.breakdown.advancesCreditsMade}">
                                                 </span>
-                                            </div>
                                         </div>
-                                        <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
-                                                 th:id="loans-table-breakdown-advances-and-credits-repaid-heading[__${stat.index}__]">
-                                              Advances and credits repaid
-                                            </div>
-                                            <div class="mobile-only-label column-fifth">
+                                    </div>
+                                    <div class="govuk-grid-row">
+                                        <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                             th:id="loans-table-breakdown-advances-and-credits-repaid-heading[__${stat.index}__]">
+                                            Advances and credits repaid
+                                        </div>
+                                        <div class="mobile-only-label column-fifth">
                                                 <span th:id="loans-table-breakdown-advances-and-credits-repaid-mobile-heading[__${stat.index}__]">
                                                     Advances and credits repaid in £
                                                 </span>
-                                            </div>
-                                            <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
+                                        </div>
+                                        <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
                                                 <span th:id="loans-table-breakdown-advances-and-credits-repaid[__${stat.index}__]"
                                                       th:text="${loan.breakdown.advancesCreditsRepaid}">
                                                 </span>
-                                            </div>
-                                        </div>
-                                        <div class="govuk-grid-row">
-                                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only">
-                                                <strong th:id="loans-table-breakdown-balance-at-period-end-heading[__${stat.index}__]"
-                                                        th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')}">
-                                                </strong>
-                                            </div>
-                                            <div class="mobile-only-label column-fifth">
-                                                <strong th:id="loans-table-breakdown-balance-at-period-end-mobile-heading[__${stat.index}__]"
-                                                        th:text="'Balance at ' + ${#temporals.format(nextAccounts.periodEndOn, 'd MMMM yyyy')} + ' in £'"></strong>
-                                            </div>
-                                            <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
-                                                <strong th:id="loans-table-breakdown-balance-at-period-end[__${stat.index}__]"
-                                                        th:text="${loan.breakdown.balanceAtPeriodEnd}">
-                                                </strong>
-                                            </div>
                                         </div>
                                     </div>
-                                </details>
-                            </td>
-                        </tr>
-                    </th:block>
+                                    <div class="govuk-grid-row">
+                                        <div class="govuk-grid-column-one-half govuk-body cya-desktop-only">
+                                            <strong th:id="loans-table-breakdown-balance-at-period-end-heading[__${stat.index}__]"
+                                                    th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')}">
+                                            </strong>
+                                        </div>
+                                        <div class="mobile-only-label column-fifth">
+                                            <strong th:id="loans-table-breakdown-balance-at-period-end-mobile-heading[__${stat.index}__]"
+                                                    th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodEndOn, 'd MMMM yyyy')} + ' in £'"></strong>
+                                        </div>
+                                        <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
+                                            <strong th:id="loans-table-breakdown-balance-at-period-end[__${stat.index}__]"
+                                                    th:text="${loan.breakdown.balanceAtPeriodEnd}">
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                </th:block>
                 </tbody>
             </table>
 
-            <form id="data-submission-form" th:action="@{''}" class="form currency-included-within-inputs govuk-body" th:object="${addOrRemoveLoans}" method="post">
+            <form id="data-submission-form" th:action="@{''}" class="form currency-included-within-inputs govuk-body"
+                  th:object="${addOrRemoveLoans}" method="post">
+
+                <input th:field="*{nextAccount.periodStartOn}" type="hidden">
+                <input th:field="*{nextAccount.periodEndOn}" type="hidden">
 
                 <div th:each="loan, stat : ${addOrRemoveLoans.existingLoans}">
-                    <input type="hidden" th:field="${addOrRemoveLoans.existingLoans[__${stat.index}__].directorName}"
+                    <input type="hidden" th:field="*{existingLoans[__${stat.index}__].directorName}"
                            th:id="existingLoans[__${stat.index}__].directorName"/>
-                    <input type="hidden" th:field="${addOrRemoveLoans.existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd}"
+                    <input type="hidden"
+                           th:field="*{existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd}"
                            th:id="existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd"/>
-                    <input type="hidden" th:field="${addOrRemoveLoans.existingLoans[__${stat.index}__].id}"
+                    <input type="hidden" th:field="*{existingLoans[__${stat.index}__].id}"
                            th:id="existingLoans[__${stat.index}__].id"/>
                 </div>
 
-                <div th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}" class="govuk-form-group govuk-form-group-block-important">
-                      <div>
-                            <label id="loanToAdd-director-name-label"
-                                   class="govuk-label govuk-label--m"
-                                   for="loanToAdd-director-name">
-                              Name of director receiving advance or credit
-                            </label>
+                <div th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}"
+                     class="govuk-form-group govuk-form-group-block-important">
 
-                            <textarea class="govuk-textarea"
-                                      id="loanToAdd-director-name"
-                                      th:field="*{loanToAdd.directorName}"
-                                      type="text" rows="1">
-                            </textarea>
-                      </div>
-                      <div>
-                          <label id="loanToAdd-description-label"
-                                 class="govuk-label govuk-label--m"
-                                 for="loanToAdd-description">
-                              Description of the loan
-                          </label>
+                    <div th:classappend="*{#fields.hasErrors('loanToAdd.directorName')} ? 'govuk-form-group--error' : ''">
 
-                          <span id="loanToAdd-description-help-text" class="govuk-hint">
+                        <span class="govuk-error-message"
+                              id="directorToAdd-errorId"
+                              th:if="*{#fields.hasErrors('loanToAdd')}"
+                              th:each="e : *{#fields.errors('loanToAdd')}" th:text="${e}">
+                        </span>
+
+                        <label id="loanToAdd-director-name-label"
+                               class="govuk-label govuk-label--m"
+                               for="loanToAdd-director-name">
+                            Name of director receiving advance or credit
+                        </label>
+
+                        <span class="govuk-error-message"
+                              id="loanToAdd.directorName-errorId"
+                              th:if="*{#fields.hasErrors('loanToAdd.directorName')}"
+                              th:each="e : *{#fields.errors('loanToAdd.directorName')}" th:text="${e}">
+                                </span>
+
+                        <textarea class="govuk-textarea"
+                                  id="loanToAdd-director-name"
+                                  th:field="*{loanToAdd.directorName}"
+                                  type="text" rows="1">
+                                </textarea>
+                    </div>
+
+                    <div>
+                        <label id="loanToAdd-description-label"
+                               class="govuk-label govuk-label--m"
+                               for="loanToAdd-description">
+                            Description of the loan
+                        </label>
+
+                        <span id="loanToAdd-description-help-text" class="govuk-hint">
                               A brief description of the loan, for example, an advance or loan for a car.
-                          </span>
+                                </span>
 
-                          <textarea class="govuk-textarea"
-                                    id="loanToAdd-description"
-                                    th:field="*{loanToAdd.description}"
-                                    type="text" rows="5">
-                          </textarea>
-                      </div>
+                        <textarea class="govuk-textarea"
+                                  id="loanToAdd-description"
+                                  th:field="*{loanToAdd.description}"
+                                  type="text" rows="5">
+                                 </textarea>
+                    </div>
 
                     <label id="loanToAdd-breakdown-label" class="govuk-label govuk-label--m">
                         Breakdown of the loan
                     </label>
 
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half" id="loanToAdd-breakdown-balance-at-period-heading"
-                            th:text = "'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')}">
+                    <div class=" govuk-grid-row">
+                        <div class="govuk-grid-column-one-half"
+                             id="loanToAdd-breakdown-balance-at-period-heading"
+                             th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')}">
                         </div>
                         <div class="govuk-grid-column-one-half govuk-!-display-block">
                             <div th:replace="fragments/numberInput :: numberInput (
                                     id = 'loanToAdd.breakdown.balanceAtPeriodStart',
-                                    text = 'Balance at ' + ${#temporals.format(nextAccounts.periodStartOn, 'd MMMM yyyy')} + ' in £',
+                                    text = 'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')} + ' in £',
                                     class = 'govuk-input current current-fixed-assets-add',
                                     )">
                             </div>
                         </div>
                     </div>
 
-                    <div class="govuk-grid-row column-flex">
-                        <div class="govuk-grid-column-one-half" id="loanToAdd-breakdown-advances-credits-made-heading">
+                    <div class=" govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half"
+                             id="loanToAdd-breakdown-advances-credits-made-heading">
                             Advances and credits made
                         </div>
                         <div class="govuk-grid-column-one-half column-flex govuk-!-display-block">
-                            <div  th:replace="fragments/numberInput :: numberInput (
+                            <div th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.advancesCreditsMade',
                                       text = 'Advances and credits made in £',
                                       class= 'govuk-input',
@@ -237,8 +269,9 @@
                         </div>
                     </div>
 
-                    <div class="govuk-grid-row column-flex">
-                        <div class="govuk-grid-column-one-half" id="loanToAdd-breakdown-advances-credits-repaid-heading">
+                    <div class=" govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half"
+                             id="loanToAdd-breakdown-advances-credits-repaid-heading">
                             Advances and credits repaid
                         </div>
                         <div class="govuk-grid-column-one-half column-flex govuk-!-display-block">
@@ -251,14 +284,15 @@
                         </div>
                     </div>
 
-                    <div class="govuk-grid-row column-flex">
-                        <div class="govuk-grid-column-one-half" id="loanToAdd-breakdown-balance-at-period-end-heading"
-                             th:text = "'Balance at ' + ${#temporals.format(nextAccounts.periodEndOn, 'd MMMM yyyy')}">
+                    <div class=" govuk-grid-row column-flex">
+                        <div class="govuk-grid-column-one-half"
+                             id="loanToAdd-breakdown-balance-at-period-end-heading"
+                             th:text="'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')}">
                         </div>
                         <div class="govuk-grid-column-one-half column-flex govuk-!-display-block">
                             <div th:replace="fragments/numberInput :: numberInput (
                                       id = 'loanToAdd.breakdown.balanceAtPeriodEnd',
-                                      text = 'Balance at ' + ${#temporals.format(nextAccounts.periodEndOn, 'd MMMM yyyy')} + ' in £',
+                                      text = 'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')} + ' in £',
                                       class= 'govuk-input',
                                       )">
                             </div>
@@ -272,16 +306,17 @@
                            th:name="submit"
                            type="submit" role="button" value="Save and continue"/>
 
-                    <th:block th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}">
+                    <th:block
+                            th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}">
                         <input id="add-loan-button" class="secondary-button piwik-event"
                                th:name="add"
                                data-event-id="Loans to directors - add loan"
                                role="button" type="submit" value="Add another loan"/>
                     </th:block>
                 </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 </div>
 </body>
 </html>

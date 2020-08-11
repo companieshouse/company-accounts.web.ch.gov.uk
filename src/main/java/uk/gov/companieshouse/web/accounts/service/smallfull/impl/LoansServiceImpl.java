@@ -18,6 +18,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,9 @@ public class LoansServiceImpl implements LoanService {
 
     @Autowired
     private ValidationContext validationContext;
+
+    @Autowired
+    private LoanValidator loanValidator;
 
     private static final UriTemplate LOANS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans");
@@ -68,6 +72,12 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException {
 
+        List<ValidationError> validationErrors = loanValidator.validateDirectorToAdd(loanToAdd);
+
+        if(!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
+
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
@@ -76,13 +86,16 @@ public class LoansServiceImpl implements LoanService {
 
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();
+            if (apiResponse.hasErrors()) {
+                    validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
+            }
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
 
-        return null;
+        return validationErrors;
     }
 
     @Override
