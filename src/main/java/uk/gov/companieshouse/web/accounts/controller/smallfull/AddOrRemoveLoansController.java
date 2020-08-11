@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
-import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
@@ -48,22 +47,16 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
     @Autowired
     private ApiClientService apiClientService;
 
-    private AccountingPeriodApi nextAccounts;
-
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans");
 
     private static final String ADD_OR_REMOVE_LOANS = "addOrRemoveLoans";
-
-    private static final String NEXT_ACCOUNTS = "nextAccount";
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-
 
     @GetMapping
     public String getAddOrRemoveLoans(@PathVariable String companyNumber,
@@ -78,8 +71,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
         ApiClient apiClient = apiClientService.getApiClient();
         try {
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
-
-
 
             addOrRemoveLoans.setExistingLoans(
                     loanService.getAllLoans(transactionId, companyAccountsId));

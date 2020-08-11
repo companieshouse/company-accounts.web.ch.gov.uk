@@ -72,17 +72,17 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException {
 
-        ApiClient apiClient = apiClientService.getApiClient();
-
-        String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
-
-        LoanApi loanApi = loanTransformer.getLoanApi(loanToAdd);
-
         List<ValidationError> validationErrors = loanValidator.validateDirectorToAdd(loanToAdd);
 
         if(!validationErrors.isEmpty()) {
             return validationErrors;
         }
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
+
+        LoanApi loanApi = loanTransformer.getLoanApi(loanToAdd);
 
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();

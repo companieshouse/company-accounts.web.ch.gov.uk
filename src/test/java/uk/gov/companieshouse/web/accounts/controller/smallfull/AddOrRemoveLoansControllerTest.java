@@ -26,7 +26,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -141,7 +140,7 @@ class AddOrRemoveLoansControllerTest {
 
     @Test
     @DisplayName("Post submit loan - throws service exception")
-    void postDirectorSubmitRequestThrowsServiceException() throws Exception {
+    void postLoanSubmitRequestThrowsServiceException() throws Exception {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
@@ -169,7 +168,7 @@ class AddOrRemoveLoansControllerTest {
 
     @Test
     @DisplayName("Post add loan - success")
-    void postDirectorAddRequestSuccess() throws Exception {
+    void postLoanAddRequestSuccess() throws Exception {
 
         when(loanService.createLoan(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
