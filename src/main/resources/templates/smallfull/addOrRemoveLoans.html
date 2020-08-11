@@ -173,7 +173,7 @@
                            th:id="existingLoans[__${stat.index}__].id"/>
                 </div>
 
-                <div class="govuk-form-group govuk-form-group-block-important">
+                <div th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}" class="govuk-form-group govuk-form-group-block-important">
                       <div>
                             <label id="loanToAdd-director-name-label"
                                    class="govuk-label govuk-label--m"
@@ -271,10 +271,13 @@
                            data-event-id="Loans to directors - save and continue"
                            th:name="submit"
                            type="submit" role="button" value="Save and continue"/>
-                    <input id="add-loan-button" class="secondary-button piwik-event"
-                           th:name="add"
-                           data-event-id="Loans to directors - add loan"
-                           role="button" type="submit" value="Add another loan"/>
+
+                    <th:block th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}">
+                        <input id="add-loan-button" class="secondary-button piwik-event"
+                               th:name="add"
+                               data-event-id="Loans to directors - add loan"
+                               role="button" type="submit" value="Add another loan"/>
+                    </th:block>
                 </div>
         </form>
     </div>
