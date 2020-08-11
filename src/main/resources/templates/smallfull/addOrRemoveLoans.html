@@ -217,7 +217,7 @@
                                 </textarea>
                     </div>
 
-                    <div>
+                    <div th:classappend="*{#fields.hasErrors('loanToAdd.description')} ? 'govuk-form-group--error' : ''">
                         <label id="loanToAdd-description-label"
                                class="govuk-label govuk-label--m"
                                for="loanToAdd-description">
@@ -226,11 +226,18 @@
 
                         <span id="loanToAdd-description-help-text" class="govuk-hint">
                               A brief description of the loan, for example, an advance or loan for a car.
-                                </span>
+                        </span>
+
+                        <span class="govuk-error-message"
+                              id="loanToAdd.description-errorId"
+                              th:if="*{#fields.hasErrors('loanToAdd.description')}"
+                              th:each="e : *{#fields.errors('loanToAdd.description')}" th:text="${e}">
+                        </span>
 
                         <textarea class="govuk-textarea"
                                   id="loanToAdd-description"
                                   th:field="*{loanToAdd.description}"
+                                  th:errorclass="govuk-input--error"
                                   type="text" rows="5">
                                  </textarea>
                     </div>
