@@ -24,7 +24,7 @@ class LoanValidatorTest {
     private static final String LOAN_TO_ADD = "loanToAdd";
 
     private static final String DIRECTOR_NAME = LOAN_TO_ADD + ".directorName";
-    private static final String NAME_NOT_PRESENT = "validation.element.missing.loan.director_name";
+    private static final String NAME_NOT_PRESENT = "validation.element.missing.loanToAdd.directorName";
 
     @Test
     @DisplayName("Validate loan to add - success")

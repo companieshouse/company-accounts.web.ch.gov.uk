@@ -192,11 +192,11 @@
 
                     <span class="govuk-error-message"
                           id="directorToAdd-errorId"
-                          th:if="${#fields.hasErrors('loanToAdd')}"
-                          th:each="e : ${#fields.errors('loanToAdd')}" th:text="${e}">
+                          th:if="*{#fields.hasErrors('loanToAdd')}"
+                          th:each="e : *{#fields.errors('loanToAdd')}" th:text="${e}">
                     </span>
                     <div class="govuk-form-group govuk-form-group-block-important">
-                        <div>
+                        <div th:classappend="*{#fields.hasErrors('loanToAdd.directorName')} ? 'govuk-form-group--error' : ''">
                             <label id="loanToAdd-director-name-label"
                                    class="govuk-label govuk-label--m"
                                    for="loanToAdd-director-name">
@@ -205,8 +205,8 @@
 
                             <span class="govuk-error-message"
                                   id="loanToAdd.directorName-errorId"
-                                  th:if="${#fields.hasErrors('loanToAdd.directorName')}"
-                                  th:each="e : ${#fields.errors('loanToAdd.directorName')}" th:text="${e}">
+                                  th:if="*{#fields.hasErrors('loanToAdd.directorName')}"
+                                  th:each="e : *{#fields.errors('loanToAdd.directorName')}" th:text="${e}">
                         </span>
 
                             <textarea class="govuk-textarea"
