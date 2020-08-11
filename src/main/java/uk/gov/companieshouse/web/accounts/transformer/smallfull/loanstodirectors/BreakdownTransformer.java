@@ -13,11 +13,13 @@ public class BreakdownTransformer {
 
         LoanBreakdownApi loanBreakdownApi = new LoanBreakdownApi();
 
-        loanBreakdownApi.setAdvancesCreditsMade(loanToAdd.getBreakdown().getAdvancesCreditsMade());
-        loanBreakdownApi.setAdvancesCreditsRepaid(loanToAdd.getBreakdown().getAdvancesCreditsRepaid());
-        loanBreakdownApi.setBalanceAtPeriodStart(loanToAdd.getBreakdown().getBalanceAtPeriodStart());
-        loanBreakdownApi.setBalanceAtPeriodEnd(loanToAdd.getBreakdown().getBalanceAtPeriodEnd());
+        if(loanToAdd.getBreakdown() != null) {
 
+            loanBreakdownApi.setAdvancesCreditsMade(loanToAdd.getBreakdown().getAdvancesCreditsMade());
+            loanBreakdownApi.setAdvancesCreditsRepaid(loanToAdd.getBreakdown().getAdvancesCreditsRepaid());
+            loanBreakdownApi.setBalanceAtPeriodStart(loanToAdd.getBreakdown().getBalanceAtPeriodStart());
+            loanBreakdownApi.setBalanceAtPeriodEnd(loanToAdd.getBreakdown().getBalanceAtPeriodEnd());
+        }
         return loanBreakdownApi;
     }
 
@@ -25,11 +27,13 @@ public class BreakdownTransformer {
 
         Breakdown breakdown = new Breakdown();
 
-        breakdown.setAdvancesCreditsMade(loanApi.getBreakdown().getAdvancesCreditsMade());
-        breakdown.setAdvancesCreditsRepaid(loanApi.getBreakdown().getAdvancesCreditsRepaid());
-        breakdown.setBalanceAtPeriodStart(loanApi.getBreakdown().getBalanceAtPeriodStart());
-        breakdown.setBalanceAtPeriodEnd(loanApi.getBreakdown().getBalanceAtPeriodEnd());
+        if(loanApi.getBreakdown() != null) {
 
+            breakdown.setAdvancesCreditsMade(loanApi.getBreakdown().getAdvancesCreditsMade());
+            breakdown.setAdvancesCreditsRepaid(loanApi.getBreakdown().getAdvancesCreditsRepaid());
+            breakdown.setBalanceAtPeriodStart(loanApi.getBreakdown().getBalanceAtPeriodStart());
+            breakdown.setBalanceAtPeriodEnd(loanApi.getBreakdown().getBalanceAtPeriodEnd());
+        }
         return breakdown;
     }
 }

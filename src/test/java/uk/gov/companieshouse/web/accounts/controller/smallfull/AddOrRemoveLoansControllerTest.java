@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,18 +13,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
-
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,7 +58,22 @@ class AddOrRemoveLoansControllerTest {
 
     @Mock
     private NavigatorService navigatorService;
+    
+    @Mock
+    private ApiClient apiClient;
+    
+    @Mock
+    private ApiClientService apiClientService;
+    
+    @Mock
+    private SmallFullService smallFullService;
+    
+    @Mock
+    private SmallFullApi smallFullApi;
 
+    @Mock
+    private List<ValidationError> validationErrors;
+    
     @InjectMocks
     private AddOrRemoveLoansController controller;
 
@@ -88,6 +110,8 @@ class AddOrRemoveLoansControllerTest {
     @DisplayName("Get add or remove loans view - success path")
     void getRequestSuccess() throws Exception {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Loan[0]);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_LOAN_PATH))
@@ -104,6 +128,8 @@ class AddOrRemoveLoansControllerTest {
     @DisplayName("Get add or remove loans view - service exception")
     void getRequestServiceException() throws Exception {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_LOAN_PATH))
@@ -112,14 +138,42 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
-    @DisplayName("Post add director - throws service exception")
-    void postDirectorAddRequestThrowsServiceException() throws Exception {
+    @DisplayName("Post submit - throws service exception")
+    void postSubmitRequestThrowsServiceException() throws Exception {
 
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Post add loan - success")
+    void postLoanAddRequestSuccess() throws Exception {
+
+        when(loanService.createLoan(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                .thenReturn(validationErrors);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_LOAN_PATH));
+    }
+
+    @Test
+    @DisplayName("Post add loan - throws service exception")
+    void postLoanAddRequestThrowsServiceException() throws Exception {
+
+        when(loanService.createLoan(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                .thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
