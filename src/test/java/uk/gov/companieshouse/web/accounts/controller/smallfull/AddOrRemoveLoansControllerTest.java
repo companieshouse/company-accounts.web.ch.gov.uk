@@ -151,7 +151,7 @@ class AddOrRemoveLoansControllerTest {
 
     @Test
     @DisplayName("Post add loan - throws validation errors")
-    void postDirectorAddRequestThrowsValidationErrors() throws Exception {
+    void postLoanAddRequestThrowsValidationErrors() throws Exception {
 
 
         when(loanService.createLoan(
