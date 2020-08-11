@@ -26,12 +26,17 @@ class LoanValidatorTest {
     private static final String DIRECTOR_NAME = LOAN_TO_ADD + ".directorName";
     private static final String NAME_NOT_PRESENT = "validation.element.missing.loanToAdd.directorName";
 
+
+    private static final String DESCRIPTION = LOAN_TO_ADD + ".description";
+    private static final String DESCRIPTION_NOT_PRESENT = "validation.element.missing.loanToAdd.description";
+
     @Test
     @DisplayName("Validate loan to add - success")
     void validateLoanToAddSuccess() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
+        loanToAdd.setDescription(DESCRIPTION);
 
         List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
 
@@ -43,6 +48,7 @@ class LoanValidatorTest {
     void validateLoanToAddMissingDirectorName() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDescription(DESCRIPTION);
 
         List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
 
@@ -50,5 +56,20 @@ class LoanValidatorTest {
         assertEquals(1, validationErrors.size());
         assertEquals(DIRECTOR_NAME, validationErrors.get(0).getFieldPath());
         assertEquals(NAME_NOT_PRESENT, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - missing description")
+    void validateLoanToAddMissingDescription() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDirectorName(DIRECTOR_NAME);
+
+        List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(DESCRIPTION, validationErrors.get(0).getFieldPath());
+        assertEquals(DESCRIPTION_NOT_PRESENT, validationErrors.get(0).getMessageKey());
     }
 }

@@ -7,6 +7,7 @@ public class LoanToAdd {
     @ValidationMapping("$.loan.director_name")
     private String directorName;
 
+    @ValidationMapping("$.loan.description")
     private String description;
 
     private Breakdown breakdown;
