@@ -112,6 +112,10 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
+
         try {
 
             List<ValidationError> validationErrors = loanService.createLoan(transactionId, companyAccountsId, addOrRemoveLoans.getLoanToAdd());
