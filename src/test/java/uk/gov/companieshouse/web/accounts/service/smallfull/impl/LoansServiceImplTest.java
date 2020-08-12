@@ -296,8 +296,6 @@ public class LoansServiceImplTest {
     @DisplayName("POST - submit loan - success")
     void submitAddOrRemoveLoanSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
-        ValidationError validationError = new ValidationError();
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd())).thenReturn(loanApi);
