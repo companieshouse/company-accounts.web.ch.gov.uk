@@ -2,6 +2,8 @@ package uk.gov.companieshouse.web.accounts.validation.smallfull;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -18,6 +20,12 @@ public class LoanValidator {
 
     private static final String DESCRIPTION = LOAN_TO_ADD + ".description";
     private static final String DESCRIPTION_NOT_PRESENT = "validation.element.missing.loanToAdd.description";
+
+    private static final String BALANCE_AT_START = LOAN_TO_ADD + ".breakdown.balanceAtPeriodStart";
+    private static final String BAS_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodStart";
+
+    private static final String BALANCE_AT_END = LOAN_TO_ADD + ".breakdown.balanceAtPeriodEnd";
+    private static final String BAE_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodEnd";
 
     public List<ValidationError> validateDirectorToAdd(LoanToAdd loanToAdd) {
 
@@ -39,6 +47,30 @@ public class LoanValidator {
             validationErrors.add(error);
         }
 
+        if (loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(BALANCE_AT_START);
+            error.setMessageKey(BAS_NOT_PRESENT);
+            validationErrors.add(error);
+        }
+
+        if (loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(BALANCE_AT_END);
+            error.setMessageKey(BAE_NOT_PRESENT);
+            validationErrors.add(error);
+        }
+
         return validationErrors;
+    }
+
+    public boolean isEmptyResource(LoanToAdd loanToAdd) {
+
+        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) &&
+                StringUtils.isBlank(loanToAdd.getDescription()) &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
     }
 }
