@@ -16,6 +16,7 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
@@ -26,6 +27,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -237,6 +239,50 @@ class AddOrRemoveLoansControllerTest {
                 .param("loanToAdd.directorName", "name"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post add or remove loan view - success")
+    void postRequestSubmitAddOrRemoveLoanSuccess() throws Exception {
+
+        when(loanService.submitAddOrRemoveLoans(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class))).thenReturn(new ArrayList<>());
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Post submit loan - throws service exception")
+    void postLoanSubmitRequestThrowsServiceException() throws Exception {
+
+        when(loanService.submitAddOrRemoveLoans(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
+                .thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post submit loan - throws validation errors")
+    void postLoanSubmitRequestThrowsValidationErrors() throws Exception {
+
+        when(loanService.submitAddOrRemoveLoans(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
     }
 
     @Test
