@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -159,21 +160,6 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
-    @DisplayName("Post add loan - throws validation errors")
-    void postLoanAddRequestThrowsValidationErrors() throws Exception {
-
-        when(loanService.createLoan(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
-                .thenReturn(validationErrors);
-
-        when(validationErrors.isEmpty()).thenReturn(false);
-
-        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
-                .param("loanToAdd.directorName", "name"))
-                .andExpect(status().isOk())
-                .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
-    }
-
     @DisplayName("Delete loan - success path")
     void deleteLoanSuccess() throws Exception {
 
@@ -209,6 +195,34 @@ class AddOrRemoveLoansControllerTest {
                 .param("loanToAdd.directorName", "name"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_LOAN_PATH));
+    }
+
+    @Test
+    @DisplayName("Post add loan - throws binding result errors")
+    void postLoanAddRequestThrowsBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.breakdown.balanceAtPeriodStart", "invalid"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
+
+        verify(loanService, never()).createLoan(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class));
+    }
+
+    @Test
+    @DisplayName("Post add loan - throws validation errors")
+    void postLoanAddRequestThrowsValidationErrors() throws Exception {
+
+        when(loanService.createLoan(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
+                .param("loanToAdd.directorName", "name"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
     }
 
     @Test
