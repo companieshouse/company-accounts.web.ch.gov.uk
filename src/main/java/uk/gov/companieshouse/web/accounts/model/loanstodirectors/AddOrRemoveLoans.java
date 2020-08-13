@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.model.loanstodirectors;
 
-import uk.gov.companieshouse.api.model.accounts.CompanyAccountsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
