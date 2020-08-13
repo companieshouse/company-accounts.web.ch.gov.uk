@@ -3,13 +3,9 @@ package uk.gov.companieshouse.web.accounts.validation.smallfull;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
-import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
-import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Component
@@ -78,7 +74,7 @@ public class LoanValidator {
                 loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
     }
 
-    public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
+    public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 

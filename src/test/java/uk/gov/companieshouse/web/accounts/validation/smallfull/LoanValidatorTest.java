@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Breakdown;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -35,6 +36,8 @@ class LoanValidatorTest {
 
     private static final String BALANCE_AT_END = LOAN_TO_ADD + ".breakdown.balanceAtPeriodEnd";
     private static final String BAE_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodEnd";
+
+    private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
     @Test
     @DisplayName("Validate loan to add - success")
@@ -139,6 +142,36 @@ class LoanValidatorTest {
         boolean isEmpty = validator.isEmptyResource(loanToAdd);
 
         assertFalse(isEmpty);
+    }
+
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, no fields populated")
+    void validateAtLeastOneLoanNoFieldsFilledIn() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(LOAN_TO_ADD, validationErrors.get(0).getFieldPath());
+        assertEquals(AT_LEAST_ONE_LOAN_REQUIRED, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, a field populated")
+    void validateAtLeastOneLoanFieldsFilledIn() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDirectorName(DIRECTOR_NAME);
+
+        addOrRemoveLoans.setLoanToAdd(loanToAdd);
+        
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
     }
 
     private Breakdown createBreakdown(boolean includePeriodStart, boolean includePeriodEnd) {
