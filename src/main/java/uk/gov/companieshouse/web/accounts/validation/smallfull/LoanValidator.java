@@ -31,7 +31,7 @@ public class LoanValidator {
 
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
-    public List<ValidationError> validateDirectorToAdd(LoanToAdd loanToAdd) {
+    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
@@ -77,7 +77,7 @@ public class LoanValidator {
                 loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
     }
-    
+
     public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
 
         List<ValidationError> validationErrors = new ArrayList<>();
@@ -88,7 +88,7 @@ public class LoanValidator {
             error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
             validationErrors.add(error);
         }
-        
+
         return validationErrors;
     }
 }

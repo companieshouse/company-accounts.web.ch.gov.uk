@@ -70,7 +70,7 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException {
 
-        List<ValidationError> validationErrors = loanValidator.validateDirectorToAdd(loanToAdd);
+        List<ValidationError> validationErrors = loanValidator.validateLoanToAdd(loanToAdd);
 
         if(!validationErrors.isEmpty()) {
             return validationErrors;

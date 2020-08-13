@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.loanstodirectors;
 
+import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
+
 public class Breakdown {
 
     private Long advancesCreditsMade;
@@ -8,6 +10,7 @@ public class Breakdown {
 
     private Long balanceAtPeriodStart;
 
+    @ValidationMapping("$.loan.breakdown.balance_at_period_end")
     private Long balanceAtPeriodEnd;
 
     public Long getAdvancesCreditsMade() {
