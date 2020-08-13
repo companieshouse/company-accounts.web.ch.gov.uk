@@ -29,6 +29,8 @@ public class SmallFullServiceImpl implements SmallFullService {
     private static final UriTemplate SMALL_FULL_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full");
 
+    private static final String SMALL_FULL_INVALID_RESOURCE_URI = "Invalid URI for small full resource";
+
     /**
      * {@inheritDoc}
      */
@@ -46,7 +48,7 @@ public class SmallFullServiceImpl implements SmallFullService {
             throw new ServiceException("Error creating small full accounts", e);
         } catch (URIValidationException e) {
 
-            throw new ServiceException("Invalid URI for small full resource", e);
+            throw new ServiceException(SMALL_FULL_INVALID_RESOURCE_URI, e);
         }
     }
 
@@ -75,7 +77,7 @@ public class SmallFullServiceImpl implements SmallFullService {
             throw new ServiceException("Error updating small full accounts", e);
         } catch (URIValidationException e) {
 
-            throw new ServiceException("Invalid URI for small full resource", e);
+            throw new ServiceException(SMALL_FULL_INVALID_RESOURCE_URI, e);
         }
     }
 
@@ -95,7 +97,7 @@ public class SmallFullServiceImpl implements SmallFullService {
             throw new ServiceException("Error retrieving small full accounts", e);
         } catch (URIValidationException e) {
 
-            throw new ServiceException("Invalid URI for small full resource", e);
+            throw new ServiceException(SMALL_FULL_INVALID_RESOURCE_URI, e);
         }
     }
 
