@@ -25,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.AccountsReferenceDate;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.company.impl.CompanyServiceImpl;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,9 +36,6 @@ import java.time.LocalDate;
 @PreviousController(AccountsReferenceDateQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/accounts-reference-date")
 public class AccountsReferenceDateController extends BaseController implements ConditionalController {
-
-    @Autowired
-    private NavigatorService navigatorService;
 
     @Autowired
     private CompanyServiceImpl companyService;
