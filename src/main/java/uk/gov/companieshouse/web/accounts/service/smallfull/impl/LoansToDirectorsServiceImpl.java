@@ -37,9 +37,6 @@ public class LoansToDirectorsServiceImpl implements LoansToDirectorsService {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        LoansToDirectorsApi loansToDirectors = getLoansToDirectors(apiClient, transactionId, companyAccountsId);
-
-
         String uri = LOANS_TO_DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {

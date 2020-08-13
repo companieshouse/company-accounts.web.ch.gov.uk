@@ -15,21 +15,19 @@ public class LoanValidator {
 
     private static final String DIRECTOR_NAME = LOAN_TO_ADD + ".directorName";
     private static final String NAME_NOT_PRESENT = "validation.element.missing.loanToAdd.directorName";
+
     private static final String DESCRIPTION = LOAN_TO_ADD + ".description";
     private static final String DESCRIPTION_NOT_PRESENT = "validation.element.missing.loanToAdd.description";
-    private static final String BREAKDOWN_BALANCE_AT_PERIOD_END = LOAN_TO_ADD + ".breakdown.balanceAtPeriodEnd";
-    private static final String BREAKDOWN_BALANCE_AT_PERIOD_END_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodEnd";
 
-    public List<ValidationError> validateLoan(LoanToAdd loanToAdd) {
+    private static final String BALANCE_AT_START = LOAN_TO_ADD + ".breakdown.balanceAtPeriodStart";
+    private static final String BAS_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodStart";
+
+    private static final String BALANCE_AT_END = LOAN_TO_ADD + ".breakdown.balanceAtPeriodEnd";
+    private static final String BAE_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodEnd";
+
+    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd) {
+
         List<ValidationError> validationErrors = new ArrayList<>();
-        
-        validateDirectorToAdd(validationErrors, loanToAdd);
-        validateBreakdown(validationErrors, loanToAdd);
-        
-        return validationErrors;
-    }
-
-    private List<ValidationError> validateDirectorToAdd(List<ValidationError> validationErrors, LoanToAdd loanToAdd) {
 
         if (StringUtils.isBlank(loanToAdd.getDirectorName())) {
 
@@ -47,20 +45,30 @@ public class LoanValidator {
             validationErrors.add(error);
         }
 
-        return validationErrors;
-    }
-    
-    private List<ValidationError> validateBreakdown(List<ValidationError> validationErrors,
-            LoanToAdd loanToAdd) {
+        if (loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(BALANCE_AT_START);
+            error.setMessageKey(BAS_NOT_PRESENT);
+            validationErrors.add(error);
+        }
 
         if (loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null) {
 
             ValidationError error = new ValidationError();
-            error.setFieldPath(BREAKDOWN_BALANCE_AT_PERIOD_END);
-            error.setMessageKey(BREAKDOWN_BALANCE_AT_PERIOD_END_NOT_PRESENT);
+            error.setFieldPath(BALANCE_AT_END);
+            error.setMessageKey(BAE_NOT_PRESENT);
             validationErrors.add(error);
         }
 
         return validationErrors;
+    }
+
+    public boolean isEmptyResource(LoanToAdd loanToAdd) {
+
+        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) &&
+                StringUtils.isBlank(loanToAdd.getDescription()) &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
     }
 }

@@ -21,6 +21,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoanApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors.LoanTransformer;
@@ -39,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -87,6 +89,9 @@ public class LoansServiceImplTest {
 
     @Mock
     private LoanToAdd loanToAdd;
+
+    @Mock
+    private AddOrRemoveLoans addOrRemoveLoans;
 
     @Mock
     private LoanGetAll loanGetAll;
@@ -233,7 +238,7 @@ public class LoansServiceImplTest {
     void createLoanValidation()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
-        when(loanValidator.validateLoan(loanToAdd)).thenReturn(new ArrayList<>());
+        when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -264,13 +269,48 @@ public class LoansServiceImplTest {
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
-        when(loanValidator.validateLoan(loanToAdd)).thenReturn(nameValidationError);
+        when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd);
 
         assertEquals(nameValidationError, validationErrors);
 
         verify(apiClientService, never()).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - submit loan - resource is empty")
+    void submitAddOrRemoveLoanEmptyResource() throws ServiceException {
+
+        ValidationError validationError = new ValidationError();
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(true);
+
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(apiClientService, never()).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - submit loan - success")
+    void submitAddOrRemoveLoanSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd())).thenReturn(loanApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
+        when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
+        when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
+        when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
+
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(false);
+
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(apiClientService, times(1)).getApiClient();
     }
 
     @Test

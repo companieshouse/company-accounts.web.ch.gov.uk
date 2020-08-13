@@ -87,7 +87,7 @@ public class LoansToDirectorsServiceImplTest {
     private LoansToDirectorsDelete loansToDirectorsDelete;
 
     @InjectMocks
-    private LoansToDirectorsService loansToDirectorsService = new LoansToDirectorsServiceImpl();
+    private final LoansToDirectorsService loansToDirectorsService = new LoansToDirectorsServiceImpl();
 
     private static final String TRANSACTION_ID = "transactionId";
 
@@ -170,9 +170,6 @@ public class LoansToDirectorsServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
-        when(loansToDirectorsResourceHandler.get(LOANS_TO_DIRECTORS_URI)).thenReturn(loansToDirectorsGet);
-        when(loansToDirectorsGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
         when(loansToDirectorsResourceHandler.create(eq(LOANS_TO_DIRECTORS_URI), any(LoansToDirectorsApi.class))).thenReturn(loansToDirectorsCreate);
 
         assertAll(() -> loansToDirectorsService.createLoansToDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -188,9 +185,6 @@ public class LoansToDirectorsServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
-        when(loansToDirectorsResourceHandler.get(LOANS_TO_DIRECTORS_URI)).thenReturn(loansToDirectorsGet);
-        when(loansToDirectorsGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
         when(loansToDirectorsResourceHandler.create(eq(LOANS_TO_DIRECTORS_URI), any(LoansToDirectorsApi.class))).thenReturn(loansToDirectorsCreate);
         when(loansToDirectorsCreate.execute()).thenThrow(apiErrorResponseException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
@@ -206,9 +200,6 @@ public class LoansToDirectorsServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
-        when(loansToDirectorsResourceHandler.get(LOANS_TO_DIRECTORS_URI)).thenReturn(loansToDirectorsGet);
-        when(loansToDirectorsGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
         when(loansToDirectorsResourceHandler.create(eq(LOANS_TO_DIRECTORS_URI), any(LoansToDirectorsApi.class))).thenReturn(loansToDirectorsCreate);
         when(loansToDirectorsCreate.execute()).thenThrow(uriValidationException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);

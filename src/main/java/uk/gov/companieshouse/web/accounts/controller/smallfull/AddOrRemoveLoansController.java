@@ -94,8 +94,24 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
     @PostMapping(params = "submit")
     public String submitAddOrRemoveLoans(@PathVariable String companyNumber,
                                          @PathVariable String transactionId,
-                                         @PathVariable String companyAccountsId
+                                         @PathVariable String companyAccountsId,
+                                         @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
+                                         BindingResult bindingResult
     ) {
+
+        try {
+            List<ValidationError> validationErrors = loanService.submitAddOrRemoveLoans(transactionId, companyAccountsId, addOrRemoveLoans);
+
+            if(!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,

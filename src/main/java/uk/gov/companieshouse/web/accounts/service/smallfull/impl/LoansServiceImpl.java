@@ -72,7 +72,7 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException {
 
-        List<ValidationError> validationErrors = loanValidator.validateLoan(loanToAdd);
+        List<ValidationError> validationErrors = loanValidator.validateLoanToAdd(loanToAdd);
 
         if(!validationErrors.isEmpty()) {
             return validationErrors;
@@ -87,7 +87,7 @@ public class LoansServiceImpl implements LoanService {
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();
             if (apiResponse.hasErrors()) {
-                    validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
+                validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
             }
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
@@ -117,6 +117,14 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> submitAddOrRemoveLoans(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
 
-        return new ArrayList<>();
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        boolean isEmptyResource = loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd());
+        if (!isEmptyResource) {
+
+            validationErrors = createLoan(transactionId, companyAccountsId, addOrRemoveLoans.getLoanToAdd());
+        }
+
+        return validationErrors;
     }
 }
