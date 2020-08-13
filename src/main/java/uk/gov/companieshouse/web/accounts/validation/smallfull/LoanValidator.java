@@ -1,14 +1,16 @@
 package uk.gov.companieshouse.web.accounts.validation.smallfull;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class LoanValidator {
@@ -26,6 +28,8 @@ public class LoanValidator {
 
     private static final String BALANCE_AT_END = LOAN_TO_ADD + ".breakdown.balanceAtPeriodEnd";
     private static final String BAE_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodEnd";
+
+    private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
     public List<ValidationError> validateDirectorToAdd(LoanToAdd loanToAdd) {
 
@@ -72,5 +76,19 @@ public class LoanValidator {
                 StringUtils.isBlank(loanToAdd.getDescription()) &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
+    }
+    
+    public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        if (addOrRemoveLoans.getExistingLoans() == null && isEmptyResource(addOrRemoveLoans.getLoanToAdd())) {
+            ValidationError error = new ValidationError();
+            error.setFieldPath(LOAN_TO_ADD);
+            error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
+            validationErrors.add(error);
+        }
+        
+        return validationErrors;
     }
 }

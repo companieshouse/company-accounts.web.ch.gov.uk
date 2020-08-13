@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -20,9 +21,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class LoansServiceImpl implements LoanService {
 
@@ -37,7 +35,7 @@ public class LoansServiceImpl implements LoanService {
 
     @Autowired
     private ValidationContext validationContext;
-
+ 
     @Autowired
     private LoanValidator loanValidator;
 
@@ -117,12 +115,15 @@ public class LoansServiceImpl implements LoanService {
     @Override
     public List<ValidationError> submitAddOrRemoveLoans(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
 
-        List<ValidationError> validationErrors = new ArrayList<>();
+        LoanToAdd loanToAdd = addOrRemoveLoans.getLoanToAdd();
 
-        boolean isEmptyResource = loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd());
-        if (!isEmptyResource) {
-
-            validationErrors = createLoan(transactionId, companyAccountsId, addOrRemoveLoans.getLoanToAdd());
+        List<ValidationError> validationErrors = loanValidator.validateAtLeastOneLoan(addOrRemoveLoans);
+        
+        if (validationErrors.isEmpty()) {
+            boolean isEmptyResource = loanValidator.isEmptyResource(loanToAdd);
+            if (!isEmptyResource) {
+                validationErrors = createLoan(transactionId, companyAccountsId, loanToAdd);
+            }
         }
 
         return validationErrors;
