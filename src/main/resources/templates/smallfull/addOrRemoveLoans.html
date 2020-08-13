@@ -193,7 +193,7 @@
                     <div th:classappend="*{#fields.hasErrors('loanToAdd.directorName')} ? 'govuk-form-group--error' : ''">
 
                         <span class="govuk-error-message"
-                              id="directorToAdd-errorId"
+                              id="loanToAdd-errorId"
                               th:if="*{#fields.hasErrors('loanToAdd')}"
                               th:each="e : *{#fields.errors('loanToAdd')}" th:text="${e}">
                         </span>
