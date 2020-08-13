@@ -38,27 +38,27 @@ class LoanValidatorTest {
 
     @Test
     @DisplayName("Validate loan to add - success")
-    void validateLoanToAddSuccess() {
+    void validateLoanToAddToAddSuccess() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertTrue(validationErrors.isEmpty());
     }
 
     @Test
     @DisplayName("Validate loan to add - missing director name")
-    void validateLoanToAddMissingDirectorName() {
+    void validateLoanToAddToAddMissingDirectorName() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -68,13 +68,13 @@ class LoanValidatorTest {
 
     @Test
     @DisplayName("Validate loan to add - missing description")
-    void validateLoanToAddMissingDescription() {
+    void validateLoanToAddToAddMissingDescription() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -84,14 +84,14 @@ class LoanValidatorTest {
 
     @Test
     @DisplayName("Validate loan to add - missing period start")
-    void validateLoanToAddMissingPeriodStart() {
+    void validateLoanToAddToAddMissingPeriodStart() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(false, true));
 
-        List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -101,14 +101,14 @@ class LoanValidatorTest {
 
     @Test
     @DisplayName("Validate loan to add - missing period end")
-    void validateLoanToAddMissingPeriodEnd() {
+    void validateLoanToAddToAddMissingPeriodEnd() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, false));
 
-        List<ValidationError> validationErrors = validator.validateDirectorToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -118,7 +118,7 @@ class LoanValidatorTest {
 
     @Test
     @DisplayName("Validate loan to add - Empty resource")
-    void validateLoanToAddIsEmpty() {
+    void validateLoanToAddToAddIsEmpty() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setBreakdown(createBreakdown(false, false));
@@ -130,7 +130,7 @@ class LoanValidatorTest {
 
     @Test
     @DisplayName("Validate loan to add - Not Empty resource")
-    void validateLoanToAddIsNotEmpty() {
+    void validateLoanToAddToAddIsNotEmpty() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);

@@ -208,7 +208,7 @@
                               id="loanToAdd.directorName-errorId"
                               th:if="*{#fields.hasErrors('loanToAdd.directorName')}"
                               th:each="e : *{#fields.errors('loanToAdd.directorName')}" th:text="${e}">
-                                </span>
+                        </span>
 
                         <textarea class="govuk-textarea"
                                   id="loanToAdd-director-name"
@@ -265,6 +265,7 @@
                              id="loanToAdd-breakdown-balance-at-period-heading"
                              th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')}">
                         </div>
+
                         <div class="govuk-grid-column-one-half govuk-!-display-block">
                             <div th:replace="fragments/numberInput :: numberInput (
                                     id = 'loanToAdd.breakdown.balanceAtPeriodStart',
@@ -273,7 +274,7 @@
                                     )">
                             </div>
                         </div>
-                    </div>
+	                </div>
 
                     <div class="govuk-grid-row" th:classappend="*{#fields.hasErrors('loanToAdd.breakdown.advancesCreditsMade')} ? '' : 'error-hidden'">
                         <div class="govuk-grid-column-one-half">&nbsp;</div>
