@@ -40,6 +40,7 @@ public class NoteService<N extends Note> {
     @Autowired
     private ValidationContext validationContext;
 
+    private static final String INVALID_RESOURCE_URI_MESSAGE = "Invalid URI for resource of type ";
     /**
      * Get a resource
      * @param transactionId the transaction identifier
@@ -66,7 +67,7 @@ public class NoteService<N extends Note> {
                 throw new ServiceException("Error fetching resource of type " + noteType.toString(), e);
             }
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for resource of type " + noteType.toString(), e);
+            throw new ServiceException(INVALID_RESOURCE_URI_MESSAGE + noteType.toString(), e);
         }
 
         N note = noteTransformerFactory.getNoteTransformer(noteType).toWeb(apiResource);
@@ -113,7 +114,7 @@ public class NoteService<N extends Note> {
         } catch (ApiErrorResponseException e) {
             throw new ServiceException("Error submitting resource of type " + noteType.toString(), e);
         } catch (URIValidationException e) {
-            throw new ServiceException("Invalid URI for resource of type " + noteType.toString(), e);
+            throw new ServiceException(INVALID_RESOURCE_URI_MESSAGE + noteType.toString(), e);
         }
 
         return new ArrayList<>();
@@ -144,7 +145,7 @@ public class NoteService<N extends Note> {
             } catch (ApiErrorResponseException e) {
                 throw new ServiceException("Error deleting resource of type " + noteType.toString(), e);
             } catch (URIValidationException e) {
-                throw new ServiceException("Invalid URI for resource of type " + noteType.toString(), e);
+                throw new ServiceException(INVALID_RESOURCE_URI_MESSAGE + noteType.toString(), e);
             }
         }
     }
