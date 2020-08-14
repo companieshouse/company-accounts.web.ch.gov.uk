@@ -4,8 +4,10 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class Breakdown {
 
+    @ValidationMapping("$.loan.breakdown.advances_credits_made")
     private Long advancesCreditsMade;
 
+    @ValidationMapping("$.loan.breakdown.advances_credits_repaid")
     private Long advancesCreditsRepaid;
 
     @ValidationMapping("$.loan.breakdown.balance_at_period_start")
