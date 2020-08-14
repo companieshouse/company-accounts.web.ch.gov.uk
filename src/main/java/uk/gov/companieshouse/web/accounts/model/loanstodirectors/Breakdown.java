@@ -8,6 +8,7 @@ public class Breakdown {
 
     private Long advancesCreditsRepaid;
 
+    @ValidationMapping("$.loan.breakdown.balance_at_period_start")
     private Long balanceAtPeriodStart;
 
     @ValidationMapping("$.loan.breakdown.balance_at_period_end")
