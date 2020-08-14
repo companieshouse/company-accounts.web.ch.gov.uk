@@ -1,11 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +23,11 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)
@@ -73,12 +72,9 @@ public class DirectorsReportApprovalController extends BaseController implements
 
             for(Director director : directorService.getAllDirectors(transactionId, companyAccountsId)) {
 
-                if (director.getResignationDate() == null) {
-                    approverOptions.add(director.getName());
-                } else if (director.getAppointmentDate() != null) {
-                    if (director.getAppointmentDate().isAfter(director.getResignationDate())) {
+                if (director.getResignationDate() == null || (director.getAppointmentDate() != null
+                        && director.getAppointmentDate().isAfter(director.getResignationDate()))) {
                         approverOptions.add(director.getName());
-                    }
                 }
             }
 

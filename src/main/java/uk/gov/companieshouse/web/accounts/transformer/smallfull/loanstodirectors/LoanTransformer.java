@@ -8,5 +8,5 @@ public interface LoanTransformer {
 
     LoanApi getLoanApi(LoanToAdd loanToAdd);
 
-    Loan[] getAllLoans(LoanApi[] Loans);
+    Loan[] getAllLoans(LoanApi[] loans);
 }

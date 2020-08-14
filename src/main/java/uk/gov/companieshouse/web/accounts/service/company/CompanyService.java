@@ -6,8 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public interface CompanyService {

@@ -54,7 +54,7 @@ public class AccountingPoliciesTransformerImplTests {
         BasisOfPreparation basisOfPreparation = transformer.toWeb(accountingPoliciesApi).getBasisOfPreparation();
 
         assertNotNull(basisOfPreparation);
-        assertEquals(basisOfPreparation.getAccountingRegulatoryStandard(), AccountingRegulatoryStandard.FRS101);
+        assertEquals(AccountingRegulatoryStandard.FRS101, basisOfPreparation.getAccountingRegulatoryStandard());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class AccountingPoliciesTransformerImplTests {
         BasisOfPreparation basisOfPreparation = transformer.toWeb(accountingPoliciesApi).getBasisOfPreparation();
 
         assertNotNull(basisOfPreparation);
-        assertNotEquals(basisOfPreparation.getAccountingRegulatoryStandard(), AccountingRegulatoryStandard.FRS102);
+        assertNotEquals(AccountingRegulatoryStandard.FRS102, basisOfPreparation.getAccountingRegulatoryStandard());
     }
 
     @Test

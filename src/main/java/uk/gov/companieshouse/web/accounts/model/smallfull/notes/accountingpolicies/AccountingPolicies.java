@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies;
 
 import uk.gov.companieshouse.web.accounts.model.Note;
-import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 public class AccountingPolicies implements Note {
 
