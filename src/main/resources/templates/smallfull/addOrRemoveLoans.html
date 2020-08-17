@@ -248,7 +248,7 @@
 
                     <div class="govuk-grid-row" th:classappend="*{#fields.hasErrors('loanToAdd.breakdown.balanceAtPeriodStart')} ? '' : 'error-hidden'">
                         <div class="govuk-grid-column-one-half">&nbsp;</div>
-                        <div class="govuk-grid-column-one-half error-div">
+                        <div class="govuk-grid-column-one-half error-div govuk-!-display-block">
                             <span th:if="*{#fields.hasErrors('loanToAdd.breakdown.balanceAtPeriodStart')}"
                                   id="loanToAdd.breakdown.balanceAtPeriodStart-errorId"
                                   th:each="e : *{#fields.errors('loanToAdd.breakdown.balanceAtPeriodStart')}"
@@ -278,7 +278,7 @@
 
                     <div class="govuk-grid-row" th:classappend="*{#fields.hasErrors('loanToAdd.breakdown.advancesCreditsMade')} ? '' : 'error-hidden'">
                         <div class="govuk-grid-column-one-half">&nbsp;</div>
-                        <div class="govuk-grid-column-one-half error-div">
+                        <div class="govuk-grid-column-one-half error-div govuk-!-display-block">
                             <span th:if="*{#fields.hasErrors('loanToAdd.breakdown.advancesCreditsMade')}"
                                   id="loanToAdd.breakdown.advancesCreditsMade-errorId"
                                   th:each="e : *{#fields.errors('loanToAdd.breakdown.advancesCreditsMade')}"
@@ -307,7 +307,7 @@
 
                     <div class="govuk-grid-row" th:classappend="*{#fields.hasErrors('loanToAdd.breakdown.advancesCreditsRepaid')} ? '' : 'error-hidden'">
                         <div class="govuk-grid-column-one-half">&nbsp;</div>
-                        <div class="govuk-grid-column-one-half error-div">
+                        <div class="govuk-grid-column-one-half error-div govuk-!-display-block">
                             <span th:if="*{#fields.hasErrors('loanToAdd.breakdown.advancesCreditsRepaid')}"
                                   id="loanToAdd.breakdown.advancesCreditsRepaid-errorId"
                                   th:each="e : *{#fields.errors('loanToAdd.breakdown.advancesCreditsRepaid')}"
@@ -336,7 +336,7 @@
 
                     <div class="govuk-grid-row" th:classappend="*{#fields.hasErrors('loanToAdd.breakdown.balanceAtPeriodEnd')} ? '' : 'error-hidden'">
                         <div class="govuk-grid-column-one-half">&nbsp;</div>
-                        <div class="govuk-grid-column-one-half error-div">
+                        <div class="govuk-grid-column-one-half error-div govuk-!-display-block">
                             <span th:if="*{#fields.hasErrors('loanToAdd.breakdown.balanceAtPeriodEnd')}"
                                   id="loanToAdd.breakdown.balanceAtPeriodEnd-errorId"
                                   th:each="e : *{#fields.errors('loanToAdd.breakdown.balanceAtPeriodEnd')}"
