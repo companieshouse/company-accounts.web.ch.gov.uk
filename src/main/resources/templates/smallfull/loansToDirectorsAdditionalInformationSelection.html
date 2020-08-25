@@ -20,7 +20,7 @@
                      th:classappend="${#fields.hasErrors('hasAdditionalInformation')} ? 'govuk-form-group--error' : ''">
 
                     <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include any additional \'loans to directors\' information notes?',
+              legendText = 'Do your prepared accounts include any additional \'loans to directors\' information?',
               radioButtonsFieldName = 'hasAdditionalInformation'
               )">
                     </div>
