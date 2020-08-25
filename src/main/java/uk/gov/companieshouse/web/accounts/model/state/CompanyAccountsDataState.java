@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AdditionalInformation;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -36,6 +38,9 @@ public class CompanyAccountsDataState implements Serializable {
 
     @JsonProperty("has_included_loans_to_directors")
     private Boolean hasIncludedLoansToDirectors;
+
+    @JsonProperty("loans_to_directors_additional_information")
+    private AdditionalInformation loansToDirectorsAdditionalInformation;
 
     @JsonProperty("is_cic")
     private Boolean isCic;
@@ -134,5 +139,13 @@ public class CompanyAccountsDataState implements Serializable {
 
     public void setHasIncludedLoansToDirectors(Boolean hasIncludedLoansToDirectors) {
         this.hasIncludedLoansToDirectors = hasIncludedLoansToDirectors;
+    }
+
+    public AdditionalInformation getLoansToDirectorsAdditionalInformation() {
+        return loansToDirectorsAdditionalInformation;
+    }
+
+    public void setLoansToDirectorsAdditionalInformation(AdditionalInformation additionalInformation) {
+        this.loansToDirectorsAdditionalInformation = additionalInformation;
     }
 }

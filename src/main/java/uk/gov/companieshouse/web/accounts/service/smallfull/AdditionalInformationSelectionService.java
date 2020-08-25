@@ -3,11 +3,11 @@ package uk.gov.companieshouse.web.accounts.service.smallfull;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AdditionalInformationSelection;
 
-public interface AdditionalInformationSelectionService {
+public interface AdditionalInformationSelectionService<T> {
 
-    AdditionalInformationSelection getAdditionalInformationSelection(String transactionId, String companyAccountsId)
+    T getAdditionalInformationSelection(String transactionId, String companyAccountsId)
             throws ServiceException;
 
     void submitAdditionalInformationSelection(String transactionId, String companyAccountsId,
-            AdditionalInformationSelection additionalInformationSelection) throws ServiceException;
+            T additionalInformationSelection) throws ServiceException;
 }

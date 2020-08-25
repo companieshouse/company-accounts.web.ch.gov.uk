@@ -12,7 +12,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformatio
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
 
 @Service
-public class AdditionalInformationSelectionServiceImpl implements AdditionalInformationSelectionService {
+public class AdditionalInformationSelectionServiceImpl implements AdditionalInformationSelectionService<AdditionalInformationSelection> {
 
     @Autowired
     private DirectorsReportStatementsService directorsReportStatementsService;

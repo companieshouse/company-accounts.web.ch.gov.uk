@@ -29,7 +29,7 @@ public class AdditionalInformationSelectionServiceImplTest {
     private DirectorsReportStatementsService directorsReportStatementsService;
 
     @InjectMocks
-    private AdditionalInformationSelectionService additionalInformationSelectionService = new AdditionalInformationSelectionServiceImpl();
+    private AdditionalInformationSelectionService<AdditionalInformationSelection> additionalInformationSelectionService = new AdditionalInformationSelectionServiceImpl();
 
     @Mock
     private AdditionalInformationSelection additionalInformationSelection;

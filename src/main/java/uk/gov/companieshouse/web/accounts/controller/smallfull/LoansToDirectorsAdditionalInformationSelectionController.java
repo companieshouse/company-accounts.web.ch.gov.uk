@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,21 +15,22 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.AdditionalInformationSelection;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AdditionalInformation;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AdditionalInformationSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformationSelectionService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
-@NextController(DirectorsReportAdditionalInformationController.class)
-@PreviousController(CompanyPolicyOnDisabledEmployeesController.class)
-@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/additional-information-question")
-public class DirectorsReportAdditionalInformationSelectionController extends BaseController implements ConditionalController {
+@NextController(OffBalanceSheetArrangementsQuestionController.class)
+@PreviousController(AddOrRemoveLoansController.class)
+@RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans/additional-information-question")
+public class LoansToDirectorsAdditionalInformationSelectionController extends BaseController implements ConditionalController {
 
     @Autowired
     private HttpServletRequest request;
@@ -39,7 +39,7 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
     private AdditionalInformationSelectionService<AdditionalInformationSelection> selectionService;
 
     @Autowired
-    private DirectorsReportService directorsReportService;
+    private LoansToDirectorsService loansToDirectorsService;
 
     @Autowired
     private ApiClientService apiClientService;
@@ -47,19 +47,19 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
     private static final String ADDITIONAL_INFORMATION_SELECTION = "additionalInformationSelection";
 
     @Override
-    protected String getTemplateName() { return "smallfull/additionalInformationSelection"; }
+    protected String getTemplateName() { return "smallfull/loansToDirectorsAdditionalInformationSelection"; }
 
     @GetMapping
     public String getAdditionalInformationSelection(@PathVariable String companyNumber,
-                                                               @PathVariable String transactionId,
-                                                               @PathVariable String companyAccountsId,
-                                                               Model model) {
+                                                    @PathVariable String transactionId,
+                                                    @PathVariable String companyAccountsId,
+                                                    Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             AdditionalInformationSelection selection =
-                     selectionService.getAdditionalInformationSelection(transactionId, companyAccountsId);
+                    selectionService.getAdditionalInformationSelection(transactionId, companyAccountsId);
 
             if (selection.getHasAdditionalInformation() == null) {
                 setHasProvidedAdditionalInformation(request, selection);
@@ -77,11 +77,11 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
 
     @PostMapping
     public String submitAdditionalInformationSelection(@PathVariable String companyNumber,
-                                                      @PathVariable String transactionId,
-                                                      @PathVariable String companyAccountsId,
-                                                      @ModelAttribute(ADDITIONAL_INFORMATION_SELECTION) @Valid AdditionalInformationSelection selection,
-                                                      BindingResult bindingResult,
-                                                      Model model) {
+                                                       @PathVariable String transactionId,
+                                                       @PathVariable String companyAccountsId,
+                                                       @ModelAttribute(ADDITIONAL_INFORMATION_SELECTION) @Valid AdditionalInformationSelection selection,
+                                                       BindingResult bindingResult,
+                                                       Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -109,33 +109,28 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         selection.setHasAdditionalInformation(
                 Optional.of(companyAccountsDataState)
-                    .map(CompanyAccountsDataState::getDirectorsReportStatements)
-                    .map(DirectorsReportStatements::getHasProvidedAdditionalInformation)
-                    .orElse(null));
+                        .map(CompanyAccountsDataState::getLoansToDirectorsAdditionalInformation)
+                        .map(AdditionalInformation::getHasProvidedAdditionalInformation)
+                        .orElse(null));
     }
 
     private void cacheHasProvidedAdditionalInformation(HttpServletRequest request, AdditionalInformationSelection selection) {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
-        if (companyAccountsDataState.getDirectorsReportStatements() == null) {
-            companyAccountsDataState.setDirectorsReportStatements(new DirectorsReportStatements());
+        if (companyAccountsDataState.getLoansToDirectorsAdditionalInformation() == null) {
+            companyAccountsDataState.setLoansToDirectorsAdditionalInformation(new AdditionalInformation());
 
         }
 
-        companyAccountsDataState.getDirectorsReportStatements().setHasProvidedAdditionalInformation(
+        companyAccountsDataState.getLoansToDirectorsAdditionalInformation().setHasProvidedAdditionalInformation(
                 selection.getHasAdditionalInformation());
 
         updateStateOnRequest(request, companyAccountsDataState);
     }
 
-
-
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
-            throws ServiceException {
-
-        return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
+        return loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
-
 }
