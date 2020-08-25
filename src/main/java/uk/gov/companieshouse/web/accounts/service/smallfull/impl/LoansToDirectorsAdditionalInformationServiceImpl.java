@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -109,9 +108,6 @@ public class LoansToDirectorsAdditionalInformationServiceImpl implements LoansTo
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        if (StringUtils.isNotBlank(
-                smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
-                        .getLinks().getLoansToDirectors())) {
             String uri = ADDITIONAL_INFORMATION_URI.expand(transactionId, companyAccountsId).toString();
 
             try {
@@ -121,6 +117,5 @@ public class LoansToDirectorsAdditionalInformationServiceImpl implements LoansTo
             } catch (ApiErrorResponseException e) {
                 serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME);
             }
-        }
     }
 }
