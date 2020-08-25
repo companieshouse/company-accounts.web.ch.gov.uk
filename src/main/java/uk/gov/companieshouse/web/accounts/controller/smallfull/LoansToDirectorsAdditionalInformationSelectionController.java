@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AdditionalInfor
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AdditionalInformationSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformationSelectionService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -36,9 +35,6 @@ public class LoansToDirectorsAdditionalInformationSelectionController extends Ba
 
     @Autowired
     private AdditionalInformationSelectionService<AdditionalInformationSelection> selectionService;
-
-    @Autowired
-    private LoansToDirectorsService loansToDirectorsService;
 
     @Autowired
     private ApiClientService apiClientService;
