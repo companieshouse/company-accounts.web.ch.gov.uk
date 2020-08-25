@@ -18,7 +18,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AdditionalInformation;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AdditionalInformationSelection;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformationSelectionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 
@@ -131,6 +130,6 @@ public class LoansToDirectorsAdditionalInformationSelectionController extends Ba
 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
-        return loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
+        return true;
     }
 }

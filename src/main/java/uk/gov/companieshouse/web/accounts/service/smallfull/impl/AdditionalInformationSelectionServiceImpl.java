@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
@@ -10,6 +7,10 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AdditionalInformationSelection;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformationSelectionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class AdditionalInformationSelectionServiceImpl implements AdditionalInformationSelectionService<AdditionalInformationSelection> {

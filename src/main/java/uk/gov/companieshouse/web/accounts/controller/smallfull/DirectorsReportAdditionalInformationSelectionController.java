@@ -129,13 +129,10 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
         updateStateOnRequest(request, companyAccountsDataState);
     }
 
-
-
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
         return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
-
 }

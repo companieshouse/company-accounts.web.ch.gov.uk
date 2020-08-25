@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
@@ -10,6 +9,8 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformatio
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorsReportStatementsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.List;
 
 @Service
 public class AdditionalInformationServiceImpl implements AdditionalInformationService {

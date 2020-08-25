@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull;
 
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.AdditionalInformationSelection;
 
 public interface AdditionalInformationSelectionService<T> {
 
