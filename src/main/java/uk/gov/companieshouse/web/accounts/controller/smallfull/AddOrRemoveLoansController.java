@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@NextController(OffBalanceSheetArrangementsQuestionController.class)
+@NextController(LoansToDirectorsAdditionalInfoQuestionController.class)
 @PreviousController(LoansToDirectorsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans")
 public class AddOrRemoveLoansController extends BaseController implements ConditionalController {

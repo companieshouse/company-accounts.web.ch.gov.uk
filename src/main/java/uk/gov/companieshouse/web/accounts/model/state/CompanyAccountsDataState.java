@@ -37,6 +37,9 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonProperty("has_included_loans_to_directors")
     private Boolean hasIncludedLoansToDirectors;
 
+    @JsonProperty("has_included_loans_to_directors_additional_info")
+    private Boolean hasIncludedLoansToDirectorsAdditionalInfo;
+
     @JsonProperty("is_cic")
     private Boolean isCic;
 
@@ -134,5 +137,13 @@ public class CompanyAccountsDataState implements Serializable {
 
     public void setHasIncludedLoansToDirectors(Boolean hasIncludedLoansToDirectors) {
         this.hasIncludedLoansToDirectors = hasIncludedLoansToDirectors;
+    }
+
+    public Boolean getHasIncludedLoansToDirectorsAdditionalInfo() {
+        return hasIncludedLoansToDirectorsAdditionalInfo;
+    }
+
+    public void setHasIncludedLoansToDirectorsAdditionalInfo(Boolean hasIncludedLoansToDirectorsAdditionalInfo) {
+        this.hasIncludedLoansToDirectorsAdditionalInfo = hasIncludedLoansToDirectorsAdditionalInfo;
     }
 }
