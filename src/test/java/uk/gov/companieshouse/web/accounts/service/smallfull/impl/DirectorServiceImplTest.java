@@ -140,7 +140,7 @@ public class DirectorServiceImplTest {
         Director[] allDirectors = new Director[1];
         when(directorTransformer.getAllDirectors(directors)).thenReturn(allDirectors);
 
-        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false);
 
         assertEquals(allDirectors, response);
     }
@@ -158,7 +158,7 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenThrow(apiErrorResponseException);
         doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false);
 
         assertNotNull(response);
         assertEquals(0, response.length);
@@ -177,7 +177,7 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenThrow(apiErrorResponseException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
     }
 
     @Test
@@ -193,7 +193,7 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenThrow(uriValidationException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
     }
 
     @Test

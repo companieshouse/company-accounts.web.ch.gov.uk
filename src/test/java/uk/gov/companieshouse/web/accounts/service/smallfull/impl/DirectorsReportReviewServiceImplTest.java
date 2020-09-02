@@ -74,7 +74,7 @@ public class DirectorsReportReviewServiceImplTest {
     void getReview() throws ServiceException {
 
         Director[] directors = new Director[]{new Director()};
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false))
                 .thenReturn(directors);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))

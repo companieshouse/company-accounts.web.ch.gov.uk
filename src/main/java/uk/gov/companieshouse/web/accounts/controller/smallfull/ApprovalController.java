@@ -72,8 +72,7 @@ public class ApprovalController extends BaseController {
                     transactionService.isPayableTransaction(transactionId, companyAccountsId));
 
             List<String> approverOptions =
-                    Arrays.stream(directorService.getAllDirectors(transactionId, companyAccountsId))
-                            .filter(d -> d.getResignationDate() == null)
+                    Arrays.stream(directorService.getAllDirectors(transactionId, companyAccountsId, true))
                             .map(Director::getName)
                             .collect(Collectors.toList());
 

@@ -210,11 +210,30 @@
                               th:each="e : *{#fields.errors('loanToAdd.directorName')}" th:text="${e}">
                         </span>
 
-                        <textarea class="govuk-textarea"
-                                  id="loanToAdd-director-name"
-                                  th:field="*{loanToAdd.directorName}"
-                                  type="text" rows="1">
-                                </textarea>
+                        <div th:if="${validDirectorNames.size() == 0}">
+                            <textarea class="govuk-textarea"
+                                      id="loanToAdd-director-name"
+                                      th:field="*{loanToAdd.directorName}"
+                                      type="text" rows="1">
+                            </textarea>
+                        </div>
+                        <div th:unless="${validDirectorNames.size() == 0}">
+                            <div th:each="director, stat : ${validDirectorNames}" class="govuk-radios__item" id="director-name-options">
+                                <input class="govuk-radios__input"
+                                       th:id="${stat.index}"
+                                       type="radio"
+                                       th:value="${director}"/>
+
+                                <label class="govuk-label govuk-radios__label"
+                                       th:for="${stat.index}"
+                                       th:id="${stat.index + '-label'}"
+                                       th:text="${director}"></label>
+                            </div>
+
+                            <!--<div th:each="director, stat : ${validDirectorNames}">
+                                <input type="hidden" th:field="${validDirectorNames[__${stat.index}__]}" th:id="validDirectorNames[__${stat.index}__]"/>
+                            </div>-->
+                        </div>
                     </div>
 
                     <div th:classappend="*{#fields.hasErrors('loanToAdd.description')} ? 'govuk-form-group--error' : ''">

@@ -123,7 +123,7 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Get add or remove directors view - success path")
     void getRequestSuccess() throws Exception {
 
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Director[0]);
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
 
@@ -141,7 +141,7 @@ public class AddOrRemoveDirectorsControllerTest {
     @DisplayName("Get add or remove directors view - service exception")
     void getRequestServiceException() throws Exception {
 
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
                 .andExpect(status().isOk())

@@ -1,6 +1,9 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +58,7 @@ public class DirectorServiceImpl implements DirectorService {
 
 
     @Override
-    public Director[] getAllDirectors(String transactionId, String companyAccountsId) throws ServiceException {
+    public Director[] getAllDirectors(String transactionId, String companyAccountsId, boolean isActive) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
@@ -63,6 +66,14 @@ public class DirectorServiceImpl implements DirectorService {
 
         try {
             DirectorApi[] directors = apiClient.smallFull().directorsReport().directors().getAll(uri).execute().getData();
+
+            if (isActive) {
+
+                return directorTransformer.getAllDirectors(Arrays.stream(directors).
+                        filter(director -> (director.getResignationDate() == null || (director.getAppointmentDate() != null
+                        && director.getAppointmentDate().isAfter(director.getResignationDate())))).toArray(DirectorApi[]::new));
+            }
+            
             return directorTransformer.getAllDirectors(directors);
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
