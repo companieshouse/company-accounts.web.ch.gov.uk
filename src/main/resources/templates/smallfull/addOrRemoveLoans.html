@@ -223,7 +223,29 @@
                         </div>
                     </th:block>
 
-                    <th:block th:unless="*{validDirectorNames == null or validDirectorNames.size() == 0}">
+                    <th:block th:if="*{validDirectorNames != null and validDirectorNames.size() == 1}">
+                        <dl class="app-check-your-answers app-check-your-answers--very-long">
+                            <div class="app-check-your-answers__contents">
+                                <dt class="app-check-your-answers__question"
+                                    th:text="*{validDirectorNames[0]}"
+                                    th:id="0-label">
+                                </dt>
+                                <dd class="app-check-your-answers__change">
+                                    <a id="director-change-link"
+                                       th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
+                                       class="govuk-body piwik-event"
+                                       data-event-id="Change director - LTD">
+                                        Change
+                                    </a>
+                                </dd>
+
+                                <input th:field="*{loanToAdd.directorName}" type="hidden">
+
+                            </div>
+                        </dl>
+                    </th:block>
+
+                    <th:block th:if="*{validDirectorNames != null and validDirectorNames.size() > 1}">
                         <div th:classappend="*{#fields.hasErrors('loanToAdd.directorName')} ? 'govuk-form-group--error' : ''">
                             <div th:each="director, stat : *{validDirectorNames}" class="govuk-radios__item">
                                 <input class="govuk-radios__input"
