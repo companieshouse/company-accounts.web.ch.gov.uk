@@ -1460,22 +1460,40 @@
                     <div class="app-check-your-answers__contents">
 
                         <div class="govuk-grid-row">
-                            <strong class="govuk-grid-column-one-half" th:id="loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
-                            <span class="govuk-grid-column-one-half govuk-table__cell--numeric">
+                            <strong class="govuk-grid-column-one-half cya-desktop-only" th:id="loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
+                            <div class="mobile-only-label column-fifth column-flexs">
+                                <strong th:id="mobile-loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
+                            </div>
+                            <div class="govuk-grid-column-one-half cya-desktop-only govuk-table__cell--numeric ">
                                 <strong th:id="review-director-name[__${stat.index}__]"
                                         th:text="${loan.directorName}">
                                 </strong>
-                            </span>
+                            </div>
+                            <div class="mobile-only-label column-fifth column-flexs govuk-!-margin-top-4">
+                                <strong th:id="mobile-review-director-name[__${stat.index}__]"
+                                        th:text="${loan.directorName}">
+                                </strong>
+                            </div>
                         </div>
-                        <div class="govuk-grid-row govuk-!-margin-top-4">
-                            <p class="govuk-grid-column-one-half" th:id="loans-table-breakdown-description-header[__${stat.index}__]">
+                        <div class="govuk-grid-row">
+                            <p class="govuk-grid-column-one-half  cya-desktop-only govuk-!-margin-top-4" th:id="loans-table-breakdown-description-header[__${stat.index}__]">
                                 Description of the loan
                             </p>
 
-                            <span class="govuk-grid-column-one-half govuk-table__cell--numeric"
+                            <div class="mobile-only-label column-fifth column-flexs govuk-!-margin-top-4">
+                                <span th:id="mobile-loans-table-breakdown-description-header[__${stat.index}__]">
+                                    Description of the loan
+                                </span>
+                            </div>
+                            <div class="govuk-grid-column-one-half cya-desktop-only govuk-!-margin-top-4 govuk-table__cell--numeric"
                                   th:id="loans-table-breakdown-description[__${stat.index}__]"
                                   th:text="${loan.description}">
-                            </span>
+                            </div>
+                            <div class="mobile-only-label column-fifth column-flexs govuk-!-margin-top-4">
+                                <span th:id="mobile-loans-table-breakdown-description[__${stat.index}__]"
+                                        th:text="${loan.description}">
+                                </span>
+                            </div>
                         </div>
                         <div class="govuk-grid-row govuk-!-margin-top-4">
                             <div class="govuk-grid-column-one-half govuk-body"></div>
@@ -1494,7 +1512,7 @@
                                             <span th:id="loans-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
                                                   th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')} + ' in £'"></span>
                             </div>
-                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                            <div class="govuk-grid-column-one-half column-flexs govuk-table__cell--numeric">
                                             <span th:id="loans-table-breakdown-balance-at-period-start[__${stat.index}__]"
                                                   th:text="${loan.breakdown.balanceAtPeriodStart}">
                                             </span>
@@ -1510,7 +1528,7 @@
                                                 Advances and credits made in £
                                             </span>
                             </div>
-                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                            <div class="govuk-grid-column-one-half column-flexs govuk-table__cell--numeric">
                                             <span th:id="loans-table-breakdown-advances-and-credits-made[__${stat.index}__]"
                                                   th:text="${loan.breakdown.advancesCreditsMade}">
                                             </span>
@@ -1526,7 +1544,7 @@
                                                 Advances and credits repaid in £
                                             </span>
                             </div>
-                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                            <div class="govuk-grid-column-one-half column-flexs govuk-table__cell--numeric">
                                             <span th:id="loans-table-breakdown-advances-and-credits-repaid[__${stat.index}__]"
                                                   th:text="${loan.breakdown.advancesCreditsRepaid}">
                                             </span>
@@ -1542,7 +1560,7 @@
                                 <strong th:id="loans-table-breakdown-balance-at-period-end-mobile-heading[__${stat.index}__]"
                                         th:text="'Balance at ' + *{#temporals.format(periodEndOn, 'd MMMM yyyy')} + ' in £'"></strong>
                             </div>
-                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                            <div class="govuk-grid-column-one-half column-flexs govuk-table__cell--numeric">
                                 <strong th:id="loans-table-breakdown-balance-at-period-end[__${stat.index}__]"
                                         th:text="${loan.breakdown.balanceAtPeriodEnd}">
                                 </strong>
