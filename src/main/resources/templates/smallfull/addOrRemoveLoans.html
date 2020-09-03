@@ -174,8 +174,12 @@
             <form id="data-submission-form" th:action="@{''}" class="form currency-included-within-inputs govuk-body"
                   th:object="${addOrRemoveLoans}" method="post">
 
+                <!--Hidden fields for form binding-->
                 <input th:field="*{nextAccount.periodStartOn}" type="hidden">
                 <input th:field="*{nextAccount.periodEndOn}" type="hidden">
+                <div th:each="director, stat : ${validDirectorNames}">
+                    <input type="hidden" th:value="${validDirectorNames[__${stat.index}__]}" th:id="validDirectorNames[__${stat.index}__]"/>
+                </div>
 
                 <div th:each="loan, stat : ${addOrRemoveLoans.existingLoans}">
                     <input type="hidden" th:field="*{existingLoans[__${stat.index}__].directorName}"
@@ -190,51 +194,48 @@
                 <div th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}"
                      class="govuk-form-group govuk-form-group-block-important">
 
-                    <div th:classappend="*{#fields.hasErrors('loanToAdd.directorName')} ? 'govuk-form-group--error' : ''">
+                    <th:block th:if="${validDirectorNames == null or validDirectorNames.size() == 0}">
 
-                        <span class="govuk-error-message"
-                              id="loanToAdd-errorId"
-                              th:if="*{#fields.hasErrors('loanToAdd')}"
-                              th:each="e : *{#fields.errors('loanToAdd')}" th:text="${e}">
-                        </span>
+                        <div th:classappend="*{#fields.hasErrors('loanToAdd.directorName')} ? 'govuk-form-group--error' : ''">
+                            <span class="govuk-error-message"
+                                  id="loanToAdd-errorId"
+                                  th:if="*{#fields.hasErrors('loanToAdd')}"
+                                  th:each="e : *{#fields.errors('loanToAdd')}" th:text="${e}">
+                            </span>
 
-                        <label id="loanToAdd-director-name-label"
-                               class="govuk-label govuk-label--m"
-                               for="loanToAdd-director-name">
-                            Name of director receiving advance or credit
-                        </label>
+                            <label id="loanToAdd-director-name-label"
+                                   class="govuk-label govuk-label--m"
+                                   for="loanToAdd-director-name">
+                                Name of director receiving advance or credit
+                            </label>
 
-                        <span class="govuk-error-message"
-                              id="loanToAdd.directorName-errorId"
-                              th:if="*{#fields.hasErrors('loanToAdd.directorName')}"
-                              th:each="e : *{#fields.errors('loanToAdd.directorName')}" th:text="${e}">
-                        </span>
+                            <span class="govuk-error-message"
+                                  id="loanToAdd.directorName-errorId"
+                                  th:if="*{#fields.hasErrors('loanToAdd.directorName')}"
+                                  th:each="e : *{#fields.errors('loanToAdd.directorName')}" th:text="${e}">
+                            </span>
 
-                        <div th:if="${validDirectorNames.size() == 0}">
                             <textarea class="govuk-textarea"
                                       id="loanToAdd-director-name"
                                       th:field="*{loanToAdd.directorName}"
                                       type="text" rows="1">
                             </textarea>
                         </div>
-                        <div th:unless="${validDirectorNames.size() == 0}">
-                            <div th:each="director, stat : ${validDirectorNames}" class="govuk-radios__item" id="director-name-options">
-                                <input class="govuk-radios__input"
-                                       th:id="${stat.index}"
-                                       type="radio"
-                                       th:value="${director}"/>
+                    </th:block>
+                    <th:block th:unless="${validDirectorNames == null or validDirectorNames.size() == 0}">
+                        <div th:each="director, stat : ${validDirectorNames}" class="govuk-radios__item" id="director-name-options">
+                            <input class="govuk-radios__input"
+                                   th:id="${stat.index}"
+                                   type="radio"
+                                   th:value="${director}"
+                                   th:field="*{loanToAdd.directorName}"/>
 
-                                <label class="govuk-label govuk-radios__label"
-                                       th:for="${stat.index}"
-                                       th:id="${stat.index + '-label'}"
-                                       th:text="${director}"></label>
-                            </div>
-
-                            <!--<div th:each="director, stat : ${validDirectorNames}">
-                                <input type="hidden" th:field="${validDirectorNames[__${stat.index}__]}" th:id="validDirectorNames[__${stat.index}__]"/>
-                            </div>-->
+                            <label class="govuk-label govuk-radios__label"
+                                   th:for="${stat.index}"
+                                   th:id="${stat.index + '-label'}"
+                                   th:text="${director}"></label>
                         </div>
-                    </div>
+                    </th:block>
 
                     <div th:classappend="*{#fields.hasErrors('loanToAdd.description')} ? 'govuk-form-group--error' : ''">
                         <label id="loanToAdd-description-label"
