@@ -89,8 +89,10 @@ public class LoansToDirectorsQuestionController extends BaseController {
         try {
             LoansToDirectorsApi loansToDirectorsApi = loansToDirectorsService.getLoansToDirectors(apiClient, transactionId, companyAccountsId);
 
-            if (loansToDirectorsQuestion.getHasIncludedLoansToDirectors() && loansToDirectorsApi == null) {
+            if (loansToDirectorsQuestion.getHasIncludedLoansToDirectors()) {
+                if (loansToDirectorsApi == null) {
                     loansToDirectorsService.createLoansToDirectors(transactionId, companyAccountsId);
+                }
             } else {
                 if (loansToDirectorsApi != null) {
                     if (loansToDirectorsApi.getLinks().getAdditionalInformation() != null) {
