@@ -219,6 +219,7 @@ public class LoansServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -228,7 +229,7 @@ public class LoansServiceImplTest {
         when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
         when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -241,6 +242,8 @@ public class LoansServiceImplTest {
         when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -256,7 +259,7 @@ public class LoansServiceImplTest {
         apiValidationErrors.add(validationError);
         when(validationContext.getValidationErrors(responseWithSingleLoan.getErrors())).thenReturn(apiValidationErrors);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
         assertEquals(apiValidationErrors, validationErrors);
     }
@@ -269,9 +272,11 @@ public class LoansServiceImplTest {
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
+        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+
         when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(nameValidationError);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
         assertEquals(nameValidationError, validationErrors);
 
@@ -320,6 +325,8 @@ public class LoansServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
+        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -329,7 +336,7 @@ public class LoansServiceImplTest {
         when(loanCreate.execute()).thenThrow(apiErrorResponseException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd));
+        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans));
     }
 
     @Test
@@ -338,6 +345,8 @@ public class LoansServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -348,7 +357,7 @@ public class LoansServiceImplTest {
         when(loanCreate.execute()).thenThrow(uriValidationException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, loanToAdd));
+        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans));
     }
 
     @Test

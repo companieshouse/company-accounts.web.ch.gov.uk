@@ -66,10 +66,48 @@ public class LoanValidator {
         return validationErrors;
     }
 
+    public List<ValidationError> validateSingleLoanToAdd(LoanToAdd loanToAdd) {
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        if (StringUtils.isBlank(loanToAdd.getDescription())) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(DESCRIPTION);
+            error.setMessageKey(DESCRIPTION_NOT_PRESENT);
+            validationErrors.add(error);
+        }
+
+        if (loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(BALANCE_AT_START);
+            error.setMessageKey(BAS_NOT_PRESENT);
+            validationErrors.add(error);
+        }
+
+        if (loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(BALANCE_AT_END);
+            error.setMessageKey(BAE_NOT_PRESENT);
+            validationErrors.add(error);
+        }
+
+        return validationErrors;
+    }
+
     public boolean isEmptyResource(LoanToAdd loanToAdd) {
 
         return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) &&
                 StringUtils.isBlank(loanToAdd.getDescription()) &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
+    }
+
+    public boolean isSingleDirectorEmptyResource(LoanToAdd loanToAdd) {
+
+        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDescription()) &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
     }
@@ -79,6 +117,20 @@ public class LoanValidator {
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (addOrRemoveLoans.getExistingLoans() == null && isEmptyResource(addOrRemoveLoans.getLoanToAdd())) {
+            ValidationError error = new ValidationError();
+            error.setFieldPath(LOAN_TO_ADD);
+            error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
+            validationErrors.add(error);
+        }
+
+        return validationErrors;
+    }
+
+    public List<ValidationError> validateAtLeastOneLoanSingleDirector(AddOrRemoveLoans addOrRemoveLoans) {
+
+        List<ValidationError> validationErrors = new ArrayList<>();
+
+        if (addOrRemoveLoans.getExistingLoans() == null && isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd())) {
             ValidationError error = new ValidationError();
             error.setFieldPath(LOAN_TO_ADD);
             error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
