@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -124,6 +126,9 @@ public class DirectorServiceImplTest {
 
     private static final String RESOURCE_NAME = "directors";
 
+    private static final LocalDate APPOINTMENT_DATE = LocalDate.of(2019, 1, 1);
+    private static final LocalDate RESIGNATION_DATE = LocalDate.of(2019, 2, 1);
+
     @Test
     @DisplayName("GET - all directors - success")
     void getAllDirectorsSuccess()
@@ -140,9 +145,30 @@ public class DirectorServiceImplTest {
         Director[] allDirectors = new Director[1];
         when(directorTransformer.getAllDirectors(directors)).thenReturn(allDirectors);
 
-        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false);
 
         assertEquals(allDirectors, response);
+    }
+
+    @Test
+    @DisplayName("GET - all directors - success with isActive flag true")
+    void getAllDirectorsSuccessIsActiveTrue()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
+        when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
+        when(directorResourceHandler.getAll(DIRECTORS_URI)).thenReturn(directorGetAll);
+        when(directorGetAll.execute()).thenReturn(responseWithMultipleDirectors);
+        DirectorApi[] allDirectors = createArrayOfDirectorsApi();
+        when(responseWithMultipleDirectors.getData()).thenReturn(allDirectors);
+        Director[] responseDirectors = createArrayOfDirectors();
+        when(directorTransformer.getAllDirectors(any())).thenReturn(responseDirectors);
+
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true);
+
+        assertEquals(responseDirectors, response);
     }
 
     @Test
@@ -158,7 +184,7 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenThrow(apiErrorResponseException);
         doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false);
 
         assertNotNull(response);
         assertEquals(0, response.length);
@@ -177,7 +203,7 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenThrow(apiErrorResponseException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
     }
 
     @Test
@@ -193,7 +219,7 @@ public class DirectorServiceImplTest {
         when(directorGetAll.execute()).thenThrow(uriValidationException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
     }
 
     @Test
@@ -383,5 +409,63 @@ public class DirectorServiceImplTest {
         when(directorValidator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors)).thenReturn(validationErrors);
 
         assertEquals(validationErrors, directorService.submitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors));
+    }
+
+    private DirectorApi[] createArrayOfDirectorsApi() {
+
+        DirectorApi[] allDirectorsApi = new DirectorApi[4];
+
+        DirectorApi activeDirector = new DirectorApi();
+        activeDirector.setName("active");
+        activeDirector.setAppointmentDate(null);
+        activeDirector.setResignationDate(null);
+
+        DirectorApi activeDirector2 = new DirectorApi();
+        activeDirector2.setName("active2");
+        activeDirector2.setAppointmentDate(APPOINTMENT_DATE);
+        activeDirector2.setResignationDate(null);
+
+        DirectorApi activeDirector3 = new DirectorApi();
+        activeDirector3.setName("active3");
+        activeDirector3.setAppointmentDate(RESIGNATION_DATE.plusDays(1));
+        activeDirector3.setResignationDate(RESIGNATION_DATE);
+
+        DirectorApi inactiveDirector = new DirectorApi();
+        inactiveDirector.setName("inactive");
+        inactiveDirector.setAppointmentDate(APPOINTMENT_DATE);
+        inactiveDirector.setResignationDate(RESIGNATION_DATE);
+
+        allDirectorsApi[0] = activeDirector;
+        allDirectorsApi[1] = activeDirector2;
+        allDirectorsApi[2] = activeDirector3;
+        allDirectorsApi[3] = inactiveDirector;
+
+        return allDirectorsApi;
+    }
+
+    private Director[] createArrayOfDirectors() {
+
+        Director[] allDirectors = new Director[3];
+
+        Director activeDirector = new Director();
+        activeDirector.setName("active");
+        activeDirector.setAppointmentDate(null);
+        activeDirector.setResignationDate(null);
+
+        Director activeDirector2 = new Director();
+        activeDirector2.setName("active2");
+        activeDirector2.setAppointmentDate(APPOINTMENT_DATE);
+        activeDirector2.setResignationDate(null);
+
+        Director activeDirector3 = new Director();
+        activeDirector3.setName("active3");
+        activeDirector3.setAppointmentDate(RESIGNATION_DATE.plusDays(1));
+        activeDirector3.setResignationDate(RESIGNATION_DATE);
+
+        allDirectors[0] = activeDirector;
+        allDirectors[1] = activeDirector2;
+        allDirectors[2] = activeDirector3;
+
+        return allDirectors;
     }
 }

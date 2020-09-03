@@ -20,13 +20,16 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -46,6 +49,9 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
     @Autowired
     private ApiClientService apiClientService;
+
+    @Autowired
+    private DirectorService directorService;
 
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans");
@@ -68,6 +74,9 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
+        Director[] validDirectors;
+        List<String> validDirectorNames = new ArrayList<>();
+
         ApiClient apiClient = apiClientService.getApiClient();
         try {
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
@@ -76,6 +85,13 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                     loanService.getAllLoans(transactionId, companyAccountsId));
 
             addOrRemoveLoans.setNextAccount(smallFullApi.getNextAccounts());
+
+            validDirectors = directorService.getAllDirectors(transactionId, companyAccountsId, true);
+            for (Director director: validDirectors) {
+                validDirectorNames.add(director.getName());
+            }
+
+            addOrRemoveLoans.setValidDirectorNames(validDirectorNames);
 
         } catch (ServiceException e) {
 

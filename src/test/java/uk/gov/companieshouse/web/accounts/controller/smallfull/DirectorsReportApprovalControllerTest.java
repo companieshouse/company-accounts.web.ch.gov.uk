@@ -126,7 +126,7 @@ public class DirectorsReportApprovalControllerTest {
         Director director = new Director();
         director.setName(DIRECTOR_NAME);
         Director[] directors = new Director[]{director};
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directors);
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(directors);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
 
@@ -156,7 +156,7 @@ public class DirectorsReportApprovalControllerTest {
         newDirector.setResignationDate(LocalDate.of(2017, 04, 01));
         newDirector.setAppointmentDate(LocalDate.of(2017, 03, 01));
 
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directors);
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(directors);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 

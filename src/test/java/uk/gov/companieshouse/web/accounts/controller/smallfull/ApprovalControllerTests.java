@@ -109,7 +109,7 @@ public class ApprovalControllerTests {
     @DisplayName("Get approval view success path")
     void getRequestSuccess() throws Exception {
 
-        when (directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Director[]{});
+        when (directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(new Director[]{});
 
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
@@ -139,7 +139,7 @@ public class ApprovalControllerTests {
 
         Director director = new Director();
         director.setName(DIRECTOR_NAME);
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Director[]{director});
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(new Director[]{director});
 
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())

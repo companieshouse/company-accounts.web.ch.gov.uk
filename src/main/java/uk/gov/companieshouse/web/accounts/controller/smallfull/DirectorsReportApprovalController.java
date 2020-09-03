@@ -70,12 +70,8 @@ public class DirectorsReportApprovalController extends BaseController implements
 
             List<String> approverOptions = new ArrayList<>();
 
-            for(Director director : directorService.getAllDirectors(transactionId, companyAccountsId)) {
-
-                if (director.getResignationDate() == null || (director.getAppointmentDate() != null
-                        && director.getAppointmentDate().isAfter(director.getResignationDate()))) {
-                        approverOptions.add(director.getName());
-                }
+            for(Director director : directorService.getAllDirectors(transactionId, companyAccountsId, true)) {
+                approverOptions.add(director.getName());
             }
 
             String secretary = secretaryService.getSecretary(transactionId, companyAccountsId);

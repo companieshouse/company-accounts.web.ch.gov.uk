@@ -16,17 +16,20 @@ import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +55,9 @@ class AddOrRemoveLoansControllerTest {
 
     @Mock
     private LoanService loanService;
+
+    @Mock
+    private DirectorService directorService;
 
     @Mock
     private HttpServletRequest request;
@@ -125,6 +131,7 @@ class AddOrRemoveLoansControllerTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(createValidDirectors());
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Loan[0]);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_LOAN_PATH))
@@ -303,5 +310,18 @@ class AddOrRemoveLoansControllerTest {
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getHasIncludedLoansToDirectors()).thenReturn(false);
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    private Director[] createValidDirectors() {
+        Director[] directors = new Director[1];
+
+        Director newDirector = new Director();
+        newDirector.setName("test");
+        newDirector.setAppointmentDate(LocalDate.of(2017, 05, 01));
+        newDirector.setResignationDate(null);
+
+        directors[0] = newDirector;
+
+        return directors;
     }
 }

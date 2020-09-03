@@ -39,7 +39,7 @@ public class DirectorsReportReviewServiceImpl implements DirectorsReportReviewSe
 
         DirectorsReportReview review = new DirectorsReportReview();
 
-        review.setDirectors(directorService.getAllDirectors(transactionId, companyAccountsId));
+        review.setDirectors(directorService.getAllDirectors(transactionId, companyAccountsId, false));
         review.setSecretary(secretaryService.getSecretary(transactionId, companyAccountsId));
         review.setAdditionalInformation(
                 additionalInformationService.getAdditionalInformation(transactionId, companyAccountsId));

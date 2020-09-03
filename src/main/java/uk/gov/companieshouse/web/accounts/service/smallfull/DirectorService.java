@@ -10,7 +10,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface DirectorService {
 
-    Director[] getAllDirectors(String transactionId, String companyAccountsId) throws ServiceException;
+    Director[] getAllDirectors(String transactionId, String companyAccountsId, boolean isActive) throws ServiceException;
 
     List<ValidationError> createDirector(String transactionId, String companyAccountsId, DirectorToAdd directorToAdd) throws ServiceException;
 
