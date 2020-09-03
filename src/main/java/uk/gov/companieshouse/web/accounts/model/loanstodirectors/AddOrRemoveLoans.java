@@ -10,6 +10,7 @@ public class AddOrRemoveLoans {
 
     public AddOrRemoveLoans() {
         this.loanToAdd = new LoanToAdd();
+        this.loanToAdd.setBreakdown(new Breakdown());
     }
 
     private Loan[] existingLoans;
