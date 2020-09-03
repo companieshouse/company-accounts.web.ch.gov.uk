@@ -64,8 +64,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String VALID_DIRECTOR_NAMES = "validDirectorNames";
-
     @GetMapping
     public String getAddOrRemoveLoans(@PathVariable String companyNumber,
                                       @PathVariable String transactionId,
@@ -93,6 +91,8 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                 validDirectorNames.add(director.getName());
             }
 
+            addOrRemoveLoans.setValidDirectorNames(validDirectorNames);
+
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -100,7 +100,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
         }
 
         model.addAttribute(ADD_OR_REMOVE_LOANS, addOrRemoveLoans);
-        model.addAttribute(VALID_DIRECTOR_NAMES, validDirectorNames);
         model.addAttribute(COMPANY_NUMBER, companyNumber);
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
