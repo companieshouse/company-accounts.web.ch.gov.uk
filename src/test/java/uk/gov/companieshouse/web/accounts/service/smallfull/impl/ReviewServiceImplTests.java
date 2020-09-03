@@ -19,6 +19,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
@@ -42,6 +43,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -115,6 +117,9 @@ public class ReviewServiceImplTests {
 
     @Mock
     private ApiClient apiClient;
+
+    @Mock
+    private LoanService loanService;
 
     @InjectMocks
     private ReviewServiceImpl reviewService = new ReviewServiceImpl();
@@ -192,6 +197,12 @@ public class ReviewServiceImplTests {
         when(offBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenReturn(mockOffBalanceSheetArrangements);
 
+        Loan[] loans = new Loan[2];
+        loans[0] = new Loan();
+        loans[1] = new Loan();
+
+        when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loans);
+
         LocalDate periodStartOn = LocalDate.now().minusYears(1);
         LocalDate periodEndOn = LocalDate.now();
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -224,5 +235,6 @@ public class ReviewServiceImplTests {
         assertEquals(mockOffBalanceSheetArrangements, review.getOffBalanceSheetArrangements());
         assertEquals(periodStartOn, review.getPeriodStartOn());
         assertEquals(periodEndOn, review.getPeriodEndOn());
+        assertEquals(loans, review.getLoans());
     }
 }

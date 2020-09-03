@@ -5,676 +5,678 @@
       layout:decorate="~{layouts/baseLayout}">
 
 <head>
-  <title>Check your answers</title>
+    <title>Check your answers</title>
 </head>
 
 <body th:object="${review}">
 
 <div id="balanceSheet-main-content" layout:fragment="content" class="two-column-accounts">
 
-  <h1 id="page-title-heading" class="govuk-heading-l">Check your answers</h1>
+    <h1 id="page-title-heading" class="govuk-heading-l">Check your answers</h1>
 
-  <form id="review-form" th:action="@{''}" class="govuk-body" method="post">
+    <form id="review-form" th:action="@{''}" class="govuk-body" method="post">
 
-    <!-- Start ARD -->
+        <!-- Start ARD -->
 
-    <div>
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div>
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Company accounts dates',
                         identifier= 'accounts-reference-date',
                         resource = 'accounts-reference-date-question'
                         )">
-      </div>
+            </div>
 
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-accountsReferenceDate"
-               th:utext="*{#temporals.format(periodStartOn, 'd MMMM yyyy') + ' to ' + #temporals.format(periodEndOn, 'd MMMM yyyy')}">
-            </p>
-          </dt>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-accountsReferenceDate"
+                           th:utext="*{#temporals.format(periodStartOn, 'd MMMM yyyy') + ' to ' + #temporals.format(periodEndOn, 'd MMMM yyyy')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
 
-    <!-- End ARD -->
+        <!-- End ARD -->
 
-    <!-- Start Profit and Loss-->
+        <!-- Start Profit and Loss-->
 
-    <div id="cya-small-full-profit-and-loss" th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null}">
+        <div id="cya-small-full-profit-and-loss"
+             th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null}">
 
-      <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+            <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                        description = 'Profit and loss account',
                        identifier = 'profit-and-loss',
                        resource = 'profit-and-loss',
                        marginTop = true
                        )">
 
-      </div>
+            </div>
 
-      <dl class="app-check-your-answers app-check-your-answers--short">
+            <dl class="app-check-your-answers app-check-your-answers--short">
 
-        <div class="app-check-your-answers__contents cya-desktop-only">
-          <dt class="app-check-your-answers__question"></dt>
-          <dd class="app-check-your-answers__answer govuk-heading-s"
-              th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-              th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-          <dd class="app-check-your-answers__answer govuk-heading-s"
-              th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-              th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-          <dd class="app-check-your-answers__change"></dd>
-        </div>
+                <div class="app-check-your-answers__contents cya-desktop-only">
+                    <dt class="app-check-your-answers__question"></dt>
+                    <dd class="app-check-your-answers__answer govuk-heading-s"
+                        th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                        th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                    <dd class="app-check-your-answers__answer govuk-heading-s"
+                        th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                        th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                    <dd class="app-check-your-answers__change"></dd>
+                </div>
 
-        <th:block
-            th:if="*{profitAndLoss?.grossProfitOrLoss?.grossTotal?.currentAmount != null or profitAndLoss?.grossProfitOrLoss?.grossTotal?.previousAmount != null}">
+                <th:block
+                        th:if="*{profitAndLoss?.grossProfitOrLoss?.grossTotal?.currentAmount != null or profitAndLoss?.grossProfitOrLoss?.grossTotal?.previousAmount != null}">
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Turnover',
                             identifier = 'turnover',
                             currentAmount = *{profitAndLoss?.grossProfitOrLoss?.turnover?.currentAmount},
                             previousAmount = *{profitAndLoss?.grossProfitOrLoss?.turnover?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Cost of sales',
                             identifier = 'cost-of-sales',
                             currentAmount = *{profitAndLoss?.grossProfitOrLoss?.costOfSales?.currentAmount},
                             previousAmount = *{profitAndLoss?.grossProfitOrLoss?.costOfSales?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Gross profit (or loss)',
                             identifier = 'gross-profit-or-loss',
                             currentAmount = *{profitAndLoss?.grossProfitOrLoss?.grossTotal?.currentAmount},
                             previousAmount = *{profitAndLoss?.grossProfitOrLoss?.grossTotal?.previousAmount},
                             isTotalRow = true
                         )">
-          </div>
+                    </div>
 
-        </th:block>
+                </th:block>
 
-        <th:block
-            th:if="*{profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.currentAmount != null or profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.previousAmount != null}">
+                <th:block
+                        th:if="*{profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.currentAmount != null or profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.previousAmount != null}">
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Distribution costs',
                             identifier = 'distribution-costs',
                             currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.distributionCosts?.currentAmount},
                             previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.distributionCosts?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Administrative expenses',
                             identifier = 'administrative-expenses',
                             currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.administrativeExpenses?.currentAmount},
                             previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.administrativeExpenses?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Other operating income',
                             identifier = 'other-operating-income',
                             currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.otherOperatingIncome?.currentAmount},
                             previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.otherOperatingIncome?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Operating profit (or loss)',
                             identifier = 'operating-profit-or-loss',
                             currentAmount = *{profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.currentAmount},
                             previousAmount = *{profitAndLoss?.operatingProfitOrLoss?.operatingTotal?.previousAmount},
                             isTotalRow = true
                         )">
-          </div>
+                    </div>
 
-        </th:block>
+                </th:block>
 
-        <th:block
-            th:if="*{profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.currentAmount != null or profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.previousAmount != null}">
+                <th:block
+                        th:if="*{profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.currentAmount != null or profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.previousAmount != null}">
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Interest receivable and similar income',
                             identifier = 'interest-receivable-and-similar-income',
                             currentAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestReceivableAndSimilarIncome?.currentAmount},
                             previousAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestReceivableAndSimilarIncome?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Interest payable and similar charges',
                             identifier = 'interest-payable-and-similar-charges',
                             currentAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestPayableAndSimilarCharges?.currentAmount},
                             previousAmount = *{profitAndLoss?.profitOrLossBeforeTax?.interestPayableAndSimilarCharges?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Profit (or loss) before tax',
                             identifier = 'profit-or-loss-before-tax',
                             currentAmount = *{profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.currentAmount},
                             previousAmount = *{profitAndLoss?.profitOrLossBeforeTax?.totalProfitOrLossBeforeTax?.previousAmount},
                             isTotalRow = true
                         )">
-          </div>
+                    </div>
 
-        </th:block>
+                </th:block>
 
-        <th:block
-            th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null or profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.previousAmount != null}">
+                <th:block
+                        th:if="*{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount != null or profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.previousAmount != null}">
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Tax',
                             identifier = 'tax',
                             currentAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.tax?.currentAmount},
                             previousAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.tax?.previousAmount}
                         )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Profit (or loss) for the financial year',
                             identifier = 'profit-or-loss-for-the-financial-year',
                             currentAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.currentAmount},
                             previousAmount = *{profitAndLoss?.profitOrLossForFinancialYear?.totalProfitOrLossForFinancialYear?.previousAmount},
                             isTotalRow = true
                         )">
-          </div>
+                    </div>
 
-        </th:block>
+                </th:block>
 
-      </dl>
+            </dl>
 
-    </div>
+        </div>
 
-    <!-- End Profit and Loss -->
-    
-    <!-- Start Balance Sheet -->
+        <!-- End Profit and Loss -->
 
-    <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <!-- Start Balance Sheet -->
+
+        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                     description = 'Balance sheet',
                     identifier= 'balance-sheet',
                     resource = 'balance-sheet'
                     )">
-    </div>
+        </div>
 
-    <dl class="app-check-your-answers app-check-your-answers--short">
+        <dl class="app-check-your-answers app-check-your-answers--short">
 
-      <div class="app-check-your-answers__contents cya-desktop-only">
-        <dt class="app-check-your-answers__question"></dt>
-        <dd class="app-check-your-answers__answer govuk-heading-s"
-            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-        <dd class="app-check-your-answers__answer govuk-heading-s"
-            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-        <dd class="app-check-your-answers__change"></dd>
-      </div>
+            <div class="app-check-your-answers__contents cya-desktop-only">
+                <dt class="app-check-your-answers__question"></dt>
+                <dd class="app-check-your-answers__answer govuk-heading-s"
+                    th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                    th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                <dd class="app-check-your-answers__answer govuk-heading-s"
+                    th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                    th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                <dd class="app-check-your-answers__change"></dd>
+            </div>
 
-      <!-- Start Called Up Share Capital -->
+            <!-- Start Called Up Share Capital -->
 
-      <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+            <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                         description = 'Called up share capital not paid',
                         identifier = 'called-up-share-capital-not-paid',
                         currentAmount = *{balanceSheet?.calledUpShareCapitalNotPaid?.currentAmount},
                         previousAmount = *{balanceSheet?.calledUpShareCapitalNotPaid?.previousAmount}
                         )">
-      </div>
+            </div>
 
-      <!-- End Called Up Share Capital -->
+            <!-- End Called Up Share Capital -->
 
-      <!-- Start Fixed Assets -->
+            <!-- Start Fixed Assets -->
 
-      <th:block
-          th:if="*{balanceSheet?.fixedAssets?.currentTotal != null or balanceSheet?.fixedAssets?.previousTotal != null}">
+            <th:block
+                    th:if="*{balanceSheet?.fixedAssets?.currentTotal != null or balanceSheet?.fixedAssets?.previousTotal != null}">
 
-        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
                             description = 'Fixed assets'
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Intangible assets',
                             identifier = 'intangible-assets',
                             currentAmount = *{balanceSheet?.fixedAssets?.intangibleAssets?.currentAmount},
                             previousAmount = *{balanceSheet?.fixedAssets?.intangibleAssets?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Tangible assets',
                             identifier = 'tangible-assets',
                             currentAmount = *{balanceSheet?.fixedAssets?.tangibleAssets?.currentAmount},
                             previousAmount = *{balanceSheet?.fixedAssets?.tangibleAssets?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Investments',
                             identifier = 'fixed-investments',
                             currentAmount = *{balanceSheet?.fixedAssets?.investments?.currentAmount},
                             previousAmount = *{balanceSheet?.fixedAssets?.investments?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total fixed assets',
                             identifier = 'total-fixed-assets',
                             currentAmount = *{balanceSheet?.fixedAssets?.currentTotal},
                             previousAmount = *{balanceSheet?.fixedAssets?.previousTotal},
                             isTotalRow = true
                         )">
-        </div>
+                </div>
 
-      </th:block>
+            </th:block>
 
-      <!-- End Fixed Assets -->
+            <!-- End Fixed Assets -->
 
-      <!-- Start Current Assets -->
+            <!-- Start Current Assets -->
 
-      <th:block
-          th:if="*{balanceSheet?.currentAssets?.currentTotal != null or balanceSheet?.currentAssets?.previousTotal != null}">
+            <th:block
+                    th:if="*{balanceSheet?.currentAssets?.currentTotal != null or balanceSheet?.currentAssets?.previousTotal != null}">
 
-        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
                             description = 'Current assets'
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Stocks',
                             identifier = 'stocks',
                             currentAmount = *{balanceSheet?.currentAssets?.stocks?.currentAmount},
                             previousAmount = *{balanceSheet?.currentAssets?.stocks?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Debtors',
                             identifier = 'debtors',
                             currentAmount = *{balanceSheet?.currentAssets?.debtors?.currentAmount},
                             previousAmount = *{balanceSheet?.currentAssets?.debtors?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Cash at bank and in hand',
                             identifier = 'cash-at-bank-and-in-hand',
                             currentAmount = *{balanceSheet?.currentAssets?.cashAtBankAndInHand?.currentAmount},
                             previousAmount = *{balanceSheet?.currentAssets?.cashAtBankAndInHand?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Investments',
                             identifier = 'investments',
                             currentAmount = *{balanceSheet?.currentAssets?.investments?.currentAmount},
                             previousAmount = *{balanceSheet?.currentAssets?.investments?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total current assets',
                             identifier = 'total-current-assets',
                             currentAmount = *{balanceSheet?.currentAssets?.currentTotal},
                             previousAmount = *{balanceSheet?.currentAssets?.previousTotal},
                             isTotalRow = true
                         )">
-        </div>
+                </div>
 
-      </th:block>
+            </th:block>
 
-      <!-- End Current Assets -->
+            <!-- End Current Assets -->
 
-      <!-- Start Other Liabilities and Assets -->
+            <!-- Start Other Liabilities and Assets -->
 
-      <th:block
-          th:if="*{balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.currentAmount != null or balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.previousAmount != null}">
+            <th:block
+                    th:if="*{balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.currentAmount != null or balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.previousAmount != null}">
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Prepayments and accrued income',
                             identifier = 'prepayments-and-accrued-income',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.prepaymentsAndAccruedIncome?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.prepaymentsAndAccruedIncome?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Creditors - amounts falling due within one year',
                             identifier = 'creditors-due-within-one-year',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsDueWithinOneYear?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsDueWithinOneYear?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Net current assets (liabilities)',
                             identifier = 'net-current-assets',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.netCurrentAssets?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.netCurrentAssets?.previousAmount},
                             isTotalRow = true
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total assets less current liabilities',
                             identifier = 'total-assets-less-current-liabilities',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalAssetsLessCurrentLiabilities?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalAssetsLessCurrentLiabilities?.previousAmount},
                             isTotalRow = true
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Creditors - amounts falling due after more than one year',
                             identifier = 'creditors-due-after-one-year',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsAfterOneYear?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.creditorsAfterOneYear?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Provision for liabilities',
                             identifier = 'provision-for-liabilities',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.provisionForLiabilities?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.provisionForLiabilities?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Accruals and deferred income',
                             identifier = 'accruals-and-deferred-income-other-liabilities',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.accrualsAndDeferredIncome?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.accrualsAndDeferredIncome?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total net assets (liabilities)',
                             identifier = 'total-net-assets',
                             currentAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.currentAmount},
                             previousAmount = *{balanceSheet?.otherLiabilitiesOrAssets?.totalNetAssets?.previousAmount},
                             isTotalRow = true
                         )">
-        </div>
+                </div>
 
-      </th:block>
+            </th:block>
 
-      <!-- End Other Liabilities and Assets -->
+            <!-- End Other Liabilities and Assets -->
 
-      <!-- Start Capital and Reserves -->
+            <!-- Start Capital and Reserves -->
 
-      <th:block
-          th:if="*{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.currentAmount != null or balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.previousAmount != null}">
+            <th:block
+                    th:if="*{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.currentAmount != null or balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.previousAmount != null}">
 
-        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
                             description = 'Capital and reserves'
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Called up share capital',
                             identifier = 'called-up-share-capital',
                             currentAmount = *{balanceSheet?.capitalAndReserves?.calledUpShareCapital?.currentAmount},
                             previousAmount = *{balanceSheet?.capitalAndReserves?.calledUpShareCapital?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Share premium account',
                             identifier = 'share-premium-account',
                             currentAmount = *{balanceSheet?.capitalAndReserves?.sharePremiumAccount?.currentAmount},
                             previousAmount = *{balanceSheet?.capitalAndReserves?.sharePremiumAccount?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Other reserves',
                             identifier = 'other-reserves',
                             currentAmount = *{balanceSheet?.capitalAndReserves?.otherReserves?.currentAmount},
                             previousAmount = *{balanceSheet?.capitalAndReserves?.otherReserves?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Profit and loss account',
                             identifier = 'profit-and-loss-account',
                             currentAmount = *{balanceSheet?.capitalAndReserves?.profitAndLossAccount?.currentAmount},
                             previousAmount = *{balanceSheet?.capitalAndReserves?.profitAndLossAccount?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total shareholders\' funds',
                             identifier = 'total-shareholders-funds',
                             currentAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.currentAmount},
                             previousAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.previousAmount},
                             isTotalRow = true
                         )">
-        </div>
+                </div>
 
-      </th:block>
+            </th:block>
 
-      <th:block
-              th:if="*{balanceSheet?.membersFunds?.totalMembersFunds?.currentAmount != null or balanceSheet?.membersFunds?.totalMembersFunds?.previousAmount != null}">
+            <th:block
+                    th:if="*{balanceSheet?.membersFunds?.totalMembersFunds?.currentAmount != null or balanceSheet?.membersFunds?.totalMembersFunds?.previousAmount != null}">
 
-        <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
+                <div th:replace="fragments/review/balanceSheetHeaderRow :: balanceSheetHeaderRow (
                             description = 'Members Funds'
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Profit and loss account',
                             identifier = 'profit-and-loss-account',
                             currentAmount = *{balanceSheet?.membersFunds?.profitAndLossAccount?.currentAmount},
                             previousAmount = *{balanceSheet?.membersFunds?.profitAndLossAccount?.previousAmount}
                         )">
-        </div>
+                </div>
 
-        <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                             description = 'Total Members funds',
                             identifier = 'total-members-funds',
                             currentAmount = *{balanceSheet?.membersFunds?.totalMembersFunds?.currentAmount},
                             previousAmount = *{balanceSheet?.membersFunds?.totalMembersFunds?.previousAmount},
                             isTotalRow = true
                         )">
-        </div>
+                </div>
 
 
-      </th:block>
+            </th:block>
 
-      <!-- End Capital and Reserves -->
+            <!-- End Capital and Reserves -->
 
-    </dl>
+        </dl>
 
-    <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                     description = 'Balance sheet statements',
                     identifier = 'balance-sheet-statements',
                     marginTop = true
                     )">
-    </div>
+        </div>
 
-    <dl class="app-check-your-answers app-check-your-answers--short">
+        <dl class="app-check-your-answers app-check-your-answers--short">
 
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__answer">
-          <ul class="govuk-list govuk-list--bullet">
-            <li id="review-statements-section-477"><span th:text="*{statements.section477}"></span>
-            </li>
-            <li id="review-statements-audit-not-required-by-members"><span
-                th:text="*{statements.auditNotRequiredByMembers}"></span></li>
-            <li id="review-statements-directors-responsibility"><span
-                th:text="*{statements.directorsResponsibility}"></span></li>
-            <li id="review-statements-small-companies-regime"><span
-                th:text="*{statements.smallCompaniesRegime}"></span></li>
-            <div th:if="*{statements.noProfitAndLoss != null}">
-            <li id="review-statements-no-profit-and-loss"><span
-                th:text="*{statements.noProfitAndLoss}"></span></li>
+            <div class="app-check-your-answers__contents">
+                <dt class="app-check-your-answers__answer">
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li id="review-statements-section-477"><span th:text="*{statements.section477}"></span>
+                        </li>
+                        <li id="review-statements-audit-not-required-by-members"><span
+                                th:text="*{statements.auditNotRequiredByMembers}"></span></li>
+                        <li id="review-statements-directors-responsibility"><span
+                                th:text="*{statements.directorsResponsibility}"></span></li>
+                        <li id="review-statements-small-companies-regime"><span
+                                th:text="*{statements.smallCompaniesRegime}"></span></li>
+                        <div th:if="*{statements.noProfitAndLoss != null}">
+                            <li id="review-statements-no-profit-and-loss"><span
+                                    th:text="*{statements.noProfitAndLoss}"></span></li>
+                        </div>
+                    </ul>
+                </dt>
             </div>
-          </ul>
-        </dt>
-      </div>
 
-    </dl>
+        </dl>
 
-    <!-- Start Accounting Policies -->
+        <!-- Start Accounting Policies -->
 
-    <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                     description = 'Basis of preparation',
                     identifier= 'basis-of-preparation',
                     resource = 'basis-of-preparation',
                     marginTop = true
                     )">
-    </div>
+        </div>
 
-    <dl class="app-check-your-answers app-check-your-answers--short">
+        <dl class="app-check-your-answers app-check-your-answers--short">
 
-      <div class="app-check-your-answers__contents">
-        <dt class="app-check-your-answers__answer">
-          <p id="review-basisOfPreparation"
-             th:utext="*{#strings.toString(basisOfPreparation.accountingRegulatoryStandard)}">
-          </p>
-        </dt>
-      </div>
-    </dl>
+            <div class="app-check-your-answers__contents">
+                <dt class="app-check-your-answers__answer">
+                    <p id="review-basisOfPreparation"
+                       th:utext="*{#strings.toString(basisOfPreparation.accountingRegulatoryStandard)}">
+                    </p>
+                </dt>
+            </div>
+        </dl>
 
-    <div th:if="*{turnoverPolicy.turnoverPolicyDetails != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:if="*{turnoverPolicy.turnoverPolicyDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Turnover policy',
                         identifier= 'turnover-policy',
                         resource = 'turnover-policy',
                         marginTop = true
                         )">
-      </div>
+            </div>
 
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-turnoverPolicy"
-               th:utext="*{#strings.replace(turnoverPolicy.turnoverPolicyDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-turnoverPolicy"
+                           th:utext="*{#strings.replace(turnoverPolicy.turnoverPolicyDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
 
-    <div th:if="*{tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:if="*{tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Tangible fixed assets depreciation policy',
                         identifier= 'tangible-depreciation-policy',
                         resource = 'tangible-depreciation-policy',
                         marginTop = true
                         )">
-      </div>
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-tangibleDepreciationPolicy"
-               th:utext="*{#strings.replace(tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            </div>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-tangibleDepreciationPolicy"
+                           th:utext="*{#strings.replace(tangibleDepreciationPolicy.tangibleDepreciationPolicyDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
 
-    <div th:if="*{intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:if="*{intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Intangible fixed assets amortisation policy',
                         identifier= 'intangible-amortisation-policy',
                         resource = 'intangible-fixed-assets-amortisation',
                         marginTop = true
                         )">
-      </div>
+            </div>
 
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-intangibleAmortisationPolicy"
-               th:utext="*{#strings.replace(intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-intangibleAmortisationPolicy"
+                           th:utext="*{#strings.replace(intangibleAmortisationPolicy.intangibleAmortisationPolicyDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
 
-    <div th:if="*{valuationInformationPolicy.valuationInformationPolicyDetails != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:if="*{valuationInformationPolicy.valuationInformationPolicyDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Valuation information policy',
                         identifier = 'valuation-information-policy',
                         resource = 'valuation-information',
                         marginTop = true
                         )">
-      </div>
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-valuationInformationPolicy"
-               th:utext="*{#strings.replace(valuationInformationPolicy.valuationInformationPolicyDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            </div>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-valuationInformationPolicy"
+                           th:utext="*{#strings.replace(valuationInformationPolicy.valuationInformationPolicyDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
 
-    <div th:if="*{otherAccountingPolicy.otherAccountingPolicyDetails != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:if="*{otherAccountingPolicy.otherAccountingPolicyDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Other accounting policies',
                         identifier= 'other-accounting-policies',
                         resource = 'other-accounting-policies',
                         marginTop = true
                         )">
-      </div>
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-otherAccountingPolicy"
-               th:utext="*{#strings.replace(otherAccountingPolicy.otherAccountingPolicyDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            </div>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-otherAccountingPolicy"
+                           th:utext="*{#strings.replace(otherAccountingPolicy.otherAccountingPolicyDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
 
-    <!-- End Accounting Policies -->
-    
-    <!-- Employees Note -->
-    <div id="cya-small-full-employees-note">
+        <!-- End Accounting Policies -->
 
-      <div th:if="*{employees?.details != null or employees?.averageNumberOfEmployees !=null}">
+        <!-- Employees Note -->
+        <div id="cya-small-full-employees-note">
 
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+            <div th:if="*{employees?.details != null or employees?.averageNumberOfEmployees !=null}">
+
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Employees',
                             identifier= 'employees-note',
                             resource = 'employees',
                             marginTop = true
                             )">
-        </div>
+                </div>
 
-        <dl th:if="*{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees != null or
-                        employees?.averageNumberOfEmployees.previousAverageNumberOfEmployees != null}" class="app-check-your-answers app-check-your-answers--short">
+                <dl th:if="*{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees != null or
+                        employees?.averageNumberOfEmployees.previousAverageNumberOfEmployees != null}"
+                    class="app-check-your-answers app-check-your-answers--short">
 
-          <div
-              class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question"></dt>
+                    <div
+                            class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question"></dt>
 
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Average number of employees',
                                 identifier = 'average-number-of-employees',
                                 currentAmount = *{employees?.averageNumberOfEmployees.currentAverageNumberOfEmployees},
@@ -682,771 +684,885 @@
                                 isBoldLegend = true,
                                 isEmployees = true
                             )">
-          </div>
+                    </div>
 
-        </dl>
+                </dl>
 
-        <div th:if="*{employees.details != null}">
-          <dl class="app-check-your-answers app-check-your-answers--short">
-            <div class="app-check-your-answers__contents">
-              <dt class="app-check-your-answers__question">Additional information</dt>
-              <dd class="app-check-your-answers__answer">
-                <p id="review-employees-details"
-                   th:utext="*{#strings.replace(employees?.details,'&#10;','&lt;br&gt;')}"></p>
-              <dd class="app-check-your-answers__change"></dd>
+                <div th:if="*{employees.details != null}">
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__question">Additional information</dt>
+                            <dd class="app-check-your-answers__answer">
+                                <p id="review-employees-details"
+                                   th:utext="*{#strings.replace(employees?.details,'&#10;','&lt;br&gt;')}"></p>
+                            <dd class="app-check-your-answers__change"></dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
-          </dl>
         </div>
-      </div>
-    </div>
 
-    <!-- Employees Note End -->
+        <!-- Employees Note End -->
 
-    <!-- Start Intangible Assets -->
+        <!-- Start Intangible Assets -->
 
-    <div id="cya-small-full-intangible-assets-note">
-      <div th:if="*{intangibleAssets?.netBookValue?.currentPeriod?.total != null}">
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div id="cya-small-full-intangible-assets-note">
+            <div th:if="*{intangibleAssets?.netBookValue?.currentPeriod?.total != null}">
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Intangible assets note',
                             identifier= 'intangible-assets-note',
                             resource = 'note/intangible-assets',
                             marginTop = true
                             )">
-        </div>
+                </div>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question">Cost</dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question">Cost</dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
+                        <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                     description = 'Cost at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                     identifier = 'intangible-assets-cost-at-period-start',
                                     row = *{intangibleAssets?.cost?.atPeriodStart}
                                     )">
-            </div>
-          </th:block>
+                        </div>
+                    </th:block>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Additions',
                                 identifier = 'intangible-assets-additions',
                                 row = *{intangibleAssets?.cost?.additions}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Disposals',
                                 identifier = 'intangible-assets-disposals',
                                 row = *{intangibleAssets?.cost?.disposals}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Revaluations',
                                 identifier = 'intangible-assets-revaluations',
                                 row = *{intangibleAssets?.cost?.revaluations}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                             description = 'Transfers',
                                 identifier = 'intangible-assets-transfers',
                                 row = *{intangibleAssets?.cost?.transfers}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Cost at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'intangible-assets-cost-at-period-end',
                                 row = *{intangibleAssets?.cost?.atPeriodEnd},
                                 isTotalRow = true
                                 )">
-          </div>
-        </dl>
+                    </div>
+                </dl>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question">Amortisation</dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question">Amortisation</dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
+                        <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                     description = 'Amortisation at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                     identifier = 'intangible-assets-amortisation-at-period-start',
                                     row = *{intangibleAssets?.amortisation?.atPeriodStart}
                                     )">
-            </div>
-          </th:block>
+                        </div>
+                    </th:block>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Charge for year',
                                 identifier = 'intangible-assets-charge-for-year',
                                 row = *{intangibleAssets?.amortisation?.chargeForYear}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'On disposals',
                                 identifier = 'intangible-assets-on-disposals',
                                 row = *{intangibleAssets?.amortisation?.onDisposals}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Other adjustments',
                                 identifier = 'intangible-assets-other-adjustments',
                                 row = *{intangibleAssets?.amortisation?.otherAdjustments}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Amortisation at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'intangible-assets-amortisation-at-period-end',
                                 row = *{intangibleAssets?.amortisation?.atPeriodEnd},
                                 isTotalRow = true
                                 )">
-          </div>
-        </dl>
+                    </div>
+                </dl>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question">Net book value</dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question">Net book value</dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Goodwill</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Other</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                 description = 'Net book value at ' + *{#temporals.format(intangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'intangible-assets-net-book-value-current-period',
                                 row = *{intangibleAssets?.netBookValue?.currentPeriod},
                                 isTotalRow = true
                                 )">
-          </div>
+                    </div>
 
-          <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
+                    <th:block th:if="*{intangibleAssets?.lastAccountsPeriodEndOn != null}">
+                        <div th:replace="fragments/review/intangibleAssetsValueRow :: intangibleAssetsValueRow (
                                     description = 'Net book value at ' + *{#temporals.format(intangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')},
                                     identifier = 'intangible-assets-net-book-value-previous-period',
                                     row = *{intangibleAssets?.netBookValue?.previousPeriod},
                                     isTotalRow = true
                                     )">
-            </div>
-          </th:block>
-        </dl>
+                        </div>
+                    </th:block>
+                </dl>
 
-        <div th:if="*{intangibleAssets.additionalInformation != null}">
-          <dl class="app-check-your-answers app-check-your-answers--short">
-            <div class="app-check-your-answers__contents">
-              <dt class="app-check-your-answers__question">Additional information</dt>
-              <dd class="app-check-your-answers__answer">
-                <p id="review-intangible-assets-additional-information"
-                   th:utext="*{#strings.replace(intangibleAssets?.additionalInformation,'&#10;','&lt;br&gt;')}">
-                </p>
-              </dd>
-              <dd class="app-check-your-answers__change"></dd>
+                <div th:if="*{intangibleAssets.additionalInformation != null}">
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__question">Additional information</dt>
+                            <dd class="app-check-your-answers__answer">
+                                <p id="review-intangible-assets-additional-information"
+                                   th:utext="*{#strings.replace(intangibleAssets?.additionalInformation,'&#10;','&lt;br&gt;')}">
+                                </p>
+                            </dd>
+                            <dd class="app-check-your-answers__change"></dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
-          </dl>
         </div>
-      </div>
-    </div>
 
-    <!-- End Intangible Assets -->
+        <!-- End Intangible Assets -->
 
-    <!-- Start Tangible Assets -->
+        <!-- Start Tangible Assets -->
 
-    <div id="cya-small-full-tangible-assets-note">
-      <div th:if="*{tangibleAssets?.netBookValue?.currentPeriod?.total != null}">
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div id="cya-small-full-tangible-assets-note">
+            <div th:if="*{tangibleAssets?.netBookValue?.currentPeriod?.total != null}">
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Tangible assets note',
                             identifier= 'tangible-assets-note',
                             resource = 'note/tangible-assets',
                             marginTop = true
                             )">
-        </div>
+                </div>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question">Cost</dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question">Cost</dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <th:block th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <th:block th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
+                        <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                     description = 'Cost at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                     identifier = 'tangible-assets-cost-at-period-start',
                                     row = *{tangibleAssets?.cost?.atPeriodStart}
                                     )">
-            </div>
-          </th:block>
+                        </div>
+                    </th:block>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Additions',
                                 identifier = 'tangible-assets-additions',
                                 row = *{tangibleAssets?.cost?.additions}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Disposals',
                                 identifier = 'tangible-assets-disposals',
                                 row = *{tangibleAssets?.cost?.disposals}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Revaluations',
                                 identifier = 'tangible-assets-revaluations',
                                 row = *{tangibleAssets?.cost?.revaluations}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                             description = 'Transfers',
                                 identifier = 'tangible-assets-transfers',
                                 row = *{tangibleAssets?.cost?.transfers}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Cost at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-cost-at-period-end',
                                 row = *{tangibleAssets?.cost?.atPeriodEnd},
                                 isTotalRow = true
                                 )">
-          </div>
+                    </div>
 
-        </dl>
+                </dl>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question">Depreciation</dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question">Depreciation</dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <th:block th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <th:block th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
+                        <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                     description = 'Depreciation at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')},
                                     identifier = 'tangible-assets-depreciation-at-period-start',
                                     row = *{tangibleAssets?.depreciation?.atPeriodStart}
                                     )">
-            </div>
-          </th:block>
+                        </div>
+                    </th:block>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Charge for year',
                                 identifier = 'tangible-assets-charge-for-year',
                                 row = *{tangibleAssets?.depreciation?.chargeForYear}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'On disposals',
                                 identifier = 'tangible-assets-on-disposals',
                                 row = *{tangibleAssets?.depreciation?.onDisposals}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Other adjustments',
                                 identifier = 'tangible-assets-other-adjustments',
                                 row = *{tangibleAssets?.depreciation?.otherAdjustments}
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Depreciation at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-depreciation-at-period-end',
                                 row = *{tangibleAssets?.depreciation?.atPeriodEnd},
                                 isTotalRow = true
                                 )">
-          </div>
+                    </div>
 
-        </dl>
+                </dl>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question">Net book value</dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question">Net book value</dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Land &amp; buildings</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Plant &amp; machinery</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Fixtures &amp; fittings</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Office equipment</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Motor vehicles</dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s">Total</dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                 description = 'Net book value at ' + *{#temporals.format(tangibleAssets.nextAccountsPeriodEndOn, 'd MMMM yyyy')},
                                 identifier = 'tangible-assets-net-book-value-current-period',
                                 row = *{tangibleAssets?.netBookValue?.currentPeriod},
                                 isTotalRow = true
                                 )">
-          </div>
+                    </div>
 
-          <th:block th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
-            <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
+                    <th:block th:if="*{tangibleAssets?.lastAccountsPeriodEndOn != null}">
+                        <div th:replace="fragments/review/tangibleAssetsValueRow :: tangibleAssetsValueRow (
                                     description = 'Net book value at ' + *{#temporals.format(tangibleAssets.lastAccountsPeriodEndOn, 'd MMMM yyyy')},
                                     identifier = 'tangible-assets-net-book-value-previous-period',
                                     row = *{tangibleAssets?.netBookValue?.previousPeriod},
                                     isTotalRow = true
                                     )">
-            </div>
-          </th:block>
+                        </div>
+                    </th:block>
 
-        </dl>
+                </dl>
 
-        <div th:if="*{tangibleAssets.additionalInformation != null}">
-          <dl class="app-check-your-answers app-check-your-answers--short">
-            <div class="app-check-your-answers__contents">
-              <dt class="app-check-your-answers__question">Additional information</dt>
-              <dd class="app-check-your-answers__answer">
-                <p id="review-tangible-assets-additional-information"
-                   th:utext="*{#strings.replace(tangibleAssets?.additionalInformation,'&#10;','&lt;br&gt;')}">
-                </p>
-              </dd>
-              <dd class="app-check-your-answers__change"></dd>
+                <div th:if="*{tangibleAssets.additionalInformation != null}">
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__question">Additional information</dt>
+                            <dd class="app-check-your-answers__answer">
+                                <p id="review-tangible-assets-additional-information"
+                                   th:utext="*{#strings.replace(tangibleAssets?.additionalInformation,'&#10;','&lt;br&gt;')}">
+                                </p>
+                            </dd>
+                            <dd class="app-check-your-answers__change"></dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
-          </dl>
         </div>
-      </div>
-    </div>
 
-    <!-- End Tangible Assets -->
+        <!-- End Tangible Assets -->
 
-    <!-- Fixed Assets Investments Note -->
-    <div th:if="*{fixedAssetsInvestments.fixedAssetsDetails != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <!-- Fixed Assets Investments Note -->
+        <div th:if="*{fixedAssetsInvestments.fixedAssetsDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Fixed assets investments',
                             identifier= 'fixed-assets-investments',
                             resource = 'fixed-assets-investments',
                             marginTop = true
                             )">
-      </div>
+            </div>
 
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-fixed-assets-investments"
-               th:utext="*{#strings.replace(fixedAssetsInvestments.fixedAssetsDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-fixed-assets-investments"
+                           th:utext="*{#strings.replace(fixedAssetsInvestments.fixedAssetsDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
-    <!-- End Fixed Assets Investments Note -->
+        <!-- End Fixed Assets Investments Note -->
 
-    <!-- Stocks Note -->
+        <!-- Stocks Note -->
 
-    <div id="cya-small-full-stocks-note">
+        <div id="cya-small-full-stocks-note">
 
-      <div th:if="*{stocks.total != null}">
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+            <div th:if="*{stocks.total != null}">
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Stocks note',
                             identifier= 'stocks-note',
                             resource = 'stocks',
                             marginTop = true
                             )">
-        </div>
+                </div>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question"></dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question"></dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Stocks',
                                 identifier = 'stocks-note-stocks',
                                 currentAmount = *{stocks?.stocks?.currentStocks},
                                 previousAmount = *{stocks?.stocks?.previousStocks},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Payments on account',
                                 identifier = 'stocks-note-payments-on-account',
                                 currentAmount = *{stocks?.paymentsOnAccount?.currentPaymentsOnAccount},
                                 previousAmount = *{stocks?.paymentsOnAccount?.previousPaymentsOnAccount},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-stocks',
                                 currentAmount = *{stocks?.total?.currentTotal},
                                 previousAmount = *{stocks?.total?.previousTotal},
                                 isTotalRow = true
                             )">
-          </div>
+                    </div>
 
-        </dl>
+                </dl>
 
-      </div>
-    </div>
+            </div>
+        </div>
 
-    <!-- End Stocks Note -->
+        <!-- End Stocks Note -->
 
-    <!-- Debtors Note -->
+        <!-- Debtors Note -->
 
-    <div id="cya-small-full-debtors-note">
+        <div id="cya-small-full-debtors-note">
 
-      <div th:if="*{debtors.total != null}">
+            <div th:if="*{debtors.total != null}">
 
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Debtors note',
                             identifier= 'debtors-note',
                             resource = 'debtors',
                             marginTop = true
                             )">
-        </div>
+                </div>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question"></dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question"></dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Trade debtors',
                                 identifier = 'trade-debtors',
                                 currentAmount = *{debtors?.tradeDebtors?.currentTradeDebtors},
                                 previousAmount = *{debtors?.tradeDebtors?.previousTradeDebtors},
                                 isBoldLegend = true
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Prepayments and accrued income',
                                 identifier = 'prepayments=and-accrued-income',
                                 currentAmount = *{debtors?.prepaymentsAndAccruedIncome?.currentPrepaymentsAndAccruedIncome},
                                 previousAmount = *{debtors?.prepaymentsAndAccruedIncome?.previousPrepaymentsAndAccruedIncome},
                                 isBoldLegend = true
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other debtors',
                                 identifier = 'other-debtors',
                                 currentAmount = *{debtors?.otherDebtors?.currentOtherDebtors},
                                 previousAmount = *{debtors?.otherDebtors?.previousOtherDebtors},
                                 isBoldLegend = true
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-debtors',
                                 currentAmount = *{debtors?.total?.currentTotal},
                                 previousAmount = *{debtors?.total?.previousTotal},
                                 isTotalRow = true
                                 )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Debtors after more than one year',
                                 identifier = 'debtors-after-more-than-one-year',
                                 currentAmount = *{debtors?.greaterThanOneYear?.currentGreaterThanOneYear},
                                 previousAmount = *{debtors?.greaterThanOneYear?.previousGreaterThanOneYear},
                                 isBoldLegend = true
                                 )">
-          </div>
-        </dl>
+                    </div>
+                </dl>
 
-        <div th:if="*{debtors.details != null}">
-          <dl class="app-check-your-answers app-check-your-answers--short">
-            <div class="app-check-your-answers__contents">
-              <dt class="app-check-your-answers__question">Additional information</dt>
-              <dd class="app-check-your-answers__answer">
-                <p id="review-debtors-details"
-                   th:utext="*{#strings.replace(debtors?.details,'&#10;','&lt;br&gt;')}">
-                </p>
-              <dd class="app-check-your-answers__change"></dd>
+                <div th:if="*{debtors.details != null}">
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__question">Additional information</dt>
+                            <dd class="app-check-your-answers__answer">
+                                <p id="review-debtors-details"
+                                   th:utext="*{#strings.replace(debtors?.details,'&#10;','&lt;br&gt;')}">
+                                </p>
+                            <dd class="app-check-your-answers__change"></dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
-          </dl>
         </div>
-      </div>
-    </div>
 
-    <!-- End Debtors Note -->
+        <!-- End Debtors Note -->
 
-    <!-- Current Assets Investments Note -->
-    <div th:if="*{currentAssetsInvestments.currentAssetsInvestmentsDetails != null}">
-      <div
-          th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <!-- Current Assets Investments Note -->
+        <div th:if="*{currentAssetsInvestments.currentAssetsInvestmentsDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Current assets investments',
                         identifier= 'current-assets-investments',
                         resource = 'current-assets-investments',
                         marginTop = true
                         )">
-      </div>
+            </div>
 
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-current-assets-investments"
-               th:utext="*{#strings.replace(currentAssetsInvestments.currentAssetsInvestmentsDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-current-assets-investments"
+                           th:utext="*{#strings.replace(currentAssetsInvestments.currentAssetsInvestmentsDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
-    <!-- End Current Assets Investments Note -->
+        <!-- End Current Assets Investments Note -->
 
-    <!-- Creditors Within One Year Note -->
+        <!-- Creditors Within One Year Note -->
 
-    <div id="cya-small-full-creditors-within-one-year-note">
+        <div id="cya-small-full-creditors-within-one-year-note">
 
-      <div th:if="*{creditorsWithinOneYear.total != null}">
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+            <div th:if="*{creditorsWithinOneYear.total != null}">
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Creditors - amounts falling due within one year note',
                             identifier= 'creditors-within-one-year-note',
                             resource = 'creditors-within-one-year',
 
                             marginTop = true
                             )">
-        </div>
+                </div>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question"></dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question"></dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Bank loans and overdrafts',
                                 identifier = 'bank-loans-and-overdrafts-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts?.currentBankLoansAndOverdrafts},
                                 previousAmount = *{creditorsWithinOneYear?.bankLoansAndOverdrafts?.previousBankLoansAndOverdrafts},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Amounts due under finance leases and hire purchase contracts',
                                 identifier = 'finance-leases-and-hire-purchase-contracts-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts?.currentFinanceLeasesAndHirePurchaseContracts},
                                 previousAmount = *{creditorsWithinOneYear?.financeLeasesAndHirePurchaseContracts?.previousFinanceLeasesAndHirePurchaseContracts},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Trade creditors',
                                 identifier = 'trade-creditors',
                                 currentAmount = *{creditorsWithinOneYear?.tradeCreditors?.currentTradeCreditors},
                                 previousAmount = *{creditorsWithinOneYear?.tradeCreditors?.previousTradeCreditors},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Taxation and social security',
                                 identifier = 'taxation-and-social-security',
                                 currentAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity?.currentTaxationAndSocialSecurity},
                                 previousAmount = *{creditorsWithinOneYear?.taxationAndSocialSecurity?.previousTaxationAndSocialSecurity},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Accruals and deferred income',
                                 identifier = 'accruals-and-deferred-income-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome?.currentAccrualsAndDeferredIncome},
                                 previousAmount = *{creditorsWithinOneYear?.accrualsAndDeferredIncome?.previousAccrualsAndDeferredIncome},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other creditors',
                                 identifier = 'other-creditors-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.otherCreditors?.currentOtherCreditors},
                                 previousAmount = *{creditorsWithinOneYear?.otherCreditors?.previousOtherCreditors},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-creditors-within',
                                 currentAmount = *{creditorsWithinOneYear?.total?.currentTotal},
                                 previousAmount = *{creditorsWithinOneYear?.total?.previousTotal},
                                 isTotalRow = true
                             )">
-          </div>
+                    </div>
 
-        </dl>
+                </dl>
 
-        <div th:if="*{creditorsWithinOneYear.details != null}">
-          <dl class="app-check-your-answers app-check-your-answers--short">
-            <div class="app-check-your-answers__contents">
-              <dt class="app-check-your-answers__question">Additional information</dt>
-              <dd class="app-check-your-answers__answer">
-                <p id="review-creditors-within-one-year-details"
-                   th:utext="*{#strings.replace(creditorsWithinOneYear?.details,'&#10;','&lt;br&gt;')}">
-                </p>
-              <dd class="app-check-your-answers__change"></dd>
+                <div th:if="*{creditorsWithinOneYear.details != null}">
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__question">Additional information</dt>
+                            <dd class="app-check-your-answers__answer">
+                                <p id="review-creditors-within-one-year-details"
+                                   th:utext="*{#strings.replace(creditorsWithinOneYear?.details,'&#10;','&lt;br&gt;')}">
+                                </p>
+                            <dd class="app-check-your-answers__change"></dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
-          </dl>
         </div>
-      </div>
-    </div>
 
-    <!-- End Creditors Within One Year Note -->
+        <!-- End Creditors Within One Year Note -->
 
-    <!-- Creditors After One Year Note -->
-    <div id="cya-small-full-creditors-after-one-year-note">
+        <!-- Creditors After One Year Note -->
+        <div id="cya-small-full-creditors-after-one-year-note">
 
-      <div th:if="*{creditorsAfterOneYear.total != null}">
-        <div th:replace="fragments/review/sectionHeader :: sectionHeader (
+            <div th:if="*{creditorsAfterOneYear.total != null}">
+                <div th:replace="fragments/review/sectionHeader :: sectionHeader (
                             description = 'Creditors - amounts falling due after one year note',
                             identifier= 'creditors-after-one-year-note',
                             resource = 'creditors-after-more-than-one-year',
 
                             marginTop = true
                             )">
-        </div>
+                </div>
 
-        <dl class="app-check-your-answers app-check-your-answers--short">
-          <div class="app-check-your-answers__contents cya-desktop-only">
-            <dt class="app-check-your-answers__question"></dt>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__answer govuk-heading-s"
-                th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
-                th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
-            <dd class="app-check-your-answers__change"></dd>
-          </div>
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents cya-desktop-only">
+                        <dt class="app-check-your-answers__question"></dt>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.currentPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__answer govuk-heading-s"
+                            th:if="*{balanceSheet.balanceSheetHeadings.previousPeriodHeading != null}"
+                            th:text='*{balanceSheet.balanceSheetHeadings.previousPeriodHeading}'></dd>
+                        <dd class="app-check-your-answers__change"></dd>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Bank loans and overdrafts',
                                 identifier = 'bank-loans-and-overdrafts-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts?.currentBankLoansAndOverdrafts},
                                 previousAmount = *{creditorsAfterOneYear?.bankLoansAndOverdrafts?.previousBankLoansAndOverdrafts},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Amounts due under finance leases and hire purchase contracts',
                                 identifier = 'finance-leases-and-hire-purchase-contracts-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts?.currentFinanceLeasesAndHirePurchaseContracts},
                                 previousAmount = *{creditorsAfterOneYear?.financeLeasesAndHirePurchaseContracts?.previousFinanceLeasesAndHirePurchaseContracts},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Other creditors',
                                 identifier = 'other-creditors-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.otherCreditors?.currentOtherCreditors},
                                 previousAmount = *{creditorsAfterOneYear?.otherCreditors?.previousOtherCreditors},
                                 isBoldLegend = true
                             )">
-          </div>
+                    </div>
 
-          <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
+                    <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
                                 description = 'Total',
                                 identifier = 'total-creditors-after',
                                 currentAmount = *{creditorsAfterOneYear?.total?.currentTotal},
                                 previousAmount = *{creditorsAfterOneYear?.total?.previousTotal},
                                 isTotalRow = true
                             )">
-          </div>
+                    </div>
 
-        </dl>
+                </dl>
 
-        <div th:if="*{creditorsAfterOneYear.details != null}">
-          <dl class="app-check-your-answers app-check-your-answers--short">
-            <div class="app-check-your-answers__contents">
-              <dt class="app-check-your-answers__question">Additional information</dt>
-              <dd class="app-check-your-answers__answer">
-                <p id="review-creditors-after-one-year-details"
-                   th:utext="*{#strings.replace(creditorsAfterOneYear?.details,'&#10;','&lt;br&gt;')}">
-                </p>
-              <dd class="app-check-your-answers__change"></dd>
+                <div th:if="*{creditorsAfterOneYear.details != null}">
+                    <dl class="app-check-your-answers app-check-your-answers--short">
+                        <div class="app-check-your-answers__contents">
+                            <dt class="app-check-your-answers__question">Additional information</dt>
+                            <dd class="app-check-your-answers__answer">
+                                <p id="review-creditors-after-one-year-details"
+                                   th:utext="*{#strings.replace(creditorsAfterOneYear?.details,'&#10;','&lt;br&gt;')}">
+                                </p>
+                            <dd class="app-check-your-answers__change"></dd>
+                        </div>
+                    </dl>
+                </div>
             </div>
-          </dl>
         </div>
-      </div>
-    </div>
-    <!-- End Creditors After One Year Note -->
+        <!-- End Creditors After One Year Note -->
 
-    <!-- Start Off Balance Sheet Arrangements -->
+        <!-- Start Off Balance Sheet Arrangements -->
 
-    <div th:if="*{offBalanceSheetArrangements.offBalanceSheetArrangementsDetails != null}">
-      <div
-              th:replace="fragments/review/sectionHeader :: sectionHeader (
+        <div th:if="*{offBalanceSheetArrangements.offBalanceSheetArrangementsDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
                         description = 'Off balance sheet arrangements',
                         identifier= 'off-balance-sheet-arrangements',
                         resource = 'off-balance-sheet-arrangements-question',
                         marginTop = true
                         )">
-      </div>
+            </div>
 
-      <dl class="app-check-your-answers app-check-your-answers--short">
-        <div class="app-check-your-answers__contents">
-          <dt class="app-check-your-answers__answer">
-            <p id="review-off-balance-sheet-arrangements"
-               th:utext="*{#strings.replace(offBalanceSheetArrangements.offBalanceSheetArrangementsDetails,'&#10;','&lt;br&gt;')}">
-            </p>
-          </dt>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-off-balance-sheet-arrangements"
+                           th:utext="*{#strings.replace(offBalanceSheetArrangements.offBalanceSheetArrangementsDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
         </div>
-      </dl>
-    </div>
 
-    <!-- End Off Balance Sheet Arrangements -->
+        <!-- End Off Balance Sheet Arrangements -->
 
-    <div class="govuk-form-group">
-      <input id="next-button" class="govuk-button piwik-event" data-event-id="CYA - Save and continue" type="submit" role="button" value="Continue"/>
-    </div>
+        <!-- Start of Loans to Directors -->
 
-  </form>
+        <div th:if="*{loans != null and loans.length > 0}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Loans to directors',
+                        identifier= 'loans-to-directors',
+                        resource = 'note/add-or-remove-loans',
+                        marginTop = true
+                        )">
+            </div>
+            <th:block th:each="loan, stat : *{loans}">
+                <dl class="app-check-your-answers app-check-your-answers--short">
+                    <div class="app-check-your-answers__contents">
+
+                        <div class="govuk-grid-row">
+                            <strong class="govuk-grid-column-one-half" th:id="loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
+                            <span class="govuk-grid-column-one-half govuk-table__cell--numeric">
+                                <strong th:id="review-director-name[__${stat.index}__]"
+                                        th:text="${loan.directorName}">
+                                </strong>
+                            </span>
+                        </div>
+                        <div class="govuk-grid-row govuk-!-margin-top-4">
+                            <p class="govuk-grid-column-one-half" th:id="loans-table-breakdown-description-header[__${stat.index}__]">
+                                Description of the loan
+                            </p>
+
+                            <span class="govuk-grid-column-one-half govuk-table__cell--numeric"
+                                  th:id="loans-table-breakdown-description[__${stat.index}__]"
+                                  th:text="${loan.description}">
+                            </span>
+                        </div>
+                        <div class="govuk-grid-row govuk-!-margin-top-4">
+                            <div class="govuk-grid-column-one-half govuk-body"></div>
+                            <div class="govuk-grid-column-one-half column-flex cya-desktop-only govuk-table__cell--numeric">
+                                <strong th:id="loans-table-breakdown-currency[__${stat.index}__]">
+                                    £
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row govuk-!-margin-top-4">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                 th:id="loans-table-breakdown-balance-at-period-start-heading[__${stat.index}__]"
+                                 th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')}">
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                            <span th:id="loans-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
+                                                  th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')} + ' in £'"></span>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                                            <span th:id="loans-table-breakdown-balance-at-period-start[__${stat.index}__]"
+                                                  th:text="${loan.breakdown.balanceAtPeriodStart}">
+                                            </span>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                 th:id="loans-table-breakdown-advances-and-credits-made-heading[__${stat.index}__]">
+                                Advances and credits made
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                            <span th:id="loans-table-breakdown-advances-and-credits-made-mobile-heading[__${stat.index}__]">
+                                                Advances and credits made in £
+                                            </span>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                                            <span th:id="loans-table-breakdown-advances-and-credits-made[__${stat.index}__]"
+                                                  th:text="${loan.breakdown.advancesCreditsMade}">
+                                            </span>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                 th:id="loans-table-breakdown-advances-and-credits-repaid-heading[__${stat.index}__]">
+                                Advances and credits repaid
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                            <span th:id="loans-table-breakdown-advances-and-credits-repaid-mobile-heading[__${stat.index}__]">
+                                                Advances and credits repaid in £
+                                            </span>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                                            <span th:id="loans-table-breakdown-advances-and-credits-repaid[__${stat.index}__]"
+                                                  th:text="${loan.breakdown.advancesCreditsRepaid}">
+                                            </span>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only">
+                                <strong th:id="loans-table-breakdown-balance-at-period-end-heading[__${stat.index}__]"
+                                        th:text="'Balance at ' + *{#temporals.format(periodEndOn, 'd MMMM yyyy')}">
+                                </strong>
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                <strong th:id="loans-table-breakdown-balance-at-period-end-mobile-heading[__${stat.index}__]"
+                                        th:text="'Balance at ' + *{#temporals.format(periodEndOn, 'd MMMM yyyy')} + ' in £'"></strong>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex govuk-table__cell--numeric">
+                                <strong th:id="loans-table-breakdown-balance-at-period-end[__${stat.index}__]"
+                                        th:text="${loan.breakdown.balanceAtPeriodEnd}">
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                </dl>
+            </th:block>
+        </div>
+
+
+        <!-- End of Loans to Directors -->
+
+
+        <div class="govuk-form-group">
+            <input id="next-button" class="govuk-button piwik-event" data-event-id="CYA - Save and continue"
+                   type="submit" role="button" value="Continue"/>
+        </div>
+
+    </form>
 
 </div>
 
