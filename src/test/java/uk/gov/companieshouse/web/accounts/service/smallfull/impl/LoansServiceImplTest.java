@@ -287,8 +287,26 @@ public class LoansServiceImplTest {
     @DisplayName("POST - submit loan - resource is empty")
     void submitAddOrRemoveLoanEmptyResource() throws ServiceException {
 
-        ValidationError validationError = new ValidationError();
         when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(true);
+
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(apiClientService, never()).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - submit loan - resource is empty - isSingleDirector True")
+    void submitAddOrRemoveLoanEmptyResourceIsSingleDirectorTrue() throws ServiceException {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        List<String> validNames = new ArrayList<>();
+        validNames.add("valid");
+
+        addOrRemoveLoans.setValidDirectorNames(validNames);
+
+        when(loanValidator.isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(true);
 
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
