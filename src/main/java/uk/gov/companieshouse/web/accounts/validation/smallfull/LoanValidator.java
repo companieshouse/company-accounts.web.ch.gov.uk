@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Breakdown;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -27,16 +28,18 @@ public class LoanValidator {
 
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
-    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd) {
+    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd, boolean isSingleDirector) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (StringUtils.isBlank(loanToAdd.getDirectorName())) {
+        if (!isSingleDirector) {
+            if (StringUtils.isBlank(loanToAdd.getDirectorName())) {
 
-            ValidationError error = new ValidationError();
-            error.setFieldPath(DIRECTOR_NAME);
-            error.setMessageKey(NAME_NOT_PRESENT);
-            validationErrors.add(error);
+                ValidationError error = new ValidationError();
+                error.setFieldPath(DIRECTOR_NAME);
+                error.setMessageKey(NAME_NOT_PRESENT);
+                validationErrors.add(error);
+            }
         }
 
         if (StringUtils.isBlank(loanToAdd.getDescription())) {
@@ -66,31 +69,21 @@ public class LoanValidator {
         return validationErrors;
     }
 
-    public List<ValidationError> validateSingleLoanToAdd(LoanToAdd loanToAdd) {
+    public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans, boolean isSingleDirector) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (StringUtils.isBlank(loanToAdd.getDescription())) {
-
-            ValidationError error = new ValidationError();
-            error.setFieldPath(DESCRIPTION);
-            error.setMessageKey(DESCRIPTION_NOT_PRESENT);
-            validationErrors.add(error);
+        boolean isEmptyResource;
+        if(isSingleDirector) {
+            isEmptyResource = isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd());
+        } else {
+            isEmptyResource = isEmptyResource(addOrRemoveLoans.getLoanToAdd());
         }
 
-        if (loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
-
+        if (addOrRemoveLoans.getExistingLoans() == null && isEmptyResource) {
             ValidationError error = new ValidationError();
-            error.setFieldPath(BALANCE_AT_START);
-            error.setMessageKey(BAS_NOT_PRESENT);
-            validationErrors.add(error);
-        }
-
-        if (loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null) {
-
-            ValidationError error = new ValidationError();
-            error.setFieldPath(BALANCE_AT_END);
-            error.setMessageKey(BAE_NOT_PRESENT);
+            error.setFieldPath(LOAN_TO_ADD);
+            error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
             validationErrors.add(error);
         }
 
@@ -99,44 +92,17 @@ public class LoanValidator {
 
     public boolean isEmptyResource(LoanToAdd loanToAdd) {
 
-        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) &&
-                StringUtils.isBlank(loanToAdd.getDescription()) &&
-                loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
-                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
+        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) && isDescriptionAndBreakdownEmpty(loanToAdd));
     }
 
     public boolean isSingleDirectorEmptyResource(LoanToAdd loanToAdd) {
 
-        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDescription()) &&
+        return loanToAdd == null || isDescriptionAndBreakdownEmpty(loanToAdd);
+    }
+
+    private boolean isDescriptionAndBreakdownEmpty(LoanToAdd loanToAdd) {
+        return  ((StringUtils.isBlank(loanToAdd.getDescription()) &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
-                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
-    }
-
-    public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans) {
-
-        List<ValidationError> validationErrors = new ArrayList<>();
-
-        if (addOrRemoveLoans.getExistingLoans() == null && isEmptyResource(addOrRemoveLoans.getLoanToAdd())) {
-            ValidationError error = new ValidationError();
-            error.setFieldPath(LOAN_TO_ADD);
-            error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
-            validationErrors.add(error);
-        }
-
-        return validationErrors;
-    }
-
-    public List<ValidationError> validateAtLeastOneLoanSingleDirector(AddOrRemoveLoans addOrRemoveLoans) {
-
-        List<ValidationError> validationErrors = new ArrayList<>();
-
-        if (addOrRemoveLoans.getExistingLoans() == null && isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd())) {
-            ValidationError error = new ValidationError();
-            error.setFieldPath(LOAN_TO_ADD);
-            error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
-            validationErrors.add(error);
-        }
-
-        return validationErrors;
+                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null));
     }
 }

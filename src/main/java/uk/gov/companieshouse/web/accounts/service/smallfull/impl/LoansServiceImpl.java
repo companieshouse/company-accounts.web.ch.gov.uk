@@ -74,9 +74,9 @@ public class LoansServiceImpl implements LoanService {
         List<ValidationError> validationErrors;
 
         if(addOrRemoveLoans.getValidDirectorNames().size() == 1) {
-            validationErrors = loanValidator.validateSingleLoanToAdd(addOrRemoveLoans.getLoanToAdd());
+            validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd(), true);
         } else {
-            validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd());
+            validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd(), false);
         }
 
         if(!validationErrors.isEmpty()) {
@@ -127,9 +127,9 @@ public class LoansServiceImpl implements LoanService {
         List<ValidationError> validationErrors;
 
         if(addOrRemoveLoans.getValidDirectorNames().size() == 1) {
-            validationErrors = loanValidator.validateAtLeastOneLoanSingleDirector(addOrRemoveLoans);
+            validationErrors = loanValidator.validateAtLeastOneLoan(addOrRemoveLoans, true);
         } else {
-            validationErrors = loanValidator.validateAtLeastOneLoan(addOrRemoveLoans);
+            validationErrors = loanValidator.validateAtLeastOneLoan(addOrRemoveLoans, false);
 
         }
 
