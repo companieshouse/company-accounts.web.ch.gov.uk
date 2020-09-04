@@ -203,6 +203,32 @@ class LoanValidatorTest {
         assertTrue(validationErrors.isEmpty());
     }
 
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
+    void validateAtLeastOneLoanPeriodStartFieldsFilledInIsSingleDirectorTrue() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(true, false));
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
+    void validateAtLeastOneLoanPeriodEndFieldsFilledInIsSingleDirectorTrue() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(false, true));
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
     private Breakdown createBreakdown(boolean includePeriodStart, boolean includePeriodEnd) {
 
         Breakdown validBreakdown = new Breakdown();
