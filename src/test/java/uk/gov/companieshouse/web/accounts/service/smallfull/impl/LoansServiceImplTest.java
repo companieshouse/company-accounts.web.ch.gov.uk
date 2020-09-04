@@ -239,7 +239,7 @@ public class LoansServiceImplTest {
     void createLoanValidation()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
-        when(loanValidator.validateLoanToAdd(loanToAdd, false)).thenReturn(new ArrayList<>());
+        when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -274,7 +274,7 @@ public class LoansServiceImplTest {
 
         when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
-        when(loanValidator.validateLoanToAdd(loanToAdd, false)).thenReturn(nameValidationError);
+        when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 

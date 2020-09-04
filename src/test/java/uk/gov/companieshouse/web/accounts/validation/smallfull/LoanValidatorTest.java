@@ -48,7 +48,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -61,7 +61,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -77,7 +77,7 @@ class LoanValidatorTest {
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -94,7 +94,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(false, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -111,7 +111,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, false));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());

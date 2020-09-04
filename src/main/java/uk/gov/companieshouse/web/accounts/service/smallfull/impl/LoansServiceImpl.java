@@ -73,11 +73,7 @@ public class LoansServiceImpl implements LoanService {
 
         List<ValidationError> validationErrors;
 
-        if(addOrRemoveLoans.getValidDirectorNames().size() == 1) {
-            validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd(), true);
-        } else {
-            validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd(), false);
-        }
+        validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd());
 
         if(!validationErrors.isEmpty()) {
             return validationErrors;

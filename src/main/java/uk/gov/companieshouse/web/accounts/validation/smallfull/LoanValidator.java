@@ -28,18 +28,16 @@ public class LoanValidator {
 
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
-    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd, boolean isSingleDirector) {
+    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (!isSingleDirector) {
-            if (StringUtils.isBlank(loanToAdd.getDirectorName())) {
+        if (StringUtils.isBlank(loanToAdd.getDirectorName())) {
 
-                ValidationError error = new ValidationError();
-                error.setFieldPath(DIRECTOR_NAME);
-                error.setMessageKey(NAME_NOT_PRESENT);
-                validationErrors.add(error);
-            }
+            ValidationError error = new ValidationError();
+            error.setFieldPath(DIRECTOR_NAME);
+            error.setMessageKey(NAME_NOT_PRESENT);
+            validationErrors.add(error);
         }
 
         if (StringUtils.isBlank(loanToAdd.getDescription())) {
