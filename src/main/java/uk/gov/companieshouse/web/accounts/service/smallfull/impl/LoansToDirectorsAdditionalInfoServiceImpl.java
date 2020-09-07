@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
-import com.google.api.client.http.HttpStatusCodes;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
@@ -15,7 +14,7 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsAdditionalInfoService;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors.LoanToDirectorsAdditionalInfoTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors.LoansToDirectorsAdditionalInfoTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
@@ -33,7 +32,7 @@ public class LoansToDirectorsAdditionalInfoServiceImpl implements LoansToDirecto
     private ValidationContext validationContext;
 
     @Autowired
-    private LoanToDirectorsAdditionalInfoTransformer loanToDirectorsAdditionalInfoTransformer;
+    private LoansToDirectorsAdditionalInfoTransformer loanToDirectorsAdditionalInfoTransformer;
 
     private static final UriTemplate ADDITIONAL_INFORMATION_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/additional-information");
@@ -54,13 +53,10 @@ public class LoansToDirectorsAdditionalInfoServiceImpl implements LoansToDirecto
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         } catch (ApiErrorResponseException e) {
-            if(e.getStatusCode() == HttpStatusCodes.STATUS_CODE_NOT_FOUND) {
-                return new LoansToDirectorsAdditionalInfo();
-            }
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
         }
 
-        return null;
+        return new LoansToDirectorsAdditionalInfo();
     }
 
     @Override

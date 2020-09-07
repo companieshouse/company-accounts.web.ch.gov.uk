@@ -24,7 +24,7 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsAdditionalInfoService;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors.LoanToDirectorsAdditionalInfoTransformer;
+import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors.LoansToDirectorsAdditionalInfoTransformer;
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
@@ -101,7 +101,7 @@ public class LoansToDirectorsAdditionalInfoServiceImplTest {
     private URIValidationException uriValidationException;
     
     @Mock
-    private LoanToDirectorsAdditionalInfoTransformer loansToDirectorsAdditionalInfoTransformer;
+    private LoansToDirectorsAdditionalInfoTransformer loansToDirectorsAdditionalInfoTransformer;
 
     @InjectMocks
     private LoansToDirectorsAdditionalInfoService loansToDirectorsAdditionalInfoService = new LoansToDirectorsAdditionalInfoServiceImpl();

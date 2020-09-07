@@ -5,7 +5,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.Addit
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
 
 @Component
-public class LoanToDirectorsAdditionalInfoTransformer {
+public class LoansToDirectorsAdditionalInfoTransformer {
 
     public AdditionalInformationApi mapLoansToDirectorsAdditonalInfoToApi(LoansToDirectorsAdditionalInfo additionalInformation) {
 
