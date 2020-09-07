@@ -1,5 +1,15 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,18 +38,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -177,7 +175,7 @@ public class LoansToDirectorsAdditionalInfoServiceImplTest {
                 .when(serviceExceptionHandler)
                 .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertNull(loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertNotNull(loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
