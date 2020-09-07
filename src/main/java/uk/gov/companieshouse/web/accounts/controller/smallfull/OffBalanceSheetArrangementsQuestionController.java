@@ -24,7 +24,7 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 
 @Controller
 @NextController(OffBalanceSheetArrangementsController.class)
-@PreviousController(LoansToDirectorsAdditionalInfoQuestionController.class)
+@PreviousController(LoansToDirectorsAdditionalInfoController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/off-balance-sheet-arrangements-question")
 public class OffBalanceSheetArrangementsQuestionController extends BaseController {
 

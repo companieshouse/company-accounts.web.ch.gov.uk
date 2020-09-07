@@ -122,11 +122,6 @@ public class LoansServiceImplTest {
 
     private static final String RESOURCE_NAME = "loans";
 
-    private static final String LOAN_TO_ADD = "loanToAdd";
-
-    private static final String DIRECTOR_NAME = LOAN_TO_ADD + ".directorName";
-    private static final String NAME_NOT_PRESENT = "validation.element.missing.loan.director_name";
-
     @Test
     @DisplayName("GET - all loans - success")
     void getAllLoansSuccess()
@@ -282,7 +277,6 @@ public class LoansServiceImplTest {
     @DisplayName("POST - submit loan - resource is empty")
     void submitAddOrRemoveLoanEmptyResource() throws ServiceException {
 
-        ValidationError validationError = new ValidationError();
         when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(true);
 
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
