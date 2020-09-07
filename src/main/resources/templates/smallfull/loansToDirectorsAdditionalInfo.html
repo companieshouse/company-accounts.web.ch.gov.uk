@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/baseLayout}">
+	<head>
+	    <meta charset = "UTF-8"></meta>
+	    <title>Enter your additional 'loans to directors' information</title>
+	</head>
+	<body>
+		<div id="loansToDirectorsAdditionalInfo-main-content" layout:fragment="content">
+		    <div class="govuk-grid-row">
+		        <div class="govuk-grid-column-two-thirds">
+		            <form id="loansToDirectorsAdditionalInfo-form" class="form" th:action="@{''}" th:object="${loansToDirectorsAdditionalInfo}" method="post">
+		
+		                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+		
+		                <div class="govuk-form-group govuk-form-group-block-important"
+		                     th:classappend="${#fields.hasErrors('additionalInfoDetails')} ? 'govuk-form-group--error' : ''">
+		
+		                    <label id="additionalInfoDetails-heading" class="govuk-label govuk-label--l" for="additionalInfoDetails">
+		                        Enter your additional 'loans to directors' information
+		                    </label>
+		
+		                    <span class="govuk-error-message"
+		                          id="additionalInfoDetails-errorId"
+		                          th:if="${#fields.hasErrors('additionalInfoDetails')}"
+		                          th:each="e : ${#fields.errors('additionalInfoDetails')}" th:text="${e}">
+		            </span>
+		
+		                    <textarea class="govuk-textarea"
+		                              id="additionalInfoDetails"
+		                              th:field="*{additionalInfoDetails}"
+		                              rows="5">
+		            </textarea>
+		                </div>
+		
+		                <input id="next-button" class="govuk-button piwik-event" data-event-id="Loans to directors additional information - save and continue"
+		                       type="submit" role="button" value="Save and continue"/>
+		
+		            </form>
+		        </div>
+		    </div>
+		</div>
+	</body>
+</html>
+
