@@ -38,6 +38,31 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LoansToDirectorsAdditionalInfoControllerTest {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String TRANSACTION_ID = "transactionId";
+
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
+    private static final String ADDITIONAL_INFORMATION_PATH = "/company/" + COMPANY_NUMBER +
+                                                                "/transaction/" + TRANSACTION_ID +
+                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                                                                "/small-full/notes/add-or-remove-loans/additional-information";
+
+    private static final String ADDITIONAL_INFORMATION_MODEL_ATTR = "loansToDirectorsAdditionalInfo";
+
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+
+    private static final String ADDITIONAL_INFORMATION_VIEW = "smallfull/loansToDirectorsAdditionalInfo";
+
+    private static final String ERROR_VIEW = "error";
+
+    private static final String ADDITIONAL_INFORMATION_DETAILS = "additionalInfoDetails";
+
+    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
+
     private MockMvc mockMvc;
 
     @Mock
@@ -63,32 +88,6 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
 
     @InjectMocks
     private LoansToDirectorsAdditionalInfoController controller;
-
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String ADDITIONAL_INFORMATION_PATH = "/company/" + COMPANY_NUMBER +
-                                                                "/transaction/" + TRANSACTION_ID +
-                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                "/small-full/notes/add-or-remove-loans/additional-information";
-
-    private static final String ADDITIONAL_INFORMATION_MODEL_ATTR = "loansToDirectorsAdditionalInfo";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String ADDITIONAL_INFORMATION_VIEW = "smallfull/loansToDirectorsAdditionalInfo";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String ADDITIONAL_INFORMATION_DETAILS = "additionalInfoDetails";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
-
-    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
     private void setup() {
@@ -268,7 +267,7 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
     }
 
     @Test
-    @DisplayName("Will render - false")
+    @DisplayName("Will render if loans to directors additional info not selected - false")
     void willRenderFalse() throws ServiceException {
 
         when(request.getSession()).thenReturn(session);
@@ -279,7 +278,7 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
     }
 
     @Test
-    @DisplayName("Will render - true")
+    @DisplayName("Will render if loans to directors additional info selected - true")
     void willRenderTrue() throws ServiceException {
 
         when(request.getSession()).thenReturn(session);
