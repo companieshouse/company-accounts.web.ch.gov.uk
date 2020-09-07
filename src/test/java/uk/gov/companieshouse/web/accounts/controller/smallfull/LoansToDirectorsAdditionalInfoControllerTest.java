@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
@@ -12,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,11 +23,13 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsAdditionalInfoService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
@@ -53,7 +56,10 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
     private List<ValidationError> validationErrors;
 
     @Mock
-    private HttpSession httpSession;
+    private MockHttpSession session;
+
+    @Mock
+    private CompanyAccountsDataState companyAccountsDataState;
 
     @InjectMocks
     private LoansToDirectorsAdditionalInfoController controller;
@@ -81,6 +87,8 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
+
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
     private void setup() {
@@ -119,6 +127,10 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
     void postAdditionalInformationSuccess() throws Exception {
 
         when(additionalInformationService
+                .getAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID)))
+                .thenReturn(additionalInformation);
+
+        when(additionalInformationService
                 .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
                 .thenReturn(validationErrors);
 
@@ -135,6 +147,10 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
     @Test
     @DisplayName("Post request - validation errors")
     void postAdditionalInformationWithValidationErrors() throws Exception {
+
+        when(additionalInformationService
+                .getAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID)))
+                .thenReturn(additionalInformation);
 
         when(additionalInformationService
                 .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
@@ -155,7 +171,85 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
     void postAdditionalInformationThrowsServiceException() throws Exception {
 
         when(additionalInformationService
+                .getAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID)))
+                .thenReturn(additionalInformation);
+
+        when(additionalInformationService
                 .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .thenThrow(ServiceException.class);
+
+        this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
+                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post request update - success")
+    void postAdditionalInformationUpdateSuccess() throws Exception {
+
+        LoansToDirectorsAdditionalInfo populatedAdditionalInformation = new LoansToDirectorsAdditionalInfo();
+        
+        populatedAdditionalInformation.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
+
+        when(additionalInformationService
+                .getAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID)))
+                .thenReturn(populatedAdditionalInformation);
+
+        when(additionalInformationService
+                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(true);
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
+                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Post request update - validation errors")
+    void postAdditionalInformationUpdateWithValidationErrors() throws Exception {
+
+        LoansToDirectorsAdditionalInfo populatedAdditionalInformation = new LoansToDirectorsAdditionalInfo();
+        
+        populatedAdditionalInformation.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
+
+        when(additionalInformationService
+                .getAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID)))
+                .thenReturn(populatedAdditionalInformation);
+
+        when(additionalInformationService
+                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
+                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADDITIONAL_INFORMATION_VIEW));
+
+        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+    }
+
+    @Test
+    @DisplayName("Post request update - service exception")
+    void postAdditionalInformationUpdateThrowsServiceException() throws Exception {
+
+        LoansToDirectorsAdditionalInfo populatedAdditionalInformation = new LoansToDirectorsAdditionalInfo();
+        
+        populatedAdditionalInformation.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
+
+        when(additionalInformationService
+                .getAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID)))
+                .thenReturn(populatedAdditionalInformation);
+
+        when(additionalInformationService
+                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
@@ -171,5 +265,27 @@ public class LoansToDirectorsAdditionalInfoControllerTest {
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADDITIONAL_INFORMATION_VIEW));
+    }
+
+    @Test
+    @DisplayName("Will render - false")
+    void willRenderFalse() throws ServiceException {
+
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo()).thenReturn(true);
+
+        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Will render - true")
+    void willRenderTrue() throws ServiceException {
+
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo()).thenReturn(false);
+
+        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }
