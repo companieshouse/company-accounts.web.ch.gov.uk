@@ -150,7 +150,23 @@ class LoanValidatorTest {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
-        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans);
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, false);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(LOAN_TO_ADD, validationErrors.get(0).getFieldPath());
+        assertEquals(AT_LEAST_ONE_LOAN_REQUIRED, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, no fields populated - isSingle director true")
+    void validateAtLeastOneLoanNoFieldsFilledInIsSingleDirectorTrue() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -169,7 +185,46 @@ class LoanValidatorTest {
 
         addOrRemoveLoans.setLoanToAdd(loanToAdd);
         
-        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans);
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, false);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
+    void validateAtLeastOneLoanFieldsFilledInIsSingleDirectorTrue() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setDescription(DESCRIPTION);
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
+    void validateAtLeastOneLoanPeriodStartFieldsFilledInIsSingleDirectorTrue() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(true, false));
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
+    void validateAtLeastOneLoanPeriodEndFieldsFilledInIsSingleDirectorTrue() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(false, true));
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -188,5 +243,4 @@ class LoanValidatorTest {
 
         return validBreakdown;
     }
-
 }

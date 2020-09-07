@@ -6,6 +6,7 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Review;
@@ -29,6 +30,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNot
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -78,6 +80,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private NoteService<AccountingPolicies> accountingPoliciesNoteService;
+
+    @Autowired
+    private LoanService loanService;
 
     @Autowired
     private SmallFullService smallFullService;
@@ -133,6 +138,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClientService.getApiClient(), transactionId, companyAccountsId);
 
+        Loan[] loans = loanService.getAllLoans(transactionId, companyAccountsId);
+
         Review review = new Review();
         review.setProfitAndLoss(profitAndLoss);
         review.setBalanceSheet(balanceSheet);
@@ -155,6 +162,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setOffBalanceSheetArrangements(offBalanceSheetArrangements);
         review.setPeriodStartOn(smallFullApi.getNextAccounts().getPeriodStartOn());
         review.setPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
+        review.setLoans(loans);
 
         return review;
     }

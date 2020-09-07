@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,9 +69,11 @@ public class LoansServiceImpl implements LoanService {
     }
 
     @Override
-    public List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException {
+    public List<ValidationError> createLoan(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
 
-        List<ValidationError> validationErrors = loanValidator.validateLoanToAdd(loanToAdd);
+        List<ValidationError> validationErrors;
+
+        validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd());
 
         if(!validationErrors.isEmpty()) {
             return validationErrors;
@@ -80,7 +83,7 @@ public class LoansServiceImpl implements LoanService {
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
 
-        LoanApi loanApi = loanTransformer.getLoanApi(loanToAdd);
+        LoanApi loanApi = loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd());
 
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();
@@ -117,12 +120,25 @@ public class LoansServiceImpl implements LoanService {
 
         LoanToAdd loanToAdd = addOrRemoveLoans.getLoanToAdd();
 
-        List<ValidationError> validationErrors = loanValidator.validateAtLeastOneLoan(addOrRemoveLoans);
-        
+        List<ValidationError> validationErrors;
+
+        if(addOrRemoveLoans.getValidDirectorNames() != null && addOrRemoveLoans.getValidDirectorNames().size() == 1) {
+            validationErrors = loanValidator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+        } else {
+            validationErrors = loanValidator.validateAtLeastOneLoan(addOrRemoveLoans, false);
+
+        }
+
+        boolean isEmptyResource;
         if (validationErrors.isEmpty()) {
-            boolean isEmptyResource = loanValidator.isEmptyResource(loanToAdd);
+            if(addOrRemoveLoans.getValidDirectorNames() != null && addOrRemoveLoans.getValidDirectorNames().size() == 1) {
+                isEmptyResource = loanValidator.isSingleDirectorEmptyResource(loanToAdd);
+            } else {
+                isEmptyResource = loanValidator.isEmptyResource(loanToAdd);
+            }
+
             if (!isEmptyResource) {
-                validationErrors = createLoan(transactionId, companyAccountsId, loanToAdd);
+                validationErrors = createLoan(transactionId, companyAccountsId, addOrRemoveLoans);
             }
         }
 

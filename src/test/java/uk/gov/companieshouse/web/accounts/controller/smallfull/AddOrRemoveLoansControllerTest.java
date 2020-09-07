@@ -195,7 +195,7 @@ class AddOrRemoveLoansControllerTest {
     void postLoanAddRequestSuccess() throws Exception {
 
         when(loanService.createLoan(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
@@ -215,7 +215,7 @@ class AddOrRemoveLoansControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW));
 
-        verify(loanService, never()).createLoan(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class));
+        verify(loanService, never()).createLoan(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class));
     }
 
     @Test
@@ -223,7 +223,7 @@ class AddOrRemoveLoansControllerTest {
     void postLoanAddRequestThrowsValidationErrors() throws Exception {
 
         when(loanService.createLoan(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
@@ -239,7 +239,7 @@ class AddOrRemoveLoansControllerTest {
     void postLoanAddRequestThrowsServiceException() throws Exception {
 
         when(loanService.createLoan(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoanToAdd.class)))
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")

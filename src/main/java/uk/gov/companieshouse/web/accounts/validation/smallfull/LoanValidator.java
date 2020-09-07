@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
+import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Breakdown;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -66,19 +67,18 @@ public class LoanValidator {
         return validationErrors;
     }
 
-    public boolean isEmptyResource(LoanToAdd loanToAdd) {
-
-        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) &&
-                StringUtils.isBlank(loanToAdd.getDescription()) &&
-                loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
-                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
-    }
-
-    public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans) {
+    public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans, boolean isSingleDirector) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
-        if (addOrRemoveLoans.getExistingLoans() == null && isEmptyResource(addOrRemoveLoans.getLoanToAdd())) {
+        boolean isEmptyResource;
+        if(isSingleDirector) {
+            isEmptyResource = isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd());
+        } else {
+            isEmptyResource = isEmptyResource(addOrRemoveLoans.getLoanToAdd());
+        }
+
+        if (addOrRemoveLoans.getExistingLoans() == null && isEmptyResource) {
             ValidationError error = new ValidationError();
             error.setFieldPath(LOAN_TO_ADD);
             error.setMessageKey(AT_LEAST_ONE_LOAN_REQUIRED);
@@ -86,5 +86,21 @@ public class LoanValidator {
         }
 
         return validationErrors;
+    }
+
+    public boolean isEmptyResource(LoanToAdd loanToAdd) {
+
+        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) && isDescriptionAndBreakdownEmpty(loanToAdd));
+    }
+
+    public boolean isSingleDirectorEmptyResource(LoanToAdd loanToAdd) {
+
+        return loanToAdd == null || isDescriptionAndBreakdownEmpty(loanToAdd);
+    }
+
+    private boolean isDescriptionAndBreakdownEmpty(LoanToAdd loanToAdd) {
+        return  ((StringUtils.isBlank(loanToAdd.getDescription()) &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
+                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null));
     }
 }

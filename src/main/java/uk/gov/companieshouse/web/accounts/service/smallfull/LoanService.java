@@ -12,7 +12,7 @@ public interface LoanService {
 
     Loan[] getAllLoans(String transactionId, String companyAccountsId) throws ServiceException;
 
-    List<ValidationError> createLoan(String transactionId, String companyAccountsId, LoanToAdd loanToAdd) throws ServiceException;
+    List<ValidationError> createLoan(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException;
 
     void deleteLoan(String transactionId, String companyAccountsId, String loanId) throws ServiceException;
 
