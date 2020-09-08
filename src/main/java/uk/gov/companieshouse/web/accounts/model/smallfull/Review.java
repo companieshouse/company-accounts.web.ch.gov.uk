@@ -16,6 +16,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinv
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
@@ -66,6 +67,16 @@ public class Review {
     private LocalDate periodEndOn;
 
     private Loan[] loans;
+
+    private LoansToDirectorsAdditionalInfo loansToDirectorsAdditionalInfo;
+
+    public LoansToDirectorsAdditionalInfo getLoansToDirectorsAdditionalInfo() {
+        return loansToDirectorsAdditionalInfo;
+    }
+
+    public void setLoansToDirectorsAdditionalInfo(LoansToDirectorsAdditionalInfo loansToDirectorsAdditionalInfo) {
+        this.loansToDirectorsAdditionalInfo = loansToDirectorsAdditionalInfo;
+    }
 
     public OffBalanceSheetArrangements getOffBalanceSheetArrangements() {
         return offBalanceSheetArrangements;

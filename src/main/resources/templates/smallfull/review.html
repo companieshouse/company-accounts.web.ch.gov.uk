@@ -1562,11 +1562,35 @@
                     </div>
                 </dl>
             </th:block>
+            <dd class="app-check-your-answers__change"></dd>
         </div>
-
 
         <!-- End of Loans to Directors -->
 
+        <!-- Start of Loans to Directors Additional Info -->
+
+        <div th:if="*{loansToDirectorsAdditionalInfo.additionalInfoDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Loans to directors additional information',
+                        identifier= 'loans-to-directors-additional-information',
+                        resource = 'notes/add-or-remove-loans/additional-information-question',
+                        marginTop = true
+                        )">
+            </div>
+
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="loans-to-directors-additional-information"
+                           th:utext="*{#strings.replace(loansToDirectorsAdditionalInfo.additionalInfoDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
+        </div>
+
+        <!-- End of Loans to Directors Additional Info-->
 
         <div class="govuk-form-group">
             <input id="next-button" class="govuk-button piwik-event" data-event-id="CYA - Save and continue"

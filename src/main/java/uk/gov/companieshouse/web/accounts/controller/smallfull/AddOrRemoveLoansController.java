@@ -116,8 +116,10 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                                          @PathVariable String transactionId,
                                          @PathVariable String companyAccountsId,
                                          @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
-                                         BindingResult bindingResult
-    ) {
+                                         BindingResult bindingResult,
+                                         Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             List<ValidationError> validationErrors = loanService.submitAddOrRemoveLoans(transactionId, companyAccountsId, addOrRemoveLoans);
