@@ -202,12 +202,6 @@
                           th:each="e : *{#fields.errors('loanToAdd')}" th:text="${e}">
                     </span>
 
-                    <label id="loanToAdd-director-name-label"
-                           class="govuk-label govuk-label--m"
-                           for="loanToAdd-director-name">
-                        Name of director receiving advance or credit
-                    </label>
-
                     <span class="govuk-error-message"
                           id="loanToAdd.directorName-errorId"
                           th:if="*{#fields.hasErrors('loanToAdd.directorName')}"
@@ -216,6 +210,11 @@
 
                     <th:block th:if="*{validDirectorNames == null or validDirectorNames.size() == 0}">
                         <div th:classappend="*{#fields.hasErrors('loanToAdd.directorName')} ? 'govuk-form-group--error' : ''">
+                            <label id="loanToAdd-director-name-label"
+                                   class="govuk-label govuk-label--m"
+                                   for="loanToAdd-director-name">
+                                Name of director receiving advance or credit
+                            </label>
                             <textarea class="govuk-textarea"
                                   id="loanToAdd-director-name"
                                   th:field="*{loanToAdd.directorName}"
@@ -225,6 +224,11 @@
                     </th:block>
 
                     <th:block th:if="*{validDirectorNames != null and validDirectorNames.size() == 1}">
+                        <label id="loanToAdd-director-name-label-radios"
+                               class="govuk-label govuk-label--m"
+                               for="loanToAdd-director-name">
+                            Name of director receiving advance or credit
+                        </label>
                         <dl class="app-check-your-answers app-check-your-answers--very-long">
                             <div class="app-check-your-answers__contents">
                                 <dt class="app-check-your-answers__question"
