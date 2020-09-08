@@ -1507,7 +1507,7 @@
                             </div>
                             <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
                                             <span th:id="loans-table-breakdown-balance-at-period-start[__${stat.index}__]"
-                                                  th:text="${loan.breakdown.balanceAtPeriodStart != null ? new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodStart) : ''}">
+                                                  th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodStart)}">
                                             </span>
                             </div>
                         </div>
