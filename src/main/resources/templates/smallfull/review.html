@@ -1452,14 +1452,14 @@
                         description = 'Loans to directors',
                         identifier= 'loans-to-directors',
                         resource = 'note/add-or-remove-loans',
-                        marginTop = true
+                        marginTop = false
                         )">
             </div>
             <dl class="app-check-your-answers app-check-your-answers--short">
                 <th:block th:each="loan, stat : *{loans}">
-                    <div class="app-check-your-answers__contents">
+                    <div class="app-check-your-answers__contents govuk-section-no-border-bottom">
 
-                        <div class="govuk-grid-row">
+                        <div class="govuk-grid-row govuk-!-margin-top-8">
                             <strong class="govuk-grid-column-one-half cya-desktop-only" th:id="loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
                             <div class="mobile-only-label column-fifth column-flex-with-min-width">
                                 <strong th:id="mobile-loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
