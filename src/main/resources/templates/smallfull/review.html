@@ -1523,7 +1523,7 @@
                             </div>
                             <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
                                             <span th:id="loans-table-breakdown-advances-and-credits-made[__${stat.index}__]"
-                                                  th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsMade)}">
+                                                  th:text="${loan.breakdown.advancesCreditsMade != null ? new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsMade) : ''}">
                                             </span>
                             </div>
                         </div>
@@ -1539,7 +1539,7 @@
                             </div>
                             <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
                                             <span th:id="loans-table-breakdown-advances-and-credits-repaid[__${stat.index}__]"
-                                                  th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsRepaid)}">
+                                                  th:text="${loan.breakdown.advancesCreditsRepaid != null ? new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsRepaid) : ''}">
                                             </span>
                             </div>
                         </div>
