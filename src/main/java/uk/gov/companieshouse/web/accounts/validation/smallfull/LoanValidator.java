@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
-import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Breakdown;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
