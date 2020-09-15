@@ -6,6 +6,8 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 @ValidationModel
 public class AddOrRemoveDirectors {
 
+    private boolean displayWarningBanner;
+
     private Director[] existingDirectors;
 
     private DirectorToAdd directorToAdd;
@@ -36,5 +38,13 @@ public class AddOrRemoveDirectors {
 
     public void setSecretary(String secretary) {
         this.secretary = secretary;
+    }
+
+    public boolean isDisplayWarningBanner() {
+        return displayWarningBanner;
+    }
+
+    public void setDisplayWarningBanner(boolean displayWarningBanner) {
+        this.displayWarningBanner = displayWarningBanner;
     }
 }

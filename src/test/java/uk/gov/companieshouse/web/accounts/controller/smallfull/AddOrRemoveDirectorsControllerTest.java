@@ -31,6 +31,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoansToDirectorsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
@@ -40,9 +41,11 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.HashMap;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,6 +83,12 @@ public class AddOrRemoveDirectorsControllerTest {
 
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
+
+    @Mock
+    private LoansToDirectorsApi loansToDirectorsApi;
+
+    @Mock
+    private LoansToDirectorsService loansToDirectorsService;
 
     @InjectMocks
     private AddOrRemoveDirectorsController controller;
@@ -126,6 +135,32 @@ public class AddOrRemoveDirectorsControllerTest {
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
+
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
+
+        when(loansToDirectorsApi.getLoans()).thenReturn(null);
+
+        this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
+                .andExpect(model().attributeExists(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get add or remove directors view when a user has existing LTD loans - success path")
+    void getRequestUserHasLTDLoansSuccess() throws Exception {
+
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
+
+        when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
+
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
+
+        when(loansToDirectorsApi.getLoans()).thenReturn(createLoans());
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
                 .andExpect(status().isOk())
@@ -306,5 +341,12 @@ public class AddOrRemoveDirectorsControllerTest {
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    private HashMap<String, String> createLoans() {
+        HashMap<String, String> loans = new HashMap<>();
+        loans.put("id", "value");
+
+        return loans;
     }
 }
