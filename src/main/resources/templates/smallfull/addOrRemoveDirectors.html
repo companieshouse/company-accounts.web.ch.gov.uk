@@ -18,8 +18,8 @@
             </form>
 
             <div th:object="${addOrRemoveDirectors}">
-                <input type="hidden" th:field="*{displayWarningBanner}" th:id="display-ltd-flag"/>
-                <p th:if="*{displayWarningBanner == true}" class="warning-note warning-note-large" id="ltd-removal-warning-note">
+                <input type="hidden" th:field="*{displayLtdWarningBanner}" th:id="display-ltd-flag"/>
+                <p th:if="*{displayLtdWarningBanner == true}" class="warning-note warning-note-large" id="ltd-removal-warning-note">
                     If you make changes to the directors’ report, the information entered on the loans to directors note will need to be re-entered.
                 </p>
             </div>

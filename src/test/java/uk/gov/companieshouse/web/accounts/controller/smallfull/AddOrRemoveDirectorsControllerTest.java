@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,7 +27,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -122,6 +123,8 @@ public class AddOrRemoveDirectorsControllerTest {
 
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
+    private static final String DISPLAY_WARNING_BANNER = "displayLtdWarningBanner";
+
     @BeforeEach
     private void setup() {
 
@@ -167,6 +170,7 @@ public class AddOrRemoveDirectorsControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attribute(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR, hasProperty(DISPLAY_WARNING_BANNER, is(false))))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
@@ -189,6 +193,7 @@ public class AddOrRemoveDirectorsControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attribute(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR, hasProperty(DISPLAY_WARNING_BANNER, is(false))))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
@@ -211,6 +216,7 @@ public class AddOrRemoveDirectorsControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attribute(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR, hasProperty(DISPLAY_WARNING_BANNER, is(true))))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 

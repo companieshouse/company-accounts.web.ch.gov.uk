@@ -98,7 +98,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
             return ERROR_VIEW;
         }
 
-        addOrRemoveDirectors.setDisplayWarningBanner(displayLoansToDirectorsWarning);
+        addOrRemoveDirectors.setDisplayLtdWarningBanner(displayLoansToDirectorsWarning);
 
         model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
         model.addAttribute(COMPANY_NUMBER, companyNumber);
