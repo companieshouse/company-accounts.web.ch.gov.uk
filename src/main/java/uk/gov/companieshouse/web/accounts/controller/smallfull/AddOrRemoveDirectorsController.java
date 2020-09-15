@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoansToDirectorsApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -23,6 +24,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;
@@ -49,10 +51,15 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     @Autowired
     private ApiClientService apiClientService;
 
+    @Autowired
+    private LoansToDirectorsService loansToDirectorsService;
+
     private static final UriTemplate URI =
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
+
+    private static final String DISPLAY_LTD_WARNING = "displayLoansToDirectorsWarning";
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -70,6 +77,9 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
 
+        boolean displayLoansToDirectorsWarning = false;
+        LoansToDirectorsApi loansToDirectorsApi;
+
         try {
             addOrRemoveDirectors.setExistingDirectors(
                     directorService.getAllDirectors(transactionId, companyAccountsId, false));
@@ -77,11 +87,18 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
             addOrRemoveDirectors.setSecretary(
                     secretaryService.getSecretary(transactionId, companyAccountsId));
 
+            loansToDirectorsApi = loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), transactionId, companyAccountsId);
+            if (loansToDirectorsApi != null && loansToDirectorsApi.getLoans() != null) {
+                displayLoansToDirectorsWarning = !loansToDirectorsApi.getLoans().isEmpty();
+            }
+
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
+
+        addOrRemoveDirectors.setDisplayLtdWarningBanner(displayLoansToDirectorsWarning);
 
         model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
         model.addAttribute(COMPANY_NUMBER, companyNumber);
