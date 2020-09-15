@@ -151,6 +151,50 @@ public class AddOrRemoveDirectorsControllerTest {
     }
 
     @Test
+    @DisplayName("Get add or remove directors view when a user has no LTD loans - success path")
+    void getRequestUserHasNoLTDLoansSuccess() throws Exception {
+
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
+
+        when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
+
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
+
+        when(loansToDirectorsApi.getLoans()).thenReturn(new HashMap<String, String>());
+
+        this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
+                .andExpect(model().attributeExists(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get add or remove directors view when a user has null LTD loans - success path")
+    void getRequestUserHasNullLTDLoansSuccess() throws Exception {
+
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
+
+        when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
+
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
+
+        when(loansToDirectorsApi.getLoans()).thenReturn(null);
+
+        this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
+                .andExpect(model().attributeExists(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
     @DisplayName("Get add or remove directors view when a user has existing LTD loans - success path")
     void getRequestUserHasLTDLoansSuccess() throws Exception {
 
