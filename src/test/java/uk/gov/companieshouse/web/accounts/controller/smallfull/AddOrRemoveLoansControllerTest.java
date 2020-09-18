@@ -135,7 +135,7 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
-    @DisplayName("Get add or remove loans view - success path")
+    @DisplayName("Get add or remove loans view for multi year filer - success path")
     void getRequestSuccessForMultiYearFiler() throws Exception {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -157,7 +157,7 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
-    @DisplayName("Get add or remove loans view - success path")
+    @DisplayName("Get add or remove loans view for single year filer - success path")
     void getRequestSuccessForSingleYearFiler() throws Exception {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
