@@ -121,8 +121,6 @@ public class AddOrRemoveDirectorsControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
-
     private static final String DISPLAY_WARNING_BANNER = "displayLtdWarningBanner";
 
     @BeforeEach
