@@ -177,6 +177,7 @@
                 <!--Hidden fields for form binding-->
                 <input th:field="*{nextAccount.periodStartOn}" type="hidden">
                 <input th:field="*{nextAccount.periodEndOn}" type="hidden">
+                <input th:field="*{isMultiYearFiler}" type="hidden">
 
                 <th:block th:each="director, stat : *{validDirectorNames}">
                     <input type="hidden" th:field="*{validDirectorNames[__${stat.index}__]}" th:id="validDirectorNames[__${stat.index}__]"/>
@@ -328,7 +329,7 @@
                             <div class="height-one">&nbsp;</div>
                         </div>
                     </div>
-                    <div class="govuk-grid-row">
+                    <div class="govuk-grid-row" th:if="*{isMultiYearFiler}">
                         <div class="govuk-grid-column-one-half"
                              id="loanToAdd-breakdown-balance-at-period-heading"
                              th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')}">
