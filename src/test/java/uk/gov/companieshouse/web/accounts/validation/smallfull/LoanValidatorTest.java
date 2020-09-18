@@ -40,28 +40,42 @@ class LoanValidatorTest {
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
     @Test
-    @DisplayName("Validate loan to add - success")
-    void validateLoanToAddToAddSuccess() {
+    @DisplayName("Validate loan to add for multi year filer - success")
+    void validateLoanToAddForMultiYearFilerSuccess() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
 
         assertTrue(validationErrors.isEmpty());
     }
 
     @Test
-    @DisplayName("Validate loan to add - missing director name")
-    void validateLoanToAddToAddMissingDirectorName() {
+    @DisplayName("Validate loan to add for single year filer - success")
+    void validateLoanToAddForSingleYearFilerSuccess() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDirectorName(DIRECTOR_NAME);
+        loanToAdd.setDescription(DESCRIPTION);
+        loanToAdd.setBreakdown(createBreakdown(false, true));
+
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add for multi year filer - missing director name")
+    void validateLoanToAddForMultiYearFilerMissingDirectorName() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -70,14 +84,30 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add - missing description")
-    void validateLoanToAddToAddMissingDescription() {
+    @DisplayName("Validate loan to add for single year filer - missing director name")
+    void validateLoanToAddForSingleYearMissingDirectorName() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDescription(DESCRIPTION);
+        loanToAdd.setBreakdown(createBreakdown(true, true));
+
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(DIRECTOR_NAME, validationErrors.get(0).getFieldPath());
+        assertEquals(NAME_NOT_PRESENT, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add for multi year filer - missing description")
+    void validateLoanToAddForMultiYearFilerMissingDescription() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -86,15 +116,31 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add - missing period start")
-    void validateLoanToAddToAddMissingPeriodStart() {
+    @DisplayName("Validate loan to add for single year filer - missing description")
+    void validateLoanToAddForSingleYearFilerMissingDescription() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDirectorName(DIRECTOR_NAME);
+        loanToAdd.setBreakdown(createBreakdown(true, true));
+
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(DESCRIPTION, validationErrors.get(0).getFieldPath());
+        assertEquals(DESCRIPTION_NOT_PRESENT, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add for multi year filer - missing period start")
+    void validateLoanToAddForMultiYearFilerMissingPeriodStart() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(false, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -103,15 +149,15 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add - missing period end")
-    void validateLoanToAddToAddMissingPeriodEnd() {
+    @DisplayName("Validate loan to add for multi year filer - missing period end")
+    void validateLoanToAddForMultiYearFilerMissingPeriodEnd() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, false));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -120,35 +166,78 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add - Empty resource")
-    void validateLoanToAddToAddIsEmpty() {
+    @DisplayName("Validate loan to add for single year filer - missing period end")
+    void validateLoanToAddForSingleYearFilerMissingPeriodEnd() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDirectorName(DIRECTOR_NAME);
+        loanToAdd.setDescription(DESCRIPTION);
+        loanToAdd.setBreakdown(createBreakdown(true, false));
+
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(BALANCE_AT_END, validationErrors.get(0).getFieldPath());
+        assertEquals(BAE_NOT_PRESENT, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add for multi year filer - Empty resource")
+    void validateLoanToAddForMultiYearFilerIsEmpty() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setBreakdown(createBreakdown(false, false));
 
-        boolean isEmpty = validator.isEmptyResource(loanToAdd);
+        boolean isEmpty = validator.isEmptyResource(loanToAdd, true);
 
         assertTrue(isEmpty);
     }
 
     @Test
-    @DisplayName("Validate loan to add - Not Empty resource")
-    void validateLoanToAddToAddIsNotEmpty() {
+    @DisplayName("Validate loan to add for single year filer - Empty resource")
+    void validateLoanToAddForSingleYearFilerIsEmpty() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setBreakdown(createBreakdown(false, false));
+
+        boolean isEmpty = validator.isEmptyResource(loanToAdd, false);
+
+        assertTrue(isEmpty);
+    }
+
+    @Test
+    @DisplayName("Validate loan to add for multi year filer - Not Empty resource")
+    void validateLoanToAddForMultiYearFilerIsNotEmpty() {
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(false, false));
 
-        boolean isEmpty = validator.isEmptyResource(loanToAdd);
+        boolean isEmpty = validator.isEmptyResource(loanToAdd, true);
 
         assertFalse(isEmpty);
     }
 
     @Test
-    @DisplayName("Validate loan to add- At least one loan, no fields populated")
-    void validateAtLeastOneLoanNoFieldsFilledIn() {
+    @DisplayName("Validate loan to add for single year filer - Not Empty resource")
+    void validateLoanToAddForSingleYearFilerIsNotEmpty() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDirectorName(DIRECTOR_NAME);
+        loanToAdd.setBreakdown(createBreakdown(false, false));
+
+        boolean isEmpty = validator.isEmptyResource(loanToAdd, false);
+
+        assertFalse(isEmpty);
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - At least one loan, no fields populated for multi year filer")
+    void validateAtLeastOneLoanNoFieldsFilledInForMultiYearFiler() {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.setIsMultiYearFiler(true);
 
         List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, false);
 
@@ -159,11 +248,27 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add- At least one loan, no fields populated - isSingle director true")
-    void validateAtLeastOneLoanNoFieldsFilledInIsSingleDirectorTrue() {
+    @DisplayName("Validate loan to add- At least one loan, no fields populated for single year filer")
+    void validateAtLeastOneLoanNoFieldsFilledInForSingleYearFiler() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.setIsMultiYearFiler(false);
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, false);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(LOAN_TO_ADD, validationErrors.get(0).getFieldPath());
+        assertEquals(AT_LEAST_ONE_LOAN_REQUIRED, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - At least one loan, no fields populated - isSingle director true for multi year filer")
+    void validateAtLeastOneLoanNoFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
+        addOrRemoveLoans.setIsMultiYearFiler(true);
         addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
 
         List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
@@ -175,10 +280,29 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add- At least one loan, a field populated")
-    void validateAtLeastOneLoanFieldsFilledIn() {
+    @DisplayName("Validate loan to add - At least one loan, no fields populated - isSingle director true for single year filer")
+    void validateAtLeastOneLoanNoFieldsFilledInIsSingleDirectorTrueForSingleYearFiler() {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(false);
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(LOAN_TO_ADD, validationErrors.get(0).getFieldPath());
+        assertEquals(AT_LEAST_ONE_LOAN_REQUIRED, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - At least one loan, a field populated for multi year filer")
+    void validateAtLeastOneLoanFieldsFilledInForMultiYear() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(true);
 
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
@@ -191,10 +315,30 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
-    void validateAtLeastOneLoanFieldsFilledInIsSingleDirectorTrue() {
+    @DisplayName("Validate loan to add - At least one loan, a field populated for single year filer")
+    void validateAtLeastOneLoanFieldsFilledInForSingleYear() {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(false);
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDirectorName(DIRECTOR_NAME);
+
+        addOrRemoveLoans.setLoanToAdd(loanToAdd);
+        
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, false);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for multi year filer")
+    void validateAtLeastOneLoanFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(true);
         addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
         addOrRemoveLoans.getLoanToAdd().setDescription(DESCRIPTION);
 
@@ -204,10 +348,27 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
-    void validateAtLeastOneLoanPeriodStartFieldsFilledInIsSingleDirectorTrue() {
+    @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for single year filer")
+    void validateAtLeastOneLoanFieldsFilledInIsSingleDirectorTrueForSingleFiler() {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(false);
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setDescription(DESCRIPTION);
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for multi year filer")
+    void validateAtLeastOneLoanPeriodStartFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(true);
         addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
         addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(true, false));
 
@@ -217,10 +378,42 @@ class LoanValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add- At least one loan, a field populated - isSingleDirector true")
-    void validateAtLeastOneLoanPeriodEndFieldsFilledInIsSingleDirectorTrue() {
+    @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for single year filer")
+    void validateAtLeastOneLoanPeriodStartFieldsFilledInIsSingleDirectorTrueForSingleYearFiler() {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(false);
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(false, true));
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for multi year filer")
+    void validateAtLeastOneLoanPeriodEndFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(true);
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(false, true));
+
+        List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for single year filer")
+    void validateAtLeastOneLoanPeriodEndFieldsFilledInIsSingleDirectorTrueForSingleYearFiler() {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        addOrRemoveLoans.setIsMultiYearFiler(false);
         addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
         addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(false, true));
 

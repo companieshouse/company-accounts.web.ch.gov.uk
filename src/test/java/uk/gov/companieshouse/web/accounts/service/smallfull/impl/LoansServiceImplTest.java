@@ -235,11 +235,13 @@ public class LoansServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - loan - validation errors")
-    void createLoanValidation()
+    @DisplayName("POST - loan - validation errors for multi year filer")
+    void createLoanValidationForMultiYearFiler()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
-        when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(new ArrayList<>());
+        addOrRemoveLoans.setIsMultiYearFiler(true);
+        
+        when(loanValidator.validateLoanToAdd(loanToAdd, addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -265,16 +267,48 @@ public class LoansServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - loan - director name validation failed")
-    void createLoanInvalidDirectorName() throws ServiceException {
+    @DisplayName("POST - loan - validation errors for single year filer")
+    void createLoanValidationForSingleYearFiler()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(loanValidator.validateLoanToAdd(loanToAdd, false)).thenReturn(new ArrayList<>());
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+
+        when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
+        when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
+        when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
+        when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
+        when(responseWithSingleLoan.hasErrors()).thenReturn(true);
+
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> apiValidationErrors = new ArrayList<>();
+        apiValidationErrors.add(validationError);
+        when(validationContext.getValidationErrors(responseWithSingleLoan.getErrors())).thenReturn(apiValidationErrors);
+
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertEquals(apiValidationErrors, validationErrors);
+    }
+
+    @Test
+    @DisplayName("POST - loan - director name validation failed for multi year filer")
+    void createLoanInvalidDirectorNameForMultiYearFiler() throws ServiceException {
 
         ValidationError validationError = new ValidationError();
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
+        addOrRemoveLoans.setIsMultiYearFiler(true);
+        
         when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
-        when(loanValidator.validateLoanToAdd(loanToAdd)).thenReturn(nameValidationError);
+        when(loanValidator.validateLoanToAdd(loanToAdd, addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
@@ -284,10 +318,31 @@ public class LoansServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - submit loan - resource is empty")
-    void submitAddOrRemoveLoanEmptyResource() throws ServiceException {
+    @DisplayName("POST - loan - director name validation failed for single year filer")
+    void createLoanInvalidDirectorNameForSingleYearFiler() throws ServiceException {
 
-        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(true);
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> nameValidationError = new ArrayList<>();
+        nameValidationError.add(validationError);
+
+        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+
+        when(loanValidator.validateLoanToAdd(loanToAdd, false)).thenReturn(nameValidationError);
+
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertEquals(nameValidationError, validationErrors);
+
+        verify(apiClientService, never()).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - submit loan - resource is empty for multi year filer")
+    void submitAddOrRemoveLoanEmptyResourceForMultiYearFiler() throws ServiceException {
+
+        addOrRemoveLoans.setIsMultiYearFiler(true);
+        
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(true);
 
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
@@ -296,8 +351,40 @@ public class LoansServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - submit loan - resource is empty - isSingleDirector True")
-    void submitAddOrRemoveLoanEmptyResourceIsSingleDirectorTrue() throws ServiceException {
+    @DisplayName("POST - submit loan - resource is empty for single year filer")
+    void submitAddOrRemoveLoanEmptyResourceForSingleYearFiler() throws ServiceException {
+
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), false)).thenReturn(true);
+
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(apiClientService, never()).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - submit loan - resource is empty for multi year filer - isSingleDirector True")
+    void submitAddOrRemoveLoanEmptyResourceForMultiYearFilerIsSingleDirectorTrue() throws ServiceException {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
+        List<String> validNames = new ArrayList<>();
+        validNames.add("valid");
+
+        addOrRemoveLoans.setIsMultiYearFiler(true);
+        addOrRemoveLoans.setValidDirectorNames(validNames);
+
+        when(loanValidator.isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(true);
+
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(apiClientService, never()).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - submit loan - resource is empty for single year filer - isSingleDirector True")
+    void submitAddOrRemoveLoanEmptyResourceForSingleYearFilerIsSingleDirectorTrue() throws ServiceException {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
@@ -305,8 +392,9 @@ public class LoansServiceImplTest {
         validNames.add("valid");
 
         addOrRemoveLoans.setValidDirectorNames(validNames);
-
-        when(loanValidator.isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(true);
+        addOrRemoveLoans.setIsMultiYearFiler(false);
+        
+        when(loanValidator.isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(true);
 
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
@@ -315,17 +403,18 @@ public class LoansServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - submit loan - successful with non empty resource")
-    void submitAddOrRemoveLoanSuccessfulNonEmptyResource() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    @DisplayName("POST - submit loan for multi year filer - successful with non empty resource")
+    void submitAddOrRemoveLoanSuccessfulForMultiYearFilerNonEmptyResource() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
         addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
         addOrRemoveLoans.getLoanToAdd().setDescription(DESCRIPTION);
         addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(true, true));
+        addOrRemoveLoans.setIsMultiYearFiler(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(false);
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(false);
         when(loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd())).thenReturn(loanApi);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -340,8 +429,58 @@ public class LoansServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - submit loan - success")
-    void submitAddOrRemoveLoanSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    @DisplayName("POST - submit loan for single year filer - successful with non empty resource")
+    void submitAddOrRemoveLoanSuccessfulForSingleYearFilerNonEmptyResource() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
+        addOrRemoveLoans.getLoanToAdd().setDescription(DESCRIPTION);
+        addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(true, true));
+        addOrRemoveLoans.setIsMultiYearFiler(false);
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(false);
+        when(loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd())).thenReturn(loanApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
+        when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
+        when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
+        when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
+
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("POST - submit loan for multi year filer - success")
+    void submitAddOrRemoveLoanForMultiYearFilerSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        addOrRemoveLoans.setIsMultiYearFiler(true);
+        
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd())).thenReturn(loanApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
+        when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
+        when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
+        when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
+
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(false);
+
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+
+        assertTrue(validationErrors.isEmpty());
+        verify(apiClientService, times(1)).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - submit loan for single year filer - success")
+    void submitAddOrRemoveLoanForSingleYearFilerSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -353,7 +492,7 @@ public class LoansServiceImplTest {
         when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
         when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
 
-        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd())).thenReturn(false);
+        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), false)).thenReturn(false);
 
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
