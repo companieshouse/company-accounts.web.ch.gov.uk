@@ -1470,7 +1470,7 @@
                             </div>
                         </div>
 
-                        <div class="govuk-grid-row govuk-!-margin-top-4">
+                        <div class="govuk-grid-row govuk-!-margin-top-4" th:if="${loan.breakdown.balanceAtPeriodStart != null}">
                             <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
                                  th:id="review-loans-to-directors-balance-at-period-start[__${stat.index}__]-heading"
                                  th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')}">
