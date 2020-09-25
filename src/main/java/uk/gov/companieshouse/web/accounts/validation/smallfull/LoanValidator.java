@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
-import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Breakdown;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -28,7 +27,7 @@ public class LoanValidator {
 
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
-    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd) {
+    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
 
@@ -48,7 +47,7 @@ public class LoanValidator {
             validationErrors.add(error);
         }
 
-        if (loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
+        if (isMultiYearFiler && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
 
             ValidationError error = new ValidationError();
             error.setFieldPath(BALANCE_AT_START);
@@ -73,9 +72,9 @@ public class LoanValidator {
 
         boolean isEmptyResource;
         if(isSingleDirector) {
-            isEmptyResource = isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd());
+            isEmptyResource = isSingleDirectorEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler());
         } else {
-            isEmptyResource = isEmptyResource(addOrRemoveLoans.getLoanToAdd());
+            isEmptyResource = isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler());
         }
 
         if (addOrRemoveLoans.getExistingLoans() == null && isEmptyResource) {
@@ -88,19 +87,19 @@ public class LoanValidator {
         return validationErrors;
     }
 
-    public boolean isEmptyResource(LoanToAdd loanToAdd) {
+    public boolean isEmptyResource(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
 
-        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) && isDescriptionAndBreakdownEmpty(loanToAdd));
+        return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) && isDescriptionAndBreakdownEmpty(loanToAdd, isMultiYearFiler));
     }
 
-    public boolean isSingleDirectorEmptyResource(LoanToAdd loanToAdd) {
+    public boolean isSingleDirectorEmptyResource(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
 
-        return loanToAdd == null || isDescriptionAndBreakdownEmpty(loanToAdd);
+        return loanToAdd == null || isDescriptionAndBreakdownEmpty(loanToAdd, isMultiYearFiler);
     }
 
-    private boolean isDescriptionAndBreakdownEmpty(LoanToAdd loanToAdd) {
+    private boolean isDescriptionAndBreakdownEmpty(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
         return  ((StringUtils.isBlank(loanToAdd.getDescription()) &&
-                loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null &&
+                ((isMultiYearFiler && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) || !isMultiYearFiler) &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null));
     }
 }

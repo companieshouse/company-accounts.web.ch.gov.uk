@@ -38,12 +38,14 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsAdditionalInfoService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
@@ -103,6 +105,8 @@ public class ReviewServiceImplTests {
     @Mock
     private NoteService<AccountingPolicies> accountingPoliciesNoteService;
 
+    @Mock
+    private LoansToDirectorsAdditionalInfoService loansToDirectorsAdditionalInfoService;
     @Mock
     private SmallFullService smallFullService;
 
@@ -203,6 +207,9 @@ public class ReviewServiceImplTests {
 
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loans);
 
+        LoansToDirectorsAdditionalInfo additionalInfo = new LoansToDirectorsAdditionalInfo();
+        when(loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(additionalInfo);
+
         LocalDate periodStartOn = LocalDate.now().minusYears(1);
         LocalDate periodEndOn = LocalDate.now();
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -236,5 +243,6 @@ public class ReviewServiceImplTests {
         assertEquals(periodStartOn, review.getPeriodStartOn());
         assertEquals(periodEndOn, review.getPeriodEndOn());
         assertEquals(loans, review.getLoans());
+        assertEquals(additionalInfo, review.getLoansToDirectorsAdditionalInfo());
     }
 }

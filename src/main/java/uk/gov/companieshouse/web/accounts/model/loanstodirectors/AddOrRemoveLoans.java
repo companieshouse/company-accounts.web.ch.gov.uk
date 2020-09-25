@@ -21,6 +21,8 @@ public class AddOrRemoveLoans {
 
     private List<String> validDirectorNames;
 
+    private Boolean isMultiYearFiler;
+    
     public AccountingPeriodApi getNextAccount() {
         return nextAccount;
     }
@@ -51,5 +53,13 @@ public class AddOrRemoveLoans {
 
     public void setValidDirectorNames(List<String> validDirectorNames) {
         this.validDirectorNames = validDirectorNames;
+    }
+
+    public Boolean getIsMultiYearFiler() {
+        return isMultiYearFiler;
+    }
+
+    public void setIsMultiYearFiler(Boolean isMultiYearFiler) {
+        this.isMultiYearFiler = isMultiYearFiler;
     }
 }

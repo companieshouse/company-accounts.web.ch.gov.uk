@@ -1,5 +1,25 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,38 +34,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
-import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -85,7 +86,13 @@ class AddOrRemoveLoansControllerTest {
 
     @Mock
     private List<ValidationError> validationErrors;
+    
+    @Mock
+    private CompanyService companyService;
 
+    @Mock
+    private CompanyProfileApi companyProfileApi;
+    
     @InjectMocks
     private AddOrRemoveLoansController controller;
 
@@ -119,6 +126,8 @@ class AddOrRemoveLoansControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
+    private static final String IS_MULTI_YEAR_FILER = "isMultiYearFiler";
+    
     @BeforeEach
     private void setup() {
 
@@ -126,18 +135,43 @@ class AddOrRemoveLoansControllerTest {
     }
 
     @Test
-    @DisplayName("Get add or remove loans view - success path")
-    void getRequestSuccess() throws Exception {
+    @DisplayName("Get add or remove loans view for multi year filer - success path")
+    void getRequestSuccessForMultiYearFiler() throws Exception {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(createValidDirectors());
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Loan[0]);
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
+        when(companyService.isMultiYearFiler(companyProfileApi)).thenReturn(true);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_LOAN_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW))
                 .andExpect(model().attributeExists(ADD_OR_REMOVE_LOANS_MODEL_ATTR))
+                .andExpect(model().attribute(ADD_OR_REMOVE_LOANS_MODEL_ATTR, hasProperty(IS_MULTI_YEAR_FILER, is(true))))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get add or remove loans view for single year filer - success path")
+    void getRequestSuccessForSingleYearFiler() throws Exception {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(createValidDirectors());
+        when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new Loan[0]);
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
+        when(companyService.isMultiYearFiler(companyProfileApi)).thenReturn(false);
+
+        this.mockMvc.perform(get(ADD_OR_REMOVE_LOAN_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW))
+                .andExpect(model().attributeExists(ADD_OR_REMOVE_LOANS_MODEL_ATTR))
+                .andExpect(model().attribute(ADD_OR_REMOVE_LOANS_MODEL_ATTR, hasProperty(IS_MULTI_YEAR_FILER, is(false))))
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))

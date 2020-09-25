@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -23,6 +24,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -46,6 +48,9 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
     @Autowired
     private SmallFullService smallFullService;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private ApiClientService apiClientService;
@@ -97,6 +102,12 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
             addOrRemoveLoans.setValidDirectorNames(validDirectorNames);
 
+            CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
+
+            boolean isMultiYearFiler = companyService.isMultiYearFiler(companyProfile);
+            
+            addOrRemoveLoans.setIsMultiYearFiler(isMultiYearFiler);
+
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -116,8 +127,10 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                                          @PathVariable String transactionId,
                                          @PathVariable String companyAccountsId,
                                          @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
-                                         BindingResult bindingResult
-    ) {
+                                         BindingResult bindingResult,
+                                         Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             List<ValidationError> validationErrors = loanService.submitAddOrRemoveLoans(transactionId, companyAccountsId, addOrRemoveLoans);

@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,7 +72,7 @@ public class LoansServiceImpl implements LoanService {
 
         List<ValidationError> validationErrors;
 
-        validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd());
+        validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler());
 
         if(!validationErrors.isEmpty()) {
             return validationErrors;
@@ -132,9 +131,9 @@ public class LoansServiceImpl implements LoanService {
         boolean isEmptyResource;
         if (validationErrors.isEmpty()) {
             if(addOrRemoveLoans.getValidDirectorNames() != null && addOrRemoveLoans.getValidDirectorNames().size() == 1) {
-                isEmptyResource = loanValidator.isSingleDirectorEmptyResource(loanToAdd);
+                isEmptyResource = loanValidator.isSingleDirectorEmptyResource(loanToAdd, addOrRemoveLoans.getIsMultiYearFiler());
             } else {
-                isEmptyResource = loanValidator.isEmptyResource(loanToAdd);
+                isEmptyResource = loanValidator.isEmptyResource(loanToAdd, addOrRemoveLoans.getIsMultiYearFiler());
             }
 
             if (!isEmptyResource) {

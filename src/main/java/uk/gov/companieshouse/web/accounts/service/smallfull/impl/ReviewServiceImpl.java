@@ -25,12 +25,14 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.StocksNote;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsAdditionalInfoService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ReviewService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -83,6 +85,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private LoanService loanService;
+
+    @Autowired
+    private LoansToDirectorsAdditionalInfoService additionalInfoService;
 
     @Autowired
     private SmallFullService smallFullService;
@@ -140,6 +145,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         Loan[] loans = loanService.getAllLoans(transactionId, companyAccountsId);
 
+        LoansToDirectorsAdditionalInfo additionalInfo = additionalInfoService.getAdditionalInformation(transactionId, companyAccountsId);
+
         Review review = new Review();
         review.setProfitAndLoss(profitAndLoss);
         review.setBalanceSheet(balanceSheet);
@@ -163,6 +170,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setPeriodStartOn(smallFullApi.getNextAccounts().getPeriodStartOn());
         review.setPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
         review.setLoans(loans);
+        review.setLoansToDirectorsAdditionalInfo(additionalInfo);
 
         return review;
     }

@@ -1418,6 +1418,153 @@
             </div>
         </div>
         <!-- End Creditors After One Year Note -->
+        <!-- Start of Loans to Directors -->
+
+        <div th:if="*{loans != null and loans.length > 0}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Loans to directors',
+                        identifier= 'loans-to-directors',
+                        resource = 'notes/loans-to-directors-question',
+                        marginTop = false
+                        )">
+            </div>
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <th:block th:each="loan, stat : *{loans}">
+                    <div class="app-check-your-answers__contents govuk-section-no-border-bottom">
+
+                        <div class="govuk-grid-row govuk-!-margin-top-8">
+                            <strong class="govuk-grid-column-one-half cya-desktop-only" th:id="review-loans-to-directors-name[__${stat.index}__]-heading">Name of director receiving advance or credit</strong>
+                            <div class="mobile-only-label column-fifth column-flex-with-min-width">
+                                <strong th:id="mobile-loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
+                            </div>
+                            <div class="govuk-grid-column-one-half cya-desktop-only govuk-table__cell--numeric ">
+                                <strong th:id="review-loans-to-directors-name[__${stat.index}__]"
+                                        th:text="${loan.directorName}">
+                                </strong>
+                            </div>
+                            <div class="mobile-only-label column-fifth column-flex-with-min-width govuk-!-margin-top-4">
+                                <strong th:id="mobile-review-director-name[__${stat.index}__]"
+                                        th:text="${loan.directorName}">
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row">
+                            <p class="govuk-grid-column-one-half  cya-desktop-only govuk-!-margin-top-4" th:id="review-loans-to-directors-description[__${stat.index}__]-heading">
+                                Description of the loan
+                            </p>
+
+                            <div class="mobile-only-label column-fifth column-flex-with-min-width govuk-!-margin-top-4">
+                                <span th:id="mobile-loans-table-breakdown-description-header[__${stat.index}__]">
+                                    Description of the loan
+                                </span>
+                            </div>
+                            <div class="govuk-grid-column-one-half cya-desktop-only govuk-!-margin-top-4 govuk-table__cell--numeric"
+                                  th:id="review-loans-to-directors-description[__${stat.index}__]"
+                                  th:text="${loan.description}">
+                            </div>
+                            <div class="mobile-only-label column-fifth column-flex-with-min-width govuk-!-margin-top-4">
+                                <span th:id="mobile-loans-table-breakdown-description[__${stat.index}__]"
+                                        th:text="${loan.description}">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="govuk-grid-row govuk-!-margin-top-4" th:if="${loan.breakdown.balanceAtPeriodStart != null}">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                 th:id="review-loans-to-directors-balance-at-period-start[__${stat.index}__]-heading"
+                                 th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')}">
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                            <span th:id="loans-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
+                                                  th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')}"></span>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
+                                            <span th:id="review-loans-to-directors-balance-at-period-start[__${stat.index}__]"
+                                                  th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodStart)}">
+                                            </span>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                 th:id="review-loans-to-directors-advances-and-credits-made[__${stat.index}__]-heading">
+                                Advances and credits made
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                            <span th:id="loans-table-breakdown-advances-and-credits-made-mobile-heading[__${stat.index}__]">
+                                                Advances and credits made
+                                            </span>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
+                                            <span th:id="review-loans-to-directors-advances-and-credits-made[__${stat.index}__]"
+                                                  th:text="${loan.breakdown.advancesCreditsMade != null ? new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsMade) : ''}">
+                                            </span>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
+                                 th:id="review-loans-to-directors-advances-and-credits-repaid[__${stat.index}__]-heading">
+                                Advances and credits repaid
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                            <span th:id="loans-table-breakdown-advances-and-credits-repaid-mobile-heading[__${stat.index}__]">
+                                                Advances and credits repaid
+                                            </span>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
+                                            <span th:id="review-loans-to-directors-advances-and-credits-repaid[__${stat.index}__]"
+                                                  th:text="${loan.breakdown.advancesCreditsRepaid != null ? new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsRepaid) : ''}">
+                                            </span>
+                            </div>
+                        </div>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only">
+                                <strong th:id="review-loans-to-directors-balance-at-period-end[__${stat.index}__]-heading"
+                                        th:text="'Balance at ' + *{#temporals.format(periodEndOn, 'd MMMM yyyy')}">
+                                </strong>
+                            </div>
+                            <div class="mobile-only-label column-fifth">
+                                <strong th:id="loans-table-breakdown-balance-at-period-end-mobile-heading[__${stat.index}__]"
+                                        th:text="'Balance at ' + *{#temporals.format(periodEndOn, 'd MMMM yyyy')}"></strong>
+                            </div>
+                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
+                                <strong th:id="review-loans-to-directors-balance-at-period-end[__${stat.index}__]"
+                                        th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodEnd)}">
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                 </th:block>
+                <dd class="app-check-your-answers__change"></dd>
+            </dl>
+        </div>
+
+        <!-- End of Loans to Directors -->
+
+        <!-- Start of Loans to Directors Additional Info -->
+
+        <div th:if="*{loansToDirectorsAdditionalInfo.additionalInfoDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Loans to directors additional information',
+                        identifier= 'loans-to-directors-additional-information',
+                        resource = 'notes/add-or-remove-loans/additional-information-question',
+                        marginTop = true
+                        )">
+            </div>
+
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="loans-to-directors-additional-information"
+                           th:utext="*{#strings.replace(loansToDirectorsAdditionalInfo.additionalInfoDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
+        </div>
+
+        <!-- End of Loans to Directors Additional Info-->
 
         <!-- Start Off Balance Sheet Arrangements -->
 
@@ -1443,130 +1590,6 @@
         </div>
 
         <!-- End Off Balance Sheet Arrangements -->
-
-        <!-- Start of Loans to Directors -->
-
-        <div th:if="*{loans != null and loans.length > 0}">
-            <div
-                    th:replace="fragments/review/sectionHeader :: sectionHeader (
-                        description = 'Loans to directors',
-                        identifier= 'loans-to-directors',
-                        resource = 'note/add-or-remove-loans',
-                        marginTop = true
-                        )">
-            </div>
-            <th:block th:each="loan, stat : *{loans}">
-                <dl class="app-check-your-answers app-check-your-answers--short">
-                    <div class="app-check-your-answers__contents">
-
-                        <div class="govuk-grid-row">
-                            <strong class="govuk-grid-column-one-half cya-desktop-only" th:id="loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
-                            <div class="mobile-only-label column-fifth column-flex-with-min-width">
-                                <strong th:id="mobile-loans-director-name[__${stat.index}__]">Name of director receiving advance or credit</strong>
-                            </div>
-                            <div class="govuk-grid-column-one-half cya-desktop-only govuk-table__cell--numeric ">
-                                <strong th:id="review-director-name[__${stat.index}__]"
-                                        th:text="${loan.directorName}">
-                                </strong>
-                            </div>
-                            <div class="mobile-only-label column-fifth column-flex-with-min-width govuk-!-margin-top-4">
-                                <strong th:id="mobile-review-director-name[__${stat.index}__]"
-                                        th:text="${loan.directorName}">
-                                </strong>
-                            </div>
-                        </div>
-                        <div class="govuk-grid-row">
-                            <p class="govuk-grid-column-one-half  cya-desktop-only govuk-!-margin-top-4" th:id="loans-table-breakdown-description-header[__${stat.index}__]">
-                                Description of the loan
-                            </p>
-
-                            <div class="mobile-only-label column-fifth column-flex-with-min-width govuk-!-margin-top-4">
-                                <span th:id="mobile-loans-table-breakdown-description-header[__${stat.index}__]">
-                                    Description of the loan
-                                </span>
-                            </div>
-                            <div class="govuk-grid-column-one-half cya-desktop-only govuk-!-margin-top-4 govuk-table__cell--numeric"
-                                  th:id="loans-table-breakdown-description[__${stat.index}__]"
-                                  th:text="${loan.description}">
-                            </div>
-                            <div class="mobile-only-label column-fifth column-flex-with-min-width govuk-!-margin-top-4">
-                                <span th:id="mobile-loans-table-breakdown-description[__${stat.index}__]"
-                                        th:text="${loan.description}">
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="govuk-grid-row govuk-!-margin-top-4">
-                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
-                                 th:id="loans-table-breakdown-balance-at-period-start-heading[__${stat.index}__]"
-                                 th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')}">
-                            </div>
-                            <div class="mobile-only-label column-fifth">
-                                            <span th:id="loans-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
-                                                  th:text="'Balance at ' + *{#temporals.format(periodStartOn, 'd MMMM yyyy')}"></span>
-                            </div>
-                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
-                                            <span th:id="loans-table-breakdown-balance-at-period-start[__${stat.index}__]"
-                                                  th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodStart)}">
-                                            </span>
-                            </div>
-                        </div>
-                        <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
-                                 th:id="loans-table-breakdown-advances-and-credits-made-heading[__${stat.index}__]">
-                                Advances and credits made
-                            </div>
-                            <div class="mobile-only-label column-fifth">
-                                            <span th:id="loans-table-breakdown-advances-and-credits-made-mobile-heading[__${stat.index}__]">
-                                                Advances and credits made
-                                            </span>
-                            </div>
-                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
-                                            <span th:id="loans-table-breakdown-advances-and-credits-made[__${stat.index}__]"
-                                                  th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsMade)}">
-                                            </span>
-                            </div>
-                        </div>
-                        <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
-                                 th:id="loans-table-breakdown-advances-and-credits-repaid-heading[__${stat.index}__]">
-                                Advances and credits repaid
-                            </div>
-                            <div class="mobile-only-label column-fifth">
-                                            <span th:id="loans-table-breakdown-advances-and-credits-repaid-mobile-heading[__${stat.index}__]">
-                                                Advances and credits repaid
-                                            </span>
-                            </div>
-                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
-                                            <span th:id="loans-table-breakdown-advances-and-credits-repaid[__${stat.index}__]"
-                                                  th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.advancesCreditsRepaid)}">
-                                            </span>
-                            </div>
-                        </div>
-                        <div class="govuk-grid-row">
-                            <div class="govuk-grid-column-one-half govuk-body cya-desktop-only">
-                                <strong th:id="loans-table-breakdown-balance-at-period-end-heading[__${stat.index}__]"
-                                        th:text="'Balance at ' + *{#temporals.format(periodEndOn, 'd MMMM yyyy')}">
-                                </strong>
-                            </div>
-                            <div class="mobile-only-label column-fifth">
-                                <strong th:id="loans-table-breakdown-balance-at-period-end-mobile-heading[__${stat.index}__]"
-                                        th:text="'Balance at ' + *{#temporals.format(periodEndOn, 'd MMMM yyyy')}"></strong>
-                            </div>
-                            <div class="govuk-grid-column-one-half column-flex-with-min-width govuk-table__cell--numeric">
-                                <strong th:id="loans-table-breakdown-balance-at-period-end[__${stat.index}__]"
-                                        th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(loan.breakdown.balanceAtPeriodEnd)}">
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
-                </dl>
-            </th:block>
-        </div>
-
-
-        <!-- End of Loans to Directors -->
-
 
         <div class="govuk-form-group">
             <input id="next-button" class="govuk-button piwik-event" data-event-id="CYA - Save and continue"

@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,12 +27,12 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoansToDirectorsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
@@ -40,9 +42,11 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.HashMap;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -81,6 +85,12 @@ public class AddOrRemoveDirectorsControllerTest {
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
+    @Mock
+    private LoansToDirectorsApi loansToDirectorsApi;
+
+    @Mock
+    private LoansToDirectorsService loansToDirectorsService;
+
     @InjectMocks
     private AddOrRemoveDirectorsController controller;
 
@@ -111,7 +121,7 @@ public class AddOrRemoveDirectorsControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
+    private static final String DISPLAY_WARNING_BANNER = "displayLtdWarningBanner";
 
     @BeforeEach
     private void setup() {
@@ -127,6 +137,10 @@ public class AddOrRemoveDirectorsControllerTest {
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
 
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
+
+        when(loansToDirectorsApi.getLoans()).thenReturn(null);
+
         this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
@@ -134,6 +148,73 @@ public class AddOrRemoveDirectorsControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get add or remove directors view LTD resource is null- success path")
+    void getRequestWithNullLTDResourceSuccess() throws Exception {
+
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
+
+        when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
+
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+        
+        this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
+                .andExpect(model().attributeExists(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attribute(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR, hasProperty(DISPLAY_WARNING_BANNER, is(false))))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get add or remove directors view when a user has no LTD loans - success path")
+    void getRequestUserHasNoLTDLoansSuccess() throws Exception {
+
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
+
+        when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
+
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
+
+        when(loansToDirectorsApi.getLoans()).thenReturn(new HashMap<String, String>());
+
+        this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
+                .andExpect(model().attributeExists(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attribute(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR, hasProperty(DISPLAY_WARNING_BANNER, is(false))))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Get add or remove directors view when a user has existing LTD loans - success path")
+    void getRequestUserHasLTDLoansSuccess() throws Exception {
+
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
+
+        when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
+
+        when(loansToDirectorsService.getLoansToDirectors(apiClientService.getApiClient(), TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
+
+        when(loansToDirectorsApi.getLoans()).thenReturn(createLoans());
+
+        this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_DIRECTORS_VIEW))
+                .andExpect(model().attributeExists(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_NUMBER))
+                .andExpect(model().attributeExists(TRANSACTION_ID))
+                .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attribute(ADD_OR_REMOVE_DIRECTORS_MODEL_ATTR, hasProperty(DISPLAY_WARNING_BANNER, is(true))))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
@@ -306,5 +387,12 @@ public class AddOrRemoveDirectorsControllerTest {
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    private HashMap<String, String> createLoans() {
+        HashMap<String, String> loans = new HashMap<>();
+        loans.put("id", "value");
+
+        return loans;
     }
 }

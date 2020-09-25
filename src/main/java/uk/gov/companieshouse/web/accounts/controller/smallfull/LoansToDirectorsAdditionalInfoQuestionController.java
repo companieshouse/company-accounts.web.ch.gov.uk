@@ -26,7 +26,7 @@ import javax.validation.Valid;
 
 @Controller
 @PreviousController(AddOrRemoveLoansController.class)
-@NextController(OffBalanceSheetArrangementsQuestionController.class)
+@NextController(LoansToDirectorsAdditionalInfoController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/add-or-remove-loans/additional-information-question")
 public class LoansToDirectorsAdditionalInfoQuestionController extends BaseController {
 
