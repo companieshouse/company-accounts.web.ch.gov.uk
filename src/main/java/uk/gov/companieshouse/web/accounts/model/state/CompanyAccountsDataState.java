@@ -31,6 +31,9 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonProperty("has_included_off_balance_sheet_arrangements")
     private Boolean hasIncludedOffBalanceSheetArrangements;
 
+    @JsonProperty("has_included_financial_commitments")
+    private Boolean hasIncludedFinancialCommitments;
+
     @JsonProperty("has_confirmed_accounting_reference_date")
     private Boolean hasConfirmedAccountingReferenceDate;
 
@@ -47,6 +50,14 @@ public class CompanyAccountsDataState implements Serializable {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime created = LocalDateTime.now();
+
+    public Boolean getHasIncludedFinancialCommitments() {
+        return hasIncludedFinancialCommitments;
+    }
+
+    public void setHasIncludedFinancialCommitments(Boolean hasIncludedFinancialCommitments) {
+        this.hasIncludedFinancialCommitments = hasIncludedFinancialCommitments;
+    }
 
     public AccountingPolicies getAccountingPolicies() {
         return accountingPolicies;
