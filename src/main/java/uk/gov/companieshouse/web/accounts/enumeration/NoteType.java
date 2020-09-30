@@ -13,6 +13,7 @@ public enum NoteType {
     SMALL_FULL_ACCOUNTING_POLICIES(false),
     SMALL_FULL_INTANGIBLE_ASSETS(true),
     SMALL_FULL_FIXED_ASSETS_INVESTMENT(false),
+    SMALL_FULL_FINANCIAL_COMMITMENTS(false),
     SMALL_FULL_LOAN_TO_DIRECTORS(false);
 
     private boolean includedDates;
