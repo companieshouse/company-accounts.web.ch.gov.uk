@@ -11,7 +11,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.FinancialCo
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class FinancialCommitmentsTransformerImplTest {
+class FinancialCommitmentsTransformerImplTest {
 
     private static final String DETAILS = "details";
 

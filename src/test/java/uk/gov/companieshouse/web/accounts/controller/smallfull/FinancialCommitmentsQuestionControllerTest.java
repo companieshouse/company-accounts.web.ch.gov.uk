@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class FinancialCommitmentsQuestionControllerTest {
+class FinancialCommitmentsQuestionControllerTest {
 
     private MockMvc mockMvc;
 

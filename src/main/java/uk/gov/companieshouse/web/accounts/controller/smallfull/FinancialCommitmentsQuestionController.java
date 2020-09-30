@@ -84,7 +84,7 @@ public class FinancialCommitmentsQuestionController extends BaseController {
         }
 
         try {
-            if (!financialCommitmentsQuestion.getHasIncludedFinancialCommitments()) {
+            if (Boolean.FALSE.equals(financialCommitmentsQuestion.getHasIncludedFinancialCommitments())) {
                 
                 noteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS);
             }
