@@ -23,7 +23,7 @@ import java.util.List;
 
 @Controller
 @NextController(IntangibleAssetsNoteController.class)
-@PreviousController(OtherAccountingPolicyController.class)
+@PreviousController(FinancialCommitmentsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/employees")
 public class EmployeesController extends BaseController {

@@ -24,7 +24,7 @@ import java.util.List;
 
 @Controller
 @NextController(EmployeesController.class)
-@PreviousController(CreditorsAfterOneYearController.class)
+@PreviousController(FinancialCommitmentsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/financial-commitments")
 public class FinancialCommitmentsController extends BaseController implements ConditionalController {
 
