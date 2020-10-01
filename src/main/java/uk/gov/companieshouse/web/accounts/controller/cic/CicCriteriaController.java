@@ -66,7 +66,7 @@ public class CicCriteriaController extends BaseController {
             return getTemplateName();
         }
 
-        if(criteria.getIsCriteriaMet()) {
+        if(Boolean.TRUE.equals(criteria.getIsCriteriaMet())) {
 
             if(companyNumber.isPresent()) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +

@@ -63,7 +63,7 @@ public class DirectorsReportQuestionController extends BaseController {
         }
 
         try {
-            if (directorsReportQuestion.getHasIncludedDirectorsReport()) {
+            if (Boolean.TRUE.equals(directorsReportQuestion.getHasIncludedDirectorsReport())) {
 
                 directorsReportService.createDirectorsReport(transactionId, companyAccountsId);
             } else {
@@ -97,7 +97,7 @@ public class DirectorsReportQuestionController extends BaseController {
 
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedDirectorsReport(directorsReportQuestion.getHasIncludedDirectorsReport());
-        companyAccountsDataState.setDirectorsReportStatements(directorsReportQuestion.getHasIncludedDirectorsReport() ? new DirectorsReportStatements() : null);
+        companyAccountsDataState.setDirectorsReportStatements(Boolean.TRUE.equals(directorsReportQuestion.getHasIncludedDirectorsReport()) ? new DirectorsReportStatements() : null);
 
         updateStateOnRequest(request, companyAccountsDataState);
     }

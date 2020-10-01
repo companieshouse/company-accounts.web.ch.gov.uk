@@ -62,7 +62,7 @@ public class ProfitAndLossQuestionController extends BaseController {
             return getTemplateName();
         }
 
-        if (!profitAndLossQuestion.getHasIncludedProfitAndLoss()) {
+        if (Boolean.FALSE.equals(profitAndLossQuestion.getHasIncludedProfitAndLoss())) {
             try {
                 profitAndLossService.deleteProfitAndLoss(transactionId, companyAccountsId, companyNumber);
             } catch (ServiceException e) {

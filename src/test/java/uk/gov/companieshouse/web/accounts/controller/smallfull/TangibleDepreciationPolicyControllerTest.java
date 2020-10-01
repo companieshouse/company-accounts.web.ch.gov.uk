@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class TangibleDepreciationPolicyControllerTest {
+class TangibleDepreciationPolicyControllerTest {
 
     private MockMvc mockMvc;
 

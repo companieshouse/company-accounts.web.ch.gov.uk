@@ -104,7 +104,7 @@ public class AccountsReferenceDateQuestionController extends BaseController {
             cacheHasConfirmedAccountingReferenceDate(request, accountsReferenceDateQuestion);
 
             // If the user elects not to change their ARD
-            if (accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate()) {
+            if (Boolean.TRUE.equals(accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate())) {
 
                 // Default the period end date
                 smallFullService.updateSmallFullAccounts(null, transactionId, companyAccountsId);

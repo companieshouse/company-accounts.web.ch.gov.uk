@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoanValidatorTest {
 
-    private LoanValidator validator = new LoanValidator();
+    private final LoanValidator validator = new LoanValidator();
 
     private static final String LOAN_TO_ADD = "loanToAdd";
 

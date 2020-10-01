@@ -29,7 +29,7 @@ class PrincipalActivitiesSelectionServiceImplTest {
     private DirectorsReportStatementsService directorsReportStatementsService;
 
     @InjectMocks
-    private PrincipalActivitiesSelectionService principalActivitiesSelectionService = new PrincipalActivitiesSelectionServiceImpl();
+    private final PrincipalActivitiesSelectionService principalActivitiesSelectionService = new PrincipalActivitiesSelectionServiceImpl();
 
     @Mock
     private PrincipalActivitiesSelection principalActivitiesSelection;

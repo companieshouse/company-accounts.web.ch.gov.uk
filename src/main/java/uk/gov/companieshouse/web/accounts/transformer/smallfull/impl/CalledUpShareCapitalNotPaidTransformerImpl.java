@@ -13,7 +13,7 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
 
-        if (hasCurrentPeriodCalledUpShareCapitalNotPaid(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasCurrentPeriodCalledUpShareCapitalNotPaid(balanceSheet))) {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(
                 balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         }
@@ -23,7 +23,7 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
 
-        if (hasPreviousPeriodCalledUpShareCapitalNotPaid(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasPreviousPeriodCalledUpShareCapitalNotPaid(balanceSheet))) {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(
                 balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
         }

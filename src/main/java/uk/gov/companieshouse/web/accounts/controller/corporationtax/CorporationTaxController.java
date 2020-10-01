@@ -34,7 +34,7 @@ public class CorporationTaxController extends BaseController {
             return getTemplateName();
         }
 
-        if (corporationTax.getFileChoice()) {
+        if (Boolean.TRUE.equals(corporationTax.getFileChoice())) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                     "https://www.gov.uk/file-your-company-accounts-and-tax-return";
         }

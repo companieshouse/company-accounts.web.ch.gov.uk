@@ -8,14 +8,19 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpResponseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
-public class ServiceExceptionHandlerTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ServiceExceptionHandlerTests {
 
-    private ServiceExceptionHandler serviceExceptionHandler = new ServiceExceptionHandlerImpl();
+    private final ServiceExceptionHandler serviceExceptionHandler = new ServiceExceptionHandlerImpl();
 
     private static final String RESOURCE_NAME = "resourceName";
 

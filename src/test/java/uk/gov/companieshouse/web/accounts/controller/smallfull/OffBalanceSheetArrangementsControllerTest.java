@@ -39,7 +39,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class OffBalanceSheetArrangementsControllerTest {
+class OffBalanceSheetArrangementsControllerTest {
 
     private MockMvc mockMvc;
 

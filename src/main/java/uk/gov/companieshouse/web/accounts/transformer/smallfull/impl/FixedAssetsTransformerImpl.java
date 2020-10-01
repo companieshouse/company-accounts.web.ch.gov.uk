@@ -19,7 +19,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasCurrentPeriodFixedAssets(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasCurrentPeriodFixedAssets(balanceSheet))) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
             fixedAssetsApi.setIntangible(balanceSheet.getFixedAssets().getIntangibleAssets().getCurrentAmount());
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
@@ -33,7 +33,7 @@ public class FixedAssetsTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasPreviousPeriodFixedAssets(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasPreviousPeriodFixedAssets(balanceSheet))) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
             fixedAssetsApi.setIntangible(balanceSheet.getFixedAssets().getIntangibleAssets().getPreviousAmount());
             fixedAssetsApi.setTangible(balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());

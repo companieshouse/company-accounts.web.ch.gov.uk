@@ -18,7 +18,7 @@ public class MembersFundsTransformerImpl implements Transformer {
     public void addCurrentPeriodToApiModel(
         BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasCurrentPeriodMembersFunds(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasCurrentPeriodMembersFunds(balanceSheet))) {
             MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
                 balanceSheet.getMembersFunds().getProfitAndLossAccount().getCurrentAmount());
@@ -33,7 +33,7 @@ public class MembersFundsTransformerImpl implements Transformer {
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
 
-        if (hasPreviousPeriodMembersFunds(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasPreviousPeriodMembersFunds(balanceSheet))) {
             MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
                 balanceSheet.getMembersFunds().getProfitAndLossAccount().getPreviousAmount());

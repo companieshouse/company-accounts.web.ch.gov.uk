@@ -24,7 +24,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasCurrentPeriodOtherLiabilitiesOrAssets(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasCurrentPeriodOtherLiabilitiesOrAssets(balanceSheet))) {
             OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
             OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
@@ -44,7 +44,7 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasPreviousPeriodOtherLiabilitiesOrAssets(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasPreviousPeriodOtherLiabilitiesOrAssets(balanceSheet))) {
             OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
             OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 

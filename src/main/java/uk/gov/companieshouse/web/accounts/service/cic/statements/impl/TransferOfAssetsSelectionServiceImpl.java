@@ -40,7 +40,7 @@ public class TransferOfAssetsSelectionServiceImpl implements
             TransferOfAssetsSelection selection)
             throws ServiceException {
 
-        if (!selection.getHasProvidedTransferOfAssets()) {
+        if (Boolean.FALSE.equals(selection.getHasProvidedTransferOfAssets())) {
 
             CicStatementsApi statements =
                     cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
