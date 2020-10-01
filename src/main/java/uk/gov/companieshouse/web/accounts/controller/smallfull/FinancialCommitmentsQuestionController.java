@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
-@NextController(LoansToDirectorsQuestionController.class)
+@NextController(FinancialCommitmentsController.class)
 @PreviousController(CreditorsAfterOneYearController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/financial-commitments-question")
 public class FinancialCommitmentsQuestionController extends BaseController {
