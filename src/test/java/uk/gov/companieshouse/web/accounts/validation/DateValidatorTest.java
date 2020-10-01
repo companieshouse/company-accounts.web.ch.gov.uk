@@ -6,11 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 
-public class DateValidatorTest {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class DateValidatorTest {
     
-    private DateValidator dateValidator = new DateValidator();
+    private final DateValidator dateValidator = new DateValidator();
     
     private static final String FIELD_PATH = "fieldPath";
     

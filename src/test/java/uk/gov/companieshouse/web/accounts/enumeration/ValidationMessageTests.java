@@ -19,7 +19,7 @@ class ValidationMessageTests {
 
     @Test
     @DisplayName("Tests no exception thrown if message key mapping exists")
-    public void testValidationMessageMappingSuccess() {
+    void testValidationMessageMappingSuccess() {
 
         Assertions.assertAll(() ->
                 ValidationMessage.getMessageForApiError(KNOWN_ERROR_STRING));
@@ -27,7 +27,7 @@ class ValidationMessageTests {
 
     @Test
     @DisplayName("Tests MissingMessageKeyException thrown if message key mapping does not exist")
-    public void testValidationMessageMappingFailure() {
+    void testValidationMessageMappingFailure() {
 
         assertThrows(MissingMessageKeyException.class, () ->
                 ValidationMessage.getMessageForApiError(UNKNOWN_ERROR_STRING));
