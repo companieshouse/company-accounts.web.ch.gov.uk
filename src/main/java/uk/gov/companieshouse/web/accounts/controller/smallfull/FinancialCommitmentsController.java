@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@NextController(EmployeesController.class)
+@NextController(LoansToDirectorsQuestionController.class)
 @PreviousController(FinancialCommitmentsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/financial-commitments")
 public class FinancialCommitmentsController extends BaseController implements ConditionalController {
