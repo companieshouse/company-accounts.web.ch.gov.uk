@@ -90,19 +90,20 @@ public class DirectorValidator {
             validationErrors.add(error);
 
         } else {
-            assert addOrRemoveDirectors != null;
-            if (addOrRemoveDirectors.getExistingDirectors() == null ||
-                    Arrays.stream(addOrRemoveDirectors.getExistingDirectors())
-                            .noneMatch(d -> d.getResignationDate() == null)) {
+            if (addOrRemoveDirectors != null) {
+                if (addOrRemoveDirectors.getExistingDirectors() == null ||
+                        Arrays.stream(addOrRemoveDirectors.getExistingDirectors())
+                                .noneMatch(d -> d.getResignationDate() == null)) {
 
-                ValidationError error = new ValidationError();
-                error.setFieldPath(DIRECTOR_TO_ADD);
-                error.setMessageKey(AT_LEAST_ONE_DIRECTOR_REQUIRED);
-                validationErrors.add(error);
+                    ValidationError error = new ValidationError();
+                    error.setFieldPath(DIRECTOR_TO_ADD);
+                    error.setMessageKey(AT_LEAST_ONE_DIRECTOR_REQUIRED);
+                    validationErrors.add(error);
+                }
             }
         }
 
-        if(addOrRemoveDirectors.getExistingDirectors() != null) {
+        if (addOrRemoveDirectors != null && addOrRemoveDirectors.getExistingDirectors() != null) {
 
             ApiClient apiClient = apiClientService.getApiClient();
 
@@ -124,6 +125,7 @@ public class DirectorValidator {
                 }
             }
         }
+
 
         return validationErrors;
     }
