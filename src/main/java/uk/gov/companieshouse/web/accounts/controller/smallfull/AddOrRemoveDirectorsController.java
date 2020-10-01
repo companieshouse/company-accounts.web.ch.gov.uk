@@ -58,7 +58,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
             new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
-    
+
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
