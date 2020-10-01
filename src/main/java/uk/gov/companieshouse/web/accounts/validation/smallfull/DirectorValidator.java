@@ -103,30 +103,29 @@ public class DirectorValidator {
             }
         }
 
-        if (addOrRemoveDirectors != null) {
-            if (addOrRemoveDirectors.getExistingDirectors() != null) {
+        if (addOrRemoveDirectors != null && addOrRemoveDirectors.getExistingDirectors() != null) {
 
-                ApiClient apiClient = apiClientService.getApiClient();
+            ApiClient apiClient = apiClientService.getApiClient();
 
-                SmallFullApi smallFullApi = smallFullService
-                        .getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
+            SmallFullApi smallFullApi = smallFullService
+                    .getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
-                LocalDate periodStartOn = smallFullApi.getNextAccounts().getPeriodStartOn();
-                LocalDate periodEndOn = smallFullApi.getNextAccounts().getPeriodEndOn();
+            LocalDate periodStartOn = smallFullApi.getNextAccounts().getPeriodStartOn();
+            LocalDate periodEndOn = smallFullApi.getNextAccounts().getPeriodEndOn();
 
-                for (Director director : addOrRemoveDirectors.getExistingDirectors()) {
+            for (Director director : addOrRemoveDirectors.getExistingDirectors()) {
 
-                    if (!isValidAppointmentOrResignationDate(director, periodStartOn, periodEndOn)) {
-                        ValidationError error = new ValidationError();
-                        error.setFieldPath("");
-                        error.setMessageKey(OUTSIDE_VALID_DATE_RANGE);
-                        validationErrors.add(error);
+                if (!isValidAppointmentOrResignationDate(director, periodStartOn, periodEndOn)) {
+                    ValidationError error = new ValidationError();
+                    error.setFieldPath("");
+                    error.setMessageKey(OUTSIDE_VALID_DATE_RANGE);
+                    validationErrors.add(error);
 
-                        break;
-                    }
+                    break;
                 }
             }
         }
+
 
         return validationErrors;
     }
