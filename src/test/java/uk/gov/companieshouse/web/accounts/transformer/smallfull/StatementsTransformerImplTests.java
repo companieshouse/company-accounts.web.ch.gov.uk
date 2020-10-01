@@ -14,7 +14,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.StatementsT
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StatementsTransformerImplTests {
+class StatementsTransformerImplTests {
 
     private StatementsTransformer transformer = new StatementsTransformerImpl();
 

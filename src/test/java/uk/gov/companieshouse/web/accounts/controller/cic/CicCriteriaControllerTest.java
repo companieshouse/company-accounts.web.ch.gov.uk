@@ -22,7 +22,7 @@ import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CicCriteriaControllerTest {
+class CicCriteriaControllerTest {
 
     private MockMvc mockMvc;
 

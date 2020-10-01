@@ -20,7 +20,7 @@ import uk.gov.companieshouse.web.accounts.model.Note;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DateHandlerFactoryTest {
+class DateHandlerFactoryTest {
 
     private DateHandlerFactory<Note> dateHandlerFactory;
 

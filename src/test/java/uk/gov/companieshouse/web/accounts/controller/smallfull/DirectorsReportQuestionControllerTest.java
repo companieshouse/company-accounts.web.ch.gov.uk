@@ -30,7 +30,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportServi
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorsReportQuestionControllerTest {
+class DirectorsReportQuestionControllerTest {
 
     private MockMvc mockMvc;
 

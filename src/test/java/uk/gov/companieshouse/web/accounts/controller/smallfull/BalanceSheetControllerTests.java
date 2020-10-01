@@ -37,7 +37,7 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class BalanceSheetControllerTests {
+class BalanceSheetControllerTests {
 
     private MockMvc mockMvc;
 

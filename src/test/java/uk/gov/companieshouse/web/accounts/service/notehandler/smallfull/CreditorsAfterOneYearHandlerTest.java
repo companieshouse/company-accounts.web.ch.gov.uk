@@ -33,7 +33,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CreditorsAfterOneYearHandlerTest {
+class CreditorsAfterOneYearHandlerTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";

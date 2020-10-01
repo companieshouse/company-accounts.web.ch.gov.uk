@@ -24,7 +24,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CompanyActivitiesAndImpactServiceImplTest {
+class CompanyActivitiesAndImpactServiceImplTest {
 
     @Mock
     private CicStatementsService cicStatementsService;

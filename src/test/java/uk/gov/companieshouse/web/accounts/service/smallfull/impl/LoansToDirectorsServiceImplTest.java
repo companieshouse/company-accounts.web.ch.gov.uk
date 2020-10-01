@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LoansToDirectorsServiceImplTest {
+class LoansToDirectorsServiceImplTest {
 
     @Mock
     private ApiClientService apiClientService;

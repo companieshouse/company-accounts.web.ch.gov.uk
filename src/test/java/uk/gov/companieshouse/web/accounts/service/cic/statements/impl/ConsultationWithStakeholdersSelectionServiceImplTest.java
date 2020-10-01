@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWit
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ConsultationWithStakeholdersSelectionServiceImplTest {
+class ConsultationWithStakeholdersSelectionServiceImplTest {
 
     @Mock
     private CicStatementsService cicStatementsService;

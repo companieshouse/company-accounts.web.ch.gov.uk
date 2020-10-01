@@ -27,7 +27,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TangibleAssetsDateHandlerTest {
+class TangibleAssetsDateHandlerTest {
 
     @Mock
     private ApiClient apiClient;

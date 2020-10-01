@@ -36,7 +36,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.StatementsTransf
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StatementsServiceImplTests {
+class StatementsServiceImplTests {
 
     @Mock
     private ApiClientService apiClientService;

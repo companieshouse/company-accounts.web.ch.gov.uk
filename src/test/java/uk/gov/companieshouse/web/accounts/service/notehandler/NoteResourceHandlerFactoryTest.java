@@ -20,7 +20,7 @@ import uk.gov.companieshouse.web.accounts.exception.MissingInfrastructureExcepti
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NoteResourceHandlerFactoryTest {
+class NoteResourceHandlerFactoryTest {
 
     private NoteResourceHandlerFactory<ApiResource> noteResourceHandlerFactory;
 

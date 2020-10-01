@@ -30,7 +30,7 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicReportService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CicReportServiceImplTest {
+class CicReportServiceImplTest {
 
     @Mock
     private ApiClient apiClient;

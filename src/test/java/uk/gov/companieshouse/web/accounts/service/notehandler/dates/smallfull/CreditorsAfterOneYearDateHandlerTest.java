@@ -22,8 +22,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
-public class CreditorsAfterOneYearDateHandlerTest {
+class CreditorsAfterOneYearDateHandlerTest {
 
     private static final String TRANSACTION_ID = "transactionId";
 

@@ -21,7 +21,7 @@ import uk.gov.companieshouse.web.accounts.model.Note;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NoteTransformerFactoryTest {
+class NoteTransformerFactoryTest {
 
     private NoteTransformerFactory<Note, ApiResource> noteTransformerFactory;
 

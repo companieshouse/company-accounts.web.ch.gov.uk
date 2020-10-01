@@ -30,7 +30,7 @@ import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccount
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CompanyAccountsServiceImplTests {
+class CompanyAccountsServiceImplTests {
 
     @Mock
     private ApiClient apiClient;

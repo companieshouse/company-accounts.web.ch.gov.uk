@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAsset
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TransferOfAssetsSelectionServiceImplTest {
+class TransferOfAssetsSelectionServiceImplTest {
 
     @Mock
     private CicStatementsService cicStatementsService;

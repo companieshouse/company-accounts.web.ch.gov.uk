@@ -38,7 +38,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CicApprovalServiceImplTest {
+class CicApprovalServiceImplTest {
 
     @Mock
     private CicApprovalTransformer cicApprovalTransformer;

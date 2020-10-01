@@ -33,7 +33,7 @@ import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PaymentServiceImplTest {
+class PaymentServiceImplTest {
 
     @Mock
     private ApiClient apiClient;

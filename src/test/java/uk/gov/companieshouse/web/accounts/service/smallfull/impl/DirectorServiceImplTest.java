@@ -47,7 +47,7 @@ import uk.gov.companieshouse.web.accounts.validation.smallfull.DirectorValidator
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorServiceImplTest {
+class DirectorServiceImplTest {
 
     @Mock
     private ApiClientService apiClientService;

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SecretaryTransformerImplTest {
+class SecretaryTransformerImplTest {
 
     @InjectMocks
     private SecretaryTransformerImpl secretaryTransformer;

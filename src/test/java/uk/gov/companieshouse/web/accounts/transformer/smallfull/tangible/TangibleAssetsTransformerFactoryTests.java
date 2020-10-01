@@ -17,7 +17,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.Ta
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TangibleAssetsTransformerFactoryTests {
+class TangibleAssetsTransformerFactoryTests {
 
     TangibleAssetsTransformerFactory factory = new TangibleAssetsTransformerFactory();
 

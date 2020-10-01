@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.ProfitO
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ProfitAndLossTransformerImplTests {
+class ProfitAndLossTransformerImplTests {
 
     @Mock
     private GrossProfitAndLossTransformer grossProfitAndLossTransformer;

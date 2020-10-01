@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class IntangibleAssetsTotalTransformerImplTests {
+class IntangibleAssetsTotalTransformerImplTests {
 
     private static final Long COST_AT_PERIOD_START = 1L;
     private static final Long ADDITIONS = 2L;

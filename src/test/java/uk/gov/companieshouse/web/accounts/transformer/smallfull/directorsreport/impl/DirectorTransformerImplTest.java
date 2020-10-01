@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorTransformerImplTest {
+class DirectorTransformerImplTest {
 
     @Mock
     private DateTransformer dateTransformer;

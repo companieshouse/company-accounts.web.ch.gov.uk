@@ -31,7 +31,7 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ConsultationWithStakeholdersControllerTest {
+class ConsultationWithStakeholdersControllerTest {
 
     private MockMvc mockMvc;
 

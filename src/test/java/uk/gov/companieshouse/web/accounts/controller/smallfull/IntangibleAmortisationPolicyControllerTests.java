@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class IntangibleAmortisationPolicyControllerTests {
+class IntangibleAmortisationPolicyControllerTests {
 
     private MockMvc mockMvc;
 

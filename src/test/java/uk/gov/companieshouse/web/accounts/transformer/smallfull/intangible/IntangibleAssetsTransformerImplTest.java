@@ -22,7 +22,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class IntangibleAssetsTransformerImplTest {
+class IntangibleAssetsTransformerImplTest {
 
     @Mock
     private IntangibleAssetsTransformerFactory factory;
