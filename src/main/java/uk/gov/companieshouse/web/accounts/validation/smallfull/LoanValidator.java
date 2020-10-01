@@ -47,7 +47,7 @@ public class LoanValidator {
             validationErrors.add(error);
         }
 
-        if (isMultiYearFiler && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
+        if (Boolean.TRUE.equals(isMultiYearFiler) && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
 
             ValidationError error = new ValidationError();
             error.setFieldPath(BALANCE_AT_START);

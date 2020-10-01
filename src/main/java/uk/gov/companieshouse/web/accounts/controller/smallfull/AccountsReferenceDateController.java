@@ -75,7 +75,7 @@ public class AccountsReferenceDateController extends BaseController implements C
             accountsReferenceDate.setPastDates(companyService.getPastDatesForArd(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn()));
             accountsReferenceDate.setFutureDates(companyService.getFutureDatesForArd(companyProfile.getAccounts().getNextAccounts().getPeriodEndOn()));
 
-            if(! smallFullPeriodEndMatchesCompanyProfilePeriodEnd(companyProfile, smallFullAccounts)) {
+            if(Boolean.FALSE.equals(smallFullPeriodEndMatchesCompanyProfilePeriodEnd(companyProfile, smallFullAccounts))) {
                 accountsReferenceDate.setChosenDate(smallFullAccounts.getNextAccounts().getPeriodEndOn());
             }
 

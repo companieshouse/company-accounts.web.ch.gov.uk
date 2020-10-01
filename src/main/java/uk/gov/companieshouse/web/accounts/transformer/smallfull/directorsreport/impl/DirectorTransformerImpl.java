@@ -24,11 +24,11 @@ public class DirectorTransformerImpl implements DirectorTransformer {
         DirectorApi directorApi = new DirectorApi();
         directorApi.setName(director.getName());
 
-        if (director.getWasDirectorAppointedDuringPeriod()) {
+        if (Boolean.TRUE.equals(director.getWasDirectorAppointedDuringPeriod())) {
             directorApi.setAppointmentDate(dateTransformer.toLocalDate(director.getAppointmentDate()));
         }
 
-        if (director.getDidDirectorResignDuringPeriod()) {
+        if (Boolean.TRUE.equals(director.getDidDirectorResignDuringPeriod())) {
             directorApi.setResignationDate(dateTransformer.toLocalDate(director.getResignationDate()));
         }
 

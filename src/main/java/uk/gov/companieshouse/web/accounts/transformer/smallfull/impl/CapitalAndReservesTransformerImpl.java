@@ -21,7 +21,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasCurrentPeriodCapitalAndReserves(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasCurrentPeriodCapitalAndReserves(balanceSheet))) {
 
             CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
             capitalAndReservesApi.setCalledUpShareCapital(
@@ -42,7 +42,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasPreviousPeriodCapitalAndReserves(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasPreviousPeriodCapitalAndReserves(balanceSheet))) {
 
             CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
             capitalAndReservesApi.setCalledUpShareCapital(

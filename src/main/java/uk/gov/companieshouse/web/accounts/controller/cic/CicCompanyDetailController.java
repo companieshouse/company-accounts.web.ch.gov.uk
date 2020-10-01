@@ -64,7 +64,7 @@ public class CicCompanyDetailController extends BaseController {
 
         model.addAttribute("companyDetail", companyDetail);
 
-        if(companyDetail.getIsCic()) {
+        if(Boolean.TRUE.equals(companyDetail.getIsCic())) {
 
             LocalDate accountsNextMadeUpTo = companyDetail.getAccountsNextMadeUpTo();
             if(accountsNextMadeUpTo != null && accountsNextMadeUpTo.isBefore(LocalDate.now())) {

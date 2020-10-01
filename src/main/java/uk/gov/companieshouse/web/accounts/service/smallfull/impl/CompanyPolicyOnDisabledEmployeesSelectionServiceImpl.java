@@ -37,7 +37,7 @@ public class CompanyPolicyOnDisabledEmployeesSelectionServiceImpl implements Com
     public void submitCompanyPolicyOnDisabledEmployeesSelection(String transactionId, String companyAccountsId,
             CompanyPolicyOnDisabledEmployeesSelection companyPolicyOnDisabledEmployees) throws ServiceException {
 
-        if (!companyPolicyOnDisabledEmployees.getHasCompanyPolicyOnDisabledEmployees()) {
+        if (Boolean.FALSE.equals(companyPolicyOnDisabledEmployees.getHasCompanyPolicyOnDisabledEmployees())) {
 
             StatementsApi statementsApi =
                     directorsReportStatementsService

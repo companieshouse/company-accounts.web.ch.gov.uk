@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.service.smallfull;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.AddOrRemoveLoans;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
-import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import java.util.List;

@@ -91,7 +91,7 @@ public class LoansToDirectorsAdditionalInfoQuestionController extends BaseContro
         try {
             LoansToDirectorsApi loansToDirectorsApi = loansToDirectorsService.getLoansToDirectors(apiClient, transactionId, companyAccountsId);
 
-            if (loansToDirectorsAdditionalInfoQuestionQuestion.getHasIncludedLoansToDirectorsAdditionalInfo()) {
+            if (Boolean.TRUE.equals(loansToDirectorsAdditionalInfoQuestionQuestion.getHasIncludedLoansToDirectorsAdditionalInfo())) {
                 if (loansToDirectorsApi == null) {
                     loansToDirectorsService.createLoansToDirectors(transactionId, companyAccountsId);
                 }

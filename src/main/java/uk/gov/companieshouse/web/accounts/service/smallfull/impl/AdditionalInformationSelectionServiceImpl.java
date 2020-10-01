@@ -37,7 +37,7 @@ public class AdditionalInformationSelectionServiceImpl implements AdditionalInfo
     public void submitAdditionalInformationSelection(String transactionId, String companyAccountsId,
             AdditionalInformationSelection additionalInformationSelection) throws ServiceException {
 
-        if (!additionalInformationSelection.getHasAdditionalInformation()) {
+        if (Boolean.FALSE.equals(additionalInformationSelection.getHasAdditionalInformation())) {
 
             StatementsApi statementsApi =
                     directorsReportStatementsService

@@ -37,7 +37,7 @@ public class PrincipalActivitiesSelectionServiceImpl implements PrincipalActivit
     public void submitPrincipalActivitiesSelection(String transactionId, String companyAccountsId,
             PrincipalActivitiesSelection principalActivitiesSelection) throws ServiceException {
 
-        if (!principalActivitiesSelection.getHasPrincipalActivities()) {
+        if (Boolean.FALSE.equals(principalActivitiesSelection.getHasPrincipalActivities())) {
 
             StatementsApi statementsApi =
                     directorsReportStatementsService

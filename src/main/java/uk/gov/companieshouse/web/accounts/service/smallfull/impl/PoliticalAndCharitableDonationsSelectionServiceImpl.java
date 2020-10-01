@@ -37,7 +37,7 @@ public class PoliticalAndCharitableDonationsSelectionServiceImpl implements Poli
     public void submitPoliticalAndCharitableDonationsSelection(String transactionId, String companyAccountsId,
             PoliticalAndCharitableDonationsSelection politicalAndCharitableDonations) throws ServiceException {
 
-        if (!politicalAndCharitableDonations.getHasPoliticalAndCharitableDonations()) {
+        if (Boolean.FALSE.equals(politicalAndCharitableDonations.getHasPoliticalAndCharitableDonations())) {
 
             StatementsApi statementsApi =
                     directorsReportStatementsService

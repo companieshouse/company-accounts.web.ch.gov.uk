@@ -40,7 +40,7 @@ public class ConsultationWithStakeholdersSelectionServiceImpl implements
             ConsultationWithStakeholdersSelection selection)
             throws ServiceException {
 
-        if (!selection.getHasProvidedConsultationWithStakeholders()) {
+        if (Boolean.FALSE.equals(selection.getHasProvidedConsultationWithStakeholders())) {
 
             CicStatementsApi statements =
                     cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);

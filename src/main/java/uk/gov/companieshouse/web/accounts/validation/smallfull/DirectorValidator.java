@@ -89,14 +89,17 @@ public class DirectorValidator {
             error.setMessageKey(DIRECTOR_MUST_BE_ADDED);
             validationErrors.add(error);
 
-        } else if (addOrRemoveDirectors.getExistingDirectors() == null ||
-                !Arrays.stream(addOrRemoveDirectors.getExistingDirectors())
-                        .filter(d -> d.getResignationDate() == null).findFirst().isPresent()) {
+        } else {
+            assert addOrRemoveDirectors != null;
+            if (addOrRemoveDirectors.getExistingDirectors() == null ||
+                    Arrays.stream(addOrRemoveDirectors.getExistingDirectors())
+                            .noneMatch(d -> d.getResignationDate() == null)) {
 
-            ValidationError error = new ValidationError();
-            error.setFieldPath(DIRECTOR_TO_ADD);
-            error.setMessageKey(AT_LEAST_ONE_DIRECTOR_REQUIRED);
-            validationErrors.add(error);
+                ValidationError error = new ValidationError();
+                error.setFieldPath(DIRECTOR_TO_ADD);
+                error.setMessageKey(AT_LEAST_ONE_DIRECTOR_REQUIRED);
+                validationErrors.add(error);
+            }
         }
 
         if(addOrRemoveDirectors.getExistingDirectors() != null) {

@@ -83,7 +83,7 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
         }
 
         try {
-            if (!offBalanceSheetArrangementsQuestion.getHasIncludedOffBalanceSheetArrangements()) {
+            if (Boolean.FALSE.equals(offBalanceSheetArrangementsQuestion.getHasIncludedOffBalanceSheetArrangements())) {
                 
                 noteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
             }

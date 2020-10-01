@@ -20,7 +20,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasCurrentPeriodCurrentAssets(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasCurrentPeriodCurrentAssets(balanceSheet))) {
             CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
@@ -35,7 +35,7 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
 
-        if (hasPreviousPeriodCurrentAssets(balanceSheet)) {
+        if (Boolean.TRUE.equals(hasPreviousPeriodCurrentAssets(balanceSheet))) {
             CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
             currentAssetsApi.setDebtors(balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());

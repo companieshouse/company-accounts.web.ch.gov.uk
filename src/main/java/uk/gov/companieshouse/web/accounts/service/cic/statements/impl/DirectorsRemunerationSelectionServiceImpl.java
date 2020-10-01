@@ -39,7 +39,7 @@ public class DirectorsRemunerationSelectionServiceImpl implements
     public void submitDirectorsRemunerationSelection(String transactionId, String companyAccountsId,
             DirectorsRemunerationSelection selection) throws ServiceException {
 
-        if (!selection.getHasProvidedDirectorsRemuneration()) {
+        if (Boolean.FALSE.equals(selection.getHasProvidedDirectorsRemuneration())) {
 
             CicStatementsApi statements =
                     cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);

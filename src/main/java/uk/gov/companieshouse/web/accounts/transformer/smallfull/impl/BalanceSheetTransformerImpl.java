@@ -62,7 +62,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         calledUpShareCapitalNotPaidTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         currentAssetsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         otherLiabilitiesOrAssetsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
-        if (balanceSheet.getLbg()){
+        if (Boolean.TRUE.equals(balanceSheet.getLbg())){
             membersFundsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
         } else {
             capitalAndReservesTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
@@ -80,7 +80,7 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
         calledUpShareCapitalNotPaidTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         currentAssetsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         otherLiabilitiesOrAssetsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
-        if (balanceSheet.getLbg()){
+        if (Boolean.TRUE.equals(balanceSheet.getLbg())){
             membersFundsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
         } else {
             capitalAndReservesTransformer

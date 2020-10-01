@@ -48,7 +48,7 @@ public class PayFilingFeeController extends BaseController {
         }
 
         try {
-            if(payFilingFee.getPayFilingFeeChoice()) {
+            if(Boolean.TRUE.equals(payFilingFee.getPayFilingFeeChoice())) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                     paymentService.createPaymentSessionForTransaction(transactionId);
             } else {
