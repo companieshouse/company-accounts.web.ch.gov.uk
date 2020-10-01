@@ -41,7 +41,7 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TransactionServiceImplTests {
+class TransactionServiceImplTests {
 
     @Mock
     private ApiClientService apiClientService;

@@ -32,7 +32,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CicApprovalControllerTest {
+class CicApprovalControllerTest {
 
     private MockMvc mockMvc;
 

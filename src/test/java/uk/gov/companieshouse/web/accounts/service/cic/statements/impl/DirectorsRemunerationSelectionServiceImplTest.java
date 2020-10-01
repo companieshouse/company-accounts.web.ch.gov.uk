@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemune
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorsRemunerationSelectionServiceImplTest {
+class DirectorsRemunerationSelectionServiceImplTest {
 
     @Mock
     private CicStatementsService cicStatementsService;

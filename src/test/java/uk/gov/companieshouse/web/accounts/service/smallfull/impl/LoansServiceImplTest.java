@@ -45,7 +45,7 @@ import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LoansServiceImplTest {
+class LoansServiceImplTest {
 
     @Mock
     private ApiClientService apiClientService;

@@ -19,7 +19,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.ApprovalTra
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ApprovalTransformerImplTests {
+class ApprovalTransformerImplTests {
 
     @Mock
     private DateTransformer dateTransformer;

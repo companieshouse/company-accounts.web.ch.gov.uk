@@ -40,7 +40,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorsReportStatementsServiceImplTests {
+class DirectorsReportStatementsServiceImplTests {
 
     @Mock
     private ApiClientService apiClientService;

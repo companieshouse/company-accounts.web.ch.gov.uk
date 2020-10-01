@@ -36,7 +36,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class LoansToDirectorsAdditionalInfoControllerTest {
+class LoansToDirectorsAdditionalInfoControllerTest {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 

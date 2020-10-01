@@ -21,7 +21,7 @@ import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransform
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CicReviewServiceImplTest {
+class CicReviewServiceImplTest {
 
     private static final String TRANSACTION_ID = "transactionId";
 

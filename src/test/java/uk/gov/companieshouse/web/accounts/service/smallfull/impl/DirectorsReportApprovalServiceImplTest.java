@@ -42,7 +42,7 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorsReportApprovalServiceImplTest {
+class DirectorsReportApprovalServiceImplTest {
 
     @Mock
     private DirectorsReportApprovalTransformer directorsReportApprovalTransformer;

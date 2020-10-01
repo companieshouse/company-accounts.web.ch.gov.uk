@@ -20,7 +20,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorsReportApprovalTransformerImplTests {
+class DirectorsReportApprovalTransformerImplTests {
 
     @Mock
     private DateTransformer dateTransformer;

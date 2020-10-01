@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CurrentAssetsInvestmentsTransformerImplTests {
+class CurrentAssetsInvestmentsTransformerImplTests {
 
     private static final String TEST_DETAILS = "test details";
 

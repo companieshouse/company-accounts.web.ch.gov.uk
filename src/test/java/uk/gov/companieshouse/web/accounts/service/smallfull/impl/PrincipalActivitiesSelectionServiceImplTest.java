@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportState
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PrincipalActivitiesSelectionServiceImplTest {
+class PrincipalActivitiesSelectionServiceImplTest {
 
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;

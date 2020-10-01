@@ -23,7 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class PayFilingFeeControllerTest {
+class PayFilingFeeControllerTest {
 
     private MockMvc mockMvc;
 

@@ -52,7 +52,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ReviewServiceImplTests {
+class ReviewServiceImplTests {
 
     private static final String TRANSACTION_ID = "transactionId";
 

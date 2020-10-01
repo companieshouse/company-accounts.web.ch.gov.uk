@@ -31,7 +31,7 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DirectorsRemunerationControllerTest {
+class DirectorsRemunerationControllerTest {
 
     public static final String DIRECTORS_REMUNERATION_PARAM = "directorsRemuneration";
     private MockMvc mockMvc;

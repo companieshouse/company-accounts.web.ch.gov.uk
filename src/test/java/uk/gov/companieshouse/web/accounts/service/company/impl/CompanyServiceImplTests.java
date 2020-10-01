@@ -41,7 +41,7 @@ import uk.gov.companieshouse.web.accounts.transformer.company.CompanyDetailTrans
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CompanyServiceImplTests {
+class CompanyServiceImplTests {
 
     @Mock
     private ApiClient apiClient;

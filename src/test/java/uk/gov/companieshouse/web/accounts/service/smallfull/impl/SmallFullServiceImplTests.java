@@ -40,7 +40,7 @@ import java.time.LocalDate;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SmallFullServiceImplTests {
+class SmallFullServiceImplTests {
 
     @Mock
     private ApiClient apiClient;

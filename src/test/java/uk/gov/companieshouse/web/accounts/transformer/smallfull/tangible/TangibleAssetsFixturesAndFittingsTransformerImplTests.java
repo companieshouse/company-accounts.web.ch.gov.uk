@@ -36,7 +36,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.Ta
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TangibleAssetsFixturesAndFittingsTransformerImplTests {
+class TangibleAssetsFixturesAndFittingsTransformerImplTests {
 
     private static final Long COST_AT_PERIOD_START = 1L;
     private static final Long ADDITIONS = 2L;
