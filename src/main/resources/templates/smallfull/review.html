@@ -1418,6 +1418,33 @@
             </div>
         </div>
         <!-- End Creditors After One Year Note -->
+
+
+        <!-- Start Off Balance Sheet Arrangements -->
+
+        <div th:if="*{financialCommitments.financialCommitmentsDetails != null}">
+            <div
+                    th:replace="fragments/review/sectionHeader :: sectionHeader (
+                        description = 'Financial Commitments',
+                        identifier= 'financial-commitments',
+                        resource = 'financial-commitments-question',
+                        marginTop = true
+                        )">
+            </div>
+
+            <dl class="app-check-your-answers app-check-your-answers--short">
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__answer">
+                        <p id="review-financial-commitments"
+                           th:utext="*{#strings.replace(financialCommitments.financialCommitmentsDetails,'&#10;','&lt;br&gt;')}">
+                        </p>
+                    </dt>
+                </div>
+            </dl>
+        </div>
+
+        <!-- End Off Balance Sheet Arrangements -->
+
         <!-- Start of Loans to Directors -->
 
         <div th:if="*{loans != null and loans.length > 0}">

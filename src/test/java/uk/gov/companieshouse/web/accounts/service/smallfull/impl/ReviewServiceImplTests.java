@@ -36,6 +36,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitments.FinancialCommitments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
@@ -101,6 +102,9 @@ class ReviewServiceImplTests {
 
     @Mock
     private NoteService<OffBalanceSheetArrangements> offBalanceSheetArrangementsService;
+
+    @Mock
+    private NoteService<FinancialCommitments> financialCommitmentsNoteService;
 
     @Mock
     private NoteService<AccountingPolicies> accountingPoliciesNoteService;
@@ -201,6 +205,10 @@ class ReviewServiceImplTests {
         when(offBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenReturn(mockOffBalanceSheetArrangements);
 
+        FinancialCommitments mockFinancialCommitments = new FinancialCommitments();
+        when(financialCommitmentsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
+                .thenReturn(mockFinancialCommitments);
+
         Loan[] loans = new Loan[2];
         loans[0] = new Loan();
         loans[1] = new Loan();
@@ -244,5 +252,6 @@ class ReviewServiceImplTests {
         assertEquals(periodEndOn, review.getPeriodEndOn());
         assertEquals(loans, review.getLoans());
         assertEquals(additionalInfo, review.getLoansToDirectorsAdditionalInfo());
+        assertEquals(mockFinancialCommitments, review.getFinancialCommitments());
     }
 }

@@ -23,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitments.FinancialCommitments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
@@ -79,6 +80,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private NoteService<OffBalanceSheetArrangements> offBalanceSheetArrangementsService;
+
+    @Autowired
+    private NoteService<FinancialCommitments> financialCommitmentsNoteService;
 
     @Autowired
     private NoteService<AccountingPolicies> accountingPoliciesNoteService;
@@ -141,6 +145,8 @@ public class ReviewServiceImpl implements ReviewService {
         OffBalanceSheetArrangements offBalanceSheetArrangements =
                 offBalanceSheetArrangementsService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
+        FinancialCommitments financialCommitments = financialCommitmentsNoteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS);
+
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClientService.getApiClient(), transactionId, companyAccountsId);
 
         Loan[] loans = loanService.getAllLoans(transactionId, companyAccountsId);
@@ -171,6 +177,7 @@ public class ReviewServiceImpl implements ReviewService {
         review.setPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
         review.setLoans(loans);
         review.setLoansToDirectorsAdditionalInfo(additionalInfo);
+        review.setFinancialCommitments(financialCommitments);
 
         return review;
     }

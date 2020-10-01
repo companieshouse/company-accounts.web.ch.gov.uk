@@ -15,6 +15,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.currentassetsinvestments.CurrentAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employees;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitments.FinancialCommitments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors.LoansToDirectorsAdditionalInfo;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
@@ -61,6 +62,8 @@ public class Review {
     private ProfitAndLoss profitAndLoss;
 
     private OffBalanceSheetArrangements offBalanceSheetArrangements;
+
+    private FinancialCommitments financialCommitments;
 
     private LocalDate periodStartOn;
 
@@ -264,5 +267,13 @@ public class Review {
 
     public void setLoans(Loan[] loans) {
         this.loans = loans;
+    }
+
+    public FinancialCommitments getFinancialCommitments() {
+        return financialCommitments;
+    }
+
+    public void setFinancialCommitments(FinancialCommitments financialCommitments) {
+        this.financialCommitments = financialCommitments;
     }
 }
