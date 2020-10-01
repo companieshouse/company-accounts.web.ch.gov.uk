@@ -99,7 +99,8 @@ public class LoanValidator {
 
     private boolean isDescriptionAndBreakdownEmpty(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
         return  ((StringUtils.isBlank(loanToAdd.getDescription()) &&
-                (isMultiYearFiler && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) || !isMultiYearFiler) &&	                (!isMultiYearFiler || loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) &&
+                (isMultiYearFiler && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) || !isMultiYearFiler) &&
+                (!isMultiYearFiler || loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) &&
                 loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
     }
 }
