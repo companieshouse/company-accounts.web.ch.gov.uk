@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod;
@@ -14,9 +17,10 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.EmployeesTr
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
 
-public class EmployeesTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class EmployeesTransformerImplTests {
     
     private static final Long AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT = 1L;
     
@@ -24,7 +28,7 @@ public class EmployeesTransformerImplTests {
 
     private static final String DETAILS = "DETAILS";
     
-    private NoteTransformer<Employees, EmployeesApi>  transformer = new EmployeesTransformerImpl();
+    private final NoteTransformer<Employees, EmployeesApi>  transformer = new EmployeesTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to employees web model")

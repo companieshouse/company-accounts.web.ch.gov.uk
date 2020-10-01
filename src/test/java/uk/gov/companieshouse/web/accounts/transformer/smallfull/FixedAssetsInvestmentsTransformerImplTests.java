@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.fixedassetsinvestments.FixedAssetsInvestmentsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.fixedassetsinvestments.FixedAssetsInvestments;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
@@ -11,11 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class FixedAssetsInvestmentsTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class FixedAssetsInvestmentsTransformerImplTests {
     
     private static final String TEST_DETAILS = "test details";
 
-    private NoteTransformer<FixedAssetsInvestments, FixedAssetsInvestmentsApi> transformer = new FixedAssetsInvestmentsTransformerImpl();
+    private final NoteTransformer<FixedAssetsInvestments, FixedAssetsInvestmentsApi> transformer = new FixedAssetsInvestmentsTransformerImpl();
 
     @Test
     @DisplayName("Transform api model to web model")

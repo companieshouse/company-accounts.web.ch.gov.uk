@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.security.SignatureException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,7 +18,8 @@ import uk.gov.companieshouse.environment.EnvironmentReader;
 import uk.gov.companieshouse.web.accounts.token.TokenManager;
 
 @ExtendWith(MockitoExtension.class)
-public class TokenManagerImplTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class TokenManagerImplTests {
 
     private static final String CHS_JWT_SECRET_ENV_VAR = "CHS_JWT_SECRET";
 
@@ -27,7 +29,7 @@ public class TokenManagerImplTests {
     private EnvironmentReader mockEnvironmentReader;
 
     @InjectMocks
-    private TokenManager tokenManager = new TokenManagerImpl();
+    private final TokenManager tokenManager = new TokenManagerImpl();
 
     @Test
     @DisplayName("Token manager - encode an object to a JWT, decode it and ensure no data is lost")

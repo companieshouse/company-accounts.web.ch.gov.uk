@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
@@ -11,12 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CalledUpShareCapitalNotPaidTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CalledUpShareCapitalNotPaidTransformerImplTests {
 
     private static final Long CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID = 1L;
     private static final Long PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID = 10L;
 
-    private Transformer transformer = new CalledUpShareCapitalNotPaidTransformerImpl();
+    private final Transformer transformer = new CalledUpShareCapitalNotPaidTransformerImpl();
 
     @Test
     @DisplayName("Current period value added to balance sheet web model")

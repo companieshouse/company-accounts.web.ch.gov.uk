@@ -35,9 +35,9 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-@TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
-public class IntangibleAssetsNoteControllerTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class IntangibleAssetsNoteControllerTest {
 
     private MockMvc mockMvc;
 

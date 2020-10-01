@@ -3,6 +3,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CreditorsWithinOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorswithinoneyear.PreviousPeriod;
@@ -20,7 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CreditorsWithinOneYearTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CreditorsWithinOneYearTransformerImplTests {
     
     private static final Long ACCRUALS_CURRENT = 1L;
     private static final Long BANK_LOANS_CURRENT = 2L;
@@ -40,7 +45,7 @@ public class CreditorsWithinOneYearTransformerImplTests {
 
     private static final String DETAILS = "DETAILS";
     
-    private NoteTransformer<CreditorsWithinOneYear, CreditorsWithinOneYearApi> transformer = new CreditorsWithinOneYearTransformerImpl();
+    private final NoteTransformer<CreditorsWithinOneYear, CreditorsWithinOneYearApi> transformer = new CreditorsWithinOneYearTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to creditors within one year web model")

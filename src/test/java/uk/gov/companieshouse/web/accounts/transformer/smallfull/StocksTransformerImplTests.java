@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.PreviousPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.stocks.StocksApi;
@@ -16,9 +19,11 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.StocksTrans
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class StocksTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class StocksTransformerImplTests {
 
-    private NoteTransformer<StocksNote, StocksApi> transformer = new StocksTransformerImpl();
+    private final NoteTransformer<StocksNote, StocksApi> transformer = new StocksTransformerImpl();
 
     private static final Long PAYMENT_ON_ACCOUNT_VALUE = 5L;
     private static final Long STOCKS_VALUE = 10L;

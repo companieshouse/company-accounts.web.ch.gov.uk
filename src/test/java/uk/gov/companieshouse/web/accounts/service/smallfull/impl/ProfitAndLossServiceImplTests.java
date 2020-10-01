@@ -53,8 +53,8 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class ProfitAndLossServiceImplTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ProfitAndLossServiceImplTests {
 
     @Mock
     private ProfitAndLoss profitAndLoss;
@@ -165,7 +165,7 @@ public class ProfitAndLossServiceImplTests {
     private ValidationContext validationContext;
 
     @InjectMocks
-    private ProfitAndLossService profitAndLossService = new ProfitAndLossServiceImpl();
+    private final ProfitAndLossService profitAndLossService = new ProfitAndLossServiceImpl();
 
     private static final String TRANSACTION_ID = "transactionId";
 

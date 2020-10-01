@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ResumeServiceImplTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ResumeServiceImplTests {
 
     @Mock
     private CompanyService companyService;
@@ -25,7 +27,7 @@ public class ResumeServiceImplTests {
     private CompanyProfileApi companyProfileApi;
 
     @InjectMocks
-    private ResumeServiceImpl resumeService = new ResumeServiceImpl();
+    private final ResumeServiceImpl resumeService = new ResumeServiceImpl();
 
     private static final String COMPANY_NUMBER = "companyNumber";
 

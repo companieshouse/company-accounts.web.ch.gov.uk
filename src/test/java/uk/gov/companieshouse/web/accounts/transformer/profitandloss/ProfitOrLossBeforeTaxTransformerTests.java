@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.profitandloss;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossBeforeTax;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -14,7 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ProfitOrLossBeforeTaxTransformerTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ProfitOrLossBeforeTaxTransformerTests {
 
     private static final Long CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES = 1L;
     private static final Long CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME = 1L;
@@ -25,7 +30,7 @@ public class ProfitOrLossBeforeTaxTransformerTests {
     private static final Long PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX = 2L;
 
 
-    private ProfitOrLossBeforeTaxTransformer transformer = new ProfitOrLossBeforeTaxTransformer();
+    private final ProfitOrLossBeforeTaxTransformer transformer = new ProfitOrLossBeforeTaxTransformer();
 
     @Test
     @DisplayName("Add current period to web model")

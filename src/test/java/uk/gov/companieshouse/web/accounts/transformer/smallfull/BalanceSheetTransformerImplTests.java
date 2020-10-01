@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,7 +25,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class BalanceSheetTransformerImplTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class BalanceSheetTransformerImplTests {
 
     @Mock
     private Transformer calledUpShareCapitalNotPaidTransformer;
@@ -45,7 +47,7 @@ public class BalanceSheetTransformerImplTests {
     private Transformer membersFundsTransformer;
 
     @InjectMocks
-    private BalanceSheetTransformer transformer = new BalanceSheetTransformerImpl();
+    private final BalanceSheetTransformer transformer = new BalanceSheetTransformerImpl();
 
     private static final Long CALLED_UP_SHARE_CAPITAL_NOT_PAID = 1L;
 

@@ -6,15 +6,20 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.CicStatementsApi;
 import uk.gov.companieshouse.api.model.accounts.cic.statements.ReportStatementsApi;
 import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivitiesAndImpact;
 import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransformer;
 
-public class CicStatementsTransformerImplTest {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CicStatementsTransformerImplTest {
 
-    private CicStatementsTransformer transformer = new CicStatementsTransformerImpl();
+    private final CicStatementsTransformer transformer = new CicStatementsTransformerImpl();
 
     private static final String COMPANY_ACTIVITIES_AND_IMPACT = "companyActivitiesAndImpact";
     private static final String UPDATED_COMPANY_ACTIVITIES_AND_IMPACT = "updatedCompanyActivitiesAndImpact";

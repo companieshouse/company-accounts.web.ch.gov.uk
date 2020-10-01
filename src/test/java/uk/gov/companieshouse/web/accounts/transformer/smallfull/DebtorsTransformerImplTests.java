@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
@@ -15,10 +18,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDeb
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.DebtorsTransformerImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
-
-public class DebtorsTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class DebtorsTransformerImplTests {
 
     private static final long TRADE_DEBTORS_CURRENT = 1L;
     private static final long PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT = 2L;
@@ -32,7 +35,7 @@ public class DebtorsTransformerImplTests {
     private static final long GREATER_THAN_ONE_YEAR_PREVIOUS = 40L;
     private static final long TOTAL_PREVIOUS = 60L;
     private static final String DETAILS = "DETAILS";
-    private DebtorsTransformerImpl transformer = new DebtorsTransformerImpl();
+    private final DebtorsTransformerImpl transformer = new DebtorsTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to debtors sheet web model")

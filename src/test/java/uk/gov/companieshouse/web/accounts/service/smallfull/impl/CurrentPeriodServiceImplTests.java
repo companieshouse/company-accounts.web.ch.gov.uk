@@ -39,8 +39,8 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class CurrentPeriodServiceImplTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CurrentPeriodServiceImplTests {
 
     @Mock
     private ApiClient apiClient;
@@ -100,7 +100,7 @@ public class CurrentPeriodServiceImplTests {
     private List<ApiError> apiErrors;
 
     @InjectMocks
-    private CurrentPeriodService currentPeriodService = new CurrentPeriodServiceImpl();
+    private final CurrentPeriodService currentPeriodService = new CurrentPeriodServiceImpl();
 
     private static final String TRANSACTION_ID = "transactionId";
 

@@ -5,17 +5,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.offBalanceSheet.OffBalanceSheetApi;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheetarrangements.OffBalanceSheetArrangements;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.OffBalanceSheetArrangementsTransformerImpl;
 
-public class OffBalanceSheetArrangementsTransformerImplTest {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class OffBalanceSheetArrangementsTransformerImplTest {
 
     private static final String DETAILS = "details";
 
-    private NoteTransformer<OffBalanceSheetArrangements, OffBalanceSheetApi> transformer = new OffBalanceSheetArrangementsTransformerImpl();
+    private final NoteTransformer<OffBalanceSheetArrangements, OffBalanceSheetApi> transformer = new OffBalanceSheetArrangementsTransformerImpl();
 
     @Test
     @DisplayName("Get off balance sheet arrangements")

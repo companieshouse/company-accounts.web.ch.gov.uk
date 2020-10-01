@@ -42,7 +42,7 @@ public class NavigatorServiceTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @Test
-    public void missingNextControllerAnnotation() {
+    void missingNextControllerAnnotation() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
@@ -50,7 +50,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void missingPreviousControllerAnnotation() {
+    void missingPreviousControllerAnnotation() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getPreviousControllerPath(MockControllerThree.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
@@ -58,7 +58,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void missingRequestMappingAnnotationOnNextController() {
+    void missingRequestMappingAnnotationOnNextController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerOne.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
@@ -66,7 +66,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void missingRequestMappingAnnotationOnPreviousController() {
+    void missingRequestMappingAnnotationOnPreviousController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getPreviousControllerPath(MockControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
@@ -74,7 +74,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void missingRequestMappingValueOnNextController() {
+    void missingRequestMappingValueOnNextController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerFive.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
@@ -82,7 +82,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void missingRequestMappingValueOnPreviousController() {
+    void missingRequestMappingValueOnPreviousController() {
         Throwable exception = assertThrows(MissingAnnotationException.class, () ->
                 navigatorService.getPreviousControllerPath(MockControllerSeven.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
 
@@ -90,7 +90,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void missingExpectedNumberOfPathVariablesForMandatoryController() {
+    void missingExpectedNumberOfPathVariablesForMandatoryController() {
 
         Throwable exception = assertThrows(NavigationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER));
@@ -99,7 +99,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void successfulRedirectStartingFromMandatoryControllerWithExpectedNumberOfPathVariables() {
+    void successfulRedirectStartingFromMandatoryControllerWithExpectedNumberOfPathVariables() {
         when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
@@ -110,7 +110,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void successfulRedirectStartingFromConditionalControllerWithExpectedNumberOfPathVariables() {
+    void successfulRedirectStartingFromConditionalControllerWithExpectedNumberOfPathVariables() {
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
         String redirect = navigatorService.getNextControllerRedirect(MockSuccessJourneyControllerTwo.class, COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
@@ -120,7 +120,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void successfulPathReturnedWithSingleConditionalControllerInChain() {
+    void successfulPathReturnedWithSingleConditionalControllerInChain() {
         when(applicationContext.getBean(MockSuccessJourneyControllerTwo.class)).thenReturn(new MockSuccessJourneyControllerTwo());
         when(applicationContext.getBean(MockSuccessJourneyControllerThree.class)).thenReturn(new MockSuccessJourneyControllerThree());
 
@@ -131,7 +131,7 @@ public class NavigatorServiceTests {
     }
 
     @Test
-    public void navigationExceptionThrownWhenWillRenderThrowsServiceException() {
+    void navigationExceptionThrownWhenWillRenderThrowsServiceException() {
         when(applicationContext.getBean(MockControllerSeven.class)).thenReturn(new MockControllerSeven());
         when(applicationContext.getBean(MockControllerEight.class)).thenReturn(new MockControllerEight());
 
