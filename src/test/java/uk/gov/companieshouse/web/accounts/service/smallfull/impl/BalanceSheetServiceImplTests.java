@@ -46,8 +46,8 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTransformer;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class BalanceSheetServiceImplTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class BalanceSheetServiceImplTests {
 
     @Mock
     private BalanceSheetTransformer transformer;
@@ -122,7 +122,7 @@ public class BalanceSheetServiceImplTests {
     private SmallFullLinks smallFullLinks;
 
     @InjectMocks
-    private BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
+    private final BalanceSheetService balanceSheetService = new BalanceSheetServiceImpl();
 
     private static final String TRANSACTION_ID = "transactionId";
 

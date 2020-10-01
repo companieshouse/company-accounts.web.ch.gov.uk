@@ -3,6 +3,9 @@ package uk.gov.companieshouse.web.accounts.transformer.profitandloss;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.OperatingProfitOrLoss;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -16,7 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class OperatingProfitAndLossTransformerTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class OperatingProfitAndLossTransformerTests {
 
     private static final Long CURRENT_ADMINISTRATIVE_EXPENSES = 1L;
     private static final Long CURRENT_DISTRIBUTION_COSTS = 1L;
@@ -29,7 +34,7 @@ public class OperatingProfitAndLossTransformerTests {
     private static final Long PREVIOUS_OPERATING_TOTAL = 50L;
 
 
-    private OperatingProfitAndLossTransformer transformer = new OperatingProfitAndLossTransformer();
+    private final OperatingProfitAndLossTransformer transformer = new OperatingProfitAndLossTransformer();
 
     @Test
     @DisplayName("Add current period to web model")

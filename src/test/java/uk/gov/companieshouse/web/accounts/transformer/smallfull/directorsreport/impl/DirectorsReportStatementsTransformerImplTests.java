@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AdditionalInformation;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.CompanyPolicyOnDisabledEmployees;
@@ -14,7 +17,9 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndChar
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivities;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorsReportStatementsTransformer;
 
-public class DirectorsReportStatementsTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class DirectorsReportStatementsTransformerImplTests {
 
     private DirectorsReportStatementsTransformer statementsTransformer = new DirectorsReportStatementsTransformerImpl();
 

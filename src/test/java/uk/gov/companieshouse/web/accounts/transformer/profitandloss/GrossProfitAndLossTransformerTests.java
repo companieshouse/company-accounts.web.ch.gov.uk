@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.GrossProfitOrLoss;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -14,7 +17,9 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.grossprofitorloss.
 import uk.gov.companieshouse.web.accounts.model.profitandloss.grossprofitorloss.items.Turnover;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.GrossProfitAndLossTransformer;
 
-public class GrossProfitAndLossTransformerTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class GrossProfitAndLossTransformerTests {
 
     private static final Long CURRENT_TURNOVER = 1L;
     private static final Long CURRENT_COST_OF_SALES = 2L;
@@ -24,7 +29,7 @@ public class GrossProfitAndLossTransformerTests {
     private static final Long PREVIOUS_COST_OF_SALES = 20L;
     private static final Long PREVIOUS_GROSS_TOTAL = 30L;
 
-    private GrossProfitAndLossTransformer transformer = new GrossProfitAndLossTransformer();
+    private final GrossProfitAndLossTransformer transformer = new GrossProfitAndLossTransformer();
 
     @Test
     @DisplayName("Add current period to web model")

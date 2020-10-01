@@ -44,7 +44,7 @@ import static org.hamcrest.Matchers.hasProperty;
 
 @ExtendWith({MockitoExtension.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AccountsReferenceDateQuestionControllerTest {
+class AccountsReferenceDateQuestionControllerTest {
 
     private MockMvc mockMvc;
 

@@ -2,6 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentAssetsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
@@ -16,7 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CurrentAssetsTransformerImplTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CurrentAssetsTransformerImplTests {
 
     private static final Long CURRENT_CASH_IN_BANK_AND_IN_HAND = 1L;
     private static final Long CURRENT_DEBTORS = 2L;
@@ -30,7 +35,7 @@ public class CurrentAssetsTransformerImplTests {
     private static final Long PREVIOUS_INVESTMENTS = 40L;
     private static final Long PREVIOUS_TOTAL = 50L;
 
-    private Transformer transformer = new CurrentAssetsTransformerImpl();
+    private final Transformer transformer = new CurrentAssetsTransformerImpl();
 
     @Test
     @DisplayName("Current period values added to balance sheet web model")

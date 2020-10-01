@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ResumeControllerTests {
+class ResumeControllerTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 

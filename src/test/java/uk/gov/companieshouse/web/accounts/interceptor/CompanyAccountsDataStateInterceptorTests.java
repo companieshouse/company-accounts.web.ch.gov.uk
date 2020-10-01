@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,7 +33,8 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataStates;
 import uk.gov.companieshouse.web.accounts.token.TokenManager;
 
 @ExtendWith(MockitoExtension.class)
-public class CompanyAccountsDataStateInterceptorTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CompanyAccountsDataStateInterceptorTests {
 
     private static final String STATE_COOKIE_NAME = "__CAS";
 

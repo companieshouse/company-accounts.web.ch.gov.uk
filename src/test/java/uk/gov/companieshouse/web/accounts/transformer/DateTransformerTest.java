@@ -5,11 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 
-public class DateTransformerTest {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class DateTransformerTest {
 
-    private DateTransformer dateTransformer = new DateTransformer();
+    private final DateTransformer dateTransformer = new DateTransformer();
 
     private static final String DAY = "8";
 

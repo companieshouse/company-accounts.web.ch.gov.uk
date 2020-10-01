@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossForFinancialYear;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -13,7 +16,9 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfin
 import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.Tax;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.ProfitOrLossForFinancialYearTransformer;
 
-public class ProfitOrLossForFinancialYearTransformerTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ProfitOrLossForFinancialYearTransformerTests {
 
     private static final Long CURRENT_TAX = 1L;
     private static final Long CURRENT_TOTAL = 2L;
@@ -21,7 +26,7 @@ public class ProfitOrLossForFinancialYearTransformerTests {
     private static final Long PREVIOUS_TAX = 10L;
     private static final Long PREVIOUS_TOTAL = 20L;
 
-    private ProfitOrLossForFinancialYearTransformer transformer = new ProfitOrLossForFinancialYearTransformer();
+    private final ProfitOrLossForFinancialYearTransformer transformer = new ProfitOrLossForFinancialYearTransformer();
 
     @Test
     @DisplayName("Add current period to web model")

@@ -11,8 +11,8 @@ import org.springframework.validation.BindingResult;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RadioAndTextValidatorTest {
 
     @Mock

@@ -15,6 +15,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,7 +31,8 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 @ExtendWith(MockitoExtension.class)
-public class ValidationContextTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ValidationContextTest {
     
     private static final String BEAN_CLASS_NAME = MockValidationModel.class.getName();
     private static final String NESTED_BEAN_NAME = MockNestedValidationModel.class.getName();
@@ -60,7 +62,7 @@ public class ValidationContextTest {
     }
     
     @Test
-    public void testSuccessfulScan() {
+    void testSuccessfulScan() {
         mockComponentScanning(BEAN_CLASS_NAME);
 
         Assertions.assertAll(() ->
@@ -68,7 +70,7 @@ public class ValidationContextTest {
     }
 
     @Test
-    public void testSuccessfulScanWithMapFieldPresent() {
+    void testSuccessfulScanWithMapFieldPresent() {
         mockComponentScanning(MAP_BEAN_NAME);
 
         Assertions.assertAll(() ->
@@ -76,7 +78,7 @@ public class ValidationContextTest {
     }
 
     @Test
-    public void testSuccessfulScanWithCollectionFieldPresent() {
+    void testSuccessfulScanWithCollectionFieldPresent() {
         mockComponentScanning(COLLECTION_BEAN_NAME);
 
         Assertions.assertAll(() ->
@@ -84,7 +86,7 @@ public class ValidationContextTest {
     }
     
     @Test
-    public void testSuccessfulScanWithLocalDateFieldPresent() {
+    void testSuccessfulScanWithLocalDateFieldPresent() {
         mockComponentScanning(LOCALDATE_BEAN_NAME);
 
         Assertions.assertAll(() ->
@@ -92,7 +94,7 @@ public class ValidationContextTest {
     }
 
     @Test
-    public void testSuccessfulScanWithParentFieldMapping() {
+    void testSuccessfulScanWithParentFieldMapping() {
         mockComponentScanning(PARENT_MAPPING_BEAN_NAME);
 
         Assertions.assertAll(() ->
@@ -100,30 +102,30 @@ public class ValidationContextTest {
     }
     
     @Test
-    public void testNoMappingsFound() {
+    void testNoMappingsFound() {
         assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
     
     @Test
-    public void testValidationMappingBeanNotFound() {
+    void testValidationMappingBeanNotFound() {
         mockComponentScanning(INVALID_BEAN_CLASS_NAME);
         assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
     
     @Test
-    public void testNoAnnotationsInValidationModel() {
+    void testNoAnnotationsInValidationModel() {
         mockComponentScanning(PRIMITIVES_ONLY_BEAN_NAME);
         assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
     
     @Test
-    public void testScanMaxDepthReached() {
+    void testScanMaxDepthReached() {
         mockComponentScanning(RECURSIVE_BEAN_NAME);
         assertThrows(IllegalStateException.class, () -> new ValidationContext(mockProvider, BASE_PATH));
     }
 
     @Test
-    public void testGetValidationError() {
+    void testGetValidationError() {
         mockComponentScanning(BEAN_CLASS_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
@@ -138,7 +140,7 @@ public class ValidationContextTest {
     }
 
     @Test
-    public void testGetValidationErrorForNestedModelField() {
+    void testGetValidationErrorForNestedModelField() {
         mockComponentScanning(NESTED_BEAN_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
@@ -153,7 +155,7 @@ public class ValidationContextTest {
     }
     
     @Test
-    public void testGetMultipleValidationErrors() {
+    void testGetMultipleValidationErrors() {
         mockComponentScanning(BEAN_CLASS_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);
@@ -171,7 +173,7 @@ public class ValidationContextTest {
     }
     
     @Test
-    public void testMissingMappingKey() {
+    void testMissingMappingKey() {
         mockComponentScanning(BEAN_CLASS_NAME);
 
         ValidationContext context = new ValidationContext(mockProvider, BASE_PATH);

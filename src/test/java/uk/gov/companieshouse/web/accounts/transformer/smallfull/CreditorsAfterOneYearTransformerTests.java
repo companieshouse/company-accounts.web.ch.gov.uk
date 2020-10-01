@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CreditorsAfterOneYearApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.PreviousPeriod;
@@ -11,7 +14,9 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteron
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CreditorsAfterOneYearTransformerImpl;
 
-public class CreditorsAfterOneYearTransformerTests {
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class CreditorsAfterOneYearTransformerTests {
 
     private static final Long BANK_LOANS_CURRENT = 2L;
     private static final Long FINANCE_LEASES_CURRENT = 3L;
@@ -25,7 +30,7 @@ public class CreditorsAfterOneYearTransformerTests {
 
     private static final String DETAILS = "DETAILS";
 
-    private NoteTransformer<CreditorsAfterOneYear, CreditorsAfterOneYearApi> transformer =
+    private final NoteTransformer<CreditorsAfterOneYear, CreditorsAfterOneYearApi> transformer =
             new CreditorsAfterOneYearTransformerImpl();
 
     @Test
