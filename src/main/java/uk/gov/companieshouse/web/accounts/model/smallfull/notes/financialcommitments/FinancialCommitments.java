@@ -1,9 +1,13 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitments;
 
 import uk.gov.companieshouse.web.accounts.model.Note;
+import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
+import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
+@ValidationModel
 public class FinancialCommitments implements Note {
 
+    @ValidationMapping("$.financial_commitments.details")
     private String financialCommitmentsDetails;
 
     public String getFinancialCommitmentsDetails() {
