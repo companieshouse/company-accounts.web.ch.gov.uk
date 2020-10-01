@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ReviewControllerTests {
+class ReviewControllerTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
 

@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AccountingPoliciesTransformerImplTests {
+class AccountingPoliciesTransformerImplTests {
 
     private static final String BASIS_OF_PREPARATION_CUSTOM_STATEMENT = "customStatement";
     private static final String TURNOVER_POLICY_DETAILS = "turnoverPolicyDetails";
