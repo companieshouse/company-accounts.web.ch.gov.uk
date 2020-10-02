@@ -59,8 +59,6 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
 
     private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
 
-    private static final String DISPLAY_LTD_WARNING = "displayLoansToDirectorsWarning";
-
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
