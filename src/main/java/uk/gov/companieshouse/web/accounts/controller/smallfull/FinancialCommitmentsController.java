@@ -4,7 +4,9 @@ import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -38,9 +41,9 @@ public class FinancialCommitmentsController extends BaseController implements Co
 
     @GetMapping
     public String getFinancialCommitments(@PathVariable String companyNumber,
-                                                 @PathVariable String transactionId,
-                                                 @PathVariable String companyAccountsId,
-                                                 Model model) {
+                                          @PathVariable String transactionId,
+                                          @PathVariable String companyAccountsId,
+                                          Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -60,17 +63,26 @@ public class FinancialCommitmentsController extends BaseController implements Co
 
     @PostMapping
     public String submitFinancialCommitments(@PathVariable String companyNumber,
-                                                    @PathVariable String transactionId,
-                                                    @PathVariable String companyAccountsId,
-                                                   FinancialCommitments financialCommitments,
-                                                   Model model) {
+                                             @PathVariable String transactionId,
+                                             @PathVariable String companyAccountsId,
+                                             @ModelAttribute(FINANCIAL_COMMITMENTS) @Valid FinancialCommitments financialCommitments,
+                                             BindingResult bindingResult,
+                                             Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
 
         try {
             List<ValidationError> validationErrors =
                     noteService.submit(transactionId, companyAccountsId, financialCommitments, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS);
 
+            if (!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);

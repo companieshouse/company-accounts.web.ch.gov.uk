@@ -28,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -129,6 +131,8 @@ class FinancialCommitmentsControllerTest {
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(FinancialCommitments.class), eq(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS)))
                 .thenReturn(validationErrors);
 
+        when(validationErrors.isEmpty()).thenReturn(true);
+
         when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         mockMvc.perform(post(FINANCIAL_COMMITMENTS_PATH)
@@ -149,6 +153,36 @@ class FinancialCommitmentsControllerTest {
                 .param(FINANCIAL_COMMITMENTS_DETAILS, FINANCIAL_COMMITMENTS_DETAILS))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Submit financial commitments - validation errors")
+    void submitFinancialCommitmentsWithValidationErrors() throws Exception {
+
+        when(noteService.submit(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(FinancialCommitments.class), eq(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        mockMvc.perform(post(FINANCIAL_COMMITMENTS_PATH)
+                .param(FINANCIAL_COMMITMENTS_DETAILS, FINANCIAL_COMMITMENTS_DETAILS))
+                .andExpect(status().isOk())
+                .andExpect(view().name(FINANCIAL_COMMITMENTS_VIEW));
+
+        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+    }
+
+    @Test
+    @DisplayName("Submit financial commitments - binding result errors")
+    void submitFinancialCommitmentsWithBindingResultErrors() throws Exception {
+
+        mockMvc.perform(post(FINANCIAL_COMMITMENTS_PATH))
+                .andExpect(status().isOk())
+                .andExpect(view().name(FINANCIAL_COMMITMENTS_VIEW));
+
+        verify(noteService, never())
+                .submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(FinancialCommitments.class), eq(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS));
     }
 
     @Test
