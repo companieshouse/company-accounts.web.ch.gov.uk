@@ -4,9 +4,12 @@ import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
+import javax.validation.constraints.NotBlank;
+
 @ValidationModel
 public class FinancialCommitments implements Note {
 
+    @NotBlank(message = "{financialCommitments.details.missing}")
     @ValidationMapping("$.financial_commitments.details")
     private String financialCommitmentsDetails;
 
