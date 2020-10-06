@@ -1420,12 +1420,12 @@
         <!-- End Creditors After One Year Note -->
 
 
-        <!-- Start Off Balance Sheet Arrangements -->
+        <!-- Start Financial Commitments -->
 
         <div th:if="*{financialCommitments.financialCommitmentsDetails != null}">
             <div
                     th:replace="fragments/review/sectionHeader :: sectionHeader (
-                        description = 'Financial Commitments',
+                        description = 'Financial commitments',
                         identifier= 'financial-commitments',
                         resource = 'financial-commitments-question',
                         marginTop = true
@@ -1443,7 +1443,7 @@
             </dl>
         </div>
 
-        <!-- End Off Balance Sheet Arrangements -->
+        <!-- End Financial Commitments -->
 
         <!-- Start of Loans to Directors -->
 
