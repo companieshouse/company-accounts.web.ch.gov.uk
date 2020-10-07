@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -21,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportA
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -42,7 +45,13 @@ public class DirectorsReportApprovalController extends BaseController implements
     private DirectorsReportApprovalService directorsReportApprovalService;
 
     @Autowired
+    private DirectorsReportService directorsReportService;
+
+    @Autowired
     private DirectorService directorService;
+
+    @Autowired
+    private ApiClientService apiClientService;
 
     @Autowired
     private SecretaryService secretaryService;
@@ -139,7 +148,8 @@ public class DirectorsReportApprovalController extends BaseController implements
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
 
-        CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
-        return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedDirectorsReport());
+        DirectorsReportApi directorsReportApi = directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId);
+
+        return directorsReportApi != null;
     }
 }
