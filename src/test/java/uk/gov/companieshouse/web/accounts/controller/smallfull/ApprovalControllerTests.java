@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,17 +10,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.handler.transaction.TransactionsResourceHandler;
+import uk.gov.companieshouse.api.handler.transaction.request.TransactionsGet;
+import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.api.model.transaction.Transaction;
+import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasProperty;
@@ -58,6 +66,21 @@ class ApprovalControllerTests {
     @Mock
     private DirectorService directorService;
 
+    @Mock
+    private ApiClientService apiClientService;
+
+    @Mock
+    private ApiClient apiClient;
+
+    @Mock
+    private TransactionsResourceHandler transactionsResourceHandler;
+
+    @Mock
+    private TransactionsGet transactionsGet;
+
+    @Mock
+    private ApiResponse<Transaction> responseWithData;
+
     @InjectMocks
     private ApprovalController approvalController;
 
@@ -73,6 +96,11 @@ class ApprovalControllerTests {
                                                 "/transaction/" + TRANSACTION_ID +
                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                 "/small-full/approval";
+
+    private static final String DROPOUT_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/approved-accounts";
 
     private static final String CONFIRMATION_VIEW = "/transaction/" + TRANSACTION_ID +
                                                     "/confirmation";
@@ -98,6 +126,8 @@ class ApprovalControllerTests {
     private static final String DIRECTOR_NAME = "directorName";
 
     private static final String NAME = "name";
+
+    private static final String GET_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
 
     @BeforeEach
     private void setup() {
@@ -150,12 +180,15 @@ class ApprovalControllerTests {
                 .andExpect(model().attributeExists(TRANSACTION_ID_MODEL_ATTR))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID_MODEL_ATTR))
                 .andExpect(model().attributeExists(IS_PAYABLE_TRANSACTION_ATTR));
-
     }
 
     @Test
     @DisplayName("Post approval api validation failure path")
     void postRequestApiValidationFailure() throws Exception {
+
+        Transaction createdTransaction = createTransaction();
+
+        when(responseWithData.getData()).thenReturn(createdTransaction);
 
         List<ValidationError> validationErrors = new ArrayList<>();
         validationErrors.add(new ValidationError());
@@ -184,7 +217,9 @@ class ApprovalControllerTests {
     @DisplayName("Post approval submit approval exception failure path")
     void postRequestSubmitApprovalExceptionFailure() throws Exception {
 
+        Transaction createdTransaction = createTransaction();
 
+        when(responseWithData.getData()).thenReturn(createdTransaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenThrow(ServiceException.class);
@@ -198,6 +233,10 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval close transaction exception failure path")
     void postRequestCloseTransactionExceptionFailure() throws Exception {
+
+        Transaction createdTransaction = createTransaction();
+
+        when(responseWithData.getData()).thenReturn(createdTransaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
@@ -214,6 +253,10 @@ class ApprovalControllerTests {
     @DisplayName("Post approval success path for non-payable transaction")
     void postRequestSuccessForNonPayableTransaction() throws Exception {
 
+        Transaction createdTransaction = createTransaction();
+
+        when(responseWithData.getData()).thenReturn(createdTransaction);
+
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
@@ -229,6 +272,10 @@ class ApprovalControllerTests {
     @DisplayName("Post approval success path for payable transaction")
     void postRequestSuccessForPayableTransaction() throws Exception {
 
+        Transaction createdTransaction = createTransaction();
+
+        when(responseWithData.getData()).thenReturn(createdTransaction);
+
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
 
@@ -240,5 +287,31 @@ class ApprovalControllerTests {
                 .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT));
+    }
+
+    @Test
+    @DisplayName("Post approval redirect for closed pending payment")
+    void postRequestSuccessClosedPendingPayment() throws Exception {
+
+        Transaction createdTransaction = createTransaction();
+
+        createdTransaction.setStatus(TransactionStatus.CLOSED_PENDING_PAYMENT);
+
+        when(responseWithData.getData()).thenReturn(createdTransaction);
+
+        this.mockMvc.perform(post(APPROVAL_PATH)
+                .param(DIRECTOR_NAME, NAME))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + DROPOUT_PATH));
+    }
+
+    private Transaction createTransaction() throws URIValidationException, ApiErrorResponseException {
+        Transaction createdTransaction = new Transaction();
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.transactions()).thenReturn(transactionsResourceHandler);
+        when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
+        when(transactionsGet.execute()).thenReturn(responseWithData);
+        return createdTransaction;
     }
 }
