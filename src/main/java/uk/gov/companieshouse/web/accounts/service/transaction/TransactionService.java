@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.accounts.service.transaction;
 
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface TransactionService {
@@ -43,4 +46,6 @@ public interface TransactionService {
      * @throws ServiceException if there's an error when fetching a transaction
      */
     boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException;
+
+    Transaction getTransaction(String uri) throws ApiErrorResponseException, URIValidationException;
 }

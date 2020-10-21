@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.transaction.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -14,6 +11,10 @@ import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -72,7 +73,7 @@ public class TransactionServiceImpl implements TransactionService {
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
         try {
-            Transaction transaction = apiClientService.getApiClient().transactions().get(uri).execute().getData();
+            Transaction transaction = getTransaction(uri);
             transaction.setStatus(TransactionStatus.CLOSED);
 
             Map<String, Object> headers =
@@ -130,7 +131,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         try {
             Transaction transaction =
-                    apiClientService.getApiClient().transactions().get(uri).execute().getData();
+                    getTransaction(uri);
 
             return transaction.getResources()
                     .get("/transactions/" + transactionId + "/company-accounts/" + companyAccountsId)
@@ -142,5 +143,10 @@ public class TransactionServiceImpl implements TransactionService {
 
             throw new ServiceException("Invalid URI for fetching transactions resource", e);
         }
+    }
+
+    @Override
+    public Transaction getTransaction(String uri) throws ApiErrorResponseException, URIValidationException {
+        return apiClientService.getApiClient().transactions().get(uri).execute().getData();
     }
 }

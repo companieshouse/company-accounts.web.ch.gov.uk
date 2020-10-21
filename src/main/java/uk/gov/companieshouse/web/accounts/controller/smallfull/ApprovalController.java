@@ -41,7 +41,6 @@ public class ApprovalController extends BaseController {
     private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
     private static final UriTemplate RESUME_URI = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/pay-filing-fee");
 
-
     private static final String APPROVAL = "approval";
     private static final String TRANSACTION_ID = "transaction_id";
     private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
@@ -130,7 +129,7 @@ public class ApprovalController extends BaseController {
             }
 
             String uri = TRANSACTIONS_URI.expand(transactionId).toString();
-            Transaction transaction = apiClientService.getApiClient().transactions().get(uri).execute().getData();
+            Transaction transaction = transactionService.getTransaction(uri);
 
             if(transaction.getStatus() == TransactionStatus.CLOSED_PENDING_PAYMENT) {
 
