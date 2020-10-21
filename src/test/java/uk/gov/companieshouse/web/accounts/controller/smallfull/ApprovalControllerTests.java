@@ -90,8 +90,6 @@ class ApprovalControllerTests {
 
     private static final String NAME = "name";
 
-    private static final String GET_TRANSACTION_URI = "/transactions/" + TRANSACTION_ID;
-
     private MockMvc mockMvc;
 
     @Mock

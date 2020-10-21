@@ -14,7 +14,6 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
-import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
@@ -43,12 +42,8 @@ public class ApprovalController extends BaseController {
     private static final String TRANSACTION_ID = "transaction_id";
     private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
     private static final String IS_PAYABLE_TRANSACTION = "isPayableTransaction";
-    private static final UriTemplate TRANSACTIONS_URI = new UriTemplate("/transactions/{transactionId}");
 
     private static final UriTemplate DROPOUT_PATH = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts");
-
-    @Autowired
-    private ApiClientService apiClientService;
 
     @Autowired
     private TransactionService transactionService;

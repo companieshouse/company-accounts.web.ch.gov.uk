@@ -124,8 +124,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException {
 
-        String uri = TRANSACTIONS_URI.expand(transactionId).toString();
-
             Transaction transaction =
                     getTransaction(transactionId);
 
