@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.transaction.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -14,6 +11,10 @@ import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -72,7 +73,7 @@ public class TransactionServiceImpl implements TransactionService {
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
         try {
-            Transaction transaction = apiClientService.getApiClient().transactions().get(uri).execute().getData();
+            Transaction transaction = getTransaction(transactionId);
             transaction.setStatus(TransactionStatus.CLOSED);
 
             Map<String, Object> headers =
@@ -89,12 +90,10 @@ public class TransactionServiceImpl implements TransactionService {
 
             return paymentRequired;
 
-        } catch (ApiErrorResponseException e) {
-
-            throw new ServiceException("Error closing transaction", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for transactions resource", e);
+        } catch (ApiErrorResponseException e) {
+            throw new ServiceException("Error closing transaction", e);
         }
     }
 
@@ -112,7 +111,6 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             apiClientService.getApiClient().transactions().update(uri, transaction).execute();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error updating transaction", e);
         } catch (URIValidationException e) {
 
@@ -126,21 +124,25 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException {
 
-        String uri = TRANSACTIONS_URI.expand(transactionId).toString();
-
-        try {
             Transaction transaction =
-                    apiClientService.getApiClient().transactions().get(uri).execute().getData();
+                    getTransaction(transactionId);
 
             return transaction.getResources()
                     .get("/transactions/" + transactionId + "/company-accounts/" + companyAccountsId)
                             .getLinks().get(COSTS_LINK) != null;
+    }
+
+    @Override
+    public Transaction getTransaction(String transactionId) throws ServiceException {
+        try {
+
+            String uri = TRANSACTIONS_URI.expand(transactionId).toString();
+
+            return apiClientService.getApiClient().transactions().get(uri).execute().getData();
         } catch (URIValidationException e) {
-
-            throw new ServiceException("Error fetching transaction", e);
-        } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Invalid URI for fetching transactions resource", e);
+        } catch (ApiErrorResponseException e) {
+            throw new ServiceException("Error fetching transaction", e);
         }
     }
 }

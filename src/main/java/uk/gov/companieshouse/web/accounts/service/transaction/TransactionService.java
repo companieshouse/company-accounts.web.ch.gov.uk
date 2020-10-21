@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.transaction;
 
+import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface TransactionService {
@@ -29,7 +30,6 @@ public interface TransactionService {
      * a later time.
      *
      * @param transactionId     the ID of the transaction to update
-     * @param companyAccountsId the company accounts ID of the transaction to update
      * @throws ServiceException
      */
     void updateResumeLink(String transactionId, String resumeLink) throws ServiceException;
@@ -43,4 +43,12 @@ public interface TransactionService {
      * @throws ServiceException if there's an error when fetching a transaction
      */
     boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException;
+
+    /**
+     * Returns a transaction
+     *
+     * @param transactionId     Transaction Id for which to return a transaction
+     * @throws ServiceException
+     */
+    Transaction getTransaction(String transactionId) throws ServiceException;
 }

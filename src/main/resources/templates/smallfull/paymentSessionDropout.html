@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+
+<head>
+    <title>Filing already submitted</title>
+</head>
+<body>
+<div id="main-content" layout:fragment="content">
+
+    <legend id="page-title" class="govuk-fieldset__legend govuk-fieldset__legend--l">
+       This filing has already been submitted
+    </legend>
+
+    <p id="filing-text">
+        Go to 'Your filings' to review the submission
+    </p>
+
+    <form id="payment-dropout-form" th:action="@{''}" class="form" method="post">
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="submitted accounts - continue" type="submit" role="button" th:value="continue"/>
+
+    </form>
+</div>
+</body>
+</html>

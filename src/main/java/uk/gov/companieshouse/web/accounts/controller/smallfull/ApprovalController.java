@@ -1,10 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
+import uk.gov.companieshouse.api.model.transaction.Transaction;
+import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -27,6 +24,12 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @PreviousController(ReviewController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
@@ -35,11 +38,12 @@ public class ApprovalController extends BaseController {
     private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
     private static final UriTemplate RESUME_URI = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/pay-filing-fee");
 
-
     private static final String APPROVAL = "approval";
     private static final String TRANSACTION_ID = "transaction_id";
     private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
     private static final String IS_PAYABLE_TRANSACTION = "isPayableTransaction";
+
+    private static final UriTemplate DROPOUT_PATH = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts");
 
     @Autowired
     private TransactionService transactionService;
@@ -92,8 +96,6 @@ public class ApprovalController extends BaseController {
             return ERROR_VIEW;
         }
 
-
-
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
 
@@ -119,6 +121,14 @@ public class ApprovalController extends BaseController {
                 return getTemplateName();
             }
 
+            Transaction transaction = transactionService.getTransaction(transactionId);
+
+            if(transaction.getStatus() == TransactionStatus.CLOSED_PENDING_PAYMENT) {
+
+                String dropoutPath = DROPOUT_PATH.expand(companyNumber,transactionId, companyAccountsId ).toString();
+               return UrlBasedViewResolver.REDIRECT_URL_PREFIX + dropoutPath;
+            }
+
             List<ValidationError> validationErrors = approvalService.submitApproval(transactionId, companyAccountsId, approval);
             if (!validationErrors.isEmpty()) {
                 model.addAttribute(IS_PAYABLE_TRANSACTION,
@@ -135,6 +145,7 @@ public class ApprovalController extends BaseController {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                         paymentService.createPaymentSessionForTransaction(transactionId);
             }
+
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
