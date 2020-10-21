@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts")
-public class PaymentDropoutController extends BaseController {
+public class AccountsAlreadySubmittedController extends BaseController {
 
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
 

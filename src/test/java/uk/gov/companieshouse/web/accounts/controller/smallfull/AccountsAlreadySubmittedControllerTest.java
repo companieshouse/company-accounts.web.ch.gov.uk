@@ -5,14 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PaymentDropoutControllerTest {
+class AccountsAlreadySubmittedControllerTest {
 
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
 
@@ -39,7 +34,7 @@ class PaymentDropoutControllerTest {
 
     private MockMvc mockMvc;
 
-    private PaymentDropoutController paymentDropoutController = new PaymentDropoutController();
+    private AccountsAlreadySubmittedController paymentDropoutController = new AccountsAlreadySubmittedController();
 
     @BeforeEach
     private void setup() {
