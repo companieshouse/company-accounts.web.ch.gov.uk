@@ -32,7 +32,6 @@ public interface TransactionService {
      * a later time.
      *
      * @param transactionId     the ID of the transaction to update
-     * @param companyAccountsId the company accounts ID of the transaction to update
      * @throws ServiceException
      */
     void updateResumeLink(String transactionId, String resumeLink) throws ServiceException;
@@ -47,5 +46,11 @@ public interface TransactionService {
      */
     boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException;
 
-    Transaction getTransaction(String uri) throws ApiErrorResponseException, URIValidationException;
+    /**
+     * Returns a transaction
+     *
+     * @param uri     URI for which to return a transaction
+     * @throws ServiceException
+     */
+    Transaction getTransaction(String uri) throws ServiceException;
 }

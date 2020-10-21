@@ -154,7 +154,7 @@ public class ApprovalController extends BaseController {
                         paymentService.createPaymentSessionForTransaction(transactionId);
             }
 
-        } catch (ServiceException  | URIValidationException | ApiErrorResponseException e) {
+        } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
