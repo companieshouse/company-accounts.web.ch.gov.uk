@@ -43,7 +43,7 @@ public class ApprovalController extends BaseController {
     private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
     private static final String IS_PAYABLE_TRANSACTION = "isPayableTransaction";
 
-    private static final UriTemplate DROPOUT_PATH = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts");
+    private static final UriTemplate SUBMITTED_ACCOUNTS_PATH = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts");
 
     @Autowired
     private TransactionService transactionService;
@@ -125,8 +125,8 @@ public class ApprovalController extends BaseController {
 
             if(transaction.getStatus() == TransactionStatus.CLOSED_PENDING_PAYMENT) {
 
-                String dropoutPath = DROPOUT_PATH.expand(companyNumber,transactionId, companyAccountsId ).toString();
-               return UrlBasedViewResolver.REDIRECT_URL_PREFIX + dropoutPath;
+                String submittedAccounts = SUBMITTED_ACCOUNTS_PATH.expand(companyNumber,transactionId, companyAccountsId ).toString();
+               return UrlBasedViewResolver.REDIRECT_URL_PREFIX + submittedAccounts;
             }
 
             List<ValidationError> validationErrors = approvalService.submitApproval(transactionId, companyAccountsId, approval);

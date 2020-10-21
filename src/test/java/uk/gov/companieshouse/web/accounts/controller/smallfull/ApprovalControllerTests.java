@@ -60,7 +60,7 @@ class ApprovalControllerTests {
                                                 "/company-accounts/" + COMPANY_ACCOUNTS_ID +
                                                 "/small-full/approval";
 
-    private static final String DROPOUT_PATH = "/company/" + COMPANY_NUMBER +
+    private static final String SUBMITTED_ACCOUNTS_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full/approved-accounts";
@@ -291,6 +291,6 @@ class ApprovalControllerTests {
         this.mockMvc.perform(post(APPROVAL_PATH)
                 .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + DROPOUT_PATH));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + SUBMITTED_ACCOUNTS_PATH));
     }
 }

@@ -19,7 +19,7 @@ public class AccountsAlreadySubmittedController extends BaseController {
 
     @Override
     protected String getTemplateName() {
-        return "smallfull/paymentSessionDropout";
+        return "smallfull/accountsAlreadySubmitted";
     }
 
     @GetMapping

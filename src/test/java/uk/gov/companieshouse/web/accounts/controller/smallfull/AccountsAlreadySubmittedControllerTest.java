@@ -25,36 +25,36 @@ class AccountsAlreadySubmittedControllerTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String DROPOUT_PATH = "/company/" + COMPANY_NUMBER +
+    private static final String SUBMITTED_ACCOUNTS_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full/approved-accounts";
 
-    private static final String DROPOUT_VIEW = "smallfull/paymentSessionDropout";
+    private static final String SUBMITTED_ACCOUNTS_VIEW = "smallfull/accountsAlreadySubmitted";
 
     private MockMvc mockMvc;
 
-    private AccountsAlreadySubmittedController paymentDropoutController = new AccountsAlreadySubmittedController();
+    private AccountsAlreadySubmittedController accountsAlreadySubmittedController = new AccountsAlreadySubmittedController();
 
     @BeforeEach
     private void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(paymentDropoutController).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(accountsAlreadySubmittedController).build();
     }
 
     @Test
-    @DisplayName("Get payment session dropout success path")
+    @DisplayName("Get payment session for acccounts already submitted success path")
     void getRequestSuccess() throws Exception {
 
-        this.mockMvc.perform(get(DROPOUT_PATH))
+        this.mockMvc.perform(get(SUBMITTED_ACCOUNTS_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(DROPOUT_VIEW));
+                .andExpect(view().name(SUBMITTED_ACCOUNTS_VIEW));
     }
 
     @Test
-    @DisplayName("Post dropout session success path")
+    @DisplayName("Post accounts already submitted session success path")
     void postRequestSuccess() throws Exception {
 
-        this.mockMvc.perform(post(DROPOUT_PATH))
+        this.mockMvc.perform(post(SUBMITTED_ACCOUNTS_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + YOUR_FILINGS_PATH));
     }
