@@ -187,7 +187,7 @@ class ApprovalControllerTests {
     @DisplayName("Post approval api validation failure path")
     void postRequestApiValidationFailure() throws Exception {
 
-        when(transactionService.getTransaction(GET_TRANSACTION_URI)).thenReturn(transaction);
+        when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         List<ValidationError> validationErrors = new ArrayList<>();
         validationErrors.add(new ValidationError());
@@ -216,7 +216,7 @@ class ApprovalControllerTests {
     @DisplayName("Post approval submit approval exception failure path")
     void postRequestSubmitApprovalExceptionFailure() throws Exception {
 
-        when(transactionService.getTransaction(GET_TRANSACTION_URI)).thenReturn(transaction);
+        when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenThrow(ServiceException.class);
@@ -231,7 +231,7 @@ class ApprovalControllerTests {
     @DisplayName("Post approval close transaction exception failure path")
     void postRequestCloseTransactionExceptionFailure() throws Exception {
 
-        when(transactionService.getTransaction(GET_TRANSACTION_URI)).thenReturn(transaction);
+        when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
@@ -248,7 +248,7 @@ class ApprovalControllerTests {
     @DisplayName("Post approval success path for non-payable transaction")
     void postRequestSuccessForNonPayableTransaction() throws Exception {
 
-        when(transactionService.getTransaction(GET_TRANSACTION_URI)).thenReturn(transaction);
+        when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
@@ -265,7 +265,7 @@ class ApprovalControllerTests {
     @DisplayName("Post approval success path for payable transaction")
     void postRequestSuccessForPayableTransaction() throws Exception {
 
-        when(transactionService.getTransaction(GET_TRANSACTION_URI)).thenReturn(transaction);
+        when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
                 .thenReturn(new ArrayList<>());
@@ -288,7 +288,7 @@ class ApprovalControllerTests {
 
         createdTransaction.setStatus(TransactionStatus.CLOSED_PENDING_PAYMENT);
 
-        when(transactionService.getTransaction(GET_TRANSACTION_URI)).thenReturn(createdTransaction);
+        when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(createdTransaction);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
                 .param(DIRECTOR_NAME, NAME))

@@ -49,8 +49,8 @@ public interface TransactionService {
     /**
      * Returns a transaction
      *
-     * @param uri     URI for which to return a transaction
+     * @param transactionId     Transaction Id for which to return a transaction
      * @throws ServiceException
      */
-    Transaction getTransaction(String uri) throws ServiceException;
+    Transaction getTransaction(String transactionId) throws ServiceException;
 }

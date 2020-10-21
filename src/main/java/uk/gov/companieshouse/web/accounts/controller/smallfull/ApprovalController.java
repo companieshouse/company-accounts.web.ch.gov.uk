@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
-import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
@@ -128,8 +126,7 @@ public class ApprovalController extends BaseController {
                 return getTemplateName();
             }
 
-            String uri = TRANSACTIONS_URI.expand(transactionId).toString();
-            Transaction transaction = transactionService.getTransaction(uri);
+            Transaction transaction = transactionService.getTransaction(transactionId);
 
             if(transaction.getStatus() == TransactionStatus.CLOSED_PENDING_PAYMENT) {
 
