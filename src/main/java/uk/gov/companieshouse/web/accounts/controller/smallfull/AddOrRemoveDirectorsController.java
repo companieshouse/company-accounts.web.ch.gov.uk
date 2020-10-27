@@ -1,7 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,19 +22,32 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.AddOrRemoveDirectors;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.List;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
 @NextController(PrincipalActivitiesSelectionController.class)
 @PreviousController(DirectorsReportQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors")
 public class AddOrRemoveDirectorsController extends BaseController implements ConditionalController {
+
+    private static final UriTemplate URI =
+            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
+
+    private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
+
+    private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String TRANSACTION_ID = "transactionId";
+
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @Autowired
     private HttpServletRequest request;
@@ -54,16 +67,11 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
     @Autowired
     private LoansToDirectorsService loansToDirectorsService;
 
-    private static final UriTemplate URI =
-            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/add-or-remove-directors");
+    @Autowired
+    private DirectorsReportApprovalService directorsReportApprovalService;
 
-    private static final String ADD_OR_REMOVE_DIRECTORS = "addOrRemoveDirectors";
-
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    @Autowired
+    private ApprovalService approvalService;
 
     @GetMapping
     public String getAddOrRemoveDirectors(@PathVariable String companyNumber,
@@ -76,7 +84,11 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
 
         boolean displayLoansToDirectorsWarning = false;
+        boolean displayApprovalsWarning = false;
+
         LoansToDirectorsApi loansToDirectorsApi;
+        DirectorsReportApproval directorsReportApproval;
+        Approval approval;
 
         try {
             addOrRemoveDirectors.setExistingDirectors(
@@ -90,6 +102,16 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
                 displayLoansToDirectorsWarning = !loansToDirectorsApi.getLoans().isEmpty();
             }
 
+            directorsReportApproval = directorsReportApprovalService.getDirectorsReportApproval(transactionId, companyAccountsId);
+            if (directorsReportApproval != null && directorsReportApproval.getName() != null) {
+                displayApprovalsWarning = true;
+            }
+            if(!displayApprovalsWarning) {
+                approval = approvalService.getApproval(transactionId, companyAccountsId);
+                if(approval != null && approval.getDirectorName() != null) {
+                    displayApprovalsWarning = true;
+                }
+            }
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -97,6 +119,7 @@ public class AddOrRemoveDirectorsController extends BaseController implements Co
         }
 
         addOrRemoveDirectors.setDisplayLtdWarningBanner(displayLoansToDirectorsWarning);
+        addOrRemoveDirectors.setDisplayApprovalWarningBanner(displayApprovalsWarning);
 
         model.addAttribute(ADD_OR_REMOVE_DIRECTORS, addOrRemoveDirectors);
         model.addAttribute(COMPANY_NUMBER, companyNumber);

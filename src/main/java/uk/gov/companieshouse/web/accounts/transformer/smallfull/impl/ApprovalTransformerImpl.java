@@ -21,4 +21,13 @@ public class ApprovalTransformerImpl implements ApprovalTransformer {
         approvalApi.setName(approval.getDirectorName());
         return approvalApi;
     }
+
+    @Override
+    public Approval getApproval(ApprovalApi approvalApi) {
+
+        Approval approval = new Approval();
+        approval.setDate(dateTransformer.toDate(approvalApi.getDate()));
+        approval.setDirectorName(approvalApi.getName());
+        return approval;
+    }
 }

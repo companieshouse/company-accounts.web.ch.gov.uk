@@ -14,4 +14,12 @@ public class DateTransformer {
         return LocalDate.parse(date.getYear() + "-" + date.getMonth() + "-" + date.getDay(),
                 DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
     }
+    
+    public Date toDate(LocalDate localDate) {
+        Date newDate = new Date();
+        newDate.setDay(String.valueOf(localDate.getDayOfMonth()));
+        newDate.setMonth(String.valueOf(localDate.getMonthValue()));
+        newDate.setYear(String.valueOf(localDate.getYear()));
+        return newDate;
+    }
 }
