@@ -8,6 +8,8 @@ public class AddOrRemoveDirectors {
 
     private boolean displayLtdWarningBanner;
 
+    private boolean displayApprovalWarningBanner;
+
     private Director[] existingDirectors;
 
     private DirectorToAdd directorToAdd;
@@ -46,5 +48,13 @@ public class AddOrRemoveDirectors {
 
     public void setDisplayLtdWarningBanner(boolean displayLtdWarningBanner) {
         this.displayLtdWarningBanner = displayLtdWarningBanner;
+    }
+
+    public boolean isDisplayApprovalWarningBanner() {
+        return displayApprovalWarningBanner;
+    }
+
+    public void setDisplayApprovalWarningBanner(boolean displayApprovalWarningBanner) {
+        this.displayApprovalWarningBanner = displayApprovalWarningBanner;
     }
 }

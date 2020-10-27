@@ -22,7 +22,7 @@ class DateTransformerTest {
 
     private static final String YEAR = "2019";
 
-    private static final LocalDate EXPECTED_DATE = LocalDate.of(2019, 12, 8);
+    private static final LocalDate LOCAL_DATE = LocalDate.of(2019, 12, 8);
 
     @Test
     @DisplayName("Date to LocalDate")
@@ -33,6 +33,17 @@ class DateTransformerTest {
         date.setMonth(MONTH);
         date.setYear(YEAR);
 
-        assertEquals(EXPECTED_DATE, dateTransformer.toLocalDate(date));
+        assertEquals(LOCAL_DATE, dateTransformer.toLocalDate(date));
+    }
+
+    @Test
+    @DisplayName("LocalDate to Date")
+    void toDate() {
+
+        Date returnedDate = dateTransformer.toDate(LOCAL_DATE);
+
+        assertEquals(DAY, returnedDate.getDay());
+        assertEquals(MONTH, returnedDate.getMonth());
+        assertEquals(YEAR, returnedDate.getYear());
     }
 }

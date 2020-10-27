@@ -18,4 +18,6 @@ public interface ApprovalService {
     List<ValidationError> submitApproval(String transactionId, String companyAccountsId,
             Approval approval)
         throws ServiceException;
+
+    Approval getApproval(String transactionId, String companyAccountsId) throws ServiceException;
 }

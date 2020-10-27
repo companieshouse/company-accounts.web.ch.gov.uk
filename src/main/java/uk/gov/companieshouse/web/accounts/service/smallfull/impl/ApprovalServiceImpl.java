@@ -88,4 +88,33 @@ public class ApprovalServiceImpl implements ApprovalService {
 
         return validationErrors;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Approval getApproval(String transactionId, String companyAccountsId) throws ServiceException {
+
+        Approval approval = new Approval();
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = APPROVAL_URI.expand(transactionId, companyAccountsId).toString();
+
+        try {
+            SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId,
+                    companyAccountsId);
+
+            if (smallFullApi.getLinks().getApproval() != null) {
+                ApprovalApi approvalApi = apiClient.smallFull().approval().get(uri).execute().getData();
+                
+                approval = transformer.getApproval(approvalApi);
+            }
+        } catch (ApiErrorResponseException e) {
+            serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
+        } catch (URIValidationException e) {
+            serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
+        }
+
+        return approval;
+    }
 }

@@ -1,11 +1,12 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.approval.ApprovalResourceHandler;
 import uk.gov.companieshouse.api.handler.smallfull.approval.request.ApprovalCreate;
+import uk.gov.companieshouse.api.handler.smallfull.approval.request.ApprovalGet;
 import uk.gov.companieshouse.api.handler.smallfull.approval.request.ApprovalUpdate;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.ApprovalApi;
@@ -54,6 +56,9 @@ class ApprovalServiceImplTests {
 
     @Mock
     private ApprovalResourceHandler approvalResourceHandler;
+
+    @Mock
+    private ApprovalGet approvalGet;
 
     @Mock
     private ApprovalCreate approvalCreate;
@@ -117,6 +122,8 @@ class ApprovalServiceImplTests {
     private static final String DATE_JSON_PATH_SUFFIX = ".approval.date";
 
     private static final String RESOURCE_NAME = "approval";
+
+    private static final String DIRECTORS_NAME = "directorsName";
 
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
@@ -422,6 +429,118 @@ class ApprovalServiceImplTests {
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
+    }
+
+    @Test
+    @DisplayName("Approval - GET - Success Path")
+    void getApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
+
+        when(approvalGet.execute()).thenReturn(responseWithData);
+
+        when(approvalGet.execute().getData()).thenReturn(approvalApi);
+
+        Approval thisApproval = new Approval();
+        thisApproval.setDirectorName(DIRECTORS_NAME);
+        when(approvalTransformer.getApproval(approvalApi)).thenReturn(thisApproval);
+
+        when(approvalResourceHandler.get(APPROVAL_URI)).thenReturn(approvalGet);
+
+        Approval returnedApproval =
+                approvalService.getApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertNotNull(returnedApproval.getDirectorName());
+    }
+
+    @Test
+    @DisplayName("Approval - GET - No approval link")
+    void getApprovalNoLinkSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(smallFullLinks.getApproval()).thenReturn(null);
+
+        Approval returnedApproval =
+                approvalService.getApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertNull(returnedApproval.getDirectorName());
+    }
+
+    @Test
+    @DisplayName("Approval - GET - URIValidationException Thrown")
+    void getApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
+                ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
+
+        when(approvalResourceHandler.get(APPROVAL_URI)).thenReturn(approvalGet);
+
+        when(approvalGet.execute()).thenThrow(uriValidationException);
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () ->
+                approvalService.getApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Approval - GET - ApiErrorResponseException Thrown")
+    void getApprovalThrowsApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+
+        when(smallFullResourceHandler.approval()).thenReturn(approvalResourceHandler);
+
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+                .thenReturn(smallFullApi);
+
+        when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
+
+        when(smallFullLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
+
+        when(approvalResourceHandler.get(APPROVAL_URI)).thenReturn(approvalGet);
+
+        when(approvalGet.execute()).thenThrow(apiErrorResponseException);
+
+        doThrow(ServiceException.class)
+                .when(serviceExceptionHandler)
+                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+
+        assertThrows(ServiceException.class, () ->
+                approvalService.getApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
 }

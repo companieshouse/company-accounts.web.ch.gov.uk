@@ -60,4 +60,28 @@ class ApprovalTransformerImplTests {
         assertEquals(Integer.parseInt(APPROVAL_MONTH), approvalApi.getDate().getMonthValue());
         assertEquals(Integer.parseInt(APPROVAL_YEAR), approvalApi.getDate().getYear());
     }
+
+    @Test
+    @DisplayName("Get Approval Api")
+    void getApproval() {
+
+        ApprovalApi approvalApi = new ApprovalApi();
+        approvalApi.setName(DIRECTOR_NAME);
+        approvalApi.setDate(APPROVAL_DATE);
+
+        Date approvalDate = new Date();
+        approvalDate.setDay(APPROVAL_DAY);
+        approvalDate.setMonth(APPROVAL_MONTH);
+        approvalDate.setYear(APPROVAL_YEAR);
+
+        when(dateTransformer.toDate(APPROVAL_DATE)).thenReturn(approvalDate);
+
+        Approval approval = approvalTransformer.getApproval(approvalApi);
+
+        assertEquals(DIRECTOR_NAME, approval.getDirectorName());
+        assertEquals(approvalDate, approval.getDate());
+        assertEquals(APPROVAL_DAY, approval.getDate().getDay());
+        assertEquals(APPROVAL_MONTH, approval.getDate().getMonth());
+        assertEquals(APPROVAL_YEAR, approval.getDate().getYear());
+    }
 }
