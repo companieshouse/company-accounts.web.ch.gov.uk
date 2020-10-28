@@ -100,6 +100,10 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                 addOrRemoveLoans.getLoanToAdd().setDirectorName(validDirectorNames.get(0));
             }
 
+            if(!validDirectorNames.isEmpty()) {
+                validDirectorNames.add("Prefer not to say");
+            }
+
             addOrRemoveLoans.setValidDirectorNames(validDirectorNames);
 
             CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
@@ -133,6 +137,7 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
+
             List<ValidationError> validationErrors = loanService.submitAddOrRemoveLoans(transactionId, companyAccountsId, addOrRemoveLoans);
 
             if(!validationErrors.isEmpty()) {

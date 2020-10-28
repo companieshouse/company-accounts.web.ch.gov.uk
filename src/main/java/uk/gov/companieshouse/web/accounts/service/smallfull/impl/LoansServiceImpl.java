@@ -82,6 +82,10 @@ public class LoansServiceImpl implements LoanService {
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
 
+        if(addOrRemoveLoans.getLoanToAdd().getDirectorName().equals("") || addOrRemoveLoans.getLoanToAdd().getDirectorName().equals("Prefer not to say")) {
+            addOrRemoveLoans.getLoanToAdd().setDirectorName(null);
+        }
+
         LoanApi loanApi = loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd());
 
         try {

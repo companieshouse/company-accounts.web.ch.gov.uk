@@ -13,9 +13,6 @@ public class LoanValidator {
 
     private static final String LOAN_TO_ADD = "loanToAdd";
 
-    private static final String DIRECTOR_NAME = LOAN_TO_ADD + ".directorName";
-    private static final String NAME_NOT_PRESENT = "validation.element.missing.loanToAdd.directorName";
-
     private static final String DESCRIPTION = LOAN_TO_ADD + ".description";
     private static final String DESCRIPTION_NOT_PRESENT = "validation.element.missing.loanToAdd.description";
 
@@ -30,14 +27,6 @@ public class LoanValidator {
     public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
-
-        if (StringUtils.isBlank(loanToAdd.getDirectorName())) {
-
-            ValidationError error = new ValidationError();
-            error.setFieldPath(DIRECTOR_NAME);
-            error.setMessageKey(NAME_NOT_PRESENT);
-            validationErrors.add(error);
-        }
 
         if (StringUtils.isBlank(loanToAdd.getDescription())) {
 
@@ -98,8 +87,8 @@ public class LoanValidator {
     }
 
     private boolean isDescriptionAndBreakdownEmpty(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
-        return  ((StringUtils.isBlank(loanToAdd.getDescription()) &&
+        return  (StringUtils.isBlank(loanToAdd.getDescription()) &&
                 ((isMultiYearFiler && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) || !isMultiYearFiler) &&
-                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null));
+                loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null);
     }
 }
