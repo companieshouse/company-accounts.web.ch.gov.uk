@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -82,7 +84,7 @@ public class LoansServiceImpl implements LoanService {
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
 
-        if(addOrRemoveLoans.getLoanToAdd().getDirectorName().equals("") || addOrRemoveLoans.getLoanToAdd().getDirectorName().equals("Prefer not to say")) {
+        if(StringUtils.isBlank(addOrRemoveLoans.getLoanToAdd().getDirectorName()) || addOrRemoveLoans.getLoanToAdd().getDirectorName().equals("Prefer not to say")) {
             addOrRemoveLoans.getLoanToAdd().setDirectorName(null);
         }
 
@@ -90,6 +92,7 @@ public class LoansServiceImpl implements LoanService {
 
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();
+
             if (apiResponse.hasErrors()) {
                 validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
             }

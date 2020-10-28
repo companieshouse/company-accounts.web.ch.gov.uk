@@ -13,6 +13,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -90,7 +92,7 @@ class LoansServiceImplTest {
     private LoanToAdd loanToAdd;
 
     @Mock
-    private AddOrRemoveLoans addOrRemoveLoans;
+    private AddOrRemoveLoans mockAddOrRemoveLoans;
 
     @Mock
     private LoanGetAll loanGetAll;
@@ -219,7 +221,7 @@ class LoansServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+        when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -229,7 +231,7 @@ class LoansServiceImplTest {
         when(loansResourceHandler.create(LOANS_URI, loanApi)).thenReturn(loanCreate);
         when(loanCreate.execute()).thenReturn(responseWithSingleLoan);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -239,13 +241,13 @@ class LoansServiceImplTest {
     void createLoanValidationForMultiYearFiler()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
-        addOrRemoveLoans.setIsMultiYearFiler(true);
+        mockAddOrRemoveLoans.setIsMultiYearFiler(true);
         
-        when(loanValidator.validateLoanToAdd(loanToAdd, addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(new ArrayList<>());
+        when(loanValidator.validateLoanToAdd(loanToAdd, mockAddOrRemoveLoans.getIsMultiYearFiler())).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+        when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -261,7 +263,7 @@ class LoansServiceImplTest {
         apiValidationErrors.add(validationError);
         when(validationContext.getValidationErrors(responseWithSingleLoan.getErrors())).thenReturn(apiValidationErrors);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
         assertEquals(apiValidationErrors, validationErrors);
     }
@@ -275,7 +277,7 @@ class LoansServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+        when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -291,7 +293,7 @@ class LoansServiceImplTest {
         apiValidationErrors.add(validationError);
         when(validationContext.getValidationErrors(responseWithSingleLoan.getErrors())).thenReturn(apiValidationErrors);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
         assertEquals(apiValidationErrors, validationErrors);
     }
@@ -304,13 +306,13 @@ class LoansServiceImplTest {
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
-        addOrRemoveLoans.setIsMultiYearFiler(true);
+        mockAddOrRemoveLoans.setIsMultiYearFiler(true);
         
-        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+        when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
-        when(loanValidator.validateLoanToAdd(loanToAdd, addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(nameValidationError);
+        when(loanValidator.validateLoanToAdd(loanToAdd, mockAddOrRemoveLoans.getIsMultiYearFiler())).thenReturn(nameValidationError);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
         assertEquals(nameValidationError, validationErrors);
 
@@ -325,11 +327,11 @@ class LoansServiceImplTest {
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
-        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+        when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanValidator.validateLoanToAdd(loanToAdd, false)).thenReturn(nameValidationError);
 
-        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+        List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
         assertEquals(nameValidationError, validationErrors);
 
@@ -340,11 +342,11 @@ class LoansServiceImplTest {
     @DisplayName("POST - submit loan - resource is empty for multi year filer")
     void submitAddOrRemoveLoanEmptyResourceForMultiYearFiler() throws ServiceException {
 
-        addOrRemoveLoans.setIsMultiYearFiler(true);
+        mockAddOrRemoveLoans.setIsMultiYearFiler(true);
         
-        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(true);
+        when(loanValidator.isEmptyResource(mockAddOrRemoveLoans.getLoanToAdd(), mockAddOrRemoveLoans.getIsMultiYearFiler())).thenReturn(true);
 
-        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
         assertTrue(validationErrors.isEmpty());
         verify(apiClientService, never()).getApiClient();
@@ -354,9 +356,9 @@ class LoansServiceImplTest {
     @DisplayName("POST - submit loan - resource is empty for single year filer")
     void submitAddOrRemoveLoanEmptyResourceForSingleYearFiler() throws ServiceException {
 
-        when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), false)).thenReturn(true);
+        when(loanValidator.isEmptyResource(mockAddOrRemoveLoans.getLoanToAdd(), false)).thenReturn(true);
 
-        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
+        List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
         assertTrue(validationErrors.isEmpty());
         verify(apiClientService, never()).getApiClient();
@@ -458,7 +460,10 @@ class LoansServiceImplTest {
     @DisplayName("POST - submit loan for multi year filer - success")
     void submitAddOrRemoveLoanForMultiYearFilerSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+
         addOrRemoveLoans.setIsMultiYearFiler(true);
+        addOrRemoveLoans.setLoanToAdd(new LoanToAdd());
         
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -472,6 +477,8 @@ class LoansServiceImplTest {
 
         when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(false);
 
+
+
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
         assertTrue(validationErrors.isEmpty());
@@ -481,6 +488,10 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan for single year filer - success")
     void submitAddOrRemoveLoanForSingleYearFilerSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
+        addOrRemoveLoans.setLoanToAdd(new LoanToAdd());
+        addOrRemoveLoans.setIsMultiYearFiler(false);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -507,7 +518,7 @@ class LoansServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+        when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -518,7 +529,7 @@ class LoansServiceImplTest {
         when(loanCreate.execute()).thenThrow(apiErrorResponseException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans));
+        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans));
     }
 
     @Test
@@ -528,7 +539,7 @@ class LoansServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(addOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
+        when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
         when(loanTransformer.getLoanApi(loanToAdd)).thenReturn(loanApi);
 
@@ -539,7 +550,7 @@ class LoansServiceImplTest {
         when(loanCreate.execute()).thenThrow(uriValidationException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans));
+        assertThrows(ServiceException.class, () -> loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans));
     }
 
     @Test

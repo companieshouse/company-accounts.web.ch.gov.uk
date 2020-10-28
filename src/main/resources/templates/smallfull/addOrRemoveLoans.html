@@ -53,7 +53,7 @@
                         <th th:id="loans-table-director-name[__${stat.index}__]"
                             class="govuk-table__header--summary"
                             scope="row"
-                            th:text="${loan.directorName}">
+                            th:text="${loan.directorName != null ? loan.directorName : 'Not provided'}">
                         </th>
                         <td th:id="loans-table-balance-at-period-end[__${stat.index}__]"
                             class="govuk-table__cell--summary"
@@ -228,7 +228,7 @@
                         <label id="loanToAdd-director-name-label-single-radio"
                                class="govuk-label govuk-label--m"
                                for="loanToAdd-director-name">
-                            Name of director receiving advance or credit
+                            Name of director receiving advance or credit (optional)
                         </label>
                         <dl class="app-check-your-answers app-check-your-answers--very-long">
                             <div class="app-check-your-answers__contents">
@@ -258,7 +258,7 @@
                                     <label id="loanToAdd-director-name-label-multiple-radio"
                                            class="app-check-your-answers__question govuk-label govuk-label--m"
                                            for="loanToAdd-director-name">
-                                        Name of director receiving advance or credit
+                                        Name of director receiving advance or credit (optional)
                                     </label>
                                     <dd class="app-check-your-answers__change">
                                         <a id="director-change-link-radios"
