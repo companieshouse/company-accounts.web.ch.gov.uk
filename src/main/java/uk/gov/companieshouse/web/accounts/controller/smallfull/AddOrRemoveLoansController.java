@@ -40,6 +40,19 @@ import java.util.List;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans")
 public class AddOrRemoveLoansController extends BaseController implements ConditionalController {
 
+    private static final String PREFER_NOT_TO_SAY = "Prefer not to say";
+
+    private static final UriTemplate URI =
+            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans");
+
+    private static final String ADD_OR_REMOVE_LOANS = "addOrRemoveLoans";
+
+    private static final String COMPANY_NUMBER = "companyNumber";
+
+    private static final String TRANSACTION_ID = "transactionId";
+
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+
     @Autowired
     private LoanService loanService;
 
@@ -58,16 +71,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
     @Autowired
     private DirectorService directorService;
 
-    private static final UriTemplate URI =
-            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans");
-
-    private static final String ADD_OR_REMOVE_LOANS = "addOrRemoveLoans";
-
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @GetMapping
     public String getAddOrRemoveLoans(@PathVariable String companyNumber,
@@ -98,6 +101,10 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
             if (validDirectorNames.size() == 1) {
                 addOrRemoveLoans.getLoanToAdd().setDirectorName(validDirectorNames.get(0));
+            }
+
+            if(!validDirectorNames.isEmpty()) {
+                validDirectorNames.add(PREFER_NOT_TO_SAY);
             }
 
             addOrRemoveLoans.setValidDirectorNames(validDirectorNames);
@@ -133,6 +140,7 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
+
             List<ValidationError> validationErrors = loanService.submitAddOrRemoveLoans(transactionId, companyAccountsId, addOrRemoveLoans);
 
             if(!validationErrors.isEmpty()) {

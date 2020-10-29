@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -24,6 +26,16 @@ import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
 @Service
 public class LoansServiceImpl implements LoanService {
 
+    private static final String PREFER_NOT_TO_SAY = "Prefer not to say";
+
+    private static final UriTemplate LOANS_URI =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans");
+
+    private static final UriTemplate LOAN_URI_WITH_ID =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans/{loanId}");
+
+    private static final String RESOURCE_NAME = "loans";
+
     @Autowired
     private ApiClientService apiClientService;
 
@@ -38,14 +50,6 @@ public class LoansServiceImpl implements LoanService {
  
     @Autowired
     private LoanValidator loanValidator;
-
-    private static final UriTemplate LOANS_URI =
-            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans");
-
-    private static final UriTemplate LOAN_URI_WITH_ID =
-            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors/loans/{loanId}");
-
-    private static final String RESOURCE_NAME = "loans";
 
     @Override
     public Loan[] getAllLoans(String transactionId, String companyAccountsId) throws ServiceException {
@@ -82,10 +86,17 @@ public class LoansServiceImpl implements LoanService {
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
 
+        String directorName = addOrRemoveLoans.getLoanToAdd().getDirectorName();
+
+        if(StringUtils.isBlank(directorName) || directorName.equals(PREFER_NOT_TO_SAY)) {
+            addOrRemoveLoans.getLoanToAdd().setDirectorName(null);
+        }
+
         LoanApi loanApi = loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd());
 
         try {
             ApiResponse<LoanApi> apiResponse = apiClient.smallFull().loansToDirectors().loans().create(uri, loanApi).execute();
+
             if (apiResponse.hasErrors()) {
                 validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
             }
