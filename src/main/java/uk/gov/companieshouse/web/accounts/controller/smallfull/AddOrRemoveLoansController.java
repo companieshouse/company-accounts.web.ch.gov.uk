@@ -99,10 +99,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                 validDirectorNames.add(director.getName());
             }
 
-            if (validDirectorNames.size() == 1) {
-                addOrRemoveLoans.getLoanToAdd().setDirectorName(validDirectorNames.get(0));
-            }
-
             if(!validDirectorNames.isEmpty()) {
                 validDirectorNames.add(PREFER_NOT_TO_SAY);
             }
