@@ -189,6 +189,18 @@
                     <input type="hidden"
                            th:field="*{existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd}"
                            th:id="existingLoans[__${stat.index}__].breakdown.balanceAtPeriodEnd"/>
+                    <input type="hidden"
+                           th:field="*{existingLoans[__${stat.index}__].breakdown.balanceAtPeriodStart}"
+                           th:id="existingLoans[__${stat.index}__].breakdown.balanceAtPeriodStart"/>
+                    <input type="hidden"
+                           th:field="*{existingLoans[__${stat.index}__].breakdown.advancesCreditsMade}"
+                           th:id="existingLoans[__${stat.index}__].breakdown.advancesCreditsMade"/>
+                    <input type="hidden"
+                           th:field="*{existingLoans[__${stat.index}__].breakdown.advancesCreditsRepaid}"
+                           th:id="existingLoans[__${stat.index}__].breakdown.advancesCreditsRepaid"/>
+                    <input type="hidden"
+                           th:field="*{existingLoans[__${stat.index}__].description}"
+                           th:id="existingLoans[__${stat.index}__].description"/>
                     <input type="hidden" th:field="*{existingLoans[__${stat.index}__].id}"
                            th:id="existingLoans[__${stat.index}__].id"/>
                 </div>
