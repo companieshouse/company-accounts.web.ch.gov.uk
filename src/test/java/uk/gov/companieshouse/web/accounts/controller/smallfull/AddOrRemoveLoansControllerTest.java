@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -127,7 +128,9 @@ class AddOrRemoveLoansControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String IS_MULTI_YEAR_FILER = "isMultiYearFiler";
-    
+
+    private static final String VALID_DIRECTORS = "validDirectorNames";
+
     @BeforeEach
     private void setup() {
 
@@ -150,6 +153,7 @@ class AddOrRemoveLoansControllerTest {
                 .andExpect(view().name(ADD_OR_REMOVE_LOANS_VIEW))
                 .andExpect(model().attributeExists(ADD_OR_REMOVE_LOANS_MODEL_ATTR))
                 .andExpect(model().attribute(ADD_OR_REMOVE_LOANS_MODEL_ATTR, hasProperty(IS_MULTI_YEAR_FILER, is(true))))
+                .andExpect(model().attribute(ADD_OR_REMOVE_LOANS_MODEL_ATTR, hasProperty(VALID_DIRECTORS, hasItems("test", "Prefer not to say"))))
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
