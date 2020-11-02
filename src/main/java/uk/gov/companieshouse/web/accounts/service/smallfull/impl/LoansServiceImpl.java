@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,9 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class LoansServiceImpl implements LoanService {
@@ -59,7 +60,14 @@ public class LoansServiceImpl implements LoanService {
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            LoanApi[] loans = apiClient.smallFull().loansToDirectors().loans().getAll(uri).execute().getData();
+            LoanApi[] loans = Arrays.stream(apiClient.smallFull().loansToDirectors().loans().getAll(uri).execute().getData())
+                    .map(loan -> {
+                        if(StringUtils.isBlank(loan.getDirectorName())) {
+                            loan.setDirectorName("Not provided");
+                        }
+                        return loan;
+                    }).toArray(LoanApi[]::new);
+
             return loanTransformer.getAllLoans(loans);
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
@@ -76,21 +84,23 @@ public class LoansServiceImpl implements LoanService {
 
         List<ValidationError> validationErrors;
 
-        validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler());
+        boolean directorReportPresent = addOrRemoveLoans.getValidDirectorNames() != null && !addOrRemoveLoans.getValidDirectorNames().isEmpty();
+
+        validationErrors = loanValidator.validateLoanToAdd(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler(), directorReportPresent);
 
         if(!validationErrors.isEmpty()) {
             return validationErrors;
         }
-
-        ApiClient apiClient = apiClientService.getApiClient();
-
-        String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
 
         String directorName = addOrRemoveLoans.getLoanToAdd().getDirectorName();
 
         if(StringUtils.isBlank(directorName) || directorName.equals(PREFER_NOT_TO_SAY)) {
             addOrRemoveLoans.getLoanToAdd().setDirectorName(null);
         }
+
+        ApiClient apiClient = apiClientService.getApiClient();
+
+        String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
 
         LoanApi loanApi = loanTransformer.getLoanApi(addOrRemoveLoans.getLoanToAdd());
 

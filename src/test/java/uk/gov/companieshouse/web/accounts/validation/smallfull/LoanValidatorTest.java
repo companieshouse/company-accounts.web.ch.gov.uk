@@ -37,6 +37,7 @@ class LoanValidatorTest {
     private static final String BAE_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodEnd";
 
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
+    private static final String DIRECTOR_REPORT_PRESENT_NAME_MISSING = "validation.element.missing.loanToAdd.directorName";
 
     @Test
     @DisplayName("Validate loan to add for multi year filer - success")
@@ -47,7 +48,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true, true);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -61,7 +62,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(false, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false, true);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -74,7 +75,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true, false);
 
         assertTrue(validationErrors.isEmpty());
         assertEquals(0, validationErrors.size());
@@ -88,10 +89,25 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false, false);
 
         assertTrue(validationErrors.isEmpty());
         assertEquals(0, validationErrors.size());
+    }
+
+    @Test
+    @DisplayName("Validate loan to add for single year filer - missing director name and directors report present")
+    void validateLoanToAddForSingleYearMissingDirectorNameWithDirectorsReportPresent() {
+
+        LoanToAdd loanToAdd = new LoanToAdd();
+        loanToAdd.setDescription(DESCRIPTION);
+        loanToAdd.setBreakdown(createBreakdown(true, true));
+
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false, true);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(DIRECTOR_REPORT_PRESENT_NAME_MISSING, validationErrors.get(0).getMessageKey());
     }
 
     @Test
@@ -102,7 +118,7 @@ class LoanValidatorTest {
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -118,7 +134,7 @@ class LoanValidatorTest {
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(true, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -135,7 +151,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(false, true));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -152,7 +168,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, false));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, true, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -169,7 +185,7 @@ class LoanValidatorTest {
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, false));
 
-        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false);
+        List<ValidationError> validationErrors = validator.validateLoanToAdd(loanToAdd, false, true);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -409,7 +425,6 @@ class LoanValidatorTest {
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(false);
-        addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
         addOrRemoveLoans.getLoanToAdd().setBreakdown(createBreakdown(false, true));
 
         List<ValidationError> validationErrors = validator.validateAtLeastOneLoan(addOrRemoveLoans, true);
