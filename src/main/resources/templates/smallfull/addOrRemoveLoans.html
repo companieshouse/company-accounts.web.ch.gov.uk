@@ -53,7 +53,7 @@
                         <th th:id="loans-table-director-name[__${stat.index}__]"
                             class="govuk-table__header--summary"
                             scope="row"
-                            th:text="${loan.directorName != null ? loan.directorName : 'Not provided'}">
+                            th:text="${loan.directorName}">
                         </th>
                         <td th:id="loans-table-balance-at-period-end[__${stat.index}__]"
                             class="govuk-table__cell--summary"
@@ -150,7 +150,7 @@
                                     <div class="govuk-grid-row">
                                         <div class="govuk-grid-column-one-half govuk-body cya-desktop-only">
                                             <strong th:id="loans-table-breakdown-balance-at-period-end-heading[__${stat.index}__]"
-                                                    th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodStartOn, 'd MMMM yyyy')}">
+                                                    th:text="'Balance at ' + ${#temporals.format(addOrRemoveLoans.nextAccount.periodEndOn, 'd MMMM yyyy')}">
                                             </strong>
                                         </div>
                                         <div class="mobile-only-label column-fifth">
@@ -222,33 +222,6 @@
                                   type="text" rows="1">
                             </textarea>
                         </div>
-                    </th:block>
-
-                    <th:block th:if="*{validDirectorNames != null and validDirectorNames.size() == 1}">
-                        <label id="loanToAdd-director-name-label-single-radio"
-                               class="govuk-label govuk-label--m"
-                               for="loanToAdd-director-name">
-                            Name of director receiving advance or credit (optional)
-                        </label>
-                        <dl class="app-check-your-answers app-check-your-answers--very-long">
-                            <div class="app-check-your-answers__contents">
-                                <dt class="app-check-your-answers__question"
-                                    th:text="*{validDirectorNames[0]}"
-                                    th:id="0-label">
-                                </dt>
-                                <dd class="app-check-your-answers__change">
-                                    <a id="director-change-link"
-                                       th:href="@{|/company/${companyNumber}/transaction/${transactionId}/company-accounts/${companyAccountsId}/small-full/add-or-remove-directors|}"
-                                       class="govuk-body piwik-event"
-                                       data-event-id="Change director - LTD">
-                                        Change
-                                    </a>
-                                </dd>
-
-                                <input th:field="*{loanToAdd.directorName}" type="hidden">
-
-                            </div>
-                        </dl>
                     </th:block>
 
                     <th:block th:if="*{validDirectorNames != null and validDirectorNames.size() > 1}">

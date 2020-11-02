@@ -174,6 +174,8 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
             List<ValidationError> validationErrors = loanService.createLoan(transactionId, companyAccountsId, addOrRemoveLoans);
 
             if(!validationErrors.isEmpty()) {
+                addOrRemoveLoans.setExistingLoans(
+                        loanService.getAllLoans(transactionId, companyAccountsId));
                 bindValidationErrors(bindingResult, validationErrors);
                 return getTemplateName();
             }

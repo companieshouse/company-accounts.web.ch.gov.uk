@@ -1,20 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -44,6 +30,20 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.LoanValidator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -140,10 +140,11 @@ class LoansServiceImplTest {
         when(loansToDirectorsResourceHandler.loans()).thenReturn(loansResourceHandler);
         when(loansResourceHandler.getAll(LOANS_URI)).thenReturn(loanGetAll);
         when(loanGetAll.execute()).thenReturn(responseWithMultipleLoans);
-        LoanApi[] loanApi = new LoanApi[1];
-        when(responseWithMultipleLoans.getData()).thenReturn(loanApi);
+        LoanApi[] loansApi = new LoanApi[1];
+        loansApi[0] = new LoanApi();
+        when(responseWithMultipleLoans.getData()).thenReturn(loansApi);
         Loan[] allLoans = new Loan[1];
-        when(loanTransformer.getAllLoans(loanApi)).thenReturn(allLoans);
+        when(loanTransformer.getAllLoans(loansApi)).thenReturn(allLoans);
 
         Loan[] response = loansService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -243,7 +244,7 @@ class LoansServiceImplTest {
 
         mockAddOrRemoveLoans.setIsMultiYearFiler(true);
         
-        when(loanValidator.validateLoanToAdd(loanToAdd, mockAddOrRemoveLoans.getIsMultiYearFiler())).thenReturn(new ArrayList<>());
+        when(loanValidator.validateLoanToAdd(loanToAdd, mockAddOrRemoveLoans.getIsMultiYearFiler(), false)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -273,7 +274,7 @@ class LoansServiceImplTest {
     void createLoanValidationForSingleYearFiler()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
-        when(loanValidator.validateLoanToAdd(loanToAdd, false)).thenReturn(new ArrayList<>());
+        when(loanValidator.validateLoanToAdd(loanToAdd, false, false)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -310,7 +311,7 @@ class LoansServiceImplTest {
         
         when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
-        when(loanValidator.validateLoanToAdd(loanToAdd, mockAddOrRemoveLoans.getIsMultiYearFiler())).thenReturn(nameValidationError);
+        when(loanValidator.validateLoanToAdd(loanToAdd, mockAddOrRemoveLoans.getIsMultiYearFiler(), false)).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 
@@ -329,7 +330,7 @@ class LoansServiceImplTest {
 
         when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
-        when(loanValidator.validateLoanToAdd(loanToAdd, false)).thenReturn(nameValidationError);
+        when(loanValidator.validateLoanToAdd(loanToAdd, false, false)).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = loansService.createLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
 

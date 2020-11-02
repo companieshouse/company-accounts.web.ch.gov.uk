@@ -16,6 +16,9 @@ public class LoanValidator {
     private static final String DESCRIPTION = LOAN_TO_ADD + ".description";
     private static final String DESCRIPTION_NOT_PRESENT = "validation.element.missing.loanToAdd.description";
 
+    private static final String DIRECTOR_NAME = LOAN_TO_ADD + ".directorName";
+    private static final String DIRECTOR_NAME_NOT_PRESENT = "validation.element.missing.loanToAdd.directorName";
+
     private static final String BALANCE_AT_START = LOAN_TO_ADD + ".breakdown.balanceAtPeriodStart";
     private static final String BAS_NOT_PRESENT = "validation.element.missing.loanToAdd.breakdown.balanceAtPeriodStart";
 
@@ -24,9 +27,17 @@ public class LoanValidator {
 
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
-    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
+    public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd, Boolean isMultiYearFiler, boolean directorReportPresent) {
 
         List<ValidationError> validationErrors = new ArrayList<>();
+
+        if (directorReportPresent && StringUtils.isBlank(loanToAdd.getDirectorName())) {
+
+            ValidationError error = new ValidationError();
+            error.setFieldPath(DIRECTOR_NAME);
+            error.setMessageKey(DIRECTOR_NAME_NOT_PRESENT);
+            validationErrors.add(error);
+        }
 
         if (StringUtils.isBlank(loanToAdd.getDescription())) {
 
