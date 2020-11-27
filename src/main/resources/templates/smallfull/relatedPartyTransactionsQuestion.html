@@ -6,27 +6,27 @@
 
 <head>
   <title id="page-title-heading">
-    Loans to Directors Question
+    Related Party Transactions Question
   </title>
 </head>
 <div id="main-content" layout:fragment="content">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form id="loansToDirectors-question-form" class="form" th:action="@{''}" th:object="${loansToDirectorsQuestion}" method="post">
+      <form id="related-party-transactions-question-form" class="form" th:action="@{''}" th:object="${relatedPartyTransactionsQuestion}" method="post">
 
         <div th:replace="fragments/globalErrors :: globalErrors"></div>
 
         <div class="govuk-form-group"
-             th:classappend="${#fields.hasErrors('hasIncludedLoansToDirectors')} ? 'govuk-form-group--error' : ''">
+             th:classappend="${#fields.hasErrors('hasIncludedRelatedPartyTransactions')} ? 'govuk-form-group--error' : ''">
 
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include any \'loans to directors\'?',
-              radioButtonsFieldName = 'hasIncludedLoansToDirectors'
+              legendText = 'Do your prepared accounts include any \'related party transactions\'?',
+              radioButtonsFieldName = 'hasIncludedRelatedPartyTransactions'
               )">
           </div>
         </div>
 
-        <input id="next-button" class="govuk-button piwik-event" data-event-id="Loans to directors question - save and continue"
+        <input id="next-button" class="govuk-button piwik-event" data-event-id="Related party transactions question - save and continue"
                type="submit" role="button" value="Save and continue"/>
 
       </form>
