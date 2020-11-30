@@ -63,7 +63,7 @@ public class AddOrRemoveRptTransactionsController extends BaseController {
     }
 
     @PostMapping(params = "submit")
-    public String submitAddOrRemoveLoans(@PathVariable String companyNumber,
+    public String submitAddOrRemoveRptTransactions(@PathVariable String companyNumber,
                                          @PathVariable String transactionId,
                                          @PathVariable String companyAccountsId) {
 
