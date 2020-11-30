@@ -25,6 +25,14 @@ import java.util.List;
 @Service
 public class RptTransactionsServiceImpl implements RptTransactionService {
 
+    private static final UriTemplate RPT_TRANSACTIONS_URI =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions/transactions");
+
+    private static final UriTemplate RPT_TRANSACTIONS_URI_WITH_ID =
+            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions/transactions/{transactionId}");
+
+    private static final String RESOURCE_NAME = "transactions";
+
     @Autowired
     private ApiClientService apiClientService;
 
@@ -36,14 +44,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     @Autowired
     private ValidationContext validationContext;
-
-    private static final UriTemplate RPT_TRANSACTIONS_URI =
-            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions/transactions");
-
-    private static final UriTemplate RPT_TRANSACTIONS_URI_WITH_ID =
-            new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions/transactions/{transactionId}");
-
-    private static final String RESOURCE_NAME = "transactions";
 
     @Override
     public RptTransaction[] getAllRptTransactions(String transactionId, String companyAccountsId) throws ServiceException {
@@ -74,7 +74,7 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
         RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd);
 
         try {
-            ApiResponse<RptTransactionApi> apiResponse = apiClient.smallFull().relatedPartyTransactions().rptTransactions().create(uri, rptTransactionApi).execute();
+            apiClient.smallFull().relatedPartyTransactions().rptTransactions().create(uri, rptTransactionApi).execute();
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {

@@ -77,10 +77,10 @@ class RptTransactionsServiceImplTest {
     private URIValidationException uriValidationException;
 
     @Mock
-    private ApiResponse<RptTransactionApi[]> responseWithMultipleDirectors;
+    private ApiResponse<RptTransactionApi[]> responseWithMultipleRptTransactions;
 
     @Mock
-    private ApiResponse<RptTransactionApi> responseWithSingleDirector;
+    private ApiResponse<RptTransactionApi> responseWithSingleRptTransaction;
 
     @Mock
     private RptTransactionsTransformer rptTransactionsTransformer;
@@ -107,9 +107,9 @@ class RptTransactionsServiceImplTest {
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
         when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
         when(rptTransactionResourceHandler.getAll(RPT_TRANSACTION_URI)).thenReturn(rptTransactionGetAll);
-        when(rptTransactionGetAll.execute()).thenReturn(responseWithMultipleDirectors);
+        when(rptTransactionGetAll.execute()).thenReturn(responseWithMultipleRptTransactions);
         RptTransactionApi[] rptTransactionApi = new RptTransactionApi[1];
-        when(responseWithMultipleDirectors.getData()).thenReturn(rptTransactionApi);
+        when(responseWithMultipleRptTransactions.getData()).thenReturn(rptTransactionApi);
         RptTransaction[] allRptTransactions = new RptTransaction[1];
         when(rptTransactionsTransformer.getAllRptTransactions(rptTransactionApi)).thenReturn(allRptTransactions);
 
@@ -194,7 +194,7 @@ class RptTransactionsServiceImplTest {
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
         when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
         when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
-        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleDirector);
+        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
 
         List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, rptTransactionToAdd);
 
