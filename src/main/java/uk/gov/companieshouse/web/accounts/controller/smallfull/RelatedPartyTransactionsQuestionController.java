@@ -24,7 +24,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransact
 
 @Controller
 @PreviousController(LoansToDirectorsAdditionalInfoController.class)
-@NextController(OffBalanceSheetArrangementsQuestionController.class)
+@NextController(AddOrRemoveRptTransactionsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions-question")
 public class RelatedPartyTransactionsQuestionController extends BaseController {
 
