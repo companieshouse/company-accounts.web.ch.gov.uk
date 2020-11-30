@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRemoveRptTransactions;
-import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionToAdd;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
