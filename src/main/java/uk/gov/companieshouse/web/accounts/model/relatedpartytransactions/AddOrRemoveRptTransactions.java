@@ -1,17 +1,34 @@
 package uk.gov.companieshouse.web.accounts.model.relatedpartytransactions;
 
+import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
+
 public class AddOrRemoveRptTransactions {
 
-    private RptTransaction[] existingTransactions;
+    public AddOrRemoveRptTransactions() {
+        this.rptTransactionToAdd = new RptTransactionToAdd();
+        this.rptTransactionToAdd.setBreakdown(new RptTransactionBreakdown());
+    }
+
+    private RptTransaction[] existingRptTransactions;
 
     private RptTransactionToAdd rptTransactionToAdd;
 
+    private AccountingPeriodApi nextAccount;
+
+    public AccountingPeriodApi getNextAccount() {
+        return nextAccount;
+    }
+
+    public void setNextAccount(AccountingPeriodApi nextAccount) {
+        this.nextAccount = nextAccount;
+    }
+
     public RptTransaction[] getExistingRptTransactions() {
-        return existingTransactions;
+        return existingRptTransactions;
     }
 
     public void setExistingRptTransactions(RptTransaction[] existingTransactions) {
-        this.existingTransactions = existingTransactions;
+        this.existingRptTransactions = existingTransactions;
     }
 
     public RptTransactionToAdd getRptTransactionToAdd() {

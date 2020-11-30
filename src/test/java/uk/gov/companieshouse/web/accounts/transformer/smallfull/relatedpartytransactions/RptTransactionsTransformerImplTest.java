@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class RptTransactionsTransformerImplTest {
 
     @Mock
-    private BreakdownTransformer breakdownTransformer;
+    private RptBreakdownTransformer rptBreakdownTransformer;
 
     @Mock
     private RptTransactionToAdd rptTransactionToAdd;
@@ -71,7 +71,7 @@ class RptTransactionsTransformerImplTest {
         rptTransactionApi.setDescriptionOfTransaction(DESCRIPTION_OF_TRANSACTION);
         rptTransactionApi.setRelationship(RELATIONSHIP);
         rptTransactionApi.setTransactionType(TRANSACTION_TYPE);
-        rptTransactionApi.setBreakdown(breakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd));
+        rptTransactionApi.setBreakdown(rptBreakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd));
 
         RptTransactionLinks rptTransactionLinks = new RptTransactionLinks();
         rptTransactionLinks.setSelf(RPT_TRANSACTIONS_SELF_LINK);

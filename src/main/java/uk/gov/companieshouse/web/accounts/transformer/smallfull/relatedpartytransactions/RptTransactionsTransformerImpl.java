@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class RptTransactionsTransformerImpl implements RptTransactionsTransformer {
 
     @Autowired
-    private BreakdownTransformer breakdownTransformer;
+    private RptBreakdownTransformer rptBreakdownTransformer;
 
     private static final Pattern RPT_TRANSACTION_URI_PATTERN = Pattern.compile("/transactions/.+?/company-accounts/.+?/small-full/notes/related-party-transactions/transactions/(.*)");
 
@@ -30,7 +30,7 @@ public class RptTransactionsTransformerImpl implements RptTransactionsTransforme
 
         rptTransactionsApi.setTransactionType(rptTransactionToAdd.getTransactionType());
 
-        rptTransactionsApi.setBreakdown(breakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd));
+        rptTransactionsApi.setBreakdown(rptBreakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd));
 
         return rptTransactionsApi;
     }
@@ -52,7 +52,7 @@ public class RptTransactionsTransformerImpl implements RptTransactionsTransforme
 
             rptTransaction.setTransactionType(rptTransactions[i].getTransactionType());
 
-            rptTransaction.setBreakdown(breakdownTransformer.mapRptTransactionsBreakdownToWeb(rptTransactions[i]));
+            rptTransaction.setBreakdown(rptBreakdownTransformer.mapRptTransactionsBreakdownToWeb(rptTransactions[i]));
 
             Matcher matcher = RPT_TRANSACTION_URI_PATTERN.matcher(rptTransactions[i].getLinks().getSelf());
             matcher.find();

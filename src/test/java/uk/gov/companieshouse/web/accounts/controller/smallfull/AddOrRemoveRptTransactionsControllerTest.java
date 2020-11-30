@@ -12,10 +12,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransaction;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -58,6 +62,18 @@ class AddOrRemoveRptTransactionsControllerTest {
     @Mock
     private NavigatorService navigatorService;
 
+    @Mock
+    private ApiClient apiClient;
+
+    @Mock
+    private ApiClientService apiClientService;
+
+    @Mock
+    private SmallFullService smallFullService;
+
+    @Mock
+    private SmallFullApi smallFullApi;
+
     @InjectMocks
     private AddOrRemoveRptTransactionsController controller;
 
@@ -72,6 +88,8 @@ class AddOrRemoveRptTransactionsControllerTest {
     @DisplayName("Get add or remove RPT transactions view - success path")
     void getRequestSuccess() throws Exception {
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(rptTransactionService.getAllRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new RptTransaction[0]);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH))

@@ -7,7 +7,7 @@ import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTran
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionToAdd;
 
 @Component
-public class BreakdownTransformer {
+public class RptBreakdownTransformer {
 
     public RptTransactionBreakdownApi mapRptTransactionsBreakdownToApi(RptTransactionToAdd rptTransactionToAdd) {
 

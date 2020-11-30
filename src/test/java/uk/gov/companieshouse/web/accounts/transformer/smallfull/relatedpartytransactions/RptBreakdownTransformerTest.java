@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BreakdownTransformerTest {
+class RptBreakdownTransformerTest {
 
-    private BreakdownTransformer breakdownTransformer = new BreakdownTransformer();
+    private RptBreakdownTransformer rptBreakdownTransformer = new RptBreakdownTransformer();
 
     private RptTransactionApi rptTransactionApi = new RptTransactionApi();
 
@@ -35,7 +35,7 @@ class BreakdownTransformerTest {
 
         rptTransactionToAdd.setBreakdown(breakdown);
 
-        RptTransactionBreakdownApi rptTransactionApi = breakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd);
+        RptTransactionBreakdownApi rptTransactionApi = rptBreakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd);
 
         assertNotNull(rptTransactionApi);
         assertEquals(rptTransactionApi.getBalanceAtPeriodEnd(), (Long) 5L);
@@ -53,7 +53,7 @@ class BreakdownTransformerTest {
 
         rptTransactionApi.setBreakdown(rptTransactionBreakdownApi);
 
-        RptTransactionBreakdown breakdown = breakdownTransformer.mapRptTransactionsBreakdownToWeb(rptTransactionApi);
+        RptTransactionBreakdown breakdown = rptBreakdownTransformer.mapRptTransactionsBreakdownToWeb(rptTransactionApi);
 
         assertNotNull(breakdown);
         assertEquals(breakdown.getBalanceAtPeriodEnd(), (Long) 1L);
