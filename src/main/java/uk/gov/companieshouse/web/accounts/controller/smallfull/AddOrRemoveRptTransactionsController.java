@@ -16,8 +16,10 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
+import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRemoveRptTransactions;
+import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransactionsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
@@ -27,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @NextController(OffBalanceSheetArrangementsQuestionController.class)
 @PreviousController(RelatedPartyTransactionsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-transactions")
-public class AddOrRemoveRptTransactionsController extends BaseController {
+public class AddOrRemoveRptTransactionsController extends BaseController implements ConditionalController {
 
     private static final String ADD_OR_REMOVE_RPT_TRANSACTIONS = "addOrRemoveTransactions";
 
@@ -42,6 +44,9 @@ public class AddOrRemoveRptTransactionsController extends BaseController {
 
     @Autowired
     private RptTransactionService rptTransactionService;
+
+    @Autowired
+    private RelatedPartyTransactionsService relatedPartyTransactionsService;
 
     @Autowired
     private SmallFullService smallFullService;
@@ -123,5 +128,11 @@ public class AddOrRemoveRptTransactionsController extends BaseController {
     @Override
     protected String getTemplateName() {
         return "smallfull/addOrRemoveTransactions";
+    }
+
+    @Override
+    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
+
+        return relatedPartyTransactionsService.getRelatedPartyTransactions(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 }

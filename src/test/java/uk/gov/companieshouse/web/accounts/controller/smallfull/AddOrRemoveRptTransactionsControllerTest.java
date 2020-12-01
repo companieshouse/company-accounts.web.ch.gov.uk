@@ -14,16 +14,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactions.RelatedPartyTransactionsApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRemoveRptTransactions;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransaction;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransactionsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -80,6 +84,12 @@ class AddOrRemoveRptTransactionsControllerTest {
 
     @Mock
     private SmallFullApi smallFullApi;
+
+    @Mock
+    private RelatedPartyTransactionsService relatedPartyTransactionsService;
+
+    @Mock
+    private RelatedPartyTransactionsApi relatedPartyTransactionsApi;
 
     @InjectMocks
     private AddOrRemoveRptTransactionsController controller;
@@ -154,4 +164,25 @@ class AddOrRemoveRptTransactionsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
+
+    @Test
+    @DisplayName("Will render - false")
+    void willRenderFalse() throws ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+
+        assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
+    @Test
+    @DisplayName("Will render - true")
+    void willRenderTrue() throws ServiceException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(relatedPartyTransactionsApi);
+
+        assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+    }
+
 }
