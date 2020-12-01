@@ -21,6 +21,7 @@ import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactions.RptTransactionApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRemoveRptTransactions;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransaction;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionToAdd;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytransactions.RptTransactionsTransformer;
@@ -57,6 +58,9 @@ class RptTransactionsServiceImplTest {
     private ApiClientService apiClientService;
     @Mock
     private ApiClient apiClient;
+
+    @Mock
+    private AddOrRemoveRptTransactions addOrRemoveRptTransactions;
 
     @Mock
     private RptTransactionApi rptTransactionApi;
@@ -187,6 +191,7 @@ class RptTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -196,7 +201,7 @@ class RptTransactionsServiceImplTest {
         when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
         when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
 
-        List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, rptTransactionToAdd);
+        List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
 
         assertNotNull(validationErrors);
         assertTrue(validationErrors.isEmpty());
@@ -208,6 +213,7 @@ class RptTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -218,7 +224,7 @@ class RptTransactionsServiceImplTest {
         when(rptTransactionCreate.execute()).thenThrow(apiErrorResponseException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, rptTransactionToAdd));
+        assertThrows(ServiceException.class, () -> rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions));
     }
 
     @Test
@@ -227,6 +233,7 @@ class RptTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -237,7 +244,7 @@ class RptTransactionsServiceImplTest {
         when(rptTransactionCreate.execute()).thenThrow(uriValidationException);
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, rptTransactionToAdd));
+        assertThrows(ServiceException.class, () -> rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions));
     }
 
     @Test

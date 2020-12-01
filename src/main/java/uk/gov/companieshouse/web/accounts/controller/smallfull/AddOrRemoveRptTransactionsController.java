@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
@@ -28,6 +31,9 @@ public class AddOrRemoveRptTransactionsController extends BaseController {
 
     private static final String ADD_OR_REMOVE_RPT_TRANSACTIONS = "addOrRemoveTransactions";
 
+    private static final UriTemplate URI =
+            new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-transactions");
+
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
@@ -42,6 +48,9 @@ public class AddOrRemoveRptTransactionsController extends BaseController {
 
     @Autowired
     private ApiClientService apiClientService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @GetMapping
     public String getAddOrRemoveRptTransactions(@PathVariable String companyNumber,
@@ -89,6 +98,28 @@ public class AddOrRemoveRptTransactionsController extends BaseController {
                         companyAccountsId);
     }
 
+    @PostMapping(params = "add")
+    public String addRptTransaction(@PathVariable String companyNumber,
+                          @PathVariable String transactionId,
+                          @PathVariable String companyAccountsId,
+                          @ModelAttribute(ADD_OR_REMOVE_RPT_TRANSACTIONS) AddOrRemoveRptTransactions addOrRemoveRptTransactions,
+                          Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        try {
+
+             rptTransactionService.createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
+
+        return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                URI.expand(companyNumber, transactionId, companyAccountsId).toString();
+    }
     @Override
     protected String getTemplateName() {
         return "smallfull/addOrRemoveTransactions";

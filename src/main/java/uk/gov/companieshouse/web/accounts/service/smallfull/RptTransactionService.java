@@ -12,7 +12,7 @@ public interface RptTransactionService {
 
     RptTransaction[] getAllRptTransactions(String transactionId, String companyAccountsId) throws ServiceException;
 
-    List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, RptTransactionToAdd rptTransactionToAdd) throws ServiceException;
+    List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException;
 
     void deleteRptTransaction(String transactionId, String companyAccountsId, String rptTransactionId) throws ServiceException;
 

@@ -64,13 +64,13 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     }
 
     @Override
-    public List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, RptTransactionToAdd rptTransactionToAdd) throws ServiceException {
+    public List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = RPT_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
 
-        RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd);
+        RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(addOrRemoveRptTransactions.getRptTransactionToAdd());
 
         try {
             apiClient.smallFull().relatedPartyTransactions().rptTransactions().create(uri, rptTransactionApi).execute();
