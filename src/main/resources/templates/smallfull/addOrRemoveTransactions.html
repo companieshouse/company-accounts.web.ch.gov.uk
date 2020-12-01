@@ -98,7 +98,7 @@
                     </div>
 
                     <label id="rptTransactionToAdd-breakdown-label" class="govuk-label govuk-label--m">
-                        Breakdown of the transaction
+                        Breakdown of the loan
                     </label>
 
                     <div class="govuk-grid-row" >
@@ -140,6 +140,10 @@
                        data-event-id="Related party transactions - save and continue"
                        th:name = "submit"
                        type="submit" role="button" value="Save and continue"/>
+                <input id="add-transaction-button" class="govuk-button govuk-button-grey piwik-event"
+                       th:name="add"
+                       data-event-id="Related party transaction - add transaction"
+                       role="button" type="submit" value="Add another related party transaction"/>
             </form>
         </div>
     </div>
