@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BreakdownTransformerTest {
+class RptBreakdownTransformerTest {
 
 
     private BreakdownTransformer breakdownTransformer = new BreakdownTransformer();

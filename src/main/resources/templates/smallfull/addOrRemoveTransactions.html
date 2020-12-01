@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{layouts/baseLayout}">>
+<head>
+    <meta charset="UTF-8">
+    <title id="page-title-heading">
+        Related party transactions
+    </title>
+</head>
+<body>
+<div id="main-content" class="two-column-accounts" layout:fragment="content">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <form th:object="${addOrRemoveTransactions}" id="data-submission-form" class="form currency-included-within-inputs govuk-body" th:action="@{''}" method="post">
+                <div th:replace="fragments/numberedHeading :: numberedHeading (
+                  headingText = 'Related party transactions')">
+                </div>
+
+                <!--Hidden fields for form binding-->
+                <input th:field="*{nextAccount.periodStartOn}" type="hidden">
+                <input th:field="*{nextAccount.periodEndOn}" type="hidden">
+
+                <span id="relatedPartyTransactions-help-text" class="govuk-hint">
+                You can report up to 20 related party transactions.
+            </span>
+
+                <div class="govuk-form-group govuk-form-group-block-important">
+
+                    <div class="govuk-form-group">
+                        <fieldset class="govuk-fieldset">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                                <h1 id="transaction-type-title-heading" class="govuk-heading-m govuk-!-margin-bottom-0">What sort of transaction was this</h1>
+                            </legend>
+
+                            <div class="govuk-radios" data-module="radios" >
+
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input piwik-event" id="transactionTypeCompanyByRelatedParty" th:field="*{rptTransactionToAdd.transactionType}" type="radio" value="money-given-by-a-related-party" data-event-id="money-given-by-a-related-party">
+                                    <label class="govuk-label govuk-radios__label" id="transactionTypeCompanyByRelatedParty-label" for="transactionTypeCompanyByRelatedParty">
+                                        Money given to the company by a related party
+                                    </label>
+                                </div>
+
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input piwik-event" id="transactionTypeRelatedPartyByCompany" th:field="*{rptTransactionToAdd.transactionType}" type="radio" value="money-given-to-a-related-party" data-event-id="money-given-to-a-related-party">
+                                    <label class="govuk-label govuk-radios__label" id="transactionTypeRelatedPartyByCompany-label" for="transactionTypeRelatedPartyByCompany">
+                                        Money given to a related party by the company
+                                    </label>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+
+                        <div class="govuk-!-margin-top-8">
+                            <label id="rptTransactionToAdd-name-of-related-party-label"
+                                   class="govuk-label govuk-label--m"
+                                   for="rptTransactionToAdd-name-of-related-party">
+                                Name of related party (optional)
+                            </label>
+                            <textarea class="govuk-textarea"
+                                      id="rptTransactionToAdd-name-of-related-party"
+                                      th:field="*{rptTransactionToAdd.nameOfRelatedParty}"
+                                      type="text" rows="1">
+                            </textarea>
+                        </div>
+
+                    <div >
+                        <label id="rptTransactionToAdd-relationship-to-the-company-label"
+                               class="govuk-label govuk-label--m"
+                               for="rptTransactionToAdd-relationship-to-the-company">
+                            Relationship to the company
+                        </label>
+                        <textarea class="govuk-textarea"
+                                  id="rptTransactionToAdd-relationship-to-the-company"
+                                  th:field="*{rptTransactionToAdd.relationship}"
+                                  type="text" rows="1">
+                            </textarea>
+                    </div>
+
+                    <div >
+                        <label id="rptTransactionToAdd-description-of-transaction-label"
+                               class="govuk-label govuk-label--m"
+                               for="rptTransactionToAdd-description-of-transaction">
+                            Description of the transaction
+                        </label>
+
+                        <span id="rptTransactionToAdd-description-help-text" class="govuk-hint">
+                              Enter a brief description of the transaction. for example, "The transaction was the loan of an asset".
+                        </span>
+
+                        <textarea class="govuk-textarea"
+                                  id="rptTransactionToAdd-description-of-transaction"
+                                  type="text" rows="5">
+                                 </textarea>
+                    </div>
+
+                    <label id="rptTransactionToAdd-breakdown-label" class="govuk-label govuk-label--m">
+                        Breakdown of the loan
+                    </label>
+
+                    <div class="govuk-grid-row" >
+                        <div class="govuk-grid-column-one-half">&nbsp;</div>
+                    </div>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half"
+                             id="rptTransactionToAdd-breakdown-balance-at-period-heading"
+                             th:text="'Balance at ' + *{#temporals.format(nextAccount.periodStartOn, 'd MMMM yyyy')}">
+                        </div>
+
+                        <div class="govuk-grid-column-one-half govuk-!-display-block">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                    id = 'rptTransactionToAdd.breakdown.balanceAtPeriodStart',
+                                    text = 'Balance at ' + ${#temporals.format(addOrRemoveTransactions.nextAccount.periodStartOn, 'd MMMM yyyy')} + ' in £',
+                                    class = 'govuk-input',
+                                    )">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-one-half" id="rptTransactionToAdd-breakdown-balance-at-period-end-heading"
+                                    th:text="'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')}">
+                        </div>
+                        <div class="govuk-grid-column-one-half column-flex govuk-!-display-block">
+                            <div th:replace="fragments/numberInput :: numberInput (
+                                      id = 'rptTransactionToAdd.breakdown.balanceAtPeriodEnd',
+                                      text = 'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')} + ' in £',
+                                      class= 'govuk-input',
+                                      )">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <input id="save-and-continue-button" class="govuk-button piwik-event"
+                       data-event-id="Related party transactions - save and continue"
+                       th:name = "submit"
+                       type="submit" role="button" value="Save and continue"/>
+                <input id="add-transaction-button" class="govuk-button govuk-button-grey piwik-event"
+                       th:name="add"
+                       data-event-id="Related party transaction - add transaction"
+                       role="button" type="submit" value="Add another related party transaction"/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
