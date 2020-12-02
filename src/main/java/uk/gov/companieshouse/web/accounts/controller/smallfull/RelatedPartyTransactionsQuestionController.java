@@ -84,8 +84,10 @@ public class RelatedPartyTransactionsQuestionController extends BaseController {
         try {
             RelatedPartyTransactionsApi relatedPartyTransactionsApi = relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, transactionId, companyAccountsId);
 
-            if (Boolean.TRUE.equals(relatedPartyTransactionsQuestion.getHasIncludedRelatedPartyTransactions()) && relatedPartyTransactionsApi == null) {
-                relatedPartyTransactionsService.createRelatedPartyTransactions(transactionId, companyAccountsId);
+            if (Boolean.TRUE.equals(relatedPartyTransactionsQuestion.getHasIncludedRelatedPartyTransactions())) {
+                if (relatedPartyTransactionsApi == null) {
+                    relatedPartyTransactionsService.createRelatedPartyTransactions(transactionId, companyAccountsId);
+                }
             } else {
                 relatedPartyTransactionsService.deleteRelatedPartyTransactions(transactionId, companyAccountsId);
             }

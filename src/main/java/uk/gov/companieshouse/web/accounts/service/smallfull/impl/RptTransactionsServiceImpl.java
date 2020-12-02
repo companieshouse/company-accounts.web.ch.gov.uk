@@ -1,11 +1,13 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoanApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactions.RptTransactionApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -18,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,6 +33,9 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions/transactions/{transactionId}");
 
     private static final String RESOURCE_NAME = "transactions";
+
+    private static final String PREFER_NOT_TO_SAY = "Prefer not to say";
+    private static final String NOT_PROVIDED = "Not provided";
 
     @Autowired
     private ApiClientService apiClientService;
@@ -51,7 +57,14 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
         String uri = RPT_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            RptTransactionApi[] rptTransactions = apiClient.smallFull().relatedPartyTransactions().rptTransactions().getAll(uri).execute().getData();
+            RptTransactionApi[] rptTransactions = Arrays.stream(apiClient.smallFull().relatedPartyTransactions().rptTransactions().getAll(uri).execute().getData())
+                    .map(transaction -> {
+                        if(StringUtils.isBlank(transaction.getNameOfRelatedParty())) {
+                            transaction.setNameOfRelatedParty(NOT_PROVIDED);
+                        }
+                        return transaction;
+                    }).toArray(RptTransactionApi[]::new);
+
             return rptTransactionsTransformer.getAllRptTransactions(rptTransactions);
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME);
@@ -68,6 +81,11 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = RPT_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
+
+        String name = addOrRemoveRptTransactions.getRptTransactionToAdd().getNameOfRelatedParty();
+        if(StringUtils.isBlank(name) || name.equals(PREFER_NOT_TO_SAY)) {
+            addOrRemoveRptTransactions.getRptTransactionToAdd().setNameOfRelatedParty(null);
+        }
 
         RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(addOrRemoveRptTransactions.getRptTransactionToAdd());
 
