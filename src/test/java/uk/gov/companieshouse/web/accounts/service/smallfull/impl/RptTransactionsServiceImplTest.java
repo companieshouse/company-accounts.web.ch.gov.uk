@@ -122,6 +122,35 @@ class RptTransactionsServiceImplTest {
         assertEquals(allRptTransactions, response);
     }
 
+
+    @Test
+    @DisplayName("GET - all RPT transactions some with blank name - success")
+    void getAllRptTransactionsSomeBlankNameSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
+        when(rptTransactionResourceHandler.getAll(RPT_TRANSACTION_URI)).thenReturn(rptTransactionGetAll);
+        when(rptTransactionGetAll.execute()).thenReturn(responseWithMultipleRptTransactions);
+        RptTransactionApi[] rptTransactionApi = new RptTransactionApi[1];
+        RptTransactionApi rptTransaction = new RptTransactionApi();
+        rptTransaction.setNameOfRelatedParty("");
+        rptTransactionApi[0] = rptTransaction;
+        when(responseWithMultipleRptTransactions.getData()).thenReturn(rptTransactionApi);
+        RptTransaction[] allRptTransactions = new RptTransaction[1];
+        RptTransaction transaction = new RptTransaction();
+        transaction.setNameOfRelatedParty("Not provided");
+        allRptTransactions[0] = transaction;
+        when(rptTransactionsTransformer.getAllRptTransactions(rptTransactionApi)).thenReturn(allRptTransactions);
+
+        RptTransaction[] response = rptTransactionsService.getAllRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+
+        assertEquals(allRptTransactions, response);
+        assertEquals(response[0].getNameOfRelatedParty(), "Not provided");
+    }
+
     @Test
     @DisplayName("DELETE - RPT transaction - success")
     void deleteRptTransactionSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
@@ -192,6 +221,53 @@ class RptTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
+        when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
+        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
+
+        List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
+
+        assertNotNull(validationErrors);
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("POST - RPT transaction - success with some transactions having no name provided")
+    void createRptTransactionSomeNoNameProvidedSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+        when(rptTransactionToAdd.getNameOfRelatedParty()).thenReturn("");
+
+        when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
+        when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
+        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
+
+        List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
+
+        assertNotNull(validationErrors);
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("POST - RPT transaction - success with some transactions having prefer not to say")
+    void createRptTransactionSomePreferNotToSaySuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
+        String PREFER_NOT_TO_SAY = "Prefer not to say";
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+        when(rptTransactionToAdd.getNameOfRelatedParty()).thenReturn(PREFER_NOT_TO_SAY);
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 

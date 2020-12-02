@@ -170,6 +170,23 @@ class RelatedPartyTransactionsQuestionControllerTest {
     }
 
     @Test
+    @DisplayName("Post related party transactions - has included related party transactions with existing api resource")
+    void postRequestHasIncludedRelatedPartyTransactionsWithExistingAPi() throws Exception {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+
+        when(relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(relatedPartyTransactionsApi);
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(RELATED_PARTY_TRANSACTIONS_QUESTION_PATH)
+                .param(RELATED_PARTY_TRANSACTIONS_SELECTION, "1")
+                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
     @DisplayName("Post related party transactions - throws exception")
     void postRequestThrowsException() throws Exception {
 
