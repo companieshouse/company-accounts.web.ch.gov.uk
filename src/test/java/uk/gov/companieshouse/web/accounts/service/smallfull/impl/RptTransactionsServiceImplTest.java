@@ -112,6 +112,7 @@ class RptTransactionsServiceImplTest {
         when(rptTransactionResourceHandler.getAll(RPT_TRANSACTION_URI)).thenReturn(rptTransactionGetAll);
         when(rptTransactionGetAll.execute()).thenReturn(responseWithMultipleRptTransactions);
         RptTransactionApi[] rptTransactionApi = new RptTransactionApi[1];
+        rptTransactionApi[0] = new RptTransactionApi();
         when(responseWithMultipleRptTransactions.getData()).thenReturn(rptTransactionApi);
         RptTransaction[] allRptTransactions = new RptTransaction[1];
         when(rptTransactionsTransformer.getAllRptTransactions(rptTransactionApi)).thenReturn(allRptTransactions);
