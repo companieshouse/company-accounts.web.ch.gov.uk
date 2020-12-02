@@ -148,7 +148,7 @@ class RptTransactionsServiceImplTest {
         RptTransaction[] response = rptTransactionsService.getAllRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(allRptTransactions, response);
-        assertEquals(response[0].getNameOfRelatedParty(), "Not provided");
+        assertEquals("Not provided", response[0].getNameOfRelatedParty());
     }
 
     @Test
