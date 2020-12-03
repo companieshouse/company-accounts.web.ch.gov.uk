@@ -17,6 +17,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytran
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +49,9 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Autowired
     private ValidationContext validationContext;
 
+    @Autowired
+    private RptTransactionValidator rptTransactionValidator;
+
     @Override
     public RptTransaction[] getAllRptTransactions(String transactionId, String companyAccountsId) throws ServiceException {
 
@@ -77,14 +81,15 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
+        List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
+
+        if(!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
+
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = RPT_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
-
-        String name = addOrRemoveRptTransactions.getRptTransactionToAdd().getNameOfRelatedParty();
-        if(StringUtils.isBlank(name) || name.equals(PREFER_NOT_TO_SAY)) {
-            addOrRemoveRptTransactions.getRptTransactionToAdd().setNameOfRelatedParty(null);
-        }
 
         RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(addOrRemoveRptTransactions.getRptTransactionToAdd());
 
@@ -116,6 +121,8 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> submitAddOrRemoveRptTransactions(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
-        return new ArrayList<>();
+        List<ValidationError>  validationErrors = createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
+
+        return validationErrors;
     }
 }

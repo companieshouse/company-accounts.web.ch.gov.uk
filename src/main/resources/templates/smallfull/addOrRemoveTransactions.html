@@ -149,6 +149,8 @@
                   headingText = 'Related party transactions')">
                 </div>
 
+                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+
                 <!--Hidden fields for form binding-->
                 <input th:field="*{nextAccount.periodStartOn}" type="hidden">
                 <input th:field="*{nextAccount.periodEndOn}" type="hidden">
@@ -189,6 +191,13 @@
                             </legend>
 
                             <div class="govuk-radios" data-module="radios" >
+
+                                 <span class="govuk-error-message"
+                                       id="rptTransactionToAdd.transactionType-errorId"
+                                       th:if="${#fields.hasErrors('rptTransactionToAdd.transactionType')}"
+                                       th:each="e : ${#fields.errors('rptTransactionToAdd.transactionType')}" th:text="${e}" >
+                            </span>
+
 
                                 <div class="govuk-radios__item">
                                     <input class="govuk-radios__input piwik-event" id="transactionTypeCompanyByRelatedParty" th:field="*{rptTransactionToAdd.transactionType}" type="radio" value="Money given to the company by a related party" data-event-id="money-given-by-a-related-party">

@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +23,10 @@ import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRe
 import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransactionsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @NextController(OffBalanceSheetArrangementsQuestionController.class)
@@ -95,8 +98,28 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
 
     @PostMapping(params = "submit")
     public String submitAddOrRemoveRptTransactions(@PathVariable String companyNumber,
-                                         @PathVariable String transactionId,
-                                         @PathVariable String companyAccountsId) {
+                                                   @PathVariable String transactionId,
+                                                   @PathVariable String companyAccountsId,
+                                                   @ModelAttribute(ADD_OR_REMOVE_RPT_TRANSACTIONS) AddOrRemoveRptTransactions addOrRemoveRptTransactions,
+                                                   BindingResult bindingResult,
+                                                   Model model) {
+
+        addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        try {
+
+            List<ValidationError> validationErrors = rptTransactionService.submitAddOrRemoveRptTransactions(transactionId, companyAccountsId, addOrRemoveRptTransactions);
+
+            if(!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
+
+        } catch (ServiceException e) {
+
+            LOGGER.errorRequest(request, e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
@@ -105,16 +128,16 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
 
     @PostMapping(params = "add")
     public String addRptTransaction(@PathVariable String companyNumber,
-                          @PathVariable String transactionId,
-                          @PathVariable String companyAccountsId,
-                          @ModelAttribute(ADD_OR_REMOVE_RPT_TRANSACTIONS) AddOrRemoveRptTransactions addOrRemoveRptTransactions,
-                          Model model) {
+                                    @PathVariable String transactionId,
+                                    @PathVariable String companyAccountsId,
+                                    @ModelAttribute(ADD_OR_REMOVE_RPT_TRANSACTIONS) AddOrRemoveRptTransactions addOrRemoveRptTransactions,
+                                    Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
 
-             rptTransactionService.createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
+            rptTransactionService.createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
 
         } catch (ServiceException e) {
 
@@ -125,6 +148,7 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                 URI.expand(companyNumber, transactionId, companyAccountsId).toString();
     }
+
     @Override
     protected String getTemplateName() {
         return "smallfull/addOrRemoveTransactions";
