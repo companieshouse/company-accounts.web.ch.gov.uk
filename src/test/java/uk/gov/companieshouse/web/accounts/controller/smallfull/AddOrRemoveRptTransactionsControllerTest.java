@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -23,13 +24,19 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransactionsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -77,6 +84,9 @@ class AddOrRemoveRptTransactionsControllerTest {
     private ApiClient apiClient;
 
     @Mock
+    private List<ValidationError> validationErrors;
+
+    @Mock
     private ApiClientService apiClientService;
 
     @Mock
@@ -90,6 +100,9 @@ class AddOrRemoveRptTransactionsControllerTest {
 
     @Mock
     private RelatedPartyTransactionsApi relatedPartyTransactionsApi;
+
+    @Mock
+    private BindingResult bindingResult;
 
     @InjectMocks
     private AddOrRemoveRptTransactionsController controller;
@@ -131,14 +144,17 @@ class AddOrRemoveRptTransactionsControllerTest {
     }
 
     @Test
-    @DisplayName("Post add RPT transaction - throws service exception")
+    @DisplayName("Post submit RPT transaction - throws service exception")
     void postRptTransactionSubmitAddRequestThrowsServiceException() throws Exception {
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(rptTransactionService.submitAddOrRemoveRptTransactions(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveRptTransactions.class)))
+                .thenThrow(ServiceException.class);
 
-        this.mockMvc.perform(post(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH + "?submit"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+        this.mockMvc.perform(post(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH + "?submit")
+                .param("rptTransactionToAdd.nameOfRelatedParty", "nameOfRelatedParty"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -163,6 +179,48 @@ class AddOrRemoveRptTransactionsControllerTest {
                 .param("rptTransactionToAdd.nameOfRelatedParty", "nameOfRelatedParty"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post submit or remove RPT transaction view - success")
+    void postRequestSubmitAddOrRemoveRptTransactionSuccess() throws Exception {
+
+        when(rptTransactionService.submitAddOrRemoveRptTransactions(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveRptTransactions.class))).thenReturn(new ArrayList<>());
+
+        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH + "?submit")
+                .param("rptTransactionToAdd.nameOfRelatedParty", "nameOfRelatedParty"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+    }
+
+    @Test
+    @DisplayName("Post add Rpt transaction - throws binding result errors")
+    void postRptTransactionAddRequestThrowsBindingResultErrors() throws Exception {
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH + "?add")
+                .param("rptTransactionToAdd.breakdown.balanceAtPeriodStart", "invalid"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_RPT_TRANSACTIONS_VIEW));
+
+        verify(rptTransactionService, never()).createRptTransaction(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveRptTransactions.class));
+    }
+
+    @Test
+    @DisplayName("Post add Rpt transaction - throws validation errors")
+    void postRptTransactionSubmitRequestThrowsValidationErrors() throws Exception {
+
+        when(rptTransactionService.submitAddOrRemoveRptTransactions(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveRptTransactions.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH + "?submit")
+                .param("rptTransactionToAdd.nameOfRelatedParty", "nameOfRelatedParty"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_RPT_TRANSACTIONS_VIEW));
     }
 
     @Test

@@ -131,9 +131,14 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
                                     @PathVariable String transactionId,
                                     @PathVariable String companyAccountsId,
                                     @ModelAttribute(ADD_OR_REMOVE_RPT_TRANSACTIONS) AddOrRemoveRptTransactions addOrRemoveRptTransactions,
+                                    BindingResult bindingResult,
                                     Model model) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
+
+        if (bindingResult.hasErrors()) {
+            return getTemplateName();
+        }
 
         try {
 
