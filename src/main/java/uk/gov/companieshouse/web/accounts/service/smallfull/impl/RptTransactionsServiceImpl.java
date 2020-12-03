@@ -7,6 +7,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
+import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactions.RptTransactionApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
@@ -19,7 +20,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +34,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     private static final String RESOURCE_NAME = "transactions";
 
-    private static final String PREFER_NOT_TO_SAY = "Prefer not to say";
     private static final String NOT_PROVIDED = "Not provided";
 
     @Autowired
@@ -62,7 +61,7 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
         try {
             RptTransactionApi[] rptTransactions = Arrays.stream(apiClient.smallFull().relatedPartyTransactions().rptTransactions().getAll(uri).execute().getData())
                     .map(transaction -> {
-                        if(StringUtils.isBlank(transaction.getNameOfRelatedParty())) {
+                        if (StringUtils.isBlank(transaction.getNameOfRelatedParty())) {
                             transaction.setNameOfRelatedParty(NOT_PROVIDED);
                         }
                         return transaction;
@@ -83,7 +82,7 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
         List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
 
-        if(!validationErrors.isEmpty()) {
+        if (!validationErrors.isEmpty()) {
             return validationErrors;
         }
 
@@ -94,14 +93,18 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
         RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(addOrRemoveRptTransactions.getRptTransactionToAdd());
 
         try {
-            apiClient.smallFull().relatedPartyTransactions().rptTransactions().create(uri, rptTransactionApi).execute();
+            ApiResponse<RptTransactionApi> apiResponse = apiClient.smallFull().relatedPartyTransactions().rptTransactions().create(uri, rptTransactionApi).execute();
+
+            if (apiResponse.hasErrors()) {
+                validationErrors.addAll(validationContext.getValidationErrors(apiResponse.getErrors()));
+            }
         } catch (ApiErrorResponseException e) {
             serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME);
         } catch (URIValidationException e) {
             serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME);
         }
 
-        return new ArrayList<>();
+        return validationErrors;
     }
 
     @Override
@@ -121,7 +124,13 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> submitAddOrRemoveRptTransactions(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
-        List<ValidationError>  validationErrors = createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
+        List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
+
+        if (!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
+
+        validationErrors = createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
 
         return validationErrors;
     }

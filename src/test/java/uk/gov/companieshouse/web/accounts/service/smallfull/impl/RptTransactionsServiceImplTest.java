@@ -25,9 +25,12 @@ import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRe
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransaction;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionToAdd;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytransactions.RptTransactionsTransformer;
+import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -96,6 +100,12 @@ class RptTransactionsServiceImplTest {
 
     @Mock
     private RptTransactionCreate rptTransactionCreate;
+
+    @Mock
+    private RptTransactionValidator rptTransactionValidator;
+
+    @Mock
+    private ValidationContext validationContext;
 
     @InjectMocks
     private RptTransactionsServiceImpl rptTransactionsService;
@@ -222,28 +232,7 @@ class RptTransactionsServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
-        when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
-        when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
-        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
-
-        List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
-
-        assertNotNull(validationErrors);
-        assertTrue(validationErrors.isEmpty());
-    }
-
-    @Test
-    @DisplayName("POST - RPT transaction - success with some transactions having no name provided")
-    void createRptTransactionSomeNoNameProvidedSuccess()
-            throws ServiceException, ApiErrorResponseException, URIValidationException {
-
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
-        when(rptTransactionToAdd.getNameOfRelatedParty()).thenReturn("");
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -260,14 +249,34 @@ class RptTransactionsServiceImplTest {
     }
 
     @Test
-    @DisplayName("POST - RPT transaction - success with some transactions having prefer not to say")
-    void createRptTransactionSomePreferNotToSaySuccess()
+    @DisplayName("POST - Rpt transaction - validation failed for fields")
+    void createRptTransactionThrowsValidationError() throws ServiceException {
+
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> nameValidationError = new ArrayList<>();
+        nameValidationError.add(validationError);
+
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(nameValidationError);
+
+        List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
+
+        assertEquals(nameValidationError, validationErrors);
+
+        verify(apiClientService, never()).getApiClient();
+    }
+
+    @Test
+    @DisplayName("POST - RPT transaction - api response error")
+    void createRptTransactionApiResponseError()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-        String PREFER_NOT_TO_SAY = "Prefer not to say";
+
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
+
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
-        when(rptTransactionToAdd.getNameOfRelatedParty()).thenReturn(PREFER_NOT_TO_SAY);
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -276,11 +285,16 @@ class RptTransactionsServiceImplTest {
         when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
         when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
         when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
+        when(responseWithSingleRptTransaction.hasErrors()).thenReturn(true);
+
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> apiValidationErrors = new ArrayList<>();
+        apiValidationErrors.add(validationError);
+        when(validationContext.getValidationErrors(responseWithSingleRptTransaction.getErrors())).thenReturn(apiValidationErrors);
 
         List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
 
-        assertNotNull(validationErrors);
-        assertTrue(validationErrors.isEmpty());
+        assertEquals(apiValidationErrors, validationErrors);
     }
 
     @Test
@@ -290,6 +304,8 @@ class RptTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -310,6 +326,8 @@ class RptTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -350,5 +368,46 @@ class RptTransactionsServiceImplTest {
         doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () -> rptTransactionsService.deleteRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, RPT_TRANSACTION_ID));
+    }
+
+    @Test
+    @DisplayName("POST - submit Rpt transaction - resource has validation errors")
+    void submitAddOrRemoveRptTransactionValidationError() throws ServiceException {
+
+        ValidationError validationError = new ValidationError();
+        List<ValidationError> nameValidationError = new ArrayList<>();
+        nameValidationError.add(validationError);
+
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(nameValidationError);
+
+        List<ValidationError> validationErrors = rptTransactionsService.submitAddOrRemoveRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
+
+        assertEquals(nameValidationError, validationErrors);
+
+    }
+
+    @Test
+    @DisplayName("POST - submit RPT transaction - successful with no validation errors")
+    void submitAddOrRemoveRptTransactionSuccessfulForMultiYearFilerNonEmptyResource() throws ServiceException, ApiErrorResponseException, URIValidationException {
+
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
+
+        when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
+        when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
+        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
+
+        List<ValidationError> validationErrors = rptTransactionsService.submitAddOrRemoveRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
+
+        assertNotNull(validationErrors);
+        assertTrue(validationErrors.isEmpty());
     }
 }
