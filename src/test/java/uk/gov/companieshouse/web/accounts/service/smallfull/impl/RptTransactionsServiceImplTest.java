@@ -151,12 +151,14 @@ class RptTransactionsServiceImplTest {
         when(responseWithMultipleRptTransactions.getData()).thenReturn(rptTransactionApi);
         RptTransaction[] allRptTransactions = new RptTransaction[1];
         RptTransaction transaction = new RptTransaction();
+        transaction.setNameOfRelatedParty("Not provided");
         allRptTransactions[0] = transaction;
         when(rptTransactionsTransformer.getAllRptTransactions(rptTransactionApi)).thenReturn(allRptTransactions);
 
         RptTransaction[] response = rptTransactionsService.getAllRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(allRptTransactions, response);
+        assertEquals("Not provided", response[0].getNameOfRelatedParty());
     }
 
     @Test

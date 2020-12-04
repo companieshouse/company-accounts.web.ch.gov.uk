@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -19,6 +20,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -31,6 +33,9 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions/transactions/{transactionId}");
 
     private static final String RESOURCE_NAME = "transactions";
+
+    private static final String NOT_PROVIDED = "Not provided";
+
 
     @Autowired
     private ApiClientService apiClientService;
@@ -55,7 +60,13 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
         String uri = RPT_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            RptTransactionApi[] rptTransactions = apiClient.smallFull().relatedPartyTransactions().rptTransactions().getAll(uri).execute().getData();
+            RptTransactionApi[] rptTransactions =  Arrays.stream(apiClient.smallFull().relatedPartyTransactions().rptTransactions().getAll(uri).execute().getData())
+                    .map(transaction -> {
+                        if (StringUtils.isBlank(transaction.getNameOfRelatedParty())) {
+                            transaction.setNameOfRelatedParty(NOT_PROVIDED);
+                        }
+                        return transaction;
+                    }).toArray(RptTransactionApi[]::new);
 
             return rptTransactionsTransformer.getAllRptTransactions(rptTransactions);
         } catch (ApiErrorResponseException e) {

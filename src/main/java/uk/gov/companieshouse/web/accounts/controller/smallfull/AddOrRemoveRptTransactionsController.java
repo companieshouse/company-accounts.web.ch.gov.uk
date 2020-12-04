@@ -142,8 +142,12 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
 
         try {
 
-            rptTransactionService.createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
+            List<ValidationError> validationErrors = rptTransactionService.createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
 
+            if(!validationErrors.isEmpty()) {
+                bindValidationErrors(bindingResult, validationErrors);
+                return getTemplateName();
+            }
         } catch (ServiceException e) {
 
             LOGGER.errorRequest(request, e.getMessage(), e);
