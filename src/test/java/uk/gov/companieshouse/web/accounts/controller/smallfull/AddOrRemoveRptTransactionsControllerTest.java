@@ -208,7 +208,7 @@ class AddOrRemoveRptTransactionsControllerTest {
     }
 
     @Test
-    @DisplayName("Post add Rpt transaction - throws validation errors")
+    @DisplayName("Post submit Rpt transaction - throws validation errors")
     void postRptTransactionSubmitRequestThrowsValidationErrors() throws Exception {
 
         when(rptTransactionService.submitAddOrRemoveRptTransactions(
@@ -218,6 +218,22 @@ class AddOrRemoveRptTransactionsControllerTest {
         when(validationErrors.isEmpty()).thenReturn(false);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH + "?submit")
+                .param("rptTransactionToAdd.nameOfRelatedParty", "nameOfRelatedParty"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ADD_OR_REMOVE_RPT_TRANSACTIONS_VIEW));
+    }
+
+    @Test
+    @DisplayName("Post add Rpt transaction - throws validation errors")
+    void postRptTransactionAddRequestThrowsValidationErrors() throws Exception {
+
+        when(rptTransactionService.createRptTransaction(
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveRptTransactions.class)))
+                .thenReturn(validationErrors);
+
+        when(validationErrors.isEmpty()).thenReturn(false);
+
+        this.mockMvc.perform(post(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH + "?add")
                 .param("rptTransactionToAdd.nameOfRelatedParty", "nameOfRelatedParty"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADD_OR_REMOVE_RPT_TRANSACTIONS_VIEW));
