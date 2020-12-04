@@ -7,6 +7,7 @@ public class RptTransactionToAdd {
     @ValidationMapping("$.rpt_transaction.name_of_related_party")
     private String nameOfRelatedParty;
 
+    @ValidationMapping("$.rpt_transaction.relationship")
     private String relationship;
 
     private String descriptionOfTransaction;
