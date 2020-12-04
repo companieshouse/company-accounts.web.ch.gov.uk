@@ -193,7 +193,7 @@
                                     What sort of transaction was this</h1>
                             </legend>
 
-                            <div class="govuk-radios" data-module="radios" th:classappend="*{#fields.hasErrors('rptTransactionToAdd')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
+                            <div class="govuk-radios" data-module="radios" th:classappend="*{#fields.hasErrors('rptTransactionToAdd.transactionType')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
 
                                  <span class="govuk-error-message"
                                        id="rptTransactionToAdd.transactionType-errorId"
@@ -233,7 +233,7 @@
                         </fieldset>
                     </div>
 
-                    <div class="govuk-!-margin-top-8" th:classappend="*{#fields.hasErrors('rptTransactionToAdd')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
+                    <div class="govuk-!-margin-top-8" th:classappend="*{#fields.hasErrors('rptTransactionToAdd.nameOfRelatedParty')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
                             <span class="govuk-error-message"
                                   id="rptTransactionToAdd-errorId"
                                   th:if="*{#fields.hasErrors('rptTransactionToAdd')}"

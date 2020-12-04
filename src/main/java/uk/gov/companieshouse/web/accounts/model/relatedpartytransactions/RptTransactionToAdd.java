@@ -11,6 +11,7 @@ public class RptTransactionToAdd {
 
     private String descriptionOfTransaction;
 
+    @ValidationMapping("$.rpt_transaction.transaction_type")
     private String transactionType;
 
     private RptTransactionBreakdown breakdown;
