@@ -68,33 +68,33 @@
                                 <div class="review-reveal govuk-body govuk-!-margin-top-4"
                                      th:id="rptTransactions-table-breakdown[__${stat.index}__]" aria-hidden="true">
                                     <p>
-                                        <span th:id="rptTransactions-table-breakdown-transaction-type-header[__${stat.index}__]">
+                                        <div th:id="rptTransactions-table-breakdown-transaction-type-header[__${stat.index}__]">
                                             Transaction type
-                                        </span>
+                                        </div>
                                         <br>
-                                        <span th:id="rptTransactions-table-breakdown-transaction-type[__${stat.index}__]"
+                                        <div th:id="rptTransactions-table-breakdown-transaction-type[__${stat.index}__]"
                                               th:text="${transaction.transactionType}">
-                                    </span>
+                                    </div>
                                     </p>
 
                                     <p>
-                                        <span th:id="rptTransactions-table-breakdown-relationship-to-company-header[__${stat.index}__]">
+                                        <div th:id="rptTransactions-table-breakdown-relationship-to-company-header[__${stat.index}__]">
                                             Relationship to company
-                                        </span>
+                                        </div>
                                         <br>
-                                        <span th:id="rptTransactions-table-breakdown-relationship-to-company[__${stat.index}__]"
+                                        <div th:id="rptTransactions-table-breakdown-relationship-to-company[__${stat.index}__]"
                                               th:text="${transaction.relationship}">
-                                        </span>
+                                        </div>
                                     </p>
 
                                     <p>
-                                        <span th:id="rptTransactions-table-breakdown-description-header[__${stat.index}__]">
+                                        <div th:id="rptTransactions-table-breakdown-description-header[__${stat.index}__]">
                                             Description of the transaction
-                                        </span>
+                                        </div>
                                         <br>
-                                        <span th:id="rptTransactions-table-breakdown-description[__${stat.index}__]"
+                                        <div th:id="rptTransactions-table-breakdown-description[__${stat.index}__]"
                                               th:text="${transaction.descriptionOfTransaction}">
-                                        </span>
+                                        </div>
                                     </p>
 
                                     <div class="govuk-grid-row">
@@ -111,13 +111,13 @@
                                              th:text="'Balance at ' + ${#temporals.format(addOrRemoveTransactions.nextAccount.periodStartOn, 'd MMMM yyyy')}">
                                         </div>
                                         <div class="mobile-only-label column-fifth">
-                                                <span th:id="rptTransactions-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
-                                                      th:text="'Balance at ' + ${#temporals.format(addOrRemoveTransactions.nextAccount.periodStartOn, 'd MMMM yyyy')} + ' in £'"></span>
+                                                <div th:id="rptTransactions-table-breakdown-balance-at-period-start-mobile-heading[__${stat.index}__]"
+                                                      th:text="'Balance at ' + ${#temporals.format(addOrRemoveTransactions.nextAccount.periodStartOn, 'd MMMM yyyy')} + ' in £'"></div>
                                         </div>
                                         <div class="govuk-grid-column-one-half column-flex govuk-summary__align--right">
-                                                <span th:id="rptTransactions-table-breakdown-balance-at-period-start[__${stat.index}__]"
+                                                <div th:id="rptTransactions-table-breakdown-balance-at-period-start[__${stat.index}__]"
                                                       th:text="${transaction.breakdown.balanceAtPeriodStart}">
-                                                </span>
+                                                </div>
                                         </div>
                                     </div>
                                     <div class="govuk-grid-row">
@@ -176,7 +176,6 @@
                     <input type="hidden" th:field="*{existingRptTransactions[__${stat.index}__].id}"
                            th:id="existingRptTransactions[__${stat.index}__].id"/>
                 </div>
-
 
                 <span id="relatedPartyTransactions-help-text" class="govuk-hint">
                 You can report up to 20 related party transactions.
