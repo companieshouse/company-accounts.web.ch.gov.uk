@@ -10,6 +10,7 @@ public class RptTransactionToAdd {
     @ValidationMapping("$.rpt_transaction.relationship")
     private String relationship;
 
+    @ValidationMapping("$.rpt_transaction.description_of_transaction")
     private String descriptionOfTransaction;
 
     @ValidationMapping("$.rpt_transaction.transaction_type")

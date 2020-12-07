@@ -277,7 +277,15 @@
                             </textarea>
                     </div>
 
-                    <div>
+                    <div th:classappend="*{#fields.hasErrors('rptTransactionToAdd.descriptionOfTransaction')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
+
+                                 <span class="govuk-error-message"
+                                       id="rptTransactionToAdd.descriptionOfTransaction-errorId"
+                                       th:if="${#fields.hasErrors('rptTransactionToAdd.descriptionOfTransaction')}"
+                                       th:each="e : ${#fields.errors('rptTransactionToAdd.descriptionOfTransaction')}"
+                                       th:text="${e}">
+                            </span>
+
                         <label id="rptTransactionToAdd-description-of-transaction-label"
                                class="govuk-label govuk-label--m"
                                for="rptTransactionToAdd-description-of-transaction">
