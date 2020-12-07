@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -17,8 +18,9 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytran
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -32,6 +34,9 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     private static final String RESOURCE_NAME = "transactions";
 
+    private static final String NOT_PROVIDED = "Not provided";
+
+
     @Autowired
     private ApiClientService apiClientService;
 
@@ -44,9 +49,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Autowired
     private ValidationContext validationContext;
 
-    @Autowired
-    private RptTransactionValidator rptTransactionValidator;
-
     @Override
     public RptTransaction[] getAllRptTransactions(String transactionId, String companyAccountsId) throws ServiceException {
 
@@ -55,7 +57,13 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
         String uri = RPT_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-            RptTransactionApi[] rptTransactions = apiClient.smallFull().relatedPartyTransactions().rptTransactions().getAll(uri).execute().getData();
+            RptTransactionApi[] rptTransactions =  Arrays.stream(apiClient.smallFull().relatedPartyTransactions().rptTransactions().getAll(uri).execute().getData())
+                    .map(transaction -> {
+                        if (StringUtils.isBlank(transaction.getNameOfRelatedParty())) {
+                            transaction.setNameOfRelatedParty(NOT_PROVIDED);
+                        }
+                        return transaction;
+                    }).toArray(RptTransactionApi[]::new);
 
             return rptTransactionsTransformer.getAllRptTransactions(rptTransactions);
         } catch (ApiErrorResponseException e) {
@@ -70,11 +78,7 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
-        List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
-
-        if (!validationErrors.isEmpty()) {
-            return validationErrors;
-        }
+        List<ValidationError> validationErrors = new ArrayList<>();
 
         ApiClient apiClient = apiClientService.getApiClient();
 
@@ -114,14 +118,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> submitAddOrRemoveRptTransactions(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
-        List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
-
-        if (!validationErrors.isEmpty()) {
-            return validationErrors;
-        }
-
-        validationErrors = createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
-
-        return validationErrors;
+        return createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
     }
 }

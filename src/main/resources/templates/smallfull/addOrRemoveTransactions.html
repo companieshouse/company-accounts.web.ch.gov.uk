@@ -144,7 +144,8 @@
                 </tbody>
             </table>
 
-            <form th:object="${addOrRemoveTransactions}" id="data-submission-form" class="form currency-included-within-inputs govuk-body" th:action="@{''}" method="post">
+            <form th:object="${addOrRemoveTransactions}" id="data-submission-form"
+                  class="form currency-included-within-inputs govuk-body" th:action="@{''}" method="post">
                 <div th:replace="fragments/numberedHeading :: numberedHeading (
                   headingText = 'Related party transactions')">
                 </div>
@@ -181,33 +182,48 @@
                 You can report up to 20 related party transactions.
                 </span>
 
-                <div class="govuk-form-group govuk-form-group-block-important">
+                <div class="govuk-form-group govuk-form-group-block-important"
+                     th:classappend="*{#fields.hasErrors('rptTransactionToAdd')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
 
                     <div class="govuk-form-group">
                         <fieldset class="govuk-fieldset">
                             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                                <h1 id="transaction-type-title-heading" class="govuk-heading-m govuk-!-margin-bottom-0">What sort of transaction was this</h1>
+                                <h1 id="transaction-type-title-heading" class="govuk-heading-m govuk-!-margin-bottom-0">
+                                    What sort of transaction was this</h1>
                             </legend>
 
-                            <div class="govuk-radios" data-module="radios" >
+                            <div class="govuk-radios" data-module="radios" th:classappend="*{#fields.hasErrors('rptTransactionToAdd.transactionType')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
 
                                  <span class="govuk-error-message"
                                        id="rptTransactionToAdd.transactionType-errorId"
                                        th:if="${#fields.hasErrors('rptTransactionToAdd.transactionType')}"
-                                       th:each="e : ${#fields.errors('rptTransactionToAdd.transactionType')}" th:text="${e}" >
+                                       th:each="e : ${#fields.errors('rptTransactionToAdd.transactionType')}"
+                                       th:text="${e}">
                             </span>
 
 
                                 <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input piwik-event" id="transactionTypeCompanyByRelatedParty" th:field="*{rptTransactionToAdd.transactionType}" type="radio" value="Money given to the company by a related party" data-event-id="money-given-by-a-related-party">
-                                    <label class="govuk-label govuk-radios__label" id="transactionTypeCompanyByRelatedParty-label" for="transactionTypeCompanyByRelatedParty">
+                                    <input class="govuk-radios__input piwik-event"
+                                           id="transactionTypeCompanyByRelatedParty"
+                                           th:field="*{rptTransactionToAdd.transactionType}" type="radio"
+                                           value="Money given to the company by a related party"
+                                           data-event-id="money-given-by-a-related-party">
+                                    <label class="govuk-label govuk-radios__label"
+                                           id="transactionTypeCompanyByRelatedParty-label"
+                                           for="transactionTypeCompanyByRelatedParty">
                                         Money given to the company by a related party
                                     </label>
                                 </div>
 
                                 <div class="govuk-radios__item">
-                                    <input class="govuk-radios__input piwik-event" id="transactionTypeRelatedPartyByCompany" th:field="*{rptTransactionToAdd.transactionType}" type="radio" value="Money given to a related party by the company" data-event-id="money-given-to-a-related-party">
-                                    <label class="govuk-label govuk-radios__label" id="transactionTypeRelatedPartyByCompany-label" for="transactionTypeRelatedPartyByCompany">
+                                    <input class="govuk-radios__input piwik-event"
+                                           id="transactionTypeRelatedPartyByCompany"
+                                           th:field="*{rptTransactionToAdd.transactionType}" type="radio"
+                                           value="Money given to a related party by the company"
+                                           data-event-id="money-given-to-a-related-party">
+                                    <label class="govuk-label govuk-radios__label"
+                                           id="transactionTypeRelatedPartyByCompany-label"
+                                           for="transactionTypeRelatedPartyByCompany">
                                         Money given to a related party by the company
                                     </label>
                                 </div>
@@ -216,20 +232,31 @@
                         </fieldset>
                     </div>
 
-                        <div class="govuk-!-margin-top-8">
-                            <label id="rptTransactionToAdd-name-of-related-party-label"
-                                   class="govuk-label govuk-label--m"
-                                   for="rptTransactionToAdd-name-of-related-party">
-                                Name of related party (optional)
-                            </label>
-                            <textarea class="govuk-textarea"
-                                      id="rptTransactionToAdd-name-of-related-party"
-                                      th:field="*{rptTransactionToAdd.nameOfRelatedParty}"
-                                      type="text" rows="1">
-                            </textarea>
-                        </div>
+                    <div class="govuk-!-margin-top-8" th:classappend="*{#fields.hasErrors('rptTransactionToAdd.nameOfRelatedParty')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
+                            <span class="govuk-error-message"
+                                  id="rptTransactionToAdd-errorId"
+                                  th:if="*{#fields.hasErrors('rptTransactionToAdd')}"
+                                  th:each="e : *{#fields.errors('rptTransactionToAdd')}" th:text="${e}">
+                    </span>
 
-                    <div >
+                        <span class="govuk-error-message"
+                              id="rptTransactionToAdd.nameOfRelatedParty-errorId"
+                              th:if="*{#fields.hasErrors('rptTransactionToAdd.nameOfRelatedParty')}"
+                              th:each="e : *{#fields.errors('rptTransactionToAdd.nameOfRelatedParty')}" th:text="${e}">
+                    </span>
+                        <label id="rptTransactionToAdd-name-of-related-party-label"
+                               class="govuk-label govuk-label--m"
+                               for="rptTransactionToAdd-name-of-related-party">
+                            Name of related party (optional)
+                        </label>
+                        <textarea class="govuk-textarea"
+                                  id="rptTransactionToAdd-name-of-related-party"
+                                  th:field="*{rptTransactionToAdd.nameOfRelatedParty}"
+                                  type="text" rows="1">
+                            </textarea>
+                    </div>
+
+                    <div>
                         <label id="rptTransactionToAdd-relationship-to-the-company-label"
                                class="govuk-label govuk-label--m"
                                for="rptTransactionToAdd-relationship-to-the-company">
@@ -242,7 +269,7 @@
                             </textarea>
                     </div>
 
-                    <div >
+                    <div>
                         <label id="rptTransactionToAdd-description-of-transaction-label"
                                class="govuk-label govuk-label--m"
                                for="rptTransactionToAdd-description-of-transaction">
@@ -264,7 +291,7 @@
                         Breakdown of the transaction
                     </label>
 
-                    <div class="govuk-grid-row" >
+                    <div class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half">&nbsp;</div>
                     </div>
                     <div class="govuk-grid-row">
@@ -284,8 +311,9 @@
                     </div>
 
                     <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-one-half" id="rptTransactionToAdd-breakdown-balance-at-period-end-heading"
-                                    th:text="'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')}">
+                        <div class="govuk-grid-column-one-half"
+                             id="rptTransactionToAdd-breakdown-balance-at-period-end-heading"
+                             th:text="'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')}">
                         </div>
                         <div class="govuk-grid-column-one-half column-flex govuk-!-display-block">
                             <div th:replace="fragments/numberInput :: numberInput (
@@ -301,7 +329,7 @@
 
                 <input id="save-and-continue-button" class="govuk-button piwik-event"
                        data-event-id="Related party transactions - save and continue"
-                       th:name = "submit"
+                       th:name="submit"
                        type="submit" role="button" value="Save and continue"/>
                 <input id="add-transaction-button" class="govuk-button govuk-button-grey piwik-event"
                        th:name="add"

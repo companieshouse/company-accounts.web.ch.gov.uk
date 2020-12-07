@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytran
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
-import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -102,9 +100,6 @@ class RptTransactionsServiceImplTest {
     private RptTransactionCreate rptTransactionCreate;
 
     @Mock
-    private RptTransactionValidator rptTransactionValidator;
-
-    @Mock
     private ValidationContext validationContext;
 
     @InjectMocks
@@ -151,12 +146,14 @@ class RptTransactionsServiceImplTest {
         when(responseWithMultipleRptTransactions.getData()).thenReturn(rptTransactionApi);
         RptTransaction[] allRptTransactions = new RptTransaction[1];
         RptTransaction transaction = new RptTransaction();
+        transaction.setNameOfRelatedParty("Not provided");
         allRptTransactions[0] = transaction;
         when(rptTransactionsTransformer.getAllRptTransactions(rptTransactionApi)).thenReturn(allRptTransactions);
 
         RptTransaction[] response = rptTransactionsService.getAllRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(allRptTransactions, response);
+        assertEquals("Not provided", response[0].getNameOfRelatedParty());
     }
 
     @Test
@@ -230,8 +227,6 @@ class RptTransactionsServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
-
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -248,29 +243,37 @@ class RptTransactionsServiceImplTest {
 
     @Test
     @DisplayName("POST - Rpt transaction - validation failed for fields")
-    void createRptTransactionThrowsValidationError() throws ServiceException {
+    void createRptTransactionThrowsValidationError() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         ValidationError validationError = new ValidationError();
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(nameValidationError);
+        when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
+        when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
+        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
+        when(responseWithSingleRptTransaction.hasErrors()).thenReturn(true);
+
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(validationContext.getValidationErrors(responseWithSingleRptTransaction.getErrors())).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
 
         assertEquals(nameValidationError, validationErrors);
-
-        verify(apiClientService, never()).getApiClient();
     }
 
     @Test
     @DisplayName("POST - RPT transaction - api response error")
     void createRptTransactionApiResponseError()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -303,8 +306,6 @@ class RptTransactionsServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
-
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -324,8 +325,6 @@ class RptTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
-
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 
@@ -370,20 +369,31 @@ class RptTransactionsServiceImplTest {
 
     @Test
     @DisplayName("POST - submit Rpt transaction - resource has validation errors")
-    void submitAddOrRemoveRptTransactionValidationError() throws ServiceException {
+    void submitAddOrRemoveRptTransactionValidationError() throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         ValidationError validationError = new ValidationError();
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
+        when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(nameValidationError);
+        when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
+
+        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
+        when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
+        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
+        when(responseWithSingleRptTransaction.hasErrors()).thenReturn(true);
+
+        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
+
+        when(validationContext.getValidationErrors(responseWithSingleRptTransaction.getErrors())).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = rptTransactionsService.submitAddOrRemoveRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
 
         assertEquals(nameValidationError, validationErrors);
-
     }
 
     @Test
@@ -392,8 +402,6 @@ class RptTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
-
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(new ArrayList<>());
 
         when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
 

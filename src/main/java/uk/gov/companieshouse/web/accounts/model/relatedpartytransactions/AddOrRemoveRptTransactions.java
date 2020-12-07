@@ -1,7 +1,9 @@
 package uk.gov.companieshouse.web.accounts.model.relatedpartytransactions;
 
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
+import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
+@ValidationModel
 public class AddOrRemoveRptTransactions {
 
     public AddOrRemoveRptTransactions() {
