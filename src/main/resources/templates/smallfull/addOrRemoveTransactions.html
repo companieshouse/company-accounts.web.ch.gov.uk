@@ -256,7 +256,15 @@
                             </textarea>
                     </div>
 
-                    <div>
+                    <div th:classappend="*{#fields.hasErrors('rptTransactionToAdd.relationship')} ? 'govuk-form-group--error govuk-!-margin-bottom-4' : ''">
+
+                                 <span class="govuk-error-message"
+                                       id="rptTransactionToAdd.relationship-errorId"
+                                       th:if="${#fields.hasErrors('rptTransactionToAdd.relationship')}"
+                                       th:each="e : ${#fields.errors('rptTransactionToAdd.relationship')}"
+                                       th:text="${e}">
+                            </span>
+
                         <label id="rptTransactionToAdd-relationship-to-the-company-label"
                                class="govuk-label govuk-label--m"
                                for="rptTransactionToAdd-relationship-to-the-company">

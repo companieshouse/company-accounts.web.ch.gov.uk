@@ -28,6 +28,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytran
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -101,6 +103,9 @@ class RptTransactionsServiceImplTest {
 
     @Mock
     private ValidationContext validationContext;
+
+    @Mock
+    private RptTransactionValidator rptTransactionValidator;
 
     @InjectMocks
     private RptTransactionsServiceImpl rptTransactionsService;
@@ -249,25 +254,16 @@ class RptTransactionsServiceImplTest {
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
 
-        when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
-        when(rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd)).thenReturn(rptTransactionApi);
-
-        when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.rptTransactions()).thenReturn(rptTransactionResourceHandler);
-        when(rptTransactionResourceHandler.create(RPT_TRANSACTION_URI, rptTransactionApi)).thenReturn(rptTransactionCreate);
-        when(rptTransactionCreate.execute()).thenReturn(responseWithSingleRptTransaction);
-        when(responseWithSingleRptTransaction.hasErrors()).thenReturn(true);
-
-        when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
-
-        when(validationContext.getValidationErrors(responseWithSingleRptTransaction.getErrors())).thenReturn(nameValidationError);
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
 
         assertEquals(nameValidationError, validationErrors);
+
+        verify(apiClientService, never()).getApiClient();
+
     }
 
     @Test

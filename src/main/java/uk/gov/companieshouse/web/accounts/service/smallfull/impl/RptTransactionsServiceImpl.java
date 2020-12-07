@@ -18,8 +18,8 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytran
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
+import uk.gov.companieshouse.web.accounts.validation.smallfull.RptTransactionValidator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,6 +48,9 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     @Autowired
     private ValidationContext validationContext;
+
+    @Autowired
+    private RptTransactionValidator rptTransactionValidator;
 
     @Override
     public RptTransaction[] getAllRptTransactions(String transactionId, String companyAccountsId) throws ServiceException {
@@ -78,7 +81,11 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
-        List<ValidationError> validationErrors = new ArrayList<>();
+        List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
+
+        if (!validationErrors.isEmpty()) {
+            return validationErrors;
+        }
 
         ApiClient apiClient = apiClientService.getApiClient();
 
