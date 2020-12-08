@@ -105,7 +105,7 @@
                                             </strong>
                                         </div>
                                     </div>
-                                    <div class="govuk-grid-row">
+                                    <div th:if="${multiYearFiler == true}" class="govuk-grid-row">
                                         <div class="govuk-grid-column-one-half govuk-body cya-desktop-only"
                                              th:id="rptTransactions-table-breakdown-balance-at-period-start-heading[__${stat.index}__]"
                                              th:text="'Balance at ' + ${#temporals.format(addOrRemoveTransactions.nextAccount.periodStartOn, 'd MMMM yyyy')}">
@@ -310,7 +310,7 @@
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half">&nbsp;</div>
                     </div>
-                    <div class="govuk-grid-row">
+                    <div th:if="${multiYearFiler == true}" class="govuk-grid-row">
                         <div class="govuk-grid-column-one-half"
                              id="rptTransactionToAdd-breakdown-balance-at-period-heading"
                              th:text="'Balance at ' + *{#temporals.format(nextAccount.periodStartOn, 'd MMMM yyyy')}">

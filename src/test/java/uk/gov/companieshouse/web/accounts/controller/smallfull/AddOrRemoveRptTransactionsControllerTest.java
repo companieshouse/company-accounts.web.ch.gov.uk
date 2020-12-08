@@ -16,10 +16,12 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactions.RelatedPartyTransactionsApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRemoveRptTransactions;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransaction;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransactionsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
@@ -69,6 +71,8 @@ class AddOrRemoveRptTransactionsControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
+    private static final String MULTI_YEAR_FILER = "multiYearFiler";
+
     private MockMvc mockMvc;
 
     @Mock
@@ -104,9 +108,14 @@ class AddOrRemoveRptTransactionsControllerTest {
     @Mock
     private BindingResult bindingResult;
 
+    @Mock
+    private CompanyService companyService;
+
+    @Mock
+    private CompanyProfileApi companyProfileApi;
+
     @InjectMocks
     private AddOrRemoveRptTransactionsController controller;
-
 
     @BeforeEach
     private void setup() {
@@ -121,6 +130,8 @@ class AddOrRemoveRptTransactionsControllerTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(rptTransactionService.getAllRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(new RptTransaction[0]);
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
+        when(companyService.isMultiYearFiler(companyProfileApi)).thenReturn(true);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH))
                 .andExpect(status().isOk())
@@ -129,6 +140,7 @@ class AddOrRemoveRptTransactionsControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
+                .andExpect(model().attributeExists(MULTI_YEAR_FILER))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
@@ -137,6 +149,7 @@ class AddOrRemoveRptTransactionsControllerTest {
     void getRequestServiceException() throws Exception {
 
         when(rptTransactionService.getAllRptTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_RPT_TRANSACTIONS_PATH))
                 .andExpect(status().isOk())

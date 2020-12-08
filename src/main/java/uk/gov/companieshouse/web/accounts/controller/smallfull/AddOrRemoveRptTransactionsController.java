@@ -13,6 +13,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -20,6 +21,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRemoveRptTransactions;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransactionsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -45,6 +47,8 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
+    private static final String MULTI_YEAR_FILER = "multiYearFiler";
+
     @Autowired
     private RptTransactionService rptTransactionService;
 
@@ -60,6 +64,9 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
     @Autowired
     private HttpServletRequest request;
 
+    @Autowired
+    private CompanyService companyService;
+
     @GetMapping
     public String getAddOrRemoveRptTransactions(@PathVariable String companyNumber,
                                                 @PathVariable String transactionId,
@@ -73,7 +80,11 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
 
         ApiClient apiClient = apiClientService.getApiClient();
 
+        CompanyProfileApi companyProfile;
+
         try {
+
+             companyProfile = companyService.getCompanyProfile(companyNumber);
 
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
@@ -92,6 +103,7 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
         model.addAttribute(COMPANY_NUMBER, companyNumber);
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
+        model.addAttribute(MULTI_YEAR_FILER, companyService.isMultiYearFiler(companyProfile));
 
         return getTemplateName();
     }
