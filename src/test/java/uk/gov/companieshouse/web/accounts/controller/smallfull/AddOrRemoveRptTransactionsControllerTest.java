@@ -71,8 +71,6 @@ class AddOrRemoveRptTransactionsControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    private static final String MULTI_YEAR_FILER = "multiYearFiler";
-
     private MockMvc mockMvc;
 
     @Mock
@@ -140,7 +138,6 @@ class AddOrRemoveRptTransactionsControllerTest {
                 .andExpect(model().attributeExists(COMPANY_NUMBER))
                 .andExpect(model().attributeExists(TRANSACTION_ID))
                 .andExpect(model().attributeExists(COMPANY_ACCOUNTS_ID))
-                .andExpect(model().attributeExists(MULTI_YEAR_FILER))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
