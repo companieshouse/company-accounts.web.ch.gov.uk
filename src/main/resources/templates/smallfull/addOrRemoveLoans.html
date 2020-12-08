@@ -418,20 +418,20 @@
                     </div>
                 </div>
 
-                <div class="govuk-form-group">
-                    <input id="save-and-continue-button" class="govuk-button piwik-event"
-                           data-event-id="Loans to directors - save and continue"
-                           th:name="submit"
-                           type="submit" role="button" value="Save and continue"/>
+                <div>&nbsp</div>
 
-                    <th:block
-                            th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}">
-                        <input id="add-loan-button" class="govuk-button govuk-button-grey piwik-event"
-                               th:name="add"
-                               data-event-id="Loans to directors - add loan"
-                               role="button" type="submit" value="Add another loan"/>
-                    </th:block>
-                </div>
+                <input id="save-and-continue-button" class="govuk-button piwik-event"
+                       data-event-id="Loans to directors - save and continue"
+                       th:name="submit"
+                       type="submit" role="button" value="Save and continue"/>
+
+                <th:block
+                        th:if="${addOrRemoveLoans.existingLoans == null or addOrRemoveLoans.existingLoans.length < 20}">
+                    <input id="add-loan-button" class="govuk-button govuk-button-grey piwik-event"
+                           th:name="add"
+                           data-event-id="Loans to directors - add loan"
+                           role="button" type="submit" value="Add another loan"/>
+                </th:block>
                 <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/resource-numeric-field-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
             </form>
         </div>
