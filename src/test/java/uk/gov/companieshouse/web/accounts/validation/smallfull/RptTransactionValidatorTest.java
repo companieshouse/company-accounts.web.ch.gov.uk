@@ -21,17 +21,21 @@ class RptTransactionValidatorTest {
     private static final String RPT_TRANSACTION_TO_ADD = "rptTransactionToAdd";
 
     private static final String TRANSACTION_RELATIONSHIP = "relationship";
-
     private static final String RELATIONSHIP = RPT_TRANSACTION_TO_ADD + ".relationship";
     private static final String RPT_TRANSACTIONS_RELATIONSHIP_NOT_PRESENT = "validation.element.missing." + RELATIONSHIP;
+
+    private static final String TRANSACTION_DESCRIPTION = "description";
+    private static final String DESCRIPTION_OF_TRANSACTION = RPT_TRANSACTION_TO_ADD + ".descriptionOfTransaction";
+    private static final String RPT_TRANSACTIONS_DESCRIPTION_OF_TRANSACTION_NOT_PRESENT = "validation.element.missing." + DESCRIPTION_OF_TRANSACTION;
 
     private final RptTransactionValidator validator = new RptTransactionValidator();
 
     @Test
-    @DisplayName("Validate RPT transaction - success")
-    void validateRptTransactionToAddSuccess() {
+    @DisplayName("Validate RPT transaction - relationship success")
+    void validateRptTransactionToAddRelationshipSuccess() {
 
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
+        rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
         rptTransactionToAdd.setRelationship(TRANSACTION_RELATIONSHIP);
         List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
 
@@ -39,15 +43,43 @@ class RptTransactionValidatorTest {
     }
 
     @Test
-    @DisplayName("Validate loan to add for multi year filer - missing relationship")
+    @DisplayName("Validate RPT transaction - missing relationship")
     void validateRptTransactionToAddMissingRelationship() {
 
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
+
+        rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
 
         List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
         assertEquals(RPT_TRANSACTIONS_RELATIONSHIP_NOT_PRESENT, validationErrors.get(0).getMessageKey());
+    }
+
+    @Test
+    @DisplayName("Validate RPT transaction - description of transaction success")
+    void validateRptTransactionToAddDescriptionOfTransactionSuccess() {
+
+        RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
+        rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
+        rptTransactionToAdd.setRelationship(TRANSACTION_DESCRIPTION);
+        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
+
+        assertTrue(validationErrors.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Validate RPT transaction -  missing description of transaction")
+    void validateRptTransactionToAddMissingDescriptionOfTransaction() {
+
+        RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
+
+        rptTransactionToAdd.setRelationship(TRANSACTION_RELATIONSHIP);
+        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
+
+        assertFalse(validationErrors.isEmpty());
+        assertEquals(1, validationErrors.size());
+        assertEquals(RPT_TRANSACTIONS_DESCRIPTION_OF_TRANSACTION_NOT_PRESENT, validationErrors.get(0).getMessageKey());
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
+import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
@@ -20,6 +21,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.AddOrRemoveRptTransactions;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RelatedPartyTransactionsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.RptTransactionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
@@ -60,6 +62,9 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
     @Autowired
     private HttpServletRequest request;
 
+    @Autowired
+    private CompanyService companyService;
+
     @GetMapping
     public String getAddOrRemoveRptTransactions(@PathVariable String companyNumber,
                                                 @PathVariable String transactionId,
@@ -74,6 +79,12 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
         ApiClient apiClient = apiClientService.getApiClient();
 
         try {
+
+            CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
+
+            boolean isMultiYearFiler = companyService.isMultiYearFiler(companyProfile);
+
+            addOrRemoveRptTransactions.setIsMultiYearFiler(isMultiYearFiler);
 
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
