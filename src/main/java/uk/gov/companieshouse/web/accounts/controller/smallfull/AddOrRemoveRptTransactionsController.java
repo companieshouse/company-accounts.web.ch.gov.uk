@@ -47,8 +47,6 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String MULTI_YEAR_FILER = "multiYearFiler";
-
     @Autowired
     private RptTransactionService rptTransactionService;
 
@@ -80,11 +78,13 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
 
         ApiClient apiClient = apiClientService.getApiClient();
 
-        CompanyProfileApi companyProfile;
-
         try {
 
-             companyProfile = companyService.getCompanyProfile(companyNumber);
+            CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
+
+            boolean isMultiYearFiler = companyService.isMultiYearFiler(companyProfile);
+
+            addOrRemoveRptTransactions.setIsMultiYearFiler(isMultiYearFiler);
 
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
@@ -103,7 +103,6 @@ public class AddOrRemoveRptTransactionsController extends BaseController impleme
         model.addAttribute(COMPANY_NUMBER, companyNumber);
         model.addAttribute(TRANSACTION_ID, transactionId);
         model.addAttribute(COMPANY_ACCOUNTS_ID, companyAccountsId);
-        model.addAttribute(MULTI_YEAR_FILER, companyService.isMultiYearFiler(companyProfile));
 
         return getTemplateName();
     }

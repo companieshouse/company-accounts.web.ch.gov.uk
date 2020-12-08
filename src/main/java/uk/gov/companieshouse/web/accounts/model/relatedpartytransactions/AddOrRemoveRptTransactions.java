@@ -17,6 +17,16 @@ public class AddOrRemoveRptTransactions {
 
     private AccountingPeriodApi nextAccount;
 
+    private Boolean isMultiYearFiler;
+
+    public Boolean getIsMultiYearFiler() {
+        return isMultiYearFiler;
+    }
+
+    public void setIsMultiYearFiler(Boolean multiYearFiler) {
+        isMultiYearFiler = multiYearFiler;
+    }
+
     public AccountingPeriodApi getNextAccount() {
         return nextAccount;
     }
