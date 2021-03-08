@@ -35,6 +35,8 @@
 
         <structured-logging.version>1.5.0-rc2</structured-logging.version>
 
+        <common-web-java.version>1.5.0</common-web-java.version>
+
         <web-security-java.version>1.3.8</web-security-java.version>
 
         <company-accounts-library.version>1.1.0-rc1</company-accounts-library.version>
@@ -142,6 +144,12 @@
             <version>${environment-reader-library.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>uk.gov.companieshouse</groupId>
+            <artifactId>common-web-java</artifactId>
+            <version>${common-web-java.version}</version>
+        </dependency>
+
         <!-- JJWT dependencies -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -228,6 +236,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin.version}</version>
                 <configuration>
                     <mainClass>uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication</mainClass>
                     <layout>ZIP</layout>

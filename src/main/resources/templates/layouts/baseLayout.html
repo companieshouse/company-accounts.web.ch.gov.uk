@@ -15,7 +15,13 @@
         rel="icon"
         th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
         type="image/x-icon" />
-    
+
+    <script th:inline="javascript">
+        window.SERVICE_NAME = 'company-accounts-web'
+        window.PIWIK_URL = [[${@environment.getProperty('piwik.url')}]];
+        window.PIWIK_SITE_ID = [[${@environment.getProperty('piwik.siteId')}]];
+    </script>
+
 </head>
 <body>
     <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=default%2CNumber.isInteger"></script>
@@ -23,8 +29,12 @@
     <script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+
+    <div th:replace="fragments/piwikWithCookieCheck :: cookieBanner"></div>
+
+
     <div class="entire-wrapper">
-        <div th:replace="fragments/header :: header"></div>
+        <div th:replace="fragments/header :: header (headerText = '')"></div>
         <div class="govuk-width-container">
             <div th:replace="fragments/betaBanner :: betaBanner"></div>
             <div th:replace="fragments/userBar :: userBar"></div>
@@ -40,8 +50,10 @@
     <script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/app/radio-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/cookie-consent-1.0.0.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+    <script th:src="@{{cdnUrl}/javascripts/app/cookie-consent/piwik-only-cookie-consent.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/autocalculate-input-fields.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
     <script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/disable-button.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-    <div th:replace="fragments/piwik :: piwik"></div>
+
 </body>
 </html>
