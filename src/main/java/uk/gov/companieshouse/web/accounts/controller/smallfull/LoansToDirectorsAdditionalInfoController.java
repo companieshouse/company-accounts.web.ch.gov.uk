@@ -25,7 +25,7 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Controller
 @PreviousController(LoansToDirectorsAdditionalInfoQuestionController.class)
-@NextController(RelatedPartyTransactionsQuestionController.class)
+@NextController(OffBalanceSheetArrangementsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/add-or-remove-loans/additional-information")
 public class LoansToDirectorsAdditionalInfoController extends BaseController implements ConditionalController {
 
