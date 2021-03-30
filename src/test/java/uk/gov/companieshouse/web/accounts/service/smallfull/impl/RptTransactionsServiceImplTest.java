@@ -256,7 +256,7 @@ class RptTransactionsServiceImplTest {
 
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
-        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd)).thenReturn(nameValidationError);
+        when(rptTransactionValidator.validateRptTransactionToAdd(rptTransactionToAdd, false)).thenReturn(nameValidationError);
 
         List<ValidationError> validationErrors = rptTransactionsService.createRptTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveRptTransactions);
 

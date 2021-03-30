@@ -37,7 +37,7 @@ class RptTransactionValidatorTest {
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
         rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
         rptTransactionToAdd.setRelationship(TRANSACTION_RELATIONSHIP);
-        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
+        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd, false);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -50,7 +50,7 @@ class RptTransactionValidatorTest {
 
         rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
 
-        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
+        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd, false);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -64,7 +64,7 @@ class RptTransactionValidatorTest {
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
         rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
         rptTransactionToAdd.setRelationship(TRANSACTION_DESCRIPTION);
-        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
+        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd, false);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -76,7 +76,7 @@ class RptTransactionValidatorTest {
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
 
         rptTransactionToAdd.setRelationship(TRANSACTION_RELATIONSHIP);
-        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd);
+        List<ValidationError> validationErrors = validator.validateRptTransactionToAdd(rptTransactionToAdd, false);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());

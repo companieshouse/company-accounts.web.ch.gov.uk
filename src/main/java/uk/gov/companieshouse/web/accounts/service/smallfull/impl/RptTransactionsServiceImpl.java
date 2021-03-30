@@ -81,7 +81,7 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
-        List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
+        List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd(), addOrRemoveRptTransactions.getIsMultiYearFiler());
 
         if (!validationErrors.isEmpty()) {
             return validationErrors;
@@ -125,6 +125,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     @Override
     public List<ValidationError> submitAddOrRemoveRptTransactions(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
 
-        return createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
+        return rptTransactionValidator.validateAtLeastOneRptTransaction(addOrRemoveRptTransactions);
     }
 }
