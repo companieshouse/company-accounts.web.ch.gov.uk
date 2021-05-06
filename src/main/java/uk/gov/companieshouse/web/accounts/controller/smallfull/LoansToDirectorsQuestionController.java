@@ -23,6 +23,7 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsServ
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 @PreviousController(FinancialCommitmentsController.class)
@@ -96,8 +97,11 @@ public class LoansToDirectorsQuestionController extends BaseController {
             } else {
                 if (loansToDirectorsApi != null) {
                     if (loansToDirectorsApi.getLinks().getAdditionalInformation() != null) {
-                        for (String loanId : loansToDirectorsApi.getLoans().keySet()) {
-                            loansService.deleteLoan(transactionId, companyAccountsId, loanId);
+                        Map<String, String> loans = loansToDirectorsApi.getLoans();
+                        if (loans != null) {
+                            for (String loanId : loans.keySet()) {
+                                loansService.deleteLoan(transactionId, companyAccountsId, loanId);
+                            }
                         }
                     } else {
                         loansToDirectorsService.deleteLoansToDirectors(transactionId, companyAccountsId);
