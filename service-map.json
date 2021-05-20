@@ -7,13 +7,13 @@
   "git_repo": "https://github.com/companieshouse/company-accounts.web.ch.gov.uk",
   "public": "true",
   "users": "public - Web",
-  "code_analysis_link": " http://code-analysis.platform.aws.chdev.org:9000/",
+  "code_analysis_link": "http://code-analysis.platform.aws.chdev.org:9000/",
   "test_automation_repo": "TO BE ADDED",
   "service_area": "Maintain a Company",
   "service_component": "Accounts",
   "language": "Java",
   "integration_outgoing": [
-    "company-accounts.api.ch.gov.uk", "CALLS_API",
-    "transactions.api.ch.gov.uk", "CALLS_API"
+    "company-accounts.api.ch.gov.uk,CALLS_API",
+    "transactions.api.ch.gov.uk,CALLS_API"
   ]
 }
