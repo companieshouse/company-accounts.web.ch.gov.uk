@@ -90,23 +90,10 @@ public class LoansToDirectorsQuestionController extends BaseController {
         try {
             LoansToDirectorsApi loansToDirectorsApi = loansToDirectorsService.getLoansToDirectors(apiClient, transactionId, companyAccountsId);
 
-            if (Boolean.TRUE.equals(loansToDirectorsQuestion.getHasIncludedLoansToDirectors())) {
-                if (loansToDirectorsApi == null) {
-                    loansToDirectorsService.createLoansToDirectors(transactionId, companyAccountsId);
-                }
-            } else {
-                if (loansToDirectorsApi != null) {
-                    if (loansToDirectorsApi.getLinks().getAdditionalInformation() != null) {
-                        Map<String, String> loans = loansToDirectorsApi.getLoans();
-                        if (loans != null) {
-                            for (String loanId : loans.keySet()) {
-                                loansService.deleteLoan(transactionId, companyAccountsId, loanId);
-                            }
-                        }
-                    } else {
-                        loansToDirectorsService.deleteLoansToDirectors(transactionId, companyAccountsId);
-                    }
-                }
+            if (Boolean.TRUE.equals(loansToDirectorsQuestion.getHasIncludedLoansToDirectors()) && loansToDirectorsApi == null) {
+                loansToDirectorsService.createLoansToDirectors(transactionId, companyAccountsId);                
+            } else if(Boolean.FALSE.equals(loansToDirectorsQuestion.getHasIncludedLoansToDirectors()) && loansToDirectorsApi != null) {
+                deleteLoansToDirectorsLoans(loansToDirectorsApi, transactionId, companyAccountsId);
             }
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -117,6 +104,19 @@ public class LoansToDirectorsQuestionController extends BaseController {
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
+
+    private void deleteLoansToDirectorsLoans(LoansToDirectorsApi loansToDirectorsApi, String transactionId, String companyAccountsId) throws ServiceException {
+        if (loansToDirectorsApi.getLinks().getAdditionalInformation() != null) {
+            Map<String, String> loans = loansToDirectorsApi.getLoans();
+            if (loans != null) {
+                for (String loanId : loans.keySet()) {
+                    loansService.deleteLoan(transactionId, companyAccountsId, loanId);
+                }
+            }
+        } else {
+            loansToDirectorsService.deleteLoansToDirectors(transactionId, companyAccountsId);
+        }
+    }   
 
     @Override
     protected String getTemplateName() {
