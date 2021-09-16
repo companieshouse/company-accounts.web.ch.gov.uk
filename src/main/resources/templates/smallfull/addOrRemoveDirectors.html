@@ -152,15 +152,17 @@
 
                 </div>
 
-                <h2 id="directorsReport-secretary-subheading" class="govuk-heading-m">
-                  Enter the name of the company secretary (optional)
-                </h2>
+                <label id="secretary-name-label" class="govuk-label govuk-label--m"
+                       for="secretary-name">
+                    Enter the name of the company secretary (optional)
+                </label>
 
                 <span class="govuk-error-message"
                       id="secretary-errorId"
                       th:if="${#fields.hasErrors('secretary')}"
                       th:each="e : ${#fields.errors('secretary')}" th:text="${e}">
                 </span>
+
 
                 <input class="govuk-input"
                        id="secretary-name"
