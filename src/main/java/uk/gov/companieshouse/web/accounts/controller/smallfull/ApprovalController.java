@@ -44,6 +44,7 @@ public class ApprovalController extends BaseController {
     private static final String IS_PAYABLE_TRANSACTION = "isPayableTransaction";
 
     private static final UriTemplate SUBMITTED_ACCOUNTS_PATH = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts");
+    private static final String SUMMARY_SCREEN_FALSE = "?summary=false";
 
     @Autowired
     private TransactionService transactionService;
@@ -143,7 +144,7 @@ public class ApprovalController extends BaseController {
                 transactionService.updateResumeLink(transactionId, RESUME_URI.expand(companyNumber, transactionId, companyAccountsId).toString());
 
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                        paymentService.createPaymentSessionForTransaction(transactionId);
+                        paymentService.createPaymentSessionForTransaction(transactionId) + SUMMARY_SCREEN_FALSE;
             }
 
         } catch (ServiceException e) {
