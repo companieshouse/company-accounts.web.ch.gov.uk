@@ -84,7 +84,7 @@ class ApprovalControllerTests {
 
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-    private static final String SUMMARY_SCREEN_FALSE = "?summary=false";
+    private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
 
     private static final String PAYMENT_WEB_ENDPOINT = "/paymentWebEndpoint";
 
@@ -277,7 +277,7 @@ class ApprovalControllerTests {
         this.mockMvc.perform(post(APPROVAL_PATH)
                 .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT + SUMMARY_SCREEN_FALSE));
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT + SUMMARY_FALSE_PARAMETER));
     }
 
     @Test
