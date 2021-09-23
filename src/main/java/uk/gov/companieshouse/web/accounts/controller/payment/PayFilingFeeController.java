@@ -25,6 +25,8 @@ public class PayFilingFeeController extends BaseController {
 
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
 
+    private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
+
     @Autowired
     private PaymentService paymentService;
 
@@ -50,7 +52,7 @@ public class PayFilingFeeController extends BaseController {
         try {
             if(Boolean.TRUE.equals(payFilingFee.getPayFilingFeeChoice())) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                    paymentService.createPaymentSessionForTransaction(transactionId);
+                    paymentService.createPaymentSessionForTransaction(transactionId) + SUMMARY_FALSE_PARAMETER;
             } else {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX
                     + YOUR_FILINGS_PATH;
