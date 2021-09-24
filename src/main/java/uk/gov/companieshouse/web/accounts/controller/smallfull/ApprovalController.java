@@ -44,7 +44,6 @@ public class ApprovalController extends BaseController {
     private static final String IS_PAYABLE_TRANSACTION = "isPayableTransaction";
 
     private static final UriTemplate SUBMITTED_ACCOUNTS_PATH = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts");
-    private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
 
     @Autowired
     private TransactionService transactionService;

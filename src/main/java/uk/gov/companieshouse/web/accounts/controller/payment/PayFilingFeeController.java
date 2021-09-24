@@ -25,8 +25,6 @@ public class PayFilingFeeController extends BaseController {
 
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
 
-    private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
-
     @Autowired
     private PaymentService paymentService;
 
