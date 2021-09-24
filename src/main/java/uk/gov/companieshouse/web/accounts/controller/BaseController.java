@@ -29,6 +29,8 @@ public abstract class BaseController {
 
     protected static final String ERROR_VIEW = "error";
 
+    protected static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
+
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     protected BaseController() {

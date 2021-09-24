@@ -25,6 +25,8 @@ import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PayFilingFeeControllerTest {
 
+    private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
+
     private MockMvc mockMvc;
 
     @Mock
@@ -70,7 +72,7 @@ class PayFilingFeeControllerTest {
         mockMvc.perform(post(PAY_FILING_FEE_PATH).
             param(PAY_FILING_FEE_MODEL_ATTR, "1"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX+paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)));
+            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX+paymentService.createPaymentSessionForTransaction(TRANSACTION_ID) + SUMMARY_FALSE_PARAMETER));
     }
 
     @Test

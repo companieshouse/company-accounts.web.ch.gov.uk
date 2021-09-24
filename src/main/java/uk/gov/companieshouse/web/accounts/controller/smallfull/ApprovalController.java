@@ -143,7 +143,7 @@ public class ApprovalController extends BaseController {
                 transactionService.updateResumeLink(transactionId, RESUME_URI.expand(companyNumber, transactionId, companyAccountsId).toString());
 
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                        paymentService.createPaymentSessionForTransaction(transactionId);
+                        paymentService.createPaymentSessionForTransaction(transactionId) + SUMMARY_FALSE_PARAMETER;
             }
 
         } catch (ServiceException e) {
