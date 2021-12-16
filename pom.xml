@@ -41,7 +41,7 @@
 
         <web-security-java.version>1.4.2</web-security-java.version>
 
-        <company-accounts-library.version>1.1.0-rc1</company-accounts-library.version>
+        <company-accounts-library.version>1.2.13</company-accounts-library.version>
 
         <environment-reader-library.version>1.2.0-rc1</environment-reader-library.version>
 
