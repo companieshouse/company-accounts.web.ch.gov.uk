@@ -35,7 +35,7 @@
 
         <structured-logging.version>1.9.10</structured-logging.version>
 
-        <log4j-bom.version>2.15.0</log4j-bom.version>
+        <log4j-bom.version>2.16.0</log4j-bom.version>
 
         <common-web-java.version>1.5.0</common-web-java.version>
 
