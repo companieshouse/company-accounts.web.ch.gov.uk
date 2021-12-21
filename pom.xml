@@ -33,15 +33,13 @@
 
         <sdk-manager-java.version>1.4.0-rc1</sdk-manager-java.version>
 
-        <structured-logging.version>1.9.10</structured-logging.version>
-
-        <log4j-bom.version>2.16.0</log4j-bom.version>
+        <structured-logging.version>1.9.12</structured-logging.version>
 
         <common-web-java.version>1.5.0</common-web-java.version>
 
         <web-security-java.version>1.4.2</web-security-java.version>
 
-        <company-accounts-library.version>1.2.13</company-accounts-library.version>
+        <company-accounts-library.version>1.2.14</company-accounts-library.version>
 
         <environment-reader-library.version>1.2.0-rc1</environment-reader-library.version>
 
@@ -71,13 +69,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-bom</artifactId>
-                <version>${log4j-bom.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
