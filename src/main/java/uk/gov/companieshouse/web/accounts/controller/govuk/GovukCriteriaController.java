@@ -22,10 +22,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 @PreviousController(GovukFullAccountsCriteriaController.class)
 @RequestMapping("/accounts/criteria")
 public class GovukCriteriaController extends BaseController {
-
-    @Value("${accounts-selector.uri}")
-    private String govUkAccountsSelectorUrl;
-
     @Override
     protected String getTemplateName() {
         return "smallfull/criteria";
