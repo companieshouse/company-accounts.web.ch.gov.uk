@@ -16,7 +16,7 @@ public class DirectorTransformerImpl implements DirectorTransformer {
     @Autowired
     private DateTransformer dateTransformer;
 
-    private static final Pattern DIRECTOR_URI_PATTERN = Pattern.compile("/transactions/.+?/company-accounts/.+?/small-full/directors-report/directors/(.*)");
+    private static final Pattern DIRECTOR_URI_PATTERN = Pattern.compile("/transactions/[^/]+/company-accounts/[^/]+/small-full/directors-report/directors/(.*)");
 
     @Override
     public DirectorApi getDirectorApi(DirectorToAdd director) {

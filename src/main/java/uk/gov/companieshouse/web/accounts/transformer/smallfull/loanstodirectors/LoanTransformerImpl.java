@@ -15,7 +15,7 @@ public class LoanTransformerImpl implements LoanTransformer {
     @Autowired
     private BreakdownTransformer breakdownTransformer;
 
-    private static final Pattern LOAN_URI_PATTERN = Pattern.compile("/transactions/.+?/company-accounts/.+?/small-full/notes/loans-to-directors/loans/(.*)");
+    private static final Pattern LOAN_URI_PATTERN = Pattern.compile("/transactions/[^/]+/company-accounts/[^/]+/small-full/notes/loans-to-directors/loans/(.*)");
 
     @Override
     public LoanApi getLoanApi(LoanToAdd loanToAdd) {

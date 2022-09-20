@@ -15,7 +15,7 @@ public class RptTransactionsTransformerImpl implements RptTransactionsTransforme
     @Autowired
     private RptBreakdownTransformer rptBreakdownTransformer;
 
-    private static final Pattern RPT_TRANSACTION_URI_PATTERN = Pattern.compile("/transactions/.+?/company-accounts/.+?/small-full/notes/related-party-transactions/transactions/(.*)");
+    private static final Pattern RPT_TRANSACTION_URI_PATTERN = Pattern.compile("/transactions/[^/]+/company-accounts/[^/]+/small-full/notes/related-party-transactions/transactions/(.*)");
 
     @Override
     public RptTransactionApi getRptTransactionsApi(RptTransactionToAdd rptTransactionToAdd) {
