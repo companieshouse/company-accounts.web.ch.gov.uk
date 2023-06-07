@@ -59,6 +59,9 @@
         <spring-boot-maven-plugin.version>2.5.5</spring-boot-maven-plugin.version>
 
 
+        <dependency-check-plugin.version>8.2.1</dependency-check-plugin.version>
+
+
         <!-- Maven and Surefire plugins -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-plugin.version>2.22.0</maven-plugin.version>
@@ -311,6 +314,18 @@
                         <expandClasspathDependencies>true</expandClasspathDependencies>
                     </container>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check-plugin.version}</version>
+                <executions>
+                    <execution>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
