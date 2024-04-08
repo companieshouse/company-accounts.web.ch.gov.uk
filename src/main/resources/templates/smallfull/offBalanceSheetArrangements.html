@@ -14,7 +14,7 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="offBalanceSheetArrangements-form" class="form" th:action="@{''}" th:object="${offBalanceSheetArrangements}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group govuk-form-group-block-important"
              th:classappend="${#fields.hasErrors('offBalanceSheetArrangementsDetails')} ? 'govuk-form-group--error' : ''">

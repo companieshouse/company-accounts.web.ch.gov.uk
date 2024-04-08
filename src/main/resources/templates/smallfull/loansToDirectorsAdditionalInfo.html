@@ -13,7 +13,7 @@
 		        <div class="govuk-grid-column-two-thirds">
 		            <form id="loansToDirectorsAdditionalInfo-form" class="form" th:action="@{''}" th:object="${loansToDirectorsAdditionalInfo}" method="post">
 		
-		                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+		                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 		
 		                <div class="govuk-form-group govuk-form-group-block-important"
 		                     th:classappend="${#fields.hasErrors('additionalInfoDetails')} ? 'govuk-form-group--error' : ''">

@@ -15,7 +15,7 @@
         <div class="govuk-grid-column-two-thirds">
             <form id="accounts-reference-date-question--form" class="form" th:action="@{''}" th:object="${accountsReferenceDateQuestion}" method="post">
 
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
 
                 <!-- Hidden input for form binding -->
@@ -25,10 +25,10 @@
                 <div class="govuk-form-group"
                      th:classappend="${#fields.hasErrors('hasConfirmedAccountingReferenceDate')} ? 'govuk-form-group--error' : ''">
 
-                    <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+                    <div th:replace="~{fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
               legendText = 'Have the accounts been prepared for the period of ' + ${#temporals.format(accountsReferenceDateQuestion.periodStartOn, 'd MMMM yyyy')} + ' to ' + ${#temporals.format(accountsReferenceDateQuestion.periodEndOn, 'd MMMM yyyy')} + '?',
               radioButtonsFieldName = 'hasConfirmedAccountingReferenceDate'
-              )">
+              )}">
                     </div>
                 </div>
 

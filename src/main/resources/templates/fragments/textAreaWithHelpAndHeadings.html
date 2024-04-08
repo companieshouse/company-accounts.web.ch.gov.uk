@@ -7,7 +7,7 @@
 <body>
 <div th:fragment="textAreaWithHelpAndHeadings">
   
-  <div th:replace="fragments/globalErrors :: globalErrors"></div>
+  <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
   <header>
     <h1 id="page-header" class="govuk-heading-l"><span th:text="${heading}"></span></h1>

@@ -12,11 +12,11 @@
   <form id="intangible-assets-note-form" th:action="@{''}" th:object="${intangibleAssets}"
         class="form currency-included-within-inputs govuk-body" method="post">
 
-    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+    <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-    <div th:replace="fragments/numberedHeading :: numberedHeading (
+    <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Intangible assets note'
-                )">
+                )}">
     </div>
 
     <input th:field="*{lastAccountsPeriodEndOn}" type="hidden">
@@ -39,10 +39,10 @@
     </div>
     <!--Start Cost at start-->
     <th:block th:if="*{lastAccountsPeriodEndOn != null}">
-      <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+      <div th:replace="~{fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                         row = 'cost.atPeriodStart',
                         isTopRow = true
-                        )">
+                        )}">
       </div>
 
      <div class="govuk-grid-row column-flex">
@@ -50,103 +50,103 @@
           <div th:text="'Cost at ' +${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="cost.nextAccountsPeriodStartOn"></div>
         </div>
         <div class="govuk-grid-column-one-quarter column-flex">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.goodwill',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Goodwill',
                                   class= 'govuk-input validate cost-ps-add cost-gw-add nbv-cp-gw-add',
-                                  )">
+                                  )}">
 
           </div>
         </div>
         <div class="govuk-grid-column-one-quarter column-flex">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.otherIntangibleAssets',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Other',
                                   class= 'govuk-input validate cost-ps-add cost-oth-add nbv-cp-oth-add',
-                                  )">
+                                  )}">
           </div>
 
         </div>
         <div class="govuk-grid-column-one-quarter accounts-total column-flex">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.total',
                                   text = 'Cost at ' + ${#temporals.format(intangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
                                   class= 'govuk-input cost-ps-total cost-t-add nbv-cp-t-add',
-                                  )">
+                                  )}">
           </div>
         </div>
       </div>
     </th:block>
     <!--End Cost at start-->
     <!--Start Additions -->
-    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+    <div th:replace="~{fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'cost.additions'
-                      )">
+                      )}">
     </div>
 
    <div class="govuk-grid-row column-flex">
       <div class="govuk-grid-column-one-quarter">Additions</div>
       <div class="govuk-grid-column-one-quarter column-flex">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.additions.goodwill',
                                 text = 'Additions - Goodwill',
                                 class= 'govuk-input validate cost-a-add cost-gw-add',
-                                )">
+                                )}">
 
         </div>
       </div>
       <div class="govuk-grid-column-one-quarter column-flex">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.additions.otherIntangibleAssets',
                                 text = 'Additions - Other',
                                 class= 'govuk-input validate cost-a-add cost-oth-add',
-                                )">
+                                )}">
         </div>
 
       </div>
       <div class="govuk-grid-column-one-quarter accounts-total column-flex">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.additions.total',
                                 text = 'Additions - Total',
                                 class= 'govuk-input cost-a-total cost-t-add',
-                                )">
+                                )}">
         </div>
 
       </div>
     </div>
     <!--End Additions-->
     <!--Start Disposals-->
-    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+    <div th:replace="~{fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'cost.disposals'
-                      )">
+                      )}">
     </div>
 
    <div class="govuk-grid-row column-flex">
       <div class="govuk-grid-column-one-quarter">Disposals</div>
       <div class="govuk-grid-column-one-quarter column-flex">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.goodwill',
                                 text = 'Disposals - Goodwill',
                                 class= 'govuk-input validate cost-d-add cost-gw-subtract',
-                                )">
+                                )}">
 
         </div>
       </div>
       <div class="govuk-grid-column-one-quarter column-flex">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.otherIntangibleAssets',
                                 text = 'Disposals - Other',
                                 class= 'govuk-input validate cost-d-add cost-oth-subtract',
-                                )">
+                                )}">
         </div>
 
       </div>
       <div class="govuk-grid-column-one-quarter accounts-total column-flex">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.disposals.total',
                                 text = 'Disposals - Total',
                                 class= 'govuk-input cost-d-total cost-t-subtract',
-                                )">
+                                )}">
         </div>
 
       </div>
@@ -154,9 +154,9 @@
 
     <!--End Disposals=-->
     <!--Start Revaluations-->
-    <div th:replace="fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
+    <div th:replace="~{fragments/intangibleAssetsErrorRow :: intangibleAssetsErrorRow (
                       row = 'cost.revaluations'
-                      )">
+                      )}">
     </div>
 
    <div class="govuk-grid-row column-flex">

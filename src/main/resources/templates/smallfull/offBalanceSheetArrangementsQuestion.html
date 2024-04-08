@@ -14,16 +14,16 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="offBalanceSheetArrangements-question-form" class="form" th:action="@{''}" th:object="${offBalanceSheetArrangementsQuestion}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalError}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasIncludedOffBalanceSheetArrangements')} ? 'govuk-form-group--error' : ''">
 
-          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+          <div th:replace="~{fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
               legendText = 'Do your prepared accounts include any \'off balance sheet arrangements\'?',
               hint = 'This could include the nature, purpose and financial impact on entity.',
               radioButtonsFieldName = 'hasIncludedOffBalanceSheetArrangements'
-              )">
+              })">
           </div>
         </div>
 

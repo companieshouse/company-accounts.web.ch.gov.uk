@@ -14,11 +14,11 @@
   <form id="balanceSheet-form" th:action="@{''}" th:object="${employees}"
         class="form currency-not-included-within-inputs govuk-body" method="post">
 
-    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+    <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-    <div th:replace="fragments/numberedHeading :: numberedHeading (
+    <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Employees note'
-                )">
+                )}">
     </div>
 
     <div class="left-indent">
@@ -46,10 +46,10 @@
 
       <!--Start Average Number Of Employees -->
 
-      <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+      <div th:replace="~{fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'averageNumberOfEmployees.currentAverageNumberOfEmployees',
                         previousField = 'averageNumberOfEmployees.previousAverageNumberOfEmployees'
-                        )">
+                        )}">
       </div>
       <div class="govuk-grid-row govuk-!-padding-bottom-5">
         <div class="govuk-grid-column-one-half">
@@ -68,33 +68,33 @@
           </details>
         </div>
         <div class="govuk-grid-column-one-quarter">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'averageNumberOfEmployees.currentAverageNumberOfEmployees',
                                 text = 'Average number of employees current ' + *{balanceSheetHeadings.currentPeriodHeading},
                                 class= 'govuk-input range-to-99999 current',
                                 isEmployees = true,
-                                )">
+                                )}">
           </div>
         </div>
         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}"
              class="govuk-grid-column-one-quarter">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'averageNumberOfEmployees.previousAverageNumberOfEmployees',
                                 text = 'Average number of employees previous ' + *{balanceSheetHeadings.previousPeriodHeading},
                                 class= 'govuk-input range-to-99999 previous',
                                 isEmployees = true,
-                                )">
+                                )}">
           </div>
         </div>
       </div>
 
       <!--End Average Number Of Employees -->
 
-      <div th:replace="fragments/additionalInformation :: additionalInformation (
+      <div th:replace="~{fragments/additionalInformation :: additionalInformation (
                                 id = 'details',
                                 dropDownText = 'Add additional information about your \'employees\' note?',
                                 helpText = 'Enter details of any other \'employees\' information not already covered'
-                                )">
+                                )}">
       </div>
 
       <div class="form-group">

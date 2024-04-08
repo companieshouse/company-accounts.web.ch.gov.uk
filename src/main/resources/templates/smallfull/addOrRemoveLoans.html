@@ -14,12 +14,12 @@
         <div class="govuk-grid-column-two-thirds">
 
             <form th:object="${addOrRemoveLoans}">
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
             </form>
 
-            <div th:replace="fragments/numberedHeading :: numberedHeading (
+            <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                   headingText = 'Loans to directors'
-              )">
+              )}">
             </div>
 
             <h2 id="loansToDirectors-subheading" class="govuk-heading-m">

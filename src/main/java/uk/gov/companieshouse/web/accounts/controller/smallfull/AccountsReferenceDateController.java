@@ -27,8 +27,8 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.company.impl.CompanyServiceImpl;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
 
 @Controller

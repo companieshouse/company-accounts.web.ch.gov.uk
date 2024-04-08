@@ -13,11 +13,11 @@
 
     <form id="balanceSheet-form" th:action="@{''}" th:object="${debtors}" class="form currency-included-within-inputs govuk-body" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-        <div th:replace="fragments/numberedHeading :: numberedHeading (
+        <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Debtors note'
-                )">
+                )}">
         </div>
 
         <div class="left-indent">
@@ -47,29 +47,29 @@
 
             <!-- Start Trade debtors-->
 
-            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+            <div th:replace="~{fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'tradeDebtors.currentTradeDebtors',
                         previousField = 'tradeDebtors.previousTradeDebtors'
-                        )">
+                        )}">
             </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
                     Trade debtors
                 </div>
                 <div class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+                    <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.currentTradeDebtors',
                                 text = 'Trade debtors current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
-                                )">
+                                )}">
                     </div>
                 </div>
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+                    <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'tradeDebtors.previousTradeDebtors',
                                 text = 'Trade debtors previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
-                                )">
+                                )}">
                     </div>
                 </div>
             </div>
@@ -78,29 +78,29 @@
 
             <!--Start Prepayments and Accrued Income-->
 
-            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+            <div th:replace="~{fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome',
                         previousField = 'prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome'
-                        )">
+                        )}">
             </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
                     Prepayments and accrued income
                 </div>
                 <div class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+                    <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.currentPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
-                                )">
+                                )}">
                     </div>
                 </div>
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+                    <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'prepaymentsAndAccruedIncome.previousPrepaymentsAndAccruedIncome',
                                 text = 'Prepayments and accrued income previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
-                                )">
+                                )}">
                     </div>
                 </div>
             </div>
@@ -109,29 +109,29 @@
 
             <!--Start Other debtors-->
 
-            <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+            <div th:replace="~{fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'otherDebtors.currentOtherDebtors',
                         previousField = 'otherDebtors.previousOtherDebtors'
-                        )">
+                        )}">
             </div>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-half">
                     Other debtors
                 </div>
                 <div class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+                    <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.currentOtherDebtors',
                                 text = 'Other debtors current ' + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class= 'govuk-input current current-debtors-add',
-                                )">
+                                )}">
                     </div>
                 </div>
                 <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter">
-                    <div th:replace="fragments/numberInput :: numberInput (
+                    <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'otherDebtors.previousOtherDebtors',
                                 text = 'Other debtors previous ' + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous previous-debtors-add',
-                                )">
+                                )}">
                     </div>
                 </div>
             </div>

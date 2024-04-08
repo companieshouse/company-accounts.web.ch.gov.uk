@@ -16,11 +16,11 @@
       <form id="transferOfAssetsSelection-form" class="form" th:action="@{''}"
             th:object="${transferOfAssetsSelection}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-        <div th:replace="fragments/numberedHeading :: numberedHeading (
+        <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Was there any transfer of assets other than for full consideration?'
-                )">
+                )}">
         </div>
 
         <details class="govuk-details" role="group">
@@ -38,9 +38,9 @@
         </details>
 
         <div class="govuk-form-group" th:classappend="${#fields.hasErrors('hasProvidedTransferOfAssets')} ? 'govuk-form-group--error' : ''">
-          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+          <div th:replace="~{fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
                                   radioButtonsFieldName = 'hasProvidedTransferOfAssets'
-                                  )">
+                                  )}">
           </div>
         </div>
 

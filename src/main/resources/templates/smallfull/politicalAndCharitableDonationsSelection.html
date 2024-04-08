@@ -13,7 +13,7 @@
         <div class="govuk-grid-column-two-thirds">
             <form id="politicalAndCharitableDonations-selection-form" class="form" th:action="@{''}" th:object="${politicalAndCharitableDonationsSelection}" method="post">
 
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
                 <div class="govuk-form-group"
                      th:classappend="${#fields.hasErrors('hasPoliticalAndCharitableDonations')} ? 'govuk-form-group--error' : ''">

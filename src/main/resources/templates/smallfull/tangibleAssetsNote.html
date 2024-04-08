@@ -42,9 +42,9 @@
 
       </div>
     </header>
-    <div th:replace="fragments/betaBanner :: betaBanner"></div>
-    <div th:replace="fragments/userBar :: userBar"></div>
-    <div th:replace="fragments/backButtonLink :: backButtonLink"></div>
+    <div th:replace="~{fragments/betaBanner :: betaBanner}"></div>
+    <div th:replace="~{fragments/userBar :: userBar}"></div>
+    <div th:replace="~{fragments/backButtonLink :: backButtonLink}"></div>
     <main id="content" role="main" class="govuk-main-wrapper">
 
 <div id="main-content" layout:fragment="content" class="two-column-accounts">
@@ -53,11 +53,11 @@
         class="form currency-included-within-inputs govuk-body" method="post">
 
 
-    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+    <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-    <div th:replace="fragments/numberedHeading :: numberedHeading (
+    <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Tangible assets note'
-                )">
+                )}">
     </div>
 
     <input th:field="*{lastAccountsPeriodEndOn}" type="hidden">
@@ -91,10 +91,10 @@
     </div>
     <!--Start Cost at start-->
     <th:block th:if="*{lastAccountsPeriodEndOn != null}">
-      <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+      <div th:replace="~{fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
                         row = 'cost.atPeriodStart',
                         isTopRow = true
-                        )">
+                        )}">
       </div>
 
       <div class="govuk-grid-row">
@@ -102,56 +102,56 @@
           <div th:text="'Cost at ' +${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} " id="cost.nextAccountsPeriodStartOn"></div>
         </div>
         <div class="column-sixth">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.landAndBuildings',
                                   text = 'Cost at ' + ${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Land & buildings',
                                   class= 'govuk-input validate cost-ps-add cost-lab-add nbv-cp-lab-add',
-                                  )">
+                                  )}">
 
           </div>
         </div>
         <div class="column-sixth">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.plantAndMachinery',
                                   text = 'Cost at ' + ${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Plant & machinery',
                                   class= 'govuk-input validate cost-ps-add cost-pam-add nbv-cp-pam-add',
-                                  )">
+                                  )}">
           </div>
 
         </div>
         <div class="column-sixth">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.fixturesAndFittings',
                                   text = 'Cost at ' + ${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Fixtures & fittings',
                                   class= 'govuk-input validate cost-ps-add cost-faf-add nbv-cp-faf-add',
-                                  )">
+                                  )}">
           </div>
 
         </div>
         <div class="column-sixth">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.officeEquipment',
                                   text = 'Cost at ' + ${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Office equipment',
                                   class= 'govuk-input validate cost-ps-add cost-oe-add nbv-cp-oe-add',
-                                  )">
+                                  )}">
           </div>
 
         </div>
         <div class="column-sixth">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.motorVehicles',
                                   text = 'Cost at ' + ${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Motor vehicles',
                                   class= 'govuk-input validate cost-ps-add cost-mv-add nbv-cp-mv-add',
-                                  )">
+                                  )}">
           </div>
 
         </div>
         <div class="column-sixth accounts-total">
-          <div th:replace="fragments/numberInput :: numberInput (
+          <div th:replace="~{fragments/numberInput :: numberInput (
                                   id = 'cost.atPeriodStart.total',
                                   text = 'Cost at ' + ${#temporals.format(tangibleAssets.nextAccountsPeriodStartOn, 'd MMMM yyyy')} + ' - Total',
                                   class= 'govuk-input cost-ps-total cost-t-add nbv-cp-t-add',
-                                  )">
+                                  )}">
           </div>
 
         </div>
@@ -159,9 +159,9 @@
     </th:block>
     <!--End Cost at start-->
     <!--Start Additions -->
-    <div th:replace="fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
+    <div th:replace="~{fragments/tangibleAssetsErrorRow :: tangibleAssetsErrorRow (
                       row = 'cost.additions'
-                      )">
+                      )}">
     </div>
 
     <div class="govuk-grid-row">
@@ -170,29 +170,29 @@
         <!--</span> </summary> <div class="panel panel-border-narrow"> <p> The cost of your tangible assets aquired during this accounting period. </p> </div> </details>-->
       </div>
       <div class="column-sixth">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.additions.landAndBuildings',
                                 text = 'Additions - Land & buildings',
                                 class= 'govuk-input validate cost-a-add cost-lab-add',
-                                )">
+                                )}">
 
         </div>
       </div>
       <div class="column-sixth">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.additions.plantAndMachinery',
                                 text = 'Additions - Plant & machinery',
                                 class= 'govuk-input validate cost-a-add cost-pam-add',
-                                )">
+                                )}">
         </div>
 
       </div>
       <div class="column-sixth">
-        <div th:replace="fragments/numberInput :: numberInput (
+        <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'cost.additions.fixturesAndFittings',
                                 text = 'Additions - Fixtures & fittings',
                                 class= 'govuk-input validate cost-a-add cost-faf-add',
-                                )">
+                                )}">
         </div>
 
       </div>

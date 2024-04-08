@@ -13,7 +13,7 @@
     <div class="govuk-grid-column-two-thirds">
 
       <form id="criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
         <header>
           <h1 id="page-title" class="govuk-heading-l">
             File full accounts

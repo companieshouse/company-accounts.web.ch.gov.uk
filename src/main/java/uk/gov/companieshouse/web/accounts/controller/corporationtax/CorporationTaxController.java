@@ -10,7 +10,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccountTypeController;
 import uk.gov.companieshouse.web.accounts.model.corporationtax.CorporationTax;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Controller
 @NextController(SelectAccountTypeController.class)

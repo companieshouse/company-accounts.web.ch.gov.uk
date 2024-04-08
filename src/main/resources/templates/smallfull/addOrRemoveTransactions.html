@@ -146,11 +146,11 @@
 
             <form th:object="${addOrRemoveTransactions}" id="data-submission-form"
                   class="form currency-included-within-inputs govuk-body" th:action="@{''}" method="post">
-                <div th:replace="fragments/numberedHeading :: numberedHeading (
-                  headingText = 'Related party transactions')">
+                <div th:replace="~{fragments/numberedHeading :: numberedHeading (
+                  headingText = 'Related party transactions')}">
                 </div>
 
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
                 <!--Hidden fields for form binding-->
                 <input th:field="*{nextAccount.periodStartOn}" type="hidden">
@@ -318,11 +318,11 @@
                         </div>
 
                         <div class="govuk-grid-column-one-half govuk-!-display-block">
-                            <div th:replace="fragments/numberInput :: numberInput (
+                            <div th:replace="~{fragments/numberInput :: numberInput (
                                     id = 'rptTransactionToAdd.breakdown.balanceAtPeriodStart',
                                     text = 'Balance at ' + ${#temporals.format(addOrRemoveTransactions.nextAccount.periodStartOn, 'd MMMM yyyy')} + ' in £',
                                     class = 'govuk-input',
-                                    )">
+                                    )}">
                             </div>
                         </div>
                     </div>
@@ -333,11 +333,11 @@
                              th:text="'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')}">
                         </div>
                         <div class="govuk-grid-column-one-half column-flex govuk-!-display-block">
-                            <div th:replace="fragments/numberInput :: numberInput (
+                            <div th:replace="~{fragments/numberInput :: numberInput (
                                       id = 'rptTransactionToAdd.breakdown.balanceAtPeriodEnd',
                                       text = 'Balance at ' + *{#temporals.format(nextAccount.periodEndOn, 'd MMMM yyyy')} + ' in £',
                                       class= 'govuk-input',
-                                      )">
+                                      )}">
                             </div>
                         </div>
                     </div>

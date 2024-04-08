@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

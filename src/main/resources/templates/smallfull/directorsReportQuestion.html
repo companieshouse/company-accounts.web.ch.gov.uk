@@ -14,15 +14,15 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="directorsReport-question-form" class="form" th:action="@{''}" th:object="${directorsReportQuestion}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasIncludedDirectorsReport')} ? 'govuk-form-group--error' : ''">
 
-          <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+          <div th:replace="~{fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
               legendText = 'Do your prepared accounts include a directors\' report?',
               radioButtonsFieldName = 'hasIncludedDirectorsReport'
-              )">
+              )}">
           </div>
         </div>
 

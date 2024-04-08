@@ -14,7 +14,7 @@
         <div class="govuk-grid-column-two-thirds">
             <form id="additionalInformation-selection-form" class="form" th:action="@{''}" th:object="${additionalInformationSelection}" method="post">
 
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
                 <div class="govuk-form-group"
                      th:classappend="${#fields.hasErrors('hasAdditionalInformation')} ? 'govuk-form-group--error' : ''">

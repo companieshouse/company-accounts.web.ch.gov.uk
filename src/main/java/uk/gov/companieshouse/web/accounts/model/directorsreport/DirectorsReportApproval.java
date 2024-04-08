@@ -1,7 +1,7 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
 import java.util.List;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;

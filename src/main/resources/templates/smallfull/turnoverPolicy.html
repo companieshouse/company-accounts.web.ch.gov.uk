@@ -15,12 +15,12 @@
       <form id="statements-form" class="form" th:action="@{''}" th:object="${turnoverPolicy}"
             method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('isIncludeTurnoverSelected')} ? 'govuk-form-group--error' : ''">
 
-          <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+          <div th:replace="~{fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
               legendText = 'Do your prepared accounts include a \'turnover\' policy?',
               boxLabelTextJavaScriptOn = 'Give details of your \'turnover\' policy',
               boxLabelTextJavaScriptOff = 'If yes, enter your \'turnover\' policy',
@@ -28,7 +28,7 @@
               textBoxFieldName = 'turnoverPolicyDetails',
               dataTargetTextFieldName = 'turnover-policy-text-box',
               textAreaClassName = 'govuk-textarea'
-              )">
+              )}">
           </div>
 
 

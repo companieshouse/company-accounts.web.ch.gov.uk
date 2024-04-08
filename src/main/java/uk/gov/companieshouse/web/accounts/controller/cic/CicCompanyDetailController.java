@@ -13,7 +13,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 @Controller

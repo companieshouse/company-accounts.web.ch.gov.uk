@@ -14,12 +14,12 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="intangibleAmortisationPolicy-form" class="form" th:action="@{''}" th:object="${intangibleAmortisationPolicy}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('includeIntangibleAmortisationPolicy')} ? 'govuk-form-group--error' : ''">
 
-          <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
+          <div th:replace="~{fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
               legendText = 'Do your prepared accounts include an \'intangible fixed assets amortisation\' policy?',
               boxLabelTextJavaScriptOn = 'Give details of your \'intangible fixed assets amortisation\' policy',
               boxLabelTextJavaScriptOff = 'If yes, enter your \'intangible fixed assets amortisation\' policy',
@@ -27,7 +27,7 @@
               textBoxFieldName = 'intangibleAmortisationPolicyDetails',
               dataTargetTextFieldName = 'intangibleAmortisationPolicy-text-box',
               textAreaClassName = 'govuk-textarea'
-              )">
+              )}">
           </div>
         </div>
 

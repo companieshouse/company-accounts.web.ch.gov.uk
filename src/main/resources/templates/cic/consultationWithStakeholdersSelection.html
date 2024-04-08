@@ -16,11 +16,11 @@
       <form id="consultationWithStakeholdersSelection-form" class="form" th:action="@{''}"
             th:object="${consultationWithStakeholdersSelection}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-        <div th:replace="fragments/numberedHeading :: numberedHeading (
+        <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Has there been a consultation with stakeholders?'
-                )">
+                )}">
         </div>
 
         <p id="stakeholders-help-text">
@@ -38,9 +38,9 @@
         </ul>
 
         <div class="govuk-form-group" th:classappend="${#fields.hasErrors('hasProvidedConsultationWithStakeholders')} ? 'govuk-form-group--error' : ''">
-          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+          <div th:replace="~{fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
                                   radioButtonsFieldName = 'hasProvidedConsultationWithStakeholders'
-                                  )">
+                                  )}">
           </div>
         </div>
 

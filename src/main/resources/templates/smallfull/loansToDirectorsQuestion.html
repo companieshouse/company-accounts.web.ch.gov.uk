@@ -14,7 +14,7 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="loansToDirectors-question-form" class="form" th:action="@{''}" th:object="${loansToDirectorsQuestion}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasIncludedLoansToDirectors')} ? 'govuk-form-group--error' : ''">

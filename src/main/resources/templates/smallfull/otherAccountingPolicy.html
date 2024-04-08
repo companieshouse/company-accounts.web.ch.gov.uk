@@ -11,7 +11,7 @@
       <form id="statements-form" class="form" th:action="@{''}"
             th:object="${otherAccountingPolicy}"
             method="post">
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasOtherAccountingPolicySelected')} ? 'govuk-form-group--error' : ''">
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (

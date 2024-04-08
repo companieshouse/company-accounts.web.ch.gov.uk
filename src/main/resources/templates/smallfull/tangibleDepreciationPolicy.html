@@ -15,7 +15,7 @@
             th:object="${tangibleDepreciationPolicy}"
             method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasTangibleDepreciationPolicySelected')} ? 'govuk-form-group--error' : ''">

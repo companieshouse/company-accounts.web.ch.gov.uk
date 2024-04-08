@@ -16,7 +16,7 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicReportService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @PreviousController(CicCompanyDetailController.class)

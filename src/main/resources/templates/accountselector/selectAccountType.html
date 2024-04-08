@@ -14,7 +14,7 @@
     <div class="govuk-grid-column-two-thirds">
 
       <form id="criteria-form" th:action="@{''}" th:object="${typeOfAccounts}" class="form" method="post">
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
         <header>
           <h1 id="page-title" class="govuk-heading-l">Which type of accounts have you prepared?</h1>
         </header>

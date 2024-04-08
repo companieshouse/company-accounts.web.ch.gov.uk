@@ -20,8 +20,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitm
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @Controller
 @NextController(FinancialCommitmentsController.class)

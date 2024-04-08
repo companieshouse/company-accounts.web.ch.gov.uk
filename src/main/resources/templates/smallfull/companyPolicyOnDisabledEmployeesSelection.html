@@ -14,7 +14,7 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="companyPolicyOnDisabledEmployees-selection-form" class="form" th:action="@{''}" th:object="${companyPolicyOnDisabledEmployeesSelection}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasCompanyPolicyOnDisabledEmployees')} ? 'govuk-form-group--error' : ''">

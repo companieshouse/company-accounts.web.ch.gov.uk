@@ -20,8 +20,8 @@ import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 

@@ -15,7 +15,7 @@
             <form id="financialCommitments-form" class="form" th:action="@{''}" th:object="${financialCommitments}"
                   method="post">
 
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
                 <div class="govuk-form-group govuk-form-group-block-important"
                      th:classappend="${#fields.hasErrors('financialCommitmentsDetails')} ? 'govuk-form-group--error' : ''">

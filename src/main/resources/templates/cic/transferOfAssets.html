@@ -17,12 +17,12 @@
             th:object="${transferOfAssets}" method="post">
 
 
-        <div th:replace="fragments/textAreaWithHelpAndHeadings :: textAreaWithHelpAndHeadings (
+        <div th:replace="~{fragments/textAreaWithHelpAndHeadings :: textAreaWithHelpAndHeadings (
                                 heading = 'Give details of any transfer of assets other than for full consideration',
                                 helpText = 'See an example',
                                 dropDownText = '<p>There was a transfer to a local community group of £100 to purchase a laptop.</p>',
                                 field = 'transferOfAssets'
-                                )">
+                                )}">
 
         </div>
 

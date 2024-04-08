@@ -14,15 +14,15 @@
     <div class="govuk-grid-column-two-thirds">
       <form id="financialCommitments-question-form" class="form" th:action="@{''}" th:object="${financialCommitmentsQuestion}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasIncludedFinancialCommitments')} ? 'govuk-form-group--error' : ''">
 
-          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+          <div th:replace="~{fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
               legendText = 'Do your prepared accounts include a \'financial commitments\' note?',
               radioButtonsFieldName = 'hasIncludedFinancialCommitments'
-              )">
+              })">
           </div>
         </div>
 

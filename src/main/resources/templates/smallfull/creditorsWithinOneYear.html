@@ -13,7 +13,7 @@
 
     <form id="balanceSheet-form" th:action="@{''}" th:object="${creditorsWithinOneYear}" class="form currency-included-within-inputs govuk-body" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div th:replace="fragments/numberedHeading :: numberedHeading (
                     headingText = 'Creditors - amounts falling due within one year note'

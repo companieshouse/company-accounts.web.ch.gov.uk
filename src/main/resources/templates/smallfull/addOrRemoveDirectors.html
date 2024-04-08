@@ -14,7 +14,7 @@
         <div class="govuk-grid-column-two-thirds">
 
             <form th:object="${addOrRemoveDirectors}">
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
             </form>
 
             <div th:object="${addOrRemoveDirectors}">

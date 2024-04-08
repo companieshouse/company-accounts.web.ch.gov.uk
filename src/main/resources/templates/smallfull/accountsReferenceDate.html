@@ -15,7 +15,7 @@
         <div class="govuk-grid-column-two-thirds">
             <form id="accounts-reference-date-form" class="form" th:action="@{''}" th:object="${accountsReferenceDate}" method="post">
 
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
                 <h1 id="page-title" class="govuk-heading-l">
                     <span>Choose the date the accounts are made up to</span>

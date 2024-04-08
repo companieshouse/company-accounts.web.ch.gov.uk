@@ -15,7 +15,7 @@
       <form id="valuationInformationPolicy-form" class="form" th:action="@{''}" th:object="${valuationInformationPolicy}"
             method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('includeValuationInformationPolicy')} ? 'govuk-form-group--error' : ''">

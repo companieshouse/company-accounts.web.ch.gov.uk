@@ -16,11 +16,11 @@
       <form id="directorsRemunerationSelection-form" class="form" th:action="@{''}"
             th:object="${directorsRemunerationSelection}" method="post">
 
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
+        <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-        <div th:replace="fragments/numberedHeading :: numberedHeading (
+        <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Was directors\' remuneration received?'
-                )">
+                )}">
         </div>
 
         <p id="remuneration-help-text">
@@ -28,9 +28,9 @@
         </p>
 
         <div class="govuk-form-group" th:classappend="${#fields.hasErrors('hasProvidedDirectorsRemuneration')} ? 'govuk-form-group--error' : ''">
-          <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
+          <div th:replace="~{fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
                                   radioButtonsFieldName = 'hasProvidedDirectorsRemuneration'
-                                  )">
+                                  )}">
           </div>
         </div>
 

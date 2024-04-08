@@ -12,11 +12,11 @@
 
             <form id="profitAndLoss-form" th:action="@{''}" th:object="${profitAndLoss}" class="form currency-included-within-inputs govuk-body" method="post">
 
-                <div th:replace="fragments/globalErrors :: globalErrors"></div>
+                <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
-                <div th:replace="fragments/numberedHeading :: numberedHeading (
+                <div th:replace="~{fragments/numberedHeading :: numberedHeading (
                     headingText = 'Profit and loss account'
-                )">
+                )}">
                 </div>
 
                 <div class="left-indent">
@@ -44,10 +44,10 @@
                         </div>
                     </div>
 
-                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                    <div th:replace="~{fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'grossProfitOrLoss.turnover.currentAmount',
                         previousField = 'grossProfitOrLoss.turnover.previousAmount'
-                        )">
+                        )}">
                     </div>
 
                     <div class="govuk-grid-row column-flex">
@@ -56,27 +56,27 @@
                         </div>
 
                         <div class="govuk-grid-column-one-quarter column-flex">
-                            <div th:replace="fragments/numberInput :: numberInput (
+                            <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.turnover.currentAmount',
                                 text = 'Turnover current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class = 'govuk-input current validate range-from-minus gross-c-add operating-c-add',
-                                )">
+                                )}">
                             </div>
                         </div>
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
-                            <div th:replace="fragments/numberInput :: numberInput (
+                            <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.turnover.previousAmount',
                                 text = 'Turnover previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous validate range-from-minus gross-p-add operating-p-add',
-                                )">
+                                )}">
                             </div>
                         </div>
                     </div>
 
-                    <div th:replace="fragments/fieldErrorRow :: fieldErrorRow (
+                    <div th:replace="~{fragments/fieldErrorRow :: fieldErrorRow (
                         currentField = 'grossProfitOrLoss.costOfSales.currentAmount',
                         previousField = 'grossProfitOrLoss.costOfSales.previousAmount'
-                        )">
+                        )}">
                     </div>
 
                     <div class="govuk-grid-row column-flex">
@@ -85,19 +85,19 @@
                         </div>
 
                         <div class="govuk-grid-column-one-quarter column-flex">
-                            <div th:replace="fragments/numberInput :: numberInput (
+                            <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.costOfSales.currentAmount',
                                 text = 'Cost of sales current '  + *{balanceSheetHeadings.currentPeriodHeading} + ' in £',
                                 class = 'govuk-input current validate gross-c-subtract operating-c-subtract',
-                                )">
+                                )}">
                             </div>
                         </div>
                         <div th:unless="*{#strings.isEmpty(balanceSheetHeadings.previousPeriodHeading)}" class="govuk-grid-column-one-quarter column-flex">
-                            <div th:replace="fragments/numberInput :: numberInput (
+                            <div th:replace="~{fragments/numberInput :: numberInput (
                                 id = 'grossProfitOrLoss.costOfSales.previousAmount',
                                 text = 'Cost of sales previous '  + *{balanceSheetHeadings.previousPeriodHeading} + ' in £',
                                 class= 'govuk-input previous validate gross-p-subtract operating-p-subtract',
-                                )">
+                                )}">
                             </div>
                         </div>
                     </div>

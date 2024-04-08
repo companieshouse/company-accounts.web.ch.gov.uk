@@ -1,42 +1,43 @@
 package uk.gov.companieshouse.web.accounts.security;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import uk.gov.companieshouse.auth.filter.CompanyAuthFilter;
 import uk.gov.companieshouse.auth.filter.HijackFilter;
 import uk.gov.companieshouse.session.handler.SessionHandler;
 
 @EnableWebSecurity
+@EnableMethodSecurity
 public class WebSecurityConfigurer {
 
     @Configuration
     @Order(1)
-    public static class GovUkAccountsSecurityFilterConfig extends WebSecurityConfigurerAdapter {
+    @EnableMethodSecurity
+    public static class GovUkAccountsSecurityFilterConfig {
 
-        @Override
-        protected void configure(HttpSecurity http)
-                throws Exception {
-
-            http.antMatcher("/accounts/**")
+        @Bean
+        public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+            return http.securityMatcher("/accounts/**")
                     .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
-                    .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class);
+                    .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class).build();
         }
     }
 
     @Configuration
-    public static class CompanyAccountsSecurityFilterConfig extends WebSecurityConfigurerAdapter {
+    @EnableMethodSecurity
+    public static class CompanyAccountsSecurityFilterConfig {
 
-        @Override
-        protected void configure(HttpSecurity http)
-                throws Exception {
-
-            http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
+        @Bean
+        public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
+            return http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
-                    .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class);
+                    .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class).build();
         }
     }
 }

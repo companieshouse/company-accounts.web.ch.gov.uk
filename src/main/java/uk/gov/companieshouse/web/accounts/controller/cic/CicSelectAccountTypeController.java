@@ -14,7 +14,7 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.Optional;
 
 @Controller

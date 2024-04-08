@@ -17,7 +17,7 @@
             th:object="${companyActivitiesAndImpact}" method="post">
 
 
-        <div th:replace="fragments/textAreaWithHelpAndHeadings :: textAreaWithHelpAndHeadings (
+        <div th:replace="~{fragments/textAreaWithHelpAndHeadings :: textAreaWithHelpAndHeadings (
                                 heading = 'The company’s activities and impact',
                                 subheading = 'Explain how the company’s activities have benefited the community in the financial year.',
                                 subheadingClass = 'govuk-heading-m',
@@ -29,7 +29,7 @@
                                                 <p>- 8 small-scale local producers of various food and drink products, who were either dissatisfied with or unable to supply larger wholesalers or retailers have been able to sell their products through the shop</p>
                                                 <p>- 40 households have been supplied with regular or occasional domestic services through the shop’s job-matching service.</p>',
                                 field = 'activitiesAndImpact'
-                                )">
+                                )}">
 
         </div>
 

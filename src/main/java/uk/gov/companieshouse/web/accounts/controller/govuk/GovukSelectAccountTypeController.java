@@ -16,7 +16,7 @@ import uk.gov.companieshouse.web.accounts.controller.govuk.smallfull.GovukFullAc
 import uk.gov.companieshouse.web.accounts.exception.NavigationException;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Controller
 @NextController(GovukFullAccountsCriteriaController.class)

@@ -13,7 +13,7 @@ import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.corporationtax.CorporationTax;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Controller
 @NextController(GovukSelectAccountTypeController.class)

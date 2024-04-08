@@ -12,7 +12,7 @@
 
   <form id="approval-form" th:action="@{''}" th:object="${cicApproval}" class="form" method="post">
 
-    <div th:replace="fragments/globalErrors :: globalErrors"></div>
+    <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
     <div class="govuk-grid-row">
 

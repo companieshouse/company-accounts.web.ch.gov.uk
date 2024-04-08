@@ -15,7 +15,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccountTypeController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @Controller
 @NextController(StepsToCompleteController.class)

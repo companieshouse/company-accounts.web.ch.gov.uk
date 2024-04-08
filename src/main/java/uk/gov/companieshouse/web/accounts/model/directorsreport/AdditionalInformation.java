@@ -3,7 +3,7 @@ package uk.gov.companieshouse.web.accounts.model.directorsreport;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @ValidationModel
 public class AdditionalInformation {
