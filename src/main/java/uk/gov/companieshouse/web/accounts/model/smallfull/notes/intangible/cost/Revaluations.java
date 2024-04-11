@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class Revaluations {
-
     @ValidationMapping("$.intangible_assets.goodwill.cost.revaluations")
     private Long goodwill;
 
@@ -12,7 +11,6 @@ public class Revaluations {
 
     @ValidationMapping("$.intangible_assets.total.cost.revaluations")
     private Long total;
-
 
     public Long getGoodwill() {
         return goodwill;
@@ -37,8 +35,5 @@ public class Revaluations {
     public void setTotal(Long total) {
         this.total = total;
     }
-
-
-
 
 }

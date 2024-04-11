@@ -20,10 +20,8 @@ import java.util.stream.Stream;
 
 @Component("otherLiabilitiesOrAssetsTransformer")
 public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
-
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasCurrentPeriodOtherLiabilitiesOrAssets(balanceSheet))) {
             OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
             OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
@@ -43,7 +41,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasPreviousPeriodOtherLiabilitiesOrAssets(balanceSheet))) {
             OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
             OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
@@ -63,7 +60,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         createOtherLiabilitiesOrAssets(balanceSheet);
         OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = balanceSheetApi.getOtherLiabilitiesOrAssets();
 
@@ -110,7 +106,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         createOtherLiabilitiesOrAssets(balanceSheet);
         OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = balanceSheetApi.getOtherLiabilitiesOrAssets();
 
@@ -156,7 +151,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private OtherLiabilitiesOrAssets createOtherLiabilitiesOrAssets(BalanceSheet balanceSheet) {
-
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets() == null) {
@@ -170,7 +164,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private AccrualsAndDeferredIncome createAccrualsAndDeferredIncome(BalanceSheet balanceSheet) {
-
         AccrualsAndDeferredIncome accrualsAndDeferredIncome;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getAccrualsAndDeferredIncome() == null) {
@@ -184,7 +177,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private CreditorsAfterOneYear createCreditorsAfterOneYear(BalanceSheet balanceSheet) {
-
         CreditorsAfterOneYear creditorsAfterOneYear;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsAfterOneYear() == null) {
@@ -198,7 +190,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private CreditorsDueWithinOneYear createCreditorsDueWithinOneYear(BalanceSheet balanceSheet) {
-
         CreditorsDueWithinOneYear creditorsDueWithinOneYear;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getCreditorsDueWithinOneYear() == null) {
@@ -212,7 +203,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private NetCurrentAssets createNetCurrentAssets(BalanceSheet balanceSheet) {
-
         NetCurrentAssets netCurrentAssets;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getNetCurrentAssets() == null) {
@@ -226,7 +216,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private PrepaymentsAndAccruedIncome createPrepaymentsAndAccruedIncome(BalanceSheet balanceSheet) {
-
         PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getPrepaymentsAndAccruedIncome() == null) {
@@ -240,7 +229,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private ProvisionForLiabilities createProvisionForLiabilities(BalanceSheet balanceSheet) {
-
         ProvisionForLiabilities provisionForLiabilities;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getProvisionForLiabilities() == null) {
@@ -254,7 +242,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private TotalAssetsLessCurrentLiabilities createTotalAssetsLessCurrentLiabilities(BalanceSheet balanceSheet) {
-
         TotalAssetsLessCurrentLiabilities totalAssetsLessCurrentLiabilities;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getTotalAssetsLessCurrentLiabilities() == null) {
@@ -268,7 +255,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private TotalNetAssets createTotalNetAssets(BalanceSheet balanceSheet) {
-
         TotalNetAssets totalNetAssets;
 
         if (balanceSheet.getOtherLiabilitiesOrAssets().getTotalNetAssets() == null) {
@@ -282,7 +268,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private Boolean hasCurrentPeriodOtherLiabilitiesOrAssets(BalanceSheet balanceSheet) {
-
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
         return Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getCurrentAmount(),
@@ -296,7 +281,6 @@ public class OtherLiabilitiesOrAssetsTransformerImpl implements Transformer {
     }
 
     private Boolean hasPreviousPeriodOtherLiabilitiesOrAssets(BalanceSheet balanceSheet) {
-
         OtherLiabilitiesOrAssets otherLiabilitiesOrAssets = balanceSheet.getOtherLiabilitiesOrAssets();
 
         return Stream.of(otherLiabilitiesOrAssets.getPrepaymentsAndAccruedIncome().getPreviousAmount(),

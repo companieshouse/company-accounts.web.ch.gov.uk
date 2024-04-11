@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTes
 @NextController(MockControllerFive.class)
 @PreviousController(MockControllerThree.class)
 public class MockControllerFour extends BaseController implements ConditionalController {
-
     @Override
     protected String getTemplateName() {
         return null;

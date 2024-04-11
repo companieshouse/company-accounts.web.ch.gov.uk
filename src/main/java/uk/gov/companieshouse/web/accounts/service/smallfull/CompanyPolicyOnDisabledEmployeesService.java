@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.CompanyPolicyOnD
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface CompanyPolicyOnDisabledEmployeesService {
-
     CompanyPolicyOnDisabledEmployees getCompanyPolicyOnDisabledEmployees(String transactionId, String companyAccountsId)
             throws ServiceException;
 

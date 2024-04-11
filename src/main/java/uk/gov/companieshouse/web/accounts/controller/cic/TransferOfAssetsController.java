@@ -26,14 +26,12 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAssetsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-
 @Controller
 @NextController(CicReviewController.class)
 @PreviousController(TransferOfAssetsSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/transfer-of-assets")
 public class TransferOfAssetsController extends BaseController implements
     ConditionalController {
-
     @Autowired
     private TransferOfAssetsService transferOfAssetsService;
 
@@ -48,14 +46,12 @@ public class TransferOfAssetsController extends BaseController implements
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute("transferOfAssets", transferOfAssetsService
                 .getTransferOfAssets(transactionId, companyAccountsId));
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -71,7 +67,6 @@ public class TransferOfAssetsController extends BaseController implements
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -88,7 +83,6 @@ public class TransferOfAssetsController extends BaseController implements
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -101,7 +95,6 @@ public class TransferOfAssetsController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
         throws ServiceException {
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
 

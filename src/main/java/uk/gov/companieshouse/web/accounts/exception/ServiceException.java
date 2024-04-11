@@ -6,7 +6,6 @@ package uk.gov.companieshouse.web.accounts.exception;
  * exceptions from being propagated up the call stack.
  */
 public class ServiceException extends Exception {
-
     /**
      * Constructs a new {@code ServiceException} with a custom message and the specified
      * cause.

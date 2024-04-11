@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class CicApproval {
-
     @ValidationMapping("$.cic_approval.name")
     private String directorName;
 

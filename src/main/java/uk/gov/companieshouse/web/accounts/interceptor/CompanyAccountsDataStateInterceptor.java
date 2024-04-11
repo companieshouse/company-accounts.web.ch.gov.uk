@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 
 @Component
 public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
-
     private static final String STATE_COOKIE_NAME = "__CAS";
 
     private static final String STATE_REQUEST_ATTRIBUTE = "companyAccountsDataState";
@@ -39,19 +38,16 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-
         String companyAccountsId = getCompanyAccountsIdFromRequest(request);
 
         // Only execute for requests for which a company accounts id exists
         if (companyAccountsId != null) {
-
             // Retrieve the state cookie
             Cookie stateCookie = getStateCookie(request);
 
             CompanyAccountsDataState companyAccountsDataState;
 
             if (stateCookie != null) {
-
                 try {
                     // Fetch the States object from the JWT
                     CompanyAccountsDataStates companyAccountsDataStates =
@@ -64,7 +60,6 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
                         companyAccountsDataState = createNewState();
                     }
                 } catch (SignatureException e) {
-
                     companyAccountsDataState = createNewState();
                 }
             } else {
@@ -79,31 +74,26 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) {
-
         String companyAccountsId = getCompanyAccountsIdFromRequest(request);
 
         // Only execute for requests for which a company accounts id exists
         if (companyAccountsId != null) {
-
             // Retrieve the state cookie
             Cookie stateCookie = getStateCookie(request);
 
             CompanyAccountsDataStates companyAccountsDataStates;
 
             if (stateCookie == null) {
-
                 // Create a new cookie if one doesn't already exist
                 stateCookie = new Cookie(STATE_COOKIE_NAME, "");
 
                 // Instantiate the states object
                 companyAccountsDataStates = new CompanyAccountsDataStates();
             } else {
-
                 try {
                     // Fetch the States object from the JWT
                     companyAccountsDataStates = tokenManager.decodeJWT(stateCookie.getValue(), CompanyAccountsDataStates.class);
                 } catch (SignatureException e) {
-
                     companyAccountsDataStates = new CompanyAccountsDataStates();
                 }
 
@@ -143,7 +133,6 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
     }
 
     private Cookie getStateCookie(HttpServletRequest request) {
-
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equalsIgnoreCase(STATE_COOKIE_NAME))
                 .findFirst()
@@ -151,7 +140,6 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
     }
 
     private CompanyAccountsDataState createNewState() {
-
         CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
@@ -161,7 +149,6 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
     }
 
     private String getCompanyAccountsIdFromRequest(HttpServletRequest request) {
-
         Matcher matcher = COMPANY_ACCOUNTS_REGEX.matcher(request.getRequestURI());
         if (matcher.find()) {
             return matcher.group(1);
@@ -170,7 +157,6 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
     }
 
     private boolean isAccountsApprovalSubmission(HttpServletRequest request) {
-
         Matcher matcher = SMALL_FULL_APPROVAL_REGEX.matcher(request.getRequestURI());
         return matcher.find() && request.getMethod().equalsIgnoreCase("POST");
     }
@@ -180,7 +166,6 @@ public class CompanyAccountsDataStateInterceptor implements HandlerInterceptor {
      * @param companyAccountsDataStates The {@link CompanyAccountsDataStates} object from which to remove the oldest state
      */
     private void removeOldestState(CompanyAccountsDataStates companyAccountsDataStates) {
-
         companyAccountsDataStates.getCompanyAccountsDataStateMap().entrySet()
                 .stream()
                 .sorted((c1, c2) -> c1.getValue().getCreated().compareTo(c2.getValue().getCreated()))

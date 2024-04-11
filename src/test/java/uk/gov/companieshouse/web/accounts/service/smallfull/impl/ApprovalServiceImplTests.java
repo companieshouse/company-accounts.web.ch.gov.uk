@@ -41,7 +41,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ApprovalServiceImplTests {
-
     @Mock
     private ApprovalTransformer approvalTransformer;
 
@@ -128,7 +127,6 @@ class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
     void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -163,7 +161,6 @@ class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - POST - Date Validation Errors")
     void createApprovalDateValidationErrors() throws ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(false);
@@ -178,7 +175,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - POST - URIValidationException Thrown")
     void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
                 ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -214,7 +210,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - POST - Validation Errors")
     void createApprovalWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -253,7 +248,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - POST - ApiErrorResponseException Thrown")
     void createApprovalThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -288,7 +282,6 @@ class ApprovalServiceImplTests {
     @Test
     @DisplayName("Submit Approval - PUT - Success Path")
     void updateApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -324,7 +317,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - PUT - URIValidationException Thrown")
     void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException,
                     ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -360,7 +352,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - PUT - Validation Errors")
     void updateApprovalWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -399,7 +390,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - PUT - ApiErrorResponseException Thrown")
     void updateApprovalThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -434,7 +424,6 @@ class ApprovalServiceImplTests {
     @Test
     @DisplayName("Approval - GET - Success Path")
     void getApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -467,7 +456,6 @@ class ApprovalServiceImplTests {
     @Test
     @DisplayName("Approval - GET - No approval link")
     void getApprovalNoLinkSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -487,7 +475,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Approval - GET - URIValidationException Thrown")
     void getApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
                 ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -517,7 +504,6 @@ class ApprovalServiceImplTests {
     @DisplayName("Approval - GET - ApiErrorResponseException Thrown")
     void getApprovalThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);

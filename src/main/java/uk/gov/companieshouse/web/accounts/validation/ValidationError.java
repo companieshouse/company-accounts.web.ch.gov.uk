@@ -8,7 +8,6 @@ import java.util.Map;
  * presentation model fields.
  */
 public class ValidationError {
-
     private String messageKey;
     private Map<String, String> messageArguments;
     private String fieldPath;

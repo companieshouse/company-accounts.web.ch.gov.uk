@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class PrepaymentsAndAccruedIncome {
-
     @ValidationMapping("$.debtors.current_period.prepayments_and_accrued_income")
     private Long currentPrepaymentsAndAccruedIncome;
 

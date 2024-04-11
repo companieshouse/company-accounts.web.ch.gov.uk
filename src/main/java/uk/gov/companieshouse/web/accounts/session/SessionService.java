@@ -8,7 +8,6 @@ import java.util.Map;
  * the use of a test framework that supports mocking of static methods.
  */
 public interface SessionService {
-
     /**
      * Returns a map comprising data retrieved from the current session.
      *

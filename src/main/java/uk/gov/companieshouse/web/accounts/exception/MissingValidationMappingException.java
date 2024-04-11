@@ -6,7 +6,6 @@ package uk.gov.companieshouse.web.accounts.exception;
  * validation error or that the mappings have yet to be initialised.
  */
 public class MissingValidationMappingException extends RuntimeException {
-
     /**
      * Constructs a new {@code MissingValidationMappingException} with a custom
      * message.

@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 
 @ValidationModel
 public class PoliticalAndCharitableDonations {
-
     @NotBlank(message = "{directorsReport.politicalAndCharitableDonations.details.missing}")
     @ValidationMapping("$.statements.political_and_charitable_donations")
     private String politicalAndCharitableDonationsDetails;

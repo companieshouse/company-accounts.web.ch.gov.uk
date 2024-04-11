@@ -21,12 +21,13 @@ import java.time.LocalDate;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicCompanyDetailsControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
@@ -42,8 +43,7 @@ class CicCompanyDetailsControllerTest {
     private CompanyDetail companyDetail;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -64,7 +64,6 @@ class CicCompanyDetailsControllerTest {
     @Test
     @DisplayName("Get Cic Company Details (Is a CIC) - Success")
     void getRequestSuccessIsCic() throws Exception {
-
         when(companyService.getCompanyDetail(COMPANY_NUMBER)).thenReturn(companyDetail);
 
         when(companyDetail.getIsCic()).thenReturn(true);
@@ -77,11 +76,9 @@ class CicCompanyDetailsControllerTest {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
-
     @Test
     @DisplayName("Get Cic Company Details (Is a CIC with Accounts Due) - Success")
     void getRequestSuccessIsCicWithAccounts() throws Exception {
-
         when(companyService.getCompanyDetail(COMPANY_NUMBER)).thenReturn(companyDetail);
 
         when(companyDetail.getIsCic()).thenReturn(true);
@@ -95,11 +92,9 @@ class CicCompanyDetailsControllerTest {
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
-
     @Test
     @DisplayName("Get Cic Company Details (Is NOT CIC) - Success")
     void getRequestSuccessNotCic() throws Exception {
-
         when(companyService.getCompanyDetail(COMPANY_NUMBER)).thenReturn(companyDetail);
 
         mockMvc.perform(get(CIC_COMPANY_DETAIL_PATH))
@@ -113,7 +108,6 @@ class CicCompanyDetailsControllerTest {
     @Test
     @DisplayName("Get Cic Company Details (Company not found) - Throws Exception")
     void getRequestThrowsException() throws Exception {
-
         when(companyService.getCompanyDetail(COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
         mockMvc.perform(get(CIC_COMPANY_DETAIL_PATH))
@@ -124,7 +118,6 @@ class CicCompanyDetailsControllerTest {
     @Test
     @DisplayName("Post Cic Company Details")
     void postRequest() throws Exception {
-
         when(navigatorService.getNextControllerRedirect(controller.getClass(), COMPANY_NUMBER))
                 .thenReturn(CIC_MOCK_CONTROLLER_PATH);
 

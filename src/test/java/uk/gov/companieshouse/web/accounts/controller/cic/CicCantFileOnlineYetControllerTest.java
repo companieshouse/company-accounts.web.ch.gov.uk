@@ -17,15 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicCantFileOnlineYetControllerTest {
-
     private MockMvc mockMvc;
 
     @InjectMocks
     private CicCantFileOnlineYetController controller;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -33,11 +31,9 @@ class CicCantFileOnlineYetControllerTest {
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR = "accountType";
 
-
     @Test
     @DisplayName("Get Cic cant file online yet view success path")
     void getCicCantFindOnlineYetRequest() throws Exception {
-
         mockMvc.perform(get(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))

@@ -5,7 +5,6 @@ import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportA
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface DirectorsReportService {
-
     void createDirectorsReport(String transactionId, String companyAccountsId) throws ServiceException;
 
     DirectorsReportApi getDirectorsReport(ApiClient apiClient, String transactionId, String companyAccountsId)

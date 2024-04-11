@@ -5,7 +5,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class AddOrRemoveRptTransactions {
-
     public AddOrRemoveRptTransactions() {
         this.rptTransactionToAdd = new RptTransactionToAdd();
         this.rptTransactionToAdd.setBreakdown(new RptTransactionBreakdown());

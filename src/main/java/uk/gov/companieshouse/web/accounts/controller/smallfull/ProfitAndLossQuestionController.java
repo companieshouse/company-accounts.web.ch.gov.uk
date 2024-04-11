@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService
 @NextController(ProfitAndLossController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/profit-and-loss-question")
 public class ProfitAndLossQuestionController extends BaseController {
-
     private static final String PROFIT_AND_LOSS_QUESTION = "profitAndLossQuestion";
 
     @Autowired
@@ -36,7 +35,6 @@ public class ProfitAndLossQuestionController extends BaseController {
                                            @PathVariable String companyAccountsId,
                                            Model model,
                                            HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         ProfitAndLossQuestion profitAndLossQuestion = new ProfitAndLossQuestion();
@@ -55,7 +53,6 @@ public class ProfitAndLossQuestionController extends BaseController {
                                               BindingResult bindingResult,
                                               Model model,
                                               HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -66,7 +63,6 @@ public class ProfitAndLossQuestionController extends BaseController {
             try {
                 profitAndLossService.deleteProfitAndLoss(transactionId, companyAccountsId, companyNumber);
             } catch (ServiceException e) {
-
                 LOGGER.errorRequest(request, e.getMessage(), e);
                 return ERROR_VIEW;
             }
@@ -83,13 +79,11 @@ public class ProfitAndLossQuestionController extends BaseController {
     }
 
     private void setIsProfitAndLossIncluded(HttpServletRequest request, ProfitAndLossQuestion profitAndLossQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         profitAndLossQuestion.setHasIncludedProfitAndLoss(companyAccountsDataState.getHasIncludedProfitAndLoss());
     }
 
     private void  cacheIsProfitAndLossIncluded(HttpServletRequest request, ProfitAndLossQuestion profitAndLossQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedProfitAndLoss(profitAndLossQuestion.getHasIncludedProfitAndLoss());
 

@@ -20,7 +20,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicReviewService;
 @PreviousController(TransferOfAssetsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/review")
 public class CicReviewController extends BaseController {
-
     @Autowired
     private CicReviewService cicReviewService;
 
@@ -30,7 +29,6 @@ public class CicReviewController extends BaseController {
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -43,7 +41,6 @@ public class CicReviewController extends BaseController {
             model.addAttribute("companyAccountsId", companyAccountsId);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -56,11 +53,9 @@ public class CicReviewController extends BaseController {
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
         HttpServletRequest request) {
-
         try {
             cicReviewService.acceptStatements(transactionId, companyAccountsId);
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }

@@ -1,5 +1,27 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -12,29 +34,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.ArrayList;
-import java.util.List;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BalanceSheetControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -69,14 +73,13 @@ class BalanceSheetControllerTests {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get balance sheet view success path")
     void getRequestSuccess() throws Exception {
-
         when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new BalanceSheet());
 
         this.mockMvc.perform(get(BALANCE_SHEET_PATH))
@@ -91,7 +94,6 @@ class BalanceSheetControllerTests {
     @Test
     @DisplayName("Get balance sheet view failure path due to error on balance sheet retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(balanceSheetService).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
@@ -104,8 +106,7 @@ class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
-
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
@@ -116,7 +117,6 @@ class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString());
 
@@ -129,7 +129,6 @@ class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath("calledUpShareCapitalNotPaid");
         validationError.setMessageKey("invalid_character");
@@ -147,7 +146,6 @@ class BalanceSheetControllerTests {
     @Test
     @DisplayName("Post balance sheet with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = "calledUpShareCapitalNotPaid.currentAmount";
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";

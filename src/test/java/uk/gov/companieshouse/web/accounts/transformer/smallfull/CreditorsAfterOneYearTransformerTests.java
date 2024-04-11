@@ -17,7 +17,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CreditorsAf
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreditorsAfterOneYearTransformerTests {
-
     private static final Long BANK_LOANS_CURRENT = 2L;
     private static final Long FINANCE_LEASES_CURRENT = 3L;
     private static final Long OTHER_CREDITORS_CURRENT = 4L;
@@ -36,7 +35,6 @@ class CreditorsAfterOneYearTransformerTests {
     @Test
     @DisplayName("All Current period values added to creditors after one year web model")
     void getCreditorsAfterOneYearForCurrentPeriod() {
-
         CreditorsAfterOneYearApi creditorsAfterOneYearApi = new CreditorsAfterOneYearApi();
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
@@ -66,7 +64,6 @@ class CreditorsAfterOneYearTransformerTests {
     @Test
     @DisplayName("Only populated Current period values added to creditors after one year web model")
     void getCreditorsAfterOneYearForCurrentPeriodPopulatedValues() {
-
         CreditorsAfterOneYearApi creditorsAfterOneYearApi = new CreditorsAfterOneYearApi();
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
@@ -89,11 +86,9 @@ class CreditorsAfterOneYearTransformerTests {
     @Test
     @DisplayName("Previous period values added to creditors after one year web model")
     void getCreditorsAfterOneYearForPreviousPeriod() {
-
         CreditorsAfterOneYearApi creditorsAfterOneYearApi = new CreditorsAfterOneYearApi();
 
         PreviousPeriod previousPeriod = new PreviousPeriod();
-
 
         previousPeriod.setBankLoansAndOverdrafts(BANK_LOANS_PREVIOUS);
         previousPeriod.setFinanceLeasesAndHirePurchaseContracts(FINANCE_LEASES_PREVIOUS);

@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.relatedpartytransactions;
 
 public class RptTransaction {
-
     private String id;
 
     private String nameOfRelatedParty;

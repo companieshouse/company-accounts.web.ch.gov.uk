@@ -12,7 +12,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 @RequestMapping({"/accounts/cic/cics-file-paper", "/accounts/cic/{companyNumber}/cics-file-paper"})
 @PreviousController(CicCantFileOnlineYetController.class)
 public class CicFileOnPaperController extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return "cic/cicFileOnPaper";
@@ -20,7 +19,6 @@ public class CicFileOnPaperController extends BaseController {
 
     @GetMapping
     public String getCicFileOnPaper(@RequestParam("backLink") String backLink, @RequestParam("accountType") String accountType, Model model) {
-
         model.addAttribute("backButton", "/accounts/cic/cant-file-online-yet?backLink=" + backLink + "&accountType=" + accountType);
 
         return getTemplateName();

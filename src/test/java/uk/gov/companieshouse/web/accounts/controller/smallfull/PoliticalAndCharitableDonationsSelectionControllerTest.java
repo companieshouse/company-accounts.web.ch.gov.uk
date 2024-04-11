@@ -1,8 +1,14 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,9 +25,6 @@ import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsSelectionService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,6 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PoliticalAndCharitableDonationsSelectionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -106,15 +111,13 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get request - success - hasPoliticalAndCharitableDonations set from db")
     void getPoliticalAndCharitableDonationsSelectionSuccessHasSelectionSetFromDB() throws Exception {
-
         when(service.getPoliticalAndCharitableDonationsSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(politicalAndCharitableDonationsSelection);
 
@@ -133,7 +136,6 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     @Test
     @DisplayName("Get request - success - hasPoliticalAndCharitableDonations derived from data state")
     void getPoliticalAndCharitableDonationsSelectionSuccessHasSelectionDerivedFromDataState() throws Exception {
-
         when(service.getPoliticalAndCharitableDonationsSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(politicalAndCharitableDonationsSelection);
 
@@ -157,7 +159,6 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     @Test
     @DisplayName("Get request - service exception")
     void getPoliticalAndCharitableDonationsSelectionThrowsServiceException() throws Exception {
-
         when(service.getPoliticalAndCharitableDonationsSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -169,7 +170,6 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     @Test
     @DisplayName("Post request - success")
     void postPoliticalAndCharitableDonationsSuccess() throws Exception {
-
         doNothing()
                 .when(service)
                 .submitPoliticalAndCharitableDonationsSelection(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(PoliticalAndCharitableDonationsSelection.class));
@@ -178,7 +178,7 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getDirectorsReportStatements()).thenReturn(directorsReportStatements);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(POLITICAL_AND_CHARITABLE_DONATIONS_SELECTION_PATH)
                 .param(HAS_POLITICAL_AND_CHARITABLE_DONATIONS, "1"))
@@ -193,7 +193,6 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     @Test
     @DisplayName("Post request - service exception")
     void postPoliticalAndCharitableDonationsServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(service)
                 .submitPoliticalAndCharitableDonationsSelection(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(PoliticalAndCharitableDonationsSelection.class));
@@ -207,7 +206,6 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     @Test
     @DisplayName("Post request - binding result errors")
     void postPoliticalAndCharitableDonationsWithBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(POLITICAL_AND_CHARITABLE_DONATIONS_SELECTION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POLITICAL_AND_CHARITABLE_DONATIONS_SELECTION_VIEW));
@@ -219,7 +217,6 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
@@ -229,7 +226,6 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 
@@ -237,6 +233,5 @@ class PoliticalAndCharitableDonationsSelectionControllerTest {
     }
 
     
-
 
 }

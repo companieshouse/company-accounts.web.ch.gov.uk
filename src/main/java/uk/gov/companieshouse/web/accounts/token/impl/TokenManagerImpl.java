@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.token.TokenManager;
 
 @Component
 public class TokenManagerImpl implements TokenManager {
-
     @Autowired
     private EnvironmentReader environmentReader;
 
@@ -30,7 +29,6 @@ public class TokenManagerImpl implements TokenManager {
      */
     @Override
     public <T> T decodeJWT(String token, Class<T> clazz) {
-
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(getKey()).build().parseClaimsJws(token);
         return OBJECT_MAPPER.convertValue(claimsJws.getBody(), clazz);
     }
@@ -40,7 +38,6 @@ public class TokenManagerImpl implements TokenManager {
      */
     @Override
     public String createJWT(Object object) throws JsonProcessingException {
-
         String payload = OBJECT_MAPPER.writeValueAsString(object);
 
         return Jwts.builder()
@@ -50,7 +47,6 @@ public class TokenManagerImpl implements TokenManager {
     }
 
     private Key getKey() {
-
         String chsJWTSecret = environmentReader.getMandatoryString(CHS_JWT_SECRET);
 
         return new SecretKeySpec(chsJWTSecret.getBytes(), SIGNATURE_ALGORITHM.getJcaName());

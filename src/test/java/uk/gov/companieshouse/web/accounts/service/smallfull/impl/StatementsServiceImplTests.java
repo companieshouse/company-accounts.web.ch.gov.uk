@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,7 +36,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.StatementsTransf
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StatementsServiceImplTests {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -77,7 +75,6 @@ class StatementsServiceImplTests {
 
     @BeforeEach
     void setUp() {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.balanceSheetStatements()).thenReturn(statementsResourceHandler);
@@ -87,7 +84,6 @@ class StatementsServiceImplTests {
     @DisplayName("Get balance sheet statements - success")
     void getBalanceSheetStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler.get(STATEMENTS_URI)).thenReturn(statementsGet);
 
         BalanceSheetStatementsApi statementsApi = new BalanceSheetStatementsApi();
@@ -104,7 +100,6 @@ class StatementsServiceImplTests {
     @DisplayName("Get balance sheet statements - throws ApiErrorResponseException")
     void getBalanceSheetStatementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.get(STATEMENTS_URI)).thenReturn(statementsGet);
 
         when(statementsGet.execute()).thenThrow(ApiErrorResponseException.class);
@@ -117,7 +112,6 @@ class StatementsServiceImplTests {
     @DisplayName("Get balance sheet statements - throws URIValidationException")
     void getBalanceSheetStatementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.get(STATEMENTS_URI)).thenReturn(statementsGet);
 
         when(statementsGet.execute()).thenThrow(URIValidationException.class);
@@ -130,7 +124,6 @@ class StatementsServiceImplTests {
     @DisplayName("Create balance sheet statements - success")
     void createBalanceSheetStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.create(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsCreate);
 
@@ -143,7 +136,6 @@ class StatementsServiceImplTests {
     @DisplayName("Create balance sheet statements - throws ApiErrorResponseException")
     void createBalanceSheetStatementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.create(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsCreate);
         when(statementsCreate.execute()).thenThrow(ApiErrorResponseException.class);
@@ -156,7 +148,6 @@ class StatementsServiceImplTests {
     @DisplayName("Create balance sheet statements - throws URIValidationException")
     void createBalanceSheetStatementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.create(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsCreate);
         when(statementsCreate.execute()).thenThrow(URIValidationException.class);
@@ -169,7 +160,6 @@ class StatementsServiceImplTests {
     @DisplayName("Update balance sheet statements - success")
     void updateBalanceSheetStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.update(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsUpdate);
 
@@ -182,7 +172,6 @@ class StatementsServiceImplTests {
     @DisplayName("Update balance sheet statements - throws ApiErrorResponseException")
     void updateBalanceSheetStatementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.update(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsUpdate);
         doThrow(ApiErrorResponseException.class).when(statementsUpdate).execute();
@@ -195,7 +184,6 @@ class StatementsServiceImplTests {
     @DisplayName("Update balance sheet statements - throws URIValidationException")
     void updateBalanceSheetStatementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.update(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsUpdate);
         doThrow(URIValidationException.class).when(statementsUpdate).execute();

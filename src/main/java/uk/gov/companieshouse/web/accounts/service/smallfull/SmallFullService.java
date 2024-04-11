@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import java.time.LocalDate;
 
 public interface SmallFullService {
-
     /**
      * Create a small full resource
      *
@@ -39,7 +38,6 @@ public interface SmallFullService {
      */
     SmallFullApi getSmallFullAccounts(ApiClient apiClient,
                                       String transactionId, String companyAccountsId) throws ServiceException;
-
 
     /**
      * Checks whether the given small full resource is for a multi-year filer

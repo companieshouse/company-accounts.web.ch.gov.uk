@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoanTransformerImplTest {
-
     @Mock
     private BreakdownTransformer breakdownTransformer;
 
@@ -41,7 +40,6 @@ class LoanTransformerImplTest {
     @Test
     @DisplayName("Get loan API - no breakdown")
     void getDirectorApiNoDates() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(NAME);
         loanToAdd.setDescription(DESCRIPTION);
@@ -57,7 +55,6 @@ class LoanTransformerImplTest {
     @Test
     @DisplayName("Get all loans")
     void getAllLoans() {
-
         LoanApi loanApi = new LoanApi();
         loanApi.setDirectorName(NAME);
         loanApi.setDescription(DESCRIPTION);

@@ -8,13 +8,10 @@ import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 
 @Component
 public class BreakdownTransformer {
-
     public LoanBreakdownApi mapLoanBreakdownToApi(LoanToAdd loanToAdd) {
-
         LoanBreakdownApi loanBreakdownApi = new LoanBreakdownApi();
 
         if(loanToAdd.getBreakdown() != null) {
-
             loanBreakdownApi.setAdvancesCreditsMade(loanToAdd.getBreakdown().getAdvancesCreditsMade());
             loanBreakdownApi.setAdvancesCreditsRepaid(loanToAdd.getBreakdown().getAdvancesCreditsRepaid());
             loanBreakdownApi.setBalanceAtPeriodStart(loanToAdd.getBreakdown().getBalanceAtPeriodStart());
@@ -24,11 +21,9 @@ public class BreakdownTransformer {
     }
 
     public Breakdown mapLoanBreakdownToWeb(LoanApi loanApi) {
-
         Breakdown breakdown = new Breakdown();
 
         if(loanApi.getBreakdown() != null) {
-
             breakdown.setAdvancesCreditsMade(loanApi.getBreakdown().getAdvancesCreditsMade());
             breakdown.setAdvancesCreditsRepaid(loanApi.getBreakdown().getAdvancesCreditsRepaid());
             breakdown.setBalanceAtPeriodStart(loanApi.getBreakdown().getBalanceAtPeriodStart());

@@ -39,7 +39,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RelatedPartyTransactionsServiceImplTest {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -103,7 +102,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("GET - related party transactions - success")
     void getRelatedPartyTransactionsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
         when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
@@ -119,7 +117,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("GET - related party transactions - not found")
     void getRelatedPartyTransactionsNotFound()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
         when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
@@ -135,7 +132,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("GET - related party transactions - ApiErrorResponseException")
     void getRelatedPartyTransactionsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
         when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
@@ -150,7 +146,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("GET - related party transactions - URIValidationException")
     void getRelatedPartyTransactionsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
         when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
@@ -165,7 +160,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("POST - related party transactions - success")
     void createRelatedPartyTransactionsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -180,7 +174,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("POST - related party transactions - ApiErrorResponseException")
     void createRelatedPartyTransactionsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -195,7 +188,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("POST - related party transactions - URIValidationException")
     void createRelatedPartyTransactionsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -210,7 +202,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("DELETE - related party transactions - success")
     void deleteRelatedPartyTransactionsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -227,7 +218,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @Test
     @DisplayName("DELETE - related party transactions - no small full link")
     void deleteRelatedPartyTransactionsNoSmallFullLink() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -242,7 +232,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("DELETE - related party transactions - ApiErrorResponseException")
     void deleteRelatedPartyTransactionsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -260,7 +249,6 @@ class RelatedPartyTransactionsServiceImplTest {
     @DisplayName("DELETE - related party transactions - URIValidationException")
     void deleteRelatedPartyTransactionsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);

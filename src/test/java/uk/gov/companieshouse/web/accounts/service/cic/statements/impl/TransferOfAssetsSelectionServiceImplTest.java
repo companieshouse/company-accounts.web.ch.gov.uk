@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAsset
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TransferOfAssetsSelectionServiceImplTest {
-
     @Mock
     private CicStatementsService cicStatementsService;
 
@@ -53,7 +52,6 @@ class TransferOfAssetsSelectionServiceImplTest {
     @Test
     @DisplayName("Get transfer of assets selection - default statement")
     void getTransferOfAssetsSelectionFromDefaultStatement() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 
@@ -72,7 +70,6 @@ class TransferOfAssetsSelectionServiceImplTest {
     @Test
     @DisplayName("Get transfer of assets selection - other statement")
     void getTransferOfAssetsSelectionFromOtherStatement() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 
@@ -91,7 +88,6 @@ class TransferOfAssetsSelectionServiceImplTest {
     @Test
     @DisplayName("Submit transfer of assets selection - has provided transfer")
     void submitTransferOfAssetsHasProvidedTransfer() throws ServiceException {
-
         when(transferOfAssetsSelection.getHasProvidedTransferOfAssets())
                 .thenReturn(true);
 
@@ -104,7 +100,6 @@ class TransferOfAssetsSelectionServiceImplTest {
     @Test
     @DisplayName("Submit transfer of assets selection - no transfer but API resource already default")
     void submitTransferOfAssetsNoTransferButApiResourceAlreadyDefault() throws ServiceException {
-
         when(transferOfAssetsSelection.getHasProvidedTransferOfAssets())
                 .thenReturn(false);
 
@@ -126,7 +121,6 @@ class TransferOfAssetsSelectionServiceImplTest {
     @Test
     @DisplayName("Submit transfer of assets selection - no transfer and API resource statement not default")
     void submitTransferOfAssetsNoTransferAndApiResourceNotDefault() throws ServiceException {
-
         when(transferOfAssetsSelection.getHasProvidedTransferOfAssets())
                 .thenReturn(false);
 

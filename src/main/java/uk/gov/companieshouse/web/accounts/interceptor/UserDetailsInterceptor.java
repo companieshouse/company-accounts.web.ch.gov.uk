@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @Component
 public class UserDetailsInterceptor implements HandlerInterceptor {
-
     private static final String USER_EMAIL = "userEmail";
 
     private static final String SIGN_IN_KEY = "signin_info";
@@ -27,14 +26,12 @@ public class UserDetailsInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-
         if (modelAndView == null) {
             return;
         }
 
         if ((isGetRequest(request) && !isResumeRequest(request))
                 || isPostRequestRedirect(request, modelAndView)) {
-
             addUserDetailsToModelAndView(modelAndView);
         }
     }

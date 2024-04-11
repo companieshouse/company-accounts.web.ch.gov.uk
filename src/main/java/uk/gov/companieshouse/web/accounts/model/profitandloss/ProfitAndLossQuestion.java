@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.profitandloss;
 import jakarta.validation.constraints.NotNull;
 
 public class ProfitAndLossQuestion {
-
     @NotNull(message = "{profitAndLossQuestion.selectionNotMade}")
     private Boolean hasIncludedProfitAndLoss;
 

@@ -9,10 +9,8 @@ import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 @Component
 public class FinancialCommitmentsTransformerImpl implements
         NoteTransformer<FinancialCommitments, FinancialCommitmentsApi> {
-
     @Override
     public FinancialCommitments toWeb(FinancialCommitmentsApi financialCommitmentsApi) {
-
         FinancialCommitments commitments = new FinancialCommitments();
 
         if (financialCommitmentsApi == null) {
@@ -25,7 +23,6 @@ public class FinancialCommitmentsTransformerImpl implements
 
     @Override
     public FinancialCommitmentsApi toApi(FinancialCommitments financialCommitments) {
-
         FinancialCommitmentsApi financialCommitmentsApi = new FinancialCommitmentsApi();
         financialCommitmentsApi.setDetails(financialCommitments.getFinancialCommitmentsDetails());
         return financialCommitmentsApi;
@@ -33,7 +30,6 @@ public class FinancialCommitmentsTransformerImpl implements
 
     @Override
     public NoteType getNoteType() {
-
         return NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS;
     }
 }

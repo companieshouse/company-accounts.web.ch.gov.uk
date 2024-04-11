@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.payment;
 import jakarta.validation.constraints.NotNull;
 
 public class PayFilingFee {
-
     @NotNull(message = "{payment.payFilingFeeChoice}")
     private Boolean payFilingFeeChoice;
 

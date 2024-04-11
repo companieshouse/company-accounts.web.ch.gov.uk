@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportState
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AdditionalInformationSelectionServiceImplTest {
-
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -48,7 +47,6 @@ class AdditionalInformationSelectionServiceImplTest {
     @Test
     @DisplayName("Get additional information selection - no existing statements")
     void getAdditionalInformationSelectionNoExistingStatements() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -62,7 +60,6 @@ class AdditionalInformationSelectionServiceImplTest {
     @Test
     @DisplayName("Get additional information selection - statements do not include additional information")
     void getAdditionalInformationSelectionStatementsDoNotIncludeAdditionalInformation() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -78,7 +75,6 @@ class AdditionalInformationSelectionServiceImplTest {
     @Test
     @DisplayName("Get additional information selection - statements include additional information")
     void getAdditionalInformationSelectionStatementsIncludeAdditionalInformation() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -94,7 +90,6 @@ class AdditionalInformationSelectionServiceImplTest {
     @Test
     @DisplayName("Submit additional information selection - has additional information")
     void submitAdditionalInformationSelectionHasAdditionalInformation() throws ServiceException {
-
         when(additionalInformationSelection.getHasAdditionalInformation()).thenReturn(true);
 
         assertAll(() ->
@@ -107,7 +102,6 @@ class AdditionalInformationSelectionServiceImplTest {
     @Test
     @DisplayName("Submit additional information selection - no existing statements")
     void submitAdditionalInformationSelectionNoExistingStatements() throws ServiceException {
-
         when(additionalInformationSelection.getHasAdditionalInformation()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -121,7 +115,6 @@ class AdditionalInformationSelectionServiceImplTest {
     @Test
     @DisplayName("Submit additional information selection - has other statements")
     void submitAdditionalInformationSelectionHasOtherStatements() throws ServiceException {
-
         when(additionalInformationSelection.getHasAdditionalInformation()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -141,7 +134,6 @@ class AdditionalInformationSelectionServiceImplTest {
     @Test
     @DisplayName("Submit additional information selection - has no other statements")
     void submitAdditionalInformationSelectionHasNoOtherStatements() throws ServiceException {
-
         when(additionalInformationSelection.getHasAdditionalInformation()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))

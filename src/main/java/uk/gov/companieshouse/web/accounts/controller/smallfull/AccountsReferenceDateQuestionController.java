@@ -34,7 +34,6 @@ import java.time.LocalDate;
 @NextController(AccountsReferenceDateController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/accounts-reference-date-question")
 public class AccountsReferenceDateQuestionController extends BaseController {
-
     @Autowired
     private CompanyService companyService;
 
@@ -57,9 +56,7 @@ public class AccountsReferenceDateQuestionController extends BaseController {
                                                    @PathVariable String companyAccountsId,
                                                    Model model,
                                                    HttpServletRequest request) {
-
         try {
-
             AccountsReferenceDateQuestion accountsReferenceDateQuestion = new AccountsReferenceDateQuestion();
 
             ApiClient apiClient = apiClientService.getApiClient();
@@ -95,7 +92,6 @@ public class AccountsReferenceDateQuestionController extends BaseController {
                                                 @ModelAttribute(ACCOUNTS_REFERENCE_DATE_QUESTION) @Valid AccountsReferenceDateQuestion accountsReferenceDateQuestion,
                                                 BindingResult bindingResult,
                                                 HttpServletRequest request) {
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -105,7 +101,6 @@ public class AccountsReferenceDateQuestionController extends BaseController {
 
             // If the user elects not to change their ARD
             if (Boolean.TRUE.equals(accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate())) {
-
                 // Default the period end date
                 smallFullService.updateSmallFullAccounts(null, transactionId, companyAccountsId);
 
@@ -113,13 +108,11 @@ public class AccountsReferenceDateQuestionController extends BaseController {
 
                 // If the filing is for a CIC
                 if (companyProfile.isCommunityInterestCompany()) {
-
                     LocalDate periodEndOn = companyProfile.getAccounts().getNextAccounts().getPeriodEndOn();
                     LocalDate cicApprovalDate = cicApprovalService.getCicApproval(transactionId, companyAccountsId).getLocalDate();
 
                     // And CIC approval date is before the default period end date
                     if (cicApprovalDate != null && !cicApprovalDate.isAfter(periodEndOn)) {
-
                         // Return the user to CIC approval
                         return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CIC_APPROVAL.expand(companyNumber, transactionId, companyAccountsId).toString();
                     }
@@ -139,13 +132,11 @@ public class AccountsReferenceDateQuestionController extends BaseController {
     }
 
     private void setHasConfirmedAccountingReferenceDate(HttpServletRequest request, AccountsReferenceDateQuestion accountsReferenceDateQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         accountsReferenceDateQuestion.setHasConfirmedAccountingReferenceDate(companyAccountsDataState.getHasConfirmedAccountingReferenceDate());
     }
 
     private void  cacheHasConfirmedAccountingReferenceDate(HttpServletRequest request, AccountsReferenceDateQuestion accountsReferenceDateQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasConfirmedAccountingReferenceDate(accountsReferenceDateQuestion.getHasConfirmedAccountingReferenceDate());
 

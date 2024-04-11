@@ -6,9 +6,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors
 
 @Component
 public class LoansToDirectorsAdditionalInfoTransformer {
-
     public AdditionalInformationApi mapLoansToDirectorsAdditonalInfoToApi(LoansToDirectorsAdditionalInfo additionalInformation) {
-
         AdditionalInformationApi additionalInformationApi = new AdditionalInformationApi();
 
         if(additionalInformation.getAdditionalInfoDetails() != null) {
@@ -18,7 +16,6 @@ public class LoansToDirectorsAdditionalInfoTransformer {
     }
 
     public LoansToDirectorsAdditionalInfo mapLoansToDirectorsAdditionalInfoToWeb(AdditionalInformationApi additionalInformationApi) {
-
         LoansToDirectorsAdditionalInfo additionalInformation = new LoansToDirectorsAdditionalInfo();
 
         if(additionalInformationApi.getDetails() != null) {

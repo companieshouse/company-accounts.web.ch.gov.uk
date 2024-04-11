@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl;
 
-
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -15,35 +14,29 @@ import java.util.stream.Stream;
 
 @Component
 public class OperatingProfitAndLossTransformer {
-
     public void addCurrentPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
         if (currentPeriodProfitAndLoss.getOperatingProfitOrLoss() != null) {
-
             createOperatingProfitOrLoss(profitAndLoss);
 
             if (currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getAdministrativeExpenses() != null) {
-
                 AdministrativeExpenses administrativeExpenses = createAdministrativeExpenses(profitAndLoss);
                 administrativeExpenses.setCurrentAmount(
                         currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getAdministrativeExpenses());
             }
 
             if (currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getDistributionCosts() != null) {
-
                 DistributionCosts distributionCosts = createDistributionCosts(profitAndLoss);
                 distributionCosts.setCurrentAmount(
                         currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getDistributionCosts());
             }
 
             if (currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getOperatingTotal() != null) {
-
                 OperatingTotal operatingTotal = createOperatingTotal(profitAndLoss);
                 operatingTotal.setCurrentAmount(
                         currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getOperatingTotal());
             }
 
             if (currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getOtherOperatingIncome() != null) {
-
                 OtherOperatingIncome otherOperatingIncome = createOtherOperatingIncome(profitAndLoss);
                 otherOperatingIncome.setCurrentAmount(
                         currentPeriodProfitAndLoss.getOperatingProfitOrLoss().getOtherOperatingIncome());
@@ -52,34 +45,28 @@ public class OperatingProfitAndLossTransformer {
     }
 
     public void addPreviousPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
-
         if (previousPeriodProfitAndLoss.getOperatingProfitOrLoss() != null) {
-
             createOperatingProfitOrLoss(profitAndLoss);
 
             if (previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getAdministrativeExpenses() != null) {
-
                 AdministrativeExpenses administrativeExpenses = createAdministrativeExpenses(profitAndLoss);
                 administrativeExpenses.setPreviousAmount(
                         previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getAdministrativeExpenses());
             }
 
             if (previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getDistributionCosts() != null) {
-
                 DistributionCosts distributionCosts = createDistributionCosts(profitAndLoss);
                 distributionCosts.setPreviousAmount(
                         previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getDistributionCosts());
             }
 
             if (previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getOperatingTotal() != null) {
-
                 OperatingTotal operatingTotal = createOperatingTotal(profitAndLoss);
                 operatingTotal.setPreviousAmount(
                         previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getOperatingTotal());
             }
 
             if (previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getOtherOperatingIncome() != null) {
-
                 OtherOperatingIncome otherOperatingIncome = createOtherOperatingIncome(profitAndLoss);
                 otherOperatingIncome.setPreviousAmount(
                         previousPeriodProfitAndLoss.getOperatingProfitOrLoss().getOtherOperatingIncome());
@@ -88,9 +75,7 @@ public class OperatingProfitAndLossTransformer {
     }
 
     public void addCurrentPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
-
         if (hasCurrentPeriodOperatingProfitOrLoss(profitAndLoss)) {
-
             uk.gov.companieshouse.api.model.accounts.profitandloss.OperatingProfitOrLoss operatingProfitOrLoss =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.OperatingProfitOrLoss();
 
@@ -108,9 +93,7 @@ public class OperatingProfitAndLossTransformer {
     }
 
     public void addPreviousPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
-
         if (hasPreviousPeriodOperatingProfitOrLoss(profitAndLoss)) {
-
             uk.gov.companieshouse.api.model.accounts.profitandloss.OperatingProfitOrLoss operatingProfitOrLoss =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.OperatingProfitOrLoss();
 
@@ -128,9 +111,7 @@ public class OperatingProfitAndLossTransformer {
     }
 
     private void createOperatingProfitOrLoss(ProfitAndLoss profitAndLoss) {
-
         if (profitAndLoss.getOperatingProfitOrLoss() == null) {
-
             profitAndLoss.setOperatingProfitOrLoss(new OperatingProfitOrLoss());
         }
     }
@@ -185,7 +166,6 @@ public class OperatingProfitAndLossTransformer {
     }
 
     private boolean hasCurrentPeriodOperatingProfitOrLoss(ProfitAndLoss profitAndLoss) {
-
         return Stream.of(profitAndLoss.getOperatingProfitOrLoss().getAdministrativeExpenses().getCurrentAmount(),
                 profitAndLoss.getOperatingProfitOrLoss().getDistributionCosts().getCurrentAmount(),
                 profitAndLoss.getOperatingProfitOrLoss().getOperatingTotal().getCurrentAmount(),
@@ -194,7 +174,6 @@ public class OperatingProfitAndLossTransformer {
     }
 
     private boolean hasPreviousPeriodOperatingProfitOrLoss(ProfitAndLoss profitAndLoss) {
-
         return Stream.of(profitAndLoss.getOperatingProfitOrLoss().getAdministrativeExpenses().getPreviousAmount(),
                 profitAndLoss.getOperatingProfitOrLoss().getDistributionCosts().getPreviousAmount(),
                 profitAndLoss.getOperatingProfitOrLoss().getOperatingTotal().getPreviousAmount(),

@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -43,6 +47,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FixedAssetInvestmentsControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -84,15 +90,14 @@ class FixedAssetInvestmentsControllerTests {
     private static final String TEST_PATH = "fixedAssetsDetails";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get fixedAssetsInvestments view success path")
     void getRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockFixedAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT))
             .thenReturn(new FixedAssetsInvestments());
 
@@ -110,7 +115,6 @@ class FixedAssetInvestmentsControllerTests {
     @Test
     @DisplayName("Get fixedAssetsInvestments view failure path due to error on fixedAssetsInvestments retrieval")
     void getRequestFailureInGetFixedAssetsInvestments() throws Exception {
-
         when(mockFixedAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT))
             .thenThrow(ServiceException.class);
 
@@ -123,8 +127,7 @@ class FixedAssetInvestmentsControllerTests {
     @Test
     @DisplayName("Post fixedAssetsInvestments success path")
     void postRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(mockNavigatorService.getNextControllerRedirect(any(), captor.capture()))
             .thenReturn(MOCK_CONTROLLER_PATH);
         when(mockFixedAssetsInvestmentsService.submit(anyString(), anyString(), any(FixedAssetsInvestments.class), eq(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT)))
             .thenReturn(new ArrayList<>());
@@ -138,7 +141,6 @@ class FixedAssetInvestmentsControllerTests {
     @Test
     @DisplayName("Post fixedAssetsInvestments failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(mockFixedAssetsInvestmentsService).submit(anyString(), anyString(), any(FixedAssetsInvestments.class), eq(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT));
 
@@ -152,7 +154,6 @@ class FixedAssetInvestmentsControllerTests {
     @Test
     @DisplayName("Post fixedAssetsInvestments failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath(TEST_PATH);
         validationError.setMessageKey("invalid_character");

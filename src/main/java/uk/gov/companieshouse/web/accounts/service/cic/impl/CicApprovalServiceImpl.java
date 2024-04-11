@@ -23,7 +23,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class CicApprovalServiceImpl implements CicApprovalService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -53,7 +52,6 @@ public class CicApprovalServiceImpl implements CicApprovalService {
     @Override
     public List<ValidationError> submitCicApproval(String transactionId, String companyAccountsId,
         CicApproval cicApproval) throws ServiceException {
-
         List<ValidationError> validationErrors = dateValidator.validateDate(cicApproval.getDate(), "date",  ".cic_approval.date");
         if (!validationErrors.isEmpty()) {
             return validationErrors;
@@ -91,13 +89,11 @@ public class CicApprovalServiceImpl implements CicApprovalService {
 
     @Override
     public CicApproval getCicApproval(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = APPROVAL_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
-
             CicApprovalApi cicApprovalApi = apiClient.cicReport().approval().get(uri).execute().getData();
             return transformer.getCicApproval(cicApprovalApi);
 

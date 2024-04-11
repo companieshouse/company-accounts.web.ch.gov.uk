@@ -33,7 +33,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TangibleAssetsHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -80,14 +79,12 @@ class TangibleAssetsHandlerTest {
     @Test
     @DisplayName("Get the resource URI")
     void getResourceURI() {
-
         assertEquals(URI, tangibleAssetsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get TangibleAssets Resource")
     void getTangibleAssetsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
         when(tangibleAssetsResourceHandler.get(URI)).thenReturn(tangibleAssetsGet);
@@ -101,7 +98,6 @@ class TangibleAssetsHandlerTest {
     @Test
     @DisplayName("Update TangibleAssets Resource")
     void updateTangibleAssetsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
         when(tangibleAssetsResourceHandler.update(URI, tangibleAssetsApi)).thenReturn(tangibleAssetsUpdate);
@@ -115,7 +111,6 @@ class TangibleAssetsHandlerTest {
     @Test
     @DisplayName("Create TangibleAssets Resource")
     void createTangibleAssetsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
         when(tangibleAssetsResourceHandler.create(URI, tangibleAssetsApi)).thenReturn(tangibleAssetsCreate);
@@ -129,7 +124,6 @@ class TangibleAssetsHandlerTest {
     @Test
     @DisplayName("Delete TangibleAssets Resource")
     void deleteTangibleAssetsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
         when(tangibleAssetsResourceHandler.delete(URI)).thenReturn(tangibleAssetsDelete);
@@ -143,7 +137,6 @@ class TangibleAssetsHandlerTest {
     @Test
     @DisplayName("Parent resource exists")
     void parentResourceExists() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn(TANGIBLE_ASSETS);
@@ -154,7 +147,6 @@ class TangibleAssetsHandlerTest {
     @Test
     @DisplayName("Parent resource does not exist")
     void parentResourceDoesNotExist() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn(null);
@@ -165,7 +157,6 @@ class TangibleAssetsHandlerTest {
     @Test
     @DisplayName("Get NoteType")
     void getNoteType()  {
-
         assertEquals(NoteType.SMALL_FULL_TANGIBLE_ASSETS, tangibleAssetsHandler.getNoteType());
     }
 }

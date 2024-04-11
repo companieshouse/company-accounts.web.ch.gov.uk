@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class StocksNote implements Note {
-
     private BalanceSheetHeadings balanceSheetHeadings;
 
     private PaymentsOnAccount paymentsOnAccount;

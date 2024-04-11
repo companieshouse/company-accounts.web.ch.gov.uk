@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoansToDirectorsQuestionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -88,15 +94,13 @@ class LoansToDirectorsQuestionControllerTest {
     private static final String ADDITIONAL_INFORMATION = "additionalInformation";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get loans to directors question without loans")
     void getRequestEmptyLoans() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
@@ -109,11 +113,9 @@ class LoansToDirectorsQuestionControllerTest {
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
-
     @Test
     @DisplayName("Get loans to directors question with loans")
     void getRequestWithLoans() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
@@ -130,7 +132,6 @@ class LoansToDirectorsQuestionControllerTest {
     @Test
     @DisplayName("Get loans to directors question - Throws exception")
     void getRequestThrowsException() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
@@ -144,12 +145,11 @@ class LoansToDirectorsQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors - has not included loans to directors")
     void postRequestHasNotIncludedLoansToDirectors() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         when(loansToDirectorsApi.getLinks()).thenReturn(loansToDirectorsLinks);
         when(loansToDirectorsLinks.getAdditionalInformation()).thenReturn(ADDITIONAL_INFORMATION);
@@ -164,12 +164,11 @@ class LoansToDirectorsQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors - has not included loans to directors, has add info")
     void postRequestHasNotLoansToDirectorsWithAddInfo() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         when(loansToDirectorsApi.getLinks()).thenReturn(loansToDirectorsLinks);
         when(loansToDirectorsLinks.getAdditionalInformation()).thenReturn(ADDITIONAL_INFORMATION);
@@ -185,12 +184,11 @@ class LoansToDirectorsQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors - has not included loans to directors and no additional info")
     void postRequestHasNotIncludedLoansToDirectorsNoAddInfo() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         when(loansToDirectorsApi.getLinks()).thenReturn(loansToDirectorsLinks);
         when(loansToDirectorsLinks.getAdditionalInformation()).thenReturn(null);
@@ -205,12 +203,11 @@ class LoansToDirectorsQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors - has included loans to directors")
     void postRequestHasIncludedLoansToDirectors() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(LOANS_TO_DIRECTORS_QUESTION_PATH)
                 .param(LOANS_TO_DIRECTORS_SELECTION, "1")
@@ -222,7 +219,6 @@ class LoansToDirectorsQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors - throws exception")
     void postRequestThrowsException() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
@@ -237,7 +233,6 @@ class LoansToDirectorsQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(LOANS_TO_DIRECTORS_QUESTION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(LOANS_TO_DIRECTORS_QUESTION_VIEW));

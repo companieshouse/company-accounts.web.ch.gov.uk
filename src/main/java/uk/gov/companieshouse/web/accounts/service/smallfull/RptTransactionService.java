@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import java.util.List;
 
 public interface RptTransactionService {
-
     RptTransaction[] getAllRptTransactions(String transactionId, String companyAccountsId) throws ServiceException;
 
     List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException;

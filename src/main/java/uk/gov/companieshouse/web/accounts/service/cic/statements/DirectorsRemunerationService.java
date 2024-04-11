@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemunera
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface DirectorsRemunerationService {
-
     /**
      * Retrieves the directors remuneration
      *

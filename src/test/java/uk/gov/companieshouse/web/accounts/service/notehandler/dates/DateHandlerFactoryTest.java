@@ -21,15 +21,13 @@ import uk.gov.companieshouse.web.accounts.model.Note;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DateHandlerFactoryTest {
-
     private DateHandlerFactory<Note> dateHandlerFactory;
 
     @Mock
     private DateHandler<Note> dateHandler;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         when(dateHandler.getNoteType()).thenReturn(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         List<DateHandler<Note>> dateHandlers = new ArrayList<>();
@@ -41,7 +39,6 @@ class DateHandlerFactoryTest {
     @Test
     @DisplayName("Get date handler - success")
     void getDateHandlerSuccess() {
-
         DateHandler<Note> returned =
                 dateHandlerFactory.getDateHandler(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
@@ -52,7 +49,6 @@ class DateHandlerFactoryTest {
     @Test
     @DisplayName("Get date handler - MissingInfrastructureException")
     void getDateHandlerMissingInfrastructureException() {
-
         assertThrows(MissingInfrastructureException.class, () ->
                 dateHandlerFactory.getDateHandler(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
     }

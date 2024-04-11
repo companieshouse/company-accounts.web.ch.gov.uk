@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemune
 @PreviousController(ConsultationWithStakeholdersController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/directors-remuneration-selection")
 public class DirectorsRemunerationSelectionController extends BaseController {
-
     @Autowired
     private DirectorsRemunerationSelectionService selectionService;
 
@@ -42,7 +41,6 @@ public class DirectorsRemunerationSelectionController extends BaseController {
             @PathVariable String companyAccountsId,
             Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -56,7 +54,6 @@ public class DirectorsRemunerationSelectionController extends BaseController {
             model.addAttribute(DIRECTORS_REMUNERATION_SELECTION_ATTR, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -73,7 +70,6 @@ public class DirectorsRemunerationSelectionController extends BaseController {
             BindingResult bindingResult,
             Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -84,7 +80,6 @@ public class DirectorsRemunerationSelectionController extends BaseController {
             selectionService.submitDirectorsRemunerationSelection(transactionId, companyAccountsId, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -95,14 +90,12 @@ public class DirectorsRemunerationSelectionController extends BaseController {
     }
 
     private void setHasProvidedDirectorsRemuneration(HttpServletRequest request, DirectorsRemunerationSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         selection.setHasProvidedDirectorsRemuneration(
                 companyAccountsDataState.getCicStatements().getHasProvidedDirectorsRemuneration());
     }
 
     private void cacheHasProvidedDirectorsRemuneration(HttpServletRequest request, DirectorsRemunerationSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
         companyAccountsDataState.getCicStatements().setHasProvidedDirectorsRemuneration(

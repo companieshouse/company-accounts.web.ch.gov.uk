@@ -37,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
-
     private static final Long COST_AT_PERIOD_START = 1L;
     private static final Long ADDITIONS = 2L;
     private static final Long DISPOSALS = 3L;
@@ -68,13 +67,11 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     private static final Long GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS = 1000L;
     private static final Long GOODWILL_AMORTISATION_AT_PERIOD_END = 1100L;
 
-
     private IntangibleAssetsResourceTransformer transformer = new IntangibleAssetsOtherIntangibleAssetsTransformerImpl();
 
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an empty web model")
     void mapFullApiResourceToEmptyWebModel() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
         IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(true, true);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, otherIntangibleAssets);
@@ -85,7 +82,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a cost or amortisation object to an empty web model")
     void mapApiResourceWithoutCostOrAmortisationToEmptyWebModel() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
         IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(false, false);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, otherIntangibleAssets);
@@ -99,7 +95,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an web model with other existing resources")
     void mapFullApiResourceToPopulatedWebModel() {
-
         IntangibleAssets intangibleAssets = createIntangibleAssetsWithPreExistingResources();
 
         IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(true, true);
@@ -112,7 +107,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from a web model to an api resource")
     void mapFullWebModelToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true, true);
 
@@ -125,7 +119,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without cost or amortisation to an api resource")
     void mapWebModelWithoutCostOrAmortisationToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithOtherIntangibleAssetsResources(false, false, true);
 
@@ -138,7 +131,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without net book values to an api resource")
     void mapWebModelWithoutNetBookValuesToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true, false);
 
@@ -151,7 +143,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     @Test
     @DisplayName("Tests intangible assets will be mapped for a fully populated web model")
     void hasIntangibleAssetsToMapToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithOtherIntangibleAssetsResources(true, true, true);
 
@@ -161,7 +152,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     @Test
     @DisplayName("Tests intangible assets will be mapped for a populated web model without any cost and amortisation values")
     void hasIntangibleAssetsToMapToApiResourceNoCostNoAmortisation() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithOtherIntangibleAssetsResources(false, false, false);
 
@@ -169,7 +159,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private IntangibleAssetsResource createOtherIntangibleAssetsApiResource(boolean includeCost, boolean includeAmortisation) {
-
         IntangibleAssetsResource otherIntangibleAssets = new IntangibleAssetsResource();
 
         if (includeCost) {
@@ -187,7 +176,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private Cost createCostApiResource() {
-
         Cost cost = new Cost();
         cost.setAtPeriodStart(COST_AT_PERIOD_START);
         cost.setAdditions(ADDITIONS);
@@ -199,7 +187,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private Amortisation createAmortisationApiResource() {
-
         Amortisation amortisation = new Amortisation();
         amortisation.setAtPeriodStart(AMORTISATION_AT_PERIOD_START);
         amortisation.setChargeForYear(AMORTISATION_CHARGE_FOR_YEAR);
@@ -210,7 +197,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private IntangibleAssets createIntangibleAssetsWithPreExistingResources() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         IntangibleAssetsCost intangibleAssetsCost = new IntangibleAssetsCost();
@@ -279,7 +265,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private void assertPreExistingFieldsUnaffected(IntangibleAssets intangibleAssets) {
-
         assertEquals(GOODWILL_COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getGoodwill());
         assertEquals(GOODWILL_ADDITIONS, intangibleAssets.getCost().getAdditions().getGoodwill());
         assertEquals(GOODWILL_DISPOSALS, intangibleAssets.getCost().getDisposals().getGoodwill());
@@ -296,7 +281,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
 
     private IntangibleAssets createIntangibleAssetsWithOtherIntangibleAssetsResources(boolean includeCost, boolean includeAmortisation,
                                                                                       boolean includeNetBookValue) {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         IntangibleAssetsCost intangibleAssetsCost = new IntangibleAssetsCost();
@@ -324,7 +308,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         intangibleAssetsCost.setAtPeriodEnd(costAtPeriodEnd);
 
         if (includeCost) {
-
             costAtPeriodStart.setOtherIntangibleAssets(COST_AT_PERIOD_START);
             additions.setOtherIntangibleAssets(ADDITIONS);
             disposals.setOtherIntangibleAssets(DISPOSALS);
@@ -349,7 +332,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         intangibleAssetsAmortisation.setAtPeriodEnd(amortisationAtPeriodEnd);
 
         if (includeAmortisation) {
-
             amortisationAtPeriodStart.setOtherIntangibleAssets(AMORTISATION_AT_PERIOD_START);
             chargeForYear.setOtherIntangibleAssets(AMORTISATION_CHARGE_FOR_YEAR);
             onDisposals.setOtherIntangibleAssets(AMORTISATION_ON_DISPOSALS);
@@ -367,7 +349,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         intangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         if (includeNetBookValue) {
-
             currentPeriod.setOtherIntangibleAssets(CURRENT_PERIOD);
             previousPeriod.setOtherIntangibleAssets(PREVIOUS_PERIOD);
         }
@@ -377,7 +358,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
 
     private void assertWebModelsMapped(IntangibleAssets intangibleAssets,
                                        boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(intangibleAssets);
         }
@@ -390,7 +370,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private void assertCostFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
-
         assertEquals(COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
         assertEquals(ADDITIONS, intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
         assertEquals(DISPOSALS, intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
@@ -400,7 +379,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private void assertAmortisationFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
-
         assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getOtherIntangibleAssets());
         assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
         assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
@@ -411,7 +389,6 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     private void assertApiFieldsMapped(IntangibleAssetsResource resource,
                                        boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped,
                                        boolean expectNetBookValueFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
         } else {

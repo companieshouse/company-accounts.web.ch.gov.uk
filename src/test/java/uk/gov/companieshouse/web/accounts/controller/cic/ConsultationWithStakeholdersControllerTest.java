@@ -1,20 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,10 +18,23 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithS
 import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
+import java.util.ArrayList;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ConsultationWithStakeholdersControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -56,8 +61,7 @@ class ConsultationWithStakeholdersControllerTest {
         UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(consultationWithStakeholdersController)
             .build();
     }
@@ -65,7 +69,6 @@ class ConsultationWithStakeholdersControllerTest {
     @Test
     @DisplayName("Get ConsultationWithStakeholders view - success path")
     void getRequestConsultationWithStakeholdersSuccess() throws Exception {
-
         when(consultationWithStakeholdersService
             .getConsultationWithStakeholders(anyString(), anyString()))
             .thenReturn(new ConsultationWithStakeholders());
@@ -77,11 +80,9 @@ class ConsultationWithStakeholdersControllerTest {
             .andExpect(model().attributeExists(CONSULTATION_MODEL_ATTR));
     }
 
-
     @Test
     @DisplayName("Get ConsultationWithStakeholders view - service exception")
     void getRequestConsultationWithStakeholdersServiceException() throws Exception {
-
         when(consultationWithStakeholdersService
             .getConsultationWithStakeholders(anyString(), anyString()))
             .thenThrow(ServiceException.class);
@@ -94,12 +95,11 @@ class ConsultationWithStakeholdersControllerTest {
     @Test
     @DisplayName("Accept ConsultationWithStakeholders - success path")
     void postRequestConsultationWithStakeholdersSuccess() throws Exception {
-
         when(consultationWithStakeholdersService
             .submitConsultationWithStakeholders(anyString(), anyString(),
                 any(ConsultationWithStakeholders.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture()))
             .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("consultationWithStakeholders", "value"))
@@ -110,7 +110,6 @@ class ConsultationWithStakeholdersControllerTest {
     @Test
     @DisplayName("Accept ConsultationWithStakeholders - service exception")
     void postRequestConsultationWithStakeholdersServiceException() throws Exception {
-
         doThrow(ServiceException.class)
             .when(consultationWithStakeholdersService)
             .submitConsultationWithStakeholders(anyString(), anyString(),
@@ -123,11 +122,9 @@ class ConsultationWithStakeholdersControllerTest {
     @Test
     @DisplayName("Accept ConsultationWithStakeholders - binding errors")
     void postRequestConsultationWithStakeholdersBindingErrors() throws Exception {
-
         this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("consultationWithStakeholders", ""))
             .andExpect(status().isOk())
             .andExpect(view().name(CONSULTATION_VIEW));
     }
-
 
 }

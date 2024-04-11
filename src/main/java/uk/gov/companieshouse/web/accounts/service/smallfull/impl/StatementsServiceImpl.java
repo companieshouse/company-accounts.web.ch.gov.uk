@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.StatementsTransf
 
 @Service
 public class StatementsServiceImpl implements StatementsService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -33,7 +32,6 @@ public class StatementsServiceImpl implements StatementsService {
     @Override
     public void createBalanceSheetStatementsResource(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -57,7 +55,6 @@ public class StatementsServiceImpl implements StatementsService {
     @Override
     public void acceptBalanceSheetStatements(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -80,7 +77,6 @@ public class StatementsServiceImpl implements StatementsService {
     @Override
     public Statements getBalanceSheetStatements(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -92,7 +88,6 @@ public class StatementsServiceImpl implements StatementsService {
             return transformer.getBalanceSheetStatements(statementsApi);
 
         } catch (ApiErrorResponseException e) {
-
             if (e.getStatusCode() == 404) {
                 return null;
             }

@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.loanstodirectors;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class LoanToAdd {
-
     @ValidationMapping("$.loan.director_name")
     private String directorName;
 

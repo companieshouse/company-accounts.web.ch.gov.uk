@@ -29,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @PreviousController(PrincipalActivitiesSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/principal-activities")
 public class PrincipalActivitiesController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -48,7 +47,6 @@ public class PrincipalActivitiesController extends BaseController implements Con
                                          @PathVariable String transactionId,
                                          @PathVariable String companyAccountsId,
                                          Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -58,7 +56,6 @@ public class PrincipalActivitiesController extends BaseController implements Con
             model.addAttribute(PRINCIPAL_ACTIVITIES, principalActivities);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -73,7 +70,6 @@ public class PrincipalActivitiesController extends BaseController implements Con
                                             @ModelAttribute(PRINCIPAL_ACTIVITIES) @Valid PrincipalActivities principalActivities,
                                             BindingResult bindingResult,
                                             Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -90,7 +86,6 @@ public class PrincipalActivitiesController extends BaseController implements Con
             }
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -101,7 +96,6 @@ public class PrincipalActivitiesController extends BaseController implements Con
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return Optional.ofNullable(companyAccountsDataState)
                     .map(CompanyAccountsDataState::getDirectorsReportStatements)

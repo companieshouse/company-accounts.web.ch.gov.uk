@@ -8,7 +8,6 @@ import java.util.List;
 
 @ValidationModel
 public class Approval {
-
     @NotBlank(message = "{approval.selectionNotMade}")
     @ValidationMapping("$.approval.name")
     private String directorName;

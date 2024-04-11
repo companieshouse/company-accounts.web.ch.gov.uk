@@ -29,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @PreviousController(CompanyPolicyOnDisabledEmployeesSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees")
 public class CompanyPolicyOnDisabledEmployeesController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -48,7 +47,6 @@ public class CompanyPolicyOnDisabledEmployeesController extends BaseController i
                                                       @PathVariable String transactionId,
                                                       @PathVariable String companyAccountsId,
                                                       Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -58,7 +56,6 @@ public class CompanyPolicyOnDisabledEmployeesController extends BaseController i
             model.addAttribute(COMPANY_POLICY_ON_DISABLED_EMPLOYEES, companyPolicyOnDisabledEmployees);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -73,7 +70,6 @@ public class CompanyPolicyOnDisabledEmployeesController extends BaseController i
                                                          @ModelAttribute(COMPANY_POLICY_ON_DISABLED_EMPLOYEES) @Valid CompanyPolicyOnDisabledEmployees companyPolicyOnDisabledEmployees,
                                                          BindingResult bindingResult,
                                                          Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -90,7 +86,6 @@ public class CompanyPolicyOnDisabledEmployeesController extends BaseController i
             }
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -101,7 +96,6 @@ public class CompanyPolicyOnDisabledEmployeesController extends BaseController i
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return Optional.ofNullable(companyAccountsDataState)
                     .map(CompanyAccountsDataState::getDirectorsReportStatements)

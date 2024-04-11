@@ -50,7 +50,6 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
                             @PathVariable String transactionId,
                             @PathVariable String companyAccountsId,
                             Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -73,7 +72,6 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
                               Model model,
                               HttpServletRequest request) {
 
-        
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -100,7 +98,6 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         BalanceSheet balanceSheet =
             balanceSheetService.getBalanceSheet(
                 transactionId, companyAccountsId, companyNumber);
@@ -109,7 +106,6 @@ public class FixedAssetsInvestmentsController extends BaseController implements 
     }
 
     private boolean hasFixedInvestments(BalanceSheet balanceSheet) {
-
         Long currentInvestments = Optional.of(balanceSheet)
             .map(BalanceSheet::getFixedAssets)
             .map(FixedAssets::getInvestments)

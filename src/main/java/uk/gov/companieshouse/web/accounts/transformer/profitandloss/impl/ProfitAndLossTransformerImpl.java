@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.transformer.profitandloss.ProfitAndLos
 
 @Component
 public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
-
     @Autowired
     private GrossProfitAndLossTransformer grossProfitAndLossTransformer;
 
@@ -24,7 +23,6 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
     @Override
     public ProfitAndLoss getProfitAndLoss(ProfitAndLossApi currentPeriodProfitAndLoss,
             ProfitAndLossApi previousPeriodProfitAndLoss) {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         if (currentPeriodProfitAndLoss != null) {
@@ -54,7 +52,6 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
 
     @Override
     public ProfitAndLossApi getCurrentPeriodProfitAndLoss(ProfitAndLoss profitAndLoss) {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         grossProfitAndLossTransformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
@@ -67,7 +64,6 @@ public class ProfitAndLossTransformerImpl implements ProfitAndLossTransformer {
 
     @Override
     public ProfitAndLossApi getPreviousPeriodProfitAndLoss(ProfitAndLoss profitAndLoss) {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         grossProfitAndLossTransformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);

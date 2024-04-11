@@ -12,7 +12,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class CreditorsAfterOneYearDateHandler implements DateHandler<CreditorsAfterOneYear> {
-
     private final SmallFullService smallFullService;
 
     @Autowired
@@ -23,7 +22,6 @@ public class CreditorsAfterOneYearDateHandler implements DateHandler<CreditorsAf
     @Override
     public void addDates(ApiClient apiClient, String transactionId, String companyAccountsId,
                     CreditorsAfterOneYear note) throws ServiceException {
-
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId,
                         companyAccountsId);
         note.setBalanceSheetHeadings(smallFullService.getBalanceSheetHeadings(smallFullApi));

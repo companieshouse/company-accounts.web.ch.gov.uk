@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportA
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface DirectorsReportApprovalService {
-
     List<ValidationError> submitDirectorsReportApproval(String transactionId, String companyAccountsId,
                                                         DirectorsReportApproval directorsReportApproval) throws ServiceException;
 

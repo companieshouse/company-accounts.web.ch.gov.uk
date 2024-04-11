@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StocksDateHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -50,7 +49,6 @@ class StocksDateHandlerTest {
     @Test
     @DisplayName("Add dates")
     void addDates() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
@@ -64,7 +62,6 @@ class StocksDateHandlerTest {
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
-
         assertEquals(NoteType.SMALL_FULL_STOCKS, stocksDateHandler.getNoteType());
     }
 }

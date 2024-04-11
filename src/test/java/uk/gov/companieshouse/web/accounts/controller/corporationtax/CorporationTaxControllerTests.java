@@ -5,7 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CorporationTaxControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -44,15 +47,13 @@ class CorporationTaxControllerTests {
             "https://www.gov.uk/file-your-company-accounts-and-tax-return";
 
     @BeforeEach
-    private void setup() {
-
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get corporation tax view success path")
     void getRequestSuccess() throws Exception {
-
         this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(VIEW))
@@ -63,7 +64,6 @@ class CorporationTaxControllerTests {
     @Test
     @DisplayName("Post corporation tax with criteria met")
     void postRequestCriteriaMet() throws Exception {
-
         String beanElement = "fileChoice";
         String criteriaMet = "true";
 
@@ -76,11 +76,10 @@ class CorporationTaxControllerTests {
     @Test
     @DisplayName("Post corporation tax with criteria not met")
     void postRequestCriteriaNotMet() throws Exception {
-
         String beanElement = "fileChoice";
         String criteriaMet = "false";
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(PATH)
@@ -92,7 +91,6 @@ class CorporationTaxControllerTests {
     @Test
     @DisplayName("Post corporation tax with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = "fileChoice";
         String criteriaMet = null;
 

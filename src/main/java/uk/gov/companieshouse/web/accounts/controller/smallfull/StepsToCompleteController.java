@@ -38,7 +38,6 @@ import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService
 @PreviousController({CriteriaController.class, AccountStartController.class})
 @RequestMapping({"/company/{companyNumber}/small-full/steps-to-complete", "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/steps-to-complete"})
 public class StepsToCompleteController extends BaseController {
-
     private static final UriTemplate RESUME_URI = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/resume");
 
     @Autowired
@@ -75,7 +74,6 @@ public class StepsToCompleteController extends BaseController {
                                      @PathVariable Optional<String> transactionId,
                                      @PathVariable Optional<String> companyAccountsId,
                                      Model model) {
-
         if (transactionId.isPresent() && companyAccountsId.isPresent()) {
             addBackPageAttributeToModel(model, companyNumber, transactionId.get(), companyAccountsId.get());
         } else {
@@ -90,7 +88,6 @@ public class StepsToCompleteController extends BaseController {
                                       @PathVariable Optional<String> transactionId,
                                       @PathVariable Optional<String> companyAccountsId,
                                       HttpServletRequest request) {
-
         boolean isExistingTransaction = false;
         String transactionID = "";
         String companyAccountsID = "";
@@ -102,7 +99,6 @@ public class StepsToCompleteController extends BaseController {
         }
 
         try {
-
             if (!isExistingTransaction) {
                 transactionID = transactionService.createTransaction(companyNumber);
                 companyAccountsID = companyAccountsService.createCompanyAccounts(transactionID);
@@ -127,7 +123,6 @@ public class StepsToCompleteController extends BaseController {
 
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionID, companyAccountsID);
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -135,11 +130,9 @@ public class StepsToCompleteController extends BaseController {
 
     private void createEmptyPeriods(ApiClient apiClient, String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         SmallFullApi smallFull = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         if (StringUtils.isBlank(smallFull.getLinks().getCurrentPeriod())) {
-
             currentPeriodService
                     .submitCurrentPeriod(apiClient, smallFull, transactionId, companyAccountsId,
                             new CurrentPeriodApi(), new ArrayList<>());
@@ -148,7 +141,6 @@ public class StepsToCompleteController extends BaseController {
         CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
         if (companyService.isMultiYearFiler(companyProfile) &&
                 StringUtils.isBlank(smallFull.getLinks().getPreviousPeriod())) {
-
             previousPeriodService
                     .submitPreviousPeriod(apiClient, smallFull, transactionId,
                             companyAccountsId,

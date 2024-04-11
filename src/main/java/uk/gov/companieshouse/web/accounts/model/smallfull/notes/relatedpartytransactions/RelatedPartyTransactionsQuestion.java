@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.relatedpartytra
 import jakarta.validation.constraints.NotNull;
 
 public class RelatedPartyTransactionsQuestion {
-
     @NotNull(message = "{relatedPartyTransactionsQuestion.selectionNotMade}")
     private Boolean hasIncludedRelatedPartyTransactions;
 

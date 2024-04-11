@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class AdditionalInformationServiceImpl implements AdditionalInformationService {
-
     @Autowired
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -23,7 +22,6 @@ public class AdditionalInformationServiceImpl implements AdditionalInformationSe
     @Override
     public AdditionalInformation getAdditionalInformation(String transactionId,
             String companyAccountsId) throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
@@ -34,18 +32,15 @@ public class AdditionalInformationServiceImpl implements AdditionalInformationSe
     public List<ValidationError> submitAdditionalInformation(String transactionId,
             String companyAccountsId, AdditionalInformation additionalInformation)
             throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
         if (statementsApi == null) {
-
             statementsApi = new StatementsApi();
             directorsReportStatementsTransformer.setAdditionalInformation(statementsApi, additionalInformation);
             return directorsReportStatementsService
                     .createDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);
         } else {
-
             directorsReportStatementsTransformer.setAdditionalInformation(statementsApi, additionalInformation);
             return directorsReportStatementsService
                     .updateDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);

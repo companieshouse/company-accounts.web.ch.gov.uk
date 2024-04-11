@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class BalanceSheet {
-
     private BalanceSheetHeadings balanceSheetHeadings;
 
     private Boolean lbg;

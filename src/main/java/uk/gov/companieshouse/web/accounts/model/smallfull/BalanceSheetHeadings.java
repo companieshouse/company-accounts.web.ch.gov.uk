@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
 public class BalanceSheetHeadings {
-
     private String currentPeriodHeading;
 
     private String previousPeriodHeading;

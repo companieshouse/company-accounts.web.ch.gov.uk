@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DebtorsTransformerImplTests {
-
     private static final long TRADE_DEBTORS_CURRENT = 1L;
     private static final long PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT = 2L;
     private static final long OTHER_DEBTORS_CURRENT = 3L;
@@ -40,7 +39,6 @@ class DebtorsTransformerImplTests {
     @Test
     @DisplayName("All Current period values added to debtors sheet web model")
     void getDebtorsForCurrentPeriod() {
-
         DebtorsApi debtorsApi = new DebtorsApi();
 
         CurrentPeriod debtorsCurrentPeriod = new CurrentPeriod();
@@ -67,7 +65,6 @@ class DebtorsTransformerImplTests {
     @Test
     @DisplayName("Only populated Current period values added to debtors sheet web model")
     void getDebtorsForCurrentPeriodPopulatedValues() {
-
         DebtorsApi debtorsApi = new DebtorsApi();
 
         CurrentPeriod debtorsCurrentPeriod = new CurrentPeriod();
@@ -90,7 +87,6 @@ class DebtorsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to debtors sheet web model")
     void getDebtorsForPreviousPeriod() {
-
         DebtorsApi debtorsApi = new DebtorsApi();
 
         PreviousPeriod debtorsPreviousPeriod = new PreviousPeriod();
@@ -131,7 +127,6 @@ class DebtorsTransformerImplTests {
     @Test
     @DisplayName("All previous period values added to debtors API model when present")
     void previousPeriodValueAddedToApiModel() {
-
         Debtors debtors = new Debtors();
 
         TradeDebtors tradeDebtors = new TradeDebtors();
@@ -196,7 +191,6 @@ class DebtorsTransformerImplTests {
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
-
         assertEquals(NoteType.SMALL_FULL_DEBTORS, transformer.getNoteType());
     }
 

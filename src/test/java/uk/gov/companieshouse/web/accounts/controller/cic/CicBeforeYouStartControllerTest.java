@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicBeforeYouStartControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
@@ -42,15 +41,13 @@ class CicBeforeYouStartControllerTest {
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get cic before you start")
     void getCicBeforeYouStartRequest() throws Exception{
-
         mockMvc.perform(get(CIC_BEFORE_YOU_START_VIEW_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(CIC_BEFORE_YOU_START_VIEW))
@@ -60,7 +57,6 @@ class CicBeforeYouStartControllerTest {
     @Test
     @DisplayName("Post cic before you start")
     void postCicBeforeYouStart() throws Exception {
-
         when(navigatorService.getNextControllerRedirect(controller.getClass()))
             .thenReturn(MOCK_CONTROLLER_PATH);
 

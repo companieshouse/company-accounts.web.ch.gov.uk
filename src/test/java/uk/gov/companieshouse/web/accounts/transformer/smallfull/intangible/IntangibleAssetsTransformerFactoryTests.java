@@ -15,14 +15,12 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IntangibleAssetsTransformerFactoryTests {
-
     private IntangibleAssetsTransformerFactory factory = new IntangibleAssetsTransformerFactory();
 
     @Test
     @DisplayName("Asserts the factory returns a goodwill transformer when requesting "
             + "with the appropriate resource type")
     void getGoodwillTransformer() {
-
         IntangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 IntangibleAssetsResource.GOODWILL);
 
@@ -33,7 +31,6 @@ class IntangibleAssetsTransformerFactoryTests {
     @DisplayName("Asserts the factory returns an other intangible assets transformer when requesting "
             + "with the appropriate resource type")
     void getOtherIntangibleAssetsTransformer() {
-
         IntangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 IntangibleAssetsResource.OTHER_INTANGIBLE_ASSETS);
 
@@ -44,7 +41,6 @@ class IntangibleAssetsTransformerFactoryTests {
     @DisplayName("Asserts the factory returns a total transformer when requesting "
             + "with the appropriate resource type")
     void getTotalTransformer() {
-
         IntangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 IntangibleAssetsResource.TOTAL);
 

@@ -16,13 +16,11 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class TangibleAssetsDateHandler implements DateHandler<TangibleAssets> {
-
     @Autowired
     private SmallFullService smallFullService;
 
     @Override
     public void addDates(ApiClient apiClient, String transactionId, String companyAccountsId, TangibleAssets note) throws ServiceException {
-
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         note.setLastAccountsPeriodEndOn(Optional.of(smallFullApi)

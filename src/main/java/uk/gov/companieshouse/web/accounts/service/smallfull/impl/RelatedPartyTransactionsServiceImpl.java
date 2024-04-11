@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class RelatedPartyTransactionsServiceImpl implements RelatedPartyTransactionsService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -33,7 +32,6 @@ public class RelatedPartyTransactionsServiceImpl implements RelatedPartyTransact
 
     @Override
     public void createRelatedPartyTransactions(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = RELATED_PARTY_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
@@ -51,7 +49,6 @@ public class RelatedPartyTransactionsServiceImpl implements RelatedPartyTransact
     @Override
     public RelatedPartyTransactionsApi getRelatedPartyTransactions(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-
         String uri = RELATED_PARTY_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
@@ -68,13 +65,11 @@ public class RelatedPartyTransactionsServiceImpl implements RelatedPartyTransact
     @Override
     public void deleteRelatedPartyTransactions(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         if (StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getRelatedPartyTransactions())) {
-
             String uri = RELATED_PARTY_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
 
             try {

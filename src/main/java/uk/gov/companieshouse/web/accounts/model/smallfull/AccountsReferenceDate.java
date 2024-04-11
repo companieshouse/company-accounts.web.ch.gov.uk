@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class AccountsReferenceDate {
-
     @NotNull(message = "{accountsReferenceDate.selectionNotMade}")
     private LocalDate chosenDate;
 

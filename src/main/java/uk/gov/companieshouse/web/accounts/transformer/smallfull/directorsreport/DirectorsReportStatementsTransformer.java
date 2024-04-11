@@ -7,7 +7,6 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndChar
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivities;
 
 public interface DirectorsReportStatementsTransformer {
-
     AdditionalInformation getAdditionalInformation(StatementsApi statementsApi);
 
     void setAdditionalInformation(StatementsApi statementsApi, AdditionalInformation additionalInformation);

@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class CompanyActivitiesAndImpact {
-
     @NotBlank(message = "{companyActivitiesAndImpact.activitiesAndImpact.missing}")
     @ValidationMapping("$.cic_statements.report_statements.company_activities_and_impact")
     private String activitiesAndImpact;

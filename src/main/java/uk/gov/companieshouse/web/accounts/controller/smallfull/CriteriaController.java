@@ -22,10 +22,8 @@ import jakarta.validation.Valid;
 @PreviousController(SelectAccountTypeController.class)
 @RequestMapping("/company/{companyNumber}/small-full/criteria")
 public class CriteriaController extends BaseController {
-
     @GetMapping
     public String getCriteria(@PathVariable String companyNumber, Model model) {
-
         addBackPageAttributeToModel(model, companyNumber);
         model.addAttribute("criteria", new Criteria());
 
@@ -41,7 +39,6 @@ public class CriteriaController extends BaseController {
     public String postCriteria(@PathVariable String companyNumber,
                                @ModelAttribute("criteria") @Valid Criteria criteria,
                                BindingResult bindingResult, Model model) {
-
         addBackPageAttributeToModel(model, companyNumber);
 
         if (bindingResult.hasErrors()) {
@@ -49,11 +46,9 @@ public class CriteriaController extends BaseController {
         }
 
         if (criteria.getIsCriteriaMet().equalsIgnoreCase("noAlternativeFilingMethod")) {
-
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + companyNumber
                     + "/submit-abridged-accounts/alternative-filing-options";
         } else if (criteria.getIsCriteriaMet().equalsIgnoreCase("noOtherAccounts")) {
-
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + companyNumber
                     + "/select-account-type";
         }

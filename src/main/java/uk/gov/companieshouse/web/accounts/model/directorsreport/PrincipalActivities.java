@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class PrincipalActivities {
-
     @NotBlank(message = "{directorsReport.principalActivities.details.missing}")
     @ValidationMapping("$.statements.principal_activities")
     private String principalActivitiesDetails;

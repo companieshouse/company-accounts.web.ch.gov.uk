@@ -1,8 +1,14 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,9 +25,6 @@ import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformationSelectionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,6 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportAdditionalInformationSelectionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -106,15 +111,13 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get request - success - hasPrincipalActivities set from db")
     void getAdditionalInformationSelectionSuccessHasSelectionSetFromDB() throws Exception {
-
         when(additionalInformationSelectionService.getAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(additionalInformationSelection);
 
@@ -133,7 +136,6 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     @Test
     @DisplayName("Get request - success - hasPrincipalActivities derived from data state")
     void getAdditionalInformationSelectionSuccessHasSelectionDerivedFromDataState() throws Exception {
-
         when(additionalInformationSelectionService.getAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(additionalInformationSelection);
 
@@ -156,7 +158,6 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     @Test
     @DisplayName("Get request - service exception")
     void getAdditionalInformationSelectionThrowsServiceException() throws Exception {
-
         when(additionalInformationSelectionService.getAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -168,7 +169,6 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     @Test
     @DisplayName("Post request - success")
     void postAdditionalInformationSuccess() throws Exception {
-
         doNothing()
                 .when(additionalInformationSelectionService)
                 .submitAdditionalInformationSelection(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AdditionalInformationSelection.class));
@@ -177,7 +177,7 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getDirectorsReportStatements()).thenReturn(directorsReportStatements);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_SELECTION_PATH)
                 .param(HAS_ADDITIONAL_INFORMATION, "1"))
@@ -192,7 +192,6 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     @Test
     @DisplayName("Post request - service exception")
     void postAdditionalInformationServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(additionalInformationSelectionService)
                 .submitAdditionalInformationSelection(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AdditionalInformationSelection.class));
@@ -206,7 +205,6 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     @Test
     @DisplayName("Post request - binding result errors")
     void postAdditionalInformationWithBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_SELECTION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADDITIONAL_INFORMATION_SELECTION_VIEW));
@@ -218,7 +216,6 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
@@ -228,7 +225,6 @@ class DirectorsReportAdditionalInformationSelectionControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 

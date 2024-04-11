@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.AdditionalInform
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface AdditionalInformationService {
-
     AdditionalInformation getAdditionalInformation(String transactionId, String companyAccountsId)
             throws ServiceException;
 

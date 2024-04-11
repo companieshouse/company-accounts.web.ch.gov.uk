@@ -8,13 +8,11 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.StatementsTransf
 
 @Component
 public class StatementsTransformerImpl implements StatementsTransformer {
-
     /**
      * {@inheritDoc}
      */
     @Override
     public Statements getBalanceSheetStatements(BalanceSheetStatementsApi statementsApi) {
-
         Statements statements = new Statements();
 
         BalanceSheetLegalStatementsApi legalStatementsApi = statementsApi.getLegalStatements();

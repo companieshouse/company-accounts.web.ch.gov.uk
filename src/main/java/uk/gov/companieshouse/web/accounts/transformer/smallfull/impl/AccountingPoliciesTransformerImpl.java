@@ -16,10 +16,8 @@ import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 
 @Component
 public class AccountingPoliciesTransformerImpl implements NoteTransformer<AccountingPolicies, AccountingPoliciesApi> {
-
     @Override
     public AccountingPolicies toWeb(AccountingPoliciesApi apiResource) {
-
         AccountingPolicies accountingPolicies = new AccountingPolicies();
 
         if (apiResource == null) {
@@ -30,15 +28,12 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
         if(apiResource.getBasisOfMeasurementAndPreparation() != null) {
             if (apiResource.getBasisOfMeasurementAndPreparation().trim()
                     .equalsIgnoreCase(AccountingRegulatoryStandard.FRS102.toString())) {
-
                 basisOfPreparation.setAccountingRegulatoryStandard(AccountingRegulatoryStandard.FRS102);
 
             } else if (apiResource.getBasisOfMeasurementAndPreparation().trim()
                     .equalsIgnoreCase(AccountingRegulatoryStandard.FRS101.toString())) {
-
                 basisOfPreparation.setAccountingRegulatoryStandard(AccountingRegulatoryStandard.FRS101);
             } else {
-
                 basisOfPreparation.setAccountingRegulatoryStandard(AccountingRegulatoryStandard.OTHER);
             }
         }
@@ -62,7 +57,6 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
 
         IntangibleAmortisationPolicy intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
         if (apiResource.getIntangibleFixedAssetsAmortisationPolicy() != null) {
-
             intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(true);
             intangibleAmortisationPolicy.setIntangibleAmortisationPolicyDetails(
                     apiResource.getIntangibleFixedAssetsAmortisationPolicy());
@@ -71,7 +65,6 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
         if (apiResource.getValuationInformationAndPolicy() != null) {
-
             valuationInformationPolicy.setIncludeValuationInformationPolicy(true);
             valuationInformationPolicy.setValuationInformationPolicyDetails(
                     apiResource.getValuationInformationAndPolicy());
@@ -91,7 +84,6 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
 
     @Override
     public AccountingPoliciesApi toApi(AccountingPolicies webResource) {
-
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
 
         if (webResource.getBasisOfPreparation().getAccountingRegulatoryStandard().toString().equalsIgnoreCase(AccountingRegulatoryStandard.FRS102.toString())) {
@@ -114,7 +106,6 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
         }
 
         if (BooleanUtils.isTrue(webResource.getIntangibleAmortisationPolicy().getIncludeIntangibleAmortisationPolicy())) {
-
             accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(
                     webResource.getIntangibleAmortisationPolicy().getIntangibleAmortisationPolicyDetails());
         } else {
@@ -122,11 +113,9 @@ public class AccountingPoliciesTransformerImpl implements NoteTransformer<Accoun
         }
 
         if (BooleanUtils.isTrue(webResource.getValuationInformationPolicy().getIncludeValuationInformationPolicy())) {
-
             accountingPoliciesApi.setValuationInformationAndPolicy(
                     webResource.getValuationInformationPolicy().getValuationInformationPolicyDetails());
         } else {
-
             accountingPoliciesApi.setValuationInformationAndPolicy(null);
         }
 

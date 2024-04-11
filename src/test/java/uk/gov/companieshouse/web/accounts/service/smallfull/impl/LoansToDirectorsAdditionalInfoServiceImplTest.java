@@ -42,8 +42,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoansToDirectorsAdditionalInfoServiceImplTest {
-
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -115,7 +113,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
 
     @BeforeEach
     void setUp() {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -126,7 +123,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Get loans to directors additional information - success")
     void getLoansToDirectorsAdditionalInformationSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditionalInfoToWeb(additionalInformationApi)).thenReturn(additionalInformationWeb);
 
@@ -147,7 +143,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Get loans to directors additional information - throws ApiErrorResponseException")
     void getLoansToDirectorsAdditionalInformationThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(additionalInformationResourceHandler.get(ADDITIONAL_INFORMATION_URI)).thenReturn(
                 additionalInformationGet);
 
@@ -165,7 +160,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Get loans to directors additional information - resource not found")
     void getLoansToDirectorsAdditionalInformationResourceNotFound()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(additionalInformationResourceHandler.get(ADDITIONAL_INFORMATION_URI)).thenReturn(
                 additionalInformationGet);
 
@@ -182,7 +176,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Get loans to directors additional information - throws URIValidationException")
     void getLoansToDirectorsAdditionalInformationThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(additionalInformationResourceHandler.get(ADDITIONAL_INFORMATION_URI)).thenReturn(
                 additionalInformationGet);
 
@@ -200,7 +193,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Create loans to directors additional information - success")
     void createLoansToDirectorsAdditionalInformationSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
 
@@ -223,7 +215,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Create loans to directors additional information - throws ApiErrorResponseException")
     void createLoansToDirectorsAdditionalInformationThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
 
@@ -246,7 +237,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Create loans to directors additional information - validation errors")
     void createLoansToDirectorsAdditionalInformationValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
 
@@ -272,7 +262,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Create loans to directors additional information - throws URIValidationException")
     void createLoansToDirectorsAdditionalInformationThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
 
@@ -295,7 +284,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Update loans to directors additional information - success")
     void updateLoansToDirectorsAdditionalInformationSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
 
@@ -318,7 +306,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Update loans to directors additional information - throws ApiErrorResponseException")
     void updateLoansToDirectorsAdditionalInformationThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
 
@@ -341,7 +328,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Update loans to directors additional information - validation errors")
     void updateLoansToDirectorsAdditionalInformationValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb))
                 .thenReturn(additionalInformationApi);
@@ -368,7 +354,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Update loans to directors additional information - throws URIValidationException")
     void updateLoansToDirectorsAdditionalInformationThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
 
@@ -391,7 +376,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Delete loans to directors additional information - success")
     void deleteLoansToDirectorsAdditionalInformationSuccess()
             throws ApiErrorResponseException, URIValidationException {
-
         when(additionalInformationResourceHandler.delete(ADDITIONAL_INFORMATION_URI))
                 .thenReturn(additionalInformationDelete);
 
@@ -405,7 +389,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Delete loans to directors additional informations - throws ApiErrorResponseException")
     void deleteLoansToDirectorsAdditionalInformationThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(additionalInformationResourceHandler.delete(ADDITIONAL_INFORMATION_URI))
                 .thenReturn(additionalInformationDelete);
 
@@ -423,7 +406,6 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
     @DisplayName("Delete loans to directors additional information - throws URIValidationException")
     void deleteLoansToDirectorsAdditionalInformationThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(additionalInformationResourceHandler.delete(ADDITIONAL_INFORMATION_URI))
                 .thenReturn(additionalInformationDelete);
 

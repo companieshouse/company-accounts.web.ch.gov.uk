@@ -12,7 +12,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
 @Component
 public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
-
     @Autowired
     @Qualifier("calledUpShareCapitalNotPaidTransformer")
     private Transformer calledUpShareCapitalNotPaidTransformer;
@@ -39,7 +38,6 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
     @Override
     public BalanceSheet getBalanceSheet(CurrentPeriodApi currentPeriodApi, PreviousPeriodApi previousPeriodApi) {
-
         BalanceSheet balanceSheet = new BalanceSheet();
 
         if (currentPeriodApi != null && currentPeriodApi.getBalanceSheet() != null) {
@@ -55,7 +53,6 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
     @Override
     public BalanceSheetApi getCurrentPeriodBalanceSheet(BalanceSheet balanceSheet) {
-
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
         fixedAssetsTransformer.addCurrentPeriodToApiModel(balanceSheetApi, balanceSheet);
@@ -73,7 +70,6 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
 
     @Override
     public BalanceSheetApi getPreviousPeriodBalanceSheet(BalanceSheet balanceSheet) {
-
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
 
         fixedAssetsTransformer.addPreviousPeriodToApiModel(balanceSheetApi, balanceSheet);
@@ -91,7 +87,6 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     }
 
     private void populateCurrentPeriodValues(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         if (balanceSheetApi.getFixedAssets() != null) {
             fixedAssetsTransformer.addCurrentPeriodToWebModel(balanceSheet, balanceSheetApi);
         }
@@ -118,7 +113,6 @@ public class BalanceSheetTransformerImpl implements BalanceSheetTransformer {
     }
 
     private void populatePreviousPeriodValues(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         if (balanceSheetApi.getFixedAssets() != null) {
             fixedAssetsTransformer.addPreviousPeriodToWebModel(balanceSheet, balanceSheetApi);
         }

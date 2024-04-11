@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FinancialCommitmentsTransformerImplTest {
-
     private static final String DETAILS = "details";
 
     private NoteTransformer<FinancialCommitments, FinancialCommitmentsApi> transformer = new FinancialCommitmentsTransformerImpl();
@@ -20,7 +19,6 @@ class FinancialCommitmentsTransformerImplTest {
     @Test
     @DisplayName("Get financial commitments")
     void getFinancialCommitments() {
-
         FinancialCommitmentsApi financialCommitmentsApi = new FinancialCommitmentsApi();
         financialCommitmentsApi.setDetails(DETAILS);
 
@@ -33,7 +31,6 @@ class FinancialCommitmentsTransformerImplTest {
     @Test
     @DisplayName("Get financial commitments api")
     void getFinancialCommitmentsApi() {
-
         FinancialCommitments commitments = new FinancialCommitments();
         commitments.setFinancialCommitmentsDetails(DETAILS);
 
@@ -46,7 +43,6 @@ class FinancialCommitmentsTransformerImplTest {
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
-
         assertEquals(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS,
                         transformer.getNoteType());
     }

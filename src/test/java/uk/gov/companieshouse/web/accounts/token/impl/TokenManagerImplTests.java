@@ -20,7 +20,6 @@ import uk.gov.companieshouse.web.accounts.token.TokenManager;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TokenManagerImplTests {
-
     private static final String CHS_JWT_SECRET_ENV_VAR = "CHS_JWT_SECRET";
 
     private static final String CHS_JWT_SECRET = "ZTljOTQ3MTdkN2Y0YmUwOTJjZDA0OTJmMTQ4OTMwODM=";
@@ -34,7 +33,6 @@ class TokenManagerImplTests {
     @Test
     @DisplayName("Token manager - encode an object to a JWT, decode it and ensure no data is lost")
     void tokenManagerEncodeDecode() throws JsonProcessingException, SignatureException {
-
         when(mockEnvironmentReader.getMandatoryString(CHS_JWT_SECRET_ENV_VAR)).thenReturn(CHS_JWT_SECRET);
 
         TestNestedClass testNestedClass = new TestNestedClass();
@@ -55,7 +53,6 @@ class TokenManagerImplTests {
     }
 
     private static class TestClass {
-
         @JsonProperty("test_value")
         private String testValue;
 
@@ -80,7 +77,6 @@ class TokenManagerImplTests {
     }
 
     private static class TestNestedClass {
-
         private String testNestedValue;
 
         public String getTestNestedValue() {

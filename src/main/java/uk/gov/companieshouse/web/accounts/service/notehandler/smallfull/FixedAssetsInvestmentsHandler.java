@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class FixedAssetsInvestmentsHandler implements NoteResourceHandler<FixedAssetsInvestmentsApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 
@@ -25,7 +24,6 @@ public class FixedAssetsInvestmentsHandler implements NoteResourceHandler<FixedA
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
-
         return FIXED_ASSETS_INVESTMENTS_URI.expand(transactionId, companyAccountsId).toString();
     }
 
@@ -51,7 +49,6 @@ public class FixedAssetsInvestmentsHandler implements NoteResourceHandler<FixedA
 
     @Override
     public boolean parentResourceExists(ApiClient apiClient, String transactionId, String companyAccountsId) throws ServiceException {
-
         return StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getFixedAssetsInvestmentsNote());

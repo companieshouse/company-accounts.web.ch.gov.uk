@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RptTransactionValidatorTest {
-
     private static final String RPT_TRANSACTION_TO_ADD = "rptTransactionToAdd";
 
     private static final String TRANSACTION_RELATIONSHIP = "relationship";
@@ -33,7 +32,6 @@ class RptTransactionValidatorTest {
     @Test
     @DisplayName("Validate RPT transaction - relationship success")
     void validateRptTransactionToAddRelationshipSuccess() {
-
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
         rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
         rptTransactionToAdd.setRelationship(TRANSACTION_RELATIONSHIP);
@@ -45,7 +43,6 @@ class RptTransactionValidatorTest {
     @Test
     @DisplayName("Validate RPT transaction - missing relationship")
     void validateRptTransactionToAddMissingRelationship() {
-
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
 
         rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
@@ -60,7 +57,6 @@ class RptTransactionValidatorTest {
     @Test
     @DisplayName("Validate RPT transaction - description of transaction success")
     void validateRptTransactionToAddDescriptionOfTransactionSuccess() {
-
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
         rptTransactionToAdd.setDescriptionOfTransaction(TRANSACTION_DESCRIPTION);
         rptTransactionToAdd.setRelationship(TRANSACTION_DESCRIPTION);
@@ -72,7 +68,6 @@ class RptTransactionValidatorTest {
     @Test
     @DisplayName("Validate RPT transaction -  missing description of transaction")
     void validateRptTransactionToAddMissingDescriptionOfTransaction() {
-
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
 
         rptTransactionToAdd.setRelationship(TRANSACTION_RELATIONSHIP);

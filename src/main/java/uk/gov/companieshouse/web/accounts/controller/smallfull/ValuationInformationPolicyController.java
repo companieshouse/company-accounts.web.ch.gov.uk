@@ -30,7 +30,6 @@ import java.util.List;
 @PreviousController(IntangibleAmortisationPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/valuation-information")
 public class ValuationInformationPolicyController extends BaseController {
-
     @Autowired
     private NoteService<AccountingPolicies> noteService;
 
@@ -51,7 +50,6 @@ public class ValuationInformationPolicyController extends BaseController {
                                                 @PathVariable String companyAccountsId,
                                                 Model model,
                                                 HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -65,7 +63,6 @@ public class ValuationInformationPolicyController extends BaseController {
 
             model.addAttribute(VALUATION_INFORMATION_POLICY, valuationInformationPolicy);
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -81,7 +78,6 @@ public class ValuationInformationPolicyController extends BaseController {
                                                    BindingResult bindingResult,
                                                    Model model,
                                                    HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         radioAndTextValidator.validate(valuationInformationPolicy.getIncludeValuationInformationPolicy(), valuationInformationPolicy.getValuationInformationPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, VALUATION_INFORMATION_POLICY_FIELD_PATH);
@@ -105,7 +101,6 @@ public class ValuationInformationPolicyController extends BaseController {
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -126,7 +121,6 @@ public class ValuationInformationPolicyController extends BaseController {
      * @param valuationInformationPolicy The valuation information policy model on which to set the boolean
      */
     private void setIsPolicyIncluded(HttpServletRequest request, ValuationInformationPolicy valuationInformationPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         valuationInformationPolicy.setIncludeValuationInformationPolicy(
                 companyAccountsDataState.getAccountingPolicies().getHasProvidedValuationInformationPolicy());
@@ -138,7 +132,6 @@ public class ValuationInformationPolicyController extends BaseController {
      * @param valuationInformationPolicy The intangible amortisation policy for which to cache data
      */
     private void  cacheIsPolicyIncluded(HttpServletRequest request, ValuationInformationPolicy valuationInformationPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.getAccountingPolicies().setHasProvidedValuationInformationPolicy(
                 valuationInformationPolicy.getIncludeValuationInformationPolicy());

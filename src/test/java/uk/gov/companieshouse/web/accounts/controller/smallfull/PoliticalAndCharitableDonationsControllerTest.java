@@ -1,8 +1,14 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,8 +23,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -34,10 +38,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PoliticalAndCharitableDonationsControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -91,15 +96,13 @@ class PoliticalAndCharitableDonationsControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get request - success")
     void getPoliticalAndCharitableDonationsSuccess() throws Exception {
-
         when(service.getPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(politicalAndCharitableDonations);
 
@@ -113,7 +116,6 @@ class PoliticalAndCharitableDonationsControllerTest {
     @Test
     @DisplayName("Get request - service exception")
     void getPoliticalAndCharitableDonationsThrowsServiceException() throws Exception {
-
         when(service.getPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -125,14 +127,13 @@ class PoliticalAndCharitableDonationsControllerTest {
     @Test
     @DisplayName("Post request - success")
     void postPoliticalAndCharitableDonationsSuccess() throws Exception {
-
         when(service
                 .submitPoliticalAndCharitableDonations(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(PoliticalAndCharitableDonations.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(POLITICAL_AND_CHARITABLE_DONATIONS_PATH)
                 .param(POLITICAL_AND_CHARITABLE_DONATIONS_DETAILS, POLITICAL_AND_CHARITABLE_DONATIONS_DETAILS))
@@ -143,7 +144,6 @@ class PoliticalAndCharitableDonationsControllerTest {
     @Test
     @DisplayName("Post request - validation errors")
     void postPoliticalAndCharitableDonationsWithValidationErrors() throws Exception {
-
         when(service
                 .submitPoliticalAndCharitableDonations(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(PoliticalAndCharitableDonations.class)))
                 .thenReturn(validationErrors);
@@ -155,13 +155,12 @@ class PoliticalAndCharitableDonationsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(POLITICAL_AND_CHARITABLE_DONATIONS_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(), captor.capture());
     }
 
     @Test
     @DisplayName("Post request - service exception")
     void postPoliticalAndCharitableDonationsThrowsServiceException() throws Exception {
-
         when(service
                 .submitPoliticalAndCharitableDonations(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(PoliticalAndCharitableDonations.class)))
                 .thenThrow(ServiceException.class);
@@ -175,7 +174,6 @@ class PoliticalAndCharitableDonationsControllerTest {
     @Test
     @DisplayName("Post request - binding result errors")
     void postPoliticalAndCharitableDonationsBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(POLITICAL_AND_CHARITABLE_DONATIONS_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(POLITICAL_AND_CHARITABLE_DONATIONS_VIEW));
@@ -187,7 +185,6 @@ class PoliticalAndCharitableDonationsControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getDirectorsReportStatements()).thenReturn(directorsReportStatements);
@@ -199,7 +196,6 @@ class PoliticalAndCharitableDonationsControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getDirectorsReportStatements()).thenReturn(directorsReportStatements);

@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWit
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ConsultationWithStakeholdersSelectionServiceImplTest {
-
     @Mock
     private CicStatementsService cicStatementsService;
 
@@ -53,7 +52,6 @@ class ConsultationWithStakeholdersSelectionServiceImplTest {
     @Test
     @DisplayName("Get consultation with stakeholders selection - default statement")
     void getConsultationWithStakeholdersSelectionFromDefaultStatement() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 
@@ -72,7 +70,6 @@ class ConsultationWithStakeholdersSelectionServiceImplTest {
     @Test
     @DisplayName("Get consultation with stakeholders selection - other statement")
     void getConsultationWithStakeholdersSelectionFromOtherStatement() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 
@@ -91,7 +88,6 @@ class ConsultationWithStakeholdersSelectionServiceImplTest {
     @Test
     @DisplayName("Submit consultation with stakeholders selection - has provided consultation")
     void submitConsultationWithStakeholdersHasProvidedConsultation() throws ServiceException {
-
         when(consultationWithStakeholdersSelection.getHasProvidedConsultationWithStakeholders())
                 .thenReturn(true);
 
@@ -104,7 +100,6 @@ class ConsultationWithStakeholdersSelectionServiceImplTest {
     @Test
     @DisplayName("Submit consultation with stakeholders selection - no consultation but API resource already default")
     void submitConsultationWithStakeholdersNoConsultationButApiResourceAlreadyDefault() throws ServiceException {
-
         when(consultationWithStakeholdersSelection.getHasProvidedConsultationWithStakeholders())
                 .thenReturn(false);
 
@@ -126,7 +121,6 @@ class ConsultationWithStakeholdersSelectionServiceImplTest {
     @Test
     @DisplayName("Submit consultation with stakeholders selection - no consultation and API resource statement not default")
     void submitConsultationWithStakeholdersNoConsultationAndApiResourceNotDefault() throws ServiceException {
-
         when(consultationWithStakeholdersSelection.getHasProvidedConsultationWithStakeholders())
                 .thenReturn(false);
 

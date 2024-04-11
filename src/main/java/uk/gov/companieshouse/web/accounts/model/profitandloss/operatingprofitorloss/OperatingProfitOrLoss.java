@@ -1,13 +1,11 @@
 package uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss;
 
-
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.AdministrativeExpenses;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.DistributionCosts;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OperatingTotal;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OtherOperatingIncome;
 
 public class OperatingProfitOrLoss {
-
     private AdministrativeExpenses administrativeExpenses;
 
     private DistributionCosts distributionCosts;

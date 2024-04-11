@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.company;
 import java.time.LocalDate;
 
 public class CompanyDetail {
-
     private String companyName;
 
     private String companyNumber;
@@ -73,6 +72,5 @@ public class CompanyDetail {
     public void setNextDue(LocalDate nextDue) {
         this.nextDue = nextDue;
     }
-
 
 }

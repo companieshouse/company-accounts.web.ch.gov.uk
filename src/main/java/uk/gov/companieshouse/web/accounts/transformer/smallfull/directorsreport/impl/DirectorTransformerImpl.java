@@ -12,7 +12,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 
 @Component
 public class DirectorTransformerImpl implements DirectorTransformer {
-
     @Autowired
     private DateTransformer dateTransformer;
 
@@ -20,7 +19,6 @@ public class DirectorTransformerImpl implements DirectorTransformer {
 
     @Override
     public DirectorApi getDirectorApi(DirectorToAdd director) {
-
         DirectorApi directorApi = new DirectorApi();
         directorApi.setName(director.getName());
 
@@ -37,11 +35,9 @@ public class DirectorTransformerImpl implements DirectorTransformer {
 
     @Override
     public Director[] getAllDirectors(DirectorApi[] directors) {
-
         Director[] allDirectors = new Director[directors.length];
 
         for (int i = 0; i < directors.length; i++) {
-
             Director director = new Director();
             director.setName(directors[i].getName());
             director.setAppointmentDate(directors[i].getAppointmentDate());

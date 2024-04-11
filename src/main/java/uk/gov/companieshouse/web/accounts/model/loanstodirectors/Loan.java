@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.loanstodirectors;
 
 public class Loan {
-
     private String id;
 
     private String directorName;

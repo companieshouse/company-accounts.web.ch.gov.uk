@@ -5,7 +5,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class AddOrRemoveDirectors {
-
     private boolean displayLtdWarningBanner;
 
     private boolean displayApprovalWarningBanner;

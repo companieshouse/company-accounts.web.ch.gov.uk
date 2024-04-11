@@ -13,11 +13,9 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
 @Component("membersFundsTransformer")
 public class MembersFundsTransformerImpl implements Transformer {
-
     @Override
     public void addCurrentPeriodToApiModel(
         BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasCurrentPeriodMembersFunds(balanceSheet))) {
             MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
@@ -32,7 +30,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasPreviousPeriodMembersFunds(balanceSheet))) {
             MembersFundsApi membersFundsApi = new MembersFundsApi();
             membersFundsApi.setProfitAndLossAccount(
@@ -47,7 +44,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet,
         BalanceSheetApi balanceSheetApi) {
-
         createMembersFunds(balanceSheet);
         MembersFundsApi membersFundsApi = balanceSheetApi.getMembersFunds();
 
@@ -69,7 +65,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet,
         BalanceSheetApi balanceSheetApi) {
-
         createMembersFunds(balanceSheet);
         MembersFundsApi membersFundsApi = balanceSheetApi.getMembersFunds();
 
@@ -89,7 +84,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     }
 
     private MembersFunds createMembersFunds(BalanceSheet balanceSheet) {
-
         MembersFunds membersFunds;
 
         if (balanceSheet.getMembersFunds() == null) {
@@ -103,7 +97,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     }
 
     private MembersFundsProfitAndLossAccount createProfitAndLossAccount(BalanceSheet balanceSheet) {
-
         MembersFundsProfitAndLossAccount membersFundProfitAndLossAccount;
 
         if (balanceSheet.getMembersFunds().getProfitAndLossAccount() == null) {
@@ -117,7 +110,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     }
 
     private TotalMembersFunds createTotalMembersFunds(BalanceSheet balanceSheet) {
-
         TotalMembersFunds totalMembersFunds;
 
         if (balanceSheet.getMembersFunds().getTotalMembersFunds() == null) {
@@ -132,7 +124,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     }
 
     private Boolean hasCurrentPeriodMembersFunds(BalanceSheet balanceSheet) {
-
         MembersFunds membersFunds = balanceSheet.getMembersFunds();
         if (membersFunds != null) {
             return Stream.of(membersFunds.getProfitAndLossAccount().getCurrentAmount(),
@@ -143,7 +134,6 @@ public class MembersFundsTransformerImpl implements Transformer {
     }
 
     private Boolean hasPreviousPeriodMembersFunds(BalanceSheet balanceSheet) {
-
         MembersFunds membersFunds = balanceSheet.getMembersFunds();
 
         if (membersFunds != null) {

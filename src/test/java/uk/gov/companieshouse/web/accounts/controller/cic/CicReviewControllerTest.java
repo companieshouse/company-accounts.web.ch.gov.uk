@@ -1,5 +1,22 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
+import uk.gov.companieshouse.web.accounts.service.cic.CicReviewService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -12,23 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.cic.CicReview;
-import uk.gov.companieshouse.web.accounts.service.cic.CicReviewService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicReviewControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private static final String COMPANY_NUMBER = "companyNumber";
 
@@ -50,7 +55,6 @@ class CicReviewControllerTest {
     private static final String MOCK_CONTROLLER_PATH =
         UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
-
     @Mock
     private CicReviewService cicReviewService;
 
@@ -66,15 +70,13 @@ class CicReviewControllerTest {
     private CicReviewController controller;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get review page success path")
     void getRequestSuccess() throws Exception {
-
         when(cicReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(cicReview);
 
@@ -90,7 +92,6 @@ class CicReviewControllerTest {
     @Test
     @DisplayName("Get review page failure path")
     void getRequestFailureWithServiceException() throws Exception {
-
         doThrow(ServiceException.class)
             .when(cicReviewService).getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -102,8 +103,7 @@ class CicReviewControllerTest {
     @Test
     @DisplayName("Post review page success path")
     void postRequestSuccess() throws Exception {
-
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture()))
             .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(REVIEW_PATH))

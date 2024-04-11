@@ -1,8 +1,14 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,8 +23,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.AdditionalInformationService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -37,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportAdditionalInformationControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -92,17 +98,14 @@ class DirectorsReportAdditionalInformationControllerTest {
 
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
-
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get request - success")
     void getAdditionalInformationSuccess() throws Exception {
-
         when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(additionalInformation);
 
@@ -116,7 +119,6 @@ class DirectorsReportAdditionalInformationControllerTest {
     @Test
     @DisplayName("Get request - service exception")
     void getAdditionalInformationThrowsServiceException() throws Exception {
-
         when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -128,14 +130,13 @@ class DirectorsReportAdditionalInformationControllerTest {
     @Test
     @DisplayName("Post request - success")
     void postAdditionalInformationSuccess() throws Exception {
-
         when(additionalInformationService
                 .submitAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AdditionalInformation.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
                 .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
@@ -146,7 +147,6 @@ class DirectorsReportAdditionalInformationControllerTest {
     @Test
     @DisplayName("Post request - validation errors")
     void postAdditionalInformationWithValidationErrors() throws Exception {
-
         when(additionalInformationService
                 .submitAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AdditionalInformation.class)))
                 .thenReturn(validationErrors);
@@ -158,13 +158,12 @@ class DirectorsReportAdditionalInformationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADDITIONAL_INFORMATION_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(), captor.capture());
     }
 
     @Test
     @DisplayName("Post request - service exception")
     void postAdditionalInformationThrowsServiceException() throws Exception {
-
         when(additionalInformationService
                 .submitAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AdditionalInformation.class)))
                 .thenThrow(ServiceException.class);
@@ -178,7 +177,6 @@ class DirectorsReportAdditionalInformationControllerTest {
     @Test
     @DisplayName("Post request - binding result errors")
     void postAdditionalInformationBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADDITIONAL_INFORMATION_VIEW));
@@ -190,7 +188,6 @@ class DirectorsReportAdditionalInformationControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getDirectorsReportStatements()).thenReturn(directorsReportStatements);
@@ -202,7 +199,6 @@ class DirectorsReportAdditionalInformationControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getDirectorsReportStatements()).thenReturn(directorsReportStatements);
@@ -210,6 +206,5 @@ class DirectorsReportAdditionalInformationControllerTest {
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
-
 
 }

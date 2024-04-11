@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-
 import java.util.List;
 import java.util.Optional;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +31,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @PreviousController(EmployeesController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/intangible-assets")
 public class IntangibleAssetsNoteController extends BaseController implements ConditionalController {
-
     private static final String INTANGIBLE_ASSETS_MODEL_ATTR = "intangibleAssets";
 
     @Autowired
@@ -50,7 +48,6 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -90,7 +87,6 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
 
@@ -111,7 +107,6 @@ public class IntangibleAssetsNoteController extends BaseController implements Co
     }
 
     private boolean hasIntangibleAssets(BalanceSheet balanceSheet) {
-
         Long currentIntangible = Optional.of(balanceSheet)
                 .map(BalanceSheet::getFixedAssets)
                 .map(FixedAssets::getIntangibleAssets)

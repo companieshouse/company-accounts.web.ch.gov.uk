@@ -1,20 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,10 +18,23 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemunera
 import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemunerationService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
+import java.util.ArrayList;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsRemunerationControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     public static final String DIRECTORS_REMUNERATION_PARAM = "directorsRemuneration";
     private MockMvc mockMvc;
@@ -57,16 +62,13 @@ class DirectorsRemunerationControllerTest {
         UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
-
-        this.mockMvc = MockMvcBuilders.standaloneSetup(directorsRemunerationController)
-            .build();
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(directorsRemunerationController).build();
     }
 
     @Test
     @DisplayName("Get DirectorsRemuneration view - success path")
     void getRequestDirectorsRemunerationSuccess() throws Exception {
-
         when(directorsRemunerationService
             .getDirectorsRemuneration(anyString(), anyString()))
             .thenReturn(new DirectorsRemuneration());
@@ -81,7 +83,6 @@ class DirectorsRemunerationControllerTest {
     @Test
     @DisplayName("Get DirectorsRemuneration view - service exception")
     void getRequestDirectorsRemunerationServiceException() throws Exception {
-
         when(directorsRemunerationService
             .getDirectorsRemuneration(anyString(), anyString()))
             .thenThrow(ServiceException.class);
@@ -94,12 +95,11 @@ class DirectorsRemunerationControllerTest {
     @Test
     @DisplayName("Accept DirectorsRemuneration - success path")
     void postRequestDirectorsRemunerationSuccess() throws Exception {
-
         when(directorsRemunerationService
             .submitDirectorsRemuneration(anyString(), anyString(),
                 any(DirectorsRemuneration.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture()))
             .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
@@ -111,7 +111,6 @@ class DirectorsRemunerationControllerTest {
     @Test
     @DisplayName("Accept DirectorsRemuneration - service exception")
     void postRequestDirectorsRemunerationServiceException() throws Exception {
-
         doThrow(ServiceException.class)
             .when(directorsRemunerationService)
             .submitDirectorsRemuneration(anyString(), anyString(),
@@ -125,12 +124,10 @@ class DirectorsRemunerationControllerTest {
     @Test
     @DisplayName("Accept DirectorsRemuneration - binding errors")
     void postRequestDirectorsRemunerationBindingErrors() throws Exception {
-
         this.mockMvc
             .perform(post(DIRECTORS_REMUNERATION_PATH).param(DIRECTORS_REMUNERATION_PARAM, ""))
             .andExpect(status().isOk())
             .andExpect(view().name(DIRECTORS_REMUNERATION_VIEW));
     }
-
 
 }

@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
 public class MembersFunds {
-
     private MembersFundsProfitAndLossAccount profitAndLossAccount;
 
     private TotalMembersFunds totalMembersFunds;

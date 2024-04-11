@@ -11,13 +11,11 @@ import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     private static final Logger LOG = LoggerFactory.getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
 
     @ExceptionHandler(value = { RuntimeException.class })
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleRuntimeException(HttpServletRequest request, Exception ex) {
-
         LOG.errorRequest(request, ex);
         return "error";
     }

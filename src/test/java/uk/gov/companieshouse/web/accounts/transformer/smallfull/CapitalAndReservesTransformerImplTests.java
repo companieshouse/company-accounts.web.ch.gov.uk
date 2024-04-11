@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CapitalAndReservesTransformerImplTests {
-
     private static final Long CURRENT_CALLED_UP_SHARE_CAPITAL = 1L;
     private static final Long CURRENT_SHARE_PREMIUM_ACCOUNT = 2L;
     private static final Long CURRENT_OTHER_RESERVES = 3L;
@@ -41,7 +40,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model")
     void currentPeriodValueAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -63,7 +61,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model without affecting previous period values")
     void currentPeriodValuesAddedToWebModelWithoutAffectingPreviousPeriodValues() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
@@ -83,7 +80,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model")
     void previousPeriodValuesAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -105,7 +101,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model without affecting current period values")
     void previousPeriodValuesAddedToWebModelWithoutAffectingCurrentPeriodValues() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
 
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
@@ -125,7 +120,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("Current period value added to balance sheet API model when present")
     void currentPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -145,7 +139,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("No current capital and reserves added to balance sheet API model")
     void noCurrentPeriodCapitalAndReservesAddedToApiModel() {
-
         CapitalAndReserves capitalAndReserves = new CapitalAndReserves();
         capitalAndReserves.setCalledUpShareCapital(new CalledUpShareCapital());
         capitalAndReserves.setOtherReserves(new OtherReserves());
@@ -171,7 +164,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("Previous period value added to balance sheet API model when present")
     void previousPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -191,7 +183,6 @@ class CapitalAndReservesTransformerImplTests {
     @Test
     @DisplayName("No previous capital and reserves added to balance sheet API model")
     void noPreviousPeriodCapitalAndReservesAddedToApiModel() {
-
         CapitalAndReserves capitalAndReserves = new CapitalAndReserves();
         capitalAndReserves.setCalledUpShareCapital(new CalledUpShareCapital());
         capitalAndReserves.setOtherReserves(new OtherReserves());
@@ -215,7 +206,6 @@ class CapitalAndReservesTransformerImplTests {
     }
 
     private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
-
         CalledUpShareCapital calledUpShareCapital = new CalledUpShareCapital();
         OtherReserves otherReserves = new OtherReserves();
         SharePremiumAccount sharePremiumAccount = new SharePremiumAccount();
@@ -260,7 +250,6 @@ class CapitalAndReservesTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForCurrentPeriod() {
-
         CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
         capitalAndReservesApi.setCalledUpShareCapital(CURRENT_CALLED_UP_SHARE_CAPITAL);
         capitalAndReservesApi.setOtherReserves(CURRENT_OTHER_RESERVES);
@@ -275,7 +264,6 @@ class CapitalAndReservesTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForPreviousPeriod() {
-
         CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
         capitalAndReservesApi.setCalledUpShareCapital(PREVIOUS_CALLED_UP_SHARE_CAPITAL);
         capitalAndReservesApi.setOtherReserves(PREVIOUS_OTHER_RESERVES);

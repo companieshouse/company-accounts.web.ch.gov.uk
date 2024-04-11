@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ResumeServiceImplTests {
-
     @Mock
     private CompanyService companyService;
 
@@ -36,14 +35,13 @@ class ResumeServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @BeforeEach
-    private void setUp() throws ServiceException {
+    public void setUp() throws ServiceException {
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
     }
     
     @Test
     @DisplayName("Get resume redirect success path for non-cic company")
     void getResumeRedirect() throws ServiceException {
-
         when(companyProfileApi.isCommunityInterestCompany()).thenReturn(false);
 
         String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
@@ -60,7 +58,6 @@ class ResumeServiceImplTests {
     @Test
     @DisplayName("Get resume redirect success path for cic company")
     void getResumeRedirectCIC() throws ServiceException {
-
         when(companyProfileApi.isCommunityInterestCompany()).thenReturn(true);
 
         String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);

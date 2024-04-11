@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.directorsreport;
 import jakarta.validation.constraints.NotNull;
 
 public class CompanyPolicyOnDisabledEmployeesSelection {
-
     @NotNull(message = "{directorsReport.companyPolicyOnDisabledEmployees.selectionNotMade}")
     private Boolean hasCompanyPolicyOnDisabledEmployees;
 

@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.directorsreport;
 import java.time.LocalDate;
 
 public class Director {
-
     private String id;
 
     private String name;

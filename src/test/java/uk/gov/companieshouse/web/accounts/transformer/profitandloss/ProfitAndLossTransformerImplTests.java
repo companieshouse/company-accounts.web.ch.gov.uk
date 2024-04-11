@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.ProfitO
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProfitAndLossTransformerImplTests {
-
     @Mock
     private GrossProfitAndLossTransformer grossProfitAndLossTransformer;
 
@@ -43,7 +42,6 @@ class ProfitAndLossTransformerImplTests {
     @Test
     @DisplayName("Get profit and loss - periods not null")
     void getProfitAndLossPeriodsNotNull() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
@@ -73,7 +71,6 @@ class ProfitAndLossTransformerImplTests {
     @Test
     @DisplayName("Get profit and loss - periods null")
     void getProfitAndLossPeriodsNull() {
-
         assertNotNull(transformer.getProfitAndLoss(null, null));
 
         verify(grossProfitAndLossTransformer, never())
@@ -100,7 +97,6 @@ class ProfitAndLossTransformerImplTests {
     @Test
     @DisplayName("Get current period")
     void getCurrentPeriod() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         assertNotNull(transformer.getCurrentPeriodProfitAndLoss(profitAndLoss));
@@ -114,7 +110,6 @@ class ProfitAndLossTransformerImplTests {
     @Test
     @DisplayName("Get previous period")
     void getPreviousPeriod() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         assertNotNull(transformer.getPreviousPeriodProfitAndLoss(profitAndLoss));

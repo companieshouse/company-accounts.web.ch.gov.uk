@@ -9,7 +9,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class ProfitAndLoss {
-
     private BalanceSheetHeadings balanceSheetHeadings;
 
     private GrossProfitOrLoss grossProfitOrLoss;

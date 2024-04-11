@@ -41,7 +41,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportStatementsServiceImplTests {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -107,7 +106,6 @@ class DirectorsReportStatementsServiceImplTests {
 
     @BeforeEach
     void setUp() {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -118,7 +116,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Get directors report statements - success")
     void getDirectorsReportStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler.get(DIRECTORS_REPORT_STATEMENTS_URI)).thenReturn(
                 statementsGet);
 
@@ -136,7 +133,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Get directors report statements - throws ApiErrorResponseException")
     void getDirectorsReportStatementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler.get(DIRECTORS_REPORT_STATEMENTS_URI)).thenReturn(
                 statementsGet);
 
@@ -154,7 +150,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Get directors report statements - resource not found")
     void getDirectorsReportStatementsResourceNotFound()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler.get(DIRECTORS_REPORT_STATEMENTS_URI)).thenReturn(
                 statementsGet);
 
@@ -171,7 +166,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Get directors report statements - throws URIValidationException")
     void getDirectorsReportStatementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler.get(DIRECTORS_REPORT_STATEMENTS_URI)).thenReturn(
                 statementsGet);
 
@@ -189,7 +183,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Create directors report statements - success")
     void createDirectorsReportStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsCreate);
@@ -209,7 +202,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Create directors report statements - throws ApiErrorResponseException")
     void createDirectorsReportStatementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsCreate);
@@ -229,7 +221,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Create directors report statements - validation errors")
     void createDirectorsReportStatementsValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsCreate);
@@ -252,7 +243,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Create directors report statements - throws URIValidationException")
     void createDirectorsReportStatementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsCreate);
@@ -272,7 +262,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Update directors report statements - success")
     void updateDirectorsReportStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsUpdate);
@@ -292,7 +281,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Update directors report statements - throws ApiErrorResponseException")
     void updateDirectorsReportStatementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsUpdate);
@@ -312,7 +300,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Update directors report statements - validation errors")
     void updateDirectorsReportStatementsValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsUpdate);
@@ -335,7 +322,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Update directors report statements - throws URIValidationException")
     void updateDirectorsReportStatementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
                         .thenReturn(statementsUpdate);
@@ -355,7 +341,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Delete directors report statements - success")
     void deleteDirectorsReportStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException {
-
         when(statementsResourceHandler.delete(DIRECTORS_REPORT_STATEMENTS_URI))
                 .thenReturn(statementsDelete);
 
@@ -369,7 +354,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Delete directors report statements - throws ApiErrorResponseException")
     void deleteDirectorsReportStatementsThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler.delete(DIRECTORS_REPORT_STATEMENTS_URI))
                 .thenReturn(statementsDelete);
 
@@ -387,7 +371,6 @@ class DirectorsReportStatementsServiceImplTests {
     @DisplayName("Delete directors report statements - throws URIValidationException")
     void deleteDirectorsReportStatementsThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(statementsResourceHandler.delete(DIRECTORS_REPORT_STATEMENTS_URI))
                 .thenReturn(statementsDelete);
 

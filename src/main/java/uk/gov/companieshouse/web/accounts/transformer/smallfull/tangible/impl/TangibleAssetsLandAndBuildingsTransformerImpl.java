@@ -27,13 +27,10 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbook
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.TangibleAssetsResourceTransformer;
 
 public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAssetsResourceTransformerImpl implements TangibleAssetsResourceTransformer {
-
     @Override
     public void mapTangibleAssetsResourceToWebModel(TangibleAssets tangibleAssets,
                                                     TangibleAssetsResource tangibleAssetsResource) {
-
         if (tangibleAssetsResource.getCost() != null) {
-
             TangibleAssetsCost tangibleAssetsCost = createCost(tangibleAssets);
 
             CostAtPeriodStart atPeriodStart = createCostAtPeriodStart(tangibleAssetsCost);
@@ -56,7 +53,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
         }
 
         if (tangibleAssetsResource.getDepreciation() != null) {
-
             TangibleAssetsDepreciation tangibleAssetsDepreciation = createDepreciation(tangibleAssets);
 
             DepreciationAtPeriodStart atPeriodStart = createDepreciationAtPeriodStart(tangibleAssetsDepreciation);
@@ -94,7 +90,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
     @Override
     public void mapTangibleAssetsToApiResource(TangibleAssets tangibleAssets,
             TangibleApi tangibleApi) {
-
         TangibleAssetsResource landAndBuildings = new TangibleAssetsResource();
 
         if (hasCostResources(tangibleAssets)) {
@@ -114,7 +109,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
 
     @Override
     protected boolean hasCostResources(TangibleAssets tangibleAssets) {
-
         TangibleAssetsCost cost = tangibleAssets.getCost();
 
         return Stream
@@ -133,7 +127,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
 
     @Override
     protected boolean hasDepreciationResources(TangibleAssets tangibleAssets) {
-
         TangibleAssetsDepreciation depreciation = tangibleAssets.getDepreciation();
 
         return Stream.of(Optional.of(depreciation)
@@ -149,7 +142,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
 
     @Override
     protected boolean hasNetBookValueResources(TangibleAssets tangibleAssets) {
-
         TangibleAssetsNetBookValue netBookValue = tangibleAssets.getNetBookValue();
 
         return Stream.of(Optional.of(netBookValue)
@@ -162,7 +154,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
 
     @Override
     protected void mapCostResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
-
         Cost cost = new Cost();
         cost.setAtPeriodStart(Optional.of(tangibleAssets)
             .map(TangibleAssets::getCost)
@@ -179,7 +170,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
 
     @Override
     protected void mapDepreciationResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
-
         Depreciation depreciation = new Depreciation();
         depreciation.setAtPeriodStart( Optional.of(tangibleAssets)
             .map(TangibleAssets::getDepreciation)
@@ -194,7 +184,6 @@ public class TangibleAssetsLandAndBuildingsTransformerImpl extends TangibleAsset
 
     @Override
     protected void mapNetBookValueResources(TangibleAssets tangibleAssets, TangibleAssetsResource tangibleAssetsResource) {
-
         tangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
             Optional.of(tangibleAssets)
                 .map(TangibleAssets::getNetBookValue)

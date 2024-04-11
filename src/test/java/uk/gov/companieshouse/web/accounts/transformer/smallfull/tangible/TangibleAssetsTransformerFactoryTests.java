@@ -18,14 +18,12 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.Ta
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TangibleAssetsTransformerFactoryTests {
-
     TangibleAssetsTransformerFactory factory = new TangibleAssetsTransformerFactory();
 
     @Test
     @DisplayName("Asserts the factory returns a fixtures and fittings transformer when requesting "
             + "with the appropriate resource type")
     void getFixturesAndFittingsTransformer() {
-
         TangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 TangibleAssetsResource.FIXTURES_AND_FITTINGS);
 
@@ -36,7 +34,6 @@ class TangibleAssetsTransformerFactoryTests {
     @DisplayName("Asserts the factory returns a land and buildings transformer when requesting "
             + "with the appropriate resource type")
     void getLandAndBuildingsTransformer() {
-
         TangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 TangibleAssetsResource.LAND_AND_BUILDINGS);
 
@@ -47,7 +44,6 @@ class TangibleAssetsTransformerFactoryTests {
     @DisplayName("Asserts the factory returns a motor vehicles transformer when requesting "
             + "with the appropriate resource type")
     void getMotorVehiclesTransformer() {
-
         TangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 TangibleAssetsResource.MOTOR_VEHICLES);
 
@@ -58,7 +54,6 @@ class TangibleAssetsTransformerFactoryTests {
     @DisplayName("Asserts the factory returns an office equipment transformer when requesting "
             + "with the appropriate resource type")
     void getOfficeEquipmentTransformer() {
-
         TangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 TangibleAssetsResource.OFFICE_EQUIPMENT);
 
@@ -69,7 +64,6 @@ class TangibleAssetsTransformerFactoryTests {
     @DisplayName("Asserts the factory returns a plant and machinery transformer when requesting "
             + "with the appropriate resource type")
     void getPlantAndMachineryTransformer() {
-
         TangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 TangibleAssetsResource.PLANT_AND_MACHINERY);
 
@@ -80,7 +74,6 @@ class TangibleAssetsTransformerFactoryTests {
     @DisplayName("Asserts the factory returns a total transformer when requesting "
             + "with the appropriate resource type")
     void getTotalTransformer() {
-
         TangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 TangibleAssetsResource.TOTAL);
 

@@ -7,7 +7,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import java.util.List;
 
 public interface BalanceSheetService {
-
     BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId, String companyNumber)
             throws ServiceException;
 

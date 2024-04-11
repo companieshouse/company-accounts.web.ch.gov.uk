@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicFileOnPaperControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
@@ -29,8 +28,7 @@ class CicFileOnPaperControllerTest {
     private CicFileOnPaperController controller;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

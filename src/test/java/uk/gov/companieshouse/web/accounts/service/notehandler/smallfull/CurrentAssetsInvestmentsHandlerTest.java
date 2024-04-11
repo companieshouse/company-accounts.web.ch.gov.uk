@@ -32,7 +32,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CurrentAssetsInvestmentsHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -79,14 +78,12 @@ class CurrentAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Get the resource URI")
     void getResourceURI() {
-
         assertEquals(URI, currentAssetsInvestmentsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get CurrentAssetsInvestments Resource")
     void getCurrentAssetsInvestmentsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
         when(currentAssetsInvestmentsResourceHandler.get(URI)).thenReturn(currentAssetsInvestmentsGet);
@@ -100,7 +97,6 @@ class CurrentAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Update CurrentAssetsInvestments Resource")
     void updateCurrentAssetsInvestmentsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
         when(currentAssetsInvestmentsResourceHandler.update(URI, currentAssetsInvestmentsApi)).thenReturn(currentAssetsInvestmentsUpdate);
@@ -114,7 +110,6 @@ class CurrentAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Create CurrentAssetsInvestments Resource")
     void createCurrentAssetsInvestmentsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
         when(currentAssetsInvestmentsResourceHandler.create(URI, currentAssetsInvestmentsApi)).thenReturn(currentAssetsInvestmentsCreate);
@@ -128,7 +123,6 @@ class CurrentAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Delete CurrentAssetsInvestments Resource")
     void deleteCurrentAssetsInvestmentsResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
         when(currentAssetsInvestmentsResourceHandler.delete(URI)).thenReturn(currentAssetsInvestmentsDelete);
@@ -142,7 +136,6 @@ class CurrentAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Parent resource exists")
     void parentResourceExists() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentAssetsInvestmentsNote()).thenReturn(CURRENT_ASSETS_INVESTMENTS);
@@ -153,7 +146,6 @@ class CurrentAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Parent resource does not exist")
     void parentResourceDoesNotExist() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentAssetsInvestmentsNote()).thenReturn(null);
@@ -164,7 +156,6 @@ class CurrentAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Get NoteType")
     void getNoteType()  {
-
         assertEquals(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS, currentAssetsInvestmentsHandler.getNoteType());
     }
 }

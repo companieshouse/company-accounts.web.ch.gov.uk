@@ -19,13 +19,11 @@ import jakarta.validation.Valid;
 @NextController(GovukSelectAccountTypeController.class)
 @RequestMapping("/accounts/corporation-tax")
 public class GovukCorporationTaxController extends BaseController {
-
     @Value("${gov-uk-file-your-accounts.uri}")
     private String govUkFileYourAccountsUrl;
 
     @GetMapping
     public String getCorporationTax(Model model) {
-
         model.addAttribute("corporationTax", new CorporationTax());
         model.addAttribute("backButton", govUkFileYourAccountsUrl);
 
@@ -36,7 +34,6 @@ public class GovukCorporationTaxController extends BaseController {
     public String postCorporationTax(@ModelAttribute("corporationTax")
                                      @Valid CorporationTax corporationTax,
                                      BindingResult bindingResult, Model model) {
-
         model.addAttribute("backButton", govUkFileYourAccountsUrl);
 
         if (bindingResult.hasErrors()) {
@@ -53,7 +50,6 @@ public class GovukCorporationTaxController extends BaseController {
 
     @Override
     protected String getTemplateName() {
-
         return "corporationtax/corporationTax";
     }
 }

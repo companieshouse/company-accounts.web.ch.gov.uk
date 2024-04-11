@@ -23,7 +23,6 @@ import jakarta.validation.Valid;
 @PreviousController(GovukCorporationTaxController.class)
 @RequestMapping("/accounts/select-account-type")
 public class GovukSelectAccountTypeController extends BaseController {
-
     @Value("${dormant-accounts.uri}")
     private String dormantAccountsUri;
 
@@ -35,7 +34,6 @@ public class GovukSelectAccountTypeController extends BaseController {
 
     @GetMapping
     public String getTypeOfAccounts(Model model) {
-
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
         addBackPageAttributeToModel(model);
 
@@ -46,7 +44,6 @@ public class GovukSelectAccountTypeController extends BaseController {
     public String postTypeOfAccounts(
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
-
         addBackPageAttributeToModel(model);
 
         if (bindingResult.hasErrors()) {
@@ -57,7 +54,6 @@ public class GovukSelectAccountTypeController extends BaseController {
     }
 
     private String getReDirectPageURL(String selectedAccount) {
-
         if ("micro-entity".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + microEntityAccountsUri;
         }

@@ -41,7 +41,6 @@ import java.time.LocalDate;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SmallFullServiceImplTests {
-
     @Mock
     private ApiClient apiClient;
 
@@ -94,11 +93,9 @@ class SmallFullServiceImplTests {
 
     private static final String NEXT_ACCOUNTS_HEADING = "2019";
 
-
     @Test
     @DisplayName("Create Small Full Accounts - Success Path")
     void createSmallFullSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -114,7 +111,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Create Small Full Accounts - Throws ApiErrorResponseException")
     void createSmallFullApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -131,7 +127,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Create Small Full Accounts - Throws URIValidationException")
     void createSmallFullURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -148,7 +143,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Get Small Full Accounts - Success")
     void getSmallFullAccountsSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
@@ -165,7 +159,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Get Small Full Accounts - Throws ApiErrorResponseException")
     void getSmallFullApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
@@ -179,7 +172,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Get Small Full Accounts - Throws URIValidationException")
     void getSmallFullURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(smallFullResourceHandler.get(anyString())).thenReturn(smallFullGet);
@@ -193,7 +185,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Update Small Full Accounts - Success Path")
     void updateSmallFullSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         LocalDate newPeriodEndOn = LocalDate.now();
@@ -211,7 +202,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Update Small Full Accounts - Throws ApiErrorResponseException")
     void updateSmallFullApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -228,7 +218,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Update Small Full Accounts - Throws URIValidationException")
     void updateSmallFullURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -245,7 +234,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Is Multi Year Filer - No Last Accounts")
     void isMultiYearFilerNoLastAccounts() {
-
         when(smallFullApi.getLastAccounts()).thenReturn(null);
 
         assertFalse(smallFullService.isMultiYearFiler(smallFullApi));
@@ -254,7 +242,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Is Multi Year Filer - No Last Accounts Period End")
     void isMultiYearFilerNoLastAccountsPeriodEnd() {
-
         when(smallFullApi.getLastAccounts()).thenReturn(lastAccounts);
 
         when(lastAccounts.getPeriodEndOn()).thenReturn(null);
@@ -265,7 +252,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Is Multi Year Filer - Has Last Accounts Period End")
     void isMultiYearFilerHasLastAccountsPeriodEnd() {
-
         when(smallFullApi.getLastAccounts()).thenReturn(lastAccounts);
 
         when(lastAccounts.getPeriodEndOn()).thenReturn(LocalDate.now());
@@ -276,7 +262,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Get Balance Sheet Headings - Single Year Filer")
     void getBalanceSheetHeadingsSingleYearFiler() {
-
         when(smallFullApi.getLastAccounts()).thenReturn(null);
 
         when(smallFullApi.getNextAccounts()).thenReturn(nextAccounts);
@@ -300,7 +285,6 @@ class SmallFullServiceImplTests {
     @Test
     @DisplayName("Get Balance Sheet Headings - Multi Year Filer")
     void getBalanceSheetHeadingsMultiYearFiler() {
-
         when(smallFullApi.getLastAccounts()).thenReturn(lastAccounts);
 
         when(lastAccounts.getPeriodStartOn()).thenReturn(LAST_ACCOUNTS_PERIOD_START);

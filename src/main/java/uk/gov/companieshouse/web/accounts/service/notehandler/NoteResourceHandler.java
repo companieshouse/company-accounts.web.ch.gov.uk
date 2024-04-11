@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface NoteResourceHandler<A extends ApiResource> {
-
     String getUri(String transactionId, String companyAccountsId);
 
     Executor<ApiResponse<A>> get(ApiClient apiClient, String uri);

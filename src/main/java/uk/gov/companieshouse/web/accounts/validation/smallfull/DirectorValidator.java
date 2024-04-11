@@ -20,7 +20,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Component
 public class DirectorValidator {
-
     @Autowired
     private SmallFullService smallFullService;
 
@@ -43,11 +42,9 @@ public class DirectorValidator {
     private static final String OUTSIDE_VALID_DATE_RANGE = "validation.date.outside.currentPeriod.accounting_period";
 
     public List<ValidationError> validateDirectorToAdd(DirectorToAdd directorToAdd) {
-
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (StringUtils.isBlank(directorToAdd.getName())) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(NAME);
             error.setMessageKey(NAME_NOT_PRESENT);
@@ -55,7 +52,6 @@ public class DirectorValidator {
         }
 
         if (directorToAdd.getWasDirectorAppointedDuringPeriod() == null) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(WAS_DIRECTOR_APPOINTED);
             error.setMessageKey(APPOINTED_NOT_SELECTED);
@@ -63,7 +59,6 @@ public class DirectorValidator {
         }
 
         if (directorToAdd.getDidDirectorResignDuringPeriod() == null) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(DID_DIRECTOR_RESIGN);
             error.setMessageKey(RESIGNATION_NOT_SELECTED);
@@ -76,14 +71,12 @@ public class DirectorValidator {
     public List<ValidationError> validateSubmitAddOrRemoveDirectors(String transactionId,
                                                                     String companyAccountsId,
                                                                     AddOrRemoveDirectors addOrRemoveDirectors) throws ServiceException {
-
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (StringUtils.isNotBlank(Optional.ofNullable(addOrRemoveDirectors)
                                     .map(AddOrRemoveDirectors::getDirectorToAdd)
                                     .map(DirectorToAdd::getName)
                                     .orElse(null))) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(DIRECTOR_TO_ADD);
             error.setMessageKey(DIRECTOR_MUST_BE_ADDED);
@@ -94,7 +87,6 @@ public class DirectorValidator {
                 if (addOrRemoveDirectors.getExistingDirectors() == null ||
                         Arrays.stream(addOrRemoveDirectors.getExistingDirectors())
                                 .noneMatch(d -> d.getResignationDate() == null)) {
-
                     ValidationError error = new ValidationError();
                     error.setFieldPath(DIRECTOR_TO_ADD);
                     error.setMessageKey(AT_LEAST_ONE_DIRECTOR_REQUIRED);
@@ -104,7 +96,6 @@ public class DirectorValidator {
         }
 
         if (addOrRemoveDirectors != null && addOrRemoveDirectors.getExistingDirectors() != null) {
-
             ApiClient apiClient = apiClientService.getApiClient();
 
             SmallFullApi smallFullApi = smallFullService
@@ -114,7 +105,6 @@ public class DirectorValidator {
             LocalDate periodEndOn = smallFullApi.getNextAccounts().getPeriodEndOn();
 
             for (Director director : addOrRemoveDirectors.getExistingDirectors()) {
-
                 if (!isValidAppointmentOrResignationDate(director, periodStartOn, periodEndOn)) {
                     ValidationError error = new ValidationError();
                     error.setFieldPath("");
@@ -125,7 +115,6 @@ public class DirectorValidator {
                 }
             }
         }
-
 
         return validationErrors;
     }
@@ -139,7 +128,6 @@ public class DirectorValidator {
         }
         if (director.getAppointmentDate() != null &&
                 (director.getAppointmentDate().isBefore(periodStartOn) || director.getAppointmentDate().isAfter(periodEndOn))) {
-
             isValid = false;
         }
 

@@ -34,7 +34,6 @@ import java.util.Optional;
         "/{companyAccountsId}/small-full/creditors-after-more-than-one-year")
 public class CreditorsAfterOneYearController extends BaseController implements
         ConditionalController {
-
     @Autowired
     private NoteService<CreditorsAfterOneYear> creditorsAfterOneYearService;
 
@@ -52,7 +51,6 @@ public class CreditorsAfterOneYearController extends BaseController implements
                                            @PathVariable String companyAccountsId,
                                            Model model,
                                            HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -74,7 +72,6 @@ public class CreditorsAfterOneYearController extends BaseController implements
             @PathVariable String companyAccountsId,
             @ModelAttribute("creditorsAfterOneYear") @Valid CreditorsAfterOneYear creditorsAfterOneYear,
             BindingResult bindingResult, Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -100,7 +97,6 @@ public class CreditorsAfterOneYearController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         BalanceSheet balanceSheet =
                 balanceSheetService.getBalanceSheet(
                         transactionId, companyAccountsId, companyNumber);
@@ -109,7 +105,6 @@ public class CreditorsAfterOneYearController extends BaseController implements
     }
 
     private boolean hasCreditorsAfter(BalanceSheet balanceSheet) {
-
         Long currentCreditorsAfter = Optional.of(balanceSheet)
                 .map(BalanceSheet::getOtherLiabilitiesOrAssets)
                 .map(OtherLiabilitiesOrAssets::getCreditorsAfterOneYear)

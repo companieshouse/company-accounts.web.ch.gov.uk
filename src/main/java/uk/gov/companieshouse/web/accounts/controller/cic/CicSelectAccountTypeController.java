@@ -20,7 +20,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping({"/accounts/cic/select-account-type", "/accounts/cic/{companyNumber}/select-account-type"})
 public class CicSelectAccountTypeController extends BaseController {
-
     private static final String CANT_FILE_ONLINE_YET_URL_LINK = "/accounts/cic/cant-file-online-yet";
     private static final UriTemplate CANT_FILE_ONLINE_COMP_NUM_LINK =
             new UriTemplate("/accounts/cic/{companyNumber}/cant-file-online-yet");
@@ -40,7 +39,6 @@ public class CicSelectAccountTypeController extends BaseController {
 
     @GetMapping
     public String getCicTypeOfAccounts(Model model) {
-
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
 
         return getTemplateName();
@@ -49,14 +47,12 @@ public class CicSelectAccountTypeController extends BaseController {
     @PostMapping
     public String postCicTypeOfAccounts(@PathVariable Optional<String> companyNumber, @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
                                         BindingResult bindingResult, RedirectAttributes attributes) {
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
 
         String accountType = typeOfAccounts.getSelectedAccountTypeName();
         if (!"full".equalsIgnoreCase(accountType)) {
-
             attributes.addAttribute("accountType", accountType);
 
             if (companyNumber.isPresent()) {
@@ -71,12 +67,10 @@ public class CicSelectAccountTypeController extends BaseController {
             }
 
         } else {
-
             if (companyNumber.isPresent()) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                         FILE_FULL_ACCOUNTS_COMP_NUM_LINK.expand(companyNumber.get()).toString();
             } else {
-
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FILE_FULL_ACCOUNTS_URL_LINK;
             }
         }

@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithin
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class AccrualsAndDeferredIncome {
-
     @ValidationMapping("$.creditors_within_one_year.current_period.accruals_and_deferred_income")
     private Long currentAccrualsAndDeferredIncome;
 

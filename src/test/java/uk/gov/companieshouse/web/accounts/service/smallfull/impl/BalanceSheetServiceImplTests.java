@@ -48,7 +48,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.BalanceSheetTran
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BalanceSheetServiceImplTests {
-
     @Mock
     private BalanceSheetTransformer transformer;
 
@@ -155,7 +154,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Get balance sheet - single year lbg filer")
     void getBalanceSheetSingleYearLBGFiler() throws ServiceException {
-
         ReflectionTestUtils.setField(balanceSheetService, CACHED_BALANCE_SHEET, null);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -189,7 +187,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Get balance sheet - multi year non-lbg filer")
     void getBalanceSheetMultiYearNonLBGFiler() throws ServiceException {
-
         ReflectionTestUtils.setField(balanceSheetService, CACHED_BALANCE_SHEET, null);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -226,7 +223,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Get cached balance sheet")
     void getCachedBalanceSheet() throws ServiceException {
-
         ReflectionTestUtils.setField(balanceSheetService, CACHED_BALANCE_SHEET, balanceSheet);
 
         BalanceSheet returnedBalanceSheet =
@@ -244,7 +240,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Submit balance sheet - single year filer")
     void submitBalanceSheetSingleYearFiler() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -284,7 +279,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Submit balance sheet - single year filer - not found")
     void submitBalanceSheetSingleYearFilerNotFound() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -322,7 +316,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Submit balance sheet - multi year filer")
     void submitBalanceSheetMultiYearFiler() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -365,7 +358,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Submit balance sheet - multi year filer - not found")
     void submitBalanceSheetMultiYearFilerNotFound() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -404,7 +396,6 @@ class BalanceSheetServiceImplTests {
     @Test
     @DisplayName("Submit balance sheet - delete all conditional notes")
     void submitBalanceSheetDeleteAllConditionalNotes() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -449,7 +440,6 @@ class BalanceSheetServiceImplTests {
     }
 
     private void mockSmallFullLinks() {
-
         when(smallFullLinks.getDebtorsNote()).thenReturn(DEBTORS_LINK);
         when(smallFullLinks.getCreditorsWithinOneYearNote()).thenReturn(CREDITORS_WITHIN_LINK);
         when(smallFullLinks.getCreditorsAfterMoreThanOneYearNote()).thenReturn(CREDITORS_AFTER_LINK);
@@ -461,7 +451,6 @@ class BalanceSheetServiceImplTests {
     }
 
     private void assertAllConditionalNotesDeleted() throws ServiceException {
-
         verify(creditorsWithinOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
         verify(debtorsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
         verify(creditorsAfterOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);

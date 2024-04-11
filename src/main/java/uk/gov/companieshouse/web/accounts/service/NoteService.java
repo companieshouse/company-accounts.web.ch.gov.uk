@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class NoteService<N extends Note> {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -50,7 +49,6 @@ public class NoteService<N extends Note> {
      * @throws ServiceException on retrieval error
      */
     public N get(String transactionId, String companyAccountsId, NoteType noteType) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         NoteResourceHandler<ApiResource> noteResourceHandler = noteResourceHandlerFactory.getNoteResourceHandler(noteType);
@@ -89,7 +87,6 @@ public class NoteService<N extends Note> {
      * @throws ServiceException on submission error
      */
     public List<ValidationError> submit(String transactionId, String companyAccountsId, N note, NoteType noteType) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         NoteResourceHandler<ApiResource> noteResourceHandler = noteResourceHandlerFactory.getNoteResourceHandler(noteType);
@@ -128,7 +125,6 @@ public class NoteService<N extends Note> {
      * @throws ServiceException on deletion error
      */
     public void delete(String transactionId, String companyAccountsId, NoteType noteType) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         NoteResourceHandler<ApiResource> noteResourceHandler = noteResourceHandlerFactory.getNoteResourceHandler(noteType);
@@ -139,7 +135,6 @@ public class NoteService<N extends Note> {
                 .parentResourceExists(apiClient, transactionId, companyAccountsId);
 
         if (parentResourceExists) {
-
             try {
                 noteResourceHandler.delete(apiClient, uri).execute();
             } catch (ApiErrorResponseException e) {

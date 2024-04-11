@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,6 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IntangibleAmortisationPolicyControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -102,15 +108,13 @@ class IntangibleAmortisationPolicyControllerTests {
             "validation.length.minInvalid.accounting_policies.intangible_fixed_assets_amortisation_policy";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get intangible amortisation policy view - success path")
     void getRequestSuccess() throws Exception {
-
         IntangibleAmortisationPolicy intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
         intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(true);
 
@@ -119,7 +123,7 @@ class IntangibleAmortisationPolicyControllerTests {
 
         when(accountingPolicies.getIntangibleAmortisationPolicy()).thenReturn(intangibleAmortisationPolicy);
 
-        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH))
                 .andExpect(status().isOk())
@@ -132,7 +136,6 @@ class IntangibleAmortisationPolicyControllerTests {
     @Test
     @DisplayName("Get intangible amortisation policy view using state to determine whether policy is included - success path")
     void getRequestSuccessUsingState() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -144,7 +147,7 @@ class IntangibleAmortisationPolicyControllerTests {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
         when(accountingPoliciesDataState.getHasProvidedIntangiblePolicy()).thenReturn(false);
-        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(INTANGIBLE_AMORTISATION_POLICY_PATH).session(session))
                 .andExpect(status().isOk())
@@ -160,7 +163,6 @@ class IntangibleAmortisationPolicyControllerTests {
     @Test
     @DisplayName("Get intangible amortisation policy view - intangible amortisation policy service exception")
     void getRequestIntangibleAmortisationPolicyServiceException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenThrow(ServiceException.class);
 
@@ -172,7 +174,6 @@ class IntangibleAmortisationPolicyControllerTests {
     @Test
     @DisplayName("Submit intangible amortisation policy - success path")
     void postRequestSuccess() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -185,7 +186,7 @@ class IntangibleAmortisationPolicyControllerTests {
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
                 .andExpect(status().is3xxRedirection())
@@ -199,7 +200,6 @@ class IntangibleAmortisationPolicyControllerTests {
     @Test
     @DisplayName("Submit intangible amortisation policy - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(postRequestWithInvalidData())
                 .andExpect(status().isOk())
                 .andExpect(view().name(INTANGIBLE_AMORTISATION_POLICY_VIEW));
@@ -208,7 +208,6 @@ class IntangibleAmortisationPolicyControllerTests {
     @Test
     @DisplayName("Submit intangible amortisation policy - validation errors")
     void postRequestWithValidationErrors() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -225,13 +224,11 @@ class IntangibleAmortisationPolicyControllerTests {
     @Test
     @DisplayName("Submit intangible amortisation policy - intangible amortisation policy service exception")
     void postRequestIntangibleAmortisationPolicyServiceException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
         when(noteService.submit(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, accountingPolicies, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenThrow(ServiceException.class);
-
 
         this.mockMvc.perform(postRequestWithValidData())
                 .andExpect(status().isOk())
@@ -239,7 +236,6 @@ class IntangibleAmortisationPolicyControllerTests {
     }
 
     private MockHttpServletRequestBuilder postRequestWithValidData() {
-
         // Mock boolean field input
         String validData = "1";
 
@@ -247,7 +243,6 @@ class IntangibleAmortisationPolicyControllerTests {
     }
 
     private MockHttpServletRequestBuilder postRequestWithInvalidData() {
-
         // Mock lack of boolean field input
         String invalidData = null;
 

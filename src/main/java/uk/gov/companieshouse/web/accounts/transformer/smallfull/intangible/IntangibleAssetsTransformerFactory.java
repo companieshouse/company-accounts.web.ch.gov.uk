@@ -8,9 +8,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.
 
 @Component
 public class IntangibleAssetsTransformerFactory {
-
     public IntangibleAssetsResourceTransformer getResourceTransformer(IntangibleAssetsResource intangibleAssetsResource) {
-
         switch (intangibleAssetsResource) {
             case GOODWILL:
                 return new IntangibleAssetsGoodwillTransformerImpl();

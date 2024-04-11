@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class OffBalanceSheetArrangementsHandler implements NoteResourceHandler<OffBalanceSheetApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 
@@ -25,38 +24,32 @@ public class OffBalanceSheetArrangementsHandler implements NoteResourceHandler<O
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
-
         return OFF_BALANCE_SHEET_ARRANGEMENTS_URI.expand(transactionId, companyAccountsId).toString();
     }
 
     @Override
     public Executor<ApiResponse<OffBalanceSheetApi>> get(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().offBalanceSheet().get(uri);
     }
 
     @Override
     public Executor<ApiResponse<Void>> update(ApiClient apiClient, String uri, OffBalanceSheetApi apiResource) {
-
         return apiClient.smallFull().offBalanceSheet().update(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<OffBalanceSheetApi>> create(ApiClient apiClient, String uri, OffBalanceSheetApi apiResource) {
-
         return apiClient.smallFull().offBalanceSheet().create(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<Void>> delete(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().offBalanceSheet().delete(uri);
     }
 
     @Override
     public boolean parentResourceExists(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getOffBalanceSheetArrangementsNote());
@@ -64,7 +57,6 @@ public class OffBalanceSheetArrangementsHandler implements NoteResourceHandler<O
 
     @Override
     public NoteType getNoteType() {
-
         return NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS;
     }
 }

@@ -7,7 +7,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class CreditorsAfterOneYear implements Note {
-
     private BalanceSheetHeadings balanceSheetHeadings;
 
     @ValidationMapping("$.creditors_after_more_than_one_year.current_period.details")

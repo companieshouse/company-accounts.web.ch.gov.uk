@@ -15,12 +15,10 @@ import uk.gov.companieshouse.session.handler.SessionHandler;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurityConfigurer {
-
     @Configuration
     @Order(1)
     @EnableMethodSecurity
     public static class GovUkAccountsSecurityFilterConfig {
-
         @Bean
         public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
             return http.securityMatcher("/accounts/**")
@@ -32,7 +30,6 @@ public class WebSecurityConfigurer {
     @Configuration
     @EnableMethodSecurity
     public static class CompanyAccountsSecurityFilterConfig {
-
         @Bean
         public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
             return http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)

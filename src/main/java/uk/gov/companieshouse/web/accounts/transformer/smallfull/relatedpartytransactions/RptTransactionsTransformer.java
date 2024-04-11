@@ -5,7 +5,6 @@ import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTran
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionToAdd;
 
 public interface RptTransactionsTransformer {
-
     RptTransactionApi getRptTransactionsApi(RptTransactionToAdd rptTransactionToAdd);
 
     RptTransaction[] getAllRptTransactions(RptTransactionApi[] rptTransactions);

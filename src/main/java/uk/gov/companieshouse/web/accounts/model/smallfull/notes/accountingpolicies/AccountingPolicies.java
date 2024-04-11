@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolic
 import uk.gov.companieshouse.web.accounts.model.Note;
 
 public class AccountingPolicies implements Note {
-
     public AccountingPolicies() {
         this.intangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
         this.basisOfPreparation = new BasisOfPreparation();

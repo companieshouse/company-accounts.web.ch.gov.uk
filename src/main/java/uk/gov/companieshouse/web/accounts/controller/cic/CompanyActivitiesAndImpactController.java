@@ -27,7 +27,6 @@ import java.util.List;
 @PreviousController(CICStepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/company-activity")
 public class CompanyActivitiesAndImpactController extends BaseController {
-
     @Autowired
     private CompanyActivitiesAndImpactService companyActivitiesAndImpactService;
 
@@ -42,11 +41,9 @@ public class CompanyActivitiesAndImpactController extends BaseController {
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         try {
             model.addAttribute("companyActivitiesAndImpact", companyActivitiesAndImpactService.getCompanyActivitiesAndImpact(transactionId, companyAccountsId));
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -61,7 +58,6 @@ public class CompanyActivitiesAndImpactController extends BaseController {
         @ModelAttribute("companyActivitiesAndImpact") @Valid CompanyActivitiesAndImpact companyActivitiesAndImpact,
         BindingResult bindingResult,
         HttpServletRequest request) {
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -74,7 +70,6 @@ public class CompanyActivitiesAndImpactController extends BaseController {
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -84,7 +79,6 @@ public class CompanyActivitiesAndImpactController extends BaseController {
     }
 
     private void  cacheIsCicCompany(HttpServletRequest request) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setIsCic(true);
         updateStateOnRequest(request, companyAccountsDataState);

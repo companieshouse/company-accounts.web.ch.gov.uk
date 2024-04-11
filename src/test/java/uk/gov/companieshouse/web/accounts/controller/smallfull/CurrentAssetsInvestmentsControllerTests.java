@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,8 +35,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CurrentAssetsInvestmentsControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -83,18 +87,15 @@ class CurrentAssetsInvestmentsControllerTests {
 
     private static final String TEST_PATH = "currentAssetsInvestmentsDetails";
 
-
     @BeforeEach
-    private void setUp() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get currentAssetsInvestments view success path")
     void getRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockCurrentAssetsInvestmentsService.get(
             TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS))
                 .thenReturn(new CurrentAssetsInvestments());
@@ -110,7 +111,6 @@ class CurrentAssetsInvestmentsControllerTests {
     @Test
     @DisplayName("Get currentAssetsInvestments view failure path due to error on currentAssetsInvestments retrieval")
     void getRequestFailureInGetFixedAssetsInvestments() throws Exception {
-
         when(mockCurrentAssetsInvestmentsService.get(
             TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS))
                 .thenThrow(ServiceException.class);
@@ -124,8 +124,7 @@ class CurrentAssetsInvestmentsControllerTests {
     @Test
     @DisplayName("Post currentAssestInvestments success path")
     void postRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(mockNavigatorService.getNextControllerRedirect(any(), captor.capture()))
             .thenReturn(MOCK_CONTROLLER_PATH);
         when(mockCurrentAssetsInvestmentsService.submit(
             anyString(), anyString(), any(CurrentAssetsInvestments.class), eq(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS)))
@@ -140,7 +139,6 @@ class CurrentAssetsInvestmentsControllerTests {
     @Test
     @DisplayName("Post currentAssetsInvestments failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(mockCurrentAssetsInvestmentsService).submit(
                 anyString(), anyString(), any(CurrentAssetsInvestments.class), eq(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
@@ -155,7 +153,6 @@ class CurrentAssetsInvestmentsControllerTests {
     @Test
     @DisplayName("Post currentAssetsInvestments failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath(TEST_PATH);
         validationError.setMessageKey("invalid_character");
@@ -176,7 +173,6 @@ class CurrentAssetsInvestmentsControllerTests {
     @Test
     @DisplayName("Post currentAssetsInvestments with binding result error")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(SMALL_FULL_CURRENT_ASSETS_INVESTMENTS_PATH)
             .param(TEST_PATH, ""))
             .andExpect(status().isOk())

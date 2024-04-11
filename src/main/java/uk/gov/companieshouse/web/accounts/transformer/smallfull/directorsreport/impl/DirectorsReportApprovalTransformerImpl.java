@@ -11,13 +11,11 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 
 @Component
 public class DirectorsReportApprovalTransformerImpl implements DirectorsReportApprovalTransformer {
-
     @Autowired
     private DateTransformer dateTransformer;
 
     @Override
     public ApprovalApi getDirectorsReportApprovalApi(DirectorsReportApproval directorsReportApproval) {
-
         ApprovalApi approvalApi = new ApprovalApi();
         approvalApi.setDate(dateTransformer.toLocalDate(directorsReportApproval.getDate()));
         approvalApi.setName(directorsReportApproval.getName());
@@ -26,7 +24,6 @@ public class DirectorsReportApprovalTransformerImpl implements DirectorsReportAp
 
     @Override
     public DirectorsReportApproval getDirectorsReportApproval(ApprovalApi approvalApi) {
-
         DirectorsReportApproval directorsReportApproval = new DirectorsReportApproval();
 
         Date approvalDate = new Date();

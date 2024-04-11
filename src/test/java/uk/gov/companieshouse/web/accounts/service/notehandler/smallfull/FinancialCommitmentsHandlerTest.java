@@ -34,7 +34,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FinancialCommitmentsHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -71,7 +70,6 @@ class FinancialCommitmentsHandlerTest {
     @Mock
     private FinancialCommitmentsResourceHandler financialCommitmentsResourceHandler;
 
-
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
@@ -83,14 +81,12 @@ class FinancialCommitmentsHandlerTest {
     @Test
     @DisplayName("Get the resource URI")
     void getResourceURI() {
-
         assertEquals(URI, financialCommitmentsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get financial commitments Resource")
     void getOffBalanceSheetResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
         when(financialCommitmentsResourceHandler.get(URI)).thenReturn(financialCommitmentsGet);
@@ -105,7 +101,6 @@ class FinancialCommitmentsHandlerTest {
     @Test
     @DisplayName("Update financial commitments Resource")
     void updateOffBalanceSheetResource() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
         when(financialCommitmentsResourceHandler.update(URI, financialCommitmentsApi)).thenReturn(financialCommitmentsUpdate);
@@ -120,7 +115,6 @@ class FinancialCommitmentsHandlerTest {
     @Test
     @DisplayName("Create financial commitments Resource")
     void createOffBalanceSheetResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
         when(financialCommitmentsResourceHandler.create(URI, financialCommitmentsApi)).thenReturn(financialCommitmentsCreate);
@@ -135,7 +129,6 @@ class FinancialCommitmentsHandlerTest {
     @Test
     @DisplayName("Delete financial commitments Resource")
     void deleteOffBalanceSheetResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
         when(financialCommitmentsResourceHandler.delete(URI)).thenReturn(financialCommitmentsDelete);
@@ -150,7 +143,6 @@ class FinancialCommitmentsHandlerTest {
    @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> financialCommitmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -159,7 +151,6 @@ class FinancialCommitmentsHandlerTest {
     @Test
     @DisplayName("Test method returns FinancialCommitments as NoteType")
     void testOffBalanceSheetArrangementsReturned()  {
-
         assertEquals(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS, financialCommitmentsHandler.getNoteType());
     }
 }

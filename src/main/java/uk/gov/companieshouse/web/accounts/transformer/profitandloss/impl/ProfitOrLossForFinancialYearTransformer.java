@@ -11,22 +11,17 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfin
 
 @Component
 public class ProfitOrLossForFinancialYearTransformer {
-
     public void addCurrentPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
-
         if (currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear() != null) {
-
             createProfitOrLossForFinancialYear(profitAndLoss);
 
             if (currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax() != null) {
-
                 Tax tax = createTax(profitAndLoss);
                 tax.setCurrentAmount(
                         currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax());
             }
 
             if (currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear() != null) {
-
                 TotalProfitOrLossForFinancialYear total = createTotalProfitOrLossForFinancialYear(profitAndLoss);
                 total.setCurrentAmount(
                         currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear());
@@ -35,20 +30,16 @@ public class ProfitOrLossForFinancialYearTransformer {
     }
 
     public void addPreviousPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
-
         if (previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear() != null) {
-
             createProfitOrLossForFinancialYear(profitAndLoss);
 
             if (previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax() != null) {
-
                 Tax tax = createTax(profitAndLoss);
                 tax.setPreviousAmount(
                         previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax());
             }
 
             if (previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear() != null) {
-
                 TotalProfitOrLossForFinancialYear total = createTotalProfitOrLossForFinancialYear(profitAndLoss);
                 total.setPreviousAmount(
                         previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear());
@@ -57,9 +48,7 @@ public class ProfitOrLossForFinancialYearTransformer {
     }
 
     public void addCurrentPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
-
         if (hasCurrentPeriodProfitOrLossForFinancialYear(profitAndLoss)) {
-
             uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossForFinancialYear profitOrLossForFinancialYear =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossForFinancialYear();
 
@@ -73,9 +62,7 @@ public class ProfitOrLossForFinancialYearTransformer {
     }
 
     public void addPreviousPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
-
         if (hasPreviousPeriodProfitOrLossForFinancialYear(profitAndLoss)) {
-
             uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossForFinancialYear profitOrLossForFinancialYear =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossForFinancialYear();
 
@@ -89,15 +76,12 @@ public class ProfitOrLossForFinancialYearTransformer {
     }
 
     private void createProfitOrLossForFinancialYear(ProfitAndLoss profitAndLoss) {
-
         if (profitAndLoss.getProfitOrLossForFinancialYear() == null) {
-
             profitAndLoss.setProfitOrLossForFinancialYear(new ProfitOrLossForFinancialYear());
         }
     }
 
     private Tax createTax(ProfitAndLoss profitAndLoss) {
-
         Tax tax;
 
         if (profitAndLoss.getProfitOrLossForFinancialYear().getTax() == null) {
@@ -111,7 +95,6 @@ public class ProfitOrLossForFinancialYearTransformer {
     }
 
     private TotalProfitOrLossForFinancialYear createTotalProfitOrLossForFinancialYear(ProfitAndLoss profitAndLoss) {
-
         TotalProfitOrLossForFinancialYear total;
 
         if (profitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear() == null) {
@@ -125,14 +108,12 @@ public class ProfitOrLossForFinancialYearTransformer {
     }
 
     private boolean hasCurrentPeriodProfitOrLossForFinancialYear(ProfitAndLoss profitAndLoss) {
-
         return Stream.of(profitAndLoss.getProfitOrLossForFinancialYear().getTax().getCurrentAmount(),
                          profitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear().getCurrentAmount()).
                 anyMatch(Objects::nonNull);
     }
 
     private boolean hasPreviousPeriodProfitOrLossForFinancialYear(ProfitAndLoss profitAndLoss) {
-
         return Stream.of(profitAndLoss.getProfitOrLossForFinancialYear().getTax().getPreviousAmount(),
                          profitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear().getPreviousAmount()).
                 anyMatch(Objects::nonNull);

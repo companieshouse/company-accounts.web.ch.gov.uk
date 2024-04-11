@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -48,7 +47,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoansServiceImplTest {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -133,7 +131,6 @@ class LoansServiceImplTest {
     @DisplayName("GET - all loans - success")
     void getAllLoansSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -154,7 +151,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("DELETE - loan - success")
     void deleteLoanSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -169,7 +165,6 @@ class LoansServiceImplTest {
     @DisplayName("GET - all loans - not found")
     void getAllLoansNotFound()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -188,7 +183,6 @@ class LoansServiceImplTest {
     @DisplayName("GET - all loans - ApiErrorResponseException")
     void getAllLoansApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -204,7 +198,6 @@ class LoansServiceImplTest {
     @DisplayName("GET - all loans - URIValidationException")
     void getAllLoansURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -220,7 +213,6 @@ class LoansServiceImplTest {
     @DisplayName("POST - loan - success")
     void createLoanSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
 
@@ -241,7 +233,6 @@ class LoansServiceImplTest {
     @DisplayName("POST - loan - validation errors for multi year filer")
     void createLoanValidationForMultiYearFiler()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         mockAddOrRemoveLoans.setIsMultiYearFiler(true);
         
         when(loanValidator.validateLoanToAdd(loanToAdd, mockAddOrRemoveLoans.getIsMultiYearFiler(), false)).thenReturn(new ArrayList<>());
@@ -273,7 +264,6 @@ class LoansServiceImplTest {
     @DisplayName("POST - loan - validation errors for single year filer")
     void createLoanValidationForSingleYearFiler()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(loanValidator.validateLoanToAdd(loanToAdd, false, false)).thenReturn(new ArrayList<>());
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
@@ -302,7 +292,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - loan - director name validation failed for multi year filer")
     void createLoanInvalidDirectorNameForMultiYearFiler() throws ServiceException {
-
         ValidationError validationError = new ValidationError();
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
@@ -323,7 +312,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - loan - director name validation failed for single year filer")
     void createLoanInvalidDirectorNameForSingleYearFiler() throws ServiceException {
-
         ValidationError validationError = new ValidationError();
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
@@ -342,7 +330,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan - resource is empty for multi year filer")
     void submitAddOrRemoveLoanEmptyResourceForMultiYearFiler() throws ServiceException {
-
         mockAddOrRemoveLoans.setIsMultiYearFiler(true);
         
         when(loanValidator.isEmptyResource(mockAddOrRemoveLoans.getLoanToAdd(), mockAddOrRemoveLoans.getIsMultiYearFiler())).thenReturn(true);
@@ -356,7 +343,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan - resource is empty for single year filer")
     void submitAddOrRemoveLoanEmptyResourceForSingleYearFiler() throws ServiceException {
-
         when(loanValidator.isEmptyResource(mockAddOrRemoveLoans.getLoanToAdd(), false)).thenReturn(true);
 
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, mockAddOrRemoveLoans);
@@ -368,7 +354,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan - resource is empty for multi year filer - isSingleDirector True")
     void submitAddOrRemoveLoanEmptyResourceForMultiYearFilerIsSingleDirectorTrue() throws ServiceException {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         List<String> validNames = new ArrayList<>();
@@ -388,7 +373,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan - resource is empty for single year filer - isSingleDirector True")
     void submitAddOrRemoveLoanEmptyResourceForSingleYearFilerIsSingleDirectorTrue() throws ServiceException {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         List<String> validNames = new ArrayList<>();
@@ -408,7 +392,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan for multi year filer - successful with non empty resource")
     void submitAddOrRemoveLoanSuccessfulForMultiYearFilerNonEmptyResource() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
         addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
         addOrRemoveLoans.getLoanToAdd().setDescription(DESCRIPTION);
@@ -434,7 +417,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan for single year filer - successful with non empty resource")
     void submitAddOrRemoveLoanSuccessfulForSingleYearFilerNonEmptyResource() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
         addOrRemoveLoans.getLoanToAdd().setDirectorName(DIRECTOR_NAME);
         addOrRemoveLoans.getLoanToAdd().setDescription(DESCRIPTION);
@@ -460,7 +442,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan for multi year filer - success")
     void submitAddOrRemoveLoanForMultiYearFilerSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(true);
@@ -478,8 +459,6 @@ class LoansServiceImplTest {
 
         when(loanValidator.isEmptyResource(addOrRemoveLoans.getLoanToAdd(), addOrRemoveLoans.getIsMultiYearFiler())).thenReturn(false);
 
-
-
         List<ValidationError> validationErrors = loansService.submitAddOrRemoveLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveLoans);
 
         assertTrue(validationErrors.isEmpty());
@@ -489,7 +468,6 @@ class LoansServiceImplTest {
     @Test
     @DisplayName("POST - submit loan for single year filer - success")
     void submitAddOrRemoveLoanForSingleYearFilerSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
         addOrRemoveLoans.setLoanToAdd(new LoanToAdd());
         addOrRemoveLoans.setIsMultiYearFiler(false);
@@ -516,7 +494,6 @@ class LoansServiceImplTest {
     @DisplayName("POST - loan - ApiErrorResponseException")
     void createLoanApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
@@ -537,7 +514,6 @@ class LoansServiceImplTest {
     @DisplayName("POST - loan - URIValidationException")
     void createLoanURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(mockAddOrRemoveLoans.getLoanToAdd()).thenReturn(loanToAdd);
@@ -558,7 +534,6 @@ class LoansServiceImplTest {
     @DisplayName("DELETE - loan - ApiErrorResponseException")
     void deleteLoanApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -574,7 +549,6 @@ class LoansServiceImplTest {
     @DisplayName("DELETE - loan - URIValidationException")
     void deleteLoanURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -587,7 +561,6 @@ class LoansServiceImplTest {
     }
 
     private Breakdown createBreakdown(boolean includePeriodStart, boolean includePeriodEnd) {
-
         Breakdown validBreakdown = new Breakdown();
 
         if (includePeriodStart) {

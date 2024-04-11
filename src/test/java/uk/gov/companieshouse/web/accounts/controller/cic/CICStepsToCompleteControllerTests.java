@@ -1,21 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,12 +16,27 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.cic.CicReportService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
-import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CICStepsToCompleteControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -69,15 +75,13 @@ class CICStepsToCompleteControllerTests {
     private static final String TRANSACTION_DESCRIPTION = "CIC report and full accounts";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get CIC steps to complete view success path")
     void getRequestSuccess() throws Exception {
-
         this.mockMvc.perform(get(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(STEPS_TO_COMPLETE_VIEW))
@@ -87,12 +91,11 @@ class CICStepsToCompleteControllerTests {
     @Test
     @DisplayName("Post CIC steps to complete success path")
     void postRequestSuccess() throws Exception {
-
         when(transactionService.createTransactionWithDescription(COMPANY_NUMBER, TRANSACTION_DESCRIPTION)).thenReturn(TRANSACTION_ID);
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         doNothing().when(cicReportService).createCicReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -110,7 +113,6 @@ class CICStepsToCompleteControllerTests {
     @Test
     @DisplayName("Post CIC steps to complete failure path for transaction service")
     void postRequestTransactionServiceFailure() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(transactionService).createTransactionWithDescription(anyString(), anyString());
 
@@ -122,7 +124,6 @@ class CICStepsToCompleteControllerTests {
     @Test
     @DisplayName("Post CIC steps to complete failure path for create company accounts resource")
     void postRequestCompanyAccountsServiceCreateCompanyAccountsFailure() throws Exception {
-
         when(transactionService.createTransactionWithDescription(COMPANY_NUMBER, TRANSACTION_DESCRIPTION)).thenReturn(TRANSACTION_ID);
 
         doThrow(ServiceException.class)
@@ -136,7 +137,6 @@ class CICStepsToCompleteControllerTests {
     @Test
     @DisplayName("Post CIC steps to complete failure path for create cic report resource")
     void postRequestCompanyAccountsServiceCreateCicReportFailure() throws Exception {
-
         when(transactionService.createTransactionWithDescription(COMPANY_NUMBER, TRANSACTION_DESCRIPTION)).thenReturn(TRANSACTION_ID);
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);

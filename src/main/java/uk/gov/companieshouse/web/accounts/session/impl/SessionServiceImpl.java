@@ -8,13 +8,11 @@ import java.util.Map;
 
 @Component
 public class SessionServiceImpl implements SessionService {
-
     /**
      * {@inheritDoc}
      */
     @Override
     public Map<String, Object> getSessionDataFromContext() {
-
         return SessionHandler.getSessionDataFromContext();
     }
 }

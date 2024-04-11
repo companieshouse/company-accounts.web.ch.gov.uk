@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,10 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyActivitiesAndImpactControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -67,8 +72,7 @@ class CompanyActivitiesAndImpactControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(companyActivitiesAndImpactController)
             .build();
     }
@@ -76,7 +80,6 @@ class CompanyActivitiesAndImpactControllerTest {
     @Test
     @DisplayName("Get CompanyActivitiesAndImpact view - success path")
     void getRequestCompanyActivitiesAndImpactSuccess() throws Exception {
-
         when(companyActivitiesAndImpactService
             .getCompanyActivitiesAndImpact(anyString(), anyString()))
             .thenReturn(new CompanyActivitiesAndImpact());
@@ -91,7 +94,6 @@ class CompanyActivitiesAndImpactControllerTest {
     @Test
     @DisplayName("Get CompanyActivitiesAndImpact view - service exception")
     void getRequestCompanyActivitiesAndImpactServiceException() throws Exception {
-
         when(companyActivitiesAndImpactService
             .getCompanyActivitiesAndImpact(anyString(), anyString()))
             .thenThrow(ServiceException.class);
@@ -104,7 +106,6 @@ class CompanyActivitiesAndImpactControllerTest {
     @Test
     @DisplayName("Accept CompanyActivitiesAndImpact - success path")
     void postRequestCompanyActivitiesAndImpactSuccess() throws Exception {
-
         CompanyAccountsDataState companyAccountsDataState = new CompanyAccountsDataState();
         companyAccountsDataState.setIsCic(true);
 
@@ -115,7 +116,7 @@ class CompanyActivitiesAndImpactControllerTest {
             .submitCompanyActivitiesAndImpact(anyString(), anyString(),
                 any(CompanyActivitiesAndImpact.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture()))
             .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).session(session).param("activitiesAndImpact", "value"))
@@ -126,7 +127,6 @@ class CompanyActivitiesAndImpactControllerTest {
     @Test
     @DisplayName("Accept CompanyActivitiesAndImpact - service exception")
     void postRequestCompanyActivitiesAndImpactServiceException() throws Exception {
-
         doThrow(ServiceException.class)
             .when(companyActivitiesAndImpactService)
             .submitCompanyActivitiesAndImpact(anyString(), anyString(),
@@ -139,11 +139,9 @@ class CompanyActivitiesAndImpactControllerTest {
     @Test
     @DisplayName("Accept CompanyActivitiesAndImpact - binding errors")
     void postRequestCompanyActivitiesAndImpactBindingErrors() throws Exception {
-
         this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("activitiesAndImpact", "") )
             .andExpect(status().isOk())
             .andExpect(view().name(COMPANY_ACTIVITY_VIEW));
     }
-
 
 }

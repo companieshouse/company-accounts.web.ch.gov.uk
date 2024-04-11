@@ -22,7 +22,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportServi
 @PreviousController(DirectorsReportAdditionalInformationController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/review")
 public class DirectorsReportReviewController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -48,7 +47,6 @@ public class DirectorsReportReviewController extends BaseController implements C
                                            @PathVariable String transactionId,
                                            @PathVariable String companyAccountsId,
                                            Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -60,7 +58,6 @@ public class DirectorsReportReviewController extends BaseController implements C
             return getTemplateName();
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -70,7 +67,6 @@ public class DirectorsReportReviewController extends BaseController implements C
     public String submitDirectorsReportReview(@PathVariable String companyNumber,
                                               @PathVariable String transactionId,
                                               @PathVariable String companyAccountsId) {
-
         return navigatorService
                 .getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
@@ -83,7 +79,6 @@ public class DirectorsReportReviewController extends BaseController implements C
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 }

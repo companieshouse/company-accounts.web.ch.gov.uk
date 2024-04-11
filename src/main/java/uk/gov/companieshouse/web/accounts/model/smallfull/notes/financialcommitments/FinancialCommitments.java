@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 
 @ValidationModel
 public class FinancialCommitments implements Note {
-
     @NotBlank(message = "{financialCommitments.details.missing}")
     @ValidationMapping("$.financial_commitments.details")
     private String financialCommitmentsDetails;

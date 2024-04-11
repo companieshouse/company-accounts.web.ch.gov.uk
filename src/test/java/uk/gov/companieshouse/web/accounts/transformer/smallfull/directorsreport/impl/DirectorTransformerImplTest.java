@@ -23,7 +23,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorTransformerImplTest {
-
     @Mock
     private DateTransformer dateTransformer;
 
@@ -44,7 +43,6 @@ class DirectorTransformerImplTest {
     @Test
     @DisplayName("Get director API - no dates")
     void getDirectorApiNoDates() {
-
         DirectorToAdd directorToAdd = new DirectorToAdd();
         directorToAdd.setName(NAME);
         directorToAdd.setWasDirectorAppointedDuringPeriod(false);
@@ -61,7 +59,6 @@ class DirectorTransformerImplTest {
     @Test
     @DisplayName("Get director API - has appointment date")
     void getDirectorApiHasAppointmentDate() {
-
         DirectorToAdd directorToAdd = new DirectorToAdd();
         directorToAdd.setName(NAME);
         directorToAdd.setWasDirectorAppointedDuringPeriod(true);
@@ -80,7 +77,6 @@ class DirectorTransformerImplTest {
     @Test
     @DisplayName("Get director API - has resignation date")
     void getDirectorApiHasResignationDate() {
-
         DirectorToAdd directorToAdd = new DirectorToAdd();
         directorToAdd.setName(NAME);
         directorToAdd.setWasDirectorAppointedDuringPeriod(false);
@@ -99,7 +95,6 @@ class DirectorTransformerImplTest {
     @Test
     @DisplayName("Get all directors")
     void getAllDirectors() {
-
         DirectorApi directorApi = new DirectorApi();
         directorApi.setName(NAME);
         directorApi.setAppointmentDate(APPOINTMENT_DATE);

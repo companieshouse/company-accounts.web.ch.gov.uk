@@ -34,7 +34,6 @@ import uk.gov.companieshouse.web.accounts.session.SessionService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PaymentServiceImplTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -78,8 +77,7 @@ class PaymentServiceImplTest {
     private static final String PAYMENT_STATE = "payment_state";
 
     @BeforeEach
-    private void setUp() {
-
+    public void setUp() {
         paymentService = new PaymentServiceImpl(apiClientService, sessionService, environmentReader);
     }
 
@@ -87,7 +85,6 @@ class PaymentServiceImplTest {
     @DisplayName("Create payment session - success")
     void createPaymentSessionSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.payment()).thenReturn(paymentResourceHandler);
@@ -116,7 +113,6 @@ class PaymentServiceImplTest {
     @DisplayName("Create payment session - throws ApiErrorResponseException")
     void createPaymentSessionThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.payment()).thenReturn(paymentResourceHandler);
@@ -136,7 +132,6 @@ class PaymentServiceImplTest {
     @DisplayName("Create payment session - throws URIValidationException")
     void createPaymentSessionThrowsURIValidationException()
             throws ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.payment()).thenReturn(paymentResourceHandler);

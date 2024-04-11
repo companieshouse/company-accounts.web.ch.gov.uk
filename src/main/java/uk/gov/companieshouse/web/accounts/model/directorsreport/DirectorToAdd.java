@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class DirectorToAdd {
-
     @ValidationMapping("$.director.name")
     private String name;
 

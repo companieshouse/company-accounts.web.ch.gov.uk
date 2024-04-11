@@ -33,7 +33,6 @@ class EmployeesTransformerImplTests {
     @Test
     @DisplayName("All Current period values added to employees web model")
     void getEmployeesForCurrentPeriod() {
-
         EmployeesApi employeesApi = new EmployeesApi();
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
@@ -51,7 +50,6 @@ class EmployeesTransformerImplTests {
     @Test
     @DisplayName("Only populated Current period values added to employees web model")
     void getEmployeesCurrentPeriodPopulatedValues() {
-
         EmployeesApi employeesApi = new EmployeesApi();
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
@@ -69,7 +67,6 @@ class EmployeesTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to employees web model")
     void getEmployeesForPreviousPeriod() {
-
         EmployeesApi employeesApi = new EmployeesApi();
 
         PreviousPeriod previousPeriod = new PreviousPeriod();
@@ -94,7 +91,6 @@ class EmployeesTransformerImplTests {
     @Test
     @DisplayName("Current period value added to employees API model when present")
     void currentPeriodValueAddedToEmployeesApiModel() {
-
         Employees employees = new Employees();
 
         AverageNumberOfEmployees averageNumberOfEmployees = new AverageNumberOfEmployees();
@@ -112,7 +108,6 @@ class EmployeesTransformerImplTests {
     @Test
     @DisplayName("Previous period value added to employees API model when present")
     void previousPeriodValueAddedToEmployeesApiModel() {
-
         Employees employees = new Employees();
 
         AverageNumberOfEmployees averageNumberOfEmployees = new AverageNumberOfEmployees();
@@ -129,7 +124,6 @@ class EmployeesTransformerImplTests {
     @Test
     @DisplayName("Current period details are null in employees API model if empty string passed in web model")
     void detailsNullWithEmployeesApiModel() {
-
         Employees employees = new Employees();
         employees.setDetails("");
 
@@ -145,7 +139,6 @@ class EmployeesTransformerImplTests {
     @Test
     @DisplayName("Test employees type returned")
     void testEmployeesReturned() {
-
         assertEquals(NoteType.SMALL_FULL_EMPLOYEES, transformer.getNoteType());
     }
 }

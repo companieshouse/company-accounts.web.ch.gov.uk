@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAsset
 @PreviousController(DirectorsRemunerationController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/transfer-of-assets-selection")
 public class TransferOfAssetsSelectionController extends BaseController {
-
     @Autowired
     private TransferOfAssetsSelectionService selectionService;
 
@@ -42,7 +41,6 @@ public class TransferOfAssetsSelectionController extends BaseController {
             @PathVariable String companyAccountsId,
             Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -56,7 +54,6 @@ public class TransferOfAssetsSelectionController extends BaseController {
             model.addAttribute(TRANSFER_OF_ASSETS_SELECTION_ATTR, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -73,7 +70,6 @@ public class TransferOfAssetsSelectionController extends BaseController {
             BindingResult bindingResult,
             Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -84,7 +80,6 @@ public class TransferOfAssetsSelectionController extends BaseController {
             selectionService.submitTransferOfAssetsSelection(transactionId, companyAccountsId, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -95,14 +90,12 @@ public class TransferOfAssetsSelectionController extends BaseController {
     }
 
     private void setHasProvidedTransferOfAssets(HttpServletRequest request, TransferOfAssetsSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         selection.setHasProvidedTransferOfAssets(
                 companyAccountsDataState.getCicStatements().getHasProvidedTransferOfAssets());
     }
 
     private void cacheHasProvidedTransferOfAssets(HttpServletRequest request, TransferOfAssetsSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
         companyAccountsDataState.getCicStatements().setHasProvidedTransferOfAssets(

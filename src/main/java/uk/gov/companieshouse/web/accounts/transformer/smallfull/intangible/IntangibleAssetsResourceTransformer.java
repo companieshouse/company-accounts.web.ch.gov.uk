@@ -5,7 +5,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleA
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 
 public interface IntangibleAssetsResourceTransformer {
-
     void mapIntangibleAssetsResourceToWebModel(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource);
 
     boolean hasIntangibleAssetsToMapToApiResource(IntangibleAssets intangibleAssets);

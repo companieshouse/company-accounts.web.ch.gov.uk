@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
-
     private ApiClientService apiClientService;
 
     private SessionService sessionService;
@@ -37,7 +36,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     public PaymentServiceImpl(ApiClientService apiClientService, SessionService sessionService, EnvironmentReader environmentReader) {
-
         this.apiClientService = apiClientService;
         this.sessionService = sessionService;
         this.chsUrl = environmentReader.getMandatoryString(CHS_URL);
@@ -50,7 +48,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public String createPaymentSessionForTransaction(String transactionId)
             throws ServiceException {
-
         String paymentState = UUID.randomUUID().toString();
 
         PaymentSessionApi paymentSessionApi = new PaymentSessionApi();
@@ -68,16 +65,13 @@ public class PaymentServiceImpl implements PaymentService {
 
             return apiResponse.getData().getLinks().get(JOURNEY_LINK);
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error creating payment session", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for payment resource", e);
         }
     }
 
     private void setPaymentStateOnSession(String paymentState) {
-
         sessionService.getSessionDataFromContext().put(PAYMENT_STATE, paymentState);
     }
 }

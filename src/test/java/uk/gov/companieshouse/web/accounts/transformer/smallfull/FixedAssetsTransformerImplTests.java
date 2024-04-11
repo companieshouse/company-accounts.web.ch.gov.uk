@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FixedAssetsTransformerImplTests {
-
     private static final Long CURRENT_INTANGIBLE_ASSETS = 1L;
     private static final Long CURRENT_TANGIBLE_ASSETS = 1L;
     private static final Long CURRENT_FIXED_ASSETS_INVESTMENTS = 1L;
@@ -37,7 +36,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model")
     void currentPeriodValueAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -59,7 +57,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model without affecting previous period values")
     void currentPeriodValuesAddedToWebModelWithoutAffectingPreviousPeriodValues() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
@@ -79,7 +76,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model")
     void previousPeriodValuesAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -101,7 +97,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model without affecting current period values")
     void previousPeriodValuesAddedToWebModelWithoutAffectingCurrentPeriodValues() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
 
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
@@ -121,7 +116,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet API model when present")
     void currentPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -140,7 +134,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values not added to balance sheet API model when absent")
     void currentPeriodValueNotAddedToApiModel() {
-
         FixedAssets fixedAssets = new FixedAssets();
         fixedAssets.setTangibleAssets(new TangibleAssets());
 
@@ -160,7 +153,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet API model when present")
     void previousPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -179,7 +171,6 @@ class FixedAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values not added to balance sheet API model when absent")
     void previousPeriodValueNotAddedToApiModel() {
-
         FixedAssets fixedAssets = new FixedAssets();
         fixedAssets.setTangibleAssets(new TangibleAssets());
 
@@ -197,7 +188,6 @@ class FixedAssetsTransformerImplTests {
     }
 
     private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
         TangibleAssets tangibleAssets = new TangibleAssets();
         FixedInvestments fixedInvestments = new FixedInvestments();
@@ -242,7 +232,6 @@ class FixedAssetsTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForCurrentPeriod() {
-
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
         fixedAssetsApi.setIntangible(CURRENT_INTANGIBLE_ASSETS);
         fixedAssetsApi.setTangible(CURRENT_TANGIBLE_ASSETS);
@@ -256,7 +245,6 @@ class FixedAssetsTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForPreviousPeriod() {
-
         FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
         fixedAssetsApi.setIntangible(PREVIOUS_INTANGIBLE_ASSETS);
         fixedAssetsApi.setTangible(PREVIOUS_TANGIBLE_ASSETS);

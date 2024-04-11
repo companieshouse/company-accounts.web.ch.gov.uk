@@ -19,10 +19,8 @@ import java.util.stream.Stream;
 
 @Component
 public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsApi> {
-
     @Override
     public Debtors toWeb(DebtorsApi debtorsApi) {
-
         Debtors debtors = new Debtors();
 
         if (debtorsApi == null) {
@@ -36,11 +34,9 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private void populatePreviousPeriodForWeb(DebtorsApi debtorsApi, Debtors debtors) {
-
         PreviousPeriod previousPeriod = debtorsApi.getDebtorsPreviousPeriod();
 
         if (previousPeriod != null) {
-
             if (previousPeriod.getTradeDebtors() != null) {
                 TradeDebtors tradeDebtors = createTradeDebtors(debtors);
                 tradeDebtors.setPreviousTradeDebtors(previousPeriod.getTradeDebtors());
@@ -71,11 +67,9 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private void populateCurrentPeriodForWeb(DebtorsApi debtorsApi, Debtors debtors) {
-
         CurrentPeriod currentPeriod = debtorsApi.getDebtorsCurrentPeriod();
 
         if (currentPeriod != null) {
-
             debtors.setDetails(currentPeriod.getDetails());
 
             if (currentPeriod.getTradeDebtors() != null) {
@@ -108,7 +102,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private TradeDebtors createTradeDebtors(Debtors debtors) {
-
         TradeDebtors tradeDebtors;
 
         if (debtors.getTradeDebtors() != null) {
@@ -122,7 +115,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private PrepaymentsAndAccruedIncome createPrepaymentsAndAccruedIncome(Debtors debtors) {
-
         PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome;
 
         if (debtors.getPrepaymentsAndAccruedIncome() != null) {
@@ -136,7 +128,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private OtherDebtors createOtherDebtors(Debtors debtors) {
-
         OtherDebtors otherDebtors;
 
         if (debtors.getOtherDebtors() != null) {
@@ -150,7 +141,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private Total createTotal(Debtors debtors) {
-
         Total total;
 
         if (debtors.getTotal() != null) {
@@ -164,7 +154,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private GreaterThanOneYear createGreaterThanOneYear(Debtors debtors) {
-
         GreaterThanOneYear greaterThanOneYear;
 
         if (debtors.getGreaterThanOneYear() != null) {
@@ -179,7 +168,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
 
     @Override
     public DebtorsApi toApi(Debtors debtors) {
-
         DebtorsApi debtorsApi = new DebtorsApi();
 
         setCurrentPeriodDebtorsOnApiModel(debtors, debtorsApi);
@@ -189,7 +177,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private void setPreviousPeriodDebtorsOnApiModel(Debtors debtors, DebtorsApi debtorsApi) {
-
         PreviousPeriod previousPeriod = new PreviousPeriod();
 
         previousPeriod.setTradeDebtors(debtors.getTradeDebtors().getPreviousTradeDebtors());
@@ -208,7 +195,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private void setCurrentPeriodDebtorsOnApiModel(Debtors debtors, DebtorsApi debtorsApi) {
-
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
         if (StringUtils.isNotBlank(debtors.getDetails())) {
@@ -231,7 +217,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
-
         return Stream.of(currentPeriod.getDetails(),
                 currentPeriod.getGreaterThanOneYear(),
                 currentPeriod.getOtherDebtors(),
@@ -241,7 +226,6 @@ public class DebtorsTransformerImpl implements NoteTransformer<Debtors, DebtorsA
     }
 
     private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
-
         return Stream.of(previousPeriod.getGreaterThanOneYear(),
                 previousPeriod.getOtherDebtors(),
                 previousPeriod.getPrepaymentsAndAccruedIncome(),

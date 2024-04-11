@@ -1,5 +1,25 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
+import uk.gov.companieshouse.web.accounts.service.NoteService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+
+import java.util.ArrayList;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -11,26 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.TangibleAssets;
-import uk.gov.companieshouse.web.accounts.service.NoteService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TangibleAssetsNoteControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -72,8 +77,8 @@ class TangibleAssetsNoteControllerTest {
     private static final String ERROR_VIEW = "error";
 
     @BeforeEach
-    private void setUp() throws Exception {
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
+    public void setUp() {
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
         this.mockMvc = MockMvcBuilders.standaloneSetup(tangibleAssetsNoteController).build();
 
     }
@@ -81,7 +86,6 @@ class TangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Get tangible asset note view success path")
     void getRequestSuccess() throws Exception {
-
         when(tangibleAssetsNoteService
             .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS))
             .thenReturn(tangibleAssets);
@@ -97,7 +101,7 @@ class TangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Post tangible asset note success path")
     void postRequestSuccess() throws Exception {
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
 
         when(
             tangibleAssetsNoteService.submit(anyString(), anyString(), any(
@@ -112,7 +116,6 @@ class TangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Get tangible asset note  service exception")
     void getRequestServiceFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(tangibleAssetsNoteService)
             .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
@@ -125,7 +128,6 @@ class TangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Post tangible asset note  service exception")
     void postRequestServiceFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(tangibleAssetsNoteService)
             .submit(anyString(), anyString(), any(

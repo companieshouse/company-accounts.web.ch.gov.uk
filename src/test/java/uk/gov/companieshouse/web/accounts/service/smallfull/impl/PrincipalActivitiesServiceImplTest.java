@@ -25,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PrincipalActivitiesServiceImplTest {
-
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -51,7 +50,6 @@ class PrincipalActivitiesServiceImplTest {
     @Test
     @DisplayName("Get principal activities")
     void getPrincipalActivities() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -67,7 +65,6 @@ class PrincipalActivitiesServiceImplTest {
     @Test
     @DisplayName("Submit principal activities - create")
     void submitPrincipalActivitiesCreate() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -84,7 +81,6 @@ class PrincipalActivitiesServiceImplTest {
     @Test
     @DisplayName("Submit principal activities - update")
     void submitPrincipalActivitiesUpdate() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 

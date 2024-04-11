@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 @Component
 public class LoanTransformerImpl implements LoanTransformer {
-
     @Autowired
     private BreakdownTransformer breakdownTransformer;
 
@@ -19,7 +18,6 @@ public class LoanTransformerImpl implements LoanTransformer {
 
     @Override
     public LoanApi getLoanApi(LoanToAdd loanToAdd) {
-
         LoanApi loanApi = new LoanApi();
 
         loanApi.setDirectorName(loanToAdd.getDirectorName());
@@ -33,11 +31,9 @@ public class LoanTransformerImpl implements LoanTransformer {
 
     @Override
     public Loan[] getAllLoans(LoanApi[] loans) {
-
         Loan[] allLoans = new Loan[loans.length];
 
         for (int i = 0; i < loans.length; i++) {
-
             Loan loan = new Loan();
             loan.setDirectorName(loans[i].getDirectorName());
             loan.setDescription(loans[i].getDescription());

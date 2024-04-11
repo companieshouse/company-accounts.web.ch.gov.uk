@@ -13,14 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ValidationMessageTests {
-
     private static final String KNOWN_ERROR_STRING = "invalid_character";
     private static final String UNKNOWN_ERROR_STRING = "non_existent_error_string";
 
     @Test
     @DisplayName("Tests no exception thrown if message key mapping exists")
     void testValidationMessageMappingSuccess() {
-
         Assertions.assertAll(() ->
                 ValidationMessage.getMessageForApiError(KNOWN_ERROR_STRING));
     }
@@ -28,7 +26,6 @@ class ValidationMessageTests {
     @Test
     @DisplayName("Tests MissingMessageKeyException thrown if message key mapping does not exist")
     void testValidationMessageMappingFailure() {
-
         assertThrows(MissingMessageKeyException.class, () ->
                 ValidationMessage.getMessageForApiError(UNKNOWN_ERROR_STRING));
     }

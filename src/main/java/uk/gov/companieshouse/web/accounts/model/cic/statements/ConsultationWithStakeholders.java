@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class ConsultationWithStakeholders {
-
     @NotBlank(message = "{consultationWithStakeholders.consultationWithStakeholders.missing}")
     @ValidationMapping("$.cic_statements.report_statements.consultation_with_stakeholders")
     private String consultationWithStakeholders;

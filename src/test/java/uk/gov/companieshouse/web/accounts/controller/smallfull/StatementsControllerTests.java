@@ -1,5 +1,23 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -10,23 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StatementsControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -63,19 +69,17 @@ class StatementsControllerTests {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get statements view - success path")
     void getRequestSuccess() throws Exception {
-
         when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(new Statements());
 
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(STATEMENTS_PATH))
                 .andExpect(status().isOk())
@@ -88,7 +92,6 @@ class StatementsControllerTests {
     @Test
     @DisplayName("Get statements view - statements service exception")
     void getRequestStatementsServiceException() throws Exception {
-
         when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -100,10 +103,9 @@ class StatementsControllerTests {
     @Test
     @DisplayName("Accept statements - success path")
     void postRequestSuccess() throws Exception {
-
         doNothing().when(statementsService).acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(STATEMENTS_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -113,7 +115,6 @@ class StatementsControllerTests {
     @Test
     @DisplayName("Accept statements - statements service exception")
     void postRequestStatementsServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(statementsService).acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -121,6 +122,5 @@ class StatementsControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
-
 
 }

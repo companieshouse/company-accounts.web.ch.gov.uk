@@ -21,7 +21,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportApprovalTransformerImplTests {
-
     @Mock
     private DateTransformer dateTransformer;
 
@@ -41,7 +40,6 @@ class DirectorsReportApprovalTransformerImplTests {
     @Test
     @DisplayName("Get Directors Report Approval Api")
     void getDirectorsReportApprovalApi() {
-
         DirectorsReportApproval approval = new DirectorsReportApproval();
         approval.setName(NAME);
 
@@ -65,7 +63,6 @@ class DirectorsReportApprovalTransformerImplTests {
     @Test
     @DisplayName("Get Directors Report Approval")
     void getDirectorsReportApproval() {
-
         ApprovalApi approvalApi = new ApprovalApi();
         approvalApi.setName(NAME);
         approvalApi.setDate(APPROVAL_DATE);

@@ -23,7 +23,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MicroCriteriaControllerTests {
-
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String MICRO_CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
         "/micro-entity/criteria";

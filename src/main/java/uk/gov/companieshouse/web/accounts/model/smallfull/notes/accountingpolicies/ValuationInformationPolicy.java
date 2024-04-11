@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class ValuationInformationPolicy {
-
     @NotNull(message = "{valuationInformationPolicy.selectionNotMade}")
     private Boolean includeValuationInformationPolicy;
 

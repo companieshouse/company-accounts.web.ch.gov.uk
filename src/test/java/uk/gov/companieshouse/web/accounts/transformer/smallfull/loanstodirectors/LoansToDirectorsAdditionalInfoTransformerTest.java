@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoansToDirectorsAdditionalInfoTransformerTest {
-
     @Mock
     private LoanToAdd loanToAdd;
 
@@ -28,7 +27,6 @@ class LoansToDirectorsAdditionalInfoTransformerTest {
     @Test
     @DisplayName("Get loans to directors additioal information API")
     void getDirectorApiNoDates() {
-
         LoansToDirectorsAdditionalInfo loansToDirectorsAdditionalInfo = new LoansToDirectorsAdditionalInfo();
         loansToDirectorsAdditionalInfo.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
 
@@ -41,7 +39,6 @@ class LoansToDirectorsAdditionalInfoTransformerTest {
     @Test
     @DisplayName("Get all loans")
     void getAllLoans() {
-
         AdditionalInformationApi additionalInformationApi = new AdditionalInformationApi();
         additionalInformationApi.setDetails(ADDITIONAL_INFORMATION_DETAILS);
 

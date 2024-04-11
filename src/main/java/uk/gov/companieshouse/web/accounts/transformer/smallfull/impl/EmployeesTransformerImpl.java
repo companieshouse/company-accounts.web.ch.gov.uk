@@ -15,10 +15,8 @@ import java.util.stream.Stream;
 
 @Component
 public class EmployeesTransformerImpl implements NoteTransformer<Employees, EmployeesApi> {
-
     @Override
     public Employees toWeb(EmployeesApi employeesApi) {
-
       Employees employees = new Employees();
 
       if (employeesApi == null) {
@@ -37,7 +35,6 @@ public class EmployeesTransformerImpl implements NoteTransformer<Employees, Empl
 
     @Override
     public EmployeesApi toApi(Employees employees) {
-
         EmployeesApi employeesApi = new EmployeesApi();
 
         setCurrentPeriodEmployeesOnApiModel(employees, employeesApi);
@@ -83,7 +80,6 @@ public class EmployeesTransformerImpl implements NoteTransformer<Employees, Empl
     }
 
     private void setPreviousPeriodEmployeesOnApiModel(Employees employees, EmployeesApi employeesApi) {
-
         if (hasPreviousPeriodEmployees(employees)) {
             PreviousPeriod previousPeriod = new PreviousPeriod();
 
@@ -96,7 +92,6 @@ public class EmployeesTransformerImpl implements NoteTransformer<Employees, Empl
     }
 
     private boolean hasPreviousPeriodEmployees(Employees employees) {
-
         return Stream.of(employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees()
                 ).anyMatch(Objects::nonNull);
     }

@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorValidatorTest {
-
     @Mock
     private SmallFullService smallFullService;
 
@@ -69,7 +68,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate director to add - success")
     void validateDirectorToAddSuccess() {
-
         DirectorToAdd directorToAdd = new DirectorToAdd();
         directorToAdd.setName(DIRECTOR_NAME);
         directorToAdd.setWasDirectorAppointedDuringPeriod(true);
@@ -83,7 +81,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate director to add - missing name")
     void validateDirectorToAddMissingName() {
-
         DirectorToAdd directorToAdd = new DirectorToAdd();
         directorToAdd.setWasDirectorAppointedDuringPeriod(true);
         directorToAdd.setDidDirectorResignDuringPeriod(false);
@@ -99,7 +96,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate director to add - missing was director appointed")
     void validateDirectorToAddMissingWasDirectorAppointed() {
-
         DirectorToAdd directorToAdd = new DirectorToAdd();
         directorToAdd.setName(DIRECTOR_NAME);
         directorToAdd.setDidDirectorResignDuringPeriod(false);
@@ -115,7 +111,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate director to add - missing did director resign")
     void validateDirectorToAddMissingDidDirectorResign() {
-
         DirectorToAdd directorToAdd = new DirectorToAdd();
         directorToAdd.setName(DIRECTOR_NAME);
         directorToAdd.setWasDirectorAppointedDuringPeriod(true);
@@ -131,7 +126,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate submit add or remove directors - success")
     void validateSubmitAddOrRemoveDirectorsSuccess() throws ServiceException {
-
         SmallFullApi smallFullApi = new SmallFullApi();
         smallFullApi.setNextAccounts(createNextAccounts());
 
@@ -152,7 +146,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate submit add or remove directors - uncommitted director name")
     void validateSubmitAddOrRemoveDirectorsUncommittedDirectorName() throws ServiceException {
-
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
 
         DirectorToAdd directorToAdd = new DirectorToAdd();
@@ -170,7 +163,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate submit add or remove directors - no directors present")
     void validateSubmitAddOrRemoveDirectorsNoDirectorsPresent() throws ServiceException {
-
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
@@ -185,7 +177,6 @@ class DirectorValidatorTest {
     @Test
     @DisplayName("Validate submit add or remove directors - all directors have resigned")
     void validateSubmitAddOrRemoveDirectorsAllDirectorsHaveResigned() throws ServiceException {
-
         SmallFullApi smallFullApi = new SmallFullApi();
         smallFullApi.setNextAccounts(createNextAccounts());
 

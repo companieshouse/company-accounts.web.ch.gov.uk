@@ -4,7 +4,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 
 public interface Transformer {
-
     /**
      * Populate the API model with values from the web model for the current
      * period.

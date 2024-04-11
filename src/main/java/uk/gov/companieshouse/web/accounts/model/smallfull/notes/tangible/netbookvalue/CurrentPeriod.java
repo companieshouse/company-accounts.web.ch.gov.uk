@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netboo
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class CurrentPeriod {
-
     @ValidationMapping("$.tangible_assets.land_and_buildings.net_book_value_at_end_of_current_period")
     private Long landAndBuildings;
 

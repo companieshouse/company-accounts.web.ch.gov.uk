@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class IntangibleAssetsHandler implements NoteResourceHandler<IntangibleApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 

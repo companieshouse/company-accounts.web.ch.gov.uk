@@ -39,7 +39,6 @@ import java.util.List;
 @PreviousController(LoansToDirectorsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-loans")
 public class AddOrRemoveLoansController extends BaseController implements ConditionalController {
-
     private static final String PREFER_NOT_TO_SAY = "Prefer not to say";
 
     private static final UriTemplate URI =
@@ -71,13 +70,11 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
     @Autowired
     private DirectorService directorService;
 
-
     @GetMapping
     public String getAddOrRemoveLoans(@PathVariable String companyNumber,
                                       @PathVariable String transactionId,
                                       @PathVariable String companyAccountsId,
                                       Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
@@ -112,7 +109,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
             addOrRemoveLoans.setIsMultiYearFiler(isMultiYearFiler);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -132,11 +128,9 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                                          @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
                                          BindingResult bindingResult,
                                          Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-
             List<ValidationError> validationErrors = loanService.submitAddOrRemoveLoans(transactionId, companyAccountsId, addOrRemoveLoans);
 
             if(!validationErrors.isEmpty()) {
@@ -145,7 +139,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
             }
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -162,7 +155,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                               @ModelAttribute(ADD_OR_REMOVE_LOANS) AddOrRemoveLoans addOrRemoveLoans,
                               BindingResult bindingResult,
                               Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -170,7 +162,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
         }
 
         try {
-
             List<ValidationError> validationErrors = loanService.createLoan(transactionId, companyAccountsId, addOrRemoveLoans);
 
             if(!validationErrors.isEmpty()) {
@@ -179,7 +170,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
             }
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -194,15 +184,12 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
                              @PathVariable String companyAccountsId,
                              @PathVariable String loanId,
                              Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-
             loanService.deleteLoan(transactionId, companyAccountsId, loanId);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -218,7 +205,6 @@ public class AddOrRemoveLoansController extends BaseController implements Condit
 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
-
         CompanyAccountsDataState dataState = getStateFromRequest(request);
         return BooleanUtils.isTrue(dataState.getHasIncludedLoansToDirectors());
     }

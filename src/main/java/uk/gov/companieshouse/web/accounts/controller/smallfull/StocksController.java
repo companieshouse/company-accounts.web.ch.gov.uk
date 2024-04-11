@@ -33,7 +33,6 @@ import java.util.List;
 @PreviousController(FixedAssetsInvestmentsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/stocks")
 public class StocksController extends BaseController implements ConditionalController {
-
     @Autowired
     private BalanceSheetService balanceSheetService;
 
@@ -50,7 +49,6 @@ public class StocksController extends BaseController implements ConditionalContr
                             @PathVariable String transactionId,
                             @PathVariable String companyAccountsId,
                             Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -71,7 +69,6 @@ public class StocksController extends BaseController implements ConditionalContr
                               BindingResult bindingResult,
                               Model model,
                               HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -98,7 +95,6 @@ public class StocksController extends BaseController implements ConditionalContr
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         BalanceSheet balanceSheet =
                 balanceSheetService.getBalanceSheet(
                         transactionId, companyAccountsId, companyNumber);
@@ -107,7 +103,6 @@ public class StocksController extends BaseController implements ConditionalContr
     }
 
     private boolean hasStocks(BalanceSheet balanceSheet) {
-
         Long currentStocks = Optional.of(balanceSheet)
                 .map(BalanceSheet::getCurrentAssets)
                 .map(CurrentAssets::getStocks)

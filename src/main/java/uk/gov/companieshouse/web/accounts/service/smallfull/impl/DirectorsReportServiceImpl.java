@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class DirectorsReportServiceImpl implements DirectorsReportService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -33,13 +32,11 @@ public class DirectorsReportServiceImpl implements DirectorsReportService {
 
     @Override
     public void createDirectorsReport(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         DirectorsReportApi directorsReport = getDirectorsReport(apiClient, transactionId, companyAccountsId);
 
         if (directorsReport == null) {
-
             String uri = DIRECTORS_REPORT_URI.expand(transactionId, companyAccountsId).toString();
 
             try {
@@ -56,7 +53,6 @@ public class DirectorsReportServiceImpl implements DirectorsReportService {
     @Override
     public DirectorsReportApi getDirectorsReport(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-
         String uri = DIRECTORS_REPORT_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
@@ -73,13 +69,11 @@ public class DirectorsReportServiceImpl implements DirectorsReportService {
     @Override
     public void deleteDirectorsReport(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         if (StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getDirectorsReport())) {
-
             String uri = DIRECTORS_REPORT_URI.expand(transactionId, companyAccountsId).toString();
 
             try {

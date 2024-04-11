@@ -36,7 +36,6 @@ import java.time.LocalDate;
 @PreviousController(AccountsReferenceDateQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/accounts-reference-date")
 public class AccountsReferenceDateController extends BaseController implements ConditionalController {
-
     @Autowired
     private CompanyServiceImpl companyService;
 
@@ -62,7 +61,6 @@ public class AccountsReferenceDateController extends BaseController implements C
                                            @PathVariable String companyAccountsId,
                                            Model model,
                                            HttpServletRequest request) {
-
         try {
             addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
@@ -96,7 +94,6 @@ public class AccountsReferenceDateController extends BaseController implements C
                                               BindingResult bindingResult,
                                               Model model,
                                               HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -108,12 +105,10 @@ public class AccountsReferenceDateController extends BaseController implements C
 
             // If the filing is for a CIC
             if (companyService.getCompanyProfile(companyNumber).isCommunityInterestCompany()) {
-
                 LocalDate cicApprovalDate = cicApprovalService.getCicApproval(transactionId, companyAccountsId).getLocalDate();
 
                 // And CIC approval date is before the new chosen period end date
                 if (cicApprovalDate != null && !cicApprovalDate.isAfter(accountsReferenceDate.getChosenDate())) {
-
                     // Return the user to CIC approval
                     return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CIC_APPROVAL.expand(companyNumber, transactionId, companyAccountsId).toString();
                 }
@@ -134,7 +129,6 @@ public class AccountsReferenceDateController extends BaseController implements C
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return BooleanUtils.isFalse(companyAccountsDataState.getHasConfirmedAccountingReferenceDate());
     }

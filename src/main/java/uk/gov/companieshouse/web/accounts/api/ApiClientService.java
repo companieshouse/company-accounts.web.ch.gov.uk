@@ -8,6 +8,5 @@ import uk.gov.companieshouse.api.ApiClient;
  * the use of a test framework that supports mocking of static methods.
  */
 public interface ApiClientService {
-
     ApiClient getApiClient();
 }

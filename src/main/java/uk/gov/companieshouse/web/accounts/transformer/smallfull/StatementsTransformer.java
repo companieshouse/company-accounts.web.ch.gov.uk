@@ -4,7 +4,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetStatements
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 
 public interface StatementsTransformer {
-
     /**
      * Get statements web model from a given statements api model
      *

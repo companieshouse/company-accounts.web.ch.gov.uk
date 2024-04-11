@@ -52,7 +52,6 @@
   <form id="tangible-assets-note-form" th:action="@{''}" th:object="${tangibleAssets}"
         class="form currency-included-within-inputs govuk-body" method="post">
 
-
     <div th:replace="~{fragments/globalErrors :: globalErrors}"></div>
 
     <div th:replace="~{fragments/numberedHeading :: numberedHeading (
@@ -492,7 +491,6 @@
 
       </div>
 
-
       <br>
 
     </div>
@@ -520,7 +518,6 @@
         <h2 class="govuk-heading-s">Total<!--<br />£--></h2>
       </div>
     </div>
-
 
     <!--Start Depreciation at start-->
     <th:block th:if="*{lastAccountsPeriodEndOn != null}">
@@ -852,11 +849,9 @@
 
       </div>
 
-
       <br>
 
     </div>
-
 
     <h2 class="govuk-heading-m">Net book value</h2>
 
@@ -948,7 +943,6 @@
 
       </div>
 
-
       <br>
 
     </div>
@@ -1018,12 +1012,10 @@
 
         </div>
 
-
         <br>
 
       </div>
     </th:block>
-
 
     <div th:replace="fragments/additionalInformation :: additionalInformation (
                                 id = 'additionalInformation',

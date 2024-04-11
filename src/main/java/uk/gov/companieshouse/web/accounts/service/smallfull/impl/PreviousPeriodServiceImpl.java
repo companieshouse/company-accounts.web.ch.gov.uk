@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class PreviousPeriodServiceImpl implements PreviousPeriodService {
-
     private static final UriTemplate PREVIOUS_PERIOD_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/previous-period");
 
@@ -34,7 +33,6 @@ public class PreviousPeriodServiceImpl implements PreviousPeriodService {
     @Override
     public PreviousPeriodApi getPreviousPeriod(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-
         try {
             return apiClient.smallFull().previousPeriod()
                     .get(PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString())
@@ -49,7 +47,6 @@ public class PreviousPeriodServiceImpl implements PreviousPeriodService {
     @Override
     public void submitPreviousPeriod(ApiClient apiClient, SmallFullApi smallFullApi, String transactionId,
             String companyAccountsId, PreviousPeriodApi previousPeriodApi, List<ValidationError> validationErrors) throws ServiceException {
-
         boolean resourceExists = StringUtils.isNotBlank(smallFullApi.getLinks().getPreviousPeriod());
 
         try {

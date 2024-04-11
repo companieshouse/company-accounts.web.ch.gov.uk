@@ -14,13 +14,11 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public abstract class BaseController {
-
     @Autowired
     protected NavigatorService navigatorService;
 
@@ -47,7 +45,6 @@ public abstract class BaseController {
      * @return an array of message argument values
      */
     private static Object[] getValidationArgs(Map<String, String> errorArgs) {
-
         if (errorArgs == null) {
             return new Object[]{};
         }
@@ -66,7 +63,6 @@ public abstract class BaseController {
     protected abstract String getTemplateName();
 
     protected void addBackPageAttributeToModel(Model model, String... pathVars) {
-
         model.addAttribute("backButton", navigatorService.getPreviousControllerPath(this.getClass(), pathVars));
     }
 
@@ -78,15 +74,12 @@ public abstract class BaseController {
      *                      API request
      */
     protected void bindValidationErrors(BindingResult bindingResult, List<ValidationError> errors) {
-        Collections.sort(errors,
-                Comparator.comparing(ValidationError::getFieldPath)
-                        .thenComparing(ValidationError::getMessageKey));
+        errors.sort(Comparator.comparing(ValidationError::getFieldPath).thenComparing(ValidationError::getMessageKey));
 
-        errors.forEach(error ->
-                bindingResult.rejectValue(error.getFieldPath(),
-                        error.getMessageKey(),
-                        getValidationArgs(error.getMessageArguments()),
-                        null)
+        errors.forEach(error -> bindingResult.rejectValue(error.getFieldPath(),
+                error.getMessageKey(),
+                getValidationArgs(error.getMessageArguments()),
+                null)
         );
     }
 
@@ -97,7 +90,6 @@ public abstract class BaseController {
      * @return the client's {@link CompanyAccountsDataState}
      */
     protected CompanyAccountsDataState getStateFromRequest(HttpServletRequest request) {
-
         return (CompanyAccountsDataState) request.getSession().getAttribute(
                 COMPANY_ACCOUNTS_DATA_STATE);
     }
@@ -109,13 +101,11 @@ public abstract class BaseController {
      * @param companyAccountsDataState The client's {@link CompanyAccountsDataState}
      */
     protected void updateStateOnRequest(HttpServletRequest request, CompanyAccountsDataState companyAccountsDataState) {
-
         request.getSession().setAttribute(COMPANY_ACCOUNTS_DATA_STATE, companyAccountsDataState);
     }
 
     @ModelAttribute("metadata")
     public String addMetadata(HttpServletRequest request) {
-
         String metadata = "";
         if (isCic(request)) {
             metadata += "cic";
@@ -125,11 +115,11 @@ public abstract class BaseController {
     }
 
     private boolean isCic(HttpServletRequest request) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
         String url = request.getRequestURL().toString();
 
-        return url.contains("cic") || (companyAccountsDataState != null && BooleanUtils.isTrue(companyAccountsDataState.getIsCic()));
+        return url.contains("cic")
+                || (companyAccountsDataState != null && BooleanUtils.isTrue(companyAccountsDataState.getIsCic()));
     }
 }

@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,6 +30,8 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServic
 
 import java.time.LocalDate;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -36,12 +42,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasProperty;
 
 @ExtendWith({MockitoExtension.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccountsReferenceDateQuestionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -120,15 +126,13 @@ class AccountsReferenceDateQuestionControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get ARD question page")
     void getRequest() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
@@ -154,7 +158,6 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Get ARD question page - different periodEndOn Dates")
     void getRequestWithDifferentEndDates() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
@@ -181,7 +184,6 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Get ARD question page - Throws exception")
     void getRequestThrowsException() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenThrow(ServiceException.class);
@@ -195,8 +197,7 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Post ARD question - has chosen NO")
     void postRequestHasConfirmedNoOnArdDate() throws Exception {
-
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_QUESTION_PATH)
                 .param(ARD_SELECTION, "0")
@@ -209,12 +210,11 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Post ARD question - has chosen YES")
     void postRequestHasConfirmedYesOnArdDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(false);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_QUESTION_PATH)
                 .param(ARD_SELECTION, "1")
@@ -228,7 +228,6 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Post ARD question - has chosen YES - is CIC with valid approval date")
     void postRequestHasConfirmedYesOnArdDateIsCicWithValidApprovalDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
@@ -243,7 +242,7 @@ class AccountsReferenceDateQuestionControllerTest {
 
         when(cicApproval.getLocalDate()).thenReturn(NEXT_ACCOUNTS_PERIOD_END.plusDays(1));
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_QUESTION_PATH)
                 .param(ARD_SELECTION, "1")
@@ -257,7 +256,6 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Post ARD question - has chosen YES - is CIC with null approval date")
     void postRequestHasConfirmedYesOnArdDateIsCicWithNullApprovalDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
@@ -272,7 +270,7 @@ class AccountsReferenceDateQuestionControllerTest {
 
         when(cicApproval.getLocalDate()).thenReturn(null);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_QUESTION_PATH)
                 .param(ARD_SELECTION, "1")
@@ -286,7 +284,6 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Post ARD question - has chosen YES - is CIC with invalidated approval date")
     void postRequestHasConfirmedYesOnArdDateIsCicWithInvalidatedApprovalDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
@@ -313,7 +310,6 @@ class AccountsReferenceDateQuestionControllerTest {
     @Test
     @DisplayName("Post ARD question - service exception")
     void postRequestServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(smallFullService)
                 .updateSmallFullAccounts(null, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
@@ -324,13 +320,12 @@ class AccountsReferenceDateQuestionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(), captor.capture());
     }
 
     @Test
     @DisplayName("Post ARD question - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(ARD_QUESTION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ARD_QUESTION_VIEW));

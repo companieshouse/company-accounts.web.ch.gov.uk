@@ -10,7 +10,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 @NextController(MockSuccessJourneyControllerTwo.class)
 @RequestMapping("/mock-success-journey-controller-one/{companyNumber}/{transactionId}/{companyAccountsId}")
 public class MockSuccessJourneyControllerOne extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return null;

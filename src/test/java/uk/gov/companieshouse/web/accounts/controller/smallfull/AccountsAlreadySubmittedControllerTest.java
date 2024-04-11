@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccountsAlreadySubmittedControllerTest {
-
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
 
     private static final String COMPANY_NUMBER = "companyNumber";
@@ -37,14 +35,13 @@ class AccountsAlreadySubmittedControllerTest {
     private AccountsAlreadySubmittedController accountsAlreadySubmittedController = new AccountsAlreadySubmittedController();
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(accountsAlreadySubmittedController).build();
     }
 
     @Test
     @DisplayName("Get payment session for acccounts already submitted success path")
     void getRequestSuccess() throws Exception {
-
         this.mockMvc.perform(get(SUBMITTED_ACCOUNTS_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(SUBMITTED_ACCOUNTS_VIEW));
@@ -53,7 +50,6 @@ class AccountsAlreadySubmittedControllerTest {
     @Test
     @DisplayName("Post accounts already submitted session success path")
     void postRequestSuccess() throws Exception {
-
         this.mockMvc.perform(post(SUBMITTED_ACCOUNTS_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + YOUR_FILINGS_PATH));

@@ -29,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportReviewServiceImplTest {
-
     @Mock
     private DirectorService directorService;
 
@@ -72,7 +71,6 @@ class DirectorsReportReviewServiceImplTest {
     @Test
     @DisplayName("Get review")
     void getReview() throws ServiceException {
-
         Director[] directors = new Director[]{new Director()};
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false))
                 .thenReturn(directors);

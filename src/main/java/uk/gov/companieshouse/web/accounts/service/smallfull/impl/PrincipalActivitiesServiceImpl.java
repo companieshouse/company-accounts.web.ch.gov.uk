@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class PrincipalActivitiesServiceImpl implements PrincipalActivitiesService {
-
     @Autowired
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -23,7 +22,6 @@ public class PrincipalActivitiesServiceImpl implements PrincipalActivitiesServic
     @Override
     public PrincipalActivities getPrincipalActivities(String transactionId,
             String companyAccountsId) throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
@@ -34,18 +32,15 @@ public class PrincipalActivitiesServiceImpl implements PrincipalActivitiesServic
     public List<ValidationError> submitPrincipalActivities(String transactionId,
             String companyAccountsId, PrincipalActivities principalActivities)
             throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
         if (statementsApi == null) {
-
             statementsApi = new StatementsApi();
             directorsReportStatementsTransformer.setPrincipalActivities(statementsApi, principalActivities);
             return directorsReportStatementsService
                     .createDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);
         } else {
-
             directorsReportStatementsTransformer.setPrincipalActivities(statementsApi, principalActivities);
             return directorsReportStatementsService
                     .updateDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);

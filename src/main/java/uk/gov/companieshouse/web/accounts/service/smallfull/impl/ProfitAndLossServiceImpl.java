@@ -30,7 +30,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class ProfitAndLossServiceImpl implements ProfitAndLossService {
-
     private static final UriTemplate CURRENT_PERIOD_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/current-period/profit-and-loss");
 
@@ -71,7 +70,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
     @Override
     public ProfitAndLoss getProfitAndLoss(String transactionId, String companyAccountsId,
             String companyNumber) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         ProfitAndLossApi currentPeriod =
@@ -98,7 +96,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
     @Override
     public List<ValidationError> submitProfitAndLoss(String transactionId, String companyAccountsId,
             String companyNumber, ProfitAndLoss profitAndLoss) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         List<ValidationError> validationErrors = new ArrayList<>();
@@ -111,7 +108,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
 
         CompanyProfileApi companyProfile = companyService.getCompanyProfile(companyNumber);
         if (companyService.isMultiYearFiler(companyProfile)) {
-
             ProfitAndLossApi previousPeriodProfitAndLoss =
                     profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss);
 
@@ -125,14 +121,12 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
     @Override
     public void deleteProfitAndLoss(String transactionId, String companyAccountsId,
             String companyNumber) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         if (StringUtils.isNotBlank(
                 currentPeriodService.getCurrentPeriod(
                         apiClient, transactionId, companyAccountsId).getLinks()
                                 .getProfitAndLoss())) {
-
             try {
                 apiClient.smallFull().currentPeriodProfitAndLoss()
                         .delete(CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId)
@@ -150,7 +144,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
                         previousPeriodService.getPreviousPeriod(
                                 apiClient, transactionId, companyAccountsId).getLinks()
                                         .getProfitAndLoss())){
-
             try {
                 apiClient.smallFull().previousPeriodProfitAndLoss()
                         .delete(PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId)
@@ -167,7 +160,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
                                               String transactionId,
                                               String companyAccountsId,
                                               boolean isCurrentPeriod) throws ServiceException {
-
         String uri = (isCurrentPeriod ? CURRENT_PERIOD_URI : PREVIOUS_PERIOD_URI).expand(transactionId, companyAccountsId).toString();
 
         try {
@@ -192,7 +184,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
                                      String companyAccountsId,
                                      ProfitAndLossApi profitAndLoss,
                                      List<ValidationError> validationErrors) throws ServiceException {
-
         String uri = CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
 
         boolean resourceExists = StringUtils.isNotEmpty(
@@ -208,7 +199,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
                     apiResponse = apiClient.smallFull().currentPeriodProfitAndLoss()
                             .create(uri, profitAndLoss).execute();
                 }
-
 
             if (apiResponse.hasErrors()) {
                 List<ApiError> apiErrors = apiResponse.getErrors();
@@ -231,7 +221,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
                                                    String companyAccountsId,
                                                    ProfitAndLossApi profitAndLoss,
                                                    List<ValidationError> validationErrors) throws ServiceException {
-
         String uri = PREVIOUS_PERIOD_URI.expand(transactionId, companyAccountsId).toString();
 
         boolean resourceExists = StringUtils.isNotEmpty(
@@ -247,7 +236,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
                 apiResponse = apiClient.smallFull().previousPeriodProfitAndLoss()
                         .create(uri, profitAndLoss).execute();
             }
-
 
             if (apiResponse.hasErrors()) {
                 List<ApiError> apiErrors = apiResponse.getErrors();
@@ -267,7 +255,6 @@ public class ProfitAndLossServiceImpl implements ProfitAndLossService {
 
     private BalanceSheetHeadings getProfitAndLossAfterOneYearBalanceSheetHeadings(ApiClient apiClient,
                     String transactionId, String companyAccountsId) throws ServiceException {
-
             SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
             return smallFullService.getBalanceSheetHeadings(smallFullApi);
         }

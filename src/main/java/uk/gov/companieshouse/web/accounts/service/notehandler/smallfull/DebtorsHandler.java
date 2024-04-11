@@ -15,13 +15,11 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class DebtorsHandler implements NoteResourceHandler<DebtorsApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 
     private static final UriTemplate DEBTORS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/debtors");
-
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
@@ -30,32 +28,27 @@ public class DebtorsHandler implements NoteResourceHandler<DebtorsApi> {
 
     @Override
     public Executor<ApiResponse<DebtorsApi>> get(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().debtors().get(uri);
     }
 
     @Override
     public Executor<ApiResponse<Void>> update(ApiClient apiClient, String uri, DebtorsApi apiResource) {
-
         return apiClient.smallFull().debtors().update(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<DebtorsApi>> create(ApiClient apiClient, String uri, DebtorsApi apiResource) {
-
         return apiClient.smallFull().debtors().create(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<Void>> delete(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().debtors().delete(uri);
     }
 
     @Override
     public boolean parentResourceExists(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getDebtorsNote());
@@ -63,7 +56,6 @@ public class DebtorsHandler implements NoteResourceHandler<DebtorsApi> {
 
     @Override
     public NoteType getNoteType() {
-
         return NoteType.SMALL_FULL_DEBTORS;
     }
 }

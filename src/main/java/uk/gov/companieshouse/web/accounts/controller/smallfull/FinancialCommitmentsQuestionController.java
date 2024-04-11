@@ -28,7 +28,6 @@ import jakarta.validation.Valid;
 @PreviousController(CreditorsAfterOneYearController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/financial-commitments-question")
 public class FinancialCommitmentsQuestionController extends BaseController {
-
     private static final String FINANCIAL_COMMITMENTS_QUESTION = "financialCommitmentsQuestion";
 
     @Autowired
@@ -42,7 +41,6 @@ public class FinancialCommitmentsQuestionController extends BaseController {
                                                          @PathVariable String transactionId,
                                                          @PathVariable String companyAccountsId,
                                                          Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         FinancialCommitmentsQuestion financialCommitmentsQuestion = new FinancialCommitmentsQuestion();
@@ -51,15 +49,12 @@ public class FinancialCommitmentsQuestionController extends BaseController {
             if (StringUtils.isNotBlank(
                     noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS)
                             .getFinancialCommitmentsDetails())) {
-
                 financialCommitmentsQuestion.setHasIncludedFinancialCommitments(true);
             } else {
-
                 setIsFinancialCommitmentsIncludedFromCache(request,
                         financialCommitmentsQuestion);
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e);
             return ERROR_VIEW;
         }
@@ -76,7 +71,6 @@ public class FinancialCommitmentsQuestionController extends BaseController {
                                                             @ModelAttribute(FINANCIAL_COMMITMENTS_QUESTION) @Valid FinancialCommitmentsQuestion financialCommitmentsQuestion,
                                                             BindingResult bindingResult,
                                                             Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -89,7 +83,6 @@ public class FinancialCommitmentsQuestionController extends BaseController {
                 noteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS);
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -100,13 +93,11 @@ public class FinancialCommitmentsQuestionController extends BaseController {
     }
 
     private void setIsFinancialCommitmentsIncludedFromCache(HttpServletRequest request, FinancialCommitmentsQuestion financialCommitmentsQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         financialCommitmentsQuestion.setHasIncludedFinancialCommitments(companyAccountsDataState.getHasIncludedFinancialCommitments());
     }
 
     private void cacheIsFinancialCommitmentsIncluded(HttpServletRequest request, FinancialCommitmentsQuestion financialCommitmentsQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedFinancialCommitments(financialCommitmentsQuestion.getHasIncludedFinancialCommitments());
 

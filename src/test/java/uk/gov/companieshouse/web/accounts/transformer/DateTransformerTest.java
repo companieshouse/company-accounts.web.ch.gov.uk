@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DateTransformerTest {
-
     private final DateTransformer dateTransformer = new DateTransformer();
 
     private static final String DAY = "8";
@@ -27,7 +26,6 @@ class DateTransformerTest {
     @Test
     @DisplayName("Date to LocalDate")
     void toLocalDate() {
-
         Date date = new Date();
         date.setDay(DAY);
         date.setMonth(MONTH);
@@ -39,7 +37,6 @@ class DateTransformerTest {
     @Test
     @DisplayName("LocalDate to Date")
     void toDate() {
-
         Date returnedDate = dateTransformer.toDate(LOCAL_DATE);
 
         assertEquals(DAY, returnedDate.getDay());

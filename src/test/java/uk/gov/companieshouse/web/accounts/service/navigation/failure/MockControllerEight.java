@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTes
 @RequestMapping("/mock-controller-eight")
 @PreviousController(MockControllerSeven.class)
 public class MockControllerEight extends BaseController implements ConditionalController {
-
     @Override
     protected String getTemplateName() {
         return null;

@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,6 +46,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StocksControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -83,15 +89,14 @@ class StocksControllerTests {
     private static final String TEST_PATH = "stocks.currentStocks";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get stocks view success path")
     void getRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockStocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS))
             .thenReturn(new StocksNote());
 
@@ -106,7 +111,6 @@ class StocksControllerTests {
     @Test
     @DisplayName("Get stocks view failure path due to error on stocks retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
-
         when(mockStocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS))
             .thenThrow(ServiceException.class);
 
@@ -119,8 +123,7 @@ class StocksControllerTests {
     @Test
     @DisplayName("Post stocks success path")
     void postRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(mockNavigatorService.getNextControllerRedirect(any(), captor.capture()))
             .thenReturn(MOCK_CONTROLLER_PATH);
         when(mockStocksService.submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS)))
             .thenReturn(new ArrayList<>());
@@ -133,7 +136,6 @@ class StocksControllerTests {
     @Test
     @DisplayName("Post stocks failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(mockStocksService).submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS));
 
@@ -146,7 +148,6 @@ class StocksControllerTests {
     @Test
     @DisplayName("Post stocks failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath(TEST_PATH);
         validationError.setMessageKey("invalid_character");
@@ -165,7 +166,6 @@ class StocksControllerTests {
     @Test
     @DisplayName("Test will render with stocks present on balancesheet")
     void willRenderStocksPresent() throws Exception {
-
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(getMockBalanceSheet());
 
@@ -177,7 +177,6 @@ class StocksControllerTests {
     @Test
     @DisplayName("Test will render with stocks not present on balancesheet")
     void willRenderStocksNotPresent() throws Exception {
-
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(getMockBalanceSheetNoDebtors());
 
@@ -189,7 +188,6 @@ class StocksControllerTests {
     @Test
     @DisplayName("Test will not render with 0 values in stocks on balance sheet")
     void willNotRenderStocksZeroValues() throws Exception {
-
         when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
             .thenReturn(getMockBalanceSheetZeroValues());
 
@@ -201,7 +199,6 @@ class StocksControllerTests {
     @Test
     @DisplayName("Post stocks with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = TEST_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
@@ -214,7 +211,6 @@ class StocksControllerTests {
     }
 
     private BalanceSheet getMockBalanceSheet() {
-
         BalanceSheet balanceSheet = new BalanceSheet();
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         CurrentAssets currentAssets = new CurrentAssets();
@@ -235,7 +231,6 @@ class StocksControllerTests {
     }
 
     private BalanceSheet getMockBalanceSheetNoDebtors() {
-
         BalanceSheet balanceSheet = new BalanceSheet();
         FixedAssets fixedAssets = new FixedAssets();
 
@@ -251,7 +246,6 @@ class StocksControllerTests {
     }
 
     private BalanceSheet getMockBalanceSheetZeroValues() {
-
         BalanceSheet balanceSheet = new BalanceSheet();
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         CurrentAssets currentAssets = new CurrentAssets();

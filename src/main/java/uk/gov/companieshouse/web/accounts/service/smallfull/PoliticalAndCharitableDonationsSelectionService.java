@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndCharitableDonationsSelection;
 
 public interface PoliticalAndCharitableDonationsSelectionService {
-
     PoliticalAndCharitableDonationsSelection getPoliticalAndCharitableDonationsSelection(String transactionId,
             String companyAccountsId) throws ServiceException;
 

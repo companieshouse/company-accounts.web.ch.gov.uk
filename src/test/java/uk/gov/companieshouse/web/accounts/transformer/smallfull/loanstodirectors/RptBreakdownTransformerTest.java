@@ -16,8 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RptBreakdownTransformerTest {
-
-
     private BreakdownTransformer breakdownTransformer = new BreakdownTransformer();
 
     private LoanApi loanApi = new LoanApi();
@@ -25,7 +23,6 @@ class RptBreakdownTransformerTest {
     @Test
     @DisplayName("Map loan breakdown to api")
     void testMapLoanBreakdownToApi() {
-
         Breakdown breakdown = new Breakdown();
 
         breakdown.setBalanceAtPeriodEnd(5L);
@@ -49,7 +46,6 @@ class RptBreakdownTransformerTest {
     @Test
     @DisplayName("Map loan breakdown to web")
     void testMapLoanBreakdownToWeb() {
-
         LoanBreakdownApi loanBreakdownApi = new LoanBreakdownApi();
 
         loanBreakdownApi.setBalanceAtPeriodEnd(1L);

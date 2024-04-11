@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class GreaterThanOneYear {
-
     @ValidationMapping("$.debtors.current_period.greater_than_one_year")
     private Long currentGreaterThanOneYear;
 

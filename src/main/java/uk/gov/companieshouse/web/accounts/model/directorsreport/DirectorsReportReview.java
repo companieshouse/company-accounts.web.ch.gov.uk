@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
 public class DirectorsReportReview {
-
     private Director[] directors;
 
     private String secretary;

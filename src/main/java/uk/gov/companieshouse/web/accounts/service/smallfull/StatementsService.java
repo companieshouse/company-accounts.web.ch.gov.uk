@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
 
 public interface StatementsService {
-
     /**
      * Create a balance sheet statements resource with the 'has_agreed_to_legal_statements' flag set to false
      *

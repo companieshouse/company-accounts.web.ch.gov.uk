@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.controller.govuk.GovukSelectAccountTyp
 @PreviousController(GovukSelectAccountTypeController.class)
 @RequestMapping("/accounts/full-accounts-criteria")
 public class GovukFullAccountsCriteriaController extends BaseController{
-
     @Override
     protected String getTemplateName() {
         return "govuk/smallfull/criteria";
@@ -24,7 +23,6 @@ public class GovukFullAccountsCriteriaController extends BaseController{
 
     @GetMapping
     public String getCriteria(Model model){
-
         addBackPageAttributeToModel(model);
 
         return getTemplateName();

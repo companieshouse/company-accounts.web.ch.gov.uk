@@ -20,7 +20,6 @@ import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.GrossPr
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GrossProfitAndLossTransformerTests {
-
     private static final Long CURRENT_TURNOVER = 1L;
     private static final Long CURRENT_COST_OF_SALES = 2L;
     private static final Long CURRENT_GROSS_TOTAL = 3L;
@@ -34,7 +33,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add current period to web model")
     void addCurrentPeriodToWebModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         GrossProfitOrLoss grossProfitOrLoss = new GrossProfitOrLoss();
@@ -58,7 +56,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to web model which has current period values")
     void addPreviousPeriodToWebModelWhichHasCurrentPeriodValues() {
-
         ProfitAndLossApi previousPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         GrossProfitOrLoss grossProfitOrLoss = new GrossProfitOrLoss();
@@ -101,7 +98,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add current period to web model - no gross profit or loss")
     void addCurrentPeriodToWebModelNoGrossProfitOrLoss() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         transformer.addCurrentPeriodToWebModel(profitAndLoss, new ProfitAndLossApi());
@@ -112,7 +108,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to web model - no gross profit or loss")
     void addPreviousPeriodToWebModelNoGrossProfitOrLoss() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         transformer.addPreviousPeriodToWebModel(profitAndLoss, new ProfitAndLossApi());
@@ -123,7 +118,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add current period to api model")
     void addCurrentPeriodToApiModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -156,7 +150,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to api model")
     void addPreviousPeriodToApiModel() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -189,7 +182,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add current period to api model without gross profit and loss to map")
     void addCurrentPeriodToApiModelWithoutGrossProfitAndLossToMap() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -211,7 +203,6 @@ class GrossProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to api model without gross profit and loss to map")
     void addPreviousPeriodToApiModelWithoutGrossProfitAndLossToMap() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();

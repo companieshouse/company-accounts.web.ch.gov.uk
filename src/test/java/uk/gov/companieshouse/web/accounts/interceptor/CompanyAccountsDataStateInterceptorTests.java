@@ -35,7 +35,6 @@ import uk.gov.companieshouse.web.accounts.token.TokenManager;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyAccountsDataStateInterceptorTests {
-
     private static final String STATE_COOKIE_NAME = "__CAS";
 
     private static final String STATE_COOKIE_VALUE = "stateCookieValue";
@@ -90,7 +89,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor preHandle - request uri doesn't contain a company accounts id")
     void preHandleRequestPathDoesNotContainCompanyAccountsId() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(CRITERIA_URI);
 
         companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
@@ -103,7 +101,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor preHandle - no state cookie")
     void preHandleStateCookieDoesNotExist() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
         when(mockRequest.getSession()).thenReturn(mockSession);
 
@@ -119,7 +116,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor preHandle - token manager exception")
     void preHandleTokenManagerException() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
         when(mockRequest.getSession()).thenReturn(mockSession);
 
@@ -137,7 +133,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor preHandle - state doesn't exist in map")
     void preHandleStateDoesNotExistInMap() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
         when(mockRequest.getSession()).thenReturn(mockSession);
 
@@ -160,7 +155,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor preHandle - state already exists")
     void preHandleStateAlreadyExists() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
         when(mockRequest.getSession()).thenReturn(mockSession);
 
@@ -185,7 +179,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor postHandle - request uri doesn't contain a company accounts id")
     void postHandleRequestPathDoesNotContainCompanyAccountsId() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(CRITERIA_URI);
 
         companyAccountsDataStateInterceptor
@@ -199,7 +192,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor postHandle - no state cookie")
     void postHandleStateCookieDoesNotExist() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{};
@@ -226,7 +218,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor postHandle - token manager signature exception")
     void postHandleTokenManagerSignatureException() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
@@ -255,7 +246,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor postHandle - approval GET")
     void postHandleGetApproval() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(APPROVAL_URI);
         when(mockRequest.getMethod()).thenReturn("GET");
 
@@ -293,7 +283,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor postHandle - approval POST")
     void postHandlePostApproval() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(APPROVAL_URI);
         when(mockRequest.getMethod()).thenReturn("POST");
 
@@ -329,7 +318,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor postHandle - more than 5 states exist in the JWT")
     void postHandleMoreThanFiveStatesExist() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
@@ -371,7 +359,6 @@ class CompanyAccountsDataStateInterceptorTests {
     @Test
     @DisplayName("State interceptor postHandle - token manager json processing exception")
     void postHandleTokenManagerJsonProcessingException() throws Exception {
-
         when(mockRequest.getRequestURI()).thenReturn(BALANCE_SHEET_URI);
 
         Cookie[] cookies = new Cookie[]{createStateCookie()};
@@ -401,7 +388,6 @@ class CompanyAccountsDataStateInterceptorTests {
     }
 
     private Cookie createStateCookie() {
-
         return new Cookie(STATE_COOKIE_NAME, STATE_COOKIE_VALUE);
     }
 }

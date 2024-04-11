@@ -11,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.transformer.cic.CicApprovalTransformer
 
 @Component
 public class CicApprovalTransformerImpl implements CicApprovalTransformer {
-
     @Autowired
     private DateTransformer dateTransformer;
 
@@ -25,7 +24,6 @@ public class CicApprovalTransformerImpl implements CicApprovalTransformer {
 
     @Override
     public CicApproval getCicApproval(CicApprovalApi cicApprovalApi) {
-
         CicApproval cicApproval = new CicApproval();
         Date approvalDate = new Date();
         LocalDate apiDate = cicApprovalApi.getDate();

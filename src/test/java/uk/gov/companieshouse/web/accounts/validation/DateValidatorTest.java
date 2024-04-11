@@ -32,7 +32,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - No Fields Provided")
     void validateApprovalDateNoFieldsProvided() {
-
         Date date = new Date();
 
         List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
@@ -46,7 +45,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Day Not Provided")
     void validateApprovalDateDayNotProvided() {
-
         Date date = new Date();
         date.setMonth("12");
         date.setYear("2018");
@@ -62,7 +60,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Month Not Provided")
     void validateApprovalDateMonthNotProvided() {
-
         Date date = new Date();
         date.setDay("12");
         date.setYear("2018");
@@ -78,7 +75,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Year Not Provided")
     void validateApprovalDateYearNotProvided() {
-
         Date date = new Date();
         date.setDay("12");
         date.setMonth("12");
@@ -94,7 +90,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Invalid Day Format")
     void validateApprovalDateInvalidDayFormat() {
-
         Date date = new Date();
         date.setDay("1st");
         date.setMonth("3");
@@ -111,7 +106,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Invalid Month Format")
     void validateApprovalDateInvalidMonthFormat() {
-
         Date date = new Date();
         date.setDay("12");
         date.setMonth("Mar");
@@ -128,7 +122,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Invalid Year Format")
     void validateApprovalDateInvalidYearFormat() {
-
         Date date = new Date();
         date.setDay("12");
         date.setMonth("3");
@@ -145,7 +138,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Invalid Date")
     void validateApprovalDateInvalidDate() {
-
         Date date = new Date();
         date.setDay("12");
         date.setMonth("13");
@@ -162,7 +154,6 @@ class DateValidatorTest {
     @Test
     @DisplayName("Validate Date - Valid Date")
     void validateApprovalDateValidDate() {
-
         Date date = new Date();
         date.setDay("12");
         date.setMonth("10");

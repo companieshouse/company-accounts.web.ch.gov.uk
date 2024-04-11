@@ -13,20 +13,17 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportState
 
 @Service
 public class PoliticalAndCharitableDonationsSelectionServiceImpl implements PoliticalAndCharitableDonationsSelectionService {
-
     @Autowired
     private DirectorsReportStatementsService directorsReportStatementsService;
 
     @Override
     public PoliticalAndCharitableDonationsSelection getPoliticalAndCharitableDonationsSelection(String transactionId,
             String companyAccountsId) throws ServiceException {
-
         PoliticalAndCharitableDonationsSelection politicalAndCharitableDonations = new PoliticalAndCharitableDonationsSelection();
 
         if (Optional.ofNullable(directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId))
                 .map(StatementsApi::getPoliticalAndCharitableDonations)
                 .isPresent()) {
-
             politicalAndCharitableDonations.setHasPoliticalAndCharitableDonations(true);
         }
 
@@ -36,15 +33,12 @@ public class PoliticalAndCharitableDonationsSelectionServiceImpl implements Poli
     @Override
     public void submitPoliticalAndCharitableDonationsSelection(String transactionId, String companyAccountsId,
             PoliticalAndCharitableDonationsSelection politicalAndCharitableDonations) throws ServiceException {
-
         if (Boolean.FALSE.equals(politicalAndCharitableDonations.getHasPoliticalAndCharitableDonations())) {
-
             StatementsApi statementsApi =
                     directorsReportStatementsService
                             .getDirectorsReportStatements(transactionId, companyAccountsId);
 
             if (statementsApi != null) {
-
                 if (hasOtherStatements(statementsApi)) {
                     statementsApi.setPoliticalAndCharitableDonations(null);
                     directorsReportStatementsService.updateDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);
@@ -56,7 +50,6 @@ public class PoliticalAndCharitableDonationsSelectionServiceImpl implements Poli
     }
 
     private boolean hasOtherStatements(StatementsApi statementsApi) {
-
         return Stream.of(statementsApi.getAdditionalInformation(),
                          statementsApi.getCompanyPolicyOnDisabledEmployees(),
                          statementsApi.getPrincipalActivities())

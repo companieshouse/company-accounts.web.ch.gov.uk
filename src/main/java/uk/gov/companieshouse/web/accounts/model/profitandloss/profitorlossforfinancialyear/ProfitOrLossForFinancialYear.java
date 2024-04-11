@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfin
 import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.TotalProfitOrLossForFinancialYear;
 
 public class ProfitOrLossForFinancialYear {
-
     private Tax tax;
 
     private TotalProfitOrLossForFinancialYear totalProfitOrLossForFinancialYear;

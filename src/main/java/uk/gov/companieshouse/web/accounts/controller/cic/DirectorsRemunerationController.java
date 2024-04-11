@@ -32,7 +32,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/directors-remuneration")
 public class DirectorsRemunerationController extends BaseController implements
     ConditionalController {
-
     @Autowired
     private DirectorsRemunerationService directorsRemunerationService;
 
@@ -47,14 +46,12 @@ public class DirectorsRemunerationController extends BaseController implements
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute("directorsRemuneration", directorsRemunerationService
                 .getDirectorsRemuneration(transactionId, companyAccountsId));
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -70,7 +67,6 @@ public class DirectorsRemunerationController extends BaseController implements
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -87,7 +83,6 @@ public class DirectorsRemunerationController extends BaseController implements
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -100,7 +95,6 @@ public class DirectorsRemunerationController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
         throws ServiceException {
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest();
 

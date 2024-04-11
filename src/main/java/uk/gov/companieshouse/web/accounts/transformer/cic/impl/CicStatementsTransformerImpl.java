@@ -12,14 +12,12 @@ import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransform
 
 @Component
 public class CicStatementsTransformerImpl implements CicStatementsTransformer {
-
     /**
      * {@inheritDoc}
      */
     @Override
     public CompanyActivitiesAndImpact getCompanyActivitiesAndImpact(
         CicStatementsApi cicStatementsApi) {
-
         if (cicStatementsApi == null) {
             return new CompanyActivitiesAndImpact();
         }
@@ -37,7 +35,6 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
     @Override
     public void setCompanyActivitiesAndImpact(CompanyActivitiesAndImpact companyActivitiesAndImpact,
         CicStatementsApi cicStatementsApi) {
-
         cicStatementsApi.getReportStatements().setCompanyActivitiesAndImpact(
             companyActivitiesAndImpact.getActivitiesAndImpact());
     }
@@ -45,12 +42,10 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
     @Override
     public ConsultationWithStakeholders getConsultationWithStakeholders(
         CicStatementsApi cicStatementsApi) {
-
         ConsultationWithStakeholders consultationWithStakeholders = new ConsultationWithStakeholders();
 
         if (!cicStatementsApi.getReportStatements().getConsultationWithStakeholders().equals(
                 DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement())) {
-
             consultationWithStakeholders.setConsultationWithStakeholders(
                     cicStatementsApi.getReportStatements().getConsultationWithStakeholders());
         }
@@ -62,7 +57,6 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
     public void setConsultationWithStakeholders(
         ConsultationWithStakeholders consultationWithStakeholders,
         CicStatementsApi cicStatementsApi) {
-
         cicStatementsApi.getReportStatements().setConsultationWithStakeholders(
             consultationWithStakeholders.getConsultationWithStakeholders());
     }
@@ -73,7 +67,6 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
 
         if (!cicStatementsApi.getReportStatements().getDirectorsRemuneration().equals(
                 DefaultCicStatements.DIRECTORS_REMUNERATION.getDefaultStatement())) {
-
             directorsRemuneration.setDirectorsRemuneration(
                     cicStatementsApi.getReportStatements().getDirectorsRemuneration());
         }
@@ -88,14 +81,12 @@ public class CicStatementsTransformerImpl implements CicStatementsTransformer {
             directorsRemuneration.getDirectorsRemuneration());
     }
 
-
     @Override
     public TransferOfAssets getTransferOfAssets(CicStatementsApi cicStatementsApi) {
         TransferOfAssets transferOfAssets = new TransferOfAssets();
 
         if (!cicStatementsApi.getReportStatements().getTransferOfAssets().equals(
                 DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement())) {
-
             transferOfAssets.setTransferOfAssets(
                     cicStatementsApi.getReportStatements().getTransferOfAssets());
         }

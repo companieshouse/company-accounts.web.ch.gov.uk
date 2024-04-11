@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible;
 
-
 import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation.IntangibleAssetsAmortisation;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.IntangibleAssetsCost;
@@ -12,7 +11,6 @@ import java.time.LocalDate;
 
 @ValidationModel
 public class IntangibleAssets implements Note {
-
     private IntangibleAssetsCost cost;
 
     private IntangibleAssetsAmortisation amortisation;
@@ -27,7 +25,6 @@ public class IntangibleAssets implements Note {
     private LocalDate nextAccountsPeriodEndOn;
 
     private LocalDate lastAccountsPeriodEndOn;
-
 
     public IntangibleAssetsNetBookValue getNetBookValue() {
         return netBookValue;
@@ -52,7 +49,6 @@ public class IntangibleAssets implements Note {
     public void setAmortisation(IntangibleAssetsAmortisation amortisation) {
         this.amortisation = amortisation;
     }
-
 
     public String getAdditionalInformation() {
         return additionalInformation;

@@ -1,21 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,9 +22,24 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAssetsSelectionService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TransferOfAssetsSelectionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -79,15 +85,13 @@ class TransferOfAssetsSelectionControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(selectionController).build();
     }
 
     @Test
     @DisplayName("Get transfer of assets selection - success path")
     void getTransferOfAssetsSelectionSuccess() throws Exception {
-
         when(selectionService.getTransferOfAssetsSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(selection);
 
@@ -106,7 +110,6 @@ class TransferOfAssetsSelectionControllerTest {
     @Test
     @DisplayName("Get transfer of assets selection - derived from cache")
     void getTransferOfAssetsSelectionDerivedFromCache() throws Exception {
-
         when(selectionService.getTransferOfAssetsSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(selection);
 
@@ -134,7 +137,6 @@ class TransferOfAssetsSelectionControllerTest {
     @Test
     @DisplayName("Get transfer of assets selection - service exception")
     void getTransferOfAssetsSelectionServiceException() throws Exception {
-
         when(selectionService.getTransferOfAssetsSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -146,13 +148,12 @@ class TransferOfAssetsSelectionControllerTest {
     @Test
     @DisplayName("Post transfer of assets selection - success path")
     void postTransferOfAssetsSelectionSuccess() throws Exception {
-
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
         when(companyAccountsDataState.getCicStatements()).thenReturn(cicStatements);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(createPostRequestWithParam(HAS_PROVIDED_TRANSFER_OF_ASSETS).session(session))
                 .andExpect(status().is3xxRedirection())
@@ -167,7 +168,6 @@ class TransferOfAssetsSelectionControllerTest {
     @Test
     @DisplayName("Post transfer of assets selection - binding errors")
     void postTransferOfAssetsSelectionBindingErrors() throws Exception {
-
         this.mockMvc.perform(createPostRequestWithParam(null))
                 .andExpect(status().isOk())
                 .andExpect(view().name(TRANSFER_OF_ASSETS_SELECTION_VIEW));
@@ -179,7 +179,6 @@ class TransferOfAssetsSelectionControllerTest {
     @Test
     @DisplayName("Post transfer of assets selection - service exception")
     void postTransferOfAssetsSelectionServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(selectionService).submitTransferOfAssetsSelection(
                         eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(TransferOfAssetsSelection.class));
@@ -190,7 +189,6 @@ class TransferOfAssetsSelectionControllerTest {
     }
 
     private MockHttpServletRequestBuilder createPostRequestWithParam(Boolean hasProvidedTransferOfAssets) {
-
         String beanElement = "hasProvidedTransferOfAssets";
         String data = hasProvidedTransferOfAssets == null ? null : "0";
 

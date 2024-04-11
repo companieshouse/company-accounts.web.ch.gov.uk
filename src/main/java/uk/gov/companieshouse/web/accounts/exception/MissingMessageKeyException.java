@@ -8,7 +8,6 @@ package uk.gov.companieshouse.web.accounts.exception;
  * @see uk.gov.companieshouse.web.accounts.enumeration.ValidationMessage
  */
 public class MissingMessageKeyException extends RuntimeException {
-
     /**
      * Constructs a new {@code MissingMessageKeyException} with a custom
      * message.

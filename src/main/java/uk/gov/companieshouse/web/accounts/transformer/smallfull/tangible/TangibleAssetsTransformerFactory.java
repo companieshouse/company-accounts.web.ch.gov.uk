@@ -11,9 +11,7 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.Ta
 
 @Component
 public class TangibleAssetsTransformerFactory {
-
     public TangibleAssetsResourceTransformer getResourceTransformer(TangibleAssetsResource tangibleAssetsResource) {
-
         switch (tangibleAssetsResource) {
             case FIXTURES_AND_FITTINGS:
                 return new TangibleAssetsFixturesAndFittingsTransformerImpl();

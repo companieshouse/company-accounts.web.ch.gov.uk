@@ -4,7 +4,6 @@ import uk.gov.companieshouse.api.model.transaction.Transaction;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface TransactionService {
-
     /**
      * Create a CHS transaction record
      *

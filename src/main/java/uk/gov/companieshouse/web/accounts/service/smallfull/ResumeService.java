@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.service.smallfull;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface ResumeService {
-
     /**
      * Return a redirect to continue the web journey for a given transaction.
      *

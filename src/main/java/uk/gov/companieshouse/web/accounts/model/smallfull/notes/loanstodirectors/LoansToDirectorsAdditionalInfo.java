@@ -7,7 +7,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class LoansToDirectorsAdditionalInfo {
-
     @NotBlank(message = "{loansToDirectorsAdditionalInfo.additionalInformation.details.missing}")
     @ValidationMapping("$.additional_information.details")
     private String additionalInfoDetails;

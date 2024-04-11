@@ -1,7 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -43,7 +48,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ApprovalControllerTests {
-
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
@@ -89,6 +93,9 @@ class ApprovalControllerTests {
 
     private static final String NAME = "name";
 
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+
     private MockMvc mockMvc;
 
     @Mock
@@ -128,15 +135,14 @@ class ApprovalControllerTests {
     private ApprovalController approvalController;
 
     @BeforeEach
-    private void setup() {
-        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+    public void setUp() {
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(approvalController).build();
     }
 
     @Test
     @DisplayName("Get approval view success path")
     void getRequestSuccess() throws Exception {
-
         when (directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(new Director[]{});
 
         this.mockMvc.perform(get(APPROVAL_PATH))
@@ -153,7 +159,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Get approval - throws service exception")
     void getRequestServiceException() throws Exception {
-
         when(transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(APPROVAL_PATH))
@@ -164,7 +169,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Get approval - approver options is equal to 1")
     void getRequestApproverOptionsIsOne() throws Exception {
-
         Director director = new Director();
         director.setName(DIRECTOR_NAME);
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(new Director[]{director});
@@ -183,7 +187,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval api validation failure path")
     void postRequestApiValidationFailure() throws Exception {
-
         when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         List<ValidationError> validationErrors = new ArrayList<>();
@@ -202,7 +205,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post request with BindingResult errors")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(APPROVAL_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(APPROVAL_VIEW));
@@ -212,7 +214,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval submit approval exception failure path")
     void postRequestSubmitApprovalExceptionFailure() throws Exception {
-
         when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
@@ -227,7 +228,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval close transaction exception failure path")
     void postRequestCloseTransactionExceptionFailure() throws Exception {
-
         when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
@@ -244,7 +244,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval success path for non-payable transaction")
     void postRequestSuccessForNonPayableTransaction() throws Exception {
-
         when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
@@ -261,7 +260,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval success path for payable transaction")
     void postRequestSuccessForPayableTransaction() throws Exception {
-
         when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(transaction);
 
         when(approvalService.submitApproval(anyString(), anyString(), any(Approval.class)))
@@ -280,7 +278,6 @@ class ApprovalControllerTests {
     @Test
     @DisplayName("Post approval redirect for closed pending payment")
     void postRequestSuccessClosedPendingPayment() throws Exception {
-
         Transaction createdTransaction = new Transaction();
 
         createdTransaction.setStatus(TransactionStatus.CLOSED_PENDING_PAYMENT);

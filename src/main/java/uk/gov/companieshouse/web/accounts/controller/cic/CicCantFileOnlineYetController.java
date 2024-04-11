@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 @Controller
 @RequestMapping({"/accounts/cic/cant-file-online-yet", "/accounts/cic/{companyNumber}/cant-file-online-yet" })
 public class CicCantFileOnlineYetController extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return "cic/cicCantFileOnlineYet";
@@ -25,7 +24,6 @@ public class CicCantFileOnlineYetController extends BaseController {
 
     @GetMapping
     public String getCantFileOnlineYetRequest(@RequestParam("backLink") String backLink, @RequestParam("accountType") String accountType, @PathVariable Optional<String> companyNumber, Model model) {
-
         if(companyNumber.isPresent()) {
             model.addAttribute("link", LINK_URL_COMP_NUM.expand(companyNumber.get()));
         } else {

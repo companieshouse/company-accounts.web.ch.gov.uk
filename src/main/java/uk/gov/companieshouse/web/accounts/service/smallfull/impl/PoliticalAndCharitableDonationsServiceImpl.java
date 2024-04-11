@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class PoliticalAndCharitableDonationsServiceImpl implements PoliticalAndCharitableDonationsService {
-
     @Autowired
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -23,7 +22,6 @@ public class PoliticalAndCharitableDonationsServiceImpl implements PoliticalAndC
     @Override
     public PoliticalAndCharitableDonations getPoliticalAndCharitableDonations(String transactionId,
             String companyAccountsId) throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
@@ -34,18 +32,15 @@ public class PoliticalAndCharitableDonationsServiceImpl implements PoliticalAndC
     public List<ValidationError> submitPoliticalAndCharitableDonations(String transactionId,
             String companyAccountsId, PoliticalAndCharitableDonations politicalAndCharitableDonations)
             throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
         if (statementsApi == null) {
-
             statementsApi = new StatementsApi();
             directorsReportStatementsTransformer.setPoliticalAndCharitableDonations(statementsApi, politicalAndCharitableDonations);
             return directorsReportStatementsService
                     .createDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);
         } else {
-
             directorsReportStatementsTransformer.setPoliticalAndCharitableDonations(statementsApi, politicalAndCharitableDonations);
             return directorsReportStatementsService
                     .updateDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);

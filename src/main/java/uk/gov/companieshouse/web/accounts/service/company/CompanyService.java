@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface CompanyService {
-
     CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException;
 
     CompanyDetail getCompanyDetail(String companyNumber) throws ServiceException;

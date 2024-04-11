@@ -27,7 +27,6 @@ import uk.gov.companieshouse.web.accounts.validation.smallfull.DirectorValidator
 
 @Service
 public class DirectorServiceImpl implements DirectorService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -54,10 +53,8 @@ public class DirectorServiceImpl implements DirectorService {
 
     private static final String RESOURCE_NAME = "directors";
 
-
     @Override
     public Director[] getAllDirectors(String transactionId, String companyAccountsId, boolean isActive) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
@@ -66,7 +63,6 @@ public class DirectorServiceImpl implements DirectorService {
             DirectorApi[] directors = apiClient.smallFull().directorsReport().directors().getAll(uri).execute().getData();
 
             if (isActive) {
-
                 return directorTransformer.getAllDirectors(Arrays.stream(directors).
                         filter(director -> (director.getResignationDate() == null || (director.getAppointmentDate() != null
                         && director.getAppointmentDate().isAfter(director.getResignationDate())))).toArray(DirectorApi[]::new));
@@ -84,7 +80,6 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public List<ValidationError> createDirector(String transactionId, String companyAccountsId, DirectorToAdd directorToAdd) throws ServiceException {
-
         List<ValidationError> validationErrors = directorValidator.validateDirectorToAdd(directorToAdd);
 
         if (BooleanUtils.isTrue(directorToAdd.getWasDirectorAppointedDuringPeriod())) {
@@ -131,7 +126,6 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public void deleteDirector(String transactionId, String companyAccountsId, String directorId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DIRECTORS_URI_WITH_ID.expand(transactionId, companyAccountsId, directorId).toString();
@@ -149,7 +143,6 @@ public class DirectorServiceImpl implements DirectorService {
     public List<ValidationError> submitAddOrRemoveDirectors(String transactionsId,
                                                             String companyAccountsId,
                                                             AddOrRemoveDirectors addOrRemoveDirectors) throws ServiceException {
-
         return directorValidator.validateSubmitAddOrRemoveDirectors(transactionsId, companyAccountsId, addOrRemoveDirectors);
     }
 }

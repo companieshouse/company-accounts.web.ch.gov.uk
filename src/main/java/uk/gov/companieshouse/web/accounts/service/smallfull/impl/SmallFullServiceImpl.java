@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @Service
 public class SmallFullServiceImpl implements SmallFullService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -36,7 +35,6 @@ public class SmallFullServiceImpl implements SmallFullService {
      */
     @Override
     public void createSmallFullAccounts(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
@@ -44,10 +42,8 @@ public class SmallFullServiceImpl implements SmallFullService {
         try {
             apiClient.smallFull().create(uri, new SmallFullApi()).execute();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error creating small full accounts", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException(SMALL_FULL_INVALID_RESOURCE_URI, e);
         }
     }
@@ -57,7 +53,6 @@ public class SmallFullServiceImpl implements SmallFullService {
      */
     @Override
     public void updateSmallFullAccounts(LocalDate periodEndOn, String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
@@ -73,10 +68,8 @@ public class SmallFullServiceImpl implements SmallFullService {
         try {
             apiClient.smallFull().update(uri, smallFull).execute();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error updating small full accounts", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException(SMALL_FULL_INVALID_RESOURCE_URI, e);
         }
     }
@@ -87,23 +80,19 @@ public class SmallFullServiceImpl implements SmallFullService {
     @Override
     public SmallFullApi getSmallFullAccounts(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-
         String uri = SMALL_FULL_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
             return apiClient.smallFull().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error retrieving small full accounts", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException(SMALL_FULL_INVALID_RESOURCE_URI, e);
         }
     }
 
     @Override
     public boolean isMultiYearFiler(SmallFullApi smallFullApi) {
-
         return Optional.ofNullable(smallFullApi)
                 .map(SmallFullApi::getLastAccounts)
                 .map(AccountingPeriodApi::getPeriodEndOn)
@@ -112,7 +101,6 @@ public class SmallFullServiceImpl implements SmallFullService {
 
     @Override
     public BalanceSheetHeadings getBalanceSheetHeadings(SmallFullApi smallFullApi) {
-
         boolean isSameYear = isSameYearFiler(smallFullApi);
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         balanceSheetHeadings.setPreviousPeriodHeading(getPreviousPeriodHeading(smallFullApi,
@@ -123,7 +111,6 @@ public class SmallFullServiceImpl implements SmallFullService {
     }
 
     private boolean isSameYearFiler(SmallFullApi smallFullApi) {
-
         if (isMultiYearFiler(smallFullApi)) {
             AccountingPeriodApi lastAccountsApi = smallFullApi.getLastAccounts();
             LocalDate previousPeriodEndOn = lastAccountsApi.getPeriodEndOn();
@@ -138,7 +125,6 @@ public class SmallFullServiceImpl implements SmallFullService {
     }
 
     private String getCurrentPeriodHeading(SmallFullApi smallFullApi, boolean isSameYear) {
-
         AccountingPeriodApi nextAccountsApi = smallFullApi.getNextAccounts();
         LocalDate currentPeriodEndOn = nextAccountsApi.getPeriodEndOn();
         LocalDate currentPeriodStartOn = nextAccountsApi.getPeriodStartOn();
@@ -148,7 +134,6 @@ public class SmallFullServiceImpl implements SmallFullService {
     }
 
     private String getPreviousPeriodHeading(SmallFullApi companyProfile, boolean isSameYear) {
-
         if (isMultiYearFiler(companyProfile)) {
             AccountingPeriodApi lastAccountsApi = companyProfile.getLastAccounts();
             LocalDate previousPeriodStartOn = lastAccountsApi.getPeriodStartOn();

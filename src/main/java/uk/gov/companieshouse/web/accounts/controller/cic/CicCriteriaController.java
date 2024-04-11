@@ -24,7 +24,6 @@ import java.util.Optional;
 @PreviousController(CicFileFullAccountsController.class)
 @RequestMapping({"/accounts/cic/criteria", "/accounts/cic/{companyNumber}/criteria"})
 public class CicCriteriaController extends BaseController {
-
     private static final String NO_CRITERIA_URL_LINK = "/accounts/cic/cant-file-online-yet";
     private static final UriTemplate NO_CRITERIA_COMP_NUM_LINK =
             new UriTemplate("/accounts/cic/{companyNumber}/cant-file-online-yet");
@@ -39,7 +38,6 @@ public class CicCriteriaController extends BaseController {
 
     @GetMapping
     public String getCicCriteria(@PathVariable Optional<String> companyNumber, Model model) {
-
         model.addAttribute("criteria", new CicCriteria());
 
         if(companyNumber.isPresent()) {
@@ -54,9 +52,7 @@ public class CicCriteriaController extends BaseController {
     @PostMapping
     public String postCicCriteria(@PathVariable Optional<String> companyNumber, @ModelAttribute("criteria") @Valid CicCriteria criteria,
                                   BindingResult bindingResult, Model model, RedirectAttributes attributes) {
-
         if (bindingResult.hasErrors()) {
-
             if(companyNumber.isPresent()) {
                 addBackPageAttributeToModel(model, companyNumber.get());
             } else {
@@ -67,7 +63,6 @@ public class CicCriteriaController extends BaseController {
         }
 
         if(Boolean.TRUE.equals(criteria.getIsCriteriaMet())) {
-
             if(companyNumber.isPresent()) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                         YES_CRITERIA_MET_COMP_NUM_LINK.expand(companyNumber.get()).toString();
@@ -76,7 +71,6 @@ public class CicCriteriaController extends BaseController {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
             }
         } else {
-
             attributes.addAttribute("accountType", "full");
 
             if(companyNumber.isPresent()) {

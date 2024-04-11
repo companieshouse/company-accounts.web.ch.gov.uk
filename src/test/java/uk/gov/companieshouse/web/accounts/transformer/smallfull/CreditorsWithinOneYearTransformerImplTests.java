@@ -50,7 +50,6 @@ class CreditorsWithinOneYearTransformerImplTests {
     @Test
     @DisplayName("All Current period values added to creditors within one year web model")
     void getDebtorsForCurrentPeriod() {
-
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
@@ -81,7 +80,6 @@ class CreditorsWithinOneYearTransformerImplTests {
     @Test
     @DisplayName("Only populated Current period values added to creditors within one year web model")
     void getCreditorsWithinOneYearForCurrentPeriodPopulatedValues() {
-
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
 
         CurrentPeriod currentPeriod = new CurrentPeriod();
@@ -102,7 +100,6 @@ class CreditorsWithinOneYearTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to creditors within one year web model")
     void getCreditorsWithinOneYearForPreviousPeriod() {
-
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
 
         PreviousPeriod previousPeriod = new PreviousPeriod();
@@ -131,7 +128,6 @@ class CreditorsWithinOneYearTransformerImplTests {
     @Test
     @DisplayName("Current period value added to creditors within one year API model when present")
     void currentPeriodValueAddedToCreditorsWithinOneYearApiModel() {
-
         CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
 
         AccrualsAndDeferredIncome accrualsAndDeferredIncome = new AccrualsAndDeferredIncome();
@@ -179,7 +175,6 @@ class CreditorsWithinOneYearTransformerImplTests {
     @Test
     @DisplayName("All previous period values added to creditors within one year API model when present")
     void previousPeriodValueAddedToCreditorsWithinOneYearApiModel() {
-
         CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
         
         AccrualsAndDeferredIncome accrualsAndDeferredIncome = new AccrualsAndDeferredIncome();
@@ -226,7 +221,6 @@ class CreditorsWithinOneYearTransformerImplTests {
     @Test
     @DisplayName("Current period details are null in creditors within one year API model if empty string passed in web model")
     void detailsNullWithCreditorsWithinOneYearApiModel() {
-
         CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
         creditorsWithinOneYear.setDetails("");
 
@@ -253,7 +247,6 @@ class CreditorsWithinOneYearTransformerImplTests {
     @Test
     @DisplayName("No previous period added to creditors within one year API model when total not present")
     void previousPeriodValueNotAddedToCreditorsWithinOneYearApiModel() {
-
         CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
         creditorsWithinOneYear.setDetails(DETAILS);
 

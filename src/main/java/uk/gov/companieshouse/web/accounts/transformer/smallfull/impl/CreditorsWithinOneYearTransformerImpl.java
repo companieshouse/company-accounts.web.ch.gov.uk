@@ -21,11 +21,9 @@ import java.util.stream.Stream;
 
 @Component
 public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<CreditorsWithinOneYear, CreditorsWithinOneYearApi> {
-
     @Override
     public CreditorsWithinOneYear toWeb(
             CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
-
         CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
 
         if (creditorsWithinOneYearApi == null) {
@@ -38,15 +36,12 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
         return creditorsWithinOneYear;
     }
 
-
     private void populateCurrentPeriodForWeb(CreditorsWithinOneYearApi creditorsWithinOneYearApi,
             CreditorsWithinOneYear creditorsWithinOneYear) {
-
         CurrentPeriod currentPeriod =
                 creditorsWithinOneYearApi.getCreditorsWithinOneYearCurrentPeriod();
 
         if (currentPeriod != null) {
-
             creditorsWithinOneYear.setDetails(currentPeriod.getDetails());
 
             if (currentPeriod.getAccrualsAndDeferredIncome() != null) {
@@ -96,12 +91,10 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
 
     private void populatePreviousPeriodForWeb(CreditorsWithinOneYearApi creditorsWithinOneYearApi,
             CreditorsWithinOneYear creditorsWithinOneYear) {
-
         PreviousPeriod previousPeriod =
                 creditorsWithinOneYearApi.getCreditorsWithinOneYearPreviousPeriod();
 
         if (previousPeriod != null) {
-
             if (previousPeriod.getAccrualsAndDeferredIncome() != null) {
                 AccrualsAndDeferredIncome accrualsAndDeferredIncome =
                         createAccrualsAndDeferredIncome(creditorsWithinOneYear);
@@ -149,7 +142,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
 
     private AccrualsAndDeferredIncome createAccrualsAndDeferredIncome(
             CreditorsWithinOneYear creditorsWithinOneYear) {
-
         AccrualsAndDeferredIncome accrualsAndDeferredIncome;
 
         if (creditorsWithinOneYear.getAccrualsAndDeferredIncome() != null) {
@@ -163,7 +155,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private BankLoansAndOverdrafts createBankLoansAndOverdrafts(CreditorsWithinOneYear creditorsWithinOneYear) {
-
         BankLoansAndOverdrafts bankLoansAndOverdrafts;
 
         if (creditorsWithinOneYear.getBankLoansAndOverdrafts() != null) {
@@ -177,7 +168,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private FinanceLeasesAndHirePurchaseContracts createFinanceLeasesAndHirePurchaseContracts(CreditorsWithinOneYear creditorsWithinOneYear) {
-
         FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts;
 
         if (creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts() != null) {
@@ -191,7 +181,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private OtherCreditors createOtherCreditors(CreditorsWithinOneYear creditorsWithinOneYear) {
-
         OtherCreditors otherCreditors;
 
         if (creditorsWithinOneYear.getOtherCreditors() != null) {
@@ -205,7 +194,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private TaxationAndSocialSecurity createTaxationAndSocialSecurity(CreditorsWithinOneYear creditorsWithinOneYear) {
-
         TaxationAndSocialSecurity taxationAndSocialSecurity;
 
         if (creditorsWithinOneYear.getTaxationAndSocialSecurity() != null) {
@@ -219,7 +207,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private Total createTotal(CreditorsWithinOneYear creditorsWithinOneYear) {
-
         Total total;
 
         if (creditorsWithinOneYear.getTotal() != null) {
@@ -233,7 +220,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private TradeCreditors createTradeCreditors(CreditorsWithinOneYear creditorsWithinOneYear) {
-
         TradeCreditors tradeCreditors;
 
         if (creditorsWithinOneYear.getTradeCreditors() != null) {
@@ -249,7 +235,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     @Override
     public CreditorsWithinOneYearApi toApi(
             CreditorsWithinOneYear creditorsWithinOneYear) {
-
         CreditorsWithinOneYearApi creditorsWithinOneYearApi = new CreditorsWithinOneYearApi();
 
         setCurrentPeriodOnApiModel(creditorsWithinOneYear, creditorsWithinOneYearApi);
@@ -266,7 +251,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
 
     private void setCurrentPeriodOnApiModel(CreditorsWithinOneYear creditorsWithinOneYear,
             CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
-
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
         if (StringUtils.isNotBlank(creditorsWithinOneYear.getDetails())) {
@@ -302,7 +286,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
 
     private void setPreviousPeriodOnApiModel(CreditorsWithinOneYear creditorsWithinOneYear,
             CreditorsWithinOneYearApi creditorsWithinOneYearApi) {
-
         PreviousPeriod previousPeriod = new PreviousPeriod();
 
         previousPeriod.setAccrualsAndDeferredIncome(creditorsWithinOneYear
@@ -333,7 +316,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
-
         return Stream.of(currentPeriod.getAccrualsAndDeferredIncome(),
                 currentPeriod.getBankLoansAndOverdrafts(),
                 currentPeriod.getFinanceLeasesAndHirePurchaseContracts(),
@@ -345,7 +327,6 @@ public class CreditorsWithinOneYearTransformerImpl implements NoteTransformer<Cr
     }
 
     private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
-
         return Stream.of(previousPeriod.getAccrualsAndDeferredIncome(),
                 previousPeriod.getBankLoansAndOverdrafts(),
                 previousPeriod.getFinanceLeasesAndHirePurchaseContracts(),

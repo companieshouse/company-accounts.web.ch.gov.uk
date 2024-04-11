@@ -1,9 +1,15 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,9 +22,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitm
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
@@ -36,6 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class FinancialCommitmentsQuestionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -88,14 +93,13 @@ class FinancialCommitmentsQuestionControllerTest {
     private static final String COMMITMENTS = "commitments";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get financial commitments question - has commitments")
     void getFinancialCommitmentsQuestionHasCommitments() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
                 .thenReturn(financialCommitments);
 
@@ -116,7 +120,6 @@ class FinancialCommitmentsQuestionControllerTest {
     @Test
     @DisplayName("Get financial commitments question - does not have commitments")
     void getFinancialCommitmentsQuestionDoesNotHaveCommitments() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
                 .thenReturn(financialCommitments);
 
@@ -140,7 +143,6 @@ class FinancialCommitmentsQuestionControllerTest {
     @Test
     @DisplayName("Get financial commitments question - ServiceException")
     void getFinancialCommitmentsQuestionThrowsServiceException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
                 .thenThrow(ServiceException.class);
 
@@ -152,12 +154,11 @@ class FinancialCommitmentsQuestionControllerTest {
     @Test
     @DisplayName("Submit financial commitments question - has commitments")
     void submitFinancialCommitmentsQuestionHasCommitments() throws Exception {
-
         when(request.getSession()).thenReturn(httpSession);
 
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         mockMvc.perform(post(FINANCIAL_COMMITMENTS_QUESTION_PATH)
                 .param(HAS_INCLUDED_FINANCIAL_COMMITMENTS, "1"))
@@ -172,12 +173,11 @@ class FinancialCommitmentsQuestionControllerTest {
     @Test
     @DisplayName("Submit financial commitments question - does not have commitments")
     void submitFinancialCommitmentsQuestionDoesNotHaveCommitments() throws Exception {
-
         when(request.getSession()).thenReturn(httpSession);
 
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         mockMvc.perform(post(FINANCIAL_COMMITMENTS_QUESTION_PATH)
                 .param(HAS_INCLUDED_FINANCIAL_COMMITMENTS, "0"))
@@ -192,7 +192,6 @@ class FinancialCommitmentsQuestionControllerTest {
     @Test
     @DisplayName("Submit financial commitments question - ServiceException")
     void submitFinancialCommitmentsQuestionThrowsServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(noteService)
                         .delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS);
@@ -206,7 +205,6 @@ class FinancialCommitmentsQuestionControllerTest {
     @Test
     @DisplayName("Submit financial commitments question - binding result errors")
     void submitFinancialCommitmentsQuestionWithBindingResultErrors() throws Exception {
-
         mockMvc.perform(post(FINANCIAL_COMMITMENTS_QUESTION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(FINANCIAL_COMMITMENTS_QUESTION_VIEW));

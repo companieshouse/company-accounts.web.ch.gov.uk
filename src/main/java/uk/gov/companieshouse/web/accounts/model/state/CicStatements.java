@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 public class CicStatements implements Serializable {
-
     @JsonProperty("has_provided_consultation_with_stakeholders")
     private Boolean hasProvidedConsultationWithStakeholders;
 

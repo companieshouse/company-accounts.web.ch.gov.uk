@@ -56,7 +56,6 @@
         <spring-test.version>6.1.5</spring-test.version>
         <spring-boot-maven-plugin.version>3.2.4</spring-boot-maven-plugin.version>
 
-
         <!-- Maven and Surefire plugins -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-plugin.version>3.2.5</maven-plugin.version>

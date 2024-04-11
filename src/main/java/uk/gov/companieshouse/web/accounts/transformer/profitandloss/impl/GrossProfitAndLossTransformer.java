@@ -12,29 +12,23 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.grossprofitorloss.
 
 @Component
 public class GrossProfitAndLossTransformer {
-
     public void addCurrentPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
-
         if (currentPeriodProfitAndLoss.getGrossProfitOrLoss() != null) {
-
             createGrossProfitOrLoss(profitAndLoss);
 
             if (currentPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover() != null) {
-
                 Turnover turnover = createTurnover(profitAndLoss);
                 turnover.setCurrentAmount(
                         currentPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover());
             }
 
             if (currentPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales() != null) {
-
                 CostOfSales costOfSales = createCostOfSales(profitAndLoss);
                 costOfSales.setCurrentAmount(
                         currentPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales());
             }
 
             if (currentPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal() != null) {
-
                 GrossTotal grossTotal = createGrossTotal(profitAndLoss);
                 grossTotal.setCurrentAmount(
                         currentPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal());
@@ -43,27 +37,22 @@ public class GrossProfitAndLossTransformer {
     }
 
     public void addPreviousPeriodToWebModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
-
         if (previousPeriodProfitAndLoss.getGrossProfitOrLoss() != null) {
-
             createGrossProfitOrLoss(profitAndLoss);
 
             if (previousPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover() != null) {
-
                 Turnover turnover = createTurnover(profitAndLoss);
                 turnover.setPreviousAmount(
                         previousPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover());
             }
 
             if (previousPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales() != null) {
-
                 CostOfSales costOfSales = createCostOfSales(profitAndLoss);
                 costOfSales.setPreviousAmount(
                         previousPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales());
             }
 
             if (previousPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal() != null) {
-
                 GrossTotal grossTotal = createGrossTotal(profitAndLoss);
                 grossTotal.setPreviousAmount(
                         previousPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal());
@@ -72,9 +61,7 @@ public class GrossProfitAndLossTransformer {
     }
 
     public void addCurrentPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi currentPeriodProfitAndLoss) {
-
         if (hasCurrentPeriodGrossProfitOrLoss(profitAndLoss)) {
-
             uk.gov.companieshouse.api.model.accounts.profitandloss.GrossProfitOrLoss grossProfitOrLoss =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.GrossProfitOrLoss();
 
@@ -90,9 +77,7 @@ public class GrossProfitAndLossTransformer {
     }
 
     public void addPreviousPeriodToApiModel(ProfitAndLoss profitAndLoss, ProfitAndLossApi previousPeriodProfitAndLoss) {
-
         if (hasPreviousPeriodGrossProfitOrLoss(profitAndLoss)) {
-
             uk.gov.companieshouse.api.model.accounts.profitandloss.GrossProfitOrLoss grossProfitOrLoss =
                     new uk.gov.companieshouse.api.model.accounts.profitandloss.GrossProfitOrLoss();
 
@@ -108,15 +93,12 @@ public class GrossProfitAndLossTransformer {
     }
 
     private void createGrossProfitOrLoss(ProfitAndLoss profitAndLoss) {
-
         if (profitAndLoss.getGrossProfitOrLoss() == null) {
-
             profitAndLoss.setGrossProfitOrLoss(new GrossProfitOrLoss());
         }
     }
 
     private Turnover createTurnover(ProfitAndLoss profitAndLoss) {
-
         Turnover turnover;
 
         if (profitAndLoss.getGrossProfitOrLoss().getTurnover() == null) {
@@ -130,7 +112,6 @@ public class GrossProfitAndLossTransformer {
     }
 
     private CostOfSales createCostOfSales(ProfitAndLoss profitAndLoss) {
-
         CostOfSales costOfSales;
 
         if (profitAndLoss.getGrossProfitOrLoss().getCostOfSales() == null) {
@@ -144,7 +125,6 @@ public class GrossProfitAndLossTransformer {
     }
 
     private GrossTotal createGrossTotal(ProfitAndLoss profitAndLoss) {
-
         GrossTotal grossTotal;
 
         if (profitAndLoss.getGrossProfitOrLoss().getGrossTotal() == null) {
@@ -158,7 +138,6 @@ public class GrossProfitAndLossTransformer {
     }
 
     private boolean hasCurrentPeriodGrossProfitOrLoss(ProfitAndLoss profitAndLoss) {
-
         return Stream.of(profitAndLoss.getGrossProfitOrLoss().getTurnover().getCurrentAmount(),
                 profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getCurrentAmount(),
                 profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getCurrentAmount()).
@@ -166,7 +145,6 @@ public class GrossProfitAndLossTransformer {
     }
 
     private boolean hasPreviousPeriodGrossProfitOrLoss(ProfitAndLoss profitAndLoss) {
-
         return Stream.of(profitAndLoss.getGrossProfitOrLoss().getTurnover().getPreviousAmount(),
                 profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getPreviousAmount(),
                 profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getPreviousAmount()).

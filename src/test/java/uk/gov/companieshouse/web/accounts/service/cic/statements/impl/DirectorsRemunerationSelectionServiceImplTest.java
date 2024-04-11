@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.DirectorsRemune
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsRemunerationSelectionServiceImplTest {
-
     @Mock
     private CicStatementsService cicStatementsService;
 
@@ -53,7 +52,6 @@ class DirectorsRemunerationSelectionServiceImplTest {
     @Test
     @DisplayName("Get directors remuneration selection - default statement")
     void getDirectorsRemunerationSelectionFromDefaultStatement() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 
@@ -72,7 +70,6 @@ class DirectorsRemunerationSelectionServiceImplTest {
     @Test
     @DisplayName("Get directors remuneration selection - other statement")
     void getDirectorsRemunerationSelectionFromOtherStatement() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 
@@ -91,7 +88,6 @@ class DirectorsRemunerationSelectionServiceImplTest {
     @Test
     @DisplayName("Submit directors remuneration selection - has provided remuneration")
     void submitDirectorsRemunerationHasProvidedRemuneration() throws ServiceException {
-
         when(directorsRemunerationSelection.getHasProvidedDirectorsRemuneration())
                 .thenReturn(true);
 
@@ -104,7 +100,6 @@ class DirectorsRemunerationSelectionServiceImplTest {
     @Test
     @DisplayName("Submit directors remuneration selection - no remuneration but API resource already default")
     void submitDirectorsRemunerationNoRemunerationButApiResourceAlreadyDefault() throws ServiceException {
-
         when(directorsRemunerationSelection.getHasProvidedDirectorsRemuneration())
                 .thenReturn(false);
 
@@ -126,7 +121,6 @@ class DirectorsRemunerationSelectionServiceImplTest {
     @Test
     @DisplayName("Submit directors remuneration selection - no remuneration and API resource statement not default")
     void submitDirectorsRemunerationNoRemunerationAndApiResourceNotDefault() throws ServiceException {
-
         when(directorsRemunerationSelection.getHasProvidedDirectorsRemuneration())
                 .thenReturn(false);
 

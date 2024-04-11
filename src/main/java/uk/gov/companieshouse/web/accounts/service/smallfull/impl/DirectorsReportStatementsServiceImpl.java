@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class DirectorsReportStatementsServiceImpl implements DirectorsReportStatementsService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -38,7 +37,6 @@ public class DirectorsReportStatementsServiceImpl implements DirectorsReportStat
     public StatementsApi getDirectorsReportStatements(String transactionId,
                                                       String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DIRECTORS_REPORT_STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -59,7 +57,6 @@ public class DirectorsReportStatementsServiceImpl implements DirectorsReportStat
                                                                  String companyAccountsId,
                                                                  StatementsApi statementsApi)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DIRECTORS_REPORT_STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -85,7 +82,6 @@ public class DirectorsReportStatementsServiceImpl implements DirectorsReportStat
                                                                  String companyAccountsId,
                                                                  StatementsApi statementsApi)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DIRECTORS_REPORT_STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -110,7 +106,6 @@ public class DirectorsReportStatementsServiceImpl implements DirectorsReportStat
     public void deleteDirectorsReportStatements(String transactionId,
                                                 String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = DIRECTORS_REPORT_STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();

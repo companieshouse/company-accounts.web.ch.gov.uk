@@ -23,7 +23,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GovukCriteriaControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
@@ -42,15 +41,13 @@ class GovukCriteriaControllerTest {
     private static final String FORWARD_PATH = "/accounts/company/{companyNumber}/details";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get criteria view success path")
     void getRequestSuccess() throws Exception {
-
         this.mockMvc.perform(get(CRITERIA_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CRITERIA_VIEW))
@@ -61,7 +58,6 @@ class GovukCriteriaControllerTest {
     @Test
     @DisplayName("Post criteria with criteria met")
     void postRequestCriteriaMet() throws Exception {
-
         String beanElement = "isCriteriaMet";
         String criteriaMet = "yes";
 
@@ -76,7 +72,6 @@ class GovukCriteriaControllerTest {
     @Test
     @DisplayName("Post corporation tax with alternative filing selected")
     void postRequestAlternativeFiling() throws Exception {
-
         String beanElement = "isCriteriaMet";
         String criteriaMet = "noAlternativeFilingMethod";
 
@@ -89,7 +84,6 @@ class GovukCriteriaControllerTest {
     @Test
     @DisplayName("Post corporation tax with other filing selected")
     void postRequestOtherFilings() throws Exception {
-
         String beanElement = "isCriteriaMet";
         String criteriaMet = "noOtherAccounts";
 
@@ -102,7 +96,6 @@ class GovukCriteriaControllerTest {
     @Test
     @DisplayName("Post corporation tax with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = "fileChoice";
         String criteriaMet = null;
 

@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import java.util.List;
 
 public interface LoanService {
-
     Loan[] getAllLoans(String transactionId, String companyAccountsId) throws ServiceException;
 
     List<ValidationError> createLoan(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException;

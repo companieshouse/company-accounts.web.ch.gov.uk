@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @Service
 public class ConsultationWithStakeholdersServiceImpl implements
     ConsultationWithStakeholdersService {
-
     @Autowired
     private CicStatementsService cicStatementsService;
 
@@ -27,7 +26,6 @@ public class ConsultationWithStakeholdersServiceImpl implements
     @Override
     public ConsultationWithStakeholders getConsultationWithStakeholders(String transactionId,
         String companyAccountsId) throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
@@ -41,7 +39,6 @@ public class ConsultationWithStakeholdersServiceImpl implements
     public List<ValidationError> submitConsultationWithStakeholders(String transactionId,
         String companyAccountsId, ConsultationWithStakeholders consultationWithStakeholders)
         throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 

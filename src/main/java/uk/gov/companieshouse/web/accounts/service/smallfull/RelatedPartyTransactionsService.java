@@ -5,7 +5,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactio
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface RelatedPartyTransactionsService {
-
     void createRelatedPartyTransactions(String transactionId, String companyAccountsId)
             throws ServiceException;
 

@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 public class Total {
-
     @ValidationParentMapping("$.debtors.current_period")
     @ValidationMapping("$.debtors.current_period.total")
     private Long currentTotal;

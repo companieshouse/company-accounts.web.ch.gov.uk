@@ -35,7 +35,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OffBalanceSheetArrangementsHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -72,7 +71,6 @@ class OffBalanceSheetArrangementsHandlerTest {
     @Mock
     private OffBalanceSheetResourceHandler offBalanceSheetResourceHandler;
 
-
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
@@ -84,14 +82,12 @@ class OffBalanceSheetArrangementsHandlerTest {
     @Test
     @DisplayName("Get the resource URI")
     void getResourceURI() {
-
         assertEquals(URI, offBalanceSheetArrangementsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get OffBalanceSheet Resource")
     void getOffBalanceSheetResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
         when(offBalanceSheetResourceHandler.get(URI)).thenReturn(offBalanceSheetGet);
@@ -106,7 +102,6 @@ class OffBalanceSheetArrangementsHandlerTest {
     @Test
     @DisplayName("Update OffBalanceSheet Resource")
     void updateOffBalanceSheetResource() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
         when(offBalanceSheetResourceHandler.update(URI, offBalanceSheetApi)).thenReturn(offBalanceSheetUpdate);
@@ -121,7 +116,6 @@ class OffBalanceSheetArrangementsHandlerTest {
     @Test
     @DisplayName("Create OffBalanceSheet Resource")
     void createOffBalanceSheetResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
         when(offBalanceSheetResourceHandler.create(URI, offBalanceSheetApi)).thenReturn(offBalanceSheetCreate);
@@ -136,7 +130,6 @@ class OffBalanceSheetArrangementsHandlerTest {
     @Test
     @DisplayName("Delete OffBalanceSheet Resource")
     void deleteOffBalanceSheetResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
         when(offBalanceSheetResourceHandler.delete(URI)).thenReturn(offBalanceSheetDelete);
@@ -151,7 +144,6 @@ class OffBalanceSheetArrangementsHandlerTest {
     @Test
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_NOTE);
@@ -162,7 +154,6 @@ class OffBalanceSheetArrangementsHandlerTest {
    @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> offBalanceSheetArrangementsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -171,7 +162,6 @@ class OffBalanceSheetArrangementsHandlerTest {
     @Test
     @DisplayName("Test method returns OffBalanceSheetArrangements as NoteType")
     void testOffBalanceSheetArrangementsReturned()  {
-
         assertEquals(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS, offBalanceSheetArrangementsHandler.getNoteType());
     }
 }

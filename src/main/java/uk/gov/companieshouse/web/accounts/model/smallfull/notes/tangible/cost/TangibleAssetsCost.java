@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost;
 
 public class TangibleAssetsCost {
-
     private CostAtPeriodStart atPeriodStart;
 
     private Additions additions;

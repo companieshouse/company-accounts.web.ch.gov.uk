@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost;
 
 public class IntangibleAssetsCost {
-
     private CostAtPeriodStart atPeriodStart;
 
     private Additions additions;

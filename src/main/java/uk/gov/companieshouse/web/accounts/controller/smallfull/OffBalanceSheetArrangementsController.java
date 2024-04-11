@@ -30,7 +30,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/off-balance-sheet-arrangements")
 public class OffBalanceSheetArrangementsController extends BaseController implements
         ConditionalController {
-
     private static final String OFF_BALANCE_SHEET_ARRANGEMENTS = "offBalanceSheetArrangements";
 
     @Autowired
@@ -44,7 +43,6 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
                                                  @PathVariable String transactionId,
                                                  @PathVariable String companyAccountsId,
                                                  Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -52,7 +50,6 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
                     noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS));
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e);
             return ERROR_VIEW;
         }
@@ -67,7 +64,6 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
                                                     @ModelAttribute(OFF_BALANCE_SHEET_ARRANGEMENTS) @Valid OffBalanceSheetArrangements offBalanceSheetArrangements,
                                                     BindingResult bindingResult,
                                                     Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -83,7 +79,6 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -99,7 +94,6 @@ public class OffBalanceSheetArrangementsController extends BaseController implem
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedOffBalanceSheetArrangements());
     }

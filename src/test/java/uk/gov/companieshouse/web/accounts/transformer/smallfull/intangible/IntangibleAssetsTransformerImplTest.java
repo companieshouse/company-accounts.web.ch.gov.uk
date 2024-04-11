@@ -23,7 +23,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IntangibleAssetsTransformerImplTest {
-
     @Mock
     private IntangibleAssetsTransformerFactory factory;
 
@@ -36,7 +35,6 @@ class IntangibleAssetsTransformerImplTest {
     @Test
     @DisplayName("Asserts that the goodwill transformer is called when its api resource is not null")
     void toWebGoodwillTransformerCalled() {
-
         IntangibleApi intangibleApi = new IntangibleApi();
         IntangibleAssetsResource goodwill = new IntangibleAssetsResource();
         intangibleApi.setGoodwill(goodwill);
@@ -56,7 +54,6 @@ class IntangibleAssetsTransformerImplTest {
     @Test
     @DisplayName("Asserts that the otherIntangibleAssets transformer is called when its api resource is not null")
     void toWebOtherIntangibleAssetsTransformerCalled() {
-
         IntangibleApi intangibleApi = new IntangibleApi();
         IntangibleAssetsResource otherIntangibleAssets = new IntangibleAssetsResource();
         intangibleApi.setOtherIntangibleAssets(otherIntangibleAssets);
@@ -76,7 +73,6 @@ class IntangibleAssetsTransformerImplTest {
     @Test
     @DisplayName("Asserts that the total transformer is called when its api resource is not null")
     void toWebTotalTransformerCalled() {
-
         IntangibleApi intangibleApi = new IntangibleApi();
         IntangibleAssetsResource total = new IntangibleAssetsResource();
         intangibleApi.setTotal(total);
@@ -96,7 +92,6 @@ class IntangibleAssetsTransformerImplTest {
     @Test
     @DisplayName("Tests that all resource transformers are called when the web model has resources to map")
     void toApiForWithResourcesToMapInWebModel() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         when(factory.getResourceTransformer(any(
@@ -117,7 +112,6 @@ class IntangibleAssetsTransformerImplTest {
     @Test
     @DisplayName("Tests that no resource transformers are called when the web model doesn't have resources to map")
     void toApiForWithoutResourcesToMapInWebModel() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         when(factory.getResourceTransformer(any(

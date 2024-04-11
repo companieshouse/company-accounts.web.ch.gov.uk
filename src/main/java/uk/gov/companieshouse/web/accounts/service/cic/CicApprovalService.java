@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.cic.CicApproval;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface CicApprovalService {
-
     /**
      * Submit an approval model to the company accounts api
      *

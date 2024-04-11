@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue;
 
 public class TangibleAssetsNetBookValue {
-
     private CurrentPeriod currentPeriod;
 
     private PreviousPeriod previousPeriod;

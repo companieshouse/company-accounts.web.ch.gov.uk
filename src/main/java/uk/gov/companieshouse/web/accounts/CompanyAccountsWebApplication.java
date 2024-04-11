@@ -11,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.interceptor.UserDetailsInterceptor;
 
 @SpringBootApplication
 public class CompanyAccountsWebApplication implements WebMvcConfigurer {
-
     public static final String APPLICATION_NAME_SPACE = "company-accounts.web.ch.gov.uk";
 
     private UserDetailsInterceptor userDetailsInterceptor;
@@ -22,7 +21,6 @@ public class CompanyAccountsWebApplication implements WebMvcConfigurer {
     public CompanyAccountsWebApplication(UserDetailsInterceptor userDetailsInterceptor,
                                          LoggingInterceptor loggingInterceptor,
                                          CompanyAccountsDataStateInterceptor companyAccountsDataStateInterceptor) {
-
         this.userDetailsInterceptor = userDetailsInterceptor;
         this.loggingInterceptor = loggingInterceptor;
         this.companyAccountsDataStateInterceptor = companyAccountsDataStateInterceptor;
@@ -34,7 +32,6 @@ public class CompanyAccountsWebApplication implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
         registry.addInterceptor(loggingInterceptor);
         registry.addInterceptor(userDetailsInterceptor).excludePathPatterns("/accounts/*");
         registry.addInterceptor(companyAccountsDataStateInterceptor).excludePathPatterns("/accounts/*");

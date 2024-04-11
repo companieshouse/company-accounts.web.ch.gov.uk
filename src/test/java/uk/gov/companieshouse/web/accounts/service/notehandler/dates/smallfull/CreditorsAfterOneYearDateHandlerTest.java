@@ -23,7 +23,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreditorsAfterOneYearDateHandlerTest {
-
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
@@ -53,7 +52,6 @@ class CreditorsAfterOneYearDateHandlerTest {
     @Test
     @DisplayName("Add dates")
     void addDates() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
@@ -67,7 +65,6 @@ class CreditorsAfterOneYearDateHandlerTest {
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
-
         assertEquals(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR, creditorsAfterOneYearDateHandler.getNoteType());
     }
 }

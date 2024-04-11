@@ -26,7 +26,6 @@ import java.util.List;
 @PreviousController(ProfitAndLossController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet")
 public class BalanceSheetController extends BaseController {
-
     @Autowired
     private BalanceSheetService balanceSheetService;
 
@@ -43,13 +42,11 @@ public class BalanceSheetController extends BaseController {
                                   @PathVariable String companyAccountsId,
                                   Model model,
                                   HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute(BALANCE_SHEET, balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber));
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -65,7 +62,6 @@ public class BalanceSheetController extends BaseController {
                                    BindingResult bindingResult,
                                    Model model,
                                    HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -80,7 +76,6 @@ public class BalanceSheetController extends BaseController {
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }

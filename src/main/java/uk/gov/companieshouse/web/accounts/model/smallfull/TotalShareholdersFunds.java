@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 public class TotalShareholdersFunds {
-
     @ValidationParentMapping("$.current_period.balance_sheet.capital_and_reserves")
     @ValidationMapping("$.current_period.balance_sheet.capital_and_reserves.total_shareholders_funds")
     private Long currentAmount;

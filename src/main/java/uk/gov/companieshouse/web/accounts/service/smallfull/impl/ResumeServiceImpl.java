@@ -11,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
 @Service
 public class ResumeServiceImpl implements ResumeService {
-
     @Autowired
     private CompanyService companyService;
 
@@ -21,7 +20,6 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public String getResumeRedirect(String companyNumber, String transactionId,
             String companyAccountsId) throws ServiceException {
-
         CompanyProfileApi company = companyService.getCompanyProfile(companyNumber);
 
         if (company.isCommunityInterestCompany()) {

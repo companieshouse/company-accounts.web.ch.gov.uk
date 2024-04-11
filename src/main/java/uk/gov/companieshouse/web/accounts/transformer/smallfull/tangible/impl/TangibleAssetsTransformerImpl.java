@@ -16,13 +16,11 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.Tangibl
 
 @Component
 public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAssets, TangibleApi> {
-
     @Autowired
     private TangibleAssetsTransformerFactory factory;
 
     @Override
     public TangibleAssets toWeb(TangibleApi tangibleApi) {
-
     	TangibleAssets tangibleAssets = new TangibleAssets();
 
         if (tangibleApi == null) {
@@ -34,7 +32,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
         TangibleAssetsResourceTransformer tangibleAssetsResourceTransformer;
 
         if (tangibleApi.getFixturesAndFittings() != null) {
-
             tangibleAssetsResourceTransformer =
                     factory.getResourceTransformer(TangibleAssetsResource.FIXTURES_AND_FITTINGS);
 
@@ -43,7 +40,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
         }
 
         if (tangibleApi.getLandAndBuildings() != null) {
-
             tangibleAssetsResourceTransformer =
                     factory.getResourceTransformer(TangibleAssetsResource.LAND_AND_BUILDINGS);
 
@@ -52,7 +48,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
         }
 
         if (tangibleApi.getMotorVehicles() != null) {
-
             tangibleAssetsResourceTransformer =
                     factory.getResourceTransformer(TangibleAssetsResource.MOTOR_VEHICLES);
 
@@ -61,7 +56,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
         }
 
         if (tangibleApi.getOfficeEquipment() != null) {
-
             tangibleAssetsResourceTransformer =
                     factory.getResourceTransformer(TangibleAssetsResource.OFFICE_EQUIPMENT);
 
@@ -70,7 +64,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
         }
 
         if (tangibleApi.getPlantAndMachinery() != null) {
-
             tangibleAssetsResourceTransformer =
                     factory.getResourceTransformer(TangibleAssetsResource.PLANT_AND_MACHINERY);
 
@@ -79,7 +72,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
         }
 
         if (tangibleApi.getTotal() != null) {
-
             tangibleAssetsResourceTransformer =
                     factory.getResourceTransformer(TangibleAssetsResource.TOTAL);
 
@@ -92,7 +84,6 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
 
     @Override
     public TangibleApi toApi(TangibleAssets tangibleAssets) {
-
         TangibleApi tangibleApi = new TangibleApi();
 
         if (StringUtils.isNotBlank(tangibleAssets.getAdditionalInformation())) {
@@ -100,12 +91,10 @@ public class TangibleAssetsTransformerImpl implements NoteTransformer<TangibleAs
         }
 
         Stream.of(TangibleAssetsResource.values()).forEach(tangibleAssetsResource -> {
-
             TangibleAssetsResourceTransformer resourceTransformer =
                     factory.getResourceTransformer(tangibleAssetsResource);
 
             if (resourceTransformer.hasTangibleAssetsToMapToApiResource(tangibleAssets)) {
-
                 resourceTransformer.mapTangibleAssetsToApiResource(tangibleAssets, tangibleApi);
             }
         });

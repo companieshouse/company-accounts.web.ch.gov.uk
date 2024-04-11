@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface PreviousPeriodService {
-
     PreviousPeriodApi getPreviousPeriod(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException;
 

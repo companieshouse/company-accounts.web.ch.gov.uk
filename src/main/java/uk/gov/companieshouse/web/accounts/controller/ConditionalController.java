@@ -12,7 +12,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
  * indicate that the template will be rendered, otherwise false.
  */
 public interface ConditionalController {
-
     /**
      * Returns a boolean value indicating whether the template associated
      * with a controller will be rendered or not. Any {@link ServiceException}

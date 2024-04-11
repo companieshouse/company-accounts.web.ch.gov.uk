@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class CreditorsWithinOneYearHandler implements NoteResourceHandler<CreditorsWithinOneYearApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 

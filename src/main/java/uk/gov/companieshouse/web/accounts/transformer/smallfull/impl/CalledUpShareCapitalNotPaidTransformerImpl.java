@@ -8,11 +8,9 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
 @Component("calledUpShareCapitalNotPaidTransformer")
 public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
-
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasCurrentPeriodCalledUpShareCapitalNotPaid(balanceSheet))) {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(
                 balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
@@ -22,7 +20,6 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi,
         BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasPreviousPeriodCalledUpShareCapitalNotPaid(balanceSheet))) {
             balanceSheetApi.setCalledUpShareCapitalNotPaid(
                 balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
@@ -32,7 +29,6 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
     @Override
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet,
         BalanceSheetApi balanceSheetApi) {
-
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
         if (balanceSheet.getCalledUpShareCapitalNotPaid() == null) {
@@ -49,7 +45,6 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
     @Override
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet,
         BalanceSheetApi balanceSheetApi) {
-
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid;
 
         if (balanceSheet.getCalledUpShareCapitalNotPaid() == null) {
@@ -64,13 +59,11 @@ public class CalledUpShareCapitalNotPaidTransformerImpl implements Transformer {
     }
 
     private Boolean hasCurrentPeriodCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet) {
-
         return (balanceSheet.getCalledUpShareCapitalNotPaid() != null
             && balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount() != null);
     }
 
     private Boolean hasPreviousPeriodCalledUpShareCapitalNotPaid(BalanceSheet balanceSheet) {
-
         return (balanceSheet.getCalledUpShareCapitalNotPaid() != null
             && balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount() != null);
     }

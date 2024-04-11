@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.security.SignatureException;
 
 public interface TokenManager {
-
     /**
      * Decodes a provided {@code token} and converts the payload into a POJO of type {@code clazz}
      * @param token The token to decode

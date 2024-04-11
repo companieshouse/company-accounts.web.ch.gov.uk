@@ -22,15 +22,13 @@ import uk.gov.companieshouse.web.accounts.model.Note;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NoteTransformerFactoryTest {
-
     private NoteTransformerFactory<Note, ApiResource> noteTransformerFactory;
 
     @Mock
     private NoteTransformer<Note, ApiResource> noteTransformer;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         when(noteTransformer.getNoteType()).thenReturn(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         List<NoteTransformer<Note, ApiResource>> noteTransformers = new ArrayList<>();
@@ -42,7 +40,6 @@ class NoteTransformerFactoryTest {
     @Test
     @DisplayName("Get note transformer - success")
     void getNoteTransformerSuccess() {
-
         NoteTransformer<Note, ApiResource> returned =
                 noteTransformerFactory.getNoteTransformer(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
@@ -53,7 +50,6 @@ class NoteTransformerFactoryTest {
     @Test
     @DisplayName("Get note transformer - MissingInfrastructureException")
     void getNoteTransformerMissingInfrastructureException() {
-
         assertThrows(MissingInfrastructureException.class, () ->
                 noteTransformerFactory.getNoteTransformer(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
     }

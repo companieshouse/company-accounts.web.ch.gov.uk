@@ -20,7 +20,6 @@ import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/pay-filing-fee")
 public class PayFilingFeeController extends BaseController {
-
     private static final String TEMPLATE_NAME = "payment/payFilingFee";
 
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
@@ -42,7 +41,6 @@ public class PayFilingFeeController extends BaseController {
     @PostMapping
     public String postPayFilingFee(@PathVariable String transactionId,
         @ModelAttribute("payFilingFeeChoice") @Valid PayFilingFee payFilingFee, BindingResult bindingResult, HttpServletRequest request) {
-
         if(bindingResult.hasErrors()) {
             return getTemplateName();
         }

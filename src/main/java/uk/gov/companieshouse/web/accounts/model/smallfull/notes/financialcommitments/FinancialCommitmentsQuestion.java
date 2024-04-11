@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommit
 import jakarta.validation.constraints.NotNull;
 
 public class FinancialCommitmentsQuestion {
-
     @NotNull(message = "{financialCommitmentsQuestion.selectionNotMade}")
     private Boolean hasIncludedFinancialCommitments;
 

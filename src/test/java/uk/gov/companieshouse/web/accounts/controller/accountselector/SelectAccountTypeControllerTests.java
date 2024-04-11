@@ -1,14 +1,9 @@
 package uk.gov.companieshouse.web.accounts.controller.accountselector;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,12 +15,15 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SelectAccountTypeControllerTests {
-
-    private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String SELECT_ACCOUNT_TYPE_VIEW = "accountselector/selectAccountType";
 
@@ -65,7 +63,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Get select account type view, success path")
     void getRequestSuccess() throws Exception {
-
         this.mockMvc.perform(get(SELECT_ACCOUNT_TYPE_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
@@ -76,7 +73,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for micro-entity account, success path")
     void postRequestForMicroEntitySuccess() throws Exception {
-
         performPostRequestAndValidateResponse(
             "micro-entity",
             status().is3xxRedirection(),
@@ -86,7 +82,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for abridged account, success path")
     void postRequestForAbridgedAccountSuccess() throws Exception {
-
         performPostRequestAndValidateResponse(
             "abridged",
             status().is3xxRedirection(),
@@ -96,7 +91,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for full account, success path")
     void postRequestForFullAccountSuccess() throws Exception {
-
         performPostRequestAndValidateResponse(
             "full",
             status().is3xxRedirection(),
@@ -106,7 +100,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post select account type for dormant account, success path")
     void postRequestForDormantAccountSuccess() throws Exception {
-
         performPostRequestAndValidateResponse(
             "dormant",
             status().is3xxRedirection(),
@@ -116,7 +109,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post any other account selected will not be re-directed")
     void postRequestAnyOtherAccountSuccess() throws Exception {
-
         performPostRequestAndValidateResponse(
             "anyOtherAccount",
             status().isOk(),
@@ -126,7 +118,6 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Post criteria with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         performPostRequestAndValidateResponse(
             null,
             status().isOk(),
@@ -137,7 +128,6 @@ class SelectAccountTypeControllerTests {
         String beanElementValue,
         ResultMatcher expectedStatus,
         String expectedViewName) throws Exception {
-
         this.mockMvc.perform(
             post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
             .andExpect(expectedStatus)

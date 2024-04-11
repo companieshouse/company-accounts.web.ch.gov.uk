@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.cic;
 
 public class CicReview {
-
     private String activitiesAndImpact;
 
     private String consultationWithStakeholders;

@@ -25,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PoliticalAndCharitableDonationsServiceImplTest {
-
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -51,7 +50,6 @@ class PoliticalAndCharitableDonationsServiceImplTest {
     @Test
     @DisplayName("Get political and charitable donations")
     void getPoliticalAndCharitableDonations() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -67,7 +65,6 @@ class PoliticalAndCharitableDonationsServiceImplTest {
     @Test
     @DisplayName("Submit political and charitable donations - create")
     void submitPoliticalAndCharitableDonationsCreate() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -86,7 +83,6 @@ class PoliticalAndCharitableDonationsServiceImplTest {
     @Test
     @DisplayName("Submit political and charitable donations - update")
     void submitPoliticalAndCharitableDonationsUpdate() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 

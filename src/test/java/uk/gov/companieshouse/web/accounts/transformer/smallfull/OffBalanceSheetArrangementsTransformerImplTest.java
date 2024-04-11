@@ -17,7 +17,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.OffBalanceS
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OffBalanceSheetArrangementsTransformerImplTest {
-
     private static final String DETAILS = "details";
 
     private final NoteTransformer<OffBalanceSheetArrangements, OffBalanceSheetApi> transformer = new OffBalanceSheetArrangementsTransformerImpl();
@@ -25,7 +24,6 @@ class OffBalanceSheetArrangementsTransformerImplTest {
     @Test
     @DisplayName("Get off balance sheet arrangements")
     void getOffBalanceSheetArrangements() {
-
         OffBalanceSheetApi offBalanceSheetApi = new OffBalanceSheetApi();
         offBalanceSheetApi.setDetails(DETAILS);
 
@@ -38,7 +36,6 @@ class OffBalanceSheetArrangementsTransformerImplTest {
     @Test
     @DisplayName("Get off balance sheet arrangements api")
     void getOffBalanceSheetArrangementsApi() {
-
         OffBalanceSheetArrangements arrangements = new OffBalanceSheetArrangements();
         arrangements.setOffBalanceSheetArrangementsDetails(DETAILS);
 
@@ -51,7 +48,6 @@ class OffBalanceSheetArrangementsTransformerImplTest {
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
-
         assertEquals(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS,
                         transformer.getNoteType());
     }

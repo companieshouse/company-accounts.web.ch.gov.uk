@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class CompanyActivitiesAndImpactServiceImpl implements CompanyActivitiesAndImpactService {
-
     @Autowired
     private CicStatementsService cicStatementsService;
 
@@ -27,7 +26,6 @@ public class CompanyActivitiesAndImpactServiceImpl implements CompanyActivitiesA
     @Override
     public CompanyActivitiesAndImpact getCompanyActivitiesAndImpact(String transactionId,
             String companyAccountsId) throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
                 cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
@@ -41,25 +39,21 @@ public class CompanyActivitiesAndImpactServiceImpl implements CompanyActivitiesA
     public List<ValidationError> submitCompanyActivitiesAndImpact(String transactionId,
             String companyAccountsId, CompanyActivitiesAndImpact companyActivitiesAndImpact)
             throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
                 cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
         if (cicStatementsApi == null) {
-
             cicStatementsApi = createNewCicStatementsApi();
             cicStatementsTransformer.setCompanyActivitiesAndImpact(companyActivitiesAndImpact, cicStatementsApi);
             return cicStatementsService.createCicStatementsApi(transactionId, companyAccountsId, cicStatementsApi);
 
         } else {
-
             cicStatementsTransformer.setCompanyActivitiesAndImpact(companyActivitiesAndImpact, cicStatementsApi);
             return cicStatementsService.updateCicStatementsApi(transactionId, companyAccountsId, cicStatementsApi);
         }
     }
 
     private CicStatementsApi createNewCicStatementsApi() {
-
         CicStatementsApi cicStatementsApi = new CicStatementsApi();
         cicStatementsApi.setReportStatements(new ReportStatementsApi());
         cicStatementsApi.setHasCompletedReportStatements(false);

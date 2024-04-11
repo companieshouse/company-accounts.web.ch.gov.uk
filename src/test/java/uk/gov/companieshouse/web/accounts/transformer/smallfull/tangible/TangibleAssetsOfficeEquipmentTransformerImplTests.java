@@ -37,7 +37,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.Ta
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TangibleAssetsOfficeEquipmentTransformerImplTests {
-
     private static final Long COST_AT_PERIOD_START = 1L;
     private static final Long ADDITIONS = 2L;
     private static final Long DISPOSALS = 3L;
@@ -71,7 +70,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an empty web model")
     void mapFullApiResourceToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource officeEquipment = createOfficeEquipmentApiResource(true, true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, officeEquipment);
@@ -82,7 +80,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a cost object to an empty web model")
     void mapApiResourceWithoutCostToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource officeEquipment = createOfficeEquipmentApiResource(false, true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, officeEquipment);
@@ -94,7 +91,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a depreciation object to an empty web model")
     void mapApiResourceWithoutDepreciationToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource officeEquipment = createOfficeEquipmentApiResource(true, false);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, officeEquipment);
@@ -106,7 +102,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an web model with other existing resources")
     void mapFullApiResourceToPopulatedWebModel() {
-
         TangibleAssets tangibleAssets = createTangibleAssetsWithPreExistingResources();
 
         TangibleAssetsResource officeEquipment = createOfficeEquipmentApiResource(true, true);
@@ -119,7 +114,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from a web model to an api resource")
     void mapFullWebModelToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(true, true, true);
 
@@ -132,7 +126,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without cost to an api resource")
     void mapWebModelWithoutCostToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(false, true, true);
 
@@ -145,7 +138,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without depreciation to an api resource")
     void mapWebModelWithoutDepreciationToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(true, false, true);
 
@@ -158,7 +150,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without net book values to an api resource")
     void mapWebModelWithoutNetBookValuesToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(true, true, false);
 
@@ -171,7 +162,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a fully populated web model")
     void hasTangibleAssetsToMapToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(true, true, true);
 
@@ -181,7 +171,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any cost values")
     void hasTangibleAssetsToMapToApiResourceNoCost() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(false, true, true);
 
@@ -191,7 +180,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any depreciation values")
     void hasTangibleAssetsToMapToApiResourceNoDepreciation() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(true, false, true);
 
@@ -201,7 +189,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any net book values")
     void hasTangibleAssetsToMapToApiResourceNoNetBookValues() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(true, true, false);
 
@@ -211,7 +198,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a web model without any office equipment values")
     void hasTangibleAssetsToMapToApiResourceNoResourceValues() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithOfficeEquipmentResources(false, false, false);
 
@@ -220,7 +206,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
 
     private TangibleAssetsResource createOfficeEquipmentApiResource(boolean includeCost,
                                                                         boolean includeDepreciation) {
-
         TangibleAssetsResource officeEquipment = new TangibleAssetsResource();
 
         if (includeCost) {
@@ -236,7 +221,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     }
 
     private Cost createCostApiResource() {
-
         Cost cost = new Cost();
         cost.setAtPeriodStart(COST_AT_PERIOD_START);
         cost.setAdditions(ADDITIONS);
@@ -248,7 +232,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     }
 
     private Depreciation createDepreciationApiResource() {
-
         Depreciation depreciation = new Depreciation();
         depreciation.setAtPeriodStart(DEPRECIATION_AT_PERIOD_START);
         depreciation.setChargeForYear(CHARGE_FOR_YEAR);
@@ -259,7 +242,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     }
 
     private TangibleAssets createTangibleAssetsWithPreExistingResources() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
@@ -332,7 +314,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     private TangibleAssets createTangibleAssetsWithOfficeEquipmentResources(boolean includeCost,
             boolean includeDepreciation,
             boolean includeNetBookValue) {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
@@ -384,7 +365,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
         tangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         if (includeCost) {
-
             costAtPeriodStart.setOfficeEquipment(COST_AT_PERIOD_START);
             additions.setOfficeEquipment(ADDITIONS);
             disposals.setOfficeEquipment(DISPOSALS);
@@ -394,7 +374,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
         }
 
         if (includeDepreciation) {
-
             depreciationAtPeriodStart.setOfficeEquipment(DEPRECIATION_AT_PERIOD_START);
             chargeForYear.setOfficeEquipment(CHARGE_FOR_YEAR);
             onDisposals.setOfficeEquipment(ON_DISPOSALS);
@@ -403,7 +382,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
         }
 
         if (includeNetBookValue) {
-
             currentPeriod.setOfficeEquipment(CURRENT_PERIOD);
             previousPeriod.setOfficeEquipment(PREVIOUS_PERIOD);
         }
@@ -414,7 +392,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     private void assertWebModelsMapped(TangibleAssets tangibleAssets,
                                        boolean expectCostFieldsMapped,
                                        boolean expectDepreciationFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(tangibleAssets);
         }
@@ -426,7 +403,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     }
 
     private void assertCostFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
-
         assertEquals(COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getOfficeEquipment());
         assertEquals(ADDITIONS, tangibleAssets.getCost().getAdditions().getOfficeEquipment());
         assertEquals(DISPOSALS, tangibleAssets.getCost().getDisposals().getOfficeEquipment());
@@ -436,7 +412,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     }
 
     private void assertDepreciationFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
-
         assertEquals(DEPRECIATION_AT_PERIOD_START, tangibleAssets.getDepreciation().getAtPeriodStart().getOfficeEquipment());
         assertEquals(CHARGE_FOR_YEAR, tangibleAssets.getDepreciation().getChargeForYear().getOfficeEquipment());
         assertEquals(ON_DISPOSALS, tangibleAssets.getDepreciation().getOnDisposals().getOfficeEquipment());
@@ -448,7 +423,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
                                        boolean expectCostFieldsMapped,
                                        boolean expectDepreciationFieldsMapped,
                                        boolean expectNetBookValueFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
         } else {
@@ -493,7 +467,6 @@ class TangibleAssetsOfficeEquipmentTransformerImplTests {
     }
 
     private void assertPreExistingFieldsUnaffected(TangibleAssets tangibleAssets) {
-
         assertEquals(OTHER_COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getPlantAndMachinery());
         assertEquals(OTHER_ADDITIONS, tangibleAssets.getCost().getAdditions().getPlantAndMachinery());
         assertEquals(OTHER_DISPOSALS, tangibleAssets.getCost().getDisposals().getPlantAndMachinery());

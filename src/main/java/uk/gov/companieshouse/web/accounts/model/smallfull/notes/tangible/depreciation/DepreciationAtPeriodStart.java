@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.deprec
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class DepreciationAtPeriodStart {
-
     @ValidationMapping("$.tangible_assets.land_and_buildings.depreciation.at_period_start")
     private Long landAndBuildings;
 

@@ -37,7 +37,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.Ta
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TangibleAssetsLandAndBuildingsTransformerImplTests {
-
     private static final Long COST_AT_PERIOD_START = 1L;
     private static final Long ADDITIONS = 2L;
     private static final Long DISPOSALS = 3L;
@@ -71,7 +70,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an empty web model")
     void mapFullApiResourceToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource landAndBuildings = createLandAndBuildingsApiResource(true, true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, landAndBuildings);
@@ -82,7 +80,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a cost object to an empty web model")
     void mapApiResourceWithoutCostToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource landAndBuildings = createLandAndBuildingsApiResource(false, true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, landAndBuildings);
@@ -94,7 +91,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a depreciation object to an empty web model")
     void mapApiResourceWithoutDepreciationToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource landAndBuildings = createLandAndBuildingsApiResource(true, false);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, landAndBuildings);
@@ -106,7 +102,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an web model with other existing resources")
     void mapFullApiResourceToPopulatedWebModel() {
-
         TangibleAssets tangibleAssets = createTangibleAssetsWithPreExistingResources();
 
         TangibleAssetsResource landAndBuildings = createLandAndBuildingsApiResource(true, true);
@@ -119,7 +114,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from a web model to an api resource")
     void mapFullWebModelToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(true, true, true);
 
@@ -132,7 +126,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without cost to an api resource")
     void mapWebModelWithoutCostToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(false, true, true);
 
@@ -145,7 +138,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without depreciation to an api resource")
     void mapWebModelWithoutDepreciationToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(true, false, true);
 
@@ -158,7 +150,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without net book values to an api resource")
     void mapWebModelWithoutNetBookValuesToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(true, true, false);
 
@@ -171,7 +162,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a fully populated web model")
     void hasTangibleAssetsToMapToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(true, true, true);
 
@@ -181,7 +171,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any cost values")
     void hasTangibleAssetsToMapToApiResourceNoCost() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(false, true, true);
 
@@ -191,7 +180,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any depreciation values")
     void hasTangibleAssetsToMapToApiResourceNoDepreciation() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(true, false, true);
 
@@ -201,7 +189,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any net book values")
     void hasTangibleAssetsToMapToApiResourceNoNetBookValues() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(true, true, false);
 
@@ -211,7 +198,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a web model without any land and buildings values")
     void hasTangibleAssetsToMapToApiResourceNoResourceValues() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithLandAndBuildingsResources(false, false, false);
 
@@ -220,7 +206,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
 
     private TangibleAssetsResource createLandAndBuildingsApiResource(boolean includeCost,
                                                                         boolean includeDepreciation) {
-
         TangibleAssetsResource landAndBuildings = new TangibleAssetsResource();
 
         if (includeCost) {
@@ -236,7 +221,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     }
 
     private Cost createCostApiResource() {
-
         Cost cost = new Cost();
         cost.setAtPeriodStart(COST_AT_PERIOD_START);
         cost.setAdditions(ADDITIONS);
@@ -248,7 +232,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     }
 
     private Depreciation createDepreciationApiResource() {
-
         Depreciation depreciation = new Depreciation();
         depreciation.setAtPeriodStart(DEPRECIATION_AT_PERIOD_START);
         depreciation.setChargeForYear(CHARGE_FOR_YEAR);
@@ -259,7 +242,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     }
 
     private TangibleAssets createTangibleAssetsWithPreExistingResources() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
@@ -332,7 +314,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     private TangibleAssets createTangibleAssetsWithLandAndBuildingsResources(boolean includeCost,
             boolean includeDepreciation,
             boolean includeNetBookValue) {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
@@ -384,7 +365,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
         tangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         if (includeCost) {
-
             costAtPeriodStart.setLandAndBuildings(COST_AT_PERIOD_START);
             additions.setLandAndBuildings(ADDITIONS);
             disposals.setLandAndBuildings(DISPOSALS);
@@ -394,7 +374,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
         }
 
         if (includeDepreciation) {
-
             depreciationAtPeriodStart.setLandAndBuildings(DEPRECIATION_AT_PERIOD_START);
             chargeForYear.setLandAndBuildings(CHARGE_FOR_YEAR);
             onDisposals.setLandAndBuildings(ON_DISPOSALS);
@@ -403,7 +382,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
         }
 
         if (includeNetBookValue) {
-
             currentPeriod.setLandAndBuildings(CURRENT_PERIOD);
             previousPeriod.setLandAndBuildings(PREVIOUS_PERIOD);
         }
@@ -414,7 +392,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     private void assertWebModelsMapped(TangibleAssets tangibleAssets,
                                        boolean expectCostFieldsMapped,
                                        boolean expectDepreciationFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(tangibleAssets);
         }
@@ -426,7 +403,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     }
 
     private void assertCostFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
-
         assertEquals(COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getLandAndBuildings());
         assertEquals(ADDITIONS, tangibleAssets.getCost().getAdditions().getLandAndBuildings());
         assertEquals(DISPOSALS, tangibleAssets.getCost().getDisposals().getLandAndBuildings());
@@ -436,7 +412,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     }
 
     private void assertDepreciationFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
-
         assertEquals(DEPRECIATION_AT_PERIOD_START, tangibleAssets.getDepreciation().getAtPeriodStart().getLandAndBuildings());
         assertEquals(CHARGE_FOR_YEAR, tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings());
         assertEquals(ON_DISPOSALS, tangibleAssets.getDepreciation().getOnDisposals().getLandAndBuildings());
@@ -448,7 +423,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
                                        boolean expectCostFieldsMapped,
                                        boolean expectDepreciationFieldsMapped,
                                        boolean expectNetBookValueFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
         } else {
@@ -493,7 +467,6 @@ class TangibleAssetsLandAndBuildingsTransformerImplTests {
     }
 
     private void assertPreExistingFieldsUnaffected(TangibleAssets tangibleAssets) {
-
         assertEquals(OTHER_COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getMotorVehicles());
         assertEquals(OTHER_ADDITIONS, tangibleAssets.getCost().getAdditions().getMotorVehicles());
         assertEquals(OTHER_DISPOSALS, tangibleAssets.getCost().getDisposals().getMotorVehicles());

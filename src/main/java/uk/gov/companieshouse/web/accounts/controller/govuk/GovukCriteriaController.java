@@ -29,7 +29,6 @@ public class GovukCriteriaController extends BaseController {
 
     @GetMapping
     public String getGovUkCriteria(Model model) {
-
         model.addAttribute("criteria", new Criteria());
         addBackPageAttributeToModel(model);
 
@@ -39,7 +38,6 @@ public class GovukCriteriaController extends BaseController {
     @PostMapping
     public String postGovUkCriteria(@ModelAttribute("criteria") @Valid Criteria criteria,
         BindingResult bindingResult, Model model, RedirectAttributes attributes) {
-
         addBackPageAttributeToModel(model);
 
         if (bindingResult.hasErrors()) {
@@ -47,11 +45,9 @@ public class GovukCriteriaController extends BaseController {
         }
 
         if (criteria.getIsCriteriaMet().equalsIgnoreCase("noAlternativeFilingMethod")) {
-
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX
                 + "/accounts/alternative-filing-options";
         } else if (criteria.getIsCriteriaMet().equalsIgnoreCase("noOtherAccounts")) {
-
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/accounts/select-account-type";
         }
         attributes.addAttribute("forward", "/accounts/company/{companyNumber}/details");

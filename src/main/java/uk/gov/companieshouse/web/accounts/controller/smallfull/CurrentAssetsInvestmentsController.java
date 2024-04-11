@@ -32,7 +32,6 @@ import java.util.Optional;
 @PreviousController(DebtorsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/current-assets-investments")
 public class CurrentAssetsInvestmentsController extends BaseController implements ConditionalController {
-
     @Autowired
     private NoteService<CurrentAssetsInvestments> noteService;
 
@@ -48,7 +47,6 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
     public String getCurrentAssetsInvestments(@PathVariable String companyNumber,
             @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -70,7 +68,6 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
             @PathVariable String transactionId, @PathVariable String companyAccountsId,
             @ModelAttribute("currentAssetsInvestments") @Valid CurrentAssetsInvestments currentAssetsInvestments,
             BindingResult bindingResult, Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -96,11 +93,9 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
                 companyAccountsId);
     }
 
-
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         BalanceSheet balanceSheet =
             balanceSheetService.getBalanceSheet(
                 transactionId, companyAccountsId, companyNumber);
@@ -109,7 +104,6 @@ public class CurrentAssetsInvestmentsController extends BaseController implement
     }
 
     private boolean hasInvestments(BalanceSheet balanceSheet) {
-
         Long currentInvestments = Optional.of(balanceSheet)
             .map(BalanceSheet::getCurrentAssets)
             .map(CurrentAssets::getInvestments)

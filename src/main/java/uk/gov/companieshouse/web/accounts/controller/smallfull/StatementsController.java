@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 @PreviousController(BalanceSheetController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/balance-sheet-statements")
 public class StatementsController extends BaseController {
-
     @Autowired
     private StatementsService statementsService;
 
@@ -29,13 +28,11 @@ public class StatementsController extends BaseController {
                                 @PathVariable String companyAccountsId,
                                 Model model,
                                 HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute("statements", statementsService.getBalanceSheetStatements(transactionId, companyAccountsId));
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -48,11 +45,9 @@ public class StatementsController extends BaseController {
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
                                    HttpServletRequest request) {
-
         try {
             statementsService.acceptBalanceSheetStatements(transactionId, companyAccountsId);
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }

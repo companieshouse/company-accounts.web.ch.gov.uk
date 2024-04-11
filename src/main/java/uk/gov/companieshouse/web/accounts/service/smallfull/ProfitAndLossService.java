@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface ProfitAndLossService {
-
     ProfitAndLoss getProfitAndLoss(String transactionId, String companyAccountsId, String companyNumber)
             throws ServiceException;
 

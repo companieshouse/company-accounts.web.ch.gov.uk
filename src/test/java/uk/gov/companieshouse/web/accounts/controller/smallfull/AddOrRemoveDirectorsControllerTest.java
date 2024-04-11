@@ -1,26 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -47,9 +34,30 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsServ
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AddOrRemoveDirectorsControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -132,15 +140,13 @@ class AddOrRemoveDirectorsControllerTest {
     private static final String DISPLAY_APPROVAL_WARNING_BANNER = "displayApprovalWarningBanner";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get add or remove directors view - success path")
     void getRequestSuccess() throws Exception {
-
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
@@ -162,7 +168,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Get add or remove directors view LTD resource is null- success path")
     void getRequestWithNullLTDResourceSuccess() throws Exception {
-
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
@@ -183,7 +188,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Get add or remove directors view when a user has no LTD loans - success path")
     void getRequestUserHasNoLTDLoansSuccess() throws Exception {
-
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
@@ -206,7 +210,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Get add or remove directors view when a user has existing LTD loans - success path")
     void getRequestUserHasLTDLoansSuccess() throws Exception {
-
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
@@ -229,7 +232,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Get add or remove directors view when a directors report approval exists - success path")
     void getRequestUserHasDirectorsReportApprovalSuccess() throws Exception {
-
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
@@ -256,7 +258,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Get add or remove directors view when an accounts approval exists - success path")
     void getRequestUserHasAccountsApprovalSuccess() throws Exception {
-
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenReturn(new Director[0]);
 
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(SECRETARY_NAME);
@@ -285,7 +286,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Get add or remove directors view - service exception")
     void getRequestServiceException() throws Exception {
-
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(ADD_OR_REMOVE_DIRECTORS_PATH))
@@ -296,8 +296,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add director - throws service exception")
     void postDirectorAddRequestThrowsServiceException() throws Exception {
-
-
         when(directorService.createDirector(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorToAdd.class)))
                 .thenThrow(ServiceException.class);
@@ -313,7 +311,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add director - success")
     void postDirectorAddRequestSuccess() throws Exception {
-
         when(directorService.createDirector(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorToAdd.class)))
                 .thenReturn(validationErrors);
@@ -331,8 +328,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add director - throws validation errors")
     void postDirectorAddRequestThrowsValidationErrors() throws Exception {
-
-
         when(directorService.createDirector(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorToAdd.class)))
                 .thenReturn(validationErrors);
@@ -350,7 +345,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Delete director - success path")
     void deleteDirectorSuccess() throws Exception {
-
         this.mockMvc.perform(get(REMOVE_DIRECTOR_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_DIRECTORS_PATH));
@@ -361,7 +355,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Delete director - service exception")
     void deleteDirectorServiceException() throws Exception {
-
         doThrow(ServiceException.class).when(directorService).deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, DIRECTOR_ID);
 
         this.mockMvc.perform(get(REMOVE_DIRECTOR_PATH))
@@ -372,10 +365,9 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add or remove directors view - remove secretary - success path")
     void postRequestRemoveSecretarySuccess() throws Exception {
-
         when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit"))
                 .andExpect(status().is3xxRedirection())
@@ -387,13 +379,12 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add or remove directors view - add secretary - success path")
     void postRequestAddSecretarySuccess() throws Exception {
-
         when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
                 AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_DIRECTORS_PATH + "?submit")
                 .param("secretary", "name"))
@@ -404,7 +395,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add or remove directors view - add secretary - validation errors")
     void postRequestAddSecretaryValidationErrors() throws Exception {
-
         when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         List<ValidationError> secretaryValidationErrors = new ArrayList<>();
@@ -421,7 +411,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Post add or remove directors view - add secretary - service exception")
     void postRequestAddSecretaryServiceException() throws Exception {
-
         when(directorService.submitAddOrRemoveDirectors(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveDirectors.class))).thenReturn(new ArrayList<>());
 
         when(secretaryService.submitSecretary(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
@@ -436,7 +425,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
@@ -446,7 +434,6 @@ class AddOrRemoveDirectorsControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 

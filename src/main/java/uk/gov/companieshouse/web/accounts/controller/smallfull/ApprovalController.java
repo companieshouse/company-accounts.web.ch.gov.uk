@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 @PreviousController(ReviewController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approval")
 public class ApprovalController extends BaseController {
-
     private static final UriTemplate CONFIRMATION_REDIRECT = new UriTemplate("/transaction/{transactionId}/confirmation");
     private static final UriTemplate RESUME_URI = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/pay-filing-fee");
 
@@ -68,7 +67,6 @@ public class ApprovalController extends BaseController {
                               @PathVariable String companyAccountsId,
                               Model model,
                               HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -89,9 +87,7 @@ public class ApprovalController extends BaseController {
 
             model.addAttribute(APPROVAL, approval);
 
-
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -110,12 +106,10 @@ public class ApprovalController extends BaseController {
                                BindingResult bindingResult,
                                Model model,
                                HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             if (bindingResult.hasErrors()) {
-
                 model.addAttribute(IS_PAYABLE_TRANSACTION,
                         transactionService.isPayableTransaction(transactionId, companyAccountsId));
                 return getTemplateName();
@@ -124,7 +118,6 @@ public class ApprovalController extends BaseController {
             Transaction transaction = transactionService.getTransaction(transactionId);
 
             if(transaction.getStatus() == TransactionStatus.CLOSED_PENDING_PAYMENT) {
-
                 String submittedAccounts = SUBMITTED_ACCOUNTS_PATH.expand(companyNumber,transactionId, companyAccountsId ).toString();
                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + submittedAccounts;
             }
@@ -139,7 +132,6 @@ public class ApprovalController extends BaseController {
 
             boolean paymentRequired = transactionService.closeTransaction(transactionId);
             if (paymentRequired) {
-
                 transactionService.updateResumeLink(transactionId, RESUME_URI.expand(companyNumber, transactionId, companyAccountsId).toString());
 
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
@@ -147,7 +139,6 @@ public class ApprovalController extends BaseController {
             }
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }

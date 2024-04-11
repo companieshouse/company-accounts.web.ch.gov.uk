@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.DirectorsRemunera
 import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 
 public interface CicStatementsTransformer {
-
     /**
      * Gets the company's activities and impact from a given cic statements API resource
      *
@@ -26,7 +25,6 @@ public interface CicStatementsTransformer {
      */
     void setCompanyActivitiesAndImpact(
         CompanyActivitiesAndImpact companyActivitiesAndImpact, CicStatementsApi cicStatementsApi);
-
 
     ConsultationWithStakeholders getConsultationWithStakeholders(CicStatementsApi cicStatementsApi);
 

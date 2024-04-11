@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.payment.PaymentService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PayFilingFeeControllerTest {
-
     private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
 
     private MockMvc mockMvc;
@@ -36,8 +35,7 @@ class PayFilingFeeControllerTest {
     private PayFilingFeeController controller;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -59,7 +57,6 @@ class PayFilingFeeControllerTest {
     @Test
     @DisplayName("Pay filing fee get request - Success")
     void getPayFilingFeeSuccess() throws Exception {
-
         this.mockMvc.perform(get(PAY_FILING_FEE_PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(PAY_FILING_FEE_VIEW))

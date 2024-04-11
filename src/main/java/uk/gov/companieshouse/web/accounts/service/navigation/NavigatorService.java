@@ -27,7 +27,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
  */
 @Service
 public class NavigatorService {
-
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -43,7 +42,6 @@ public class NavigatorService {
      * @return the next or previous controller class in the chain dependent on {@code direction}
      */
     private Class getControllerClass(Class clazz, Direction direction, String ... pathVars) {
-
         Class controllerClass;
 
         if (direction == Direction.FORWARD) {
@@ -71,15 +69,12 @@ public class NavigatorService {
         Class[] classList = ((NextController) nextControllerAnnotation).value();
 
         if (classList.length > 0) {
-
             if (classList.length == 1) {
                 return ((NextController) nextControllerAnnotation).value()[0];
             } else {
-
                 Class notImplementingBranch = null;
 
                 for (int i = 0, j = 0; i < classList.length; i++) {
-
                     Class specificClass = classList[i];
 
                     if (!isBranchController(specificClass)) {
@@ -125,15 +120,12 @@ public class NavigatorService {
         Class[] classList = ((PreviousController) previousControllerAnnotation).value();
 
         if (classList.length > 0) {
-
             if (classList.length == 1) {
                 return ((PreviousController) previousControllerAnnotation).value()[0];
             } else {
-
                 Class notImplementingBranch = null;
 
                 for (int i = 0, j = 0; i < classList.length; i++) {
-
                     Class specificClass = classList[i];
 
                     if (!isBranchController(specificClass)) {
@@ -176,7 +168,6 @@ public class NavigatorService {
      * @return the previous controller class in the chain
      */
     private Class findControllerClass(Class clazz, Direction direction, String... pathVars) {
-
         Class controllerClass = getControllerClass(clazz, direction, pathVars);
         if (!isConditionalController(controllerClass) || pathVars.length != EXPECTED_PATH_VAR_COUNT) {
             return controllerClass;
@@ -189,7 +180,6 @@ public class NavigatorService {
         boolean foundController = false;
 
         while (!foundController) {
-
             if (isConditionalController(controllerClass)) {
                 ConditionalController conditionalController = (ConditionalController) applicationContext.getBean(controllerClass);
 
@@ -199,7 +189,6 @@ public class NavigatorService {
                         continue;
                     }
                 } catch (ServiceException e) {
-
                     throw new NavigationException("Error when determining whether to render conditional controller " + conditionalController.getClass().toString(), e);
                 }
             }
@@ -223,7 +212,6 @@ public class NavigatorService {
      *         path of the next controller
      */
     public String getNextControllerRedirect(Class clazz, String... pathVars) {
-
         Class nextControllerClass = findControllerClass(clazz, Direction.FORWARD, pathVars);
 
         Annotation requestMappingAnnotation = AnnotationUtils.findAnnotation(nextControllerClass, RequestMapping.class);
@@ -260,7 +248,6 @@ public class NavigatorService {
      *         previous controller
      */
     public String getPreviousControllerPath(Class clazz, String... pathVars) {
-
         Class previousControllerClass = findControllerClass(clazz, Direction.BACKWARD, pathVars);
 
         Annotation requestMappingAnnotation = AnnotationUtils.findAnnotation(previousControllerClass, RequestMapping.class);

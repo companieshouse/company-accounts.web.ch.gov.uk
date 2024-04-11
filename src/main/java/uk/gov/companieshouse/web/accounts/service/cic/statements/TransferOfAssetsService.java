@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssets;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface TransferOfAssetsService {
-
     /**
      * Retrieves the transfer of assets
      *

@@ -55,7 +55,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProfitAndLossServiceImplTests {
-
     @Mock
     private ProfitAndLoss profitAndLoss;
 
@@ -189,7 +188,6 @@ class ProfitAndLossServiceImplTests {
 
     @BeforeEach
     private void init() {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -199,7 +197,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Get profit and loss - single year filer - success")
     void getProfitAndLossSingleYearFilerSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
@@ -232,7 +229,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Get profit and loss - multi year filer - success")
     void getProfitAndLossMultiYearFilerSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
@@ -275,7 +271,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Get profit and loss - not found")
     void getProfitAndLossNotFound()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
@@ -309,7 +304,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Get profit and loss - uri validation exception")
     void getProfitAndLossURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
@@ -329,7 +323,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Create profit and loss - single year filer - success")
     void createProfitAndLossSingleYearFilerSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(currentPeriodProfitAndLoss);
 
@@ -364,7 +357,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Create profit and loss - multi year filer - success")
     void createProfitAndLossMultiYearFilerSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(currentPeriodProfitAndLoss);
 
@@ -419,7 +411,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Update profit and loss - single year filer - success")
     void updateProfitAndLossSingleYearFilerSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(currentPeriodProfitAndLoss);
 
@@ -454,7 +445,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Update profit and loss - multi year filer - success")
     void updateProfitAndLossMultiYearFilerSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(currentPeriodProfitAndLoss);
 
@@ -509,7 +499,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Create profit and loss - multi year filer - current period validation errors")
     void createProfitAndLossMultiYearFilerCurrentPeriodValidationErrors()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(currentPeriodProfitAndLoss);
 
@@ -566,7 +555,6 @@ class ProfitAndLossServiceImplTests {
     @DisplayName("Create profit and loss - multi year filer - previous period validation errors")
     void createProfitAndLossMultiYearFilerPreviousPeriodValidationErrors()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(profitAndLossTransformer.getCurrentPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(currentPeriodProfitAndLoss);
 

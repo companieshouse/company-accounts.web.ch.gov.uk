@@ -31,7 +31,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicReportService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicReportServiceImplTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -65,15 +64,13 @@ class CicReportServiceImplTest {
                                                     "/cic-report";
 
     @BeforeEach
-    private void setUp() {
-
+    public void setUp() {
         when(apiClient.cicReport()).thenReturn(cicReportResourceHandler);
     }
 
     @Test
     @DisplayName("Create CIC report - success")
     void createCicReportSuccess() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(cicReportResourceHandler.create(eq(CIC_REPORT_URI), any(CicReportApi.class)))
@@ -87,7 +84,6 @@ class CicReportServiceImplTest {
     @Test
     @DisplayName("Create CIC report - ApiErrorResponseException")
     void createCicReportApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(cicReportResourceHandler.create(eq(CIC_REPORT_URI), any(CicReportApi.class)))
@@ -102,7 +98,6 @@ class CicReportServiceImplTest {
     @Test
     @DisplayName("Create CIC report - URIValidationException")
     void createCicReportURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(cicReportResourceHandler.create(eq(CIC_REPORT_URI), any(CicReportApi.class)))
@@ -118,7 +113,6 @@ class CicReportServiceImplTest {
     @DisplayName("Get CIC report - success")
     void getCicReportSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(cicReportResourceHandler.get(CIC_REPORT_URI)).thenReturn(cicReportGet);
 
         when(cicReportGet.execute()).thenReturn(responseWithData);
@@ -134,7 +128,6 @@ class CicReportServiceImplTest {
     @Test
     @DisplayName("Get CIC report - ApiErrorResponseException")
     void getCicReportApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
         when(cicReportResourceHandler.get(CIC_REPORT_URI)).thenReturn(cicReportGet);
 
         when(cicReportGet.execute()).thenThrow(ApiErrorResponseException.class);
@@ -146,7 +139,6 @@ class CicReportServiceImplTest {
     @Test
     @DisplayName("Get CIC report - URIValidationException")
     void getCicReportURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
         when(cicReportResourceHandler.get(CIC_REPORT_URI)).thenReturn(cicReportGet);
 
         when(cicReportGet.execute()).thenThrow(URIValidationException.class);

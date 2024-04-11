@@ -17,12 +17,9 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
 
 @Component("capitalAndReservesTransformer")
 public class CapitalAndReservesTransformerImpl implements Transformer {
-
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasCurrentPeriodCapitalAndReserves(balanceSheet))) {
-
             CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
             capitalAndReservesApi.setCalledUpShareCapital(
                 balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
@@ -41,9 +38,7 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasPreviousPeriodCapitalAndReserves(balanceSheet))) {
-
             CapitalAndReservesApi capitalAndReservesApi = new CapitalAndReservesApi();
             capitalAndReservesApi.setCalledUpShareCapital(
                 balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
@@ -62,7 +57,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
 
     @Override
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         createCapitalAndReserves(balanceSheet);
         CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReserves();
 
@@ -99,7 +93,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         createCapitalAndReserves(balanceSheet);
         CapitalAndReservesApi capitalAndReservesApi = balanceSheetApi.getCapitalAndReserves();
 
@@ -135,7 +128,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private CapitalAndReserves createCapitalAndReserves(BalanceSheet balanceSheet) {
-
         CapitalAndReserves capitalAndReserves;
 
         if (balanceSheet.getCapitalAndReserves() == null) {
@@ -149,7 +141,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private CalledUpShareCapital createCalledUpShareCapital(BalanceSheet balanceSheet) {
-
         CalledUpShareCapital calledUpShareCapital;
 
         if (balanceSheet.getCapitalAndReserves().getCalledUpShareCapital() == null) {
@@ -163,7 +154,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private ProfitAndLossAccount createProfitAndLossAccount(BalanceSheet balanceSheet) {
-
         ProfitAndLossAccount profitAndLossAccount;
 
         if (balanceSheet.getCapitalAndReserves().getProfitAndLossAccount() == null) {
@@ -177,7 +167,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private OtherReserves createOtherReserves(BalanceSheet balanceSheet) {
-
         OtherReserves otherReserves;
 
         if (balanceSheet.getCapitalAndReserves().getOtherReserves() == null) {
@@ -191,7 +180,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private SharePremiumAccount createSharePremiumAccounts(BalanceSheet balanceSheet) {
-
         SharePremiumAccount sharePremiumAccount;
 
         if (balanceSheet.getCapitalAndReserves().getSharePremiumAccount() == null) {
@@ -205,7 +193,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private TotalShareholdersFunds createTotalShareholdersFund(BalanceSheet balanceSheet) {
-
         TotalShareholdersFunds totalShareholdersFunds;
 
         if (balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds() == null) {
@@ -219,7 +206,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private Boolean hasCurrentPeriodCapitalAndReserves(BalanceSheet balanceSheet) {
-
         CapitalAndReserves capitalAndReserves = balanceSheet.getCapitalAndReserves();
 
         if (capitalAndReserves != null) {
@@ -234,7 +220,6 @@ public class CapitalAndReservesTransformerImpl implements Transformer {
     }
 
     private Boolean hasPreviousPeriodCapitalAndReserves(BalanceSheet balanceSheet) {
-
         CapitalAndReserves capitalAndReserves = balanceSheet.getCapitalAndReserves();
 
         if (capitalAndReserves != null) {

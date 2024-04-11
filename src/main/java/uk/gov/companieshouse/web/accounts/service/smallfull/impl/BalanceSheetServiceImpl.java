@@ -46,7 +46,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @Service
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class BalanceSheetServiceImpl implements BalanceSheetService {
-
     @Autowired
     private BalanceSheetTransformer transformer;
 
@@ -100,7 +99,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
     public BalanceSheet getBalanceSheet(String transactionId, String companyAccountsId,
                                         String companyNumber)
             throws ServiceException {
-
         if (cachedBalanceSheet != null) {
             return cachedBalanceSheet;
         }
@@ -136,7 +134,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
                                                   BalanceSheet balanceSheet,
                                                   String companyNumber)
             throws ServiceException {
-
         invalidateRequestScopedCache();
 
         ApiClient apiClient = apiClientService.getApiClient();
@@ -149,7 +146,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         CompanyProfileApi companyProfileApi = companyService.getCompanyProfile(companyNumber);
         
         if (companyService.isMultiYearFiler(companyProfileApi)) {
-
             PreviousPeriodApi previousPeriodApi =
                     previousPeriodService.getPreviousPeriod(apiClient, transactionId, companyAccountsId);
 
@@ -194,18 +190,15 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
      */
     private void checkConditionalNotes(BalanceSheet balanceSheet, SmallFullLinks smallFullLinks,
                                        String transactionId, String companyAccountsId) throws ServiceException {
-
         if ((isDebtorsCurrentAmountNullOrZero(balanceSheet)
                 && isDebtorsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getDebtorsNote() != null) {
-
             debtorsService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_DEBTORS);
         }
 
         if ((isCreditorsWithinOneYearCurrentAmountNullOrZero(balanceSheet)
                 && isCreditorsWithinOneYearPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getCreditorsWithinOneYearNote() != null) {
-
             creditorsWithinOneYearService
                     .delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
         }
@@ -213,42 +206,36 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
         if ((isCreditorsAfterOneYearCurrentAmountNullOrZero(balanceSheet)
                 && isCreditorsAfterOneYearPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getCreditorsAfterMoreThanOneYearNote() != null) {
-
             creditorsAfterOneYearService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
         }
 
         if ((isIntangibleAssetsCurrentAmountNullOrZero(balanceSheet)
                 && isIntangibleAssetsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getIntangibleAssetsNote() != null) {
-
             intangibleAssetsNoteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
         }
 
         if ((isTangibleAssetsCurrentAmountNullOrZero(balanceSheet)
                 && isTangibleAssetsPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getTangibleAssetsNote() != null) {
-
             tangibleAssetsNoteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
         }
 
         if ((isFixedInvestmentsCurrentAmountNullOrZero(balanceSheet)
             && isFixedInvestmentsPreviousAmountNullOrZero(balanceSheet))
             && smallFullLinks.getFixedAssetsInvestmentsNote() != null) {
-
             fixedAssetsInvestmentsService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
         }
 
         if ((isStocksCurrentAmountNullOrZero(balanceSheet)
                 && isStocksPreviousAmountNullOrZero(balanceSheet))
                 && smallFullLinks.getStocksNote() != null) {
-
             stocksService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_STOCKS);
         }
 
         if ((isCurrentAssetsInvestmentsCurrentAmountNullOrZero(balanceSheet)
                 && isCurrentAssetsInvestmentsPreviousAmountNullOrZero(balanceSheet)
                 && smallFullLinks.getCurrentAssetsInvestmentsNote() != null)) {
-
             currentAssetsInvestmentsService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
         }
     }
@@ -387,7 +374,6 @@ public class BalanceSheetServiceImpl implements BalanceSheetService {
 
     private BalanceSheetHeadings getBalanceSheetHeadings(ApiClient apiClient, String transactionId, String companyAccountsId)
     		throws ServiceException {
-
         SmallFullApi smallFullApi = smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId);
 
         return smallFullService.getBalanceSheetHeadings(smallFullApi);

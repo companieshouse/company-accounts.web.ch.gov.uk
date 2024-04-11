@@ -26,7 +26,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWit
 @PreviousController(CompanyActivitiesAndImpactController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/consultation-with-stakeholders-selection")
 public class ConsultationWithStakeholdersSelectionController extends BaseController {
-
     @Autowired
     private ConsultationWithStakeholdersSelectionService selectionService;
 
@@ -44,7 +43,6 @@ public class ConsultationWithStakeholdersSelectionController extends BaseControl
             @PathVariable String companyAccountsId,
             Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -58,7 +56,6 @@ public class ConsultationWithStakeholdersSelectionController extends BaseControl
             model.addAttribute(CONSULTATION_WITH_STAKEHOLDERS_SELECTION_ATTR, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -75,7 +72,6 @@ public class ConsultationWithStakeholdersSelectionController extends BaseControl
             BindingResult bindingResult,
             Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -86,7 +82,6 @@ public class ConsultationWithStakeholdersSelectionController extends BaseControl
             selectionService.submitConsultationWithStakeholdersSelection(transactionId, companyAccountsId, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -97,7 +92,6 @@ public class ConsultationWithStakeholdersSelectionController extends BaseControl
     }
 
     private void setHasProvidedConsultationWithStakeholders(HttpServletRequest request, ConsultationWithStakeholdersSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         selection.setHasProvidedConsultationWithStakeholders(
                 Optional.of(companyAccountsDataState)
@@ -107,7 +101,6 @@ public class ConsultationWithStakeholdersSelectionController extends BaseControl
     }
 
     private void cacheHasProvidedConsultationWithStakeholders(HttpServletRequest request, ConsultationWithStakeholdersSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
         if (companyAccountsDataState.getCicStatements() == null) {

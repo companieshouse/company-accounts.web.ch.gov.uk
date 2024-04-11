@@ -30,7 +30,6 @@ import java.util.List;
 @PreviousController(TangibleDepreciationPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/intangible-fixed-assets-amortisation")
 public class IntangibleAmortisationPolicyController extends BaseController {
-
     private static final String INTANGIBLE_AMORTISATION_POLICY = "intangibleAmortisationPolicy";
 
     private static final String INTANGIBLE_AMORTISATION_POLICY_FIELD_PATH =
@@ -51,7 +50,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
                                                   @PathVariable String companyAccountsId,
                                                   Model model,
                                                   HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -65,7 +63,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
 
             model.addAttribute(INTANGIBLE_AMORTISATION_POLICY, intangibleAmortisationPolicy);
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -81,7 +78,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
                                                      BindingResult bindingResult,
                                                      Model model,
                                                      HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         radioAndTextValidator.validate(intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy(), intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, INTANGIBLE_AMORTISATION_POLICY_FIELD_PATH);
@@ -91,7 +87,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
         }
 
         try {
-
             AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
                     NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
@@ -105,7 +100,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -126,7 +120,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
      * @param intangibleAmortisationPolicy The intangible amortisation policy model on which to set the boolean
      */
     private void setIsPolicyIncluded(HttpServletRequest request, IntangibleAmortisationPolicy intangibleAmortisationPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         intangibleAmortisationPolicy.setIncludeIntangibleAmortisationPolicy(
                 companyAccountsDataState.getAccountingPolicies().getHasProvidedIntangiblePolicy());
@@ -138,7 +131,6 @@ public class IntangibleAmortisationPolicyController extends BaseController {
      * @param intangibleAmortisationPolicy The intangible amortisation policy for which to cache data
      */
     private void  cacheIsPolicyIncluded(HttpServletRequest request, IntangibleAmortisationPolicy intangibleAmortisationPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.getAccountingPolicies().setHasProvidedIntangiblePolicy(
                 intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy());

@@ -25,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyPolicyOnDisabledEmployeesServiceImplTest {
-
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -51,7 +50,6 @@ class CompanyPolicyOnDisabledEmployeesServiceImplTest {
     @Test
     @DisplayName("Get company policy on disabled employees")
     void getCompanyPolicyOnDisabledEmployees() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -67,7 +65,6 @@ class CompanyPolicyOnDisabledEmployeesServiceImplTest {
     @Test
     @DisplayName("Submit company policy on disabled employees - create")
     void submitCompanyPolicyOnDisabledEmployeesCreate() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -86,7 +83,6 @@ class CompanyPolicyOnDisabledEmployeesServiceImplTest {
     @Test
     @DisplayName("Submit company policy on disabled employees - update")
     void submitCompanyPolicyOnDisabledEmployeesUpdate() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 

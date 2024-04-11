@@ -27,5 +27,4 @@ else
     source "${APP_DIR}/app_env"
 fi
 
-
 exec java ${JAVA_MEM_ARGS} -jar -Dserver.port="${PORT}" "${APP_DIR}/company-accounts.web.ch.gov.uk.jar"

@@ -14,7 +14,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RadioAndTextValidatorTest {
-
     @Mock
     private BindingResult bindingResult;
 
@@ -22,11 +21,9 @@ class RadioAndTextValidatorTest {
     private static final String ERROR_MESSAGE = "turnoverErrorMessage";
     private static final String DETAILS = "details";
 
-
     @Test
     @DisplayName("RadioAndTextValidator - verify method never gets called with unexpected arguments")
     void verifyMethodNeverGetCalledWithUnexpectedArguments() {
-
         RadioAndTextValidator radioAndTextValidator = new RadioAndTextValidator();
 
         radioAndTextValidator.validate(true, DETAILS, bindingResult, ERROR_MESSAGE, ERROR_LOCATION);
@@ -41,7 +38,6 @@ class RadioAndTextValidatorTest {
     @Test
     @DisplayName("RadioAndTextValidator - verify method gets called with expected arguments")
     void verifyMethodNeverGetCalledWithExpectedArguments() {
-
         RadioAndTextValidator radioAndTextValidator = new RadioAndTextValidator();
 
         radioAndTextValidator.validate(true, null, bindingResult, ERROR_MESSAGE, ERROR_LOCATION);

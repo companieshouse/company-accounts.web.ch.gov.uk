@@ -8,10 +8,8 @@ import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 
 @Component
 public class FixedAssetsInvestmentsTransformerImpl implements NoteTransformer<FixedAssetsInvestments, FixedAssetsInvestmentsApi> {
-
     @Override
     public FixedAssetsInvestments toWeb(FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi) {
-
         if (fixedAssetsInvestmentsApi == null) {
             return new FixedAssetsInvestments();
         }
@@ -24,7 +22,6 @@ public class FixedAssetsInvestmentsTransformerImpl implements NoteTransformer<Fi
 
     @Override
     public FixedAssetsInvestmentsApi toApi(FixedAssetsInvestments fixedAssetsInvestments) {
-
         FixedAssetsInvestmentsApi fixedAssetsInvestmentsApi = new FixedAssetsInvestmentsApi();
         fixedAssetsInvestmentsApi.setDetails(fixedAssetsInvestments.getFixedAssetsDetails());
 

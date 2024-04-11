@@ -29,12 +29,9 @@ import java.util.stream.Stream;
 
 public class IntangibleAssetsGoodwillTransformerImpl extends
         IntangibleAssetsResourceTransformerImpl implements IntangibleAssetsResourceTransformer {
-
     @Override
     public void mapIntangibleAssetsResourceToWebModel(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
-
         if (intangibleAssetsResource.getCost() != null) {
-
             IntangibleAssetsCost intangibleAssetsCost = createCost(intangibleAssets);
 
             CostAtPeriodStart atPeriodStart = createCostAtPeriodStart(intangibleAssetsCost);
@@ -58,7 +55,6 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
         }
 
         if (intangibleAssetsResource.getAmortisation() != null) {
-
             IntangibleAssetsAmortisation intangibleAssetsAmortisation = createAmortisation(intangibleAssets);
 
             AmortisationAtPeriodStart atPeriodStart = createAmortisationAtPeriodStart(intangibleAssetsAmortisation);
@@ -90,7 +86,6 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
     @Override
     public boolean hasIntangibleAssetsToMapToApiResource(IntangibleAssets intangibleAssets) {
-
         return hasCostResources(intangibleAssets) ||
                 hasAmortisationResources(intangibleAssets) ||
                 hasNetBookValueResources(intangibleAssets);
@@ -98,13 +93,11 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
     @Override
     public void mapIntangibleAssetsToApiResource(IntangibleAssets intangibleAssets, IntangibleApi intangibleApi) {
-
         IntangibleAssetsResource goodwill = new IntangibleAssetsResource();
 
         if (hasCostResources(intangibleAssets)) {
             mapCostResources(intangibleAssets, goodwill);
         }
-
 
         if (hasAmortisationResources(intangibleAssets)) {
             mapAmortisationResources(intangibleAssets, goodwill);
@@ -153,7 +146,6 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
     @Override
     protected boolean hasNetBookValueResources(IntangibleAssets intangibleAssets) {
-
         IntangibleAssetsNetBookValue netBookValue = intangibleAssets.getNetBookValue();
 
         return Stream
@@ -167,7 +159,6 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
     @Override
     protected void mapCostResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
-
         Cost cost = new Cost();
         cost.setAtPeriodStart(Optional.of(intangibleAssets)
                 .map(IntangibleAssets::getCost)
@@ -184,7 +175,6 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
 
     @Override
     protected void mapAmortisationResources(IntangibleAssets intangibleAssets, IntangibleAssetsResource intangibleAssetsResource) {
-
         Amortisation amortisation = new Amortisation();
         amortisation.setAtPeriodStart(Optional.of(intangibleAssets)
                 .map(IntangibleAssets::getAmortisation)
@@ -202,7 +192,6 @@ public class IntangibleAssetsGoodwillTransformerImpl extends
     @Override
     protected void mapNetBookValueResources(IntangibleAssets intangibleAssets,
                                             IntangibleAssetsResource intangibleAssetsResource) {
-
         intangibleAssetsResource.setNetBookValueAtEndOfPreviousPeriod(
                 Optional.of(intangibleAssets)
                         .map(IntangibleAssets::getNetBookValue)

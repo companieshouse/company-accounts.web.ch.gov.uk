@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbefor
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class InterestReceivableAndSimilarIncome {
-
     @ValidationMapping("$.current_period.profit_and_loss.profit_or_loss_before_tax.interest_receivable_and_similar_income")
     private Long currentAmount;
 

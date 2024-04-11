@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class IntangibleAssetsDateHandler implements DateHandler<IntangibleAssets> {
-
     @Autowired
     private SmallFullService smallFullService;
 

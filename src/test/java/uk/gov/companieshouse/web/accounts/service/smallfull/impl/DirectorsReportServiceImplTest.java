@@ -40,7 +40,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportServiceImplTest {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -104,7 +103,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("GET - directors report - success")
     void getDirectorsReportSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
         when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
@@ -120,7 +118,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("GET - directors report - not found")
     void getDirectorsReportNotFound()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
         when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
@@ -136,7 +133,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("GET - directors report - ApiErrorResponseException")
     void getDirectorsReportApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
         when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
@@ -151,7 +147,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("GET - directors report - URIValidationException")
     void getDirectorsReportURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
         when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
@@ -166,7 +161,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("POST - directors report - success")
     void createDirectorsReportSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -184,7 +178,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("POST - directors report - already exists")
     void createDirectorsReportAlreadyExists()
             throws ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -201,7 +194,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("POST - directors report - ApiErrorResponseException")
     void createDirectorsReportApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -219,7 +211,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("POST - directors report - URIValidationException")
     void createDirectorsReportURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -237,7 +228,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("DELETE - directors report - success")
     void deleteDirectorsReportSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -254,7 +244,6 @@ class DirectorsReportServiceImplTest {
     @Test
     @DisplayName("DELETE - directors report - no small full link")
     void deleteDirectorsReportNoSmallFullLink() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -269,7 +258,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("DELETE - directors report - ApiErrorResponseException")
     void deleteDirectorsReportApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -287,7 +275,6 @@ class DirectorsReportServiceImplTest {
     @DisplayName("DELETE - directors report - URIValidationException")
     void deleteDirectorsReportURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);

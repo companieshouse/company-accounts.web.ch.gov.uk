@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @NextController(BalanceSheetController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/profit-and-loss")
 public class ProfitAndLossController extends BaseController implements ConditionalController {
-
     @Autowired
     private ProfitAndLossService profitAndLossService;
 
@@ -47,14 +46,12 @@ public class ProfitAndLossController extends BaseController implements Condition
                                    @PathVariable String transactionId,
                                    @PathVariable String companyAccountsId,
                                    Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
             model.addAttribute(PROFIT_AND_LOSS, profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber));
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -69,7 +66,6 @@ public class ProfitAndLossController extends BaseController implements Condition
                                       @ModelAttribute(PROFIT_AND_LOSS) @Valid ProfitAndLoss profitAndLoss,
                                       BindingResult bindingResult,
                                       Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -85,7 +81,6 @@ public class ProfitAndLossController extends BaseController implements Condition
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -96,7 +91,6 @@ public class ProfitAndLossController extends BaseController implements Condition
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedProfitAndLoss());
     }

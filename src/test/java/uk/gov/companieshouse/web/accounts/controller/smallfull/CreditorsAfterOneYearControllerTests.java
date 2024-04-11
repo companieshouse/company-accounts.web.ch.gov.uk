@@ -1,27 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,9 +26,30 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreditorsAfterOneYearControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     @InjectMocks
     private CreditorsAfterOneYearController mockController;
@@ -58,7 +64,7 @@ class CreditorsAfterOneYearControllerTests {
     private BalanceSheetService mockBalanceSheetService;
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(mockController).build();
     }
 
@@ -96,8 +102,7 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Get creditors after one year view success path")
     void getRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
                 NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR)).thenReturn(new CreditorsAfterOneYear());
 
@@ -116,7 +121,6 @@ class CreditorsAfterOneYearControllerTests {
     @DisplayName("Get creditors after one year view failure path due to error on creditors after " +
             "one year retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
-
         when(mockService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
                 NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR)).thenThrow(ServiceException.class);
 
@@ -129,8 +133,7 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Post creditors after one year success path")
     void postRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockService.submit(anyString(), anyString(), any(CreditorsAfterOneYear.class),
                         eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR)))
                                         .thenReturn(new ArrayList<>());
@@ -143,7 +146,6 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Post creditors after one year failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class).when(mockService).submit(anyString(), anyString(),
                         any(CreditorsAfterOneYear.class),
                         eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR));
@@ -156,7 +158,6 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Post creditors after one year with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = CURRENT_TOTAL_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
@@ -204,7 +205,6 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Post creditors after one year failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath(CURRENT_TOTAL_PATH);
         validationError.setMessageKey("invalid_character");

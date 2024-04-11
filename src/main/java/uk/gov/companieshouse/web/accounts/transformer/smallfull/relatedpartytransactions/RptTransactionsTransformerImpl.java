@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 @Component
 public class RptTransactionsTransformerImpl implements RptTransactionsTransformer {
-
     @Autowired
     private RptBreakdownTransformer rptBreakdownTransformer;
 
@@ -19,7 +18,6 @@ public class RptTransactionsTransformerImpl implements RptTransactionsTransforme
 
     @Override
     public RptTransactionApi getRptTransactionsApi(RptTransactionToAdd rptTransactionToAdd) {
-
         RptTransactionApi rptTransactionsApi = new RptTransactionApi();
 
         rptTransactionsApi.setNameOfRelatedParty(rptTransactionToAdd.getNameOfRelatedParty());
@@ -37,11 +35,9 @@ public class RptTransactionsTransformerImpl implements RptTransactionsTransforme
 
     @Override
     public RptTransaction[] getAllRptTransactions(RptTransactionApi[] rptTransactions) {
-
         RptTransaction[] allRptTransactions = new RptTransaction[rptTransactions.length];
 
         for (int i = 0; i < rptTransactions.length; i++) {
-
             RptTransaction rptTransaction = new RptTransaction();
 
             rptTransaction.setNameOfRelatedParty(rptTransactions[i].getNameOfRelatedParty());

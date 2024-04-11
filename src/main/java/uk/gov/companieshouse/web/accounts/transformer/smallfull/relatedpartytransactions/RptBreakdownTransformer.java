@@ -8,9 +8,7 @@ import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTran
 
 @Component
 public class RptBreakdownTransformer {
-
     public RptTransactionBreakdownApi mapRptTransactionsBreakdownToApi(RptTransactionToAdd rptTransactionToAdd) {
-
         RptTransactionBreakdownApi rptTransactionsBreakdownApi = new RptTransactionBreakdownApi();
 
         rptTransactionsBreakdownApi.setBalanceAtPeriodStart(rptTransactionToAdd.getBreakdown().getBalanceAtPeriodStart());
@@ -20,7 +18,6 @@ public class RptBreakdownTransformer {
     }
 
     public RptTransactionBreakdown mapRptTransactionsBreakdownToWeb(RptTransactionApi rptTransactionsApi) {
-
         RptTransactionBreakdown breakdown = new RptTransactionBreakdown();
 
         breakdown.setBalanceAtPeriodStart(rptTransactionsApi.getBreakdown().getBalanceAtPeriodStart());

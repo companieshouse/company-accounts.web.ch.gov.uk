@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @Service
 public class TransferOfAssetsServiceImpl implements
     TransferOfAssetsService {
-
     @Autowired
     private CicStatementsService cicStatementsService;
 
@@ -27,7 +26,6 @@ public class TransferOfAssetsServiceImpl implements
     @Override
     public TransferOfAssets getTransferOfAssets(String transactionId,
         String companyAccountsId) throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
@@ -41,7 +39,6 @@ public class TransferOfAssetsServiceImpl implements
     public List<ValidationError> submitTransferOfAssets(String transactionId,
         String companyAccountsId, TransferOfAssets transferOfAssets)
         throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 

@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amortisation;
 
 public class IntangibleAssetsAmortisation {
-
     AmortisationAtPeriodStart atPeriodStart;
 
     ChargeForYear chargeForYear;

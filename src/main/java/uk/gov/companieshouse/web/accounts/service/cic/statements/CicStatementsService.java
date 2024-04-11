@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface CicStatementsService {
-
     /**
      * Fetches the cic statements API resource
      *

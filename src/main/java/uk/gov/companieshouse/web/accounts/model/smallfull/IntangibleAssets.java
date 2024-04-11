@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class IntangibleAssets {
-
     @ValidationMapping("$.current_period.balance_sheet.fixed_assets.intangible")
     private Long currentAmount;
 

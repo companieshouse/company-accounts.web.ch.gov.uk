@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class AverageNumberOfEmployees {
-
     @ValidationMapping("$.employees.current_period.average_number_of_employees")
     private Long currentAverageNumberOfEmployees;
 

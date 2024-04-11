@@ -1,9 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,7 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class TurnoverPolicyControllerTest {
-
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String TRANSACTION_ID = "transactionId";
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
@@ -66,6 +69,9 @@ class TurnoverPolicyControllerTest {
 
     private static final String TURNOVER_POLICY_DETAILS_FIELD_PATH = "turnoverPolicyDetails";
     private static final String INVALID_STRING_SIZE_ERROR_MESSAGE = "validation.length.minInvalid.accounting_policies.turnover_policy";
+
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -95,22 +101,19 @@ class TurnoverPolicyControllerTest {
 
     @BeforeEach
     public void setupBeforeEach() {
-        when(navigatorService.getPreviousControllerPath(any(Class.class), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(Class.class), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(turnoverPolicyController).build();
     }
 
     @Test
     @DisplayName("Get the Include Turnover Policy view")
     void shouldGetTurnoverPolicy() throws Exception {
-
         TurnoverPolicy turnoverPolicy = new TurnoverPolicy();
         turnoverPolicy.setIsIncludeTurnoverSelected(true);
 
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
         when(accountingPolicies.getTurnoverPolicy()).thenReturn(turnoverPolicy);
-
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
             .perform(get(TURNOVER_POLICY_PATH))
@@ -124,7 +127,6 @@ class TurnoverPolicyControllerTest {
     @Test
     @DisplayName("Get the Include Turnover Policy view using the state to determine whether the policy is included")
     void shouldGetTurnoverPolicyUsingState() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
         when(accountingPolicies.getTurnoverPolicy()).thenReturn(new TurnoverPolicy());
@@ -150,7 +152,6 @@ class TurnoverPolicyControllerTest {
     @Test
     @DisplayName("Get the Include Turnover Policy view fails due to service exception")
     void shouldNotGetTurnoverPolicyServiceException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES)).thenThrow(ServiceException.class);
         this.mockMvc
             .perform(get(TURNOVER_POLICY_PATH))
@@ -163,7 +164,6 @@ class TurnoverPolicyControllerTest {
     @Test
     @DisplayName("Post Turnover Policy call is successful")
     void shouldPostTurnoverPolicy() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -177,7 +177,7 @@ class TurnoverPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(createPostRequestWithParam(false).session(session))
             .andExpect(status().is3xxRedirection())
@@ -208,7 +208,6 @@ class TurnoverPolicyControllerTest {
     @Test
     @DisplayName("Post Turnover Policy call is not redirected as there is a validation error")
     void shouldPostTurnoverPolicyFailsDueValidationErrors() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -229,7 +228,6 @@ class TurnoverPolicyControllerTest {
     @Test
     @DisplayName("Post Turnover Policy call is not redirected as there is service exception")
     void shouldPostTurnoverPolicyFailsDueException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -253,7 +251,6 @@ class TurnoverPolicyControllerTest {
      * @return
      */
     private MockHttpServletRequestBuilder createPostRequestWithParam(boolean addInvalidData) {
-
         String beanElement = "isIncludeTurnoverSelected";
         String data = addInvalidData ? null : "1";
 

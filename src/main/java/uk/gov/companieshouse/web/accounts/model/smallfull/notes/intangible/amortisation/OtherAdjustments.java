@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amor
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class OtherAdjustments {
-
     @ValidationMapping("$.intangible_assets.goodwill.amortisation.other_adjustments")
     private Long goodwill;
 

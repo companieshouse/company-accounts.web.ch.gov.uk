@@ -11,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 @PreviousController(GovukCriteriaController.class)
 @RequestMapping("/accounts/alternative-filing-options")
 public class GovukAlternativeFilingOptionsController extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return "smallfull/alternativeFilingOptions";
@@ -19,7 +18,6 @@ public class GovukAlternativeFilingOptionsController extends BaseController {
 
     @GetMapping
     public String showAlternativeFilingOptionsPage(Model model) {
-
         addBackPageAttributeToModel(model);
 
         return getTemplateName();

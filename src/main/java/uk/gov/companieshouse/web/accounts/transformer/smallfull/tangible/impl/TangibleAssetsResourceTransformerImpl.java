@@ -20,9 +20,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbook
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.netbookvalue.TangibleAssetsNetBookValue;
 
 public abstract class TangibleAssetsResourceTransformerImpl {
-
     protected TangibleAssetsCost createCost(TangibleAssets tangibleAssets) {
-
         TangibleAssetsCost tangibleAssetsCost;
 
         if (tangibleAssets.getCost() == null) {
@@ -36,7 +34,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected CostAtPeriodStart createCostAtPeriodStart(TangibleAssetsCost tangibleAssetsCost) {
-
         CostAtPeriodStart atPeriodStart;
 
         if (tangibleAssetsCost.getAtPeriodStart() == null) {
@@ -50,7 +47,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected Additions createAdditions(TangibleAssetsCost tangibleAssetsCost) {
-
         Additions additions;
 
         if (tangibleAssetsCost.getAdditions() == null) {
@@ -64,7 +60,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected Disposals createDisposals(TangibleAssetsCost tangibleAssetsCost) {
-
         Disposals disposals;
 
         if (tangibleAssetsCost.getDisposals() == null) {
@@ -78,7 +73,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected Revaluations createRevaluations(TangibleAssetsCost tangibleAssetsCost) {
-
         Revaluations revaluations;
 
         if (tangibleAssetsCost.getRevaluations() == null) {
@@ -92,7 +86,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected Transfers createTransfers(TangibleAssetsCost tangibleAssetsCost) {
-
         Transfers transfers;
 
         if (tangibleAssetsCost.getTransfers() == null) {
@@ -106,7 +99,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected CostAtPeriodEnd createCostAtPeriodEnd(TangibleAssetsCost tangibleAssetsCost) {
-
         CostAtPeriodEnd atPeriodEnd;
 
         if (tangibleAssetsCost.getAtPeriodEnd() == null) {
@@ -120,7 +112,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected TangibleAssetsDepreciation createDepreciation(TangibleAssets tangibleAssets) {
-
         TangibleAssetsDepreciation tangibleAssetsDepreciation;
 
         if (tangibleAssets.getDepreciation() == null) {
@@ -134,7 +125,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected DepreciationAtPeriodStart createDepreciationAtPeriodStart(TangibleAssetsDepreciation tangibleAssetsDepreciation) {
-
         DepreciationAtPeriodStart atPeriodStart;
 
         if (tangibleAssetsDepreciation.getAtPeriodStart() == null) {
@@ -148,7 +138,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected ChargeForYear createChargeForYear(TangibleAssetsDepreciation tangibleAssetsDepreciation) {
-
         ChargeForYear chargeForYear;
 
         if (tangibleAssetsDepreciation.getChargeForYear() == null) {
@@ -162,7 +151,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected OnDisposals createOnDisposals(TangibleAssetsDepreciation tangibleAssetsDepreciation) {
-
         OnDisposals onDisposals;
 
         if (tangibleAssetsDepreciation.getOnDisposals() == null) {
@@ -176,7 +164,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected OtherAdjustments createOtherAdjustments(TangibleAssetsDepreciation tangibleAssetsDepreciation) {
-
         OtherAdjustments otherAdjustments;
 
         if (tangibleAssetsDepreciation.getOtherAdjustments() == null) {
@@ -190,7 +177,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected DepreciationAtPeriodEnd createDepreciationAtPeriodEnd(TangibleAssetsDepreciation tangibleAssetsDepreciation) {
-
         DepreciationAtPeriodEnd atPeriodEnd;
 
         if (tangibleAssetsDepreciation.getAtPeriodEnd() == null) {
@@ -204,7 +190,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected TangibleAssetsNetBookValue createNetBookValue(TangibleAssets tangibleAssets) {
-
         TangibleAssetsNetBookValue tangibleAssetsNetBookValue;
 
         if (tangibleAssets.getNetBookValue() == null) {
@@ -218,7 +203,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected CurrentPeriod createCurrentPeriod(TangibleAssetsNetBookValue tangibleAssetsNetBookValue) {
-
         CurrentPeriod currentPeriod;
 
         if (tangibleAssetsNetBookValue.getCurrentPeriod() == null) {
@@ -232,7 +216,6 @@ public abstract class TangibleAssetsResourceTransformerImpl {
     }
 
     protected PreviousPeriod createPreviousPeriod(TangibleAssetsNetBookValue tangibleAssetsNetBookValue) {
-
         PreviousPeriod previousPeriod;
 
         if (tangibleAssetsNetBookValue.getPreviousPeriod() == null) {

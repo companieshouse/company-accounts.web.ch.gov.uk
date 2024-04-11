@@ -43,7 +43,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NoteServiceTest {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -109,8 +108,7 @@ class NoteServiceTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(noteResourceHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(URI);
     }
@@ -118,7 +116,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Get - success")
     void getSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.get(apiClient, URI)).thenReturn(executorWithResponseBody);
         when(executorWithResponseBody.execute()).thenReturn(apiResponseWithBody);
@@ -136,7 +133,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Get - has dates")
     void getHasDates() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE_WITH_DATES)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.get(apiClient, URI)).thenReturn(executorWithResponseBody);
         when(executorWithResponseBody.execute()).thenReturn(apiResponseWithBody);
@@ -158,7 +154,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Get - not found")
     void getNotFound() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.get(apiClient, URI)).thenReturn(executorWithResponseBody);
 
@@ -182,7 +177,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Get - ApiErrorResponseException")
     void getApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.get(apiClient, URI)).thenReturn(executorWithResponseBody);
 
@@ -200,7 +194,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Get - URIValidationException")
     void getURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.get(apiClient, URI)).thenReturn(executorWithResponseBody);
 
@@ -212,7 +205,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - create - success")
     void submitCreateSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -234,7 +226,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - create - has validation errors")
     void submitCreateHasValidationErrors() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -260,7 +251,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - create - ApiErrorResponseException")
     void submitCreateApiErrorResponseException() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -279,7 +269,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - create - URIValidationException")
     void submitCreateURIValidationException() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -298,7 +287,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - update - success")
     void submitUpdateSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -320,7 +308,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - update - has validation errors")
     void submitUpdateHasValidationErrors() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -346,7 +333,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - update - ApiErrorResponseException")
     void submitUpdateApiErrorResponseException() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -365,7 +351,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Submit - update - URIValidationException")
     void submitUpdateURIValidationException() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteTransformerFactory.getNoteTransformer(NOTE_TYPE)).thenReturn(noteTransformer);
         when(noteTransformer.toApi(note)).thenReturn(apiResource);
@@ -384,7 +369,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Delete - success")
     void deleteSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(true);
@@ -399,7 +383,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Delete - does not exist")
     void deleteDoesNotExist() throws ServiceException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(false);
@@ -412,7 +395,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Delete - ApiErrorResponseException")
     void deleteApiErrorResponseException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(true);
@@ -427,7 +409,6 @@ class NoteServiceTest {
     @Test
     @DisplayName("Delete - URIValidationException")
     void deleteURIValidationException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(noteResourceHandlerFactory.getNoteResourceHandler(NOTE_TYPE)).thenReturn(noteResourceHandler);
         when(noteResourceHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(true);

@@ -41,7 +41,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
-
     @Autowired
     private ProfitAndLossService profitAndLossService;
 
@@ -100,7 +99,6 @@ public class ReviewServiceImpl implements ReviewService {
     private ApiClientService apiClientService;
 
     public Review getReview(String transactionId, String companyAccountsId, String companyNumber) throws ServiceException {
-
         ProfitAndLoss profitAndLoss = profitAndLossService.getProfitAndLoss(transactionId, companyAccountsId, companyNumber);
 
         BalanceSheet balanceSheet = balanceSheetService.getBalanceSheet(transactionId, companyAccountsId, companyNumber);

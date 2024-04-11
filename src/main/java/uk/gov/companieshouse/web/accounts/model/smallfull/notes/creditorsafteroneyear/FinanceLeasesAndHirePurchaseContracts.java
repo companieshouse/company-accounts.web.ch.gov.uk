@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsaftero
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class FinanceLeasesAndHirePurchaseContracts {
-
     @ValidationMapping("$.creditors_after_more_than_one_year.current_period.finance_leases_and_hire_purchase_contracts")
     private Long currentFinanceLeasesAndHirePurchaseContracts;
 

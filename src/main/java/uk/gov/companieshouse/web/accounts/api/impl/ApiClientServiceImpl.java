@@ -7,7 +7,6 @@ import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 
 @Component
 public class ApiClientServiceImpl implements ApiClientService {
-
     @Override
     public ApiClient getApiClient() {
         return ApiClientManager.getSDK();

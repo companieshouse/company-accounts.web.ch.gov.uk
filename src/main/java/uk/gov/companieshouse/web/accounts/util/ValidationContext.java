@@ -45,7 +45,6 @@ import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.A
  * @see ValidationMessage
  */
 public class ValidationContext {
-
     private static final int MAX_DEPTH = 5;
 
     private static final String PATH_DELIMITER = ".";
@@ -88,7 +87,6 @@ public class ValidationContext {
      * @see   ValidationMapping
      */
     public void scanPackageForValidationMappings(String basePackage) {
-
         scanner.addIncludeFilter(new AnnotationTypeFilter(ValidationModel.class));
 
         depth = 0;
@@ -114,7 +112,6 @@ public class ValidationContext {
      * @return           a list of web-readable validation errors
      */
     public List<ValidationError> getValidationErrors(List<ApiError> apiErrors) {
-
         return apiErrors.stream().map(apiError -> {
             ValidationError validationError = new ValidationError();
             validationError.setFieldPath(getModelPathForErrorPath(apiError.getLocation()));
@@ -141,7 +138,6 @@ public class ValidationContext {
      * @return     the model object field path for the JSON path error string
      */
     private String getModelPathForErrorPath(String path) {
-
         String modelPath = mappings.get(path);
         if (StringUtils.isBlank(modelPath)) {
             throw new MissingValidationMappingException("No validation mapping found for API JSON error path: " + path);
@@ -159,13 +155,11 @@ public class ValidationContext {
      *                 path
      */
     private void scanClassValidationMappings(Class<?> clazz, String basePath) {
-
         if (depth >= MAX_DEPTH) {
             throw new IllegalStateException("Maximum recursion depth reached when performing validation scan of class " + clazz.toString());
         }
 
         for (Field field : clazz.getDeclaredFields()) {
-
             if (field.isSynthetic()) {
                 continue;
             }

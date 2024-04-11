@@ -29,7 +29,6 @@ import jakarta.validation.Valid;
 @NextController(LoansToDirectorsAdditionalInfoController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/add-or-remove-loans/additional-information-question")
 public class LoansToDirectorsAdditionalInfoQuestionController extends BaseController {
-
     private static final String LOANS_TO_DIRECTORS_ADDITIONAL_INFO_QUESTION = "loansToDirectorsAdditionalInfoQuestion";
 
     @Autowired
@@ -49,7 +48,6 @@ public class LoansToDirectorsAdditionalInfoQuestionController extends BaseContro
                                              @PathVariable String companyNumber,
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId) {
-
         LoansToDirectorsAdditionalInfoQuestion loansToDirectorsAdditionalInfoQuestion = new LoansToDirectorsAdditionalInfoQuestion();
 
         ApiClient apiClient = apiClientService.getApiClient();
@@ -79,7 +77,6 @@ public class LoansToDirectorsAdditionalInfoQuestionController extends BaseContro
                                                 BindingResult bindingResult,
                                                 Model model,
                                                 HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -123,14 +120,12 @@ public class LoansToDirectorsAdditionalInfoQuestionController extends BaseContro
     }
 
     private void setIsLoansToDirectorsAdditionalInfoIncluded(HttpServletRequest request, LoansToDirectorsAdditionalInfoQuestion loansToDirectorsAdditionalInfoQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         loansToDirectorsAdditionalInfoQuestion.setHasIncludedLoansToDirectorsAdditionalInfo(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo());
     }
 
     private void  cacheIsLoansToDirectorsIncluded(HttpServletRequest request,
                                                   LoansToDirectorsAdditionalInfoQuestion loansToDirectorsAdditionalInfoQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedLoansToDirectorsAdditionalInfo(loansToDirectorsAdditionalInfoQuestion.getHasIncludedLoansToDirectorsAdditionalInfo());
 

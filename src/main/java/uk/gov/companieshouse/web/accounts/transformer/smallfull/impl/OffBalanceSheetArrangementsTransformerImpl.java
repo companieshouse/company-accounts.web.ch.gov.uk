@@ -9,10 +9,8 @@ import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 @Component
 public class OffBalanceSheetArrangementsTransformerImpl implements
         NoteTransformer<OffBalanceSheetArrangements, OffBalanceSheetApi> {
-
     @Override
     public OffBalanceSheetArrangements toWeb(OffBalanceSheetApi offBalanceSheetApi) {
-
         OffBalanceSheetArrangements arrangements = new OffBalanceSheetArrangements();
 
         if (offBalanceSheetApi == null) {
@@ -25,7 +23,6 @@ public class OffBalanceSheetArrangementsTransformerImpl implements
 
     @Override
     public OffBalanceSheetApi toApi(OffBalanceSheetArrangements offBalanceSheetArrangements) {
-
         OffBalanceSheetApi offBalanceSheetApi = new OffBalanceSheetApi();
         offBalanceSheetApi.setDetails(offBalanceSheetArrangements.getOffBalanceSheetArrangementsDetails());
         return offBalanceSheetApi;
@@ -33,7 +30,6 @@ public class OffBalanceSheetArrangementsTransformerImpl implements
 
     @Override
     public NoteType getNoteType() {
-
         return NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS;
     }
 }

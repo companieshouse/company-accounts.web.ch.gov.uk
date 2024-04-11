@@ -15,19 +15,16 @@ import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.A
 
 @Component
 public class LoggingInterceptor implements RequestLogger, HandlerInterceptor {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(APPLICATION_NAME_SPACE);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-
         logStartRequestProcessing(request, LOGGER);
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) {
-
         logEndRequestProcessing(request, response, LOGGER);
     }
 }

@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -45,6 +49,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreditorsWithinOneYearControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -88,15 +94,14 @@ class CreditorsWithinOneYearControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get creditors within one year view success path")
     void getRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockCreditorsWithinOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR)).thenReturn(new CreditorsWithinOneYear());
 
         this.mockMvc.perform(get(CREDITORS_WITHIN_ONE_YEAR_PATH))
@@ -112,7 +117,6 @@ class CreditorsWithinOneYearControllerTest {
     @Test
     @DisplayName("Get creditors within one year view failure path due to error on creditors within one year retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
-
         when(mockCreditorsWithinOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(CREDITORS_WITHIN_ONE_YEAR_PATH))
@@ -124,8 +128,7 @@ class CreditorsWithinOneYearControllerTest {
     @Test
     @DisplayName("Post creditors within one year success path")
     void postRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockCreditorsWithinOneYearService.submit(anyString(), anyString(), any(CreditorsWithinOneYear.class), eq(NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(CREDITORS_WITHIN_ONE_YEAR_PATH))
@@ -136,7 +139,6 @@ class CreditorsWithinOneYearControllerTest {
     @Test
     @DisplayName("Post creditors within one year failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(mockCreditorsWithinOneYearService).submit(anyString(), anyString(), any(CreditorsWithinOneYear.class), eq(NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR));
 
@@ -149,7 +151,6 @@ class CreditorsWithinOneYearControllerTest {
     @Test
     @DisplayName("Post creditors within one year failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath(TEST_PATH);
         validationError.setMessageKey("invalid_character");
@@ -200,7 +201,6 @@ class CreditorsWithinOneYearControllerTest {
     @Test
     @DisplayName("Post creditors within one year with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = TEST_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";

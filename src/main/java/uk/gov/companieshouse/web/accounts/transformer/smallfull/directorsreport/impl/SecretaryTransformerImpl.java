@@ -7,10 +7,8 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 
 @Component
 public class SecretaryTransformerImpl implements SecretaryTransformer {
-
     @Override
     public SecretaryApi getSecretaryApi(AddOrRemoveDirectors addOrRemoveDirectors) {
-
         SecretaryApi secretaryApi = new SecretaryApi();
         secretaryApi.setName(addOrRemoveDirectors.getSecretary());
 

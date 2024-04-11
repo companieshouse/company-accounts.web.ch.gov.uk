@@ -1,9 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -40,6 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
 class TangibleDepreciationPolicyControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -91,14 +97,13 @@ class TangibleDepreciationPolicyControllerTest {
             "validation.length.minInvalid.accounting_policies.tangible_fixed_assets_depreciation_policy";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get tangible depreciation policy view - success path")
     void getRequestSuccess() throws Exception {
-
         TangibleDepreciationPolicy tangibleDepreciationPolicy = new TangibleDepreciationPolicy();
         tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(true);
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
@@ -106,7 +111,7 @@ class TangibleDepreciationPolicyControllerTest {
 
         when(accountingPolicies.getTangibleDepreciationPolicy()).thenReturn(tangibleDepreciationPolicy);
 
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH))
             .andExpect(status().isOk())
@@ -119,7 +124,6 @@ class TangibleDepreciationPolicyControllerTest {
     @Test
     @DisplayName("Get tangible depreciation policy view using state to determine whether policy is included - success path")
     void getRequestSuccessUsingState() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -131,7 +135,7 @@ class TangibleDepreciationPolicyControllerTest {
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
         when(accountingPoliciesDataState.getHasProvidedTangiblePolicy()).thenReturn(false);
 
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(TANGIBLE_DEPRECIATION_POLICY_PATH).session(session))
                 .andExpect(status().isOk())
@@ -157,7 +161,6 @@ class TangibleDepreciationPolicyControllerTest {
     @Test
     @DisplayName("Submit tangible depreciation policy - success path")
     void postRequestSuccess() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -171,7 +174,7 @@ class TangibleDepreciationPolicyControllerTest {
 
         when(companyAccountsDataState.getAccountingPolicies()).thenReturn(accountingPoliciesDataState);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData().session(session))
             .andExpect(status().is3xxRedirection())

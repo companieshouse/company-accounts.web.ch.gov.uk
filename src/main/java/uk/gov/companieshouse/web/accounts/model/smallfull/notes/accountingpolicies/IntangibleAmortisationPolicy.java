@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 @ValidationModel
 public class IntangibleAmortisationPolicy {
-
     @NotNull(message = "{intangibleAmortisationPolicy.selectionNotMade}")
     private Boolean includeIntangibleAmortisationPolicy;
 

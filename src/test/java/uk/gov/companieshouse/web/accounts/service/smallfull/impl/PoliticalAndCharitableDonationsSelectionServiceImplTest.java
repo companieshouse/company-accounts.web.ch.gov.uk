@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportState
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PoliticalAndCharitableDonationsSelectionServiceImplTest {
-
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -49,7 +48,6 @@ class PoliticalAndCharitableDonationsSelectionServiceImplTest {
     @Test
     @DisplayName("Get political and charitable donations selection - no existing statements")
     void getPoliticalAndCharitableDonationsSelectionNoExistingStatements() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -63,7 +61,6 @@ class PoliticalAndCharitableDonationsSelectionServiceImplTest {
     @Test
     @DisplayName("Get political and charitable donations selection - statements do not include political and charitable donations")
     void getPoliticalAndCharitableDonationsSelectionStatementsDoNotIncludePoliticalAndCharitableDonations() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -79,7 +76,6 @@ class PoliticalAndCharitableDonationsSelectionServiceImplTest {
     @Test
     @DisplayName("Get political and charitable donations selection - statements include political and charitable donations")
     void getPoliticalAndCharitableDonationsSelectionStatementsIncludePoliticalAndCharitableDonations() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -96,7 +92,6 @@ class PoliticalAndCharitableDonationsSelectionServiceImplTest {
     @Test
     @DisplayName("Submit political and charitable donations selection - has political and charitable donations")
     void submitPoliticalAndCharitableDonationsSelectionHasPoliticalAndCharitableDonations() throws ServiceException {
-
         when(politicalAndCharitableDonationsSelection.getHasPoliticalAndCharitableDonations()).thenReturn(true);
 
         assertAll(() ->
@@ -109,7 +104,6 @@ class PoliticalAndCharitableDonationsSelectionServiceImplTest {
     @Test
     @DisplayName("Submit political and charitable donations selection - no existing statements")
     void submitPoliticalAndCharitableDonationsSelectionNoExistingStatements() throws ServiceException {
-
         when(politicalAndCharitableDonationsSelection.getHasPoliticalAndCharitableDonations()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -123,7 +117,6 @@ class PoliticalAndCharitableDonationsSelectionServiceImplTest {
     @Test
     @DisplayName("Submit political and charitable donations selection - has other statements")
     void submitPoliticalAndCharitableDonationsSelectionHasOtherStatements() throws ServiceException {
-
         when(politicalAndCharitableDonationsSelection.getHasPoliticalAndCharitableDonations()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -143,7 +136,6 @@ class PoliticalAndCharitableDonationsSelectionServiceImplTest {
     @Test
     @DisplayName("Submit political and charitable donations selection - has no other statements")
     void submitPoliticalAndCharitableDonationsSelectionHasNoOtherStatements() throws ServiceException {
-
         when(politicalAndCharitableDonationsSelection.getHasPoliticalAndCharitableDonations()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))

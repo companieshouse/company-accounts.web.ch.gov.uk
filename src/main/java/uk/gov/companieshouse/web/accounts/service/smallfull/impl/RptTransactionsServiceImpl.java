@@ -25,7 +25,6 @@ import java.util.List;
 
 @Service
 public class RptTransactionsServiceImpl implements RptTransactionService {
-
     private static final UriTemplate RPT_TRANSACTIONS_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/related-party-transactions/transactions");
 
@@ -35,7 +34,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
     private static final String RESOURCE_NAME = "transactions";
 
     private static final String NOT_PROVIDED = "Not provided";
-
 
     @Autowired
     private ApiClientService apiClientService;
@@ -54,7 +52,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     @Override
     public RptTransaction[] getAllRptTransactions(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = RPT_TRANSACTIONS_URI.expand(transactionId, companyAccountsId).toString();
@@ -80,7 +77,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     @Override
     public List<ValidationError> createRptTransaction(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
-
         List<ValidationError> validationErrors = rptTransactionValidator.validateRptTransactionToAdd(addOrRemoveRptTransactions.getRptTransactionToAdd());
 
         if (!validationErrors.isEmpty()) {
@@ -110,7 +106,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     @Override
     public void deleteRptTransaction(String transactionId, String companyAccountsId, String rptTransactionId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
         String uri = RPT_TRANSACTIONS_URI_WITH_ID.expand(transactionId, companyAccountsId, rptTransactionId).toString();
         try {
@@ -124,7 +119,6 @@ public class RptTransactionsServiceImpl implements RptTransactionService {
 
     @Override
     public List<ValidationError> submitAddOrRemoveRptTransactions(String transactionId, String companyAccountsId, AddOrRemoveRptTransactions addOrRemoveRptTransactions) throws ServiceException {
-
         return createRptTransaction(transactionId, companyAccountsId, addOrRemoveRptTransactions);
     }
 }

@@ -5,7 +5,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbefore
 import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.items.TotalProfitOrLossBeforeTax;
 
 public class ProfitOrLossBeforeTax {
-
     private InterestPayableAndSimilarCharges interestPayableAndSimilarCharges;
 
     private InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome;

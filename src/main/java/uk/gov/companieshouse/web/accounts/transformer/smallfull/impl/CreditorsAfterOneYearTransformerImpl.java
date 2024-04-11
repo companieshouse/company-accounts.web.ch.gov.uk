@@ -19,10 +19,8 @@ import java.util.stream.Stream;
 @Component
 public class CreditorsAfterOneYearTransformerImpl
         implements NoteTransformer<CreditorsAfterOneYear, CreditorsAfterOneYearApi> {
-
     @Override
     public CreditorsAfterOneYear toWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi) {
-
         CreditorsAfterOneYear creditorsAfterOneYear = new CreditorsAfterOneYear();
 
         if (creditorsAfterOneYearApi == null) {
@@ -37,7 +35,6 @@ public class CreditorsAfterOneYearTransformerImpl
 
     @Override
     public CreditorsAfterOneYearApi toApi(CreditorsAfterOneYear creditorsAfterOneYear) {
-
         CreditorsAfterOneYearApi creditorsAfterOneYearApi = new CreditorsAfterOneYearApi();
 
         setCurrentPeriodOnApiModel(creditorsAfterOneYear, creditorsAfterOneYearApi);
@@ -49,12 +46,10 @@ public class CreditorsAfterOneYearTransformerImpl
 
     private void populateCurrentPeriodForWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi,
             CreditorsAfterOneYear creditorsAfterOneYear) {
-
         CurrentPeriod currentPeriod =
                 creditorsAfterOneYearApi.getCurrentPeriod();
 
         if (currentPeriod != null) {
-
             creditorsAfterOneYear.setDetails(currentPeriod.getDetails());
 
             if (currentPeriod.getBankLoansAndOverdrafts() != null) {
@@ -83,12 +78,10 @@ public class CreditorsAfterOneYearTransformerImpl
 
     private void populatePreviousPeriodForWeb(CreditorsAfterOneYearApi creditorsAfterOneYearApi,
             CreditorsAfterOneYear creditorsAfterOneYear) {
-
         PreviousPeriod previousPeriod =
                 creditorsAfterOneYearApi.getPreviousPeriod();
 
         if (previousPeriod != null) {
-
             if (previousPeriod.getBankLoansAndOverdrafts() != null) {
                 BankLoansAndOverdrafts bankLoansAndOverdrafts = createBankLoansAndOverdrafts(creditorsAfterOneYear);
                 bankLoansAndOverdrafts.setPreviousBankLoansAndOverdrafts(previousPeriod.getBankLoansAndOverdrafts());
@@ -114,7 +107,6 @@ public class CreditorsAfterOneYearTransformerImpl
     }
 
     private BankLoansAndOverdrafts createBankLoansAndOverdrafts(CreditorsAfterOneYear creditorsAfterOneYear) {
-
         BankLoansAndOverdrafts bankLoansAndOverdrafts;
 
         if (creditorsAfterOneYear.getBankLoansAndOverdrafts() != null) {
@@ -128,7 +120,6 @@ public class CreditorsAfterOneYearTransformerImpl
     }
 
     private OtherCreditors createOtherCreditors(CreditorsAfterOneYear creditorsAfterOneYear) {
-
         OtherCreditors otherCreditors;
 
         if (creditorsAfterOneYear.getOtherCreditors() != null) {
@@ -142,7 +133,6 @@ public class CreditorsAfterOneYearTransformerImpl
     }
 
     private FinanceLeasesAndHirePurchaseContracts createFinanceLeasesAndHirePurchaseContracts(CreditorsAfterOneYear creditorsAfterOneYear) {
-
         FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts;
 
         if (creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts() != null) {
@@ -156,7 +146,6 @@ public class CreditorsAfterOneYearTransformerImpl
     }
 
     private Total createTotal(CreditorsAfterOneYear creditorsAfterOneYear) {
-
         Total total;
 
         if (creditorsAfterOneYear.getTotal() != null) {
@@ -216,7 +205,6 @@ public class CreditorsAfterOneYearTransformerImpl
     }
 
     private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
-
         return Stream.of(currentPeriod.getBankLoansAndOverdrafts(),
                 currentPeriod.getFinanceLeasesAndHirePurchaseContracts(),
                 currentPeriod.getOtherCreditors(),
@@ -225,7 +213,6 @@ public class CreditorsAfterOneYearTransformerImpl
     }
 
     private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
-
         return Stream.of(previousPeriod.getBankLoansAndOverdrafts(),
                 previousPeriod.getFinanceLeasesAndHirePurchaseContracts(),
                 previousPeriod.getOtherCreditors(),

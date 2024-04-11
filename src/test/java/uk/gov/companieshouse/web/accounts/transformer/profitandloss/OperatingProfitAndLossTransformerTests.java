@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OperatingProfitAndLossTransformerTests {
-
     private static final Long CURRENT_ADMINISTRATIVE_EXPENSES = 1L;
     private static final Long CURRENT_DISTRIBUTION_COSTS = 1L;
     private static final Long CURRENT_OTHER_OPERATING_INCOME = 2L;
@@ -33,13 +32,11 @@ class OperatingProfitAndLossTransformerTests {
     private static final Long PREVIOUS_OTHER_OPERATING_INCOME = 20L;
     private static final Long PREVIOUS_OPERATING_TOTAL = 50L;
 
-
     private final OperatingProfitAndLossTransformer transformer = new OperatingProfitAndLossTransformer();
 
     @Test
     @DisplayName("Add current period to web model")
     void addCurrentPeriodToWebModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         OperatingProfitOrLoss operatingProfitOrLoss = new OperatingProfitOrLoss();
@@ -71,7 +68,6 @@ class OperatingProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to web models which has current period values")
     void addPreviousPeriodToWebModelWhichHasCurrentPeriodValues() {
-
         ProfitAndLossApi previousPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         OperatingProfitOrLoss operatingProfitOrLoss = new OperatingProfitOrLoss();
@@ -120,7 +116,6 @@ class OperatingProfitAndLossTransformerTests {
 
     }
 
-
     @Test
     @DisplayName("Add current period to web model - no operating profit or loss")
     void addCurrentPeriodToWebModelNoOperatingProfitOrLoss() {
@@ -134,7 +129,6 @@ class OperatingProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to web model - no operating profit or loss")
     void addPreviousPeriodToWebModelNoOperatingProfitOrLoss() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         transformer.addPreviousPeriodToWebModel(profitAndLoss, new ProfitAndLossApi());
@@ -145,7 +139,6 @@ class OperatingProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add current period to api model")
     void addCurrentPeriodToApiModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -188,7 +181,6 @@ class OperatingProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to api model")
     void addPreviousPeriodToApiModel() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -231,7 +223,6 @@ class OperatingProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add current period to api model without operating profit and loss to map")
     void addCurrentPeriodToApiModelWithoutOperatingProfitAndLossToMap() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -255,7 +246,6 @@ class OperatingProfitAndLossTransformerTests {
     @Test
     @DisplayName("Add previous period to api model without operating profit and loss to map")
     void addPreviousPeriodToApiModelWithoutOperatingProfitAndLossToMap() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();

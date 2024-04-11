@@ -20,7 +20,6 @@ import java.time.LocalDate;
 @NextController(CICStepsToCompleteController.class)
 @RequestMapping("/accounts/company/{companyNumber}/cic/details")
 public class CicCompanyDetailController extends BaseController {
-
     @Autowired
     private CompanyService companyService;
 
@@ -51,7 +50,6 @@ public class CicCompanyDetailController extends BaseController {
 
     @GetMapping
     public String getCompanyDetail(@PathVariable String companyNumber, Model model, HttpServletRequest request) {
-
         CompanyDetail companyDetail;
 
         try {
@@ -65,7 +63,6 @@ public class CicCompanyDetailController extends BaseController {
         model.addAttribute("companyDetail", companyDetail);
 
         if(Boolean.TRUE.equals(companyDetail.getIsCic())) {
-
             LocalDate accountsNextMadeUpTo = companyDetail.getAccountsNextMadeUpTo();
             if(accountsNextMadeUpTo != null && accountsNextMadeUpTo.isBefore(LocalDate.now())) {
                 model.addAttribute(MODEL_ATTR_HEADING, TEMPLATE_HEADING_IS_CIC);
@@ -92,7 +89,6 @@ public class CicCompanyDetailController extends BaseController {
 
     @PostMapping
     public String postCompanyDetails(@PathVariable String companyNumber) {
-
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
     }
 }

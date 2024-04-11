@@ -27,7 +27,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 @PreviousController(LoansToDirectorsAdditionalInfoController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/off-balance-sheet-arrangements-question")
 public class OffBalanceSheetArrangementsQuestionController extends BaseController {
-
     private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_QUESTION = "offBalanceSheetArrangementsQuestion";
 
     @Autowired
@@ -41,7 +40,6 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
                                                          @PathVariable String transactionId,
                                                          @PathVariable String companyAccountsId,
                                                          Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         OffBalanceSheetArrangementsQuestion offBalanceSheetArrangementsQuestion = new OffBalanceSheetArrangementsQuestion();
@@ -50,15 +48,12 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
             if (StringUtils.isNotBlank(
                     noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)
                             .getOffBalanceSheetArrangementsDetails())) {
-
                 offBalanceSheetArrangementsQuestion.setHasIncludedOffBalanceSheetArrangements(true);
             } else {
-
                 setIsOffBalanceSheetArrangementsIncludedFromCache(request,
                         offBalanceSheetArrangementsQuestion);
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e);
             return ERROR_VIEW;
         }
@@ -75,7 +70,6 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
                                                             @ModelAttribute(OFF_BALANCE_SHEET_ARRANGEMENTS_QUESTION) @Valid OffBalanceSheetArrangementsQuestion offBalanceSheetArrangementsQuestion,
                                                             BindingResult bindingResult,
                                                             Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -88,7 +82,6 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
                 noteService.delete(transactionId, companyAccountsId, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -99,13 +92,11 @@ public class OffBalanceSheetArrangementsQuestionController extends BaseControlle
     }
 
     private void setIsOffBalanceSheetArrangementsIncludedFromCache(HttpServletRequest request, OffBalanceSheetArrangementsQuestion directorsReportQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         directorsReportQuestion.setHasIncludedOffBalanceSheetArrangements(companyAccountsDataState.getHasIncludedOffBalanceSheetArrangements());
     }
 
     private void  cacheIsOffBalanceSheetArrangementsIncluded(HttpServletRequest request, OffBalanceSheetArrangementsQuestion directorsReportQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedOffBalanceSheetArrangements(directorsReportQuestion.getHasIncludedOffBalanceSheetArrangements());
 

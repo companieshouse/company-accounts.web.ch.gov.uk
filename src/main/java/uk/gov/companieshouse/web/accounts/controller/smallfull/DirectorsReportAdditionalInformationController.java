@@ -30,7 +30,6 @@ import java.util.Optional;
 @PreviousController(DirectorsReportAdditionalInformationSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/additional-information")
 public class DirectorsReportAdditionalInformationController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -47,7 +46,6 @@ public class DirectorsReportAdditionalInformationController extends BaseControll
                                            @PathVariable String transactionId,
                                            @PathVariable String companyAccountsId,
                                            Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -57,7 +55,6 @@ public class DirectorsReportAdditionalInformationController extends BaseControll
             model.addAttribute(ADDITIONAL_INFORMATION, additionalInformation);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -73,7 +70,6 @@ public class DirectorsReportAdditionalInformationController extends BaseControll
                                               @ModelAttribute(ADDITIONAL_INFORMATION) @Valid AdditionalInformation additionalInformation,
                                               BindingResult bindingResult,
                                               Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -90,20 +86,17 @@ public class DirectorsReportAdditionalInformationController extends BaseControll
             }
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
-
     }
 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return Optional.ofNullable(companyAccountsDataState)
                 .map(CompanyAccountsDataState::getDirectorsReportStatements)
@@ -111,9 +104,5 @@ public class DirectorsReportAdditionalInformationController extends BaseControll
                 .orElse(false);
 
     }
-
-
-
-
 
 }

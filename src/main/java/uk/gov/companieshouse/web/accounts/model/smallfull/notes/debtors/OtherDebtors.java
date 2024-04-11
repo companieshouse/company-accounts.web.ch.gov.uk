@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class OtherDebtors {
-
     @ValidationMapping("$.debtors.current_period.other_debtors")
     private Long currentOtherDebtors;
 

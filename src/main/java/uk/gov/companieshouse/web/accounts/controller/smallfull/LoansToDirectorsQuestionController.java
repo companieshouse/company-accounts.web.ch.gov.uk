@@ -30,7 +30,6 @@ import java.util.Map;
 @NextController(AddOrRemoveLoansController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/loans-to-directors-question")
 public class LoansToDirectorsQuestionController extends BaseController {
-
     private static final String LOANS_TO_DIRECTORS_QUESTION = "loansToDirectorsQuestion";
 
     @Autowired
@@ -48,7 +47,6 @@ public class LoansToDirectorsQuestionController extends BaseController {
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
                                              HttpServletRequest request) {
-
         LoansToDirectorsQuestion loansToDirectorsQuestion = new LoansToDirectorsQuestion();
 
         ApiClient apiClient = apiClientService.getApiClient();
@@ -78,7 +76,6 @@ public class LoansToDirectorsQuestionController extends BaseController {
                                                 BindingResult bindingResult,
                                                 Model model,
                                                 HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -124,13 +121,11 @@ public class LoansToDirectorsQuestionController extends BaseController {
     }
 
     private void setIsLoansToDirectorsIncluded(HttpServletRequest request, LoansToDirectorsQuestion loansToDirectorsQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         loansToDirectorsQuestion.setHasIncludedLoansToDirectors(companyAccountsDataState.getHasIncludedLoansToDirectors());
     }
 
     private void  cacheIsLoansToDirectorsIncluded(HttpServletRequest request, LoansToDirectorsQuestion loansToDirectorsQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedLoansToDirectors(loansToDirectorsQuestion.getHasIncludedLoansToDirectors());
 

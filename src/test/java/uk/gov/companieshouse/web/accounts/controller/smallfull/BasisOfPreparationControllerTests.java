@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,6 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BasisOfPreparationControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -76,15 +82,14 @@ class BasisOfPreparationControllerTests {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+    public void setUp() {
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get basis of preparation view - success path")
     void getRequestSuccess() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -104,7 +109,6 @@ class BasisOfPreparationControllerTests {
     @Test
     @DisplayName("Get basis of preparation view - basis of preparation service exception")
     void getRequestBasisOfPreparationServiceException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenThrow(ServiceException.class);
 
@@ -116,7 +120,6 @@ class BasisOfPreparationControllerTests {
     @Test
     @DisplayName("Submit basis of preparation - success path")
     void postRequestSuccess() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -124,7 +127,7 @@ class BasisOfPreparationControllerTests {
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(postRequestWithValidData())
                 .andExpect(status().is3xxRedirection())
@@ -134,7 +137,6 @@ class BasisOfPreparationControllerTests {
     @Test
     @DisplayName("Submit basis of preparation - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(postRequestWithInvalidData())
                 .andExpect(status().isOk())
                 .andExpect(view().name(BASIS_OF_PREPARATION_VIEW));
@@ -143,7 +145,6 @@ class BasisOfPreparationControllerTests {
     @Test
     @DisplayName("Submit basis of preparation - validation errors")
     void postRequestWithValidationErrors() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -159,7 +160,6 @@ class BasisOfPreparationControllerTests {
     @Test
     @DisplayName("Submit basis of preparation - basis of preparation service exception")
     void postRequestBasisOfPreparationServiceException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
@@ -172,7 +172,6 @@ class BasisOfPreparationControllerTests {
     }
 
     private MockHttpServletRequestBuilder postRequestWithValidData() {
-
         String beanElement = "accountingRegulatoryStandard";
         // Mock boolean field input
         String validData = "FRS102";
@@ -181,7 +180,6 @@ class BasisOfPreparationControllerTests {
     }
 
     private MockHttpServletRequestBuilder postRequestWithInvalidData() {
-
         String beanElement = "isPreparedInAccordanceWithStandards";
         // Mock lack of boolean field input
         String invalidData = null;

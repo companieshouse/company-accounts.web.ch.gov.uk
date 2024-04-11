@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Approval;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface ApprovalService {
-
     /**
      * Submit an approval model to the company accounts api
      * @param transactionId The id of the CHS transaction

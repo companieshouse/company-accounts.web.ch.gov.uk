@@ -27,7 +27,6 @@ import java.util.List;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/employees")
 public class EmployeesController extends BaseController {
-
     @Autowired
     private NoteService<Employees> employeesService;
 
@@ -41,7 +40,6 @@ public class EmployeesController extends BaseController {
             @PathVariable String companyNumber,
             @PathVariable String transactionId, @PathVariable String companyAccountsId,
             Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -64,7 +62,6 @@ public class EmployeesController extends BaseController {
             @PathVariable String companyAccountsId,
             @ModelAttribute("employees") @Valid Employees employees,
             BindingResult bindingResult, Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {

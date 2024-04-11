@@ -5,7 +5,6 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorToAdd;
 
 public interface DirectorTransformer {
-
     DirectorApi getDirectorApi(DirectorToAdd director);
 
     Director[] getAllDirectors(DirectorApi[] directors);

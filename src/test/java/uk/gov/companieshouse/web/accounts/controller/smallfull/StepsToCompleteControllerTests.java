@@ -1,24 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,19 +23,37 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StepsToCompleteControllerTests {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -126,16 +132,14 @@ class StepsToCompleteControllerTests {
     private static final String CURRENT_PERIOD_LINK = "currentPeriodLink";
 
     @BeforeEach
-    private void setup() {
-
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get steps to complete view success path")
     void getRequestSuccess() throws Exception {
-
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
@@ -147,7 +151,6 @@ class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post steps to complete success path - first year filer")
     void postRequestSuccessFirstYearFiler() throws Exception {
-
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
@@ -156,7 +159,7 @@ class StepsToCompleteControllerTests {
 
         when(companyAccountsApi.getLinks()).thenReturn(companyAccountsLinks);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
@@ -190,7 +193,6 @@ class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post steps to complete success path - multi year filer")
     void postRequestSuccessMultiYearFiler() throws Exception {
-
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
@@ -199,7 +201,7 @@ class StepsToCompleteControllerTests {
 
         when(companyAccountsApi.getLinks()).thenReturn(companyAccountsLinks);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -237,7 +239,6 @@ class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post steps to complete success path with pre-existing resources")
     void postRequestSuccessPreExistingResources() throws Exception {
-
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
@@ -248,7 +249,7 @@ class StepsToCompleteControllerTests {
 
         when(companyAccountsLinks.getSmallFullAccounts()).thenReturn(SMALL_FULL_LINK);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -279,7 +280,6 @@ class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post steps to complete failure path for transaction service")
     void postRequestTransactionServiceFailure() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(transactionService).createTransaction(anyString());
 
@@ -291,7 +291,6 @@ class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post steps to complete failure path for create company accounts resource")
     void postRequestCompanyAccountsServiceCreateCompanyAccountsFailure() throws Exception {
-
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
         doThrow(ServiceException.class)
@@ -305,7 +304,6 @@ class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post steps to complete failure path for create small full accounts resource")
     void postRequestCompanyAccountsServiceCreateSmallFullAccountsFailure() throws Exception {
-
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
@@ -327,7 +325,6 @@ class StepsToCompleteControllerTests {
     @Test
     @DisplayName("Post steps to complete failure path for create statements resource")
     void postRequestStatementsServiceCreateStatementsFailure() throws Exception {
-
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
         when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);

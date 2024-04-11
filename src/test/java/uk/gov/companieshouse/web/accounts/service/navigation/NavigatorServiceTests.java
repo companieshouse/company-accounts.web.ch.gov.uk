@@ -30,7 +30,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class NavigatorServiceTests {
-
     @Mock
     private ApplicationContext applicationContext;
 
@@ -91,7 +90,6 @@ public class NavigatorServiceTests {
 
     @Test
     void missingExpectedNumberOfPathVariablesForMandatoryController() {
-
         Throwable exception = assertThrows(NavigationException.class, () ->
                 navigatorService.getNextControllerRedirect(MockControllerFour.class, COMPANY_NUMBER));
 

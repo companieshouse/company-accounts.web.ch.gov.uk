@@ -37,7 +37,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl.Ta
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TangibleAssetsTotalTransformerImplTests {
-
     private static final Long COST_AT_PERIOD_START = 1L;
     private static final Long ADDITIONS = 2L;
     private static final Long DISPOSALS = 3L;
@@ -71,7 +70,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an empty web model")
     void mapFullApiResourceToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource total = createTotalApiResource(true, true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, total);
@@ -82,7 +80,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a cost object to an empty web model")
     void mapApiResourceWithoutCostToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource total = createTotalApiResource(false, true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, total);
@@ -94,7 +91,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a depreciation object to an empty web model")
     void mapApiResourceWithoutDepreciationToEmptyWebModel() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
         TangibleAssetsResource total = createTotalApiResource(true, false);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, total);
@@ -106,7 +102,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an web model with other existing resources")
     void mapFullApiResourceToPopulatedWebModel() {
-
         TangibleAssets tangibleAssets = createTangibleAssetsWithPreExistingResources();
 
         TangibleAssetsResource total = createTotalApiResource(true, true);
@@ -119,7 +114,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from a web model to an api resource")
     void mapFullWebModelToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(true, true, true);
 
@@ -132,7 +126,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without cost to an api resource")
     void mapWebModelWithoutCostToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(false, true, true);
 
@@ -145,7 +138,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without depreciation to an api resource")
     void mapWebModelWithoutDepreciationToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(true, false, true);
 
@@ -158,7 +150,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without net book values to an api resource")
     void mapWebModelWithoutNetBookValuesToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(true, true, false);
 
@@ -171,7 +162,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a fully populated web model")
     void hasTangibleAssetsToMapToApiResource() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(true, true, true);
 
@@ -181,7 +171,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any cost values")
     void hasTangibleAssetsToMapToApiResourceNoCost() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(false, true, true);
 
@@ -191,7 +180,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any depreciation values")
     void hasTangibleAssetsToMapToApiResourceNoDepreciation() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(true, false, true);
 
@@ -201,7 +189,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a populated web model without any net book values")
     void hasTangibleAssetsToMapToApiResourceNoNetBookValues() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(true, true, false);
 
@@ -211,7 +198,6 @@ class TangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests tangible assets will be mapped for a web model without any total values")
     void hasTangibleAssetsToMapToApiResourceNoResourceValues() {
-
         TangibleAssets tangibleAssets =
                 createTangibleAssetsWithTotalResources(false, false, false);
 
@@ -220,7 +206,6 @@ class TangibleAssetsTotalTransformerImplTests {
 
     private TangibleAssetsResource createTotalApiResource(boolean includeCost,
                                                                         boolean includeDepreciation) {
-
         TangibleAssetsResource total = new TangibleAssetsResource();
 
         if (includeCost) {
@@ -236,7 +221,6 @@ class TangibleAssetsTotalTransformerImplTests {
     }
 
     private Cost createCostApiResource() {
-
         Cost cost = new Cost();
         cost.setAtPeriodStart(COST_AT_PERIOD_START);
         cost.setAdditions(ADDITIONS);
@@ -248,7 +232,6 @@ class TangibleAssetsTotalTransformerImplTests {
     }
 
     private Depreciation createDepreciationApiResource() {
-
         Depreciation depreciation = new Depreciation();
         depreciation.setAtPeriodStart(DEPRECIATION_AT_PERIOD_START);
         depreciation.setChargeForYear(CHARGE_FOR_YEAR);
@@ -259,7 +242,6 @@ class TangibleAssetsTotalTransformerImplTests {
     }
 
     private TangibleAssets createTangibleAssetsWithPreExistingResources() {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
@@ -332,7 +314,6 @@ class TangibleAssetsTotalTransformerImplTests {
     private TangibleAssets createTangibleAssetsWithTotalResources(boolean includeCost,
             boolean includeDepreciation,
             boolean includeNetBookValue) {
-
         TangibleAssets tangibleAssets = new TangibleAssets();
 
         TangibleAssetsCost tangibleAssetsCost = new TangibleAssetsCost();
@@ -384,7 +365,6 @@ class TangibleAssetsTotalTransformerImplTests {
         tangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         if (includeCost) {
-
             costAtPeriodStart.setTotal(COST_AT_PERIOD_START);
             additions.setTotal(ADDITIONS);
             disposals.setTotal(DISPOSALS);
@@ -394,7 +374,6 @@ class TangibleAssetsTotalTransformerImplTests {
         }
 
         if (includeDepreciation) {
-
             depreciationAtPeriodStart.setTotal(DEPRECIATION_AT_PERIOD_START);
             chargeForYear.setTotal(CHARGE_FOR_YEAR);
             onDisposals.setTotal(ON_DISPOSALS);
@@ -403,7 +382,6 @@ class TangibleAssetsTotalTransformerImplTests {
         }
 
         if (includeNetBookValue) {
-
             currentPeriod.setTotal(CURRENT_PERIOD);
             previousPeriod.setTotal(PREVIOUS_PERIOD);
         }
@@ -414,7 +392,6 @@ class TangibleAssetsTotalTransformerImplTests {
     private void assertWebModelsMapped(TangibleAssets tangibleAssets,
                                        boolean expectCostFieldsMapped,
                                        boolean expectDepreciationFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(tangibleAssets);
         }
@@ -426,7 +403,6 @@ class TangibleAssetsTotalTransformerImplTests {
     }
 
     private void assertCostFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
-
         assertEquals(COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getTotal());
         assertEquals(ADDITIONS, tangibleAssets.getCost().getAdditions().getTotal());
         assertEquals(DISPOSALS, tangibleAssets.getCost().getDisposals().getTotal());
@@ -436,7 +412,6 @@ class TangibleAssetsTotalTransformerImplTests {
     }
 
     private void assertDepreciationFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
-
         assertEquals(DEPRECIATION_AT_PERIOD_START, tangibleAssets.getDepreciation().getAtPeriodStart().getTotal());
         assertEquals(CHARGE_FOR_YEAR, tangibleAssets.getDepreciation().getChargeForYear().getTotal());
         assertEquals(ON_DISPOSALS, tangibleAssets.getDepreciation().getOnDisposals().getTotal());
@@ -448,7 +423,6 @@ class TangibleAssetsTotalTransformerImplTests {
                                        boolean expectCostFieldsMapped,
                                        boolean expectDepreciationFieldsMapped,
                                        boolean expectNetBookValueFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
         } else {
@@ -493,7 +467,6 @@ class TangibleAssetsTotalTransformerImplTests {
     }
 
     private void assertPreExistingFieldsUnaffected(TangibleAssets tangibleAssets) {
-
         assertEquals(OTHER_COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getFixturesAndFittings());
         assertEquals(OTHER_ADDITIONS, tangibleAssets.getCost().getAdditions().getFixturesAndFittings());
         assertEquals(OTHER_DISPOSALS, tangibleAssets.getCost().getDisposals().getFixturesAndFittings());

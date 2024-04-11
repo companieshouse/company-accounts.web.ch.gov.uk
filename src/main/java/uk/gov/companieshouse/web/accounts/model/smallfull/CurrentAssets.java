@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class CurrentAssets {
-
     private Stocks stocks;
     private Debtors debtors;
     private CashAtBankAndInHand cashAtBankAndInHand;

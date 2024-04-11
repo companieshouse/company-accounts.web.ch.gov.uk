@@ -1,29 +1,14 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,9 +31,32 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.LoanService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AddOrRemoveLoansControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -129,15 +137,13 @@ class AddOrRemoveLoansControllerTest {
     private static final String VALID_DIRECTORS = "validDirectorNames";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get add or remove loans view for multi year filer - success path")
     void getRequestSuccessForMultiYearFiler() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(createValidDirectors());
@@ -160,7 +166,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Get add or remove loans view for single year filer - success path")
     void getRequestSuccessForSingleYearFiler() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(createValidDirectors());
@@ -182,7 +187,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Get add or remove loans view - service exception")
     void getRequestServiceException() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
@@ -195,8 +199,7 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post submit - throws service exception")
     void postSubmitRequestThrowsServiceException() throws Exception {
-
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit"))
                 .andExpect(status().is3xxRedirection())
@@ -206,7 +209,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Delete loan - success path")
     void deleteLoanSuccess() throws Exception {
-
         this.mockMvc.perform(get(REMOVE_LOAN_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + ADD_OR_REMOVE_LOAN_PATH));
@@ -217,7 +219,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Delete loan - service exception")
     void deleteLoanServiceException() throws Exception {
-
         doThrow(ServiceException.class).when(loanService).deleteLoan(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, LOAN_ID);
 
         this.mockMvc.perform(get(REMOVE_LOAN_PATH))
@@ -228,7 +229,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post add loan - success")
     void postLoanAddRequestSuccess() throws Exception {
-
         when(loanService.createLoan(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenReturn(validationErrors);
@@ -244,7 +244,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post add loan - throws binding result errors")
     void postLoanAddRequestThrowsBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?add")
                 .param("loanToAdd.breakdown.balanceAtPeriodStart", "invalid"))
                 .andExpect(status().isOk())
@@ -256,7 +255,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post add loan - throws validation errors")
     void postLoanAddRequestThrowsValidationErrors() throws Exception {
-
         when(loanService.createLoan(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenReturn(validationErrors);
@@ -272,7 +270,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post add loan - throws service exception")
     void postLoanAddRequestThrowsServiceException() throws Exception {
-
         when(loanService.createLoan(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenThrow(ServiceException.class);
@@ -286,10 +283,9 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post add or remove loan view - success")
     void postRequestSubmitAddOrRemoveLoanSuccess() throws Exception {
-
         when(loanService.submitAddOrRemoveLoans(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADD_OR_REMOVE_LOAN_PATH + "?submit")
                 .param("loanToAdd.directorName", "name"))
@@ -300,7 +296,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post submit loan - throws service exception")
     void postLoanSubmitRequestThrowsServiceException() throws Exception {
-
         when(loanService.submitAddOrRemoveLoans(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenThrow(ServiceException.class);
@@ -314,7 +309,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Post submit loan - throws validation errors")
     void postLoanSubmitRequestThrowsValidationErrors() throws Exception {
-
         when(loanService.submitAddOrRemoveLoans(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(AddOrRemoveLoans.class)))
                 .thenReturn(validationErrors);
@@ -330,7 +324,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getHasIncludedLoansToDirectors()).thenReturn(true);
@@ -340,7 +333,6 @@ class AddOrRemoveLoansControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getHasIncludedLoansToDirectors()).thenReturn(false);

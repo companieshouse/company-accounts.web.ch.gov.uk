@@ -29,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CompanyPolicyOnDisab
 @PreviousController(PoliticalAndCharitableDonationsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/company-policy-on-disabled-employees-question")
 public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -54,7 +53,6 @@ public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseCon
                                                                @PathVariable String transactionId,
                                                                @PathVariable String companyAccountsId,
                                                                Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -68,7 +66,6 @@ public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseCon
             model.addAttribute(COMPANY_POLICY_ON_DISABLED_EMPLOYEES_SELECTION, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -83,7 +80,6 @@ public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseCon
                                                                   @ModelAttribute(COMPANY_POLICY_ON_DISABLED_EMPLOYEES_SELECTION) @Valid CompanyPolicyOnDisabledEmployeesSelection selection,
                                                                   BindingResult bindingResult,
                                                                   Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -94,7 +90,6 @@ public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseCon
             selectionService.submitCompanyPolicyOnDisabledEmployeesSelection(transactionId, companyAccountsId, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -105,7 +100,6 @@ public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseCon
     }
 
     private void setHasProvidedCompanyPolicyOnDisabledEmployees(HttpServletRequest request, CompanyPolicyOnDisabledEmployeesSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         selection.setHasCompanyPolicyOnDisabledEmployees(
                 Optional.of(companyAccountsDataState)
@@ -115,7 +109,6 @@ public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseCon
     }
 
     private void cacheHasProvidedCompanyPolicyOnDisabledEmployees(HttpServletRequest request, CompanyPolicyOnDisabledEmployeesSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
         if (companyAccountsDataState.getDirectorsReportStatements() == null) {
@@ -131,7 +124,6 @@ public class CompanyPolicyOnDisabledEmployeesSelectionController extends BaseCon
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 }

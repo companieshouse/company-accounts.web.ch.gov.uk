@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 @ValidationModel
 public class TangibleDepreciationPolicy {
-
     @NotNull(message = "{tangibleDepreciationPolicy.selectionNotMade}")
     private Boolean hasTangibleDepreciationPolicySelected;
 

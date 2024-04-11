@@ -11,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 @PreviousController(MockSuccessJourneyControllerTwo.class)
 @RequestMapping("/mock-success-journey-controller-three/{companyNumber}/{transactionId}/{companyAccountsId}")
 public class MockSuccessJourneyControllerThree extends BaseController implements ConditionalController {
-
     @Override
     protected String getTemplateName() {
         return null;

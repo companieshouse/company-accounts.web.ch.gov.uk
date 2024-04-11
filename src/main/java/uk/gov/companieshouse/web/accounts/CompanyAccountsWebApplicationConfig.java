@@ -13,13 +13,11 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 
 @Configuration
 public class CompanyAccountsWebApplicationConfig {
-
     public static final String APPLICATION_MODEL_PACKAGE = "uk.gov.companieshouse.web.accounts.model";
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public ValidationContext createValidationContext() {
-
         return new ValidationContext(new ClassPathScanningCandidateComponentProvider(false),
                 APPLICATION_MODEL_PACKAGE);
     }
@@ -27,14 +25,12 @@ public class CompanyAccountsWebApplicationConfig {
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public EnvironmentReader createEnvironmentReader() {
-
         return new EnvironmentReaderImpl();
     }
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public AccountsDatesHelper createAccountsDatesHelper() {
-
         return new AccountsDatesHelperImpl();
     }
 }

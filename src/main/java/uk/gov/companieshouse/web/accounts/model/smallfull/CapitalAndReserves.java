@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
 public class CapitalAndReserves {
-
     private CalledUpShareCapital calledUpShareCapital;
 
     private SharePremiumAccount sharePremiumAccount;

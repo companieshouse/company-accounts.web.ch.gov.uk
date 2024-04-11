@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CompanyAccountsDataStates {
-
     @JsonProperty("company_accounts_data_state_map")
     private Map<String, CompanyAccountsDataState> companyAccountsDataStateMap = new HashMap<>();
 

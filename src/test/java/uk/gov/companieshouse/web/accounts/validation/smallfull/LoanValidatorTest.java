@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.validation.smallfull;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoanValidatorTest {
-
     private final LoanValidator validator = new LoanValidator();
 
     private static final String LOAN_TO_ADD = "loanToAdd";
@@ -42,7 +40,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for multi year filer - success")
     void validateLoanToAddForMultiYearFilerSuccess() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
@@ -56,7 +53,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for single year filer - success")
     void validateLoanToAddForSingleYearFilerSuccess() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
@@ -70,7 +66,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for multi year filer - missing director name")
     void validateLoanToAddForMultiYearFilerMissingDirectorName() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
@@ -84,7 +79,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for single year filer - missing director name")
     void validateLoanToAddForSingleYearMissingDirectorName() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
@@ -98,7 +92,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for single year filer - missing director name and directors report present")
     void validateLoanToAddForSingleYearMissingDirectorNameWithDirectorsReportPresent() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDescription(DESCRIPTION);
         loanToAdd.setBreakdown(createBreakdown(true, true));
@@ -113,7 +106,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for multi year filer - missing description")
     void validateLoanToAddForMultiYearFilerMissingDescription() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(true, true));
@@ -129,7 +121,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for single year filer - missing description")
     void validateLoanToAddForSingleYearFilerMissingDescription() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(true, true));
@@ -145,7 +136,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for multi year filer - missing period start")
     void validateLoanToAddForMultiYearFilerMissingPeriodStart() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
@@ -162,7 +152,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for multi year filer - missing period end")
     void validateLoanToAddForMultiYearFilerMissingPeriodEnd() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
@@ -179,7 +168,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for single year filer - missing period end")
     void validateLoanToAddForSingleYearFilerMissingPeriodEnd() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setDescription(DESCRIPTION);
@@ -196,7 +184,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for multi year filer - Empty resource")
     void validateLoanToAddForMultiYearFilerIsEmpty() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setBreakdown(createBreakdown(false, false));
 
@@ -208,7 +195,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for single year filer - Empty resource")
     void validateLoanToAddForSingleYearFilerIsEmpty() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setBreakdown(createBreakdown(false, false));
 
@@ -220,7 +206,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for multi year filer - Not Empty resource")
     void validateLoanToAddForMultiYearFilerIsNotEmpty() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(false, false));
@@ -233,7 +218,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add for single year filer - Not Empty resource")
     void validateLoanToAddForSingleYearFilerIsNotEmpty() {
-
         LoanToAdd loanToAdd = new LoanToAdd();
         loanToAdd.setDirectorName(DIRECTOR_NAME);
         loanToAdd.setBreakdown(createBreakdown(false, false));
@@ -246,7 +230,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, no fields populated for multi year filer")
     void validateAtLeastOneLoanNoFieldsFilledInForMultiYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
         addOrRemoveLoans.setIsMultiYearFiler(true);
 
@@ -261,7 +244,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add- At least one loan, no fields populated for single year filer")
     void validateAtLeastOneLoanNoFieldsFilledInForSingleYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
         addOrRemoveLoans.setIsMultiYearFiler(false);
 
@@ -276,7 +258,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, no fields populated - isSingle director true for multi year filer")
     void validateAtLeastOneLoanNoFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(true);
@@ -293,7 +274,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, no fields populated - isSingle director true for single year filer")
     void validateAtLeastOneLoanNoFieldsFilledInIsSingleDirectorTrueForSingleYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(false);
@@ -310,7 +290,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated for multi year filer")
     void validateAtLeastOneLoanFieldsFilledInForMultiYear() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(true);
@@ -328,7 +307,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated for single year filer")
     void validateAtLeastOneLoanFieldsFilledInForSingleYear() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(false);
@@ -346,7 +324,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for multi year filer")
     void validateAtLeastOneLoanFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(true);
@@ -361,7 +338,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for single year filer")
     void validateAtLeastOneLoanFieldsFilledInIsSingleDirectorTrueForSingleFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(false);
@@ -376,7 +352,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for multi year filer")
     void validateAtLeastOneLoanPeriodStartFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(true);
@@ -391,7 +366,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for single year filer")
     void validateAtLeastOneLoanPeriodStartFieldsFilledInIsSingleDirectorTrueForSingleYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(false);
@@ -406,7 +380,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for multi year filer")
     void validateAtLeastOneLoanPeriodEndFieldsFilledInIsSingleDirectorTrueForMultiYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(true);
@@ -421,7 +394,6 @@ class LoanValidatorTest {
     @Test
     @DisplayName("Validate loan to add - At least one loan, a field populated - isSingleDirector true for single year filer")
     void validateAtLeastOneLoanPeriodEndFieldsFilledInIsSingleDirectorTrueForSingleYearFiler() {
-
         AddOrRemoveLoans addOrRemoveLoans = new AddOrRemoveLoans();
 
         addOrRemoveLoans.setIsMultiYearFiler(false);
@@ -433,7 +405,6 @@ class LoanValidatorTest {
     }
 
     private Breakdown createBreakdown(boolean includePeriodStart, boolean includePeriodEnd) {
-
         Breakdown validBreakdown = new Breakdown();
 
         if (includePeriodStart) {

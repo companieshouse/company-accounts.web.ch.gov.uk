@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class CompanyAccountsDataState implements Serializable {
-
     @JsonProperty("accounting_policies")
     private AccountingPolicies accountingPolicies;
 

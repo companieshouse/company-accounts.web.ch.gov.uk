@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.ProfitO
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProfitOrLossForFinancialYearTransformerTests {
-
     private static final Long CURRENT_TAX = 1L;
     private static final Long CURRENT_TOTAL = 2L;
 
@@ -31,7 +30,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add current period to web model")
     void addCurrentPeriodToWebModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         ProfitOrLossForFinancialYear profitOrLossForFinancialYear = new ProfitOrLossForFinancialYear();
@@ -53,7 +51,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add previous period to web model which has current period values")
     void addPreviousPeriodToWebModelWhichHasCurrentPeriodValues() {
-
         ProfitAndLossApi previousPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         ProfitOrLossForFinancialYear profitOrLossForFinancialYear = new ProfitOrLossForFinancialYear();
@@ -89,7 +86,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add current period to web model - no profit or loss for financial year")
     void addCurrentPeriodToWebModelNoProfitOrLossForFinancialYear() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         transformer.addCurrentPeriodToWebModel(profitAndLoss, new ProfitAndLossApi());
@@ -100,7 +96,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add previous period to web model - no profit or loss for financial year")
     void addPreviousPeriodToWebModelNoProfitOrLossForFinancialYear() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         transformer.addPreviousPeriodToWebModel(profitAndLoss, new ProfitAndLossApi());
@@ -111,7 +106,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add current period to api model")
     void addCurrentPeriodToApiModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -139,7 +133,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add previous period to api model")
     void addPreviousPeriodToApiModel() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -167,7 +160,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add current period to api model without profit or loss for financial year to map")
     void addCurrentPeriodToApiModelWithoutProfitOrLossForFinancialYearToMap() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -188,7 +180,6 @@ class ProfitOrLossForFinancialYearTransformerTests {
     @Test
     @DisplayName("Add previous period to api model without profit or loss for financial year to map")
     void addPreviousPeriodToApiModelWithoutProfitOrLossForFinancialYearToMap() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();

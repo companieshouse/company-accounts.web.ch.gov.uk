@@ -29,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesS
 @PreviousController(AddOrRemoveDirectorsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/principal-activities-question")
 public class PrincipalActivitiesSelectionController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -54,7 +53,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
                                                   @PathVariable String transactionId,
                                                   @PathVariable String companyAccountsId,
                                                   Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -68,7 +66,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
             model.addAttribute(PRINCIPAL_ACTIVITIES_SELECTION, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -83,7 +80,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
                                                      @ModelAttribute(PRINCIPAL_ACTIVITIES_SELECTION) @Valid PrincipalActivitiesSelection selection,
                                                      BindingResult bindingResult,
                                                      Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -94,7 +90,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
             selectionService.submitPrincipalActivitiesSelection(transactionId, companyAccountsId, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -105,7 +100,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
     }
 
     private void setHasProvidedPrincipalActivities(HttpServletRequest request, PrincipalActivitiesSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         selection.setHasPrincipalActivities(
                 Optional.of(companyAccountsDataState)
@@ -115,7 +109,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
     }
 
     private void cacheHasProvidedPrincipalActivities(HttpServletRequest request, PrincipalActivitiesSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
         if (companyAccountsDataState.getDirectorsReportStatements() == null) {
@@ -130,7 +123,6 @@ public class PrincipalActivitiesSelectionController extends BaseController imple
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 }

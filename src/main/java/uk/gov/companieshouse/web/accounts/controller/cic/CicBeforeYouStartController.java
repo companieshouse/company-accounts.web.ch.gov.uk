@@ -11,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 @RequestMapping("/accounts/cic/before-you-start")
 @NextController(CicSelectAccountTypeController.class)
 public class CicBeforeYouStartController extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return "cic/cicBeforeYouStart";

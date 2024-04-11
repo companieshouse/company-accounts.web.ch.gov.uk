@@ -14,13 +14,14 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT_URL_PREFIX;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicSelectAccountTypeControllerTest {
-
     private MockMvc mockMvc;
 
     private static final String CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH = "/accounts/cic/select-account-type";
@@ -48,7 +49,6 @@ class CicSelectAccountTypeControllerTest {
     @Test
     @DisplayName("Get cic select account type view success path")
     void getCicSelectAccountTypeRequest() throws Exception {
-
         mockMvc.perform(get(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CIC_SELECT_ACCOUNT_TYPE_VIEW_NAME))
@@ -59,7 +59,6 @@ class CicSelectAccountTypeControllerTest {
     @Test
     @DisplayName("Post cic select account type Binding Error")
     void postCicSelectAccountBindingError() throws Exception {
-
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CIC_SELECT_ACCOUNT_TYPE_VIEW_NAME));
@@ -68,7 +67,6 @@ class CicSelectAccountTypeControllerTest {
     @Test
     @DisplayName("Post cic select account selection made - micro-entity")
     void postCicSelectAccountSelectionMadeMicro() throws Exception {
-
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
                 param("selectedAccountTypeName", "micro-entity"))
                 .andExpect(status().is3xxRedirection())
@@ -78,7 +76,6 @@ class CicSelectAccountTypeControllerTest {
     @Test
     @DisplayName("Post cic select account selection made - abridged")
     void postCicSelectAccountSelectionMadeAbridged() throws Exception {
-
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
                 param("selectedAccountTypeName", "abridged"))
                 .andExpect(status().is3xxRedirection())
@@ -88,7 +85,6 @@ class CicSelectAccountTypeControllerTest {
     @Test
     @DisplayName("Post cic select account selection made - dormant")
     void postCicSelectAccountSelectionMadeDormant() throws Exception {
-
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
                 param("selectedAccountTypeName", "dormant"))
                 .andExpect(status().is3xxRedirection())
@@ -98,7 +94,6 @@ class CicSelectAccountTypeControllerTest {
     @Test
     @DisplayName("Post cic select account selection made - full")
     void postCicSelectAccountSelectionMadeFull() throws Exception {
-
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
                 param("selectedAccountTypeName", "full"))
                 .andExpect(status().is3xxRedirection())

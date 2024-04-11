@@ -1,21 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,9 +19,25 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicApprovalService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicApprovalControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -73,14 +80,13 @@ class CicApprovalControllerTest {
 
     @BeforeEach
     public void setup() {
-        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(cicApprovalController).build();
     }
 
     @Test
     @DisplayName("Get approval view success path")
     void getRequestSuccess() throws Exception {
-
         when(cicApprovalService
                 .getCicApproval(anyString(), anyString()))
                 .thenReturn(new CicApproval());
@@ -96,7 +102,6 @@ class CicApprovalControllerTest {
     @Test
     @DisplayName("Get approval view success path with invalidated date")
     void getRequestSuccessWithInvalidatedDate() throws Exception {
-
         when(cicApprovalService
                 .getCicApproval(anyString(), anyString()))
                 .thenReturn(new CicApproval());
@@ -113,7 +118,6 @@ class CicApprovalControllerTest {
     @Test
     @DisplayName("Post approval api validation failure path")
     void postRequestApiValidationFailure() throws Exception {
-
         List<ValidationError> validationErrors = new ArrayList<>();
         validationErrors.add(new ValidationError());
 
@@ -129,7 +133,6 @@ class CicApprovalControllerTest {
     @Test
     @DisplayName("Post approval submit approval exception failure path")
     void postRequestSubmitApprovalExceptionFailure() throws Exception {
-
         when(cicApprovalService.submitCicApproval(anyString(), anyString(), any(CicApproval.class)))
             .thenThrow(ServiceException.class);
 
@@ -141,7 +144,6 @@ class CicApprovalControllerTest {
     @Test
     @DisplayName("Post approval success path")
     void postRequestSuccess() throws Exception {
-
         when(cicApprovalService.submitCicApproval(anyString(), anyString(), any(CicApproval.class)))
             .thenReturn(new ArrayList<>());
 

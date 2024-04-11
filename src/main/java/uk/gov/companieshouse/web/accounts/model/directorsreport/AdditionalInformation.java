@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 
 @ValidationModel
 public class AdditionalInformation {
-
     @NotBlank(message = "{directorsReport.additionalInformation.details.missing}")
     @ValidationMapping("$.statements.additional_information")
     private String additionalInformationDetails;

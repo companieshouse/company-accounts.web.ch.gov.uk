@@ -48,7 +48,6 @@ import uk.gov.companieshouse.web.accounts.validation.smallfull.DirectorValidator
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorServiceImplTest {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -133,7 +132,6 @@ class DirectorServiceImplTest {
     @DisplayName("GET - all directors - success")
     void getAllDirectorsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -154,7 +152,6 @@ class DirectorServiceImplTest {
     @DisplayName("GET - all directors - success with isActive flag true")
     void getAllDirectorsSuccessIsActiveTrue()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -175,7 +172,6 @@ class DirectorServiceImplTest {
     @DisplayName("GET - all directors - not found")
     void getAllDirectorsNotFound()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -194,7 +190,6 @@ class DirectorServiceImplTest {
     @DisplayName("GET - all directors - ApiErrorResponseException")
     void getAllDirectorsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -210,7 +205,6 @@ class DirectorServiceImplTest {
     @DisplayName("GET - all directors - URIValidationException")
     void getAllDirectorsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -226,7 +220,6 @@ class DirectorServiceImplTest {
     @DisplayName("POST - director - success")
     void createDirectorSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(true);
@@ -254,7 +247,6 @@ class DirectorServiceImplTest {
     @Test
     @DisplayName("POST - director - invalid date")
     void createDirectorInvalidDate() throws ServiceException {
-
         when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
@@ -277,7 +269,6 @@ class DirectorServiceImplTest {
     @DisplayName("POST - director - validation errors")
     void createDirectorValidation()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
@@ -309,7 +300,6 @@ class DirectorServiceImplTest {
     @DisplayName("POST - director - ApiErrorResponseException")
     void createDirectorApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
@@ -333,7 +323,6 @@ class DirectorServiceImplTest {
     @DisplayName("POST - director - URIValidationException")
     void createDirectorURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(false);
@@ -357,7 +346,6 @@ class DirectorServiceImplTest {
     @DisplayName("DELETE - director - success")
     void deleteDirectorSuccess()
             throws ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -373,7 +361,6 @@ class DirectorServiceImplTest {
     @DisplayName("DELETE - director - ApiErrorResponseException")
     void deleteDirectorApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -389,7 +376,6 @@ class DirectorServiceImplTest {
     @DisplayName("DELETE - director - URIValidationException")
     void deleteDirectorURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
@@ -404,7 +390,6 @@ class DirectorServiceImplTest {
     @Test
     @DisplayName("Submit add or remove directors")
     void submitAddOrRemoveDirectors() throws ServiceException {
-
         List<ValidationError> validationErrors = new ArrayList<>();
         when(directorValidator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors)).thenReturn(validationErrors);
 
@@ -412,7 +397,6 @@ class DirectorServiceImplTest {
     }
 
     private DirectorApi[] createArrayOfDirectorsApi() {
-
         DirectorApi[] allDirectorsApi = new DirectorApi[4];
 
         DirectorApi activeDirector = new DirectorApi();
@@ -444,7 +428,6 @@ class DirectorServiceImplTest {
     }
 
     private Director[] createArrayOfDirectors() {
-
         Director[] allDirectors = new Director[3];
 
         Director activeDirector = new Director();

@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +30,6 @@ import java.util.Optional;
 @PreviousController(CompanyPolicyOnDisabledEmployeesController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/additional-information-question")
 public class DirectorsReportAdditionalInformationSelectionController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -54,7 +52,6 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
                                                                @PathVariable String transactionId,
                                                                @PathVariable String companyAccountsId,
                                                                Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -67,7 +64,6 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
 
             model.addAttribute(ADDITIONAL_INFORMATION_SELECTION, selection);
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -82,7 +78,6 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
                                                       @ModelAttribute(ADDITIONAL_INFORMATION_SELECTION) @Valid AdditionalInformationSelection selection,
                                                       BindingResult bindingResult,
                                                       Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -93,7 +88,6 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
             selectionService.submitAdditionalInformationSelection(transactionId, companyAccountsId, selection);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -105,7 +99,6 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
     }
 
     private void setHasProvidedAdditionalInformation(HttpServletRequest request, AdditionalInformationSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         selection.setHasAdditionalInformation(
                 Optional.of(companyAccountsDataState)
@@ -115,7 +108,6 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
     }
 
     private void cacheHasProvidedAdditionalInformation(HttpServletRequest request, AdditionalInformationSelection selection) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
 
         if (companyAccountsDataState.getDirectorsReportStatements() == null) {
@@ -129,12 +121,9 @@ public class DirectorsReportAdditionalInformationSelectionController extends Bas
         updateStateOnRequest(request, companyAccountsDataState);
     }
 
-
-
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId) != null;
     }
 

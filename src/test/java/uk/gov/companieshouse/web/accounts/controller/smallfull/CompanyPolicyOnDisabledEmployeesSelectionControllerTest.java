@@ -1,5 +1,31 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.api.ApiClient;
+import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
+import uk.gov.companieshouse.web.accounts.api.ApiClientService;
+import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.model.directorsreport.CompanyPolicyOnDisabledEmployeesSelection;
+import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
+import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.CompanyPolicyOnDisabledEmployeesSelectionService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,31 +41,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.api.ApiClient;
-import uk.gov.companieshouse.api.model.accounts.directorsreport.DirectorsReportApi;
-import uk.gov.companieshouse.web.accounts.api.ApiClientService;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.model.directorsreport.CompanyPolicyOnDisabledEmployeesSelection;
-import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
-import uk.gov.companieshouse.web.accounts.model.state.DirectorsReportStatements;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
-import uk.gov.companieshouse.web.accounts.service.smallfull.CompanyPolicyOnDisabledEmployeesSelectionService;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -105,15 +111,13 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get request - success - hasCompanyPolicyOnDisabledEmployees set from db")
     void getCompanyPolicyOnDisabledEmployeesSelectionSuccessHasSelectionSetFromDB() throws Exception {
-
         when(companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(companyPolicyOnDisabledEmployeesSelection);
 
@@ -132,7 +136,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     @Test
     @DisplayName("Get request - success - hasCompanyPolicyOnDisabledEmployees derived from data state")
     void getCompanyPolicyOnDisabledEmployeesSelectionSuccessHasSelectionDerivedFromDataState() throws Exception {
-
         when(companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(companyPolicyOnDisabledEmployeesSelection);
 
@@ -155,7 +158,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     @Test
     @DisplayName("Get request - service exception")
     void getCompanyPolicyOnDisabledEmployeesSelectionThrowsServiceException() throws Exception {
-
         when(companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -167,7 +169,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     @Test
     @DisplayName("Post request - success")
     void postCompanyPolicyOnDisabledEmployeesSuccess() throws Exception {
-
         doNothing()
                 .when(companyPolicyOnDisabledEmployeesSelectionService)
                         .submitCompanyPolicyOnDisabledEmployeesSelection(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(CompanyPolicyOnDisabledEmployeesSelection.class));
@@ -176,7 +177,7 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getDirectorsReportStatements()).thenReturn(directorsReportStatements);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(COMPANY_POLICY_ON_DISABLED_EMPLOYEES_SELECTION_PATH)
                 .param(HAS_COMPANY_POLICY_ON_DISABLED_EMPLOYEES, "1"))
@@ -191,7 +192,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     @Test
     @DisplayName("Post request - service exception")
     void postCompanyPolicyOnDisabledEmployeesServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(companyPolicyOnDisabledEmployeesSelectionService)
                         .submitCompanyPolicyOnDisabledEmployeesSelection(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(CompanyPolicyOnDisabledEmployeesSelection.class));
@@ -205,7 +205,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     @Test
     @DisplayName("Post request - binding result errors")
     void postCompanyPolicyOnDisabledEmployeesWithBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(COMPANY_POLICY_ON_DISABLED_EMPLOYEES_SELECTION_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(COMPANY_POLICY_ON_DISABLED_EMPLOYEES_SELECTION_VIEW));
@@ -217,7 +216,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
@@ -227,7 +225,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 

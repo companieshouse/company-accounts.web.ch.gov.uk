@@ -5,7 +5,6 @@ import uk.gov.companieshouse.api.model.accounts.cic.CicReportApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface CicReportService {
-
     /**
      * Creates the CIC report parent resource
      *

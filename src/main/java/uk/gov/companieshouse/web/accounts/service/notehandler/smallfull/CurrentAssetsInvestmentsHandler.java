@@ -16,7 +16,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @Component
 public class CurrentAssetsInvestmentsHandler implements
         NoteResourceHandler<CurrentAssetsInvestmentsApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 
@@ -26,38 +25,32 @@ public class CurrentAssetsInvestmentsHandler implements
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
-
         return CURRENT_ASSETS_URI.expand(transactionId, companyAccountsId).toString();
     }
 
     @Override
     public Executor<ApiResponse<CurrentAssetsInvestmentsApi>> get(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().currentAssetsInvestments().get(uri);
     }
 
     @Override
     public Executor<ApiResponse<Void>> update(ApiClient apiClient, String uri, CurrentAssetsInvestmentsApi apiResource) {
-
         return apiClient.smallFull().currentAssetsInvestments().update(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<CurrentAssetsInvestmentsApi>> create(ApiClient apiClient, String uri, CurrentAssetsInvestmentsApi apiResource) {
-
         return apiClient.smallFull().currentAssetsInvestments().create(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<Void>> delete(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().currentAssetsInvestments().delete(uri);
     }
 
     @Override
     public boolean parentResourceExists(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getCurrentAssetsInvestmentsNote());
@@ -65,7 +58,6 @@ public class CurrentAssetsInvestmentsHandler implements
 
     @Override
     public NoteType getNoteType() {
-
         return NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS;
     }
 }

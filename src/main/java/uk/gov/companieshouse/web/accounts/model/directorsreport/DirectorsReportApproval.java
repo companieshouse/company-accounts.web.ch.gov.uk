@@ -8,7 +8,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class DirectorsReportApproval {
-
     @NotBlank(message = "{directorsReportApproval.selectionNotMade}")
     @ValidationMapping("$.directors_approval.name")
     private String name;

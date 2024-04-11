@@ -8,9 +8,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 
 @Component
 public class DateTransformer {
-
     public LocalDate toLocalDate(Date date) {
-
         return LocalDate.parse(date.getYear() + "-" + date.getMonth() + "-" + date.getDay(),
                 DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
     }

@@ -34,7 +34,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @PreviousController(IntangibleAssetsNoteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/tangible-assets")
 public class TangibleAssetsNoteController extends BaseController implements ConditionalController {
-
     @Autowired
     private NoteService<TangibleAssets> noteService;
 
@@ -52,7 +51,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -77,7 +75,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -93,7 +90,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -106,7 +102,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         BalanceSheet balanceSheet =
                 balanceSheetService.getBalanceSheet(
                         transactionId, companyAccountsId, companyNumber);
@@ -115,7 +110,6 @@ public class TangibleAssetsNoteController extends BaseController implements Cond
     }
 
     private boolean hasTangibleAssets(BalanceSheet balanceSheet) {
-
         Long currentTangible = Optional.of(balanceSheet)
                 .map(BalanceSheet::getFixedAssets)
                 .map(FixedAssets::getTangibleAssets)

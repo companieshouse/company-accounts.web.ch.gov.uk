@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class CicStatementsServiceImpl implements CicStatementsService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -40,7 +39,6 @@ public class CicStatementsServiceImpl implements CicStatementsService {
     @Override
     public CicStatementsApi getCicStatementsApi(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = CIC_STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -62,7 +60,6 @@ public class CicStatementsServiceImpl implements CicStatementsService {
     @Override
     public List<ValidationError> createCicStatementsApi(String transactionId,
             String companyAccountsId, CicStatementsApi cicStatementsApi) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = CIC_STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -89,7 +86,6 @@ public class CicStatementsServiceImpl implements CicStatementsService {
     @Override
     public List<ValidationError> updateCicStatementsApi(String transactionId,
             String companyAccountsId, CicStatementsApi cicStatementsApi) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = CIC_STATEMENTS_URI.expand(transactionId, companyAccountsId).toString();

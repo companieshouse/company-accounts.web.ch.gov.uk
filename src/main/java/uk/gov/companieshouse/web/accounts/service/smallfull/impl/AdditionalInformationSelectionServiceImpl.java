@@ -13,20 +13,17 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportState
 
 @Service
 public class AdditionalInformationSelectionServiceImpl implements AdditionalInformationSelectionService {
-
     @Autowired
     private DirectorsReportStatementsService directorsReportStatementsService;
 
     @Override
     public AdditionalInformationSelection getAdditionalInformationSelection(String transactionId,
             String companyAccountsId) throws ServiceException {
-
         AdditionalInformationSelection additionalInformationSelection = new AdditionalInformationSelection();
 
         if (Optional.ofNullable(directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId))
                 .map(StatementsApi::getAdditionalInformation)
                 .isPresent()) {
-
             additionalInformationSelection.setHasAdditionalInformation(true);
         }
 
@@ -36,15 +33,12 @@ public class AdditionalInformationSelectionServiceImpl implements AdditionalInfo
     @Override
     public void submitAdditionalInformationSelection(String transactionId, String companyAccountsId,
             AdditionalInformationSelection additionalInformationSelection) throws ServiceException {
-
         if (Boolean.FALSE.equals(additionalInformationSelection.getHasAdditionalInformation())) {
-
             StatementsApi statementsApi =
                     directorsReportStatementsService
                             .getDirectorsReportStatements(transactionId, companyAccountsId);
 
             if (statementsApi != null) {
-
                 if (hasOtherStatements(statementsApi)) {
                     statementsApi.setAdditionalInformation(null);
                     directorsReportStatementsService.updateDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);
@@ -56,7 +50,6 @@ public class AdditionalInformationSelectionServiceImpl implements AdditionalInfo
     }
 
     private boolean hasOtherStatements(StatementsApi statementsApi) {
-
         return Stream.of(statementsApi.getCompanyPolicyOnDisabledEmployees(),
                          statementsApi.getPoliticalAndCharitableDonations(),
                          statementsApi.getPrincipalActivities())

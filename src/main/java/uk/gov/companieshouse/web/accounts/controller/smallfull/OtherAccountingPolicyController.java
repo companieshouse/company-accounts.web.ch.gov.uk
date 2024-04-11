@@ -30,7 +30,6 @@ import java.util.List;
 @PreviousController(ValuationInformationPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/other-accounting-policies")
 public class OtherAccountingPolicyController extends BaseController {
-
     private static final String OTHER_ACCOUNTING_POLICY_FIELD_PATH =
             "otherAccountingPolicyDetails";
 
@@ -49,7 +48,6 @@ public class OtherAccountingPolicyController extends BaseController {
                                            @PathVariable String companyAccountsId,
                                            Model model,
                                            HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -77,7 +75,6 @@ public class OtherAccountingPolicyController extends BaseController {
                                             BindingResult bindingResult,
                                             Model model,
                                             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         radioAndTextValidator.validate(otherAccountingPolicy.getHasOtherAccountingPolicySelected(), otherAccountingPolicy.getOtherAccountingPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, OTHER_ACCOUNTING_POLICY_FIELD_PATH);
@@ -87,7 +84,6 @@ public class OtherAccountingPolicyController extends BaseController {
         }
 
         try {
-
             AccountingPolicies accountingPolicies = noteService.get(transactionId, companyAccountsId,
                     NoteType.SMALL_FULL_ACCOUNTING_POLICIES);
 
@@ -122,7 +118,6 @@ public class OtherAccountingPolicyController extends BaseController {
      * @param otherAccountingPolicy The other accounting policy model on which to set the boolean
      */
     private void setIsPolicyIncluded(HttpServletRequest request, OtherAccountingPolicy otherAccountingPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         otherAccountingPolicy.setHasOtherAccountingPolicySelected(
                 companyAccountsDataState.getAccountingPolicies().getHasProvidedOtherAccountingPolicy());
@@ -134,7 +129,6 @@ public class OtherAccountingPolicyController extends BaseController {
      * @param otherAccountingPolicy The other accounting policy for which to cache data
      */
     private void  cacheIsPolicyIncluded(HttpServletRequest request, OtherAccountingPolicy otherAccountingPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.getAccountingPolicies().setHasProvidedOtherAccountingPolicy(
                 otherAccountingPolicy.getHasOtherAccountingPolicySelected());

@@ -28,7 +28,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @NextController(OffBalanceSheetArrangementsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/notes/add-or-remove-loans/additional-information")
 public class LoansToDirectorsAdditionalInfoController extends BaseController implements ConditionalController {
-
     private static final String LOANS_TO_DIRECTORS_ADDITIONAL_INFO = "loansToDirectorsAdditionalInfo";
 
     @Autowired
@@ -48,7 +47,6 @@ public class LoansToDirectorsAdditionalInfoController extends BaseController imp
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -71,7 +69,6 @@ public class LoansToDirectorsAdditionalInfoController extends BaseController imp
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -93,7 +90,6 @@ public class LoansToDirectorsAdditionalInfoController extends BaseController imp
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -106,7 +102,6 @@ public class LoansToDirectorsAdditionalInfoController extends BaseController imp
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo());
     }

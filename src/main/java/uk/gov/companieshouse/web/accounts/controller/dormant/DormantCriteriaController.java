@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccou
 @PreviousController(SelectAccountTypeController.class)
 @RequestMapping("/company/{companyNumber}/dormant/criteria")
 public class DormantCriteriaController extends BaseController {
-
     @Value("${dormant-accounts.uri}")
     private String dormantAccountsUri;
 

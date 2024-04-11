@@ -33,7 +33,6 @@ import java.util.List;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts" +
         "/{companyAccountsId}/small-full/debtors")
 public class DebtorsController extends BaseController implements ConditionalController {
-
     @Autowired
     private NoteService<Debtors> debtorsService;
 
@@ -50,7 +49,6 @@ public class DebtorsController extends BaseController implements ConditionalCont
             @PathVariable String transactionId,
             @PathVariable String companyAccountsId,
             Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -76,7 +74,6 @@ public class DebtorsController extends BaseController implements ConditionalCont
             BindingResult bindingResult,
             Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -104,7 +101,6 @@ public class DebtorsController extends BaseController implements ConditionalCont
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         BalanceSheet balanceSheet =
                 balanceSheetService.getBalanceSheet(
                         transactionId, companyAccountsId, companyNumber);
@@ -113,7 +109,6 @@ public class DebtorsController extends BaseController implements ConditionalCont
     }
 
     private boolean hasDebtors(BalanceSheet balanceSheet) {
-
         Long currentDebtors = Optional.of(balanceSheet)
                 .map(BalanceSheet::getCurrentAssets)
                 .map(CurrentAssets::getDebtors)

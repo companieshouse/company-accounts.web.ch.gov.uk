@@ -16,14 +16,14 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employ
 import uk.gov.companieshouse.web.accounts.service.notehandler.dates.DateHandler;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmployeesDateHandlerTest {
-
         @Mock
         private ApiClient apiClient;
 
@@ -49,7 +49,6 @@ class EmployeesDateHandlerTest {
         @Test
         @DisplayName("Add dates")
         void addDates() throws ServiceException {
-
             when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                     .thenReturn(smallFullApi);
 
@@ -63,7 +62,6 @@ class EmployeesDateHandlerTest {
         @Test
         @DisplayName("Get note type")
         void getNoteType() {
-
             assertEquals(NoteType.SMALL_FULL_EMPLOYEES, employeesDateHandler.getNoteType());
         }
 }

@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ResumeControllerTests {
-
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String TRANSACTION_ID = "transactionId";
@@ -51,15 +50,13 @@ class ResumeControllerTests {
     private MockMvc mockMvc;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get resume redirect success path")
     void getRequestSuccess() throws Exception {
-
         when(resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT);
 
         this.mockMvc.perform(get(RESUME_PATH))

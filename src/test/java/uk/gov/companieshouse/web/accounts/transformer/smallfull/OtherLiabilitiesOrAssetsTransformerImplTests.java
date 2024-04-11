@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OtherLiabilitiesOrAssetsTransformerImplTests {
-
     private static final Long CURRENT_PREPAYMENTS_AND_ACCRUED_INCOME = 1L;
     private static final Long CURRENT_CREDITORS_DUE_WITHIN_ONE_YEAR = 2L;
     private static final Long CURRENT_CREDITORS_AFTER_ONE_YEAR = 3L;
@@ -50,7 +49,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model")
     void currentPeriodValueAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -72,7 +70,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model without affecting previous period values")
     void currentPeriodValuesAddedToWebModelWithoutAffectingPreviousPeriodValues() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
@@ -92,7 +89,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model")
     void previousPeriodValuesAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -114,7 +110,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model without affecting current period values")
     void previousPeriodValuesAddedToWebModelWithoutAffectingCurrentPeriodValues() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
 
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
@@ -134,7 +129,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period value added to balance sheet API model when present")
     void currentPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -153,7 +147,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period value not added to balance sheet API model when absent")
     void currentPeriodValueNotAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetWithPeriods(false, false);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -169,7 +162,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period value added to balance sheet API model when present")
     void previousPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -188,7 +180,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period value not added to balance sheet API model when absent")
     void previousPeriodValueNotAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetWithPeriods(false, false);
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -202,7 +193,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     }
 
     private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
-
         PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
         CreditorsDueWithinOneYear creditorsDueWithinOneYear = new CreditorsDueWithinOneYear();
         CreditorsAfterOneYear creditorsAfterOneYear = new CreditorsAfterOneYear();
@@ -259,7 +249,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForCurrentPeriod() {
-
         OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
         otherLiabilitiesOrAssetsApi.setPrepaymentsAndAccruedIncome(CURRENT_PREPAYMENTS_AND_ACCRUED_INCOME);
         otherLiabilitiesOrAssetsApi.setCreditorsDueWithinOneYear(CURRENT_CREDITORS_DUE_WITHIN_ONE_YEAR);
@@ -277,7 +266,6 @@ class OtherLiabilitiesOrAssetsTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForPreviousPeriod() {
-
         OtherLiabilitiesOrAssetsApi otherLiabilitiesOrAssetsApi = new OtherLiabilitiesOrAssetsApi();
         otherLiabilitiesOrAssetsApi.setPrepaymentsAndAccruedIncome(PREVIOUS_PREPAYMENTS_AND_ACCRUED_INCOME);
         otherLiabilitiesOrAssetsApi.setCreditorsDueWithinOneYear(PREVIOUS_CREDITORS_DUE_WITHIN_ONE_YEAR);

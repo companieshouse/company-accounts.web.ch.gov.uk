@@ -17,8 +17,6 @@ import uk.gov.companieshouse.web.accounts.controller.smallfull.StepsToCompleteCo
 @NextController(StepsToCompleteController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/accounts-start")
 public class AccountStartController extends BaseController implements BranchController {
-
-
     private static final String TRANSACTION_ID = "transaction_id";
     private static final String COMPANY_ACCOUNTS_ID = "company_accounts_id";
 
@@ -32,7 +30,6 @@ public class AccountStartController extends BaseController implements BranchCont
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
         Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         model.addAttribute(TRANSACTION_ID, transactionId);
@@ -46,7 +43,6 @@ public class AccountStartController extends BaseController implements BranchCont
         @PathVariable String transactionId,
         @PathVariable String companyAccountsId,
         Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
@@ -55,7 +51,6 @@ public class AccountStartController extends BaseController implements BranchCont
 
     @Override
     public boolean shouldBranch(String ... pathVars) {
-
         return pathVars.length == 3;
     }
 }

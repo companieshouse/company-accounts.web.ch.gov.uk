@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTes
 @PreviousController(MockControllerFour.class)
 @RequestMapping("/mock-controller-five")
 public class MockControllerFive extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return null;

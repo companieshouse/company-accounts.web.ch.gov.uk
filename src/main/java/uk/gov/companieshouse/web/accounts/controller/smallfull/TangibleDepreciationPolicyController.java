@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +30,6 @@ import java.util.List;
 @PreviousController(TurnoverPolicyController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/tangible-depreciation-policy")
 public class TangibleDepreciationPolicyController extends BaseController {
-
     private static final String TANGIBLE_DEPRECIATION_POLICY_FIELD_PATH =
             "tangibleDepreciationPolicyDetails";
 
@@ -50,7 +48,6 @@ public class TangibleDepreciationPolicyController extends BaseController {
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -64,7 +61,6 @@ public class TangibleDepreciationPolicyController extends BaseController {
 
             model.addAttribute("tangibleDepreciationPolicy", tangibleDepreciationPolicy);
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -80,7 +76,6 @@ public class TangibleDepreciationPolicyController extends BaseController {
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         radioAndTextValidator.validate(tangiblePolicy.getHasTangibleDepreciationPolicySelected(), tangiblePolicy.getTangibleDepreciationPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, TANGIBLE_DEPRECIATION_POLICY_FIELD_PATH);
@@ -104,7 +99,6 @@ public class TangibleDepreciationPolicyController extends BaseController {
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -126,7 +120,6 @@ public class TangibleDepreciationPolicyController extends BaseController {
      * @param tangibleDepreciationPolicy The tangible depreciation policy model on which to set the boolean
      */
     private void setIsPolicyIncluded(HttpServletRequest request, TangibleDepreciationPolicy tangibleDepreciationPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         tangibleDepreciationPolicy.setHasTangibleDepreciationPolicySelected(
                 companyAccountsDataState.getAccountingPolicies().getHasProvidedTangiblePolicy());
@@ -138,7 +131,6 @@ public class TangibleDepreciationPolicyController extends BaseController {
      * @param tangibleDepreciationPolicy The tangible depreciation policy for which to cache data
      */
     private void  cacheIsPolicyIncluded(HttpServletRequest request, TangibleDepreciationPolicy tangibleDepreciationPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.getAccountingPolicies().setHasProvidedTangiblePolicy(
                 tangibleDepreciationPolicy.getHasTangibleDepreciationPolicySelected());

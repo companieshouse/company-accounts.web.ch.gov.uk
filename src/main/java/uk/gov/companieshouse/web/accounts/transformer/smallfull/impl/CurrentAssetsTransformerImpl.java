@@ -16,10 +16,8 @@ import java.util.stream.Stream;
 
 @Component("currentAssetsTransformer")
 public class CurrentAssetsTransformerImpl implements Transformer {
-
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasCurrentPeriodCurrentAssets(balanceSheet))) {
             CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
@@ -34,7 +32,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasPreviousPeriodCurrentAssets(balanceSheet))) {
             CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
             currentAssetsApi.setStocks(balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
@@ -49,7 +46,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
         CurrentAssetsApi currentAssetsApi = balanceSheetApi.getCurrentAssets();
 
@@ -84,7 +80,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         CurrentAssets currentAssets = createCurrentAssets(balanceSheet);
         CurrentAssetsApi currentAssetsApi = balanceSheetApi.getCurrentAssets();
 
@@ -118,7 +113,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     }
 
     private CurrentAssets createCurrentAssets(BalanceSheet balanceSheet) {
-
         CurrentAssets currentAssets;
 
         if (balanceSheet.getCurrentAssets() == null) {
@@ -132,7 +126,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     }
 
     private Stocks createStocks(BalanceSheet balanceSheet) {
-
         Stocks stocks;
 
         if (balanceSheet.getCurrentAssets().getStocks() == null) {
@@ -146,7 +139,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     }
 
     private Debtors createDebtors(BalanceSheet balanceSheet) {
-
         Debtors debtors;
 
         if (balanceSheet.getCurrentAssets().getDebtors() == null) {
@@ -160,7 +152,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     }
 
     private CashAtBankAndInHand createCashAtBankAndInHand(BalanceSheet balanceSheet) {
-
         CashAtBankAndInHand cashAtBankAndInHand;
 
         if (balanceSheet.getCurrentAssets().getCashAtBankAndInHand() == null) {
@@ -174,7 +165,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     }
 
     private CurrentAssetsInvestments  createInvestments(BalanceSheet balanceSheet) {
-
         CurrentAssetsInvestments currentAssetsInvestments;
 
         if (balanceSheet.getCurrentAssets().getInvestments() == null) {
@@ -188,7 +178,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     }
 
     private Boolean hasCurrentPeriodCurrentAssets(BalanceSheet balanceSheet) {
-
         CurrentAssets currentAssets = balanceSheet.getCurrentAssets();
 
         return Stream.of(currentAssets.getStocks().getCurrentAmount(),
@@ -199,7 +188,6 @@ public class CurrentAssetsTransformerImpl implements Transformer {
     }
 
     private Boolean hasPreviousPeriodCurrentAssets(BalanceSheet balanceSheet) {
-
         CurrentAssets currentAssets = balanceSheet.getCurrentAssets();
 
         return Stream.of(currentAssets.getStocks().getPreviousAmount(),

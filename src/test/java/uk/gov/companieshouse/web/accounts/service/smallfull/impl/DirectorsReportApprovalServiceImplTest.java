@@ -43,7 +43,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportApprovalServiceImplTest {
-
     @Mock
     private DirectorsReportApprovalTransformer directorsReportApprovalTransformer;
 
@@ -131,7 +130,6 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
     void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -168,7 +166,6 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Submit Approval - POST - Date Validation Errors")
     void createApprovalDateValidationErrors() throws ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(false);
@@ -183,7 +180,6 @@ class DirectorsReportApprovalServiceImplTest {
     @DisplayName("Submit Approval - POST - URIValidationException Thrown")
     void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
         ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -223,7 +219,6 @@ class DirectorsReportApprovalServiceImplTest {
     @DisplayName("Submit Approval - POST - Validation Errors")
     void createApprovalReturnsValidationErrors()
         throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -264,7 +259,6 @@ class DirectorsReportApprovalServiceImplTest {
     @DisplayName("Submit Approval - POST - Generic ApiErrorResponseException Thrown")
     void createApprovalThrowsGenericApiErrorResponseException()
         throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -303,7 +297,6 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Submit Approval - PUT - Success Path")
     void updateApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -341,7 +334,6 @@ class DirectorsReportApprovalServiceImplTest {
     @DisplayName("Submit Approval - PUT - URIValidationException Thrown")
     void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException,
         ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -381,7 +373,6 @@ class DirectorsReportApprovalServiceImplTest {
     @DisplayName("Submit Approval - PUT - Validation Errors")
     void updateApprovalReturnsValidationErrors()
         throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -422,7 +413,6 @@ class DirectorsReportApprovalServiceImplTest {
     @DisplayName("Submit Approval - PUT - Generic ApiErrorResponseException Thrown")
     void updateApprovalThrowsGenericApiErrorResponseException()
         throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
@@ -461,7 +451,6 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Get Approval - Success Path")
     void getApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -485,7 +474,6 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Get Approval - Not Found")
     void getApprovalNotFound() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -506,7 +494,6 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Get Approval - Generic ApiErrorResponseException Thrown")
     void getApprovalThrowsGenericApiErrorResponseException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
@@ -528,7 +515,6 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Get Approval - URIValidationException Thrown")
     void getApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);

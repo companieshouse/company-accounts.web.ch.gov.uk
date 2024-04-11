@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class CurrentPeriodServiceImpl implements CurrentPeriodService {
-
     private static final UriTemplate CURRENT_PERIOD_URI =
             new UriTemplate("/transactions/{transactionId}/company-accounts/{companyAccountsId}/small-full/current-period");
 
@@ -34,7 +33,6 @@ public class CurrentPeriodServiceImpl implements CurrentPeriodService {
     @Override
     public CurrentPeriodApi getCurrentPeriod(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-
         try {
             return apiClient.smallFull().currentPeriod()
                     .get(CURRENT_PERIOD_URI.expand(transactionId, companyAccountsId).toString())
@@ -49,7 +47,6 @@ public class CurrentPeriodServiceImpl implements CurrentPeriodService {
     @Override
     public void submitCurrentPeriod(ApiClient apiClient, SmallFullApi smallFullApi, String transactionId,
             String companyAccountsId, CurrentPeriodApi currentPeriodApi, List<ValidationError> validationErrors) throws ServiceException {
-
         boolean resourceExists = StringUtils.isNotBlank(smallFullApi.getLinks().getCurrentPeriod());
 
         try {

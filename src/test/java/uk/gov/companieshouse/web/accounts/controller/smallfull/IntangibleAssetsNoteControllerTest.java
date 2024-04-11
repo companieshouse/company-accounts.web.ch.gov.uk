@@ -1,23 +1,11 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,9 +23,25 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IntangibleAssetsNoteControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -87,15 +91,14 @@ class IntangibleAssetsNoteControllerTest {
 
     private static final String ERROR_VIEW = "error";
 
-    private void setUpMockMvc() {
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
+    public void setUpMockMvc() {
+        when(navigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
         mockMvc = MockMvcBuilders.standaloneSetup(intangibleAssetsNoteController).build();
     }
 
     @Test
     @DisplayName("Get intangible asset note view - success path")
     void getRequestSuccess() throws Exception {
-
         setUpMockMvc();
 
         when(intangibleAssetsNoteService
@@ -113,7 +116,6 @@ class IntangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Get intangible asset note - service exception")
     void getRequestServiceException() throws Exception {
-
         setUpMockMvc();
 
         doThrow(ServiceException.class)
@@ -128,10 +130,9 @@ class IntangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Post intangible asset note - success path")
     void postRequestSuccess() throws Exception {
-
         setUpMockMvc();
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
 
         when(
             intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
@@ -148,7 +149,6 @@ class IntangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Post intangible asset note - validation errors")
     void postRequestValidationErrors() throws Exception {
-
         setUpMockMvc();
 
         when(
@@ -167,7 +167,6 @@ class IntangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Post intangible asset note - service exception")
     void postRequestServiceException() throws Exception {
-
         setUpMockMvc();
 
         doThrow(ServiceException.class)
@@ -183,7 +182,6 @@ class IntangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Post intangible assets note - binding errors")
     void postRequestBindingErrors() throws Exception {
-
         setUpMockMvc();
 
         mockMvc.perform(post(INTANGIBLE_PATH)

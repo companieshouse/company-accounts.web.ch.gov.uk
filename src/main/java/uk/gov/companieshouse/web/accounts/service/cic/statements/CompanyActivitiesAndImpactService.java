@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivities
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface CompanyActivitiesAndImpactService {
-
     /**
      * Retrieves the company's activities and impact
      *

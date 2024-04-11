@@ -18,7 +18,6 @@ import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransform
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicStatementsTransformerImplTest {
-
     private final CicStatementsTransformer transformer = new CicStatementsTransformerImpl();
 
     private static final String COMPANY_ACTIVITIES_AND_IMPACT = "companyActivitiesAndImpact";
@@ -33,7 +32,6 @@ class CicStatementsTransformerImplTest {
     @Test
     @DisplayName("Get company activities and impact - null statements object")
     void getCompanyActivitiesAndImpactForNullStatementsObject() {
-
         CompanyActivitiesAndImpact companyActivitiesAndImpact =
                 transformer.getCompanyActivitiesAndImpact(null);
 
@@ -44,7 +42,6 @@ class CicStatementsTransformerImplTest {
     @Test
     @DisplayName("Get company activities and impact")
     void getCompanyActivitiesAndImpact() {
-
         CompanyActivitiesAndImpact companyActivitiesAndImpact =
                 transformer.getCompanyActivitiesAndImpact(createCicStatementsApi());
 
@@ -55,7 +52,6 @@ class CicStatementsTransformerImplTest {
     @Test
     @DisplayName("Set company activities and impact")
     void setCompanyActivitiesAndImpact() {
-
         CompanyActivitiesAndImpact companyActivitiesAndImpact = new CompanyActivitiesAndImpact();
         companyActivitiesAndImpact.setActivitiesAndImpact(UPDATED_COMPANY_ACTIVITIES_AND_IMPACT);
 
@@ -73,7 +69,6 @@ class CicStatementsTransformerImplTest {
     @Test
     @DisplayName("Get cicReview")
     void getCicReview() {
-
         CicReview cicReview = transformer.getCicReview(createCicStatementsApi());
 
         assertNotNull(cicReview);
@@ -84,7 +79,6 @@ class CicStatementsTransformerImplTest {
     }
 
     CicStatementsApi createCicStatementsApi() {
-
         ReportStatementsApi reportStatementsApi = new ReportStatementsApi();
         reportStatementsApi.setCompanyActivitiesAndImpact(COMPANY_ACTIVITIES_AND_IMPACT);
         reportStatementsApi.setConsultationWithStakeholders(CONSULTATION_WITH_STAKEHOLDERS);

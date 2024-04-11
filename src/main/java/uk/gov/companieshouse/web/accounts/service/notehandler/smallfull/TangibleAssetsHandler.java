@@ -17,7 +17,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @Component
 public class TangibleAssetsHandler implements
         NoteResourceHandler<TangibleApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 
@@ -27,38 +26,32 @@ public class TangibleAssetsHandler implements
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
-
         return TANGIBLE_ASSETS_URI.expand(transactionId, companyAccountsId).toString();
     }
 
     @Override
     public Executor<ApiResponse<TangibleApi>> get(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().tangible().get(uri);
     }
 
     @Override
     public Executor<ApiResponse<Void>> update(ApiClient apiClient, String uri, TangibleApi apiResource) {
-
         return apiClient.smallFull().tangible().update(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<TangibleApi>> create(ApiClient apiClient, String uri, TangibleApi apiResource) {
-
         return apiClient.smallFull().tangible().create(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<Void>> delete(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().tangible().delete(uri);
     }
 
     @Override
     public boolean parentResourceExists(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getTangibleAssetsNote());
@@ -66,7 +59,6 @@ public class TangibleAssetsHandler implements
 
     @Override
     public NoteType getNoteType() {
-
         return NoteType.SMALL_FULL_TANGIBLE_ASSETS;
     }
 }

@@ -1,21 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,9 +22,24 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWithStakeholdersSelectionService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ConsultationWithStakeholdersSelectionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -79,15 +85,13 @@ class ConsultationWithStakeholdersSelectionControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(selectionController).build();
     }
 
     @Test
     @DisplayName("Get consultation with stakeholders selection - success path")
     void getConsultationWithStakeHoldersSelectionSuccess() throws Exception {
-
         when(selectionService.getConsultationWithStakeholdersSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(selection);
 
@@ -106,7 +110,6 @@ class ConsultationWithStakeholdersSelectionControllerTest {
     @Test
     @DisplayName("Get consultation with stakeholders selection - derived from cache")
     void getConsultationWithStakeHoldersSelectionDerivedFromCache() throws Exception {
-
         when(selectionService.getConsultationWithStakeholdersSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(selection);
 
@@ -134,7 +137,6 @@ class ConsultationWithStakeholdersSelectionControllerTest {
     @Test
     @DisplayName("Get consultation with stakeholders selection - service exception")
     void getConsultationWithStakeHoldersSelectionServiceException() throws Exception {
-
         when(selectionService.getConsultationWithStakeholdersSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -146,13 +148,12 @@ class ConsultationWithStakeholdersSelectionControllerTest {
     @Test
     @DisplayName("Post consultation with stakeholders selection - success path")
     void postConsultationWithStakeHoldersSelectionSuccess() throws Exception {
-
         MockHttpSession session = new MockHttpSession();
         session.setAttribute(COMPANY_ACCOUNTS_STATE, companyAccountsDataState);
 
         when(companyAccountsDataState.getCicStatements()).thenReturn(cicStatements);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(createPostRequestWithParam(HAS_PROVIDED_CONSULTATION_WITH_STAKEHOLDERS).session(session))
                 .andExpect(status().is3xxRedirection())
@@ -167,7 +168,6 @@ class ConsultationWithStakeholdersSelectionControllerTest {
     @Test
     @DisplayName("Post consultation with stakeholders selection - binding errors")
     void postConsultationWithStakeHoldersSelectionBindingErrors() throws Exception {
-
         this.mockMvc.perform(createPostRequestWithParam(null))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CONSULTATION_WITH_STAKEHOLDERS_SELECTION_VIEW));
@@ -179,7 +179,6 @@ class ConsultationWithStakeholdersSelectionControllerTest {
     @Test
     @DisplayName("Post consultation with stakeholders selection - service exception")
     void postConsultationWithStakeHoldersSelectionServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(selectionService).submitConsultationWithStakeholdersSelection(
                         eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(ConsultationWithStakeholdersSelection.class));
@@ -190,7 +189,6 @@ class ConsultationWithStakeholdersSelectionControllerTest {
     }
 
     private MockHttpServletRequestBuilder createPostRequestWithParam(Boolean hasProvidedConsultationWithStakeholders) {
-
         String beanElement = "hasProvidedConsultationWithStakeholders";
         String data = hasProvidedConsultationWithStakeholders == null ? null : "0";
 

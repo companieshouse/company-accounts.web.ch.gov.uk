@@ -32,7 +32,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StocksHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -79,14 +78,12 @@ class StocksHandlerTest {
     @Test
     @DisplayName("Get the resource URI")
     void getResourceURI() {
-
         assertEquals(URI, stocksHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get Stocks Resource")
     void getStocksResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.stocks()).thenReturn(stocksResourceHandler);
         when(stocksResourceHandler.get(URI)).thenReturn(stocksGet);
@@ -100,7 +97,6 @@ class StocksHandlerTest {
     @Test
     @DisplayName("Update Stocks Resource")
     void updateStocksResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.stocks()).thenReturn(stocksResourceHandler);
         when(stocksResourceHandler.update(URI, stocksApi)).thenReturn(stocksUpdate);
@@ -114,7 +110,6 @@ class StocksHandlerTest {
     @Test
     @DisplayName("Create Stocks Resource")
     void createStocksResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.stocks()).thenReturn(stocksResourceHandler);
         when(stocksResourceHandler.create(URI, stocksApi)).thenReturn(stocksCreate);
@@ -128,7 +123,6 @@ class StocksHandlerTest {
     @Test
     @DisplayName("Delete Stocks Resource")
     void deleteStocksResource() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.stocks()).thenReturn(stocksResourceHandler);
         when(stocksResourceHandler.delete(URI)).thenReturn(stocksDelete);
@@ -142,7 +136,6 @@ class StocksHandlerTest {
     @Test
     @DisplayName("Parent resource exists")
     void parentResourceExists() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getStocksNote()).thenReturn(STOCKS_NOTE);
@@ -153,7 +146,6 @@ class StocksHandlerTest {
     @Test
     @DisplayName("Parent resource does not exist")
     void parentResourceDoesNotExist() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getStocksNote()).thenReturn(null);
@@ -164,7 +156,6 @@ class StocksHandlerTest {
     @Test
     @DisplayName("Get NoteType")
     void getNoteType()  {
-
         assertEquals(NoteType.SMALL_FULL_STOCKS, stocksHandler.getNoteType());
     }
 }

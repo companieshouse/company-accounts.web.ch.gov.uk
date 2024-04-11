@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.service.payment;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface PaymentService {
-
     /**
      * Creates a payment session in order to pay to close a transaction
      *

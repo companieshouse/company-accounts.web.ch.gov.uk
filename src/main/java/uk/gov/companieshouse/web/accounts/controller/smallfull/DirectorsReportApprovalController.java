@@ -37,7 +37,6 @@ import java.util.List;
 @PreviousController(DirectorsReportReviewController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/approval")
 public class DirectorsReportApprovalController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -69,11 +68,9 @@ public class DirectorsReportApprovalController extends BaseController implements
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
                                              Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-
             DirectorsReportApproval directorsReportApproval =
                     directorsReportApprovalService.getDirectorsReportApproval(transactionId, companyAccountsId);
 
@@ -101,7 +98,6 @@ public class DirectorsReportApprovalController extends BaseController implements
             return getTemplateName();
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -114,7 +110,6 @@ public class DirectorsReportApprovalController extends BaseController implements
                                                 @Valid @ModelAttribute(DIRECTORS_REPORT_APPROVAL) DirectorsReportApproval directorsReportApproval,
                                                 BindingResult bindingResult,
                                                 Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -131,7 +126,6 @@ public class DirectorsReportApprovalController extends BaseController implements
             }
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -147,7 +141,6 @@ public class DirectorsReportApprovalController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         DirectorsReportApi directorsReportApi = directorsReportService.getDirectorsReport(apiClientService.getApiClient(), transactionId, companyAccountsId);
 
         return directorsReportApi != null;

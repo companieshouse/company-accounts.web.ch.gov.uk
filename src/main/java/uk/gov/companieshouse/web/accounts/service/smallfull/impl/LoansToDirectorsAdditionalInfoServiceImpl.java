@@ -21,7 +21,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class LoansToDirectorsAdditionalInfoServiceImpl implements LoansToDirectorsAdditionalInfoService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -41,7 +40,6 @@ public class LoansToDirectorsAdditionalInfoServiceImpl implements LoansToDirecto
 
     @Override
     public LoansToDirectorsAdditionalInfo getAdditionalInformation(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = ADDITIONAL_INFORMATION_URI.expand(transactionId, companyAccountsId).toString();
@@ -62,7 +60,6 @@ public class LoansToDirectorsAdditionalInfoServiceImpl implements LoansToDirecto
     @Override
     public List<ValidationError> createAdditionalInformation(String transactionId, String companyAccountsId, LoansToDirectorsAdditionalInfo additionalInformation)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = ADDITIONAL_INFORMATION_URI.expand(transactionId, companyAccountsId).toString();
@@ -86,7 +83,6 @@ public class LoansToDirectorsAdditionalInfoServiceImpl implements LoansToDirecto
 
     @Override
     public List<ValidationError> updateAdditionalInformation(String transactionId, String companyAccountsId, LoansToDirectorsAdditionalInfo additionalInformation) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = ADDITIONAL_INFORMATION_URI.expand(transactionId, companyAccountsId).toString();
@@ -110,7 +106,6 @@ public class LoansToDirectorsAdditionalInfoServiceImpl implements LoansToDirecto
 
     @Override
     public void deleteAdditionalInformation(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = ADDITIONAL_INFORMATION_URI.expand(transactionId, companyAccountsId).toString();

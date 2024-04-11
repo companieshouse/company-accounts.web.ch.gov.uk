@@ -26,7 +26,6 @@ import java.util.List;
 
 @Service
 public class LoansServiceImpl implements LoanService {
-
     private static final String PREFER_NOT_TO_SAY = "Prefer not to say";
 
     private static final UriTemplate LOANS_URI =
@@ -54,7 +53,6 @@ public class LoansServiceImpl implements LoanService {
 
     @Override
     public Loan[] getAllLoans(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = LOANS_URI.expand(transactionId, companyAccountsId).toString();
@@ -81,7 +79,6 @@ public class LoansServiceImpl implements LoanService {
 
     @Override
     public List<ValidationError> createLoan(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
-
         List<ValidationError> validationErrors;
 
         boolean directorReportPresent = addOrRemoveLoans.getValidDirectorNames() != null && !addOrRemoveLoans.getValidDirectorNames().isEmpty();
@@ -121,7 +118,6 @@ public class LoansServiceImpl implements LoanService {
 
     @Override
     public void deleteLoan(String transactionId, String companyAccountsId, String loanId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = LOAN_URI_WITH_ID.expand(transactionId, companyAccountsId, loanId).toString();
@@ -137,7 +133,6 @@ public class LoansServiceImpl implements LoanService {
 
     @Override
     public List<ValidationError> submitAddOrRemoveLoans(String transactionId, String companyAccountsId, AddOrRemoveLoans addOrRemoveLoans) throws ServiceException {
-
         LoanToAdd loanToAdd = addOrRemoveLoans.getLoanToAdd();
 
         List<ValidationError> validationErrors;

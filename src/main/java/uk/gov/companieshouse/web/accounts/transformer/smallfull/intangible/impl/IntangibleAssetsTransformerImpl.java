@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.Intan
 
 @Component
 public class IntangibleAssetsTransformerImpl implements NoteTransformer<IntangibleAssets, IntangibleApi> {
-
     @Autowired
     private IntangibleAssetsTransformerFactory factory;
 
@@ -28,7 +27,6 @@ public class IntangibleAssetsTransformerImpl implements NoteTransformer<Intangib
             IntangibleAssetsResourceTransformer intangibleAssetsResourceTransformer;
 
             if (intangibleApi.getGoodwill() != null) {
-
                 intangibleAssetsResourceTransformer =
                                 factory.getResourceTransformer(IntangibleAssetsResource.GOODWILL);
 
@@ -37,7 +35,6 @@ public class IntangibleAssetsTransformerImpl implements NoteTransformer<Intangib
             }
 
             if (intangibleApi.getOtherIntangibleAssets() != null) {
-
                 intangibleAssetsResourceTransformer = factory.getResourceTransformer(
                                 IntangibleAssetsResource.OTHER_INTANGIBLE_ASSETS);
 
@@ -46,7 +43,6 @@ public class IntangibleAssetsTransformerImpl implements NoteTransformer<Intangib
             }
 
             if (intangibleApi.getTotal() != null) {
-
                 intangibleAssetsResourceTransformer =
                                 factory.getResourceTransformer(IntangibleAssetsResource.TOTAL);
 
@@ -59,7 +55,6 @@ public class IntangibleAssetsTransformerImpl implements NoteTransformer<Intangib
 
     @Override
     public IntangibleApi toApi(IntangibleAssets intangibleAssets) {
-
         IntangibleApi intangibleApi = new IntangibleApi();
 
         if (StringUtils.isNotBlank(intangibleAssets.getAdditionalInformation())) {
@@ -67,12 +62,10 @@ public class IntangibleAssetsTransformerImpl implements NoteTransformer<Intangib
         }
 
         Stream.of(IntangibleAssetsResource.values()).forEach(intangibleAssetsResource -> {
-
             IntangibleAssetsResourceTransformer resourceTransformer =
                     factory.getResourceTransformer(intangibleAssetsResource);
 
             if (resourceTransformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets)) {
-
                 resourceTransformer.mapIntangibleAssetsToApiResource(intangibleAssets, intangibleApi);
             }
         });

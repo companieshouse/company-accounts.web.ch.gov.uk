@@ -21,7 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @PreviousController(OffBalanceSheetArrangementsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/review")
 public class ReviewController extends BaseController {
-
     @Autowired
     ReviewService reviewService;
 
@@ -31,7 +30,6 @@ public class ReviewController extends BaseController {
                                 @PathVariable String companyAccountsId,
                                 Model model,
                                 HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -43,7 +41,6 @@ public class ReviewController extends BaseController {
             model.addAttribute("companyAccountsId", companyAccountsId);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -55,7 +52,6 @@ public class ReviewController extends BaseController {
     public String postReviewPage(@PathVariable String companyNumber,
                                  @PathVariable String transactionId,
                                  @PathVariable String companyAccountsId) {
-
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
     }
 

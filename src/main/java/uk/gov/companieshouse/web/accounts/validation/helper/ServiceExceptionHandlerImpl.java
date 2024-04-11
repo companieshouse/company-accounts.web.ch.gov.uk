@@ -10,7 +10,6 @@ import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 
 @Component
 public class ServiceExceptionHandlerImpl implements ServiceExceptionHandler {
-
     @Autowired
     private ValidationContext validationContext;
 
@@ -20,8 +19,6 @@ public class ServiceExceptionHandlerImpl implements ServiceExceptionHandler {
     @Override
     public void handleSubmissionException(ApiErrorResponseException e, String resourceName)
             throws ServiceException {
-
-
         throw new ServiceException("Error when submitting resource: " + resourceName, e);
     }
 
@@ -31,7 +28,6 @@ public class ServiceExceptionHandlerImpl implements ServiceExceptionHandler {
     @Override
     public void handleDeletionException(ApiErrorResponseException e, String resourceName)
             throws ServiceException{
-
         throw new ServiceException("Error deleting resource: " + resourceName, e);
     }
 
@@ -41,7 +37,6 @@ public class ServiceExceptionHandlerImpl implements ServiceExceptionHandler {
     @Override
     public void handleRetrievalException(ApiErrorResponseException e, String resourceName)
             throws ServiceException {
-
         if (e.getStatusCode() != HttpStatus.NOT_FOUND.value()) {
             throw new ServiceException("Error retrieving resource: " + resourceName, e);
         }
@@ -53,7 +48,6 @@ public class ServiceExceptionHandlerImpl implements ServiceExceptionHandler {
     @Override
     public void handleURIValidationException(URIValidationException e, String resourceName)
             throws ServiceException {
-
         throw new ServiceException("Invalid URI for resource: " + resourceName, e);
     }
 }

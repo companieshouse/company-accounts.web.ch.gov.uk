@@ -5,7 +5,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.Loans
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface LoansToDirectorsService {
-
     void createLoansToDirectors(String transactionId, String companyAccountsId) throws ServiceException;
 
     LoansToDirectorsApi getLoansToDirectors(ApiClient apiClient, String transactionId, String companyAccountsId)

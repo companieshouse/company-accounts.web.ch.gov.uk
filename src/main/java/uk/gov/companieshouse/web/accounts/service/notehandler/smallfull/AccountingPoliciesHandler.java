@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class AccountingPoliciesHandler implements NoteResourceHandler<AccountingPoliciesApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 

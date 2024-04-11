@@ -1,8 +1,14 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,8 +23,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -37,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FinancialCommitmentsControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -90,14 +96,13 @@ class FinancialCommitmentsControllerTest {
     private static final String FINANCIAL_COMMITMENTS_DETAILS = "financialCommitmentsDetails";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get financial commitments - success")
     void getFinancialCommitmentsSuccess() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
                 .thenReturn(financialCommitments);
 
@@ -111,7 +116,6 @@ class FinancialCommitmentsControllerTest {
     @Test
     @DisplayName("Get financial commitments - ServiceException")
     void getFinancialCommitmentsThrowsServiceException() throws Exception {
-
         when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
                 .thenThrow(ServiceException.class);
 
@@ -123,14 +127,13 @@ class FinancialCommitmentsControllerTest {
     @Test
     @DisplayName("Submit financial commitments - success")
     void submitFinancialCommitmentsSuccess() throws Exception {
-
         when(noteService.submit(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(FinancialCommitments.class), eq(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         mockMvc.perform(post(FINANCIAL_COMMITMENTS_PATH)
                 .param(FINANCIAL_COMMITMENTS_DETAILS, FINANCIAL_COMMITMENTS_DETAILS))
@@ -141,7 +144,6 @@ class FinancialCommitmentsControllerTest {
     @Test
     @DisplayName("Submit financial commitments - ServiceException")
     void submitFinancialCommitmentsThrowsServiceException() throws Exception {
-
         when(noteService.submit(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(FinancialCommitments.class), eq(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS)))
                 .thenThrow(ServiceException.class);
@@ -155,7 +157,6 @@ class FinancialCommitmentsControllerTest {
     @Test
     @DisplayName("Submit financial commitments - validation errors")
     void submitFinancialCommitmentsWithValidationErrors() throws Exception {
-
         when(noteService.submit(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(FinancialCommitments.class), eq(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS)))
                 .thenReturn(validationErrors);
@@ -167,13 +168,12 @@ class FinancialCommitmentsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(FINANCIAL_COMMITMENTS_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(), captor.capture());
     }
 
     @Test
     @DisplayName("Submit financial commitments - binding result errors")
     void submitFinancialCommitmentsWithBindingResultErrors() throws Exception {
-
         mockMvc.perform(post(FINANCIAL_COMMITMENTS_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(FINANCIAL_COMMITMENTS_VIEW));
@@ -185,7 +185,6 @@ class FinancialCommitmentsControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getHasIncludedFinancialCommitments()).thenReturn(true);
@@ -195,7 +194,6 @@ class FinancialCommitmentsControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getHasIncludedFinancialCommitments()).thenReturn(false);

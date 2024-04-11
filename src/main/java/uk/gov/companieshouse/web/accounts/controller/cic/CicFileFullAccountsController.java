@@ -17,7 +17,6 @@ import java.util.Optional;
 @NextController(CicCriteriaController.class)
 @PreviousController(CicSelectAccountTypeController.class)
 public class CicFileFullAccountsController extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return "govuk/smallfull/criteria";
@@ -25,7 +24,6 @@ public class CicFileFullAccountsController extends BaseController {
 
     @GetMapping
     public String getCicFullAccountsCriteria(@PathVariable Optional<String> companyNumber, Model model) {
-
         if(companyNumber.isPresent()) {
             addBackPageAttributeToModel(model, companyNumber.get());
         } else {
@@ -37,7 +35,6 @@ public class CicFileFullAccountsController extends BaseController {
 
     @PostMapping
     public String postCicFullAccountsCriteria(@PathVariable Optional<String> companyNumber) {
-
         if (companyNumber.isPresent()) {
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber.get());
         } else {

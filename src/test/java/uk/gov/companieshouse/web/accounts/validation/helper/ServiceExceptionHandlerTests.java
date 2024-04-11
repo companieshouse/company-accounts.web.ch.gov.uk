@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ServiceExceptionHandlerTests {
-
     private final ServiceExceptionHandler serviceExceptionHandler = new ServiceExceptionHandlerImpl();
 
     private static final String RESOURCE_NAME = "resourceName";
@@ -27,7 +26,6 @@ class ServiceExceptionHandlerTests {
     @Test
     @DisplayName("Handle submission exception")
     void handleSubmissionException() {
-
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
                         .build();
@@ -44,7 +42,6 @@ class ServiceExceptionHandlerTests {
     @Test
     @DisplayName("Handle deletion exception")
     void handleDeletionException() {
-
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
                         .build();
@@ -61,7 +58,6 @@ class ServiceExceptionHandlerTests {
     @Test
     @DisplayName("Handle retrieval exception - internal server error")
     void handleRetrievalExceptionInternalServerError() {
-
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
                         .build();
@@ -78,7 +74,6 @@ class ServiceExceptionHandlerTests {
     @Test
     @DisplayName("Handle retrieval exception - not found")
     void handleRetrievalExceptionNotFound() {
-
         HttpResponseException httpResponseException =
                 new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
                         .build();
@@ -91,7 +86,6 @@ class ServiceExceptionHandlerTests {
     @Test
     @DisplayName("Handle URI validation exception")
     void handleURIValidationException() {
-
         URIValidationException e = new URIValidationException("Invalid URI");
 
         Throwable exception =

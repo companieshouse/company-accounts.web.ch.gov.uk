@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SecretaryTransformerImplTest {
-
     @InjectMocks
     private SecretaryTransformerImpl secretaryTransformer;
 
@@ -24,7 +23,6 @@ class SecretaryTransformerImplTest {
     @Test
     @DisplayName("Get secretary API")
     void getSecretaryApi() {
-
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
         addOrRemoveDirectors.setSecretary(NAME);
 

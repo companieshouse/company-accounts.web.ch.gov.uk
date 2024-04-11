@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportState
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
-
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -49,7 +48,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     @Test
     @DisplayName("Get company policy on disabled employees selection - no existing statements")
     void getCompanyPolicyOnDisabledEmployeesSelectionNoExistingStatements() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -63,7 +61,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     @Test
     @DisplayName("Get company policy on disabled employees selection - statements do not include company policy on disabled employees")
     void getCompanyPolicyOnDisabledEmployeesSelectionStatementsDoNotIncludeCompanyPolicyOnDisabledEmployees() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -79,7 +76,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     @Test
     @DisplayName("Get company policy on disabled employees selection - statements include company policy on disabled employees")
     void getCompanyPolicyOnDisabledEmployeesSelectionStatementsIncludeCompanyPolicyOnDisabledEmployees() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -96,7 +92,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit company policy on disabled employees selection - has company policy on disabled employees")
     void submitCompanyPolicyOnDisabledEmployeesSelectionHasCompanyPolicyOnDisabledEmployees() throws ServiceException {
-
         when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(true);
 
         assertAll(() ->
@@ -109,7 +104,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit company policy on disabled employees selection - no existing statements")
     void submitCompanyPolicyOnDisabledEmployeesSelectionNoExistingStatements() throws ServiceException {
-
         when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -123,7 +117,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit company policy on disabled employees selection - has other statements")
     void submitCompanyPolicyOnDisabledEmployeesSelectionHasOtherStatements() throws ServiceException {
-
         when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -143,7 +136,6 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit company policy on disabled employees selection - has no other statements")
     void submitCompanyPolicyOnDisabledEmployeesSelectionHasNoOtherStatements() throws ServiceException {
-
         when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))

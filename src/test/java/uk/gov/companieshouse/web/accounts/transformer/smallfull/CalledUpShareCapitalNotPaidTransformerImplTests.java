@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CalledUpShareCapitalNotPaidTransformerImplTests {
-
     private static final Long CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID = 1L;
     private static final Long PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID = 10L;
 
@@ -26,7 +25,6 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
     @Test
     @DisplayName("Current period value added to balance sheet web model")
     void currentPeriodValueAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
         balanceSheetApi.setCalledUpShareCapitalNotPaid(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
@@ -43,7 +41,6 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
     @Test
     @DisplayName("Current period value added to balance sheet web model does not affect an existing previous period value")
     void currentPeriodValueAddedToWebModelDoesNotAffectPreviousPeriodValue() {
-
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
         balanceSheetApi.setCalledUpShareCapitalNotPaid(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
@@ -64,7 +61,6 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
     @Test
     @DisplayName("Previous period value added to balance sheet web model")
     void previousPeriodValueAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
         balanceSheetApi.setCalledUpShareCapitalNotPaid(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
@@ -81,7 +77,6 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
     @Test
     @DisplayName("Previous period value added to balance sheet web model does not affect an existing current period value")
     void previousPeriodValueAddedToWebModelDoesNotAffectCurrentPeriodValue() {
-
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
         balanceSheetApi.setCalledUpShareCapitalNotPaid(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
@@ -102,7 +97,6 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
     @Test
     @DisplayName("Current period value added to balance sheet API model when present")
     void currentPeriodValueAddedToApiModel() {
-
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setCurrentAmount(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
@@ -120,11 +114,9 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
-
     @Test
     @DisplayName("Current period value not added to balance sheet API model when absent")
     void currentPeriodValueNotAddedToApiModel() {
-
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setCalledUpShareCapitalNotPaid(new CalledUpShareCapitalNotPaid());
 
@@ -141,7 +133,6 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
     @Test
     @DisplayName("Previous period value added to balance sheet API model when present")
     void previousPeriodValueAddedToApiModel() {
-
         CalledUpShareCapitalNotPaid calledUpShareCapitalNotPaid = new CalledUpShareCapitalNotPaid();
         calledUpShareCapitalNotPaid.setPreviousAmount(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID);
 
@@ -162,7 +153,6 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
     @Test
     @DisplayName("Previous period value not added to balance sheet API model when absent")
     void previousPeriodValueNotAddedToApiModel() {
-
         BalanceSheet balanceSheet = new BalanceSheet();
         balanceSheet.setCalledUpShareCapitalNotPaid(new CalledUpShareCapitalNotPaid());
 

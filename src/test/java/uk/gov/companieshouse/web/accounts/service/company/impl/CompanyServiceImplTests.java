@@ -42,7 +42,6 @@ import uk.gov.companieshouse.web.accounts.transformer.company.CompanyDetailTrans
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyServiceImplTests {
-
     @Mock
     private ApiClient apiClient;
 
@@ -99,7 +98,6 @@ class CompanyServiceImplTests {
     private static final String NEXT_ACCOUNTS_HEADING = "2019";
 
     private void initApiClient() {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.company()).thenReturn(companyResourceHandler);
@@ -110,7 +108,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Get Company Profile - Success Path")
     void getCompanyProfileSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         initApiClient();
 
         when(companyGet.execute()).thenReturn(responseWithData);
@@ -125,7 +122,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Get Company Profile - Throws ApiErrorResponseException")
     void getCompanyProfileThrowsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
         initApiClient();
 
         when(companyGet.execute()).thenThrow(ApiErrorResponseException.class);
@@ -137,7 +133,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Get Company Profile - Throws URIValidationException")
     void getCompanyProfileThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
         initApiClient();
 
         when(companyGet.execute()).thenThrow(URIValidationException.class);
@@ -149,7 +144,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Get Company Details - Success Path")
     void getCompanyDetailSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         initApiClient();
 
         when(companyGet.execute()).thenReturn(responseWithData);
@@ -166,7 +160,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Is Multi Year Filer - No Last Accounts")
     void isMultiYearFilerNoLastAccounts() {
-
         when(companyProfile.getAccounts()).thenReturn(accounts);
 
         when(accounts.getLastAccounts()).thenReturn(null);
@@ -177,7 +170,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Is Multi Year Filer - No Last Accounts Period End")
     void isMultiYearFilerNoLastAccountsPeriodEnd() {
-
         when(companyProfile.getAccounts()).thenReturn(accounts);
 
         when(accounts.getLastAccounts()).thenReturn(lastAccounts);
@@ -190,7 +182,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Is Multi Year Filer - Has Last Accounts Period End")
     void isMultiYearFilerHasLastAccountsPeriodEnd() {
-
         when(companyProfile.getAccounts()).thenReturn(accounts);
 
         when(accounts.getLastAccounts()).thenReturn(lastAccounts);
@@ -203,7 +194,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Get Balance Sheet Headings - Single Year Filer")
     void getBalanceSheetHeadingsSingleYearFiler() {
-
         when(companyProfile.getAccounts()).thenReturn(accounts);
 
         when(accounts.getLastAccounts()).thenReturn(null);
@@ -229,7 +219,6 @@ class CompanyServiceImplTests {
     @Test
     @DisplayName("Get Balance Sheet Headings - Multi Year Filer")
     void getBalanceSheetHeadingsMultiYearFiler() {
-
         when(companyProfile.getAccounts()).thenReturn(accounts);
 
         when(accounts.getLastAccounts()).thenReturn(lastAccounts);

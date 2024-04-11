@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 
 @Service
 public class DirectorsReportReviewServiceImpl implements DirectorsReportReviewService {
-
     @Autowired
     private DirectorService directorService;
 
@@ -36,7 +35,6 @@ public class DirectorsReportReviewServiceImpl implements DirectorsReportReviewSe
     @Override
     public DirectorsReportReview getReview(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         DirectorsReportReview review = new DirectorsReportReview();
 
         review.setDirectors(directorService.getAllDirectors(transactionId, companyAccountsId, false));

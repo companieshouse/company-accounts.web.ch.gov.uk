@@ -38,7 +38,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicStatementsServiceImplTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -98,8 +97,7 @@ class CicStatementsServiceImplTest {
     private static final String RESOURCE_NAME = "CIC statements";
 
     @BeforeEach
-    private void setUp() {
-
+    public void setUp() {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.cicReport()).thenReturn(cicReportResourceHandler);
         when(cicReportResourceHandler.statements()).thenReturn(cicStatementsResourceHandler);
@@ -109,7 +107,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Get CIC statements - success")
     void getCicStatementsSuccess()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(cicStatementsResourceHandler.get(CIC_STATEMENTS_URI)).thenReturn(cicStatementsGet);
 
         when(cicStatementsGet.execute()).thenReturn(responseWithData);
@@ -126,7 +123,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Get CIC statements - not found")
     void getCicStatementsNotFound()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(cicStatementsResourceHandler.get(CIC_STATEMENTS_URI)).thenReturn(cicStatementsGet);
 
         when(cicStatementsGet.execute()).thenThrow(apiErrorResponseException);
@@ -142,7 +138,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Get CIC statements - URIValidationException")
     void getCicStatementsURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(cicStatementsResourceHandler.get(CIC_STATEMENTS_URI)).thenReturn(cicStatementsGet);
 
         when(cicStatementsGet.execute()).thenThrow(uriValidationException);
@@ -159,7 +154,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Create CIC statements - success")
     void createCicStatementsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.create(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsCreate);
 
@@ -180,7 +174,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Create CIC statements - validation errors")
     void createCicStatementsValidationErrors()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.create(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsCreate);
 
@@ -202,7 +195,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Create CIC statements - URIValidationException")
     void createCicStatementsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.create(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsCreate);
 
@@ -221,7 +213,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Create CIC statements - ApiErrorResponseException")
     void createCicStatementsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.create(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsCreate);
 
@@ -240,7 +231,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Update CIC statements - success")
     void updateCicStatementsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.update(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsUpdate);
 
@@ -259,7 +249,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Update CIC statements - validation errors")
     void updateCicStatementsValidationErrors()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.update(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsUpdate);
 
@@ -281,7 +270,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Update CIC statements - URIValidationException")
     void updateCicStatementsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.update(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsUpdate);
 
@@ -300,7 +288,6 @@ class CicStatementsServiceImplTest {
     @DisplayName("Update CIC statements - ApiErrorResponseException")
     void updateCicStatementsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(cicStatementsResourceHandler.update(CIC_STATEMENTS_URI, cicStatementsApi))
                 .thenReturn(cicStatementsUpdate);
 

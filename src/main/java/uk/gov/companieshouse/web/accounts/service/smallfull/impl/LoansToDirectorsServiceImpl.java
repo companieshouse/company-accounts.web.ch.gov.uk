@@ -17,7 +17,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class LoansToDirectorsServiceImpl implements LoansToDirectorsService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -34,7 +33,6 @@ public class LoansToDirectorsServiceImpl implements LoansToDirectorsService {
 
     @Override
     public void createLoansToDirectors(String transactionId, String companyAccountsId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = LOANS_TO_DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
@@ -52,7 +50,6 @@ public class LoansToDirectorsServiceImpl implements LoansToDirectorsService {
     @Override
     public LoansToDirectorsApi getLoansToDirectors(ApiClient apiClient, String transactionId,
             String companyAccountsId) throws ServiceException {
-
         String uri = LOANS_TO_DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
@@ -69,13 +66,11 @@ public class LoansToDirectorsServiceImpl implements LoansToDirectorsService {
     @Override
     public void deleteLoansToDirectors(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         if (StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getLoansToDirectors())) {
-
             String uri = LOANS_TO_DIRECTORS_URI.expand(transactionId, companyAccountsId).toString();
 
             try {

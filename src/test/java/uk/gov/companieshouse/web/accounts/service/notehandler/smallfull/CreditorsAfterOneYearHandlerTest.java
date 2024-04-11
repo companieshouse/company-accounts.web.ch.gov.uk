@@ -34,7 +34,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreditorsAfterOneYearHandlerTest {
-
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
@@ -92,7 +91,6 @@ class CreditorsAfterOneYearHandlerTest {
     @Test
     @DisplayName("Get CreditorsAfterOneYear Resource")
     void getCreditorsAfterOneYearResource() {
-
         setupCreditorsAfterOneYearResourceHandler();
 
         when(creditorsAfterOneYearResourceHandler.get(URI)).thenReturn(creditorsAfterOneYearGet);
@@ -106,8 +104,7 @@ class CreditorsAfterOneYearHandlerTest {
 
     @Test
     @DisplayName("Update CreditorsAfterOneYear Resource")
-    void updateCreditorsAfterOneYearResource() throws ApiErrorResponseException, URIValidationException {
-
+    void updateCreditorsAfterOneYearResource() {
         setupCreditorsAfterOneYearResourceHandler();
 
         when(creditorsAfterOneYearResourceHandler.update(URI, creditorsAfterOneYearApi)).thenReturn(creditorsAfterOneYearUpdate);
@@ -122,7 +119,6 @@ class CreditorsAfterOneYearHandlerTest {
     @Test
     @DisplayName("Create CreditorsAfterOneYear Resource")
     void createCreditorsAfterOneYearResource() {
-
         setupCreditorsAfterOneYearResourceHandler();
 
         when(creditorsAfterOneYearResourceHandler.create(URI, creditorsAfterOneYearApi)).thenReturn(creditorsAfterOneYearCreate);
@@ -137,7 +133,6 @@ class CreditorsAfterOneYearHandlerTest {
     @Test
     @DisplayName("Delete CreditorsAfterOneYear Resource")
     void deleteCreditorsAfterOneYearResource() {
-
         setupCreditorsAfterOneYearResourceHandler();
 
         when(creditorsAfterOneYearResourceHandler.delete(URI)).thenReturn(creditorsAfterOneYearDelete);
@@ -152,7 +147,6 @@ class CreditorsAfterOneYearHandlerTest {
     @Test
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCreditorsAfterMoreThanOneYearNote()).thenReturn(CREDITORS_AFTER_ONE_YEAR_NOTE);
@@ -163,7 +157,6 @@ class CreditorsAfterOneYearHandlerTest {
     @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> creditorsAfterOneYearHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -172,12 +165,10 @@ class CreditorsAfterOneYearHandlerTest {
     @Test
     @DisplayName("Test method returns CreditorsAfterOneYear as NoteType")
     void testCreditorsAfterOneYearReturned()  {
-
         assertEquals(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR, creditorsAfterOneYearHandler.getNoteType());
     }
 
     private void setupCreditorsAfterOneYearResourceHandler() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.creditorsAfterOneYear()).thenReturn(creditorsAfterOneYearResourceHandler);
     }

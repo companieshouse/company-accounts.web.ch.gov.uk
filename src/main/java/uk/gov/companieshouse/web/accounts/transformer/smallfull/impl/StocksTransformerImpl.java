@@ -16,10 +16,8 @@ import java.util.stream.Stream;
 
 @Component
 public class StocksTransformerImpl implements NoteTransformer<StocksNote, StocksApi> {
-
     @Override
     public StocksNote toWeb(StocksApi stocksApi) {
-
         StocksNote stocksNote = new StocksNote();
 
         if (stocksApi == null) {
@@ -34,7 +32,6 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
 
     @Override
     public StocksApi toApi(StocksNote stocksNote) {
-
         StocksApi stocksApi = new StocksApi();
 
         setCurrentPeriodDebtorsOnApiModel(stocksNote, stocksApi);
@@ -49,7 +46,6 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
     }
 
     private void setPreviousPeriodDebtorsOnApiModel(StocksNote stocksNote, StocksApi stocksApi) {
-
         PreviousPeriod previousPeriod = new PreviousPeriod();
 
         previousPeriod.setPaymentsOnAccount(
@@ -59,14 +55,12 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
 
         previousPeriod.setTotal(stocksNote.getTotal().getPreviousTotal());
 
-
         if (isPreviousPeriodPopulated(previousPeriod)) {
             stocksApi.setPreviousPeriod(previousPeriod);
         }
     }
 
     private void setCurrentPeriodDebtorsOnApiModel(StocksNote stocksNote, StocksApi stocksApi) {
-
         CurrentPeriod currentPeriod = new CurrentPeriod();
 
         currentPeriod.setPaymentsOnAccount(
@@ -83,11 +77,9 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
 
     private void populatePreviousPeriodForWeb(StocksApi stocksApi,
                                                StocksNote stocksNote) {
-
         PreviousPeriod previousPeriod = stocksApi.getPreviousPeriod();
 
         if (previousPeriod != null) {
-
             if (previousPeriod.getPaymentsOnAccount() != null) {
                 PaymentsOnAccount paymentsOnAccount = createPaymentsOnAccount(stocksNote);
                 paymentsOnAccount.setPreviousPaymentsOnAccount(previousPeriod.getPaymentsOnAccount());
@@ -107,11 +99,9 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
 
     private void populateCurrentPeriodForWeb(StocksApi stocksApi,
                                               StocksNote stocksNote) {
-
         CurrentPeriod currentPeriod = stocksApi.getCurrentPeriod();
 
         if (currentPeriod != null) {
-
             if (currentPeriod.getPaymentsOnAccount() != null) {
                 PaymentsOnAccount paymentsOnAccount = createPaymentsOnAccount(stocksNote);
                 paymentsOnAccount.setCurrentPaymentsOnAccount(currentPeriod.getPaymentsOnAccount());
@@ -130,7 +120,6 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
     }
 
     private PaymentsOnAccount createPaymentsOnAccount(StocksNote stocksNote) {
-
         PaymentsOnAccount paymentsOnAccount;
 
         if (stocksNote.getPaymentsOnAccount() != null) {
@@ -144,7 +133,6 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
     }
 
     private Stocks createStocks(StocksNote stocksNote) {
-
         Stocks stocks;
 
         if (stocksNote.getStocks() != null) {
@@ -158,7 +146,6 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
     }
 
     private Total createTotal(StocksNote stocksNote) {
-
         Total total;
 
         if (stocksNote.getTotal() != null) {
@@ -172,14 +159,12 @@ public class StocksTransformerImpl implements NoteTransformer<StocksNote, Stocks
     }
 
     private boolean isCurrentPeriodPopulated(CurrentPeriod currentPeriod) {
-
         return Stream.of(currentPeriod.getPaymentsOnAccount(),
                 currentPeriod.getStocks(),
                 currentPeriod.getTotal()).anyMatch(Objects::nonNull);
     }
 
     private boolean isPreviousPeriodPopulated(PreviousPeriod previousPeriod) {
-
         return Stream.of(previousPeriod.getPaymentsOnAccount(),
                 previousPeriod.getStocks(),
                 previousPeriod.getTotal()).anyMatch(Objects::nonNull);

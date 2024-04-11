@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StocksTransformerImplTests {
-
     private final NoteTransformer<StocksNote, StocksApi> transformer = new StocksTransformerImpl();
 
     private static final Long PAYMENT_ON_ACCOUNT_VALUE = 5L;
@@ -32,7 +31,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("All current period values added to stock sheet web model")
     void transformStocksForCurrentPeriodApiToWeb() {
-
         StocksApi stocksApi = new StocksApi();
 
         CurrentPeriod stocksCurrentPeriod = new CurrentPeriod();
@@ -54,7 +52,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("Only populated Current period values added to stock sheet web model")
     void transformCurrentPeriodPopulatedValuesApiToWeb() {
-
         StocksApi stocksApi = new StocksApi();
 
         CurrentPeriod stocksCurrentPeriod = new CurrentPeriod();
@@ -74,7 +71,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("All previous period values added to stocks sheet web model")
     void transformStocksForPreviousPeriodApiToWeb() {
-
         StocksApi stocksApi = new StocksApi();
 
         PreviousPeriod stocksPreviousPeriod = new PreviousPeriod();
@@ -96,7 +92,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("Only populated Previous period values added to stock sheet web model")
     void transformPreviousPeriodPopulatedValuesApiToWeb() {
-
         StocksApi stocksApi = new StocksApi();
 
         PreviousPeriod stocksPreviousPeriod = new PreviousPeriod();
@@ -116,7 +111,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("All Current period value added to stocks API model when all present")
     void currentPeriodValueAddedToApiModel() {
-
         StocksNote stocksNote = new StocksNote();
         createFullCurrentDebtors(stocksNote);
 
@@ -131,7 +125,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("All previous period values added to stocks API model when present")
     void previousPeriodValueAddedToApiModel() {
-
         StocksNote stocksNote = new StocksNote();
         createFullPreviousDebtors(stocksNote);
 
@@ -146,7 +139,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("Only populated current period values added to the Stocks API model when present")
     void onlyPopulatedCurrentPeriodValuesAddedToApiModel() {
-
         StocksNote stocksNote = new StocksNote();
 
         PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
@@ -169,7 +161,6 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("Only populated previous period values added to the Stocks API model when present")
     void onlyPopulatedPreviousPeriodValuesAddedToApiModel() {
-
         StocksNote stocksNote = new StocksNote();
 
         PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
@@ -192,12 +183,10 @@ class StocksTransformerImplTests {
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
-
         assertEquals(NoteType.SMALL_FULL_STOCKS, transformer.getNoteType());
     }
 
     private void createFullCurrentDebtors(StocksNote stocksNote) {
-
         PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
         paymentsOnAccount.setCurrentPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
         stocksNote.setPaymentsOnAccount(paymentsOnAccount);
@@ -212,7 +201,6 @@ class StocksTransformerImplTests {
     }
 
     private void createFullPreviousDebtors(StocksNote stocksNote) {
-
         PaymentsOnAccount paymentsOnAccount = new PaymentsOnAccount();
         paymentsOnAccount.setPreviousPaymentsOnAccount(PAYMENT_ON_ACCOUNT_VALUE);
         stocksNote.setPaymentsOnAccount(paymentsOnAccount);

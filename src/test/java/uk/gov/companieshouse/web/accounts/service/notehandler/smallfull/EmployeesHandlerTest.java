@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmployeesHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -86,7 +85,6 @@ class EmployeesHandlerTest {
     @Test
     @DisplayName("Get Employees Resource")
     void getEmployeesResource() {
-
         setupEmployeesHandler();
 
         when(employeesHandler.get(apiClient, URI)).thenReturn(employeesGet);
@@ -100,7 +98,6 @@ class EmployeesHandlerTest {
     @Test
     @DisplayName("Update Employees Resource")
     void updateEmployeesResource() {
-
         setupEmployeesHandler();
 
         when(employeesHandler.update(apiClient, URI, employeesApi)).thenReturn(employeesUpdate);
@@ -114,7 +111,6 @@ class EmployeesHandlerTest {
     @Test
     @DisplayName("Create Employees Resource")
     void createEmployeesResource() {
-
         setupEmployeesHandler();
 
         when(employeesHandler.create(apiClient, URI, employeesApi)).thenReturn(employeesCreate);
@@ -128,7 +124,6 @@ class EmployeesHandlerTest {
     @Test
     @DisplayName("Delete Employees Resource")
     void deleteEmployeesResource() {
-
         setupEmployeesHandler();
 
         when(employeesHandler.delete(apiClient, URI)).thenReturn(employeesDelete);
@@ -142,7 +137,6 @@ class EmployeesHandlerTest {
     @Test
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getEmployeesNote()).thenReturn(EMPLOYEES_NOTE);
@@ -153,7 +147,6 @@ class EmployeesHandlerTest {
     @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> employeesHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -162,12 +155,10 @@ class EmployeesHandlerTest {
     @Test
     @DisplayName("Test method returns Employees as NoteType")
     void testEmployeesReturned()  {
-
         assertEquals(NoteType.SMALL_FULL_EMPLOYEES, employeesHandler.getNoteType());
     }
 
     private void setupEmployeesHandler() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.employees()).thenReturn(employeesResourceHandler);
     }

@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -46,7 +45,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RptTransactionsServiceImplTest {
-
     private static final String TRANSACTION_ID = "transactionId";
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String RPT_TRANSACTION_ID = "rptTransactionsId";
@@ -114,7 +112,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("GET - all RPT transactions - success")
     void getAllRptTransactionsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -132,12 +129,10 @@ class RptTransactionsServiceImplTest {
         assertEquals(allRptTransactions, response);
     }
 
-
     @Test
     @DisplayName("GET - all RPT transactions some with blank name - success")
     void getAllRptTransactionsSomeBlankNameSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -177,7 +172,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("GET - all RPT transactions - not found")
     void getAllRptTransactionNotFound()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -196,7 +190,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("GET - all RPT transaction - ApiErrorResponseException")
     void getAllRptTransactionsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -212,7 +205,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("GET - all RPT transactions - URIValidationException")
     void getAllRptTransactionsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
@@ -228,7 +220,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("POST - RPT transaction - success")
     void createRptTransactionSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
@@ -249,7 +240,6 @@ class RptTransactionsServiceImplTest {
     @Test
     @DisplayName("POST - Rpt transaction - validation failed for fields")
     void createRptTransactionThrowsValidationError() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         ValidationError validationError = new ValidationError();
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
@@ -270,7 +260,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("POST - RPT transaction - api response error")
     void createRptTransactionApiResponseError()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
@@ -298,7 +287,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("POST - Rpt transaction - ApiErrorResponseException")
     void createRptTransactionApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
@@ -318,7 +306,6 @@ class RptTransactionsServiceImplTest {
     @DisplayName("POST - Rpt transaction - URIValidationException")
     void createRptTransactionURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 
@@ -366,7 +353,6 @@ class RptTransactionsServiceImplTest {
     @Test
     @DisplayName("POST - submit Rpt transaction - resource has validation errors")
     void submitAddOrRemoveRptTransactionValidationError() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         ValidationError validationError = new ValidationError();
         List<ValidationError> nameValidationError = new ArrayList<>();
         nameValidationError.add(validationError);
@@ -395,7 +381,6 @@ class RptTransactionsServiceImplTest {
     @Test
     @DisplayName("POST - submit RPT transaction - successful with no validation errors")
     void submitAddOrRemoveRptTransactionSuccessfulForMultiYearFilerNonEmptyResource() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(addOrRemoveRptTransactions.getRptTransactionToAdd()).thenReturn(rptTransactionToAdd);
 

@@ -10,7 +10,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTes
  * @see NavigatorServiceTests
  */
 public class MockControllerThree extends BaseController {
-
     @Override
     protected String getTemplateName() {
         return null;

@@ -30,7 +30,6 @@ import java.util.List;
 @PreviousController(BasisOfPreparationController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/turnover-policy")
 public class TurnoverPolicyController extends BaseController {
-
     @Autowired
     private NoteService<AccountingPolicies> noteService;
 
@@ -46,7 +45,6 @@ public class TurnoverPolicyController extends BaseController {
         @PathVariable String companyAccountsId,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -76,7 +74,6 @@ public class TurnoverPolicyController extends BaseController {
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         radioAndTextValidator.validate(turnoverPolicy.getIsIncludeTurnoverSelected(), turnoverPolicy.getTurnoverPolicyDetails(), bindingResult, INVALID_STRING_SIZE_ERROR_MESSAGE, TURNOVER_POLICY_DETAILS_FIELD_PATH);
@@ -121,7 +118,6 @@ public class TurnoverPolicyController extends BaseController {
      * @param turnoverPolicy The turnover policy model on which to set the boolean
      */
     private void setIsPolicyIncluded(HttpServletRequest request, TurnoverPolicy turnoverPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         turnoverPolicy.setIsIncludeTurnoverSelected(
                 companyAccountsDataState.getAccountingPolicies().getHasProvidedTurnoverPolicy());
@@ -133,7 +129,6 @@ public class TurnoverPolicyController extends BaseController {
      * @param turnoverPolicy The turnover policy for which to cache data
      */
     private void  cacheIsPolicyIncluded(HttpServletRequest request, TurnoverPolicy turnoverPolicy) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.getAccountingPolicies().setHasProvidedTurnoverPolicy(turnoverPolicy.getIsIncludeTurnoverSelected());
 

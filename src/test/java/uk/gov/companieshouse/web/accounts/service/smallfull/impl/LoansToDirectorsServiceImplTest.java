@@ -40,7 +40,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoansToDirectorsServiceImplTest {
-
     @Mock
     private ApiClientService apiClientService;
 
@@ -104,7 +103,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("GET - loans to directors - success")
     void getLoansToDirectorsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
         when(loansToDirectorsResourceHandler.get(LOANS_TO_DIRECTORS_URI)).thenReturn(loansToDirectorsGet);
@@ -120,7 +118,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("GET - LoansToDirectors - not found")
     void getLoansToDirectorsNotFound()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
         when(loansToDirectorsResourceHandler.get(LOANS_TO_DIRECTORS_URI)).thenReturn(loansToDirectorsGet);
@@ -136,7 +133,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("GET - loans to directors - ApiErrorResponseException")
     void getLoansToDirectorsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
         when(loansToDirectorsResourceHandler.get(LOANS_TO_DIRECTORS_URI)).thenReturn(loansToDirectorsGet);
@@ -151,7 +147,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("GET - loans to directors - URIValidationException")
     void getLoansToDirectorsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
         when(loansToDirectorsResourceHandler.get(LOANS_TO_DIRECTORS_URI)).thenReturn(loansToDirectorsGet);
@@ -166,7 +161,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("POST - loans to directors - success")
     void createLoansToDirectorsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -181,7 +175,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("POST - loans to directors - ApiErrorResponseException")
     void createLoansToDirectorsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -196,7 +189,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("POST - loans to directors - URIValidationException")
     void createLoansToDirectorsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
@@ -211,7 +203,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("DELETE - loans to directors - success")
     void deleteLoansToDirectorsSuccess()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -228,7 +219,6 @@ class LoansToDirectorsServiceImplTest {
     @Test
     @DisplayName("DELETE - loans to directors - no small full link")
     void deleteLoansToDirectorsNoSmallFullLink() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -243,7 +233,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("DELETE - loans to directors - ApiErrorResponseException")
     void deleteLoansToDirectorsApiErrorResponseException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
@@ -261,7 +250,6 @@ class LoansToDirectorsServiceImplTest {
     @DisplayName("DELETE - loans to directors - URIValidationException")
     void deleteLoansToDirectorsURIValidationException()
             throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);

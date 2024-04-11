@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.CompanyPolicyOnDisabledEmployeesSelection;
 
 public interface CompanyPolicyOnDisabledEmployeesSelectionService {
-
     CompanyPolicyOnDisabledEmployeesSelection getCompanyPolicyOnDisabledEmployeesSelection(String transactionId,
             String companyAccountsId) throws ServiceException;
 

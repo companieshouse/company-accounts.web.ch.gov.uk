@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/accounts/company/{companyNumber}/details")
 public class GovukCompanyDetailController extends BaseController {
-
     @Autowired
     private CompanyService companyService;
 
@@ -41,7 +40,6 @@ public class GovukCompanyDetailController extends BaseController {
 
     @GetMapping
     public String getCompanyDetail(@PathVariable String companyNumber, Model model, HttpServletRequest request) {
-
         try {
             model.addAttribute("companyDetail", companyService.getCompanyDetail(companyNumber));
         } catch (ServiceException e) {
@@ -59,15 +57,12 @@ public class GovukCompanyDetailController extends BaseController {
 
     @PostMapping
     public String postCompanyDetail(@PathVariable String companyNumber, HttpServletRequest request) {
-
         try {
             if (BooleanUtils.isTrue(companyService.getCompanyProfile(companyNumber)
                     .isCommunityInterestCompany())) {
-
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                         CIC_STEPS_TO_COMPLETE.expand(companyNumber).toString();
             } else {
-
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                         SMALL_FULL_STEPS_TO_COMPLETE.expand(companyNumber).toString();
             }

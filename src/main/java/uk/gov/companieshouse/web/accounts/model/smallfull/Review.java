@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.Tangibl
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.IntangibleAssets;
 
 public class Review {
-
     private BalanceSheet balanceSheet;
 
     private Statements statements;

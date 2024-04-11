@@ -5,7 +5,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.grossprofitorloss.
 import uk.gov.companieshouse.web.accounts.model.profitandloss.grossprofitorloss.items.Turnover;
 
 public class GrossProfitOrLoss {
-
     private CostOfSales costOfSales;
 
     private GrossTotal grossTotal;

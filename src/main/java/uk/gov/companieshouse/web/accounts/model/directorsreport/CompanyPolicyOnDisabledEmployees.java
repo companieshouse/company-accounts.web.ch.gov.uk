@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class CompanyPolicyOnDisabledEmployees {
-
     @NotBlank(message = "{directorsReport.companyPolicyOnDisabledEmployees.details.missing}")
     @ValidationMapping("$.statements.company_policy_on_disabled_employees")
     private String companyPolicyOnDisabledEmployeesDetails;

@@ -32,7 +32,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FixedAssetsInvestmentsHandlerTest {
-
     @Mock
     private ApiClient apiClient;
 
@@ -86,7 +85,6 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Get FixedAssetsInvestments Resource")
     void getFixedAssetsInvestmentsResource() {
-
         setupFixedAssetsInvestmentsHandler();
 
         when(fixedAssetsInvestmentsHandler.get(apiClient, URI)).thenReturn(fixedAssetsInvestmentsGet);
@@ -100,7 +98,6 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Update FixedAssetsInvestments Resource")
     void updateFixedAssetsInvestmentsResource() {
-
         setupFixedAssetsInvestmentsHandler();
 
         when(fixedAssetsInvestmentsHandler.update(apiClient, URI, fixedAssetsInvestmentsApi)).thenReturn(fixedAssetsInvestmentsUpdate);
@@ -114,7 +111,6 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Create FixedAssetsInvestments Resource")
     void createFixedAssetsInvestmentsResource() {
-
         setupFixedAssetsInvestmentsHandler();
 
         when(fixedAssetsInvestmentsHandler.create(apiClient, URI, fixedAssetsInvestmentsApi)).thenReturn(fixedAssetsInvestmentsCreate);
@@ -128,7 +124,6 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Delete FixedAssetsInvestments Resource")
     void deleteFixedAssetsInvestmentsResource() {
-
         setupFixedAssetsInvestmentsHandler();
 
         when(fixedAssetsInvestmentsHandler.delete(apiClient, URI)).thenReturn(fixedAssetsInvestmentsDelete);
@@ -142,7 +137,6 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getFixedAssetsInvestmentsNote()).thenReturn(FIXED_ASSETS_INVESTMENTS_NOTE);
@@ -153,7 +147,6 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
-
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class, () -> fixedAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -162,12 +155,10 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Test method returns FixedAssetsInvestments as NoteType")
     void testFixedAssetsInvestmentsReturned() {
-
         assertEquals(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT, fixedAssetsInvestmentsHandler.getNoteType());
     }
 
     private void setupFixedAssetsInvestmentsHandler() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.fixedAssetsInvestments()).thenReturn(fixedAssetsInvestmentsResourceHandler);
     }

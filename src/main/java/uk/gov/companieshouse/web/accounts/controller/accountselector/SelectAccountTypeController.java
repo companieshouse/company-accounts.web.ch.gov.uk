@@ -19,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
 @PreviousController(SelectAccountTypeController.class)
 @RequestMapping("/company/{companyNumber}/select-account-type")
 public class SelectAccountTypeController extends BaseController {
-
     private static final UriTemplate MICRO_ENTITY_ACCOUNTS_URI =
         new UriTemplate("/company/{companyNumber}/micro-entity/criteria");
 
@@ -34,7 +33,6 @@ public class SelectAccountTypeController extends BaseController {
 
     @GetMapping
     public String getTypeOfAccounts(Model model) {
-
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
 
         return getTemplateName();
@@ -45,7 +43,6 @@ public class SelectAccountTypeController extends BaseController {
         @PathVariable String companyNumber,
         @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
         BindingResult bindingResult, Model model) {
-
         if (bindingResult.hasErrors()) {
             return getTemplateName();
         }
@@ -54,7 +51,6 @@ public class SelectAccountTypeController extends BaseController {
     }
 
     private String getReDirectPageURL(String companyNumber, String selectedAccount) {
-
         if ("micro-entity".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + MICRO_ENTITY_ACCOUNTS_URI
                 .expand(companyNumber).toString();

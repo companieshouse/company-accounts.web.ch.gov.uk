@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class FixedAssets {
-
     private TangibleAssets tangibleAssets;
     private IntangibleAssets intangibleAssets;
     private FixedInvestments investments;

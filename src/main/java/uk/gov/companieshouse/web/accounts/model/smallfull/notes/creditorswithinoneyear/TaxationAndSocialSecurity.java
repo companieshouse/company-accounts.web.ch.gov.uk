@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithin
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class TaxationAndSocialSecurity {
-
     @ValidationMapping("$.creditors_within_one_year.current_period.taxation_and_social_security")
     private Long currentTaxationAndSocialSecurity;
 

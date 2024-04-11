@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class OtherAccountingPolicy {
-
     @NotNull(message = "{otherAccountingPolicy.selectionNotMade}")
     private Boolean hasOtherAccountingPolicySelected;
 

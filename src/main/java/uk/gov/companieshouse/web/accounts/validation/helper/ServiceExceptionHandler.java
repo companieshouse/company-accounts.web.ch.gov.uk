@@ -5,7 +5,6 @@ import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 
 public interface ServiceExceptionHandler {
-
     /**
      * Handles an {@link ApiErrorResponseException}, triggered by resource submission
      * @param e The exception which has occurred as a result of submitting an API resource

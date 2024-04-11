@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface LoansToDirectorsAdditionalInfoService {
-
     LoansToDirectorsAdditionalInfo getAdditionalInformation(String transactionId, String companyAccountsId)
             throws ServiceException;
 

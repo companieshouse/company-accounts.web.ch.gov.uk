@@ -24,7 +24,6 @@ import java.util.List;
 
 @Service
 public class SecretaryServiceImpl implements SecretaryService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -48,7 +47,6 @@ public class SecretaryServiceImpl implements SecretaryService {
     @Override
     public String getSecretary(String transactionId, String companyAccountsId)
         throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = SECRETARY_URI.expand(transactionId, companyAccountsId).toString();
@@ -68,7 +66,6 @@ public class SecretaryServiceImpl implements SecretaryService {
     public List<ValidationError> submitSecretary(String transactionId, String companyAccountsId,
                                                  AddOrRemoveDirectors addOrRemoveDirectors)
             throws ServiceException {
-
         List<ValidationError> validationErrors = new ArrayList<>();
 
         ApiClient apiClient = apiClientService.getApiClient();
@@ -79,10 +76,8 @@ public class SecretaryServiceImpl implements SecretaryService {
         try {
             ApiResponse apiResponse;
             if (hasSecretary(directorsReportService.getDirectorsReport(apiClient, transactionId, companyAccountsId).getLinks())) {
-
                 apiResponse = apiClient.smallFull().directorsReport().secretary().update(uri, secretaryApi).execute();
             } else {
-
                 apiResponse = apiClient.smallFull().directorsReport().secretary().create(uri, secretaryApi).execute();
             }
 
@@ -103,12 +98,10 @@ public class SecretaryServiceImpl implements SecretaryService {
     @Override
     public void deleteSecretary(String transactionId, String companyAccountsId)
         throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         if (hasSecretary(directorsReportService.
                 getDirectorsReport(apiClient, transactionId, companyAccountsId).getLinks())) {
-
             String uri = SECRETARY_URI.expand(transactionId, companyAccountsId).toString();
 
             try {
@@ -122,7 +115,6 @@ public class SecretaryServiceImpl implements SecretaryService {
     }
 
     private boolean hasSecretary(DirectorsReportLinks directorsReportLinks) {
-
         return directorsReportLinks.getSecretary() != null;
     }
 }

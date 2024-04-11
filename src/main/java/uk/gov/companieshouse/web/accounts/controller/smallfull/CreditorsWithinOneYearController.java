@@ -33,7 +33,6 @@ import java.util.Optional;
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/creditors-within-one-year")
 public class CreditorsWithinOneYearController extends BaseController implements
         ConditionalController {
-
     @Autowired
     private NoteService<CreditorsWithinOneYear> noteService;
 
@@ -49,11 +48,9 @@ public class CreditorsWithinOneYearController extends BaseController implements
     public String getCreditorsWithinOneYear(@PathVariable String companyNumber,
             @PathVariable String transactionId, @PathVariable String companyAccountsId, Model model,
             HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
-
             model.addAttribute("creditorsWithinOneYear", noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR));
         } catch (ServiceException e) {
             LOGGER.errorRequest(request, e.getMessage(), e);
@@ -69,7 +66,6 @@ public class CreditorsWithinOneYearController extends BaseController implements
             @PathVariable String companyAccountsId,
             @ModelAttribute("creditorsWithinOneYear") @Valid CreditorsWithinOneYear creditorsWithinOneYear,
             BindingResult bindingResult, Model model, HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -97,7 +93,6 @@ public class CreditorsWithinOneYearController extends BaseController implements
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         BalanceSheet balanceSheet =
                 balanceSheetService.getBalanceSheet(
                         transactionId, companyAccountsId, companyNumber);
@@ -106,7 +101,6 @@ public class CreditorsWithinOneYearController extends BaseController implements
     }
 
     private boolean hasCreditorsWithin(BalanceSheet balanceSheet) {
-
         Long currentCreditorsWithin = Optional.of(balanceSheet)
                 .map(BalanceSheet::getOtherLiabilitiesOrAssets)
                 .map(OtherLiabilitiesOrAssets::getCreditorsDueWithinOneYear)

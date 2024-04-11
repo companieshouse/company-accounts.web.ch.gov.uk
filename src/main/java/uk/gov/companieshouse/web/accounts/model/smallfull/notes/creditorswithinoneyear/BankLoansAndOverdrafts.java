@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithin
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class BankLoansAndOverdrafts {
-
     @ValidationMapping("$.creditors_within_one_year.current_period.bank_loans_and_overdrafts")
     private Long currentBankLoansAndOverdrafts;
 

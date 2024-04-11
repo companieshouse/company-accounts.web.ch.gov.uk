@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class Stocks {
-
     @ValidationMapping("$.stocks.current_period.stocks")
     private Long currentStocks;
 

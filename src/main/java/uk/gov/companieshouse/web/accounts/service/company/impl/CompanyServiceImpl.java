@@ -25,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.transformer.company.CompanyDetailTrans
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -39,7 +38,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyProfileApi getCompanyProfile(String companyNumber) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         CompanyProfileApi companyProfileApi;
@@ -49,10 +47,8 @@ public class CompanyServiceImpl implements CompanyService {
         try {
             companyProfileApi = apiClient.company().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error retrieving company profile", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for company resource", e);
         }
 
@@ -61,13 +57,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDetail getCompanyDetail(String companyNumber) throws ServiceException {
-
         return companyDetailTransformer.getCompanyDetail(getCompanyProfile(companyNumber));
     }
 
     @Override
     public boolean isMultiYearFiler(CompanyProfileApi companyProfile) {
-
         return Optional.ofNullable(companyProfile)
                 .map(CompanyProfileApi::getAccounts)
                 .map(CompanyAccountApi::getLastAccounts)
@@ -77,7 +71,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public BalanceSheetHeadings getBalanceSheetHeadings(CompanyProfileApi companyProfile) {
-
         boolean isSameYear = isSameYearFiler(companyProfile);
         BalanceSheetHeadings balanceSheetHeadings = new BalanceSheetHeadings();
         balanceSheetHeadings.setPreviousPeriodHeading(getPreviousPeriodHeading(companyProfile,
@@ -88,7 +81,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private String getCurrentPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
-
         NextAccountsApi nextAccountsApi = companyProfile.getAccounts().getNextAccounts();
         LocalDate currentPeriodEndOn = nextAccountsApi.getPeriodEndOn();
         LocalDate currentPeriodStartOn = nextAccountsApi.getPeriodStartOn();
@@ -98,7 +90,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private String getPreviousPeriodHeading(CompanyProfileApi companyProfile, boolean isSameYear) {
-
         if (isMultiYearFiler(companyProfile)) {
             LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
             LocalDate previousPeriodStartOn = lastAccountsApi.getPeriodStartOn();
@@ -111,7 +102,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private boolean isSameYearFiler(CompanyProfileApi companyProfile) {
-
         if (isMultiYearFiler(companyProfile)) {
             LastAccountsApi lastAccountsApi = companyProfile.getAccounts().getLastAccounts();
             LocalDate previousPeriodEndOn = lastAccountsApi.getPeriodEndOn();
@@ -127,7 +117,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<LocalDate> getFutureDatesForArd(LocalDate periodEndOn) {
-
     	LocalDate todaysDate = LocalDate.now();
         List<LocalDate> futureValidDates = new ArrayList<>();
 
@@ -145,7 +134,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<LocalDate> getPastDatesForArd(LocalDate periodEndOn) {
-
         List<LocalDate> pastValidDates = new ArrayList<>();
 
         pastValidDates.add(periodEndOn.minusDays(1));

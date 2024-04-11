@@ -20,9 +20,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbo
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.PreviousPeriod;
 
 public abstract class IntangibleAssetsResourceTransformerImpl {
-
     protected IntangibleAssetsCost createCost(IntangibleAssets intangibleAssets) {
-
         IntangibleAssetsCost intangibleAssetsCost;
 
         if (intangibleAssets.getCost() == null) {
@@ -36,7 +34,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected IntangibleAssetsAmortisation createAmortisation(IntangibleAssets intangibleAssets) {
-
         IntangibleAssetsAmortisation intangibleAssetsAmortisation;
 
         if (intangibleAssets.getAmortisation() == null) {
@@ -48,11 +45,9 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
 
         return intangibleAssetsAmortisation;
 
-
     }
 
     protected CostAtPeriodStart createCostAtPeriodStart(IntangibleAssetsCost intangibleAssetsCost) {
-
         CostAtPeriodStart atPeriodStart;
 
         if (intangibleAssetsCost.getAtPeriodStart() == null) {
@@ -65,10 +60,7 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
         return atPeriodStart;
     }
 
-
-
     protected Additions createAdditions(IntangibleAssetsCost intangibleAssetsCost) {
-
         Additions additions;
 
         if (intangibleAssetsCost.getAdditions() == null) {
@@ -82,7 +74,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected Disposals createDisposals(IntangibleAssetsCost intangibleAssetsCost) {
-
         Disposals disposals;
 
         if (intangibleAssetsCost.getDisposals() == null) {
@@ -96,7 +87,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected Revaluations createRevaluations(IntangibleAssetsCost intangibleAssetsCost) {
-
         Revaluations revaluations;
 
         if (intangibleAssetsCost.getRevaluations() == null) {
@@ -110,7 +100,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected Transfers createTransfers(IntangibleAssetsCost intangibleAssetsCost) {
-
         Transfers transfers;
 
         if (intangibleAssetsCost.getTransfers() == null) {
@@ -124,7 +113,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected CostAtPeriodEnd createCostAtPeriodEnd(IntangibleAssetsCost intangibleAssetsCost) {
-
         CostAtPeriodEnd atPeriodEnd;
 
         if (intangibleAssetsCost.getAtPeriodEnd() == null) {
@@ -138,7 +126,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected AmortisationAtPeriodStart createAmortisationAtPeriodStart(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
-
         AmortisationAtPeriodStart atPeriodStart;
 
         if (intangibleAssetsAmortisation.getAtPeriodStart() == null) {
@@ -153,7 +140,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected ChargeForYear createAmortisationChargeForYear(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
-
         ChargeForYear chargeForYear;
 
         if (intangibleAssetsAmortisation.getChargeForYear() == null) {
@@ -167,7 +153,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected OnDisposals createOnDisposals(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
-
         OnDisposals onDisposals;
 
         if (intangibleAssetsAmortisation.getOnDisposals() == null) {
@@ -181,7 +166,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected OtherAdjustments createOtherAdjustments(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
-
         OtherAdjustments otherAdjustments;
 
         if (intangibleAssetsAmortisation.getOtherAdjustments() == null) {
@@ -195,7 +179,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected AmortisationAtPeriodEnd createAmortisationAtPeriodEnd(IntangibleAssetsAmortisation intangibleAssetsAmortisation) {
-
         AmortisationAtPeriodEnd atPeriodEnd;
 
         if (intangibleAssetsAmortisation.getAtPeriodEnd() == null) {
@@ -209,7 +192,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected IntangibleAssetsNetBookValue createNetBookValue(IntangibleAssets intangibleAssets) {
-
         IntangibleAssetsNetBookValue intangibleAssetsNetBookValue;
 
         if (intangibleAssets.getNetBookValue() == null) {
@@ -223,7 +205,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected CurrentPeriod createCurrentPeriod(IntangibleAssetsNetBookValue intangibleAssetsNetBookValue) {
-
         CurrentPeriod currentPeriod;
 
         if (intangibleAssetsNetBookValue.getCurrentPeriod() == null) {
@@ -237,7 +218,6 @@ public abstract class IntangibleAssetsResourceTransformerImpl {
     }
 
     protected PreviousPeriod createPreviousPeriod(IntangibleAssetsNetBookValue intangibleAssetsNetBookValue) {
-
         PreviousPeriod previousPeriod;
 
         if (intangibleAssetsNetBookValue.getPreviousPeriod() == null) {

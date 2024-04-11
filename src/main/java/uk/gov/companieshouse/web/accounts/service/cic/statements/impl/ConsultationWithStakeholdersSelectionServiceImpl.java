@@ -12,14 +12,12 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.ConsultationWit
 @Service
 public class ConsultationWithStakeholdersSelectionServiceImpl implements
         ConsultationWithStakeholdersSelectionService {
-
     @Autowired
     private CicStatementsService cicStatementsService;
 
     @Override
     public ConsultationWithStakeholdersSelection getConsultationWithStakeholdersSelection(
             String transactionId, String companyAccountsId) throws ServiceException {
-
         ConsultationWithStakeholdersSelection selection = new ConsultationWithStakeholdersSelection();
 
         CicStatementsApi statements =
@@ -28,7 +26,6 @@ public class ConsultationWithStakeholdersSelectionServiceImpl implements
         if (!statements.getReportStatements()
                 .getConsultationWithStakeholders()
                         .equals(DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement())) {
-
             selection.setHasProvidedConsultationWithStakeholders(true);
         }
 
@@ -39,16 +36,13 @@ public class ConsultationWithStakeholdersSelectionServiceImpl implements
     public void submitConsultationWithStakeholdersSelection(String transactionId, String companyAccountsId,
             ConsultationWithStakeholdersSelection selection)
             throws ServiceException {
-
         if (Boolean.FALSE.equals(selection.getHasProvidedConsultationWithStakeholders())) {
-
             CicStatementsApi statements =
                     cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
             if (!statements.getReportStatements()
                     .getConsultationWithStakeholders()
                             .equals(DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement())) {
-
                 statements.getReportStatements().setConsultationWithStakeholders(
                         DefaultCicStatements.CONSULTATION_WITH_STAKEHOLDERS.getDefaultStatement());
 

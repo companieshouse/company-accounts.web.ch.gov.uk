@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProfitOrLossBeforeTaxTransformerTests {
-
     private static final Long CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES = 1L;
     private static final Long CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME = 1L;
     private static final Long CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX = 2L;
@@ -29,13 +28,11 @@ class ProfitOrLossBeforeTaxTransformerTests {
     private static final Long PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME = 1L;
     private static final Long PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX = 2L;
 
-
     private final ProfitOrLossBeforeTaxTransformer transformer = new ProfitOrLossBeforeTaxTransformer();
 
     @Test
     @DisplayName("Add current period to web model")
     void addCurrentPeriodToWebModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         ProfitOrLossBeforeTax profitOrLossBeforeTax = new ProfitOrLossBeforeTax();
@@ -43,7 +40,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
         profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
         profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
         profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
-
 
         currentPeriodProfitAndLossApi.setProfitOrLossBeforeTax(profitOrLossBeforeTax);
 
@@ -64,7 +60,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
     @Test
     @DisplayName("Add previous period to web models which has current period values")
     void addPreviousPeriodToWebModelWhichHasCurrentPeriodValues() {
-
         ProfitAndLossApi previousPeriodProfitAndLossApi = new ProfitAndLossApi();
 
         ProfitOrLossBeforeTax profitOrLossBeforeTax = new ProfitOrLossBeforeTax();
@@ -113,7 +108,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
                 getTotalProfitOrLossBeforeTax().getPreviousAmount());
     }
 
-
     @Test
     @DisplayName("Add current period to web model - no profit or loss before tax")
     void addCurrentPeriodToWebModelNoOperatingProfitOrLoss() {
@@ -127,7 +121,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
     @Test
     @DisplayName("Add previous period to web model - no profit or loss before tax")
     void addPreviousPeriodToWebModelNoOperatingProfitOrLoss() {
-
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
         transformer.addPreviousPeriodToWebModel(profitAndLoss, new ProfitAndLossApi());
@@ -138,7 +131,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
     @Test
     @DisplayName("Add current period to api model")
     void addCurrentPeriodToApiModel() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -176,7 +168,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
     @Test
     @DisplayName("Add previous period to api model")
     void addPreviousPeriodToApiModel() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -214,7 +205,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
     @Test
     @DisplayName("Add current period to api model without profit or loss before tax to map")
     void addCurrentPeriodToApiModelWithoutProfitOrLossBeforeTaxToMap() {
-
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
@@ -227,7 +217,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
         profitOrLossBeforeTaxWeb.setInterestPayableAndSimilarCharges(new InterestPayableAndSimilarCharges());
         profitOrLossBeforeTaxWeb.setTotalProfitOrLossBeforeTax(new TotalProfitOrLossBeforeTax());
 
-
         profitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTaxWeb);
 
         transformer.addPreviousPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
@@ -238,7 +227,6 @@ class ProfitOrLossBeforeTaxTransformerTests {
     @Test
     @DisplayName("Add previous period to api model without operating profit and loss to map")
     void addPreviousPeriodToApiModelWithoutOperatingProfitAndLossToMap() {
-
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();

@@ -10,12 +10,10 @@ import uk.gov.companieshouse.web.accounts.model.Note;
 
 @Component
 public class DateHandlerFactory<N extends Note> {
-
     private EnumMap<NoteType, DateHandler<N>> dateHandlerMap;
 
     @Autowired
     public DateHandlerFactory(List<DateHandler<N>> dateHandlers) {
-
         this.dateHandlerMap = new EnumMap<>(NoteType.class);
 
         dateHandlers.forEach(
@@ -24,7 +22,6 @@ public class DateHandlerFactory<N extends Note> {
     }
 
     public DateHandler<N> getDateHandler(NoteType noteType) {
-
         DateHandler<N> dateHandler = dateHandlerMap.get(noteType);
         if (dateHandler == null) {
             throw new MissingInfrastructureException("No date handler found for note type: " + noteType.toString());

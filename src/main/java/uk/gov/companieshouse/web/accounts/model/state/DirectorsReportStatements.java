@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 public class DirectorsReportStatements implements Serializable {
-
     @JsonProperty("has_provided_principal_activities")
     private Boolean hasProvidedPrincipalActivities;
 

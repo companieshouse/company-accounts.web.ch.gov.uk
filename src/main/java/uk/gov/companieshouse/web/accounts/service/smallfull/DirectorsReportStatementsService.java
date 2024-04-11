@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface DirectorsReportStatementsService {
-
     StatementsApi getDirectorsReportStatements(String transactionId, String companyAccountsId)
             throws ServiceException;
 

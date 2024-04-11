@@ -1,8 +1,14 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,9 +24,6 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsAdditionalInfoService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.LoansToDirectorsService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoansToDirectorsAdditionalInfoQuestionControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -99,15 +104,13 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get request - success - has additional information set from db")
     void getAdditionalInformationSuccessHasSelectionSetFromDB() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
         when(loansToDirectorsApi.getLinks()).thenReturn(loansToDirectorsLinks);
@@ -126,7 +129,6 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Get request - success - has no additional information set from db")
     void getAdditionalInformationSuccessHasSelectionLtdNull() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
         when(request.getSession()).thenReturn(httpSession);
@@ -143,10 +145,8 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Get request - service exception")
     void getAdditionalInformationThrowsServiceException() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
-
 
         this.mockMvc.perform(get(ADDITIONAL_INFORMATION_SELECTION_PATH))
                 .andExpect(status().isOk())
@@ -156,10 +156,9 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors additional info - has not included additional information but has loans and has previously filed additional info")
     void postRequestHasNotIncludedLtdAddInfoWithLoansAndPrevInfo() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(loansToDirectorsApi.getLoans()).thenReturn(getLoans());
         when(loansToDirectorsApi.getLinks()).thenReturn(loansToDirectorsLinks);
         when(loansToDirectorsLinks.getAdditionalInformation()).thenReturn("text");
@@ -176,10 +175,9 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors additional info - has not included additional information but has loans and has not previously filed additional info")
     void postRequestHasNotIncludedLtdAddInfoWithLoansAndNoPrevInfo() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(loansToDirectorsApi.getLoans()).thenReturn(getLoans());
         when(loansToDirectorsApi.getLinks()).thenReturn(loansToDirectorsLinks);
         when(loansToDirectorsLinks.getAdditionalInformation()).thenReturn(null);
@@ -196,13 +194,11 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors additional info - has included additional information with null loans to directors resource")
     void postRequestHasIncludedLtdAddInfoWithNoLtd() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_SELECTION_PATH)
                 .param(ADDITIONAL_INFORMATION_SELECTION, "1")
@@ -213,15 +209,12 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
         verify(loansToDirectorsService).createLoansToDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
-
     @Test
     @DisplayName("Post loans to directors additional info - has included additional information with loans to directors resource")
     void postRequestHasIncludedLtdAddInfoWithLtd() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_SELECTION_PATH)
                 .param(ADDITIONAL_INFORMATION_SELECTION, "1")
@@ -235,7 +228,6 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors additional info - service exception thrown")
     void postRequestHasIncludedLoansToDirAddInfoException() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
@@ -249,7 +241,6 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors additional info - binding result error")
     void postRequestHasIncludedLoansToDirAddInfoBindingError() throws Exception {
-
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_SELECTION_PATH)
                 .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().is2xxSuccessful())
@@ -259,10 +250,9 @@ class LoansToDirectorsAdditionalInfoQuestionControllerTest {
     @Test
     @DisplayName("Post loans to directors additional info - has not included additional information but has no loans ")
     void postRequestHasNotIncludedLoansToDirectorsAddInfoNoLoans() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(loansToDirectorsService.getLoansToDirectors(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loansToDirectorsApi);
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(loansToDirectorsApi.getLoans()).thenReturn(null);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_SELECTION_PATH)

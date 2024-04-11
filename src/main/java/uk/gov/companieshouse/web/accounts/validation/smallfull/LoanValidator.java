@@ -10,7 +10,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Component
 public class LoanValidator {
-
     private static final String LOAN_TO_ADD = "loanToAdd";
 
     private static final String DESCRIPTION = LOAN_TO_ADD + ".description";
@@ -28,11 +27,9 @@ public class LoanValidator {
     private static final String AT_LEAST_ONE_LOAN_REQUIRED = "validation.addOrRemoveLoans.oneRequired";
 
     public List<ValidationError> validateLoanToAdd(LoanToAdd loanToAdd, Boolean isMultiYearFiler, boolean directorReportPresent) {
-
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (directorReportPresent && StringUtils.isBlank(loanToAdd.getDirectorName())) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(DIRECTOR_NAME);
             error.setMessageKey(DIRECTOR_NAME_NOT_PRESENT);
@@ -40,7 +37,6 @@ public class LoanValidator {
         }
 
         if (StringUtils.isBlank(loanToAdd.getDescription())) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(DESCRIPTION);
             error.setMessageKey(DESCRIPTION_NOT_PRESENT);
@@ -48,7 +44,6 @@ public class LoanValidator {
         }
 
         if (Boolean.TRUE.equals(isMultiYearFiler) && loanToAdd.getBreakdown().getBalanceAtPeriodStart() == null) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(BALANCE_AT_START);
             error.setMessageKey(BAS_NOT_PRESENT);
@@ -56,7 +51,6 @@ public class LoanValidator {
         }
 
         if (loanToAdd.getBreakdown().getBalanceAtPeriodEnd() == null) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(BALANCE_AT_END);
             error.setMessageKey(BAE_NOT_PRESENT);
@@ -67,7 +61,6 @@ public class LoanValidator {
     }
 
     public List<ValidationError> validateAtLeastOneLoan(AddOrRemoveLoans addOrRemoveLoans, boolean isSingleDirector) {
-
         List<ValidationError> validationErrors = new ArrayList<>();
 
         boolean isEmptyResource;
@@ -88,12 +81,10 @@ public class LoanValidator {
     }
 
     public boolean isEmptyResource(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
-
         return loanToAdd == null || (StringUtils.isBlank(loanToAdd.getDirectorName()) && isDescriptionAndBreakdownEmpty(loanToAdd, isMultiYearFiler));
     }
 
     public boolean isSingleDirectorEmptyResource(LoanToAdd loanToAdd, Boolean isMultiYearFiler) {
-
         return loanToAdd == null || isDescriptionAndBreakdownEmpty(loanToAdd, isMultiYearFiler);
     }
 

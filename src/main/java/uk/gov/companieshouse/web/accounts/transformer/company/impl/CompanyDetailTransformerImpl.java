@@ -12,10 +12,8 @@ import java.util.Optional;
 
 @Component
 public class CompanyDetailTransformerImpl implements CompanyDetailTransformer {
-
     @Override
     public CompanyDetail getCompanyDetail(CompanyProfileApi companyProfile) {
-
         CompanyDetail companyDetail = new CompanyDetail();
 
         companyDetail.setCompanyName(companyProfile.getCompanyName());
@@ -25,7 +23,6 @@ public class CompanyDetailTransformerImpl implements CompanyDetailTransformer {
                 .getRegisteredOfficeAddress();
 
         if (registeredOfficeAddress != null) {
-
             companyDetail.setRegisteredOfficeAddress(
                     ((registeredOfficeAddress.getAddressLine1() == null) ? "": registeredOfficeAddress
                             .getAddressLine1()) +

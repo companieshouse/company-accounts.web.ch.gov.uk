@@ -9,7 +9,6 @@ package uk.gov.companieshouse.web.accounts.exception;
  * @see uk.gov.companieshouse.web.accounts.controller.ConditionalController
  **/
 public class NavigationException extends RuntimeException {
-
     /**
      * Constructs a new {@code NavigationException} with a custom message and the specified
      * cause.

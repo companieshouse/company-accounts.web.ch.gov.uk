@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndChar
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface PoliticalAndCharitableDonationsService {
-
     PoliticalAndCharitableDonations getPoliticalAndCharitableDonations(String transactionId, String companyAccountsId)
             throws ServiceException;
 

@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.cost;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class CostAtPeriodStart {
-
     @ValidationMapping("$.tangible_assets.land_and_buildings.cost.at_period_start")
     private Long landAndBuildings;
 

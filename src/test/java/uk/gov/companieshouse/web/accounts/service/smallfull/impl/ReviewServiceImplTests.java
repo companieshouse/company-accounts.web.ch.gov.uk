@@ -54,7 +54,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ReviewServiceImplTests {
-
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
@@ -135,7 +134,6 @@ class ReviewServiceImplTests {
     @Test
     @DisplayName("Get Review - Success Path")
     void getReview() throws ServiceException {
-
         ProfitAndLoss mockProfitAndLoss = new ProfitAndLoss();
         when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
                 .thenReturn(mockProfitAndLoss);

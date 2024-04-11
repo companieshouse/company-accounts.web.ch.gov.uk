@@ -10,7 +10,6 @@ import java.util.List;
 
 @Component
 public class RptTransactionValidator {
-
     private static final String RPT_TRANSACTION_TO_ADD = "rptTransactionToAdd";
 
     private static final String RELATIONSHIP = RPT_TRANSACTION_TO_ADD + ".relationship";
@@ -23,7 +22,6 @@ public class RptTransactionValidator {
         List<ValidationError> validationErrors = new ArrayList<>();
 
         if (StringUtils.isBlank(rptTransactionToAdd.getRelationship())) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(RELATIONSHIP);
             error.setMessageKey(RPT_TRANSACTIONS_RELATIONSHIP_NOT_PRESENT);
@@ -31,7 +29,6 @@ public class RptTransactionValidator {
         }
 
         if (StringUtils.isBlank(rptTransactionToAdd.getDescriptionOfTransaction())) {
-
             ValidationError error = new ValidationError();
             error.setFieldPath(DESCRIPTION_OF_TRANSACTION);
             error.setMessageKey(RPT_TRANSACTIONS_DESCRIPTION_OF_TRANSACTION_NOT_PRESENT);

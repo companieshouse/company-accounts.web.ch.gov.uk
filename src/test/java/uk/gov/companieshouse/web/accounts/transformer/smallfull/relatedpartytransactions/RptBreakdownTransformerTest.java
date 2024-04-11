@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytransactions;
 
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RptBreakdownTransformerTest {
-
     private RptBreakdownTransformer rptBreakdownTransformer = new RptBreakdownTransformer();
 
     private RptTransactionApi rptTransactionApi = new RptTransactionApi();
@@ -25,7 +23,6 @@ class RptBreakdownTransformerTest {
     @Test
     @DisplayName("Map RPT transaction breakdown to api")
     void testMapRptTransactionBreakdownToApi() {
-
         RptTransactionBreakdown breakdown = new RptTransactionBreakdown();
 
         breakdown.setBalanceAtPeriodEnd(5L);
@@ -45,7 +42,6 @@ class RptBreakdownTransformerTest {
     @Test
     @DisplayName("Map Rpt transaction breakdown to web")
     void testMapRptTransactionBreakdownToWeb() {
-
         RptTransactionBreakdownApi rptTransactionBreakdownApi = new RptTransactionBreakdownApi();
 
         rptTransactionBreakdownApi.setBalanceAtPeriodEnd(1L);

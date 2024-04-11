@@ -24,7 +24,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportState
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PrincipalActivitiesSelectionServiceImplTest {
-
     @Mock
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -48,7 +47,6 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @Test
     @DisplayName("Get principal activities selection - no existing statements")
     void getPrincipalActivitiesSelectionNoExistingStatements() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -62,7 +60,6 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @Test
     @DisplayName("Get principal activities selection - statements do not include principal activities")
     void getPrincipalActivitiesSelectionStatementsDoNotIncludePrincipalActivities() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -78,7 +75,6 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @Test
     @DisplayName("Get principal activities selection - statements include principal activities")
     void getPrincipalActivitiesSelectionStatementsIncludePrincipalActivities() throws ServiceException {
-
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
@@ -94,7 +90,6 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit principal activities selection - has principal activities")
     void submitPrincipalActivitiesSelectionHasPrincipalActivities() throws ServiceException {
-
         when(principalActivitiesSelection.getHasPrincipalActivities()).thenReturn(true);
 
         assertAll(() ->
@@ -107,7 +102,6 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit principal activities selection - no existing statements")
     void submitPrincipalActivitiesSelectionNoExistingStatements() throws ServiceException {
-
         when(principalActivitiesSelection.getHasPrincipalActivities()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -121,7 +115,6 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit principal activities selection - has other statements")
     void submitPrincipalActivitiesSelectionHasOtherStatements() throws ServiceException {
-
         when(principalActivitiesSelection.getHasPrincipalActivities()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
@@ -141,7 +134,6 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @Test
     @DisplayName("Submit principal activities selection - has no other statements")
     void submitPrincipalActivitiesSelectionHasNoOtherStatements() throws ServiceException {
-
         when(principalActivitiesSelection.getHasPrincipalActivities()).thenReturn(false);
 
         when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))

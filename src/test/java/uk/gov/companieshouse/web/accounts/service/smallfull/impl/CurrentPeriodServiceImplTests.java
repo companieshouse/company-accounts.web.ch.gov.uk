@@ -41,7 +41,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CurrentPeriodServiceImplTests {
-
     @Mock
     private ApiClient apiClient;
 
@@ -116,7 +115,6 @@ class CurrentPeriodServiceImplTests {
 
     @BeforeEach
     private void init() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.currentPeriod()).thenReturn(currentPeriodResourceHandler);
     }
@@ -124,7 +122,6 @@ class CurrentPeriodServiceImplTests {
     @Test
     @DisplayName("Get current period - success")
     void getCurrentPeriodSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
         when(currentPeriodGet.execute()).thenReturn(responseWithData);
         when(responseWithData.getData()).thenReturn(currentPeriod);
@@ -139,7 +136,6 @@ class CurrentPeriodServiceImplTests {
     @Test
     @DisplayName("Get current period - api error response exception")
     void getCurrentPeriodApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
         when(currentPeriodGet.execute()).thenThrow(apiErrorResponseException);
 
@@ -150,7 +146,6 @@ class CurrentPeriodServiceImplTests {
     @Test
     @DisplayName("Get current period - uri validation exception")
     void getCurrentPeriodURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
         when(currentPeriodGet.execute()).thenThrow(uriValidationException);
 
@@ -161,7 +156,6 @@ class CurrentPeriodServiceImplTests {
     @Test
     @DisplayName("Create current period - success")
     void createCurrentPeriodSuccess() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
@@ -180,7 +174,6 @@ class CurrentPeriodServiceImplTests {
     @Test
     @DisplayName("Create current period - validation errors")
     void createCurrentValidationErrors() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
@@ -204,7 +197,6 @@ class CurrentPeriodServiceImplTests {
     @DisplayName("Create current period - api error response exception")
     void createCurrentPeriodApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
@@ -225,7 +217,6 @@ class CurrentPeriodServiceImplTests {
     @DisplayName("Create current period - uri validation exception")
     void createCurrentPeriodURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
@@ -245,7 +236,6 @@ class CurrentPeriodServiceImplTests {
     @Test
     @DisplayName("Update current period - success")
     void updateCurrentPeriodSuccess() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
@@ -264,7 +254,6 @@ class CurrentPeriodServiceImplTests {
     @Test
     @DisplayName("Update current period - validation errors")
     void updateCurrentValidationErrors() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
@@ -288,7 +277,6 @@ class CurrentPeriodServiceImplTests {
     @DisplayName("Update current period - api error response exception")
     void updateCurrentPeriodApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
@@ -309,7 +297,6 @@ class CurrentPeriodServiceImplTests {
     @DisplayName("Update current period - uri validation exception")
     void updateCurrentPeriodURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 

@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 @ValidationModel
 public class BasisOfPreparation {
-
     @NotNull(message = "{basisOfPreparation.selectionNotMade}")
     private AccountingRegulatoryStandard accountingRegulatoryStandard;
 

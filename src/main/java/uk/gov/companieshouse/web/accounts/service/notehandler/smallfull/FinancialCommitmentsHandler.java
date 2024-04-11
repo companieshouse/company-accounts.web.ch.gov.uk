@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 
 @Component
 public class FinancialCommitmentsHandler implements NoteResourceHandler<FinancialCommitmentsApi> {
-
     @Autowired
     private SmallFullService smallFullService;
 
@@ -25,38 +24,32 @@ public class FinancialCommitmentsHandler implements NoteResourceHandler<Financia
 
     @Override
     public String getUri(String transactionId, String companyAccountsId) {
-
         return FINANCIAL_COMMITMENTS_URI.expand(transactionId, companyAccountsId).toString();
     }
 
     @Override
     public Executor<ApiResponse<FinancialCommitmentsApi>> get(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().financialCommitments().get(uri);
     }
 
     @Override
     public Executor<ApiResponse<Void>> update(ApiClient apiClient, String uri, FinancialCommitmentsApi apiResource) {
-
         return apiClient.smallFull().financialCommitments().update(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<FinancialCommitmentsApi>> create(ApiClient apiClient, String uri, FinancialCommitmentsApi apiResource) {
-
         return apiClient.smallFull().financialCommitments().create(uri, apiResource);
     }
 
     @Override
     public Executor<ApiResponse<Void>> delete(ApiClient apiClient, String uri) {
-
         return apiClient.smallFull().financialCommitments().delete(uri);
     }
 
     @Override
     public boolean parentResourceExists(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         return StringUtils.isNotBlank(
                 smallFullService.getSmallFullAccounts(apiClient, transactionId, companyAccountsId)
                         .getLinks().getFinancialCommitmentsNote());
@@ -64,7 +57,6 @@ public class FinancialCommitmentsHandler implements NoteResourceHandler<Financia
 
     @Override
     public NoteType getNoteType() {
-
         return NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS;
     }
 }

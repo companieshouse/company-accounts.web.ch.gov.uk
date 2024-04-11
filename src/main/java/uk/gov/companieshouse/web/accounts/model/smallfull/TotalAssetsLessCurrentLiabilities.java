@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class TotalAssetsLessCurrentLiabilities {
-
     @ValidationMapping("$.current_period.balance_sheet.other_liabilities_or_assets.total_assets_less_current_liabilities")
     private Long currentAmount;
 

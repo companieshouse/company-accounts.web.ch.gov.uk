@@ -9,13 +9,11 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.ApprovalTransfor
 
 @Component
 public class ApprovalTransformerImpl implements ApprovalTransformer {
-
     @Autowired
     private DateTransformer dateTransformer;
 
     @Override
     public ApprovalApi getApprovalApi(Approval approval) {
-
         ApprovalApi approvalApi = new ApprovalApi();
         approvalApi.setDate(dateTransformer.toLocalDate(approval.getDate()));
         approvalApi.setName(approval.getDirectorName());
@@ -24,7 +22,6 @@ public class ApprovalTransformerImpl implements ApprovalTransformer {
 
     @Override
     public Approval getApproval(ApprovalApi approvalApi) {
-
         Approval approval = new Approval();
         approval.setDate(dateTransformer.toDate(approvalApi.getDate()));
         approval.setDirectorName(approvalApi.getName());

@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CurrentAssetsTransformerImplTests {
-
     private static final Long CURRENT_CASH_IN_BANK_AND_IN_HAND = 1L;
     private static final Long CURRENT_DEBTORS = 2L;
     private static final Long CURRENT_STOCKS = 3L;
@@ -40,7 +39,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model")
     void currentPeriodValueAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -62,7 +60,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period values added to balance sheet web model without affecting previous period values")
     void currentPeriodValuesAddedToWebModelWithoutAffectingPreviousPeriodValues() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForCurrentPeriod();
 
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
@@ -82,7 +79,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model")
     void previousPeriodValuesAddedToWebModel() {
-
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
 
         BalanceSheet balanceSheet = new BalanceSheet();
@@ -104,7 +100,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period values added to balance sheet web model without affecting current period values")
     void previousPeriodValuesAddedToWebModelWithoutAffectingCurrentPeriodValues() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
 
         BalanceSheetApi balanceSheetApi = mockBalanceSheetApiForPreviousPeriod();
@@ -124,7 +119,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period value added to balance sheet API model when present")
     void currentPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForCurrentPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -143,7 +137,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Current period value not added to balance sheet API model when absent")
     void currentPeriodValueNotAddedToApiModel() {
-
         CurrentAssets currentAssets = new CurrentAssets();
         currentAssets.setCashAtBankAndInHand(new CashAtBankAndInHand());
         currentAssets.setDebtors(new Debtors());
@@ -166,7 +159,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period value added to balance sheet API model when present")
     void previousPeriodValueAddedToApiModel() {
-
         BalanceSheet balanceSheet = mockBalanceSheetForPreviousPeriod();
 
         BalanceSheetApi balanceSheetApi = new BalanceSheetApi();
@@ -185,7 +177,6 @@ class CurrentAssetsTransformerImplTests {
     @Test
     @DisplayName("Previous period value not added to balance sheet API model when absent")
     void previousPeriodValueNotAddedToApiModel() {
-
         CurrentAssets currentAssets = new CurrentAssets();
         currentAssets.setCashAtBankAndInHand(new CashAtBankAndInHand());
         currentAssets.setDebtors(new Debtors());
@@ -206,12 +197,10 @@ class CurrentAssetsTransformerImplTests {
     }
 
     private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
-
         CashAtBankAndInHand cashAtBankAndInHand = new CashAtBankAndInHand();
         Debtors debtors = new Debtors();
         Stocks stocks = new Stocks();
         CurrentAssetsInvestments investments = new CurrentAssetsInvestments();
-
 
         CurrentAssets currentAssets = new CurrentAssets();
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
@@ -250,7 +239,6 @@ class CurrentAssetsTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForCurrentPeriod() {
-
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
         currentAssetsApi.setCashAtBankAndInHand(CURRENT_CASH_IN_BANK_AND_IN_HAND);
         currentAssetsApi.setDebtors(CURRENT_DEBTORS);
@@ -265,7 +253,6 @@ class CurrentAssetsTransformerImplTests {
     }
 
     private BalanceSheetApi mockBalanceSheetApiForPreviousPeriod() {
-
         CurrentAssetsApi currentAssetsApi = new CurrentAssetsApi();
         currentAssetsApi.setCashAtBankAndInHand(PREVIOUS_CASH_IN_BANK_AND_IN_HAND);
         currentAssetsApi.setDebtors(PREVIOUS_DEBTORS);

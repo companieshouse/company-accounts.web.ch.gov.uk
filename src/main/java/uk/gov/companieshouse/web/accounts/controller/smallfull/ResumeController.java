@@ -15,10 +15,8 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 @RequestMapping({"/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/resume",
                 "/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/resume"})
 public class ResumeController {
-
     private static final Logger LOGGER = LoggerFactory
             .getLogger(CompanyAccountsWebApplication.APPLICATION_NAME_SPACE);
-
 
     @Autowired
     ResumeService resumeService;
@@ -27,7 +25,6 @@ public class ResumeController {
     public String getResumeRedirect(@PathVariable String companyNumber,
                                     @PathVariable String transactionId,
                                     @PathVariable String companyAccountsId) {
-
         try {
             return resumeService.getResumeRedirect(companyNumber, transactionId, companyAccountsId);
         } catch (ServiceException e) {

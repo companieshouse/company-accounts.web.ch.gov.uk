@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class AccountsReferenceDateQuestion {
-
     @NotNull(message = "{accountsReferenceDateQuestion.selectionNotMade}")
     private Boolean hasConfirmedAccountingReferenceDate;
 

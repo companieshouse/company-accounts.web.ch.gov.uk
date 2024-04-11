@@ -4,7 +4,6 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.cic.statements.TransferOfAssetsSelection;
 
 public interface TransferOfAssetsSelectionService {
-
     TransferOfAssetsSelection getTransferOfAssetsSelection(
             String transactionId, String companyAccountsId) throws ServiceException;
 

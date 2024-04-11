@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,8 +23,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -37,6 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmployeesControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -79,15 +83,14 @@ class EmployeesControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get employees view success path")
     void getRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockEmployeesService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_EMPLOYEES)).thenReturn(new Employees());
 
         this.mockMvc.perform(get(EMPLOYEES_PATH))
@@ -103,7 +106,6 @@ class EmployeesControllerTest {
     @Test
     @DisplayName("Get employees view failure path due to error on employees retrieval")
     void getRequestFailure() throws Exception {
-
         when(mockEmployeesService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_EMPLOYEES)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(EMPLOYEES_PATH))
@@ -115,8 +117,7 @@ class EmployeesControllerTest {
     @Test
     @DisplayName("Post employees success path")
     void postRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(EMPLOYEES_PATH)
             .param("details", "test"))
@@ -127,7 +128,6 @@ class EmployeesControllerTest {
     @Test
     @DisplayName("Post employees failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(mockEmployeesService).submit(anyString(), anyString(), any(Employees.class), eq(NoteType.SMALL_FULL_EMPLOYEES));
 
@@ -141,7 +141,6 @@ class EmployeesControllerTest {
     @Test
     @DisplayName("Post employees with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = TEST_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
@@ -156,7 +155,6 @@ class EmployeesControllerTest {
     @Test
     @DisplayName("Post employees failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath(TEST_PATH);
         validationError.setMessageKey("invalid_character");

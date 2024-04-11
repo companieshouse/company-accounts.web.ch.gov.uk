@@ -37,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IntangibleAssetsTotalTransformerImplTests {
-
     private static final Long COST_AT_PERIOD_START = 1L;
     private static final Long ADDITIONS = 2L;
     private static final Long DISPOSALS = 3L;
@@ -72,7 +71,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an empty web model")
     void mapFullApiResourceToEmptyWebModel() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
         IntangibleAssetsResource total = createTotalApiResource(true, true);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, total);
@@ -83,7 +81,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from an api resource which doesn't have a cost or amortisation object to an empty web model")
     void mapApiResourceWithoutCostOrAmortisationToEmptyWebModel() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
         IntangibleAssetsResource total = createTotalApiResource(false, false);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, total);
@@ -97,7 +94,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from an api resource to an web model with other existing resources")
     void mapFullApiResourceToPopulatedWebModel() {
-
         IntangibleAssets intangibleAssets = createIntangibleAssetsWithPreExistingResources();
 
         IntangibleAssetsResource total = createTotalApiResource(true, true);
@@ -110,7 +106,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests all resources are mapped from a web model to an api resource")
     void mapFullWebModelToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithTotalResources(true, true, true);
 
@@ -123,7 +118,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without cost or amortisation to an api resource")
     void mapWebModelWithoutCostToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithTotalResources(false, false, true);
 
@@ -136,7 +130,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests resources are mapped from a web model without net book values to an api resource")
     void mapWebModelWithoutNetBookValuesToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithTotalResources(true, true, false);
 
@@ -149,7 +142,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests intangible assets will be mapped for a fully populated web model")
     void hasIntangibleAssetsToMapToApiResource() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithTotalResources(true, true, true);
 
@@ -159,7 +151,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     @Test
     @DisplayName("Tests intangible assets will be mapped for a populated web model without any cost and amortisation values")
     void hasIntangibleAssetsToMapToApiResourceNoCostNoAmortisation() {
-
         IntangibleAssets intangibleAssets =
                 createIntangibleAssetsWithTotalResources(false, false, false);
 
@@ -167,7 +158,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private IntangibleAssetsResource createTotalApiResource(boolean includeCost, boolean includeAmortisation) {
-
         IntangibleAssetsResource total = new IntangibleAssetsResource();
 
         if (includeCost) {
@@ -185,7 +175,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private Cost createCostApiResource() {
-
         Cost cost = new Cost();
         cost.setAtPeriodStart(COST_AT_PERIOD_START);
         cost.setAdditions(ADDITIONS);
@@ -197,7 +186,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private Amortisation createAmortisationApiResource() {
-
         Amortisation amortisation = new Amortisation();
         amortisation.setAtPeriodStart(AMORTISATION_AT_PERIOD_START);
         amortisation.setChargeForYear(AMORTISATION_CHARGE_FOR_YEAR);
@@ -208,7 +196,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private IntangibleAssets createIntangibleAssetsWithPreExistingResources() {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         IntangibleAssetsCost intangibleAssetsCost = new IntangibleAssetsCost();
@@ -273,12 +260,10 @@ class IntangibleAssetsTotalTransformerImplTests {
 
         intangibleAssets.setNetBookValue(intangibleAssetsNetBookValue);
 
-
         return intangibleAssets;
     }
 
     private void assertPreExistingFieldsUnaffected(IntangibleAssets intangibleAssets) {
-
         assertEquals(OTHER_COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
         assertEquals(OTHER_ADDITIONS, intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
         assertEquals(OTHER_DISPOSALS, intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
@@ -294,7 +279,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private IntangibleAssets createIntangibleAssetsWithTotalResources(boolean includeCost, boolean includeAmortisation, boolean includeNetBookValue) {
-
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
         IntangibleAssetsCost intangibleAssetsCost = new IntangibleAssetsCost();
@@ -331,7 +315,6 @@ class IntangibleAssetsTotalTransformerImplTests {
         intangibleAssetsNetBookValue.setPreviousPeriod(previousPeriod);
 
         if (includeCost) {
-
             costAtPeriodStart.setTotal(COST_AT_PERIOD_START);
             additions.setTotal(ADDITIONS);
             disposals.setTotal(DISPOSALS);
@@ -356,7 +339,6 @@ class IntangibleAssetsTotalTransformerImplTests {
         intangibleAssetsAmortisation.setAtPeriodEnd(amortisationAtPeriodEnd);
 
         if (includeAmortisation) {
-
             amortisationAtPeriodStart.setTotal(AMORTISATION_AT_PERIOD_START);
             chargeForYear.setTotal(AMORTISATION_CHARGE_FOR_YEAR);
             onDisposals.setTotal(AMORTISATION_ON_DISPOSALS);
@@ -365,7 +347,6 @@ class IntangibleAssetsTotalTransformerImplTests {
         }
 
         if (includeNetBookValue) {
-
             currentPeriod.setTotal(CURRENT_PERIOD);
             previousPeriod.setTotal(PREVIOUS_PERIOD);
         }
@@ -375,7 +356,6 @@ class IntangibleAssetsTotalTransformerImplTests {
 
     private void assertWebModelsMapped(IntangibleAssets intangibleAssets,
                                        boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(intangibleAssets);
         }
@@ -388,7 +368,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private void assertCostFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
-
         assertEquals(COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getTotal());
         assertEquals(ADDITIONS, intangibleAssets.getCost().getAdditions().getTotal());
         assertEquals(DISPOSALS, intangibleAssets.getCost().getDisposals().getTotal());
@@ -398,7 +377,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private void assertAmortisationFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
-
         assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getTotal());
         assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getTotal());
         assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getTotal());
@@ -409,7 +387,6 @@ class IntangibleAssetsTotalTransformerImplTests {
     private void assertApiFieldsMapped(IntangibleAssetsResource resource,
                                        boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped,
                                         boolean expectNetBookValueFieldsMapped) {
-
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
         } else {

@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccount
 
 @Service
 public class CompanyAccountsServiceImpl implements CompanyAccountsService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -29,7 +28,6 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
 
     @Override
     public String createCompanyAccounts(String transactionId) throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         CompanyAccountsApi companyAccounts = new CompanyAccountsApi();
@@ -39,10 +37,8 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
         try {
             companyAccounts = apiClient.companyAccounts().create(uri, companyAccounts).execute().getData();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error creating company account", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for company accounts resource", e);
         }
 
@@ -57,7 +53,6 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
     @Override
     public CompanyAccountsApi getCompanyAccounts(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = GET_COMPANY_ACCOUNTS_URI.expand(transactionId, companyAccountsId).toString();
@@ -65,10 +60,8 @@ public class CompanyAccountsServiceImpl implements CompanyAccountsService {
         try {
             return apiClient.companyAccounts().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error retrieving company accounts", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for company accounts resource", e);
         }
     }

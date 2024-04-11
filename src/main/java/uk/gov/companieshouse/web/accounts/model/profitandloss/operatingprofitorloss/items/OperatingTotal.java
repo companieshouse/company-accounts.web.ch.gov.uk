@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitor
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class OperatingTotal {
-
     @ValidationMapping("$.current_period.profit_and_loss.operating_profit_or_loss.operating_total")
     private Long currentAmount;
 

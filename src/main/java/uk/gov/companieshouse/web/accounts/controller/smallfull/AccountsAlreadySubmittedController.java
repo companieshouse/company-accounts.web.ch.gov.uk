@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/approved-accounts")
 public class AccountsAlreadySubmittedController extends BaseController {
-
     private static final String YOUR_FILINGS_PATH = "/user/transactions";
 
     @Override
@@ -27,7 +26,6 @@ public class AccountsAlreadySubmittedController extends BaseController {
                               @PathVariable String transactionId,
                               @PathVariable String companyAccountsId,
                               Model model) {
-
         return getTemplateName();
     }
 
@@ -37,7 +35,6 @@ public class AccountsAlreadySubmittedController extends BaseController {
                                @PathVariable String companyAccountsId,
                                Model model,
                                HttpServletRequest request) {
-
         return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                 YOUR_FILINGS_PATH;
     }

@@ -5,7 +5,6 @@ import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 
 public interface LoanTransformer {
-
     LoanApi getLoanApi(LoanToAdd loanToAdd);
 
     Loan[] getAllLoans(LoanApi[] loans);

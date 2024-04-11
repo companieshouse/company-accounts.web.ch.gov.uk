@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.service.cic.CicReportService;
 
 @Service
 public class CicReportServiceImpl implements CicReportService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -26,7 +25,6 @@ public class CicReportServiceImpl implements CicReportService {
     @Override
     public void createCicReport(String transactionId, String companyAccountsId)
             throws ServiceException {
-
         ApiClient apiClient = apiClientService.getApiClient();
 
         String uri = CIC_REPORT_URI.expand(transactionId, companyAccountsId).toString();
@@ -34,10 +32,8 @@ public class CicReportServiceImpl implements CicReportService {
         try {
             apiClient.cicReport().create(uri, new CicReportApi()).execute();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error creating cic report resource", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for cic report resource", e);
         }
     }
@@ -48,16 +44,13 @@ public class CicReportServiceImpl implements CicReportService {
     @Override
     public CicReportApi getCicReport(ApiClient apiClient, String transactionId, String companyAccountsId)
             throws ServiceException {
-
         String uri = CIC_REPORT_URI.expand(transactionId, companyAccountsId).toString();
 
         try {
             return apiClient.cicReport().get(uri).execute().getData();
         } catch (ApiErrorResponseException e) {
-
             throw new ServiceException("Error retrieving cic report resource", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for cic report resource", e);
         }
     }

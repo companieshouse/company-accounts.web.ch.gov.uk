@@ -13,7 +13,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 @Service
 public class CompanyPolicyOnDisabledEmployeesServiceImpl implements CompanyPolicyOnDisabledEmployeesService {
-
     @Autowired
     private DirectorsReportStatementsService directorsReportStatementsService;
 
@@ -23,7 +22,6 @@ public class CompanyPolicyOnDisabledEmployeesServiceImpl implements CompanyPolic
     @Override
     public CompanyPolicyOnDisabledEmployees getCompanyPolicyOnDisabledEmployees(String transactionId,
             String companyAccountsId) throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
@@ -34,18 +32,15 @@ public class CompanyPolicyOnDisabledEmployeesServiceImpl implements CompanyPolic
     public List<ValidationError> submitCompanyPolicyOnDisabledEmployees(String transactionId,
             String companyAccountsId, CompanyPolicyOnDisabledEmployees companyPolicyOnDisabledEmployees)
             throws ServiceException {
-
         StatementsApi statementsApi =
                 directorsReportStatementsService.getDirectorsReportStatements(transactionId, companyAccountsId);
 
         if (statementsApi == null) {
-
             statementsApi = new StatementsApi();
             directorsReportStatementsTransformer.setCompanyPolicyOnDisabledEmployees(statementsApi, companyPolicyOnDisabledEmployees);
             return directorsReportStatementsService
                     .createDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);
         } else {
-
             directorsReportStatementsTransformer.setCompanyPolicyOnDisabledEmployees(statementsApi, companyPolicyOnDisabledEmployees);
             return directorsReportStatementsService
                     .updateDirectorsReportStatements(transactionId, companyAccountsId, statementsApi);

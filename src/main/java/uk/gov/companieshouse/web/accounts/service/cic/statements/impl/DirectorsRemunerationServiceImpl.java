@@ -14,7 +14,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @Service
 public class DirectorsRemunerationServiceImpl implements
     DirectorsRemunerationService {
-
     @Autowired
     private CicStatementsService cicStatementsService;
 
@@ -27,7 +26,6 @@ public class DirectorsRemunerationServiceImpl implements
     @Override
     public DirectorsRemuneration getDirectorsRemuneration(String transactionId,
         String companyAccountsId) throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
@@ -41,7 +39,6 @@ public class DirectorsRemunerationServiceImpl implements
     public List<ValidationError> submitDirectorsRemuneration(String transactionId,
         String companyAccountsId, DirectorsRemuneration directorsRemuneration)
         throws ServiceException {
-
         CicStatementsApi cicStatementsApi =
             cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 

@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.tangible.depreciation;
 
 public class TangibleAssetsDepreciation {
-
     private DepreciationAtPeriodStart atPeriodStart;
 
     private ChargeForYear chargeForYear;

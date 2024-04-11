@@ -22,7 +22,6 @@ import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransform
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicReviewServiceImplTest {
-
     private static final String TRANSACTION_ID = "transactionId";
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
@@ -45,7 +44,6 @@ class CicReviewServiceImplTest {
     @Test
     @DisplayName("Get Review - Success Path")
     void getReview() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
             .thenReturn(cicStatementsApi);
         when(cicStatementsTransformer.getCicReview(cicStatementsApi)).thenReturn(cicReview);
@@ -59,7 +57,6 @@ class CicReviewServiceImplTest {
     @Test
     @DisplayName("Get Review - ServiceException")
     void getReviewServiceException() throws ServiceException {
-
         doThrow(ServiceException.class).when(cicStatementsService)
             .getCicStatementsApi(anyString(), anyString());
 

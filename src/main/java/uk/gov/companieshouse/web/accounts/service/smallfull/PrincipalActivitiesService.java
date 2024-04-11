@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivit
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface PrincipalActivitiesService {
-
     PrincipalActivities getPrincipalActivities(String transactionId, String companyAccountsId)
             throws ServiceException;
 

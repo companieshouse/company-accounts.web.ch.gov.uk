@@ -2,14 +2,12 @@ package uk.gov.companieshouse.web.accounts.enumeration;
 
 import uk.gov.companieshouse.web.accounts.exception.MissingMessageKeyException;
 
-
 /**
  * The {@code ValidationMessage} enumeration provides mappings between API
  * validation error strings and validation message keys, for use when
  * binding validation errors.
  */
 public enum ValidationMessage {
-
     // API validation error to message key mappings
     VALUE_OUTSIDE_RANGE("value_outside_range", "validation.range.outside", true),
     INVALID_CHARACTER("invalid_character", "validation.characters.invalid", false),
@@ -46,7 +44,6 @@ public enum ValidationMessage {
      * @return         the message key
      */
     public static ValidationMessage getMessageForApiError(String apiError) {
-
         for (ValidationMessage validationMessage : ValidationMessage.values()) {
             if (validationMessage.apiError.equals(apiError)) {
                 return validationMessage;

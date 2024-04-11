@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CurrentAssetsInvestmentsTransformerImplTests {
-
     private static final String TEST_DETAILS = "test details";
 
     private NoteTransformer<CurrentAssetsInvestments, CurrentAssetsInvestmentsApi> transformer = new CurrentAssetsInvestmentsTransformerImpl();
@@ -64,7 +63,6 @@ class CurrentAssetsInvestmentsTransformerImplTests {
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
-
         assertEquals(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS, transformer.getNoteType());
     }
 }

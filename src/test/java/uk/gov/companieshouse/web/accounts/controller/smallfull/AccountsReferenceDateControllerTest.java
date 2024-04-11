@@ -1,8 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,7 +30,6 @@ import uk.gov.companieshouse.web.accounts.service.company.impl.CompanyServiceImp
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.impl.SmallFullServiceImpl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -45,6 +49,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith({MockitoExtension.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccountsReferenceDateControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -129,15 +135,13 @@ class AccountsReferenceDateControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get ARD page")
     void getRequest() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
@@ -162,7 +166,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Get ARD page - with different dates")
     void getRequestWithDifferentDates() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
@@ -187,7 +190,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Get ARD page - Throws exception")
     void getRequestThrowsException() throws Exception {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenThrow(ServiceException.class);
@@ -200,12 +202,11 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Post ARD - has chosen date")
     void postRequestHasConfirmedArdDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(false);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_PATH)
                 .param("chosenDate", CHOSEN_DATE.format(DateTimeFormatter.ofPattern("d/M/yy"))))
@@ -218,7 +219,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Post ARD - has chosen date - is CIC with valid approval date")
     void postRequestHasConfirmedArdDateIsCICWithValidApprovalDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
@@ -227,7 +227,7 @@ class AccountsReferenceDateControllerTest {
 
         when(cicApproval.getLocalDate()).thenReturn(CHOSEN_DATE.plusDays(1));
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_PATH)
                 .param("chosenDate", CHOSEN_DATE.format(DateTimeFormatter.ofPattern("d/M/yy"))))
@@ -240,7 +240,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Post ARD - has chosen date - is CIC with null approval date")
     void postRequestHasConfirmedArdDateIsCICWithNullApprovalDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
@@ -249,7 +248,7 @@ class AccountsReferenceDateControllerTest {
 
         when(cicApproval.getLocalDate()).thenReturn(null);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ARD_PATH)
                 .param("chosenDate", CHOSEN_DATE.format(DateTimeFormatter.ofPattern("d/M/yy"))))
@@ -262,7 +261,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Post ARD - has chosen date - is CIC with invalidated approval date")
     void postRequestHasConfirmedArdDateIsCICWithInvalidatedApprovalDate() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfile);
 
         when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
@@ -282,7 +280,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Post ARD - service exception")
     void postRequestServiceException() throws Exception {
-
         doThrow(ServiceException.class)
                 .when(smallFullService)
                 .updateSmallFullAccounts(CHOSEN_DATE, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
@@ -292,13 +289,12 @@ class AccountsReferenceDateControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(), captor.capture());
     }
 
     @Test
     @DisplayName("Post ARD - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(ARD_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ARD_VIEW));
@@ -307,7 +303,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getHasConfirmedAccountingReferenceDate()).thenReturn(true);
@@ -318,7 +313,6 @@ class AccountsReferenceDateControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
         when(companyAccountsDataState.getHasConfirmedAccountingReferenceDate()).thenReturn(false);

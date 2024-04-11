@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyTransformerImplTests {
-
-
     @Mock
     private CompanyGet companyGet;
 
@@ -49,7 +47,6 @@ class CompanyTransformerImplTests {
     private static final LocalDate DUE_BY_DATE = LocalDate.of(2017, 1, 1);
 
     private CompanyProfileApi createMockCompanyProfileApi(boolean hasRegisteredOfficeAddress, boolean hasAccounts) {
-
         CompanyProfileApi companyProfile = new CompanyProfileApi();
 
         companyProfile.setCompanyName(COMPANY_NAME);
@@ -82,7 +79,6 @@ class CompanyTransformerImplTests {
     @Test
     @DisplayName("Get Company Detail - All fields Populated Path")
     void getCompanyDetailAllPopulated() {
-
         CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(createMockCompanyProfileApi(true, true));
 
         assertEquals(COMPANY_NAME, companyDetailReturned.getCompanyName());
@@ -96,7 +92,6 @@ class CompanyTransformerImplTests {
     @Test
     @DisplayName("Get Company Detail - No Accounts Path")
     void getCompanyDetailNoAccounts() {
-
         CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(createMockCompanyProfileApi(true, false));
 
         assertEquals(COMPANY_NAME, companyDetailReturned.getCompanyName());
@@ -110,7 +105,6 @@ class CompanyTransformerImplTests {
     @Test
     @DisplayName("Get Company Detail - No Address Path")
     void getCompanyDetailNoAddress() {
-
         CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(createMockCompanyProfileApi(false, true));
 
         assertEquals(COMPANY_NAME, companyDetailReturned.getCompanyName());

@@ -10,10 +10,8 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 
 @Component
 public class DirectorsReportStatementsTransformerImpl implements DirectorsReportStatementsTransformer {
-
     @Override
     public AdditionalInformation getAdditionalInformation(StatementsApi statementsApi) {
-
         AdditionalInformation additionalInformation = new AdditionalInformation();
         if (statementsApi != null) {
             additionalInformation.setAdditionalInformationDetails(
@@ -25,7 +23,6 @@ public class DirectorsReportStatementsTransformerImpl implements DirectorsReport
     @Override
     public void setAdditionalInformation(StatementsApi statementsApi,
             AdditionalInformation additionalInformation) {
-
         statementsApi.setAdditionalInformation(
                 additionalInformation.getAdditionalInformationDetails());
     }
@@ -33,7 +30,6 @@ public class DirectorsReportStatementsTransformerImpl implements DirectorsReport
     @Override
     public CompanyPolicyOnDisabledEmployees getCompanyPolicyOnDisabledEmployees(
             StatementsApi statementsApi) {
-
         CompanyPolicyOnDisabledEmployees companyPolicyOnDisabledEmployees = new CompanyPolicyOnDisabledEmployees();
         if (statementsApi != null) {
             companyPolicyOnDisabledEmployees.setCompanyPolicyOnDisabledEmployeesDetails(
@@ -45,7 +41,6 @@ public class DirectorsReportStatementsTransformerImpl implements DirectorsReport
     @Override
     public void setCompanyPolicyOnDisabledEmployees(StatementsApi statementsApi,
             CompanyPolicyOnDisabledEmployees companyPolicyOnDisabledEmployees) {
-
         statementsApi.setCompanyPolicyOnDisabledEmployees(
                 companyPolicyOnDisabledEmployees.getCompanyPolicyOnDisabledEmployeesDetails());
     }
@@ -53,7 +48,6 @@ public class DirectorsReportStatementsTransformerImpl implements DirectorsReport
     @Override
     public PoliticalAndCharitableDonations getPoliticalAndCharitableDonations(
             StatementsApi statementsApi) {
-
         PoliticalAndCharitableDonations politicalAndCharitableDonations = new PoliticalAndCharitableDonations();
         if (statementsApi != null) {
             politicalAndCharitableDonations.setPoliticalAndCharitableDonationsDetails(
@@ -65,14 +59,12 @@ public class DirectorsReportStatementsTransformerImpl implements DirectorsReport
     @Override
     public void setPoliticalAndCharitableDonations(StatementsApi statementsApi,
             PoliticalAndCharitableDonations politicalAndCharitableDonations) {
-
         statementsApi.setPoliticalAndCharitableDonations(
                 politicalAndCharitableDonations.getPoliticalAndCharitableDonationsDetails());
     }
 
     @Override
     public PrincipalActivities getPrincipalActivities(StatementsApi statementsApi) {
-
         PrincipalActivities principalActivities = new PrincipalActivities();
         if (statementsApi != null) {
             principalActivities.setPrincipalActivitiesDetails(
@@ -84,7 +76,6 @@ public class DirectorsReportStatementsTransformerImpl implements DirectorsReport
     @Override
     public void setPrincipalActivities(StatementsApi statementsApi,
             PrincipalActivities principalActivities) {
-
         statementsApi.setPrincipalActivities(
                 principalActivities.getPrincipalActivitiesDetails());
     }

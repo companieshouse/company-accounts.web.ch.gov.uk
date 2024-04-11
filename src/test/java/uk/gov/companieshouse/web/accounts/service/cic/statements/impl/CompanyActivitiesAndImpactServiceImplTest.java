@@ -25,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyActivitiesAndImpactServiceImplTest {
-
     @Mock
     private CicStatementsService cicStatementsService;
 
@@ -52,7 +51,6 @@ class CompanyActivitiesAndImpactServiceImplTest {
     @Test
     @DisplayName("Get company activities and impact")
     void getCompanyActivitiesAndImpact() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 
@@ -69,7 +67,6 @@ class CompanyActivitiesAndImpactServiceImplTest {
     @Test
     @DisplayName("Submit company activities and impact - not found")
     void submitCompanyActivitiesAndImpactNotFound() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
@@ -90,7 +87,6 @@ class CompanyActivitiesAndImpactServiceImplTest {
     @Test
     @DisplayName("Submit company activities and impact - update existing")
     void submitCompanyActivitiesAndImpactUpdateExisting() throws ServiceException {
-
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(cicStatementsApi);
 

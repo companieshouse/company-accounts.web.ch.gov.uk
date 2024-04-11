@@ -15,10 +15,8 @@ import java.util.stream.Stream;
 
 @Component("fixedAssetsTransformer")
 public class FixedAssetsTransformerImpl implements Transformer {
-
     @Override
     public void addCurrentPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasCurrentPeriodFixedAssets(balanceSheet))) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
             fixedAssetsApi.setIntangible(balanceSheet.getFixedAssets().getIntangibleAssets().getCurrentAmount());
@@ -32,7 +30,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToApiModel(BalanceSheetApi balanceSheetApi, BalanceSheet balanceSheet) {
-
         if (Boolean.TRUE.equals(hasPreviousPeriodFixedAssets(balanceSheet))) {
             FixedAssetsApi fixedAssetsApi = new FixedAssetsApi();
             fixedAssetsApi.setIntangible(balanceSheet.getFixedAssets().getIntangibleAssets().getPreviousAmount());
@@ -44,30 +41,25 @@ public class FixedAssetsTransformerImpl implements Transformer {
         }
     }
 
-
     @Override
     public void addCurrentPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
         FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssets();
 
         // Intangible assets
         if (fixedAssetsApi.getIntangible() != null) {
-
             IntangibleAssets intangibleAssets = createIntangibleAssets(balanceSheet);
             intangibleAssets.setCurrentAmount(fixedAssetsApi.getIntangible());
         }
 
         // Tangible assets
         if (fixedAssetsApi.getTangible() != null) {
-
             TangibleAssets tangibleAssets = createTangibleAssets(balanceSheet);
             tangibleAssets.setCurrentAmount(fixedAssetsApi.getTangible());
         }
 
         //Fixed assets investments
         if (fixedAssetsApi.getInvestments() !=null) {
-
             FixedInvestments fixedInvestments = createFixedInvestments(balanceSheet);
             fixedInvestments.setCurrentAmount((fixedAssetsApi.getInvestments()));
         }
@@ -80,7 +72,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
 
     @Override
     public void addPreviousPeriodToWebModel(BalanceSheet balanceSheet, BalanceSheetApi balanceSheetApi) {
-
         FixedAssets fixedAssets = createFixedAssets(balanceSheet);
         FixedAssetsApi fixedAssetsApi = balanceSheetApi.getFixedAssets();
 
@@ -109,7 +100,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
     }
 
     private FixedAssets createFixedAssets(BalanceSheet balanceSheet) {
-
         FixedAssets fixedAssets;
 
         if (balanceSheet.getFixedAssets() == null) {
@@ -123,7 +113,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
     }
 
     private TangibleAssets createTangibleAssets(BalanceSheet balanceSheet) {
-
         TangibleAssets tangibleAssets;
 
         if (balanceSheet.getFixedAssets().getTangibleAssets() == null) {
@@ -137,7 +126,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
     }
 
     private IntangibleAssets createIntangibleAssets(BalanceSheet balanceSheet) {
-
         IntangibleAssets intangibleAssets;
 
         if (balanceSheet.getFixedAssets().getIntangibleAssets() == null) {
@@ -151,7 +139,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
     }
 
     private FixedInvestments createFixedInvestments(BalanceSheet balanceSheet){
-
         FixedInvestments fixedInvestments;
 
         if(balanceSheet.getFixedAssets().getInvestments() == null) {
@@ -165,7 +152,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
     }
 
     private Boolean hasCurrentPeriodFixedAssets(BalanceSheet balanceSheet) {
-
         FixedAssets fixedAssets = balanceSheet.getFixedAssets();
 
         return Stream.of(fixedAssets.getTangibleAssets().getCurrentAmount(),
@@ -174,7 +160,6 @@ public class FixedAssetsTransformerImpl implements Transformer {
     }
 
     private Boolean hasPreviousPeriodFixedAssets(BalanceSheet balanceSheet) {
-
         FixedAssets fixedAssets = balanceSheet.getFixedAssets();
 
         return Stream.of(fixedAssets.getTangibleAssets().getPreviousAmount(),

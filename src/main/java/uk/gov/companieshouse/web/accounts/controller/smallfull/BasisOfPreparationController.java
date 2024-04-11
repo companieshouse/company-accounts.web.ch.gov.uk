@@ -27,7 +27,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @PreviousController(StatementsController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/basis-of-preparation")
 public class BasisOfPreparationController extends BaseController {
-
     @Autowired
     private NoteService<AccountingPolicies> noteService;
 
@@ -37,7 +36,6 @@ public class BasisOfPreparationController extends BaseController {
                                         @PathVariable String companyAccountsId,
                                         Model model,
                                         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -60,7 +58,6 @@ public class BasisOfPreparationController extends BaseController {
                                            BindingResult bindingResult,
                                            Model model,
                                            HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -82,7 +79,6 @@ public class BasisOfPreparationController extends BaseController {
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }

@@ -1,8 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -43,6 +47,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DebtorsControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
 
@@ -86,15 +92,14 @@ class DebtorsControllerTest {
     private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get debtors view success path")
     void getRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenReturn(new Debtors());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
@@ -110,7 +115,6 @@ class DebtorsControllerTest {
     @Test
     @DisplayName("Get debtors view failure path due to error on debtors retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
-
         when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(DEBTORS_PATH))
@@ -122,8 +126,7 @@ class DebtorsControllerTest {
     @Test
     @DisplayName("Post debtors success path")
     void postRequestSuccess() throws Exception {
-
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
         when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(DEBTORS_PATH))
@@ -134,7 +137,6 @@ class DebtorsControllerTest {
     @Test
     @DisplayName("Post debtors failure path")
     void postRequestFailure() throws Exception {
-
         doThrow(ServiceException.class)
             .when(mockDebtorsService).submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS));
 
@@ -147,7 +149,6 @@ class DebtorsControllerTest {
     @Test
     @DisplayName("Post debtors failure path with API validation errors")
     void postRequestFailureWithApiValidationErrors() throws Exception {
-
         ValidationError validationError = new ValidationError();
         validationError.setFieldPath(TEST_PATH);
         validationError.setMessageKey("invalid_character");
@@ -195,7 +196,6 @@ class DebtorsControllerTest {
     @Test
     @DisplayName("Post debtors with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         String beanElement = TEST_PATH;
         // Mock non-numeric input to trigger binding result errors
         String invalidData = "test";
@@ -240,7 +240,6 @@ class DebtorsControllerTest {
         balanceSheet.setFixedAssets(fixedAssets);
         return balanceSheet;
     }
-
 
     private BalanceSheet getMockBalanceSheetZeroValues() {
         BalanceSheet balanceSheet = new BalanceSheet();

@@ -6,7 +6,6 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.ConsultationWithS
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
 public interface ConsultationWithStakeholdersService {
-
     /**
      * Retrieves the consultation with stakeholders
      *

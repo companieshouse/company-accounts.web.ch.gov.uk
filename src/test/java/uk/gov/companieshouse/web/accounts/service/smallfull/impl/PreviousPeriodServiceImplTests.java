@@ -41,7 +41,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PreviousPeriodServiceImplTests {
-
     @Mock
     private ApiClient apiClient;
 
@@ -116,7 +115,6 @@ class PreviousPeriodServiceImplTests {
 
     @BeforeEach
     private void init() {
-
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.previousPeriod()).thenReturn(previousPeriodResourceHandler);
     }
@@ -124,7 +122,6 @@ class PreviousPeriodServiceImplTests {
     @Test
     @DisplayName("Get previous period - success")
     void getPreviousPeriodSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
-
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenReturn(responseWithData);
         when(responseWithData.getData()).thenReturn(previousPeriod);
@@ -139,7 +136,6 @@ class PreviousPeriodServiceImplTests {
     @Test
     @DisplayName("Get previous period - api error response exception")
     void getPreviousPeriodApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
-
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenThrow(apiErrorResponseException);
 
@@ -150,7 +146,6 @@ class PreviousPeriodServiceImplTests {
     @Test
     @DisplayName("Get previous period - uri validation exception")
     void getPreviousPeriodURIValidationException() throws ApiErrorResponseException, URIValidationException {
-
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenThrow(uriValidationException);
 
@@ -161,7 +156,6 @@ class PreviousPeriodServiceImplTests {
     @Test
     @DisplayName("Create previous period - success")
     void createPreviousPeriodSuccess() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
@@ -180,7 +174,6 @@ class PreviousPeriodServiceImplTests {
     @Test
     @DisplayName("Create previous period - validation errors")
     void createPreviousValidationErrors() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
@@ -204,7 +197,6 @@ class PreviousPeriodServiceImplTests {
     @DisplayName("Create previous period - api error response exception")
     void createPreviousPeriodApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
@@ -225,7 +217,6 @@ class PreviousPeriodServiceImplTests {
     @DisplayName("Create previous period - uri validation exception")
     void createPreviousPeriodURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
@@ -245,7 +236,6 @@ class PreviousPeriodServiceImplTests {
     @Test
     @DisplayName("Update previous period - success")
     void updatePreviousPeriodSuccess() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 
@@ -264,7 +254,6 @@ class PreviousPeriodServiceImplTests {
     @Test
     @DisplayName("Update previous period - validation errors")
     void updatePreviousValidationErrors() throws ApiErrorResponseException, URIValidationException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 
@@ -288,7 +277,6 @@ class PreviousPeriodServiceImplTests {
     @DisplayName("Update previous period - api error response exception")
     void updatePreviousPeriodApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 
@@ -309,7 +297,6 @@ class PreviousPeriodServiceImplTests {
     @DisplayName("Update previous period - uri validation exception")
     void updatePreviousPeriodURIValidationException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
-
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 

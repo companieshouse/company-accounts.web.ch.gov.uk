@@ -21,15 +21,13 @@ import uk.gov.companieshouse.web.accounts.exception.MissingInfrastructureExcepti
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NoteResourceHandlerFactoryTest {
-
     private NoteResourceHandlerFactory<ApiResource> noteResourceHandlerFactory;
 
     @Mock
     private NoteResourceHandler<ApiResource> noteResourceHandler;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         when(noteResourceHandler.getNoteType()).thenReturn(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         List<NoteResourceHandler<ApiResource>> noteResourceHandlers = new ArrayList<>();
@@ -41,7 +39,6 @@ class NoteResourceHandlerFactoryTest {
     @Test
     @DisplayName("Get note transformer - success")
     void getNoteResourceHandlerSuccess() {
-
         NoteResourceHandler<ApiResource> returned =
                 noteResourceHandlerFactory.getNoteResourceHandler(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
@@ -52,7 +49,6 @@ class NoteResourceHandlerFactoryTest {
     @Test
     @DisplayName("Get note transformer - MissingInfrastructureException")
     void getNoteResourceHandlerMissingInfrastructureException() {
-
         assertThrows(MissingInfrastructureException.class, () ->
                 noteResourceHandlerFactory.getNoteResourceHandler(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
     }

@@ -1,8 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.junit.jupiter.api.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,7 +29,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportServi
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -48,6 +52,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportApprovalControllerTest {
+    @Captor
+    private ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
 
     private MockMvc mockMvc;
     
@@ -124,15 +130,13 @@ class DirectorsReportApprovalControllerTest {
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get directors report approval view - success path - multiple approvers")
     void getRequestSuccessMultipleApprovers() throws Exception {
-
         when(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(directorsReportApproval);
 
@@ -159,7 +163,6 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Get directors report approval view - success path - single approver")
     void getRequestSuccessSingleApprover() throws Exception {
-
         when(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(directorsReportApproval);
 
@@ -188,7 +191,6 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Get directors report approval view - service exception")
     void getRequestServiceException() throws Exception {
-
         when(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
@@ -200,13 +202,12 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Post directors report approval view - success path")
     void postRequestSuccess() throws Exception {
-
         when(directorsReportApprovalService.submitDirectorsReportApproval(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorsReportApproval.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(), captor.capture())).thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(DIRECTORS_REPORT_APPROVAL_PATH)
                 .param("name", DIRECTOR_NAME))
@@ -217,7 +218,6 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Post directors report approval view - validation errors")
     void postRequestValidationErrors() throws Exception {
-
         when(directorsReportApprovalService.submitDirectorsReportApproval(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorsReportApproval.class)))
                 .thenReturn(validationErrors);
 
@@ -232,7 +232,6 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Post directors report approval view - service exception")
     void postRequestServiceException() throws Exception {
-
         when(directorsReportApprovalService.submitDirectorsReportApproval(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorsReportApproval.class)))
                 .thenThrow(ServiceException.class);
 
@@ -245,7 +244,6 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Post directors report approval view - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
-
         this.mockMvc.perform(post(DIRECTORS_REPORT_APPROVAL_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(DIRECTORS_REPORT_APPROVAL_VIEW));
@@ -257,7 +255,6 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Will render - false")
     void willRenderFalse() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
@@ -267,7 +264,6 @@ class DirectorsReportApprovalControllerTest {
     @Test
     @DisplayName("Will render - true")
     void willRenderTrue() throws ServiceException {
-
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(directorsReportApi);
 
@@ -275,7 +271,6 @@ class DirectorsReportApprovalControllerTest {
     }
 
     private Director[] createReappointedDirector() {
-
         Director[] directors = new Director[3];
 
         Director director = new Director();

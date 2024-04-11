@@ -18,7 +18,6 @@ import java.util.Map;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -34,7 +33,6 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public String createTransaction(String companyNumber) throws ServiceException {
-
         return createTransactionWithDescription(companyNumber, "Full accounts");
     }
 
@@ -43,7 +41,6 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public String createTransactionWithDescription(String companyNumber, String description) throws ServiceException {
-
         Transaction transaction = new Transaction();
         transaction.setCompanyNumber(companyNumber);
 
@@ -57,7 +54,6 @@ public class TransactionServiceImpl implements TransactionService {
             
             throw new ServiceException("Error creating transaction", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for transactions resource", e);
         }
 
@@ -69,7 +65,6 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public boolean closeTransaction(String transactionId) throws ServiceException {
-
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
         try {
@@ -102,7 +97,6 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public void updateResumeLink(String transactionId, String resumeLink) throws ServiceException {
-
         String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
         Transaction transaction = new Transaction();
@@ -113,7 +107,6 @@ public class TransactionServiceImpl implements TransactionService {
         } catch (ApiErrorResponseException e) {
             throw new ServiceException("Error updating transaction", e);
         } catch (URIValidationException e) {
-
             throw new ServiceException("Invalid URI for updating transactions resource", e);
         }
     }
@@ -123,7 +116,6 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public boolean isPayableTransaction(String transactionId, String companyAccountsId) throws ServiceException {
-
             Transaction transaction =
                     getTransaction(transactionId);
 
@@ -135,7 +127,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction getTransaction(String transactionId) throws ServiceException {
         try {
-
             String uri = TRANSACTIONS_URI.expand(transactionId).toString();
 
             return apiClientService.getApiClient().transactions().get(uri).execute().getData();

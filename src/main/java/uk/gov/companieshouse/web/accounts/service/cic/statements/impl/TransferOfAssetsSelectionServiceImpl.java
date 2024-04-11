@@ -12,14 +12,12 @@ import uk.gov.companieshouse.web.accounts.service.cic.statements.TransferOfAsset
 @Service
 public class TransferOfAssetsSelectionServiceImpl implements
         TransferOfAssetsSelectionService {
-
     @Autowired
     private CicStatementsService cicStatementsService;
 
     @Override
     public TransferOfAssetsSelection getTransferOfAssetsSelection(
             String transactionId, String companyAccountsId) throws ServiceException {
-
         TransferOfAssetsSelection selection = new TransferOfAssetsSelection();
 
         CicStatementsApi statements =
@@ -28,7 +26,6 @@ public class TransferOfAssetsSelectionServiceImpl implements
         if (!statements.getReportStatements()
                 .getTransferOfAssets()
                         .equals(DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement())) {
-
             selection.setHasProvidedTransferOfAssets(true);
         }
 
@@ -39,16 +36,13 @@ public class TransferOfAssetsSelectionServiceImpl implements
     public void submitTransferOfAssetsSelection(String transactionId, String companyAccountsId,
             TransferOfAssetsSelection selection)
             throws ServiceException {
-
         if (Boolean.FALSE.equals(selection.getHasProvidedTransferOfAssets())) {
-
             CicStatementsApi statements =
                     cicStatementsService.getCicStatementsApi(transactionId, companyAccountsId);
 
             if (!statements.getReportStatements()
                     .getTransferOfAssets()
                             .equals(DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement())) {
-
                 statements.getReportStatements().setTransferOfAssets(
                         DefaultCicStatements.TRANSFER_OF_ASSETS.getDefaultStatement());
 

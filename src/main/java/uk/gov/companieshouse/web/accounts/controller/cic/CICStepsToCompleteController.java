@@ -23,7 +23,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @NextController(CompanyActivitiesAndImpactController.class)
 @RequestMapping("/company/{companyNumber}/cic/steps-to-complete")
 public class CICStepsToCompleteController extends BaseController {
-
     private static final UriTemplate RESUME_URI = new UriTemplate("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/resume");
 
     @Autowired
@@ -49,7 +48,6 @@ public class CICStepsToCompleteController extends BaseController {
     @PostMapping
     public String postStepsToComplete(@PathVariable String companyNumber,
                                       HttpServletRequest request) {
-
         try {
             String transactionId = transactionService.createTransactionWithDescription(companyNumber,
                     "CIC report and full accounts");
@@ -63,7 +61,6 @@ public class CICStepsToCompleteController extends BaseController {
             return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId, companyAccountsId);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }

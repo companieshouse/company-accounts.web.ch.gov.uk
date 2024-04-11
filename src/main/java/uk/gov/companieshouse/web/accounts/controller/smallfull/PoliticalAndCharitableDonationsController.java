@@ -30,7 +30,6 @@ import java.util.Optional;
 @PreviousController(PoliticalAndCharitableDonationsSelectionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report/political-and-charitable-donations")
 public class PoliticalAndCharitableDonationsController extends BaseController implements ConditionalController {
-
     @Autowired
     private HttpServletRequest request;
 
@@ -49,7 +48,6 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
                                                      @PathVariable String transactionId,
                                                      @PathVariable String companyAccountsId,
                                                      Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -59,7 +57,6 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
             model.addAttribute(POLITICAL_AND_CHARITABLE_DONATIONS, politicalAndCharitableDonations);
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -76,7 +73,6 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
                                                         @Valid PoliticalAndCharitableDonations politicalAndCharitableDonations,
                                                         BindingResult bindingResult,
                                                         Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -93,7 +89,6 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -104,15 +99,11 @@ public class PoliticalAndCharitableDonationsController extends BaseController im
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId)
         throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return Optional.ofNullable(companyAccountsDataState)
                 .map(CompanyAccountsDataState::getDirectorsReportStatements)
                 .map(DirectorsReportStatements::getHasProvidedPoliticalAndCharitableDonations)
                 .orElse(false);
     }
-
-
-
 
 }

@@ -30,7 +30,6 @@ import java.util.List;
 @PreviousController(FinancialCommitmentsQuestionController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/financial-commitments")
 public class FinancialCommitmentsController extends BaseController implements ConditionalController {
-
     private static final String FINANCIAL_COMMITMENTS = "financialCommitments";
 
     @Autowired
@@ -44,7 +43,6 @@ public class FinancialCommitmentsController extends BaseController implements Co
                                           @PathVariable String transactionId,
                                           @PathVariable String companyAccountsId,
                                           Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -52,7 +50,6 @@ public class FinancialCommitmentsController extends BaseController implements Co
                     noteService.get(transactionId, companyAccountsId, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS));
 
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e);
             return ERROR_VIEW;
         }
@@ -68,7 +65,6 @@ public class FinancialCommitmentsController extends BaseController implements Co
                                              @ModelAttribute(FINANCIAL_COMMITMENTS) @Valid FinancialCommitments financialCommitments,
                                              BindingResult bindingResult,
                                              Model model) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -84,7 +80,6 @@ public class FinancialCommitmentsController extends BaseController implements Co
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -99,7 +94,6 @@ public class FinancialCommitmentsController extends BaseController implements Co
 
     @Override
     public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) throws ServiceException {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         return BooleanUtils.isTrue(companyAccountsDataState.getHasIncludedFinancialCommitments());
     }

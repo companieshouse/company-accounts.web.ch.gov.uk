@@ -16,12 +16,13 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicFileFullAccountsControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
@@ -31,8 +32,7 @@ class CicFileFullAccountsControllerTest {
     private CicFileFullAccountsController controller;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -46,7 +46,6 @@ class CicFileFullAccountsControllerTest {
     @Test
     @DisplayName("Get cic file full accounts view success path")
     void getCicFileFullAccountsRequest() throws Exception{
-
         mockMvc.perform(get(CIC_FILE_FULL_ACCOUNTS_VIEW_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CIC_FILE_FULL_ACCOUNTS_VIEW))
@@ -56,7 +55,6 @@ class CicFileFullAccountsControllerTest {
     @Test
     @DisplayName("Post cic file full accounts")
     void postCicFileFullAccounts() throws Exception {
-
         when(service.getNextControllerRedirect(controller.getClass()))
                 .thenReturn(CIC_MOCK_CONTROLLER_PATH);
 

@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirector
 import jakarta.validation.constraints.NotNull;
 
 public class LoansToDirectorsQuestion {
-
     @NotNull(message = "{loansToDirectorsQuestion.selectionNotMade}")
     private Boolean hasIncludedLoansToDirectors;
 

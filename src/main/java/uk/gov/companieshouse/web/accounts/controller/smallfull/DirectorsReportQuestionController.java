@@ -25,7 +25,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportServi
 @PreviousController(AccountsReferenceDateController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/directors-report-question")
 public class DirectorsReportQuestionController extends BaseController {
-
     private static final String DIRECTORS_REPORT_QUESTION = "directorsReportQuestion";
 
     @Autowired
@@ -37,7 +36,6 @@ public class DirectorsReportQuestionController extends BaseController {
                                              @PathVariable String transactionId,
                                              @PathVariable String companyAccountsId,
                                              HttpServletRequest request) {
-
         DirectorsReportQuestion directorsReportQuestion = new DirectorsReportQuestion();
         setIsDirectorsReportIncluded(request, directorsReportQuestion);
 
@@ -55,7 +53,6 @@ public class DirectorsReportQuestionController extends BaseController {
                                                 BindingResult bindingResult,
                                                 Model model,
                                                 HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         if (bindingResult.hasErrors()) {
@@ -64,14 +61,11 @@ public class DirectorsReportQuestionController extends BaseController {
 
         try {
             if (Boolean.TRUE.equals(directorsReportQuestion.getHasIncludedDirectorsReport())) {
-
                 directorsReportService.createDirectorsReport(transactionId, companyAccountsId);
             } else {
-
                 directorsReportService.deleteDirectorsReport(transactionId, companyAccountsId);
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
@@ -83,18 +77,15 @@ public class DirectorsReportQuestionController extends BaseController {
 
     @Override
     protected String getTemplateName() {
-
         return "smallfull/directorsReportQuestion";
     }
 
     private void setIsDirectorsReportIncluded(HttpServletRequest request, DirectorsReportQuestion directorsReportQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         directorsReportQuestion.setHasIncludedDirectorsReport(companyAccountsDataState.getHasIncludedDirectorsReport());
     }
 
     private void  cacheIsDirectorsReportIncluded(HttpServletRequest request, DirectorsReportQuestion directorsReportQuestion) {
-
         CompanyAccountsDataState companyAccountsDataState = getStateFromRequest(request);
         companyAccountsDataState.setHasIncludedDirectorsReport(directorsReportQuestion.getHasIncludedDirectorsReport());
         companyAccountsDataState.setDirectorsReportStatements(Boolean.TRUE.equals(directorsReportQuestion.getHasIncludedDirectorsReport()) ? new DirectorsReportStatements() : null);

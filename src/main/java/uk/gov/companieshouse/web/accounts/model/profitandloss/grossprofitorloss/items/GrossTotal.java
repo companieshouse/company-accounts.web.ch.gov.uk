@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.profitandloss.grossprofitorloss
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class GrossTotal {
-
     @ValidationMapping("$.current_period.profit_and_loss.gross_profit_or_loss.gross_total")
     private Long currentAmount;
 

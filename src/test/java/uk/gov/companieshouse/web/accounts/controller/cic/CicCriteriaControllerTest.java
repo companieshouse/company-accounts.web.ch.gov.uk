@@ -23,7 +23,6 @@ import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicCriteriaControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
@@ -33,8 +32,7 @@ class CicCriteriaControllerTest {
     private CicCriteriaController controller;
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -51,7 +49,6 @@ class CicCriteriaControllerTest {
     @Test
     @DisplayName("Get cic criteria view - success path")
     void getRequestSuccess() throws Exception {
-
         this.mockMvc.perform(get(CIC_CRITERIA_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CIC_CRITERIA_VIEW))
@@ -62,7 +59,6 @@ class CicCriteriaControllerTest {
     @Test
     @DisplayName("Post cic criteria - criteria met")
     void postRequestCriteriaMet() throws Exception {
-
         mockMvc.perform(post(CIC_CRITERIA_PATH).
                 param("isCriteriaMet", "1"))
                 .andExpect(status().is3xxRedirection())
@@ -72,7 +68,6 @@ class CicCriteriaControllerTest {
     @Test
     @DisplayName("Post cic criteria - criteria not met")
     void postRequestCriteriaNotMet() throws Exception {
-
         mockMvc.perform(post(CIC_CRITERIA_PATH).
                 param("isCriteriaMet", "0"))
                 .andExpect(status().is3xxRedirection())
@@ -82,7 +77,6 @@ class CicCriteriaControllerTest {
     @Test
     @DisplayName("Post cic criteria - binding error")
     void postRequestCriteriaBindingError() throws Exception {
-
         mockMvc.perform(post(CIC_CRITERIA_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CIC_CRITERIA_VIEW));

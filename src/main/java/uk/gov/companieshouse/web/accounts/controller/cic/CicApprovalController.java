@@ -28,8 +28,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @NextController(AccountStartController.class)
 @RequestMapping("/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/cic/approval")
 public class CicApprovalController extends BaseController {
-
-
     private static final String APPROVAL = "cicApproval";
 
     @Autowired
@@ -50,7 +48,6 @@ public class CicApprovalController extends BaseController {
         @RequestParam Optional<String> dateInvalidated,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -73,7 +70,6 @@ public class CicApprovalController extends BaseController {
         BindingResult bindingResult,
         Model model,
         HttpServletRequest request) {
-
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
 
         try {
@@ -85,7 +81,6 @@ public class CicApprovalController extends BaseController {
                 return getTemplateName();
             }
         } catch (ServiceException e) {
-
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }

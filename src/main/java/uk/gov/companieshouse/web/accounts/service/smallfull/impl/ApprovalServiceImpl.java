@@ -23,7 +23,6 @@ import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHand
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
-
     @Autowired
     private ApiClientService apiClientService;
 
@@ -53,7 +52,6 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Override
     public List<ValidationError> submitApproval(String transactionId, String companyAccountsId,
             Approval approval) throws ServiceException {
-
         List<ValidationError> validationErrors = dateValidator.validateDate(approval.getDate(), "date", ".approval.date");
         if (!validationErrors.isEmpty()) {
             return validationErrors;
@@ -94,7 +92,6 @@ public class ApprovalServiceImpl implements ApprovalService {
      */
     @Override
     public Approval getApproval(String transactionId, String companyAccountsId) throws ServiceException {
-
         Approval approval = new Approval();
         ApiClient apiClient = apiClientService.getApiClient();
 

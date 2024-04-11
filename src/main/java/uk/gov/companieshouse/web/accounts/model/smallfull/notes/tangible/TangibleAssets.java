@@ -11,7 +11,6 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
 
 @ValidationModel
 public class TangibleAssets implements Note {
-
     private TangibleAssetsCost cost;
 
     private TangibleAssetsDepreciation depreciation;

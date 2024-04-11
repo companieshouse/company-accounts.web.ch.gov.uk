@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.impl;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -20,7 +19,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportStatementsTransformerImplTests {
-
     private DirectorsReportStatementsTransformer statementsTransformer = new DirectorsReportStatementsTransformerImpl();
 
     private static final String ADDITIONAL_INFORMATION = "additionalInformation";
@@ -31,7 +29,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get additional information - null statements")
     void getAdditionalInformationNullStatements() {
-
         AdditionalInformation additionalInformation =
                 statementsTransformer.getAdditionalInformation(null);
 
@@ -42,7 +39,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get additional information - provided statements")
     void getAdditionalInformationProvidedStatements() {
-
         StatementsApi statementsApi = new StatementsApi();
         statementsApi.setAdditionalInformation(ADDITIONAL_INFORMATION);
 
@@ -56,7 +52,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Set additional information")
     void setAdditionalInformation() {
-
         AdditionalInformation additionalInformation = new AdditionalInformation();
         additionalInformation.setAdditionalInformationDetails(ADDITIONAL_INFORMATION);
 
@@ -70,7 +65,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get company policy on disabled employees - null statements")
     void getCompanyPolicyOnDisabledEmployeesNullStatements() {
-
         CompanyPolicyOnDisabledEmployees companyPolicyOnDisabledEmployees =
                 statementsTransformer.getCompanyPolicyOnDisabledEmployees(null);
 
@@ -81,7 +75,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get company policy on disabled employees - provided statements")
     void getCompanyPolicyOnDisabledEmployeesProvidedStatements() {
-
         StatementsApi statementsApi = new StatementsApi();
         statementsApi.setCompanyPolicyOnDisabledEmployees(COMPANY_POLICY_ON_DISABLED_EMPLOYEES);
 
@@ -95,7 +88,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Set company policy on disabled employees")
     void setCompanyPolicyOnDisabledEmployees() {
-
         CompanyPolicyOnDisabledEmployees companyPolicyOnDisabledEmployees = new CompanyPolicyOnDisabledEmployees();
         companyPolicyOnDisabledEmployees.setCompanyPolicyOnDisabledEmployeesDetails(COMPANY_POLICY_ON_DISABLED_EMPLOYEES);
 
@@ -109,7 +101,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get political and charitable donations - null statements")
     void getPoliticalAndCharitableDonationsNullStatements() {
-
         PoliticalAndCharitableDonations politicalAndCharitableDonations =
                 statementsTransformer.getPoliticalAndCharitableDonations(null);
 
@@ -120,7 +111,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get political and charitable donations - provided statements")
     void getPoliticalAndCharitableDonationsProvidedStatements() {
-
         StatementsApi statementsApi = new StatementsApi();
         statementsApi.setPoliticalAndCharitableDonations(POLITICAL_AND_CHARITABLE_DONATIONS);
 
@@ -134,7 +124,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Set political and charitable donations")
     void setPoliticalAndCharitableDonations() {
-
         PoliticalAndCharitableDonations politicalAndCharitableDonations = new PoliticalAndCharitableDonations();
         politicalAndCharitableDonations.setPoliticalAndCharitableDonationsDetails(POLITICAL_AND_CHARITABLE_DONATIONS);
 
@@ -148,7 +137,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get principal activities - null statements")
     void getPrincipalActivitiesNullStatements() {
-
         PrincipalActivities principalActivities =
                 statementsTransformer.getPrincipalActivities(null);
 
@@ -159,7 +147,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Get principal activities - provided statements")
     void getPrincipalActivitiesProvidedStatements() {
-
         StatementsApi statementsApi = new StatementsApi();
         statementsApi.setPrincipalActivities(PRINCIPAL_ACTIVITIES);
 
@@ -173,7 +160,6 @@ class DirectorsReportStatementsTransformerImplTests {
     @Test
     @DisplayName("Set principal activities")
     void setPrincipalActivities() {
-
         PrincipalActivities principalActivities = new PrincipalActivities();
         principalActivities.setPrincipalActivitiesDetails(PRINCIPAL_ACTIVITIES);
 

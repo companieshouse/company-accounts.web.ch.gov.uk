@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.offbalancesheet
 import jakarta.validation.constraints.NotNull;
 
 public class OffBalanceSheetArrangementsQuestion {
-
     @NotNull(message = "{offBalanceSheetArrangementsQuestion.selectionNotMade}")
     private Boolean hasIncludedOffBalanceSheetArrangements;
 

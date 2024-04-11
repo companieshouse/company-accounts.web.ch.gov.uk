@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RptTransactionsTransformerImplTest {
-
     @Mock
     private RptBreakdownTransformer rptBreakdownTransformer;
 
@@ -45,7 +44,6 @@ class RptTransactionsTransformerImplTest {
     @Test
     @DisplayName("Get RPT transaction API - no breakdown")
     void getRptTransactionNoBreakdown() {
-
         RptTransactionToAdd rptTransactionToAdd = new RptTransactionToAdd();
         rptTransactionToAdd.setNameOfRelatedParty(NAME_OF_RELATED_PARTY);
         rptTransactionToAdd.setDescriptionOfTransaction(DESCRIPTION_OF_TRANSACTION);
@@ -65,7 +63,6 @@ class RptTransactionsTransformerImplTest {
     @Test
     @DisplayName("Get all RPT transactions")
     void getAllRptTransactions() {
-
         RptTransactionApi rptTransactionApi = new RptTransactionApi();
         rptTransactionApi.setNameOfRelatedParty(NAME_OF_RELATED_PARTY);
         rptTransactionApi.setDescriptionOfTransaction(DESCRIPTION_OF_TRANSACTION);

@@ -3,7 +3,6 @@ package uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.amor
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 
 public class OnDisposals {
-
     @ValidationMapping("$.intangible_assets.goodwill.amortisation.on_disposals")
     private Long goodwill;
 

@@ -15,7 +15,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.StatementsT
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StatementsTransformerImplTests {
-
     private StatementsTransformer transformer = new StatementsTransformerImpl();
 
     private static final String AUDIT_NOT_REQUIRED = "auditNotRequired";
@@ -31,7 +30,6 @@ class StatementsTransformerImplTests {
     @Test
     @DisplayName("Get statements")
     void getStatements() {
-
         BalanceSheetLegalStatementsApi legalStatementsApi = new BalanceSheetLegalStatementsApi();
         legalStatementsApi.setAuditNotRequiredByMembers(AUDIT_NOT_REQUIRED);
         legalStatementsApi.setDirectorsResponsibility(DIRECTORS_RESPONSIBILITY);

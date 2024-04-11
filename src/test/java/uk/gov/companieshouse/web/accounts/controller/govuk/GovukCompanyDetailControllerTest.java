@@ -19,12 +19,13 @@ import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GovukCompanyDetailControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
@@ -55,15 +56,13 @@ class GovukCompanyDetailControllerTest {
             UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + COMPANY_NUMBER + "/cic/steps-to-complete";
 
     @BeforeEach
-    private void setup() {
-
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
     @Test
     @DisplayName("Get Gov uk Company Details - Success")
     void getRequestSuccess() throws Exception {
-
         when(companyService.getCompanyDetail(COMPANY_NUMBER)).thenReturn(companyDetail);
 
         mockMvc.perform(get(COMPANY_DETAIL_PATH))
@@ -78,7 +77,6 @@ class GovukCompanyDetailControllerTest {
     @Test
     @DisplayName("Get Gov uk Company Details - Throws Exception")
     void getRequestThrowsException() throws Exception {
-
         when(companyService.getCompanyDetail(COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
         mockMvc.perform(get(COMPANY_DETAIL_PATH))
@@ -89,7 +87,6 @@ class GovukCompanyDetailControllerTest {
     @Test
     @DisplayName("Post Gov uk Company Details - CIC Company")
     void postRequestCicCompany() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER))
                 .thenReturn(companyProfile);
         when(companyProfile.isCommunityInterestCompany()).thenReturn(true);
@@ -102,7 +99,6 @@ class GovukCompanyDetailControllerTest {
     @Test
     @DisplayName("Post Gov uk Company Details - Non-CIC Company")
     void postRequestNonCicCompany() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER))
                 .thenReturn(companyProfile);
         when(companyProfile.isCommunityInterestCompany()).thenReturn(false);
@@ -115,7 +111,6 @@ class GovukCompanyDetailControllerTest {
     @Test
     @DisplayName("Post Gov uk Company Details - Throws Exception")
     void postRequestThrowsException() throws Exception {
-
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
         mockMvc.perform(post(COMPANY_DETAIL_PATH))

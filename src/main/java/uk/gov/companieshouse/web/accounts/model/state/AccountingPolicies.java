@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 public class AccountingPolicies implements Serializable {
-
     @JsonProperty("has_provided_turnover_policy")
     private Boolean hasProvidedTurnoverPolicy;
 
