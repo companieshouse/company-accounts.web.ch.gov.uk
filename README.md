@@ -4,7 +4,7 @@ These screens allow clients to interact with company accounts data.
 
 ### Requirements
 
-- Java 8
+- Java 21
 - Maven
 - Git
 - Accounts platform
