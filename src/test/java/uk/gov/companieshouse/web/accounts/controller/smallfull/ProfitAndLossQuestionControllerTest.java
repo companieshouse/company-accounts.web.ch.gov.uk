@@ -27,7 +27,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 class ProfitAndLossQuestionControllerTest {
 
     private MockMvc mockMvc;

@@ -39,7 +39,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesS
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 class PrincipalActivitiesSelectionControllerTest {
 
     private MockMvc mockMvc;

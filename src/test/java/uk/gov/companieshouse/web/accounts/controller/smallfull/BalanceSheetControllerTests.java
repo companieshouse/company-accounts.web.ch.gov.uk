@@ -34,7 +34,6 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 class BalanceSheetControllerTests {
 
     private MockMvc mockMvc;

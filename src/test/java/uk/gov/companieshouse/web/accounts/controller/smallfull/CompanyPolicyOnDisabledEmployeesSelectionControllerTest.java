@@ -39,7 +39,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.CompanyPolicyOnDisab
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 class CompanyPolicyOnDisabledEmployeesSelectionControllerTest {
 
     private MockMvc mockMvc;

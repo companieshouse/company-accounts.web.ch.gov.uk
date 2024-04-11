@@ -40,7 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-@Disabled
 class ValuationInformationPolicyControllerTest {
 
     private static final String COMPANY_NUMBER = "companyNumber";

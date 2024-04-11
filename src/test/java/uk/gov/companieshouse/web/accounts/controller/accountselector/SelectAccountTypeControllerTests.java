@@ -22,7 +22,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 class SelectAccountTypeControllerTests {
 
     private static final String MOCK_CONTROLLER_PATH =

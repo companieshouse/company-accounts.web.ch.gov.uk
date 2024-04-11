@@ -30,7 +30,6 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 class CICStepsToCompleteControllerTests {
 
     private MockMvc mockMvc;

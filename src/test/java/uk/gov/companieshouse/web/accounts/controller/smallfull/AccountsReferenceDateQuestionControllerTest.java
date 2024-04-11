@@ -41,7 +41,6 @@ import static org.hamcrest.Matchers.hasProperty;
 
 @ExtendWith({MockitoExtension.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Disabled
 class AccountsReferenceDateQuestionControllerTest {
 
     private MockMvc mockMvc;
