@@ -10,7 +10,7 @@ locals {
   docker_repo                = "company-accounts.web.ch.gov.uk"
   kms_alias                  = "alias/${var.aws_profile}/environment-services-kms"
   lb_listener_rule_priority  = 66
-  lb_listener_paths          = ["/transactions/*/company-accounts","/private/transactions/*/company-accounts","/company-accounts/healthcheck"]
+  lb_listener_paths          = ["/company/*/small-full","/company/*/corporation-tax","/company/*/dormant","/company/*/micro-entity","/company/*/select-account-type","/company/*/transaction/*/company-accounts/*/small-full","/accounts/criteria","/accounts/cic/before-you-start", "/accounts/cic/criteria","/accounts/cic/select-account-type","/accounts/cic/full-accounts-criteria","/accounts/cic/*/select-account-type","/accounts/cic/*/full-accounts-criteria","/accounts/cic/*/criteria","/accounts/cic/cant-file-online-yet","/accounts/cic/*/cant-file-online-yet","/accounts/cic/cics-file-paper","/accounts/cic/*/cics-file-paper","/accounts/alternative-filing-options","/accounts/corporation-tax","/accounts/select-account-type","/accounts/full-accounts-criteria","/accounts/company/*/details","/company/*/cic/","/company/*/transaction/*/company-accounts/*/resume","/company/*/transaction/*/company-accounts/*/cic/","/company/*/transaction/*/company-accounts/*/pay-filing-fee"]
   healthcheck_path           = "/company-accounts/healthcheck" #healthcheck path for company accounts web
   healthcheck_matcher        = "200"
   s3_config_bucket           = data.vault_generic_secret.shared_s3.data["config_bucket_name"]
