@@ -47,16 +47,6 @@ variable "required_memory" {
   description = "The required memory for this service"
   default     = 512 # defaulted minimum required for fargate services, override for production
 }
-variable "eric_cpus" {
-  type = number
-  description = "The required cpu resource for eric. 1024 here is 1 vCPU"
-  default = 256
-}
-variable "eric_memory" {
-  type = number
-  description = "The required memory for eric"
-  default = 512
-}
 
 variable "use_fargate" {
   type        = bool
@@ -127,9 +117,4 @@ variable "use_set_environment_files" {
 variable "company_accounts_api_version" {
   type        = string
   description = "The version of the company-accounts-api container to run."
-}
-
-variable "eric_version" {
-  type        = string
-  description = "The version of the eric container to run."
 }
