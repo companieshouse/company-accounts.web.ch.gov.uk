@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -112,8 +113,9 @@ class ApprovalServiceImplTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String APPROVAL_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-                                                COMPANY_ACCOUNTS_ID + "/small-full/approval";
+    private static final String APPROVAL_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/approval";
 
     private static final String MOCK_APPROVAL_LINK = "mockApprovalLink";
 
@@ -127,9 +129,11 @@ class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
-    void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void createApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -164,7 +168,8 @@ class ApprovalServiceImplTests {
     @DisplayName("Submit Approval - POST - Date Validation Errors")
     void createApprovalDateValidationErrors() throws ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(false);
 
@@ -176,10 +181,12 @@ class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Submit Approval - POST - URIValidationException Thrown")
-    void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
-                ServiceException {
+    void createApprovalThrowsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException,
+            ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -204,7 +211,7 @@ class ApprovalServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -215,7 +222,8 @@ class ApprovalServiceImplTests {
     void createApprovalWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -254,7 +262,8 @@ class ApprovalServiceImplTests {
     void createApprovalThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -279,7 +288,7 @@ class ApprovalServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -287,9 +296,11 @@ class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Submit Approval - PUT - Success Path")
-    void updateApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void updateApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -322,10 +333,12 @@ class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Submit Approval - PUT - URIValidationException Thrown")
-    void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException,
-                    ServiceException {
+    void updateApprovalURIValidationExceptionThrown()
+            throws ApiErrorResponseException, URIValidationException,
+            ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -350,7 +363,7 @@ class ApprovalServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                    .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -361,7 +374,8 @@ class ApprovalServiceImplTests {
     void updateApprovalWithValidationErrors()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -400,7 +414,8 @@ class ApprovalServiceImplTests {
     void updateApprovalThrowsApiErrorResponseException()
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(approval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -425,7 +440,7 @@ class ApprovalServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.submitApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, approval));
@@ -433,7 +448,8 @@ class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Approval - GET - Success Path")
-    void getApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void getApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -466,7 +482,8 @@ class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Approval - GET - No approval link")
-    void getApprovalNoLinkSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void getApprovalNoLinkSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -485,8 +502,9 @@ class ApprovalServiceImplTests {
 
     @Test
     @DisplayName("Approval - GET - URIValidationException Thrown")
-    void getApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
-                ServiceException {
+    void getApprovalThrowsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException,
+            ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -507,7 +525,7 @@ class ApprovalServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.getApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -537,7 +555,7 @@ class ApprovalServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 approvalService.getApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));

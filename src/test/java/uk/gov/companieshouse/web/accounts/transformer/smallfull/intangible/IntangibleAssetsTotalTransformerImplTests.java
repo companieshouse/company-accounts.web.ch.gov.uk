@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -25,14 +31,8 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.cost.Transfers;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.CurrentPeriod;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.IntangibleAssetsNetBookValue;
-import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.IntangibleAssetsTotalTransformerImpl;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.PreviousPeriod;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.IntangibleAssetsTotalTransformerImpl;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -166,7 +166,8 @@ class IntangibleAssetsTotalTransformerImplTests {
         assertFalse(transformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets));
     }
 
-    private IntangibleAssetsResource createTotalApiResource(boolean includeCost, boolean includeAmortisation) {
+    private IntangibleAssetsResource createTotalApiResource(boolean includeCost,
+            boolean includeAmortisation) {
 
         IntangibleAssetsResource total = new IntangibleAssetsResource();
 
@@ -174,7 +175,7 @@ class IntangibleAssetsTotalTransformerImplTests {
             total.setCost(createCostApiResource());
         }
 
-        if(includeAmortisation) {
+        if (includeAmortisation) {
             total.setAmortisation(createAmortisationApiResource());
         }
 
@@ -273,27 +274,39 @@ class IntangibleAssetsTotalTransformerImplTests {
 
         intangibleAssets.setNetBookValue(intangibleAssetsNetBookValue);
 
-
         return intangibleAssets;
     }
 
     private void assertPreExistingFieldsUnaffected(IntangibleAssets intangibleAssets) {
 
-        assertEquals(OTHER_COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
-        assertEquals(OTHER_ADDITIONS, intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
-        assertEquals(OTHER_DISPOSALS, intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
-        assertEquals(OTHER_REVALUATIONS, intangibleAssets.getCost().getRevaluations().getOtherIntangibleAssets());
-        assertEquals(OTHER_TRANSFERS, intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
-        assertEquals(OTHER_COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
+        assertEquals(OTHER_COST_AT_PERIOD_START,
+                intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
+        assertEquals(OTHER_ADDITIONS,
+                intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
+        assertEquals(OTHER_DISPOSALS,
+                intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
+        assertEquals(OTHER_REVALUATIONS,
+                intangibleAssets.getCost().getRevaluations().getOtherIntangibleAssets());
+        assertEquals(OTHER_TRANSFERS,
+                intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
+        assertEquals(OTHER_COST_AT_PERIOD_END,
+                intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
 
-        assertEquals(OTHER_AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getOtherIntangibleAssets());
-        assertEquals(OTHER_AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
-        assertEquals(OTHER_AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
-        assertEquals(OTHER_AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getOtherIntangibleAssets());
-        assertEquals(OTHER_AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_AT_PERIOD_START,
+                intangibleAssets.getAmortisation().getAtPeriodStart().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_CHARGE_FOR_YEAR,
+                intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_ON_DISPOSALS,
+                intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_OTHER_ADJUSTMENTS,
+                intangibleAssets.getAmortisation().getOtherAdjustments()
+                        .getOtherIntangibleAssets());
+        assertEquals(OTHER_AMORTISATION_AT_PERIOD_END,
+                intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
     }
 
-    private IntangibleAssets createIntangibleAssetsWithTotalResources(boolean includeCost, boolean includeAmortisation, boolean includeNetBookValue) {
+    private IntangibleAssets createIntangibleAssetsWithTotalResources(boolean includeCost,
+            boolean includeAmortisation, boolean includeNetBookValue) {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
@@ -374,22 +387,25 @@ class IntangibleAssetsTotalTransformerImplTests {
     }
 
     private void assertWebModelsMapped(IntangibleAssets intangibleAssets,
-                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
+            boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(intangibleAssets);
         }
 
-        if(expectAmortisationFieldsMapped) {
+        if (expectAmortisationFieldsMapped) {
             assertAmortisationFieldsMappedToWebModel(intangibleAssets);
         }
-        assertEquals(CURRENT_PERIOD, intangibleAssets.getNetBookValue().getCurrentPeriod().getTotal());
-        assertEquals(PREVIOUS_PERIOD, intangibleAssets.getNetBookValue().getPreviousPeriod().getTotal());
+        assertEquals(CURRENT_PERIOD,
+                intangibleAssets.getNetBookValue().getCurrentPeriod().getTotal());
+        assertEquals(PREVIOUS_PERIOD,
+                intangibleAssets.getNetBookValue().getPreviousPeriod().getTotal());
     }
 
     private void assertCostFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
 
-        assertEquals(COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getTotal());
+        assertEquals(COST_AT_PERIOD_START,
+                intangibleAssets.getCost().getAtPeriodStart().getTotal());
         assertEquals(ADDITIONS, intangibleAssets.getCost().getAdditions().getTotal());
         assertEquals(DISPOSALS, intangibleAssets.getCost().getDisposals().getTotal());
         assertEquals(REVALUATIONS, intangibleAssets.getCost().getRevaluations().getTotal());
@@ -399,16 +415,21 @@ class IntangibleAssetsTotalTransformerImplTests {
 
     private void assertAmortisationFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
 
-        assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getTotal());
-        assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getTotal());
-        assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getTotal());
-        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getTotal());
-        assertEquals(AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getTotal());
+        assertEquals(AMORTISATION_AT_PERIOD_START,
+                intangibleAssets.getAmortisation().getAtPeriodStart().getTotal());
+        assertEquals(AMORTISATION_CHARGE_FOR_YEAR,
+                intangibleAssets.getAmortisation().getChargeForYear().getTotal());
+        assertEquals(AMORTISATION_ON_DISPOSALS,
+                intangibleAssets.getAmortisation().getOnDisposals().getTotal());
+        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS,
+                intangibleAssets.getAmortisation().getOtherAdjustments().getTotal());
+        assertEquals(AMORTISATION_AT_PERIOD_END,
+                intangibleAssets.getAmortisation().getAtPeriodEnd().getTotal());
     }
 
     private void assertApiFieldsMapped(IntangibleAssetsResource resource,
-                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped,
-                                        boolean expectNetBookValueFieldsMapped) {
+            boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped,
+            boolean expectNetBookValueFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
@@ -418,8 +439,7 @@ class IntangibleAssetsTotalTransformerImplTests {
 
         if (expectAmortisationFieldsMapped) {
             assertAmortisationFieldsMappedToApiResource(resource.getAmortisation());
-        }
-        else {
+        } else {
             assertNull(resource.getAmortisation());
         }
         if (expectNetBookValueFieldsMapped) {

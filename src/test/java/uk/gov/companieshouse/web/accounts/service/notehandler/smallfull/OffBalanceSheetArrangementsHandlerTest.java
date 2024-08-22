@@ -1,5 +1,12 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -24,13 +31,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.offBalanceSheet.OffBal
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -77,7 +77,9 @@ class OffBalanceSheetArrangementsHandlerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/notes/off-balance-sheet-arrangements";
+    private static final String URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID
+                    + "/small-full/notes/off-balance-sheet-arrangements";
 
     private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_NOTE = "offBalanceSheetArrangements";
 
@@ -85,7 +87,8 @@ class OffBalanceSheetArrangementsHandlerTest {
     @DisplayName("Get the resource URI")
     void getResourceURI() {
 
-        assertEquals(URI, offBalanceSheetArrangementsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertEquals(URI,
+                offBalanceSheetArrangementsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -96,7 +99,8 @@ class OffBalanceSheetArrangementsHandlerTest {
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
         when(offBalanceSheetResourceHandler.get(URI)).thenReturn(offBalanceSheetGet);
 
-        Executor<ApiResponse<OffBalanceSheetApi>> offBalanceSheetApi = offBalanceSheetArrangementsHandler.get(apiClient, URI);
+        Executor<ApiResponse<OffBalanceSheetApi>> offBalanceSheetApi = offBalanceSheetArrangementsHandler.get(
+                apiClient, URI);
 
         assertNotNull(offBalanceSheetApi);
         assertEquals(offBalanceSheetApi, offBalanceSheetGet);
@@ -109,9 +113,11 @@ class OffBalanceSheetArrangementsHandlerTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
-        when(offBalanceSheetResourceHandler.update(URI, offBalanceSheetApi)).thenReturn(offBalanceSheetUpdate);
+        when(offBalanceSheetResourceHandler.update(URI, offBalanceSheetApi)).thenReturn(
+                offBalanceSheetUpdate);
 
-        Executor<ApiResponse<Void>> updatedOffBalanceSheetApi = offBalanceSheetArrangementsHandler.update(apiClient, URI, offBalanceSheetApi);
+        Executor<ApiResponse<Void>> updatedOffBalanceSheetApi = offBalanceSheetArrangementsHandler.update(
+                apiClient, URI, offBalanceSheetApi);
 
         assertNotNull(updatedOffBalanceSheetApi);
         assertEquals(updatedOffBalanceSheetApi, offBalanceSheetUpdate);
@@ -124,9 +130,11 @@ class OffBalanceSheetArrangementsHandlerTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
-        when(offBalanceSheetResourceHandler.create(URI, offBalanceSheetApi)).thenReturn(offBalanceSheetCreate);
+        when(offBalanceSheetResourceHandler.create(URI, offBalanceSheetApi)).thenReturn(
+                offBalanceSheetCreate);
 
-        Executor<ApiResponse<OffBalanceSheetApi>> createOffBalanceSheetApi = offBalanceSheetArrangementsHandler.create(apiClient, URI, offBalanceSheetApi);
+        Executor<ApiResponse<OffBalanceSheetApi>> createOffBalanceSheetApi = offBalanceSheetArrangementsHandler.create(
+                apiClient, URI, offBalanceSheetApi);
 
         assertNotNull(createOffBalanceSheetApi);
         assertEquals(createOffBalanceSheetApi, offBalanceSheetCreate);
@@ -141,7 +149,8 @@ class OffBalanceSheetArrangementsHandlerTest {
         when(smallFullResourceHandler.offBalanceSheet()).thenReturn(offBalanceSheetResourceHandler);
         when(offBalanceSheetResourceHandler.delete(URI)).thenReturn(offBalanceSheetDelete);
 
-        Executor<ApiResponse<Void>> deleteOffBalanceSheetApi = offBalanceSheetArrangementsHandler.delete(apiClient, URI);
+        Executor<ApiResponse<Void>> deleteOffBalanceSheetApi = offBalanceSheetArrangementsHandler.delete(
+                apiClient, URI);
 
         assertNotNull(deleteOffBalanceSheetApi);
         assertEquals(deleteOffBalanceSheetApi, offBalanceSheetDelete);
@@ -152,26 +161,34 @@ class OffBalanceSheetArrangementsHandlerTest {
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(OFF_BALANCE_SHEET_ARRANGEMENTS_NOTE);
+        when(smallFullLinks.getOffBalanceSheetArrangementsNote()).thenReturn(
+                OFF_BALANCE_SHEET_ARRANGEMENTS_NOTE);
 
-        assertTrue(offBalanceSheetArrangementsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(
+                offBalanceSheetArrangementsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
-   @Test
+    @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
-        assertThrows(ServiceException.class, () -> offBalanceSheetArrangementsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> offBalanceSheetArrangementsHandler.parentResourceExists(apiClient,
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test method returns OffBalanceSheetArrangements as NoteType")
-    void testOffBalanceSheetArrangementsReturned()  {
+    void testOffBalanceSheetArrangementsReturned() {
 
-        assertEquals(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS, offBalanceSheetArrangementsHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS,
+                offBalanceSheetArrangementsHandler.getNoteType());
     }
 }

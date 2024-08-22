@@ -174,12 +174,12 @@ class ProfitAndLossServiceImplTests {
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String CURRENT_PERIOD_URI = "/transactions/" + TRANSACTION_ID +
-                                                    "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                    "/small-full/current-period/profit-and-loss";
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/current-period/profit-and-loss";
 
     private static final String PREVIOUS_PERIOD_URI = "/transactions/" + TRANSACTION_ID +
-                                                    "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                    "/small-full/previous-period/profit-and-loss";
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/previous-period/profit-and-loss";
 
     private static final String CURRENT_PERIOD_RESOURCE = "current period profit and loss";
     private static final String PREVIOUS_PERIOD_RESOURCE = "previous period profit and loss";
@@ -217,11 +217,14 @@ class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getProfitAndLoss(currentPeriodProfitAndLoss, null))
                 .thenReturn(profitAndLoss);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
-        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(
+                balanceSheetHeadings);
 
         ProfitAndLoss returnedProfitAndLoss =
-                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER);
 
         assertEquals(profitAndLoss, returnedProfitAndLoss);
 
@@ -253,18 +256,23 @@ class ProfitAndLossServiceImplTests {
         when(previousPeriodProfitAndLossResourceHandler.get(PREVIOUS_PERIOD_URI))
                 .thenReturn(previousPeriodProfitAndLossGet);
 
-        when(previousPeriodProfitAndLossGet.execute()).thenReturn(previousPeriodApiResponseWithData);
+        when(previousPeriodProfitAndLossGet.execute()).thenReturn(
+                previousPeriodApiResponseWithData);
 
         when(previousPeriodApiResponseWithData.getData()).thenReturn(previousPeriodProfitAndLoss);
 
-        when(profitAndLossTransformer.getProfitAndLoss(currentPeriodProfitAndLoss, previousPeriodProfitAndLoss))
+        when(profitAndLossTransformer.getProfitAndLoss(currentPeriodProfitAndLoss,
+                previousPeriodProfitAndLoss))
                 .thenReturn(profitAndLoss);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
-        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(
+                balanceSheetHeadings);
 
         ProfitAndLoss returnedProfitAndLoss =
-                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER);
 
         assertEquals(profitAndLoss, returnedProfitAndLoss);
 
@@ -294,11 +302,14 @@ class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getProfitAndLoss(null, null))
                 .thenReturn(profitAndLoss);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
-        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(
+                balanceSheetHeadings);
 
         ProfitAndLoss returnedProfitAndLoss =
-                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER);
 
         assertEquals(profitAndLoss, returnedProfitAndLoss);
 
@@ -322,7 +333,8 @@ class ProfitAndLossServiceImplTests {
                 .handleURIValidationException(uriValidationException, CURRENT_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
-                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER));
+                profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER));
     }
 
     @Test
@@ -343,10 +355,12 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
-        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI,
+                currentPeriodProfitAndLoss))
                 .thenReturn(currentPeriodProfitAndLossCreate);
 
-        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(
+                currentPeriodApiResponseWithData);
 
         when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(false);
 
@@ -356,8 +370,9 @@ class ProfitAndLossServiceImplTests {
 
         assertEquals(0,
                 profitAndLossService
-                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
-                                .size());
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER,
+                                profitAndLoss)
+                        .size());
     }
 
     @Test
@@ -378,10 +393,12 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
-        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI,
+                currentPeriodProfitAndLoss))
                 .thenReturn(currentPeriodProfitAndLossCreate);
 
-        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(
+                currentPeriodApiResponseWithData);
 
         when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(false);
 
@@ -392,7 +409,8 @@ class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(previousPeriodProfitAndLoss);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(previousPeriod);
 
         when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
@@ -402,17 +420,20 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.previousPeriodProfitAndLoss())
                 .thenReturn(previousPeriodProfitAndLossResourceHandler);
 
-        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI,
+                previousPeriodProfitAndLoss))
                 .thenReturn(previousPeriodProfitAndLossCreate);
 
-        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(previousPeriodApiResponseWithData);
+        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(
+                previousPeriodApiResponseWithData);
 
         when(previousPeriodApiResponseWithData.hasErrors()).thenReturn(false);
 
         assertEquals(0,
                 profitAndLossService
-                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
-                                .size());
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER,
+                                profitAndLoss)
+                        .size());
     }
 
     @Test
@@ -433,7 +454,8 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
-        when(currentPeriodProfitAndLossResourceHandler.update(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+        when(currentPeriodProfitAndLossResourceHandler.update(CURRENT_PERIOD_URI,
+                currentPeriodProfitAndLoss))
                 .thenReturn(currentPeriodProfitAndLossUpdate);
 
         when(currentPeriodProfitAndLossUpdate.execute()).thenReturn(currentPeriodApiResponseNoData);
@@ -446,8 +468,9 @@ class ProfitAndLossServiceImplTests {
 
         assertEquals(0,
                 profitAndLossService
-                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
-                                .size());
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER,
+                                profitAndLoss)
+                        .size());
     }
 
     @Test
@@ -468,7 +491,8 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
-        when(currentPeriodProfitAndLossResourceHandler.update(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+        when(currentPeriodProfitAndLossResourceHandler.update(CURRENT_PERIOD_URI,
+                currentPeriodProfitAndLoss))
                 .thenReturn(currentPeriodProfitAndLossUpdate);
 
         when(currentPeriodProfitAndLossUpdate.execute()).thenReturn(currentPeriodApiResponseNoData);
@@ -482,27 +506,32 @@ class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(previousPeriodProfitAndLoss);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(previousPeriod);
 
         when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
 
-        when(previousPeriodLinks.getProfitAndLoss()).thenReturn(PREVIOUS_PERIOD_PROFIT_AND_LOSS_LINK);
+        when(previousPeriodLinks.getProfitAndLoss()).thenReturn(
+                PREVIOUS_PERIOD_PROFIT_AND_LOSS_LINK);
 
         when(smallFullResourceHandler.previousPeriodProfitAndLoss())
                 .thenReturn(previousPeriodProfitAndLossResourceHandler);
 
-        when(previousPeriodProfitAndLossResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+        when(previousPeriodProfitAndLossResourceHandler.update(PREVIOUS_PERIOD_URI,
+                previousPeriodProfitAndLoss))
                 .thenReturn(previousPeriodProfitAndLossUpdate);
 
-        when(previousPeriodProfitAndLossUpdate.execute()).thenReturn(previousPeriodApiResponseNoData);
+        when(previousPeriodProfitAndLossUpdate.execute()).thenReturn(
+                previousPeriodApiResponseNoData);
 
         when(previousPeriodApiResponseNoData.hasErrors()).thenReturn(false);
 
         assertEquals(0,
                 profitAndLossService
-                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss)
-                                .size());
+                        .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER,
+                                profitAndLoss)
+                        .size());
     }
 
     @Test
@@ -523,10 +552,12 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
-        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI,
+                currentPeriodProfitAndLoss))
                 .thenReturn(currentPeriodProfitAndLossCreate);
 
-        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(
+                currentPeriodApiResponseWithData);
 
         when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(true);
 
@@ -541,7 +572,8 @@ class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(previousPeriodProfitAndLoss);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(previousPeriod);
 
         when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
@@ -551,15 +583,18 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.previousPeriodProfitAndLoss())
                 .thenReturn(previousPeriodProfitAndLossResourceHandler);
 
-        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI,
+                previousPeriodProfitAndLoss))
                 .thenReturn(previousPeriodProfitAndLossCreate);
 
-        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(previousPeriodApiResponseWithData);
+        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(
+                previousPeriodApiResponseWithData);
 
         when(previousPeriodApiResponseWithData.hasErrors()).thenReturn(false);
 
         assertNotNull(profitAndLossService
-                .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss));
+                .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER,
+                        profitAndLoss));
     }
 
     @Test
@@ -580,10 +615,12 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.currentPeriodProfitAndLoss())
                 .thenReturn(currentPeriodProfitAndLossResourceHandler);
 
-        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI, currentPeriodProfitAndLoss))
+        when(currentPeriodProfitAndLossResourceHandler.create(CURRENT_PERIOD_URI,
+                currentPeriodProfitAndLoss))
                 .thenReturn(currentPeriodProfitAndLossCreate);
 
-        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(currentPeriodApiResponseWithData);
+        when(currentPeriodProfitAndLossCreate.execute()).thenReturn(
+                currentPeriodApiResponseWithData);
 
         when(currentPeriodApiResponseWithData.hasErrors()).thenReturn(false);
 
@@ -594,7 +631,8 @@ class ProfitAndLossServiceImplTests {
         when(profitAndLossTransformer.getPreviousPeriodProfitAndLoss(profitAndLoss))
                 .thenReturn(previousPeriodProfitAndLoss);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(previousPeriod);
 
         when(previousPeriod.getLinks()).thenReturn(previousPeriodLinks);
@@ -604,10 +642,12 @@ class ProfitAndLossServiceImplTests {
         when(smallFullResourceHandler.previousPeriodProfitAndLoss())
                 .thenReturn(previousPeriodProfitAndLossResourceHandler);
 
-        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriodProfitAndLoss))
+        when(previousPeriodProfitAndLossResourceHandler.create(PREVIOUS_PERIOD_URI,
+                previousPeriodProfitAndLoss))
                 .thenReturn(previousPeriodProfitAndLossCreate);
 
-        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(previousPeriodApiResponseWithData);
+        when(previousPeriodProfitAndLossCreate.execute()).thenReturn(
+                previousPeriodApiResponseWithData);
 
         when(previousPeriodApiResponseWithData.hasErrors()).thenReturn(true);
 
@@ -616,6 +656,7 @@ class ProfitAndLossServiceImplTests {
         when(validationContext.getValidationErrors(apiErrors)).thenReturn(new ArrayList<>());
 
         assertNotNull(profitAndLossService
-                .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER, profitAndLoss));
+                .submitProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER,
+                        profitAndLoss));
     }
 }

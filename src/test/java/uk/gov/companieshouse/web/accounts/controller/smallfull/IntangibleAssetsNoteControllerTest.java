@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -11,13 +12,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,56 +39,43 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IntangibleAssetsNoteControllerTest {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String INTANGIBLE_VIEW = "smallfull/intangibleAssetsNote";
+    private static final String INTANGIBLE_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/note/intangible-assets";
+    private static final String MODEL_ATTR_BACK_PAGE = "backButton";
+    private static final String MODEL_ATTR_TEMPLATE = "templateName";
+    private static final String MODEL_ATTR_ASSET = "intangibleAssets";
+    private static final String MOCK_CONTROLLER_PATH_NEXT = "nextControllerPath";
+    private static final String MOCK_CONTROLLER_PATH_PREVIOUS = "previousControllerPath";
+    private static final String ERROR_VIEW = "error";
     private MockMvc mockMvc;
-
     @Mock
     private NoteService<IntangibleAssets> intangibleAssetsNoteService;
-
     @Mock
     private IntangibleAssets intangibleAssets;
-
     @Mock
     private NavigatorService navigatorService;
-
     @InjectMocks
     private IntangibleAssetsNoteController intangibleAssetsNoteController;
-
     @Mock
     private List<ValidationError> validationErrors;
-
     @Mock
     private BalanceSheetService mockBalanceSheetService;
-
     @InjectMocks
     private IntangibleAssetsNoteController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String INTANGIBLE_VIEW = "smallfull/intangibleAssetsNote";
-
-    private static final String INTANGIBLE_PATH = "/company/" + COMPANY_NUMBER +
-        "/transaction/" + TRANSACTION_ID +
-        "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-        "/small-full/note/intangible-assets";
-
-    private static final String MODEL_ATTR_BACK_PAGE = "backButton";
-
-    private static final String MODEL_ATTR_TEMPLATE = "templateName";
-
-    private static final String MODEL_ATTR_ASSET = "intangibleAssets";
-
-    private static final String MOCK_CONTROLLER_PATH_NEXT = "nextControllerPath";
-
-    private static final String MOCK_CONTROLLER_PATH_PREVIOUS = "previousControllerPath";
-
-    private static final String ERROR_VIEW = "error";
-
     private void setUpMockMvc() {
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
+        when(navigatorService.getPreviousControllerPath(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH_PREVIOUS);
         mockMvc = MockMvcBuilders.standaloneSetup(intangibleAssetsNoteController).build();
     }
 
@@ -99,15 +86,15 @@ class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         when(intangibleAssetsNoteService
-            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
-            .thenReturn(intangibleAssets);
+                .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
+                .thenReturn(intangibleAssets);
 
         mockMvc.perform(get(INTANGIBLE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(INTANGIBLE_VIEW))
-            .andExpect(model().attributeExists(MODEL_ATTR_BACK_PAGE))
-            .andExpect(model().attributeExists(MODEL_ATTR_TEMPLATE))
-            .andExpect(model().attributeExists(MODEL_ATTR_ASSET));
+                .andExpect(status().isOk())
+                .andExpect(view().name(INTANGIBLE_VIEW))
+                .andExpect(model().attributeExists(MODEL_ATTR_BACK_PAGE))
+                .andExpect(model().attributeExists(MODEL_ATTR_TEMPLATE))
+                .andExpect(model().attributeExists(MODEL_ATTR_ASSET));
     }
 
     @Test
@@ -117,12 +104,12 @@ class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         doThrow(ServiceException.class)
-            .when(intangibleAssetsNoteService)
-            .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
+                .when(intangibleAssetsNoteService)
+                .get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
 
         mockMvc.perform(get(INTANGIBLE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -131,18 +118,23 @@ class IntangibleAssetsNoteControllerTest {
 
         setUpMockMvc();
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH_NEXT);
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH_NEXT);
 
         when(
-            intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
-            .thenReturn(validationErrors);
+                intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
         mockMvc.perform(post(INTANGIBLE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH_NEXT));
+                .andExpect(status().isOk())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH_NEXT));
     }
 
     @Test
@@ -152,16 +144,16 @@ class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         when(
-            intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
-            .thenReturn(validationErrors);
+                intangibleAssetsNoteService.submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS)))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
 
         mockMvc.perform(post(INTANGIBLE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(INTANGIBLE_VIEW))
-            .andExpect(model().attributeExists(MODEL_ATTR_BACK_PAGE));
+                .andExpect(status().isOk())
+                .andExpect(view().name(INTANGIBLE_VIEW))
+                .andExpect(model().attributeExists(MODEL_ATTR_BACK_PAGE));
     }
 
     @Test
@@ -171,13 +163,13 @@ class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         doThrow(ServiceException.class)
-            .when(intangibleAssetsNoteService)
-            .submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS));
+                .when(intangibleAssetsNoteService)
+                .submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        IntangibleAssets.class), eq(NoteType.SMALL_FULL_INTANGIBLE_ASSETS));
 
         mockMvc.perform(post(INTANGIBLE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -187,18 +179,20 @@ class IntangibleAssetsNoteControllerTest {
         setUpMockMvc();
 
         mockMvc.perform(post(INTANGIBLE_PATH)
-        .param("cost.atPeriodStart.goodwill", "abc"))
-            .andExpect(status().isOk())
-            .andExpect(view().name(INTANGIBLE_VIEW))
-            .andExpect(model().attributeExists(MODEL_ATTR_BACK_PAGE));
+                        .param("cost.atPeriodStart.goodwill", "abc"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(INTANGIBLE_VIEW))
+                .andExpect(model().attributeExists(MODEL_ATTR_BACK_PAGE));
     }
 
     @Test
     @DisplayName("Test will render with Intangible present on balancesheet")
     void willRenderDebtorsPresent() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertTrue(renderPage);
     }
@@ -206,9 +200,11 @@ class IntangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Test will render with Intangible not present on balancesheet")
     void willRenderDebtorsNotPresent() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoIntangibleAssets());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoIntangibleAssets());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertFalse(renderPage);
     }
@@ -216,13 +212,15 @@ class IntangibleAssetsNoteControllerTest {
     @Test
     @DisplayName("Test will not render with 0 values in intangible on balance sheet")
     void willNotRenderDebtorsZeroValues() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertFalse(renderPage);
     }
-    
+
     private BalanceSheet getMockBalanceSheet() {
         BalanceSheet balanceSheet = new BalanceSheet();
         FixedAssets fixedAssets = new FixedAssets();
@@ -242,6 +240,7 @@ class IntangibleAssetsNoteControllerTest {
         balanceSheet.setBalanceSheetHeadings(balanceSheetHeadings);
         return balanceSheet;
     }
+
     private BalanceSheet getMockBalanceSheetNoIntangibleAssets() {
         BalanceSheet balanceSheet = new BalanceSheet();
         FixedAssets fixedAssets = new FixedAssets();

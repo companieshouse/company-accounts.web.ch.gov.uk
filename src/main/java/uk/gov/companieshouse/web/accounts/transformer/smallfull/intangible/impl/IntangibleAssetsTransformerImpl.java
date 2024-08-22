@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl;
 
 import java.util.stream.Stream;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

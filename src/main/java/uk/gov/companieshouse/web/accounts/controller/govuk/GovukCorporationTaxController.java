@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +13,6 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.corporationtax.CorporationTax;
-
-import javax.validation.Valid;
 
 @Controller
 @NextController(GovukSelectAccountTypeController.class)

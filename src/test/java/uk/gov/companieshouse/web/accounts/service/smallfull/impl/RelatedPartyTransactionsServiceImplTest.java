@@ -11,6 +11,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -92,8 +93,9 @@ class RelatedPartyTransactionsServiceImplTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String RELATED_PARTY_TRANSACTIONS_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-            COMPANY_ACCOUNTS_ID + "/small-full/notes/related-party-transactions";
+    private static final String RELATED_PARTY_TRANSACTIONS_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/notes/related-party-transactions";
 
     private static final String SMALL_FULL_DIRECTORS_LINK = "smallFullDirectorsLink";
 
@@ -105,12 +107,15 @@ class RelatedPartyTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.get(
+                RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
         when(relatedPartyTransactionsGet.execute()).thenReturn(responseWithData);
         when(responseWithData.getData()).thenReturn(relatedPartyTransactionsApi);
 
-        RelatedPartyTransactionsApi response = relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        RelatedPartyTransactionsApi response = relatedPartyTransactionsService.getRelatedPartyTransactions(
+                apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(relatedPartyTransactionsApi, response);
     }
@@ -121,12 +126,16 @@ class RelatedPartyTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.get(
+                RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
         when(relatedPartyTransactionsGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doNothing().when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        RelatedPartyTransactionsApi response = relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        RelatedPartyTransactionsApi response = relatedPartyTransactionsService.getRelatedPartyTransactions(
+                apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNull(response);
     }
@@ -137,13 +146,17 @@ class RelatedPartyTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.get(
+                RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
         when(relatedPartyTransactionsGet.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient,
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -152,13 +165,17 @@ class RelatedPartyTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.get(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.get(
+                RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsGet);
         when(relatedPartyTransactionsGet.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                relatedPartyTransactionsService.getRelatedPartyTransactions(apiClient,
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -168,10 +185,14 @@ class RelatedPartyTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.create(eq(RELATED_PARTY_TRANSACTIONS_URI), any(RelatedPartyTransactionsApi.class))).thenReturn(relatedPartyTransactionsCreate);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.create(eq(RELATED_PARTY_TRANSACTIONS_URI),
+                any(RelatedPartyTransactionsApi.class))).thenReturn(relatedPartyTransactionsCreate);
 
-        assertAll(() -> relatedPartyTransactionsService.createRelatedPartyTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(
+                () -> relatedPartyTransactionsService.createRelatedPartyTransactions(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
 
         verify(relatedPartyTransactionsCreate).execute();
     }
@@ -183,12 +204,17 @@ class RelatedPartyTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.create(eq(RELATED_PARTY_TRANSACTIONS_URI), any(RelatedPartyTransactionsApi.class))).thenReturn(relatedPartyTransactionsCreate);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.create(eq(RELATED_PARTY_TRANSACTIONS_URI),
+                any(RelatedPartyTransactionsApi.class))).thenReturn(relatedPartyTransactionsCreate);
         when(relatedPartyTransactionsCreate.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> relatedPartyTransactionsService.createRelatedPartyTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> relatedPartyTransactionsService.createRelatedPartyTransactions(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -198,12 +224,17 @@ class RelatedPartyTransactionsServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.create(eq(RELATED_PARTY_TRANSACTIONS_URI), any(RelatedPartyTransactionsApi.class))).thenReturn(relatedPartyTransactionsCreate);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.create(eq(RELATED_PARTY_TRANSACTIONS_URI),
+                any(RelatedPartyTransactionsApi.class))).thenReturn(relatedPartyTransactionsCreate);
         when(relatedPartyTransactionsCreate.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> relatedPartyTransactionsService.createRelatedPartyTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> relatedPartyTransactionsService.createRelatedPartyTransactions(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -212,14 +243,19 @@ class RelatedPartyTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getRelatedPartyTransactions()).thenReturn(SMALL_FULL_DIRECTORS_LINK);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.delete(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsDelete);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.delete(
+                RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsDelete);
 
-        assertAll(() -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(
+                () -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
 
         verify(relatedPartyTransactionsDelete).execute();
     }
@@ -229,11 +265,14 @@ class RelatedPartyTransactionsServiceImplTest {
     void deleteRelatedPartyTransactionsNoSmallFullLink() throws ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getRelatedPartyTransactions()).thenReturn(null);
 
-        assertAll(() -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(
+                () -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
 
         verify(apiClient, never()).smallFull();
     }
@@ -244,16 +283,22 @@ class RelatedPartyTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getRelatedPartyTransactions()).thenReturn(SMALL_FULL_DIRECTORS_LINK);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.delete(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsDelete);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.delete(
+                RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsDelete);
         when(relatedPartyTransactionsDelete.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -262,15 +307,21 @@ class RelatedPartyTransactionsServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getRelatedPartyTransactions()).thenReturn(SMALL_FULL_DIRECTORS_LINK);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(relatedPartyTransactionsResourceHandler);
-        when(relatedPartyTransactionsResourceHandler.delete(RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsDelete);
+        when(smallFullResourceHandler.relatedPartyTransactions()).thenReturn(
+                relatedPartyTransactionsResourceHandler);
+        when(relatedPartyTransactionsResourceHandler.delete(
+                RELATED_PARTY_TRANSACTIONS_URI)).thenReturn(relatedPartyTransactionsDelete);
         when(relatedPartyTransactionsDelete.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> relatedPartyTransactionsService.deleteRelatedPartyTransactions(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 }

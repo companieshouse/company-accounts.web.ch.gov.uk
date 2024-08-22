@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -12,14 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -38,54 +38,38 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProfitAndLossControllerTests {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String PROFIT_AND_LOSS_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/profit-and-loss";
+    private static final String PROFIT_AND_LOSS_MODEL_ATTR = "profitAndLoss";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String PROFIT_AND_LOSS_VIEW = "smallfull/profitAndLoss";
+    private static final String ERROR_VIEW = "error";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
     private MockMvc mockMvc;
-
     @Mock
     private ProfitAndLossService profitAndLossService;
-
     @Mock
     private HttpServletRequest request;
-
     @Mock
     private NavigatorService navigatorService;
-
     @InjectMocks
     private ProfitAndLossController controller;
-
     @Mock
     private List<ValidationError> validationErrors;
-
     @Mock
     private MockHttpSession session;
-
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String PROFIT_AND_LOSS_PATH = "/company/" + COMPANY_NUMBER +
-                                                     "/transaction/" + TRANSACTION_ID +
-                                                     "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                     "/small-full/profit-and-loss";
-
-    private static final String PROFIT_AND_LOSS_MODEL_ATTR = "profitAndLoss";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String PROFIT_AND_LOSS_VIEW = "smallfull/profitAndLoss";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
-    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
-
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -93,14 +77,15 @@ class ProfitAndLossControllerTests {
     @DisplayName("Get profit and loss - success")
     void getRequestSuccess() throws Exception {
 
-        when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER))
                 .thenReturn(new ProfitAndLoss());
 
         this.mockMvc.perform(get(PROFIT_AND_LOSS_PATH))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name(PROFIT_AND_LOSS_VIEW))
-                    .andExpect(model().attributeExists(PROFIT_AND_LOSS_MODEL_ATTR))
-                    .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(PROFIT_AND_LOSS_VIEW))
+                .andExpect(model().attributeExists(PROFIT_AND_LOSS_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -109,7 +94,7 @@ class ProfitAndLossControllerTests {
 
         doThrow(ServiceException.class)
                 .when(profitAndLossService)
-                        .getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                .getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         this.mockMvc.perform(get(PROFIT_AND_LOSS_PATH))
                 .andExpect(status().isOk())
@@ -121,12 +106,17 @@ class ProfitAndLossControllerTests {
     void postRequestSuccess() throws Exception {
 
         when(profitAndLossService.submitProfitAndLoss(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), eq(COMPANY_NUMBER), any(ProfitAndLoss.class)))
-                        .thenReturn(validationErrors);
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), eq(COMPANY_NUMBER),
+                any(ProfitAndLoss.class)))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
                 .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(PROFIT_AND_LOSS_PATH))
@@ -140,7 +130,8 @@ class ProfitAndLossControllerTests {
 
         doThrow(ServiceException.class)
                 .when(profitAndLossService).submitProfitAndLoss(
-                        eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), eq(COMPANY_NUMBER), any(ProfitAndLoss.class));
+                        eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), eq(COMPANY_NUMBER),
+                        any(ProfitAndLoss.class));
 
         this.mockMvc.perform(post(PROFIT_AND_LOSS_PATH))
                 .andExpect(status().isOk())
@@ -152,8 +143,9 @@ class ProfitAndLossControllerTests {
     void postRequestFailureWithApiValidationErrors() throws Exception {
 
         when(profitAndLossService.submitProfitAndLoss(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), eq(COMPANY_NUMBER), any(ProfitAndLoss.class)))
-                        .thenReturn(validationErrors);
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), eq(COMPANY_NUMBER),
+                any(ProfitAndLoss.class)))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
 
@@ -161,7 +153,7 @@ class ProfitAndLossControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(view().name(PROFIT_AND_LOSS_VIEW));
     }
-    
+
     @Test
     @DisplayName("Post profit and loss - binding result errors")
     void postRequestBindingResultErrors() throws Exception {
@@ -171,7 +163,7 @@ class ProfitAndLossControllerTests {
         String invalidData = "test";
 
         this.mockMvc.perform(post(PROFIT_AND_LOSS_PATH)
-                .param(beanElement, invalidData))
+                        .param(beanElement, invalidData))
                 .andExpect(status().isOk())
                 .andExpect(view().name(PROFIT_AND_LOSS_VIEW))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -182,7 +174,8 @@ class ProfitAndLossControllerTests {
     void willRenderFalse() throws ServiceException {
 
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(
+                companyAccountsDataState);
         when(companyAccountsDataState.getHasIncludedProfitAndLoss()).thenReturn(false);
 
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -193,7 +186,8 @@ class ProfitAndLossControllerTests {
     void willRenderTrue() throws ServiceException {
 
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(
+                companyAccountsDataState);
         when(companyAccountsDataState.getHasIncludedProfitAndLoss()).thenReturn(true);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));

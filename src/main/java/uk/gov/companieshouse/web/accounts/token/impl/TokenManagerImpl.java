@@ -31,7 +31,7 @@ public class TokenManagerImpl implements TokenManager {
     @Override
     public <T> T decodeJWT(String token, Class<T> clazz) {
 
-        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(getKey()).parseClaimsJws(token);
+        Jws<Claims> claimsJws = Jwts.parser().setSigningKey(getKey()).build().parseClaimsJws(token);
         return OBJECT_MAPPER.convertValue(claimsJws.getBody(), clazz);
     }
 

@@ -43,7 +43,7 @@ class CompanyAccountsServiceImplTests {
 
     @Mock
     private CompanyAccountsCreate companyAccountsCreate;
-    
+
     @Mock
     private CompanyAccountsGet companyAccountsGet;
 
@@ -68,7 +68,8 @@ class CompanyAccountsServiceImplTests {
 
     @Test
     @DisplayName("Create Company Accounts - Success Path")
-    void createCompanyAccountSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void createCompanyAccountSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
@@ -92,7 +93,8 @@ class CompanyAccountsServiceImplTests {
 
     @Test
     @DisplayName("Create Company Accounts - Throws ApiErrorResponseException")
-    void createCompanyAccountsApiErrorResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+    void createCompanyAccountsApiErrorResponseExceptionThrown()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
@@ -108,7 +110,8 @@ class CompanyAccountsServiceImplTests {
 
     @Test
     @DisplayName("Create Company Accounts - Throws URIValidationException")
-    void createCompanyAccountsURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+    void createCompanyAccountsURIValidationExceptionThrown()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
@@ -124,7 +127,8 @@ class CompanyAccountsServiceImplTests {
 
     @Test
     @DisplayName("Get company accounts - success")
-    void getCompanyAccountsSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void getCompanyAccountsSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
@@ -141,7 +145,8 @@ class CompanyAccountsServiceImplTests {
 
     @Test
     @DisplayName("Get company accounts - api error response exception")
-    void getCompanyAccountsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+    void getCompanyAccountsApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
@@ -149,12 +154,14 @@ class CompanyAccountsServiceImplTests {
         when(companyAccountsGet.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class,
-                () -> companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> companyAccountsService.getCompanyAccounts(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get company accounts - uri validation exception")
-    void getCompanyAccountsURIValidationException() throws ApiErrorResponseException, URIValidationException {
+    void getCompanyAccountsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(apiClient.companyAccounts()).thenReturn(companyAccountsResourceHandler);
 
@@ -162,6 +169,7 @@ class CompanyAccountsServiceImplTests {
         when(companyAccountsGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class,
-                () -> companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> companyAccountsService.getCompanyAccounts(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 }

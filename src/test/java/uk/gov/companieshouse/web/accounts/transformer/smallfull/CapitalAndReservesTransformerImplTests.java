@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,10 +20,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.SharePremiumAccount;
 import uk.gov.companieshouse.web.accounts.model.smallfull.TotalShareholdersFunds;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CapitalAndReservesTransformerImpl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CapitalAndReservesTransformerImplTests {
@@ -28,13 +28,13 @@ class CapitalAndReservesTransformerImplTests {
     private static final Long CURRENT_SHARE_PREMIUM_ACCOUNT = 2L;
     private static final Long CURRENT_OTHER_RESERVES = 3L;
     private static final Long CURRENT_PROFIT_AND_LOSS_ACCOUNT = 4L;
-    private static final Long CURRENT_TOTAL_SHAREHOLDERS_FUNDS= 5L;
+    private static final Long CURRENT_TOTAL_SHAREHOLDERS_FUNDS = 5L;
 
     private static final Long PREVIOUS_CALLED_UP_SHARE_CAPITAL = 10L;
     private static final Long PREVIOUS_SHARE_PREMIUM_ACCOUNT = 20L;
     private static final Long PREVIOUS_OTHER_RESERVES = 30L;
     private static final Long PREVIOUS_PROFIT_AND_LOSS_ACCOUNT = 40L;
-    private static final Long PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS= 50L;
+    private static final Long PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS = 50L;
 
     private final Transformer transformer = new CapitalAndReservesTransformerImpl();
 
@@ -214,7 +214,8 @@ class CapitalAndReservesTransformerImplTests {
         assertNull(balanceSheetApi.getCapitalAndReserves());
     }
 
-    private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
+    private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod,
+            Boolean previousPeriod) {
 
         CalledUpShareCapital calledUpShareCapital = new CalledUpShareCapital();
         OtherReserves otherReserves = new OtherReserves();
@@ -304,51 +305,79 @@ class CapitalAndReservesTransformerImplTests {
     }
 
     private void assertCurrentPeriodFieldsNull(BalanceSheet balanceSheet) {
-        assertNull(balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
-        assertNull(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
+        assertNull(
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
+        assertNull(
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
         assertNull(balanceSheet.getCapitalAndReserves().getOtherReserves().getCurrentAmount());
-        assertNull(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
-        assertNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getCurrentAmount());
+        assertNull(
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
+        assertNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
+                .getCurrentAmount());
     }
 
     private void assertPreviousPeriodFieldsNull(BalanceSheet balanceSheet) {
-        assertNull(balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
-        assertNull(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
+        assertNull(
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
+        assertNull(
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
         assertNull(balanceSheet.getCapitalAndReserves().getOtherReserves().getPreviousAmount());
-        assertNull(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
-        assertNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
+        assertNull(
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
+        assertNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
+                .getPreviousAmount());
     }
 
     private void assertCurrentPeriodFieldsNotNull(BalanceSheet balanceSheet) {
-        assertNotNull(balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
-        assertNotNull(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
+        assertNotNull(
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
+        assertNotNull(
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
         assertNotNull(balanceSheet.getCapitalAndReserves().getOtherReserves().getCurrentAmount());
-        assertNotNull(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
-        assertNotNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getCurrentAmount());
+        assertNotNull(
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
+        assertNotNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
+                .getCurrentAmount());
     }
 
     private void assertPreviousPeriodFieldsNotNull(BalanceSheet balanceSheet) {
-        assertNotNull(balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
-        assertNotNull(balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
+        assertNotNull(
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
+        assertNotNull(
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
         assertNotNull(balanceSheet.getCapitalAndReserves().getOtherReserves().getPreviousAmount());
-        assertNotNull(balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
-        assertNotNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
+        assertNotNull(
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
+        assertNotNull(balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
+                .getPreviousAmount());
     }
 
     private void assertCurrentPeriodValuesCorrect(BalanceSheet balanceSheet) {
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
-        assertEquals(CURRENT_SHARE_PREMIUM_ACCOUNT, balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
-        assertEquals(CURRENT_OTHER_RESERVES, balanceSheet.getCapitalAndReserves().getOtherReserves().getCurrentAmount());
-        assertEquals(CURRENT_PROFIT_AND_LOSS_ACCOUNT, balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
-        assertEquals(CURRENT_TOTAL_SHAREHOLDERS_FUNDS, balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getCurrentAmount());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL,
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getCurrentAmount());
+        assertEquals(CURRENT_SHARE_PREMIUM_ACCOUNT,
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getCurrentAmount());
+        assertEquals(CURRENT_OTHER_RESERVES,
+                balanceSheet.getCapitalAndReserves().getOtherReserves().getCurrentAmount());
+        assertEquals(CURRENT_PROFIT_AND_LOSS_ACCOUNT,
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getCurrentAmount());
+        assertEquals(CURRENT_TOTAL_SHAREHOLDERS_FUNDS,
+                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
+                        .getCurrentAmount());
     }
 
     private void assertPreviousPeriodValuesCorrect(BalanceSheet balanceSheet) {
-        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL, balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
-        assertEquals(PREVIOUS_SHARE_PREMIUM_ACCOUNT, balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
-        assertEquals(PREVIOUS_OTHER_RESERVES, balanceSheet.getCapitalAndReserves().getOtherReserves().getPreviousAmount());
-        assertEquals(PREVIOUS_PROFIT_AND_LOSS_ACCOUNT, balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
-        assertEquals(PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS, balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds().getPreviousAmount());
+        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL,
+                balanceSheet.getCapitalAndReserves().getCalledUpShareCapital().getPreviousAmount());
+        assertEquals(PREVIOUS_SHARE_PREMIUM_ACCOUNT,
+                balanceSheet.getCapitalAndReserves().getSharePremiumAccount().getPreviousAmount());
+        assertEquals(PREVIOUS_OTHER_RESERVES,
+                balanceSheet.getCapitalAndReserves().getOtherReserves().getPreviousAmount());
+        assertEquals(PREVIOUS_PROFIT_AND_LOSS_ACCOUNT,
+                balanceSheet.getCapitalAndReserves().getProfitAndLossAccount().getPreviousAmount());
+        assertEquals(PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS,
+                balanceSheet.getCapitalAndReserves().getTotalShareholdersFunds()
+                        .getPreviousAmount());
     }
 
     private void assertApiModelFieldsNotNull(BalanceSheetApi balanceSheetApi) {
@@ -361,19 +390,29 @@ class CapitalAndReservesTransformerImplTests {
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL, balanceSheetApi.getCapitalAndReserves().getCalledUpShareCapital());
-        assertEquals(CURRENT_SHARE_PREMIUM_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getSharePremiumAccount());
-        assertEquals(CURRENT_OTHER_RESERVES, balanceSheetApi.getCapitalAndReserves().getOtherReserves());
-        assertEquals(CURRENT_PROFIT_AND_LOSS_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getProfitAndLoss());
-        assertEquals(CURRENT_TOTAL_SHAREHOLDERS_FUNDS, balanceSheetApi.getCapitalAndReserves().getTotalShareholdersFunds());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL,
+                balanceSheetApi.getCapitalAndReserves().getCalledUpShareCapital());
+        assertEquals(CURRENT_SHARE_PREMIUM_ACCOUNT,
+                balanceSheetApi.getCapitalAndReserves().getSharePremiumAccount());
+        assertEquals(CURRENT_OTHER_RESERVES,
+                balanceSheetApi.getCapitalAndReserves().getOtherReserves());
+        assertEquals(CURRENT_PROFIT_AND_LOSS_ACCOUNT,
+                balanceSheetApi.getCapitalAndReserves().getProfitAndLoss());
+        assertEquals(CURRENT_TOTAL_SHAREHOLDERS_FUNDS,
+                balanceSheetApi.getCapitalAndReserves().getTotalShareholdersFunds());
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL, balanceSheetApi.getCapitalAndReserves().getCalledUpShareCapital());
-        assertEquals(PREVIOUS_SHARE_PREMIUM_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getSharePremiumAccount());
-        assertEquals(PREVIOUS_OTHER_RESERVES, balanceSheetApi.getCapitalAndReserves().getOtherReserves());
-        assertEquals(PREVIOUS_PROFIT_AND_LOSS_ACCOUNT, balanceSheetApi.getCapitalAndReserves().getProfitAndLoss());
-        assertEquals(PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS, balanceSheetApi.getCapitalAndReserves().getTotalShareholdersFunds());
+        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL,
+                balanceSheetApi.getCapitalAndReserves().getCalledUpShareCapital());
+        assertEquals(PREVIOUS_SHARE_PREMIUM_ACCOUNT,
+                balanceSheetApi.getCapitalAndReserves().getSharePremiumAccount());
+        assertEquals(PREVIOUS_OTHER_RESERVES,
+                balanceSheetApi.getCapitalAndReserves().getOtherReserves());
+        assertEquals(PREVIOUS_PROFIT_AND_LOSS_ACCOUNT,
+                balanceSheetApi.getCapitalAndReserves().getProfitAndLoss());
+        assertEquals(PREVIOUS_TOTAL_SHAREHOLDERS_FUNDS,
+                balanceSheetApi.getCapitalAndReserves().getTotalShareholdersFunds());
     }
 
     private void assertNonCapitalAndReservesFieldsNull(BalanceSheet balanceSheet) {

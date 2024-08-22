@@ -52,14 +52,17 @@ class CompanyPolicyOnDisabledEmployeesServiceImplTest {
     @DisplayName("Get company policy on disabled employees")
     void getCompanyPolicyOnDisabledEmployees() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
-        when(directorsReportStatementsTransformer.getCompanyPolicyOnDisabledEmployees(statementsApi))
+        when(directorsReportStatementsTransformer.getCompanyPolicyOnDisabledEmployees(
+                statementsApi))
                 .thenReturn(companyPolicyOnDisabledEmployees);
 
         CompanyPolicyOnDisabledEmployees returned =
-                companyPolicyOnDisabledEmployeesService.getCompanyPolicyOnDisabledEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                companyPolicyOnDisabledEmployeesService.getCompanyPolicyOnDisabledEmployees(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(companyPolicyOnDisabledEmployees, returned);
     }
@@ -68,37 +71,45 @@ class CompanyPolicyOnDisabledEmployeesServiceImplTest {
     @DisplayName("Submit company policy on disabled employees - create")
     void submitCompanyPolicyOnDisabledEmployeesCreate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
-        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
+        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID),
+                eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
                 .thenReturn(validationErrors);
 
         List<ValidationError> returned =
                 companyPolicyOnDisabledEmployeesService
-                        .submitCompanyPolicyOnDisabledEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployees);
+                        .submitCompanyPolicyOnDisabledEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                companyPolicyOnDisabledEmployees);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setCompanyPolicyOnDisabledEmployees(any(StatementsApi.class), eq(companyPolicyOnDisabledEmployees));
+        verify(directorsReportStatementsTransformer).setCompanyPolicyOnDisabledEmployees(
+                any(StatementsApi.class), eq(companyPolicyOnDisabledEmployees));
     }
 
     @Test
     @DisplayName("Submit company policy on disabled employees - update")
     void submitCompanyPolicyOnDisabledEmployeesUpdate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
-        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi))
+        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, statementsApi))
                 .thenReturn(validationErrors);
 
         List<ValidationError> returned =
                 companyPolicyOnDisabledEmployeesService
-                        .submitCompanyPolicyOnDisabledEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployees);
+                        .submitCompanyPolicyOnDisabledEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                companyPolicyOnDisabledEmployees);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setCompanyPolicyOnDisabledEmployees(statementsApi, companyPolicyOnDisabledEmployees);
+        verify(directorsReportStatementsTransformer).setCompanyPolicyOnDisabledEmployees(
+                statementsApi, companyPolicyOnDisabledEmployees);
     }
 }

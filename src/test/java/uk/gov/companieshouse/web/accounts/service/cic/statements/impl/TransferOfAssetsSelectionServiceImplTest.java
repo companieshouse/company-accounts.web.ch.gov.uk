@@ -98,7 +98,8 @@ class TransferOfAssetsSelectionServiceImplTest {
         selectionService.submitTransferOfAssetsSelection(
                 TRANSACTION_ID, COMPANY_ACCOUNTS_ID, transferOfAssetsSelection);
 
-        verify(cicStatementsService, never()).getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(cicStatementsService, never()).getCicStatementsApi(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
     }
 
     @Test

@@ -1,5 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,25 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import org.springframework.web.util.UriTemplate;
-import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GovukSelectAccountTypeControllerTest {
 
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String SELECT_ACCOUNT_TYPE_VIEW = "accountselector/selectAccountType";
 
@@ -39,16 +35,17 @@ class GovukSelectAccountTypeControllerTest {
     private static final String TYPE_OF_ACCOUNTS_ATTR = "typeOfAccounts";
 
     private static final String SELECT_ACCOUNT_TYPE_PATH =
-        "/accounts/select-account-type";
+            "/accounts/select-account-type";
 
-    private static final String MICRO_ENTITY_ACCOUNTS_URI = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-        "https://beta.companieshouse.gov.uk/guides/accounts/chooser/micro-entity";
+    private static final String MICRO_ENTITY_ACCOUNTS_URI =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                    "https://beta.companieshouse.gov.uk/guides/accounts/chooser/micro-entity";
 
     private static final String DORMANT_ACCOUNTS_URI = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-        "https://beta.companieshouse.gov.uk/guides/accounts/chooser/dormant";
+            "https://beta.companieshouse.gov.uk/guides/accounts/chooser/dormant";
 
     private static final String ABRIDGED_ACCOUNTS_URI = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-        "https://beta.companieshouse.gov.uk/guides/accounts/chooser/abridged";
+            "https://beta.companieshouse.gov.uk/guides/accounts/chooser/abridged";
 
     private MockMvc mockMvc;
 
@@ -68,10 +65,10 @@ class GovukSelectAccountTypeControllerTest {
     void getRequestSuccess() throws Exception {
 
         this.mockMvc.perform(get(SELECT_ACCOUNT_TYPE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
 
     @Test
@@ -79,9 +76,9 @@ class GovukSelectAccountTypeControllerTest {
     void postRequestForMicroEntitySuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "micro-entity",
-            status().is3xxRedirection(),
-            getRedirectUrlForAccount(MICRO_ENTITY_ACCOUNTS_URI));
+                "micro-entity",
+                status().is3xxRedirection()
+        );
     }
 
     @Test
@@ -89,9 +86,9 @@ class GovukSelectAccountTypeControllerTest {
     void postRequestForAbridgedAccountSuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "abridged",
-            status().is3xxRedirection(),
-            getRedirectUrlForAccount(ABRIDGED_ACCOUNTS_URI));
+                "abridged",
+                status().is3xxRedirection()
+        );
     }
 
     @Test
@@ -99,36 +96,39 @@ class GovukSelectAccountTypeControllerTest {
     void postRequestForDormantAccountSuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "dormant",
-            status().is3xxRedirection(),
-            getRedirectUrlForAccount(DORMANT_ACCOUNTS_URI));
+                "dormant",
+                status().is3xxRedirection()
+        );
     }
 
     @Test
     @DisplayName("Post criteria with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        performPostRequestAndValidateResponse(
-            null,
-            status().isOk(),
-            SELECT_ACCOUNT_TYPE_VIEW);
+        performPostRequestAndValidateResponseNoAttributes(
+                null,
+                status().isOk()
+        );
     }
 
     private void performPostRequestAndValidateResponse(
-        String beanElementValue,
-        ResultMatcher expectedStatus,
-        String expectedViewName) throws Exception {
+            String beanElementValue,
+            ResultMatcher expectedStatus) throws Exception {
 
         this.mockMvc.perform(
-            post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
-            .andExpect(expectedStatus)
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
+                        post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
+                .andExpect(expectedStatus)
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
 
-    private String getRedirectUrlForAccount(String accountTypeUri) {
-        return
-            UrlBasedViewResolver.REDIRECT_URL_PREFIX + accountTypeUri;
+    private void performPostRequestAndValidateResponseNoAttributes(
+            String beanElementValue,
+            ResultMatcher expectedStatus) throws Exception {
+
+        this.mockMvc.perform(
+                        post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
+                .andExpect(expectedStatus);
     }
 }
 

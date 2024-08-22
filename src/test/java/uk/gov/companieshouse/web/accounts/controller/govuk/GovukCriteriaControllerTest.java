@@ -38,11 +38,12 @@ class GovukCriteriaControllerTest {
     private static final String CRITERIA_VIEW = "smallfull/criteria";
     private static final String ALTERNATIVE_FILING_PATH = "redirect:/accounts/alternative-filing-options";
     private static final String OTHER_FILING_PATH = "redirect:/accounts/select-account-type";
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company-lookup/search";
     private static final String FORWARD_PATH = "/accounts/company/{companyNumber}/details";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -66,9 +67,9 @@ class GovukCriteriaControllerTest {
         String criteriaMet = "yes";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(MockMvcResultMatchers.model()
-                    .attribute("forward", FORWARD_PATH))
+                        .attribute("forward", FORWARD_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -81,7 +82,7 @@ class GovukCriteriaControllerTest {
         String criteriaMet = "noAlternativeFilingMethod";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(ALTERNATIVE_FILING_PATH));
     }
@@ -94,7 +95,7 @@ class GovukCriteriaControllerTest {
         String criteriaMet = "noOtherAccounts";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(OTHER_FILING_PATH));
     }
@@ -107,7 +108,7 @@ class GovukCriteriaControllerTest {
         String criteriaMet = null;
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CRITERIA_VIEW));
     }

@@ -1,15 +1,15 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -38,98 +37,71 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
-import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
+import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.companyaccounts.CompanyAccountsService;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.CurrentPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.PreviousPeriodService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
-import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StepsToCompleteControllerTests {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String STEPS_TO_COMPLETE_PATH = "/company/" + COMPANY_NUMBER +
+            "/small-full/steps-to-complete";
+    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String STEPS_TO_COMPLETE_VIEW = "smallfull/stepsToComplete";
+    private static final String ERROR_VIEW = "error";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String SMALL_FULL_LINK = "smallFullLink";
+    private static final String CURRENT_PERIOD_LINK = "currentPeriodLink";
     private MockMvc mockMvc;
-
     @Mock
     private TransactionService transactionService;
-
     @Mock
     private CompanyAccountsService companyAccountsService;
-
     @Mock
     private SmallFullService smallFullService;
-
     @Mock
     private CompanyAccountsApi companyAccountsApi;
-
     @Mock
     private CompanyAccountsLinks companyAccountsLinks;
-
     @Mock
     private SmallFullApi smallFull;
-
     @Mock
     private SmallFullLinks smallFullLinks;
-
     @Mock
     private StatementsService statementsService;
-
     @Mock
     private Statements statements;
-
     @Mock
     private ApiClientService apiClientService;
-
     @Mock
     private ApiClient apiClient;
-
     @Mock
     private NavigatorService navigatorService;
-
     @Mock
     private CompanyService companyService;
-
     @Mock
     private CompanyProfileApi companyProfile;
-
     @Mock
     private CurrentPeriodService currentPeriodService;
-
     @Mock
     private PreviousPeriodService previousPeriodService;
-
     @InjectMocks
     private StepsToCompleteController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String STEPS_TO_COMPLETE_PATH = "/company/" + COMPANY_NUMBER +
-            "/small-full/steps-to-complete";
-
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String STEPS_TO_COMPLETE_VIEW = "smallfull/stepsToComplete";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
-    private static final String SMALL_FULL_LINK = "smallFullLink";
-
-    private static final String CURRENT_PERIOD_LINK = "currentPeriodLink";
-
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -138,7 +110,10 @@ class StepsToCompleteControllerTests {
     @DisplayName("Get steps to complete view success path")
     void getRequestSuccess() throws Exception {
 
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(
+                any(Class.class),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
@@ -153,19 +128,27 @@ class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(
+                COMPANY_ACCOUNTS_ID);
 
-        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
+        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
 
         when(companyAccountsApi.getLinks()).thenReturn(companyAccountsLinks);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
-        doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        doNothing().when(statementsService)
+                .createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
@@ -181,13 +164,16 @@ class StepsToCompleteControllerTests {
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID);
 
-        verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
-        verify(currentPeriodService).submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                CurrentPeriodApi.class), anyList());
+        verify(currentPeriodService).submitCurrentPeriod(eq(apiClient), eq(smallFull),
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        CurrentPeriodApi.class), anyList());
 
-        verify(previousPeriodService, never()).submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                PreviousPeriodApi.class), anyList());
+        verify(previousPeriodService, never()).submitPreviousPeriod(eq(apiClient), eq(smallFull),
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        PreviousPeriodApi.class), anyList());
     }
 
     @Test
@@ -196,23 +182,32 @@ class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(
+                COMPANY_ACCOUNTS_ID);
 
-        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
+        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
 
         when(companyAccountsApi.getLinks()).thenReturn(companyAccountsLinks);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
-        doNothing().when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        doNothing().when(statementsService)
+                .createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
@@ -228,13 +223,16 @@ class StepsToCompleteControllerTests {
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID);
 
-        verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(statementsService, times(1)).createBalanceSheetStatementsResource(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
-        verify(currentPeriodService).submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                CurrentPeriodApi.class), anyList());
+        verify(currentPeriodService).submitCurrentPeriod(eq(apiClient), eq(smallFull),
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        CurrentPeriodApi.class), anyList());
 
-        verify(previousPeriodService).submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                PreviousPeriodApi.class), anyList());
+        verify(previousPeriodService).submitPreviousPeriod(eq(apiClient), eq(smallFull),
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        PreviousPeriodApi.class), anyList());
     }
 
     @Test
@@ -243,25 +241,33 @@ class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(
+                COMPANY_ACCOUNTS_ID);
 
-        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
+        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
 
         when(companyAccountsApi.getLinks()).thenReturn(companyAccountsLinks);
 
         when(companyAccountsLinks.getSmallFullAccounts()).thenReturn(SMALL_FULL_LINK);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
-        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(statements);
+        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(statements);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -271,12 +277,15 @@ class StepsToCompleteControllerTests {
 
         verify(companyAccountsService, times(1)).createCompanyAccounts(TRANSACTION_ID);
 
-        verify(smallFullService, never()).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(smallFullService, never()).createSmallFullAccounts(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
-        verify(statementsService, never()).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(statementsService, never()).createBalanceSheetStatementsResource(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
-        verify(currentPeriodService, never()).submitCurrentPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
-                CurrentPeriodApi.class), anyList());
+        verify(currentPeriodService, never()).submitCurrentPeriod(eq(apiClient), eq(smallFull),
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(
+                        CurrentPeriodApi.class), anyList());
     }
 
     @Test
@@ -311,16 +320,19 @@ class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(
+                COMPANY_ACCOUNTS_ID);
 
-        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
+        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
 
         when(companyAccountsApi.getLinks()).thenReturn(companyAccountsLinks);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         doThrow(ServiceException.class)
-                .when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                .when(smallFullService)
+                .createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())
@@ -333,20 +345,25 @@ class StepsToCompleteControllerTests {
 
         when(transactionService.createTransaction(COMPANY_NUMBER)).thenReturn(TRANSACTION_ID);
 
-        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(COMPANY_ACCOUNTS_ID);
+        when(companyAccountsService.createCompanyAccounts(TRANSACTION_ID)).thenReturn(
+                COMPANY_ACCOUNTS_ID);
 
-        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
+        when(companyAccountsService.getCompanyAccounts(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(companyAccountsApi);
 
         when(companyAccountsApi.getLinks()).thenReturn(companyAccountsLinks);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
-        doNothing().when(smallFullService).createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        doNothing().when(smallFullService)
+                .createSmallFullAccounts(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(null);
+        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(null);
 
         doThrow(ServiceException.class)
-                .when(statementsService).createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                .when(statementsService)
+                .createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(STEPS_TO_COMPLETE_PATH))
                 .andExpect(status().isOk())

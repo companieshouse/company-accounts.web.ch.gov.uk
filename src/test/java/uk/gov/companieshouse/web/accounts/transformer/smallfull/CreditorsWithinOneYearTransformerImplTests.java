@@ -1,8 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,14 +22,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithino
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.TradeCreditors;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CreditorsWithinOneYearTransformerImpl;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreditorsWithinOneYearTransformerImplTests {
-    
+
     private static final Long ACCRUALS_CURRENT = 1L;
     private static final Long BANK_LOANS_CURRENT = 2L;
     private static final Long FINANCE_LEASES_CURRENT = 3L;
@@ -34,7 +34,7 @@ class CreditorsWithinOneYearTransformerImplTests {
     private static final Long TAXATION_CURRENT = 5L;
     private static final Long TRADE_CREDITORS_CURRENT = 6L;
     private static final Long TOTAL_CURRENT = 21L;
-    
+
     private static final Long ACCRUALS_PREVIOUS = 10L;
     private static final Long BANK_LOANS_PREVIOUS = 20L;
     private static final Long FINANCE_LEASES_PREVIOUS = 30L;
@@ -44,7 +44,7 @@ class CreditorsWithinOneYearTransformerImplTests {
     private static final Long TOTAL_PREVIOUS = 210L;
 
     private static final String DETAILS = "DETAILS";
-    
+
     private final NoteTransformer<CreditorsWithinOneYear, CreditorsWithinOneYearApi> transformer = new CreditorsWithinOneYearTransformerImpl();
 
     @Test
@@ -66,14 +66,22 @@ class CreditorsWithinOneYearTransformerImplTests {
 
         creditorsWithinOneYearApi.setCreditorsWithinOneYearCurrentPeriod(currentPeriod);
 
-        CreditorsWithinOneYear creditorsWithinOneYear = transformer.toWeb(creditorsWithinOneYearApi);
+        CreditorsWithinOneYear creditorsWithinOneYear = transformer.toWeb(
+                creditorsWithinOneYearApi);
 
-        assertEquals(ACCRUALS_CURRENT, creditorsWithinOneYear.getAccrualsAndDeferredIncome().getCurrentAccrualsAndDeferredIncome());
-        assertEquals(BANK_LOANS_CURRENT, creditorsWithinOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
-        assertEquals(FINANCE_LEASES_CURRENT, creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts().getCurrentFinanceLeasesAndHirePurchaseContracts());
-        assertEquals(OTHER_CREDITORS_CURRENT, creditorsWithinOneYear.getOtherCreditors().getCurrentOtherCreditors());
-        assertEquals(TAXATION_CURRENT, creditorsWithinOneYear.getTaxationAndSocialSecurity().getCurrentTaxationAndSocialSecurity());
-        assertEquals(TRADE_CREDITORS_CURRENT, creditorsWithinOneYear.getTradeCreditors().getCurrentTradeCreditors());
+        assertEquals(ACCRUALS_CURRENT, creditorsWithinOneYear.getAccrualsAndDeferredIncome()
+                .getCurrentAccrualsAndDeferredIncome());
+        assertEquals(BANK_LOANS_CURRENT, creditorsWithinOneYear.getBankLoansAndOverdrafts()
+                .getCurrentBankLoansAndOverdrafts());
+        assertEquals(FINANCE_LEASES_CURRENT,
+                creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts()
+                        .getCurrentFinanceLeasesAndHirePurchaseContracts());
+        assertEquals(OTHER_CREDITORS_CURRENT,
+                creditorsWithinOneYear.getOtherCreditors().getCurrentOtherCreditors());
+        assertEquals(TAXATION_CURRENT, creditorsWithinOneYear.getTaxationAndSocialSecurity()
+                .getCurrentTaxationAndSocialSecurity());
+        assertEquals(TRADE_CREDITORS_CURRENT,
+                creditorsWithinOneYear.getTradeCreditors().getCurrentTradeCreditors());
         assertEquals(TOTAL_CURRENT, creditorsWithinOneYear.getTotal().getCurrentTotal());
         assertEquals(DETAILS, creditorsWithinOneYear.getDetails());
     }
@@ -92,9 +100,11 @@ class CreditorsWithinOneYearTransformerImplTests {
 
         creditorsWithinOneYearApi.setCreditorsWithinOneYearCurrentPeriod(currentPeriod);
 
-        CreditorsWithinOneYear creditorsWithinOneYear = transformer.toWeb(creditorsWithinOneYearApi);
+        CreditorsWithinOneYear creditorsWithinOneYear = transformer.toWeb(
+                creditorsWithinOneYearApi);
 
-        assertEquals(TRADE_CREDITORS_CURRENT, creditorsWithinOneYear.getTradeCreditors().getCurrentTradeCreditors());
+        assertEquals(TRADE_CREDITORS_CURRENT,
+                creditorsWithinOneYear.getTradeCreditors().getCurrentTradeCreditors());
         assertEquals(TOTAL_CURRENT, creditorsWithinOneYear.getTotal().getCurrentTotal());
         assertEquals(DETAILS, creditorsWithinOneYear.getDetails());
     }
@@ -117,14 +127,22 @@ class CreditorsWithinOneYearTransformerImplTests {
 
         creditorsWithinOneYearApi.setCreditorsWithinOneYearPreviousPeriod(previousPeriod);
 
-        CreditorsWithinOneYear creditorsWithinOneYear = transformer.toWeb(creditorsWithinOneYearApi);
+        CreditorsWithinOneYear creditorsWithinOneYear = transformer.toWeb(
+                creditorsWithinOneYearApi);
 
-        assertEquals(ACCRUALS_PREVIOUS, creditorsWithinOneYear.getAccrualsAndDeferredIncome().getPreviousAccrualsAndDeferredIncome());
-        assertEquals(BANK_LOANS_PREVIOUS, creditorsWithinOneYear.getBankLoansAndOverdrafts().getPreviousBankLoansAndOverdrafts());
-        assertEquals(FINANCE_LEASES_PREVIOUS, creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts().getPreviousFinanceLeasesAndHirePurchaseContracts());
-        assertEquals(OTHER_CREDITORS_PREVIOUS, creditorsWithinOneYear.getOtherCreditors().getPreviousOtherCreditors());
-        assertEquals(TAXATION_PREVIOUS, creditorsWithinOneYear.getTaxationAndSocialSecurity().getPreviousTaxationAndSocialSecurity());
-        assertEquals(TRADE_CREDITORS_PREVIOUS, creditorsWithinOneYear.getTradeCreditors().getPreviousTradeCreditors());
+        assertEquals(ACCRUALS_PREVIOUS, creditorsWithinOneYear.getAccrualsAndDeferredIncome()
+                .getPreviousAccrualsAndDeferredIncome());
+        assertEquals(BANK_LOANS_PREVIOUS, creditorsWithinOneYear.getBankLoansAndOverdrafts()
+                .getPreviousBankLoansAndOverdrafts());
+        assertEquals(FINANCE_LEASES_PREVIOUS,
+                creditorsWithinOneYear.getFinanceLeasesAndHirePurchaseContracts()
+                        .getPreviousFinanceLeasesAndHirePurchaseContracts());
+        assertEquals(OTHER_CREDITORS_PREVIOUS,
+                creditorsWithinOneYear.getOtherCreditors().getPreviousOtherCreditors());
+        assertEquals(TAXATION_PREVIOUS, creditorsWithinOneYear.getTaxationAndSocialSecurity()
+                .getPreviousTaxationAndSocialSecurity());
+        assertEquals(TRADE_CREDITORS_PREVIOUS,
+                creditorsWithinOneYear.getTradeCreditors().getPreviousTradeCreditors());
         assertEquals(TOTAL_PREVIOUS, creditorsWithinOneYear.getTotal().getPreviousTotal());
     }
 
@@ -141,19 +159,21 @@ class CreditorsWithinOneYearTransformerImplTests {
         BankLoansAndOverdrafts bankLoansAndOverdrafts = new BankLoansAndOverdrafts();
         bankLoansAndOverdrafts.setCurrentBankLoansAndOverdrafts(BANK_LOANS_CURRENT);
         creditorsWithinOneYear.setBankLoansAndOverdrafts(bankLoansAndOverdrafts);
-        
+
         FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts = new FinanceLeasesAndHirePurchaseContracts();
-        financeLeasesAndHirePurchaseContracts.setCurrentFinanceLeasesAndHirePurchaseContracts(FINANCE_LEASES_CURRENT);
-        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(financeLeasesAndHirePurchaseContracts);
-        
+        financeLeasesAndHirePurchaseContracts.setCurrentFinanceLeasesAndHirePurchaseContracts(
+                FINANCE_LEASES_CURRENT);
+        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(
+                financeLeasesAndHirePurchaseContracts);
+
         OtherCreditors otherCreditors = new OtherCreditors();
         otherCreditors.setCurrentOtherCreditors(OTHER_CREDITORS_CURRENT);
         creditorsWithinOneYear.setOtherCreditors(otherCreditors);
-        
+
         TaxationAndSocialSecurity taxationAndSocialSecurity = new TaxationAndSocialSecurity();
         taxationAndSocialSecurity.setCurrentTaxationAndSocialSecurity(TAXATION_CURRENT);
         creditorsWithinOneYear.setTaxationAndSocialSecurity(taxationAndSocialSecurity);
-        
+
         TradeCreditors tradeCreditors = new TradeCreditors();
         tradeCreditors.setCurrentTradeCreditors(TRADE_CREDITORS_CURRENT);
         creditorsWithinOneYear.setTradeCreditors(tradeCreditors);
@@ -162,14 +182,16 @@ class CreditorsWithinOneYearTransformerImplTests {
         total.setCurrentTotal(TOTAL_CURRENT);
         creditorsWithinOneYear.setTotal(total);
 
-        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(creditorsWithinOneYear);
+        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(
+                creditorsWithinOneYear);
 
         assertNull(creditorsWithinOneYearApi.getCreditorsWithinOneYearCurrentPeriod().getDetails());
         CurrentPeriod currentPeriod = creditorsWithinOneYearApi.getCreditorsWithinOneYearCurrentPeriod();
-        
+
         assertEquals(ACCRUALS_CURRENT, currentPeriod.getAccrualsAndDeferredIncome());
         assertEquals(BANK_LOANS_CURRENT, currentPeriod.getBankLoansAndOverdrafts());
-        assertEquals(FINANCE_LEASES_CURRENT, currentPeriod.getFinanceLeasesAndHirePurchaseContracts());
+        assertEquals(FINANCE_LEASES_CURRENT,
+                currentPeriod.getFinanceLeasesAndHirePurchaseContracts());
         assertEquals(OTHER_CREDITORS_CURRENT, currentPeriod.getOtherCreditors());
         assertEquals(TAXATION_CURRENT, currentPeriod.getTaxationAndSocialSecurity());
         assertEquals(TRADE_CREDITORS_CURRENT, currentPeriod.getTradeCreditors());
@@ -181,7 +203,7 @@ class CreditorsWithinOneYearTransformerImplTests {
     void previousPeriodValueAddedToCreditorsWithinOneYearApiModel() {
 
         CreditorsWithinOneYear creditorsWithinOneYear = new CreditorsWithinOneYear();
-        
+
         AccrualsAndDeferredIncome accrualsAndDeferredIncome = new AccrualsAndDeferredIncome();
         accrualsAndDeferredIncome.setPreviousAccrualsAndDeferredIncome(ACCRUALS_PREVIOUS);
         creditorsWithinOneYear.setAccrualsAndDeferredIncome(accrualsAndDeferredIncome);
@@ -189,19 +211,21 @@ class CreditorsWithinOneYearTransformerImplTests {
         BankLoansAndOverdrafts bankLoansAndOverdrafts = new BankLoansAndOverdrafts();
         bankLoansAndOverdrafts.setPreviousBankLoansAndOverdrafts(BANK_LOANS_PREVIOUS);
         creditorsWithinOneYear.setBankLoansAndOverdrafts(bankLoansAndOverdrafts);
-        
+
         FinanceLeasesAndHirePurchaseContracts financeLeasesAndHirePurchaseContracts = new FinanceLeasesAndHirePurchaseContracts();
-        financeLeasesAndHirePurchaseContracts.setPreviousFinanceLeasesAndHirePurchaseContracts(FINANCE_LEASES_PREVIOUS);
-        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(financeLeasesAndHirePurchaseContracts);
-        
+        financeLeasesAndHirePurchaseContracts.setPreviousFinanceLeasesAndHirePurchaseContracts(
+                FINANCE_LEASES_PREVIOUS);
+        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(
+                financeLeasesAndHirePurchaseContracts);
+
         OtherCreditors otherCreditors = new OtherCreditors();
         otherCreditors.setPreviousOtherCreditors(OTHER_CREDITORS_PREVIOUS);
         creditorsWithinOneYear.setOtherCreditors(otherCreditors);
-        
+
         TaxationAndSocialSecurity taxationAndSocialSecurity = new TaxationAndSocialSecurity();
         taxationAndSocialSecurity.setPreviousTaxationAndSocialSecurity(TAXATION_PREVIOUS);
         creditorsWithinOneYear.setTaxationAndSocialSecurity(taxationAndSocialSecurity);
-        
+
         TradeCreditors tradeCreditors = new TradeCreditors();
         tradeCreditors.setPreviousTradeCreditors(TRADE_CREDITORS_PREVIOUS);
         creditorsWithinOneYear.setTradeCreditors(tradeCreditors);
@@ -210,19 +234,21 @@ class CreditorsWithinOneYearTransformerImplTests {
         total.setPreviousTotal(TOTAL_PREVIOUS);
         creditorsWithinOneYear.setTotal(total);
 
-        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(creditorsWithinOneYear);
+        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(
+                creditorsWithinOneYear);
 
         PreviousPeriod previousPeriod = creditorsWithinOneYearApi.getCreditorsWithinOneYearPreviousPeriod();
-        
+
         assertEquals(ACCRUALS_PREVIOUS, previousPeriod.getAccrualsAndDeferredIncome());
         assertEquals(BANK_LOANS_PREVIOUS, previousPeriod.getBankLoansAndOverdrafts());
-        assertEquals(FINANCE_LEASES_PREVIOUS, previousPeriod.getFinanceLeasesAndHirePurchaseContracts());
+        assertEquals(FINANCE_LEASES_PREVIOUS,
+                previousPeriod.getFinanceLeasesAndHirePurchaseContracts());
         assertEquals(OTHER_CREDITORS_PREVIOUS, previousPeriod.getOtherCreditors());
         assertEquals(TAXATION_PREVIOUS, previousPeriod.getTaxationAndSocialSecurity());
         assertEquals(TRADE_CREDITORS_PREVIOUS, previousPeriod.getTradeCreditors());
         assertEquals(TOTAL_PREVIOUS, previousPeriod.getTotal());
     }
-    
+
     @Test
     @DisplayName("Current period details are null in creditors within one year API model if empty string passed in web model")
     void detailsNullWithCreditorsWithinOneYearApiModel() {
@@ -232,7 +258,8 @@ class CreditorsWithinOneYearTransformerImplTests {
 
         creditorsWithinOneYear.setAccrualsAndDeferredIncome(new AccrualsAndDeferredIncome());
         creditorsWithinOneYear.setBankLoansAndOverdrafts(new BankLoansAndOverdrafts());
-        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(new FinanceLeasesAndHirePurchaseContracts());
+        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(
+                new FinanceLeasesAndHirePurchaseContracts());
         creditorsWithinOneYear.setOtherCreditors(new OtherCreditors());
         creditorsWithinOneYear.setTaxationAndSocialSecurity(new TaxationAndSocialSecurity());
 
@@ -242,14 +269,15 @@ class CreditorsWithinOneYearTransformerImplTests {
 
         creditorsWithinOneYear.setTradeCreditors(new TradeCreditors());
 
-        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(creditorsWithinOneYear);
+        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(
+                creditorsWithinOneYear);
 
         assertNull(creditorsWithinOneYearApi.getCreditorsWithinOneYearCurrentPeriod().getDetails());
         CurrentPeriod currentPeriod = creditorsWithinOneYearApi.getCreditorsWithinOneYearCurrentPeriod();
 
         assertEquals(TOTAL_CURRENT, currentPeriod.getTotal());
     }
-    
+
     @Test
     @DisplayName("No previous period added to creditors within one year API model when total not present")
     void previousPeriodValueNotAddedToCreditorsWithinOneYearApiModel() {
@@ -259,17 +287,19 @@ class CreditorsWithinOneYearTransformerImplTests {
 
         creditorsWithinOneYear.setAccrualsAndDeferredIncome(new AccrualsAndDeferredIncome());
         creditorsWithinOneYear.setBankLoansAndOverdrafts(new BankLoansAndOverdrafts());
-        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(new FinanceLeasesAndHirePurchaseContracts());
+        creditorsWithinOneYear.setFinanceLeasesAndHirePurchaseContracts(
+                new FinanceLeasesAndHirePurchaseContracts());
         creditorsWithinOneYear.setOtherCreditors(new OtherCreditors());
         creditorsWithinOneYear.setTaxationAndSocialSecurity(new TaxationAndSocialSecurity());
         creditorsWithinOneYear.setTotal(new Total());
         creditorsWithinOneYear.setTradeCreditors(new TradeCreditors());
-        
-        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(creditorsWithinOneYear);
+
+        CreditorsWithinOneYearApi creditorsWithinOneYearApi = transformer.toApi(
+                creditorsWithinOneYear);
 
         assertNull(creditorsWithinOneYearApi.getCreditorsWithinOneYearPreviousPeriod());
     }
-    
+
     @Test
     @DisplayName("When creditors within one year API model is null the returned web model is non null")
     void NullCreditorsWithinOneYearWebModelWhenNullAPIModel() {

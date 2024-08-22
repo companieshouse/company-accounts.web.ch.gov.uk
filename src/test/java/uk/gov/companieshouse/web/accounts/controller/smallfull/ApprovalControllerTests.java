@@ -1,5 +1,19 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,21 +42,6 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ApprovalControllerTests {
@@ -56,9 +55,9 @@ class ApprovalControllerTests {
     private static final String APPROVAL_VIEW = "smallfull/approval";
 
     private static final String APPROVAL_PATH = "/company/" + COMPANY_NUMBER +
-                                                "/transaction/" + TRANSACTION_ID +
-                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                "/small-full/approval";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/approval";
 
     private static final String SUBMITTED_ACCOUNTS_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
@@ -66,7 +65,7 @@ class ApprovalControllerTests {
             "/small-full/approved-accounts";
 
     private static final String CONFIRMATION_VIEW = "/transaction/" + TRANSACTION_ID +
-                                                    "/confirmation";
+            "/confirmation";
 
     private static final String BACK_PAGE_MODEL_ATTR = "backButton";
 
@@ -82,7 +81,8 @@ class ApprovalControllerTests {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String SUMMARY_FALSE_PARAMETER = "?summary=false";
 
@@ -131,8 +131,13 @@ class ApprovalControllerTests {
     private ApprovalController approvalController;
 
     @BeforeEach
-    private void setup() {
-        when(navigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+    public void setup() {
+        when(navigatorService.getPreviousControllerPath(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
         this.mockMvc = MockMvcBuilders.standaloneSetup(approvalController).build();
     }
 
@@ -140,7 +145,8 @@ class ApprovalControllerTests {
     @DisplayName("Get approval view success path")
     void getRequestSuccess() throws Exception {
 
-        when (directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(new Director[]{});
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(
+                new Director[]{});
 
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
@@ -157,7 +163,8 @@ class ApprovalControllerTests {
     @DisplayName("Get approval - throws service exception")
     void getRequestServiceException() throws Exception {
 
-        when(transactionService.isPayableTransaction(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(transactionService.isPayableTransaction(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
@@ -170,11 +177,13 @@ class ApprovalControllerTests {
 
         Director director = new Director();
         director.setName(DIRECTOR_NAME);
-        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(new Director[]{director});
+        when(directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true)).thenReturn(
+                new Director[]{director});
 
         this.mockMvc.perform(get(APPROVAL_PATH))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute(APPROVAL_MODEL_ATTR, hasProperty(DIRECTOR_NAME, is(DIRECTOR_NAME))))
+                .andExpect(model().attribute(APPROVAL_MODEL_ATTR,
+                        hasProperty(DIRECTOR_NAME, is(DIRECTOR_NAME))))
                 .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
@@ -196,7 +205,7 @@ class ApprovalControllerTests {
                 .thenReturn(validationErrors);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param(DIRECTOR_NAME, NAME))
+                        .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(APPROVAL_VIEW))
                 .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
@@ -222,7 +231,7 @@ class ApprovalControllerTests {
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param(DIRECTOR_NAME, NAME))
+                        .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -239,7 +248,7 @@ class ApprovalControllerTests {
         doThrow(ServiceException.class).when(transactionService).closeTransaction(TRANSACTION_ID);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param(DIRECTOR_NAME, NAME))
+                        .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -256,9 +265,10 @@ class ApprovalControllerTests {
         when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(false);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param(DIRECTOR_NAME, NAME))
+                        .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + CONFIRMATION_VIEW));
+                .andExpect(
+                        view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + CONFIRMATION_VIEW));
     }
 
     @Test
@@ -272,12 +282,15 @@ class ApprovalControllerTests {
 
         when(transactionService.closeTransaction(TRANSACTION_ID)).thenReturn(true);
 
-        when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)).thenReturn(PAYMENT_WEB_ENDPOINT);
+        when(paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)).thenReturn(
+                PAYMENT_WEB_ENDPOINT);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param(DIRECTOR_NAME, NAME))
+                        .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT + SUMMARY_FALSE_PARAMETER));
+                .andExpect(view().name(
+                        UrlBasedViewResolver.REDIRECT_URL_PREFIX + PAYMENT_WEB_ENDPOINT
+                                + SUMMARY_FALSE_PARAMETER));
     }
 
     @Test
@@ -291,8 +304,9 @@ class ApprovalControllerTests {
         when(transactionService.getTransaction(TRANSACTION_ID)).thenReturn(createdTransaction);
 
         this.mockMvc.perform(post(APPROVAL_PATH)
-                .param(DIRECTOR_NAME, NAME))
+                        .param(DIRECTOR_NAME, NAME))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + SUBMITTED_ACCOUNTS_PATH));
+                .andExpect(view().name(
+                        UrlBasedViewResolver.REDIRECT_URL_PREFIX + SUBMITTED_ACCOUNTS_PATH));
     }
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,9 +58,11 @@ class CreditorsAfterOneYearDateHandlerTest {
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
-        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(
+                balanceSheetHeadings);
 
-        assertAll(() -> creditorsAfterOneYearDateHandler.addDates(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID, creditorsAfterOneYear));
+        assertAll(() -> creditorsAfterOneYearDateHandler.addDates(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, creditorsAfterOneYear));
 
         verify(creditorsAfterOneYear).setBalanceSheetHeadings(balanceSheetHeadings);
     }
@@ -68,6 +71,7 @@ class CreditorsAfterOneYearDateHandlerTest {
     @DisplayName("Get note type")
     void getNoteType() {
 
-        assertEquals(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR, creditorsAfterOneYearDateHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR,
+                creditorsAfterOneYearDateHandler.getNoteType());
     }
 }

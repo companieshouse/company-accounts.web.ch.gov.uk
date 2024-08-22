@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.profitandloss;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,10 +16,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbefore
 import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.items.InterestReceivableAndSimilarIncome;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.items.TotalProfitOrLossBeforeTax;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.ProfitOrLossBeforeTaxTransformer;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,10 +40,12 @@ class ProfitOrLossBeforeTaxTransformerTests {
 
         ProfitOrLossBeforeTax profitOrLossBeforeTax = new ProfitOrLossBeforeTax();
 
-        profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
-        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
-        profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
-
+        profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(
+                CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
+        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(
+                CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
+        profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(
+                CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
 
         currentPeriodProfitAndLossApi.setProfitOrLossBeforeTax(profitOrLossBeforeTax);
 
@@ -53,12 +55,15 @@ class ProfitOrLossBeforeTaxTransformerTests {
 
         assertNotNull(profitAndLoss.getProfitOrLossBeforeTax());
 
-        assertEquals(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES, profitAndLoss.getProfitOrLossBeforeTax().
-                getInterestPayableAndSimilarCharges().getCurrentAmount());
-        assertEquals(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME, profitAndLoss.getProfitOrLossBeforeTax().
-                getInterestReceivableAndSimilarIncome().getCurrentAmount());
-        assertEquals(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX, profitAndLoss.getProfitOrLossBeforeTax().
-                getTotalProfitOrLossBeforeTax().getCurrentAmount());
+        assertEquals(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestPayableAndSimilarCharges().getCurrentAmount());
+        assertEquals(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestReceivableAndSimilarIncome().getCurrentAmount());
+        assertEquals(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getTotalProfitOrLossBeforeTax().getCurrentAmount());
     }
 
     @Test
@@ -69,9 +74,12 @@ class ProfitOrLossBeforeTaxTransformerTests {
 
         ProfitOrLossBeforeTax profitOrLossBeforeTax = new ProfitOrLossBeforeTax();
 
-        profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
-        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
-        profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
+        profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(
+                PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
+        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(
+                PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
+        profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(
+                PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
 
         previousPeriodProfitAndLossApi.setProfitOrLossBeforeTax(profitOrLossBeforeTax);
 
@@ -82,35 +90,45 @@ class ProfitOrLossBeforeTaxTransformerTests {
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.ProfitOrLossBeforeTax();
 
         InterestPayableAndSimilarCharges interestPayableAndSimilarCharges = new InterestPayableAndSimilarCharges();
-        interestPayableAndSimilarCharges.setCurrentAmount(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
+        interestPayableAndSimilarCharges.setCurrentAmount(
+                CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
 
         InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome = new InterestReceivableAndSimilarIncome();
-        interestReceivableAndSimilarIncome.setCurrentAmount(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
+        interestReceivableAndSimilarIncome.setCurrentAmount(
+                CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
 
         TotalProfitOrLossBeforeTax totalProfitOrLossBeforeTax = new TotalProfitOrLossBeforeTax();
         totalProfitOrLossBeforeTax.setCurrentAmount(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
 
-        profitOrLossBeforeTaxWeb.setInterestReceivableAndSimilarIncome(interestReceivableAndSimilarIncome);
-        profitOrLossBeforeTaxWeb.setInterestPayableAndSimilarCharges(interestPayableAndSimilarCharges);
+        profitOrLossBeforeTaxWeb.setInterestReceivableAndSimilarIncome(
+                interestReceivableAndSimilarIncome);
+        profitOrLossBeforeTaxWeb.setInterestPayableAndSimilarCharges(
+                interestPayableAndSimilarCharges);
         profitOrLossBeforeTaxWeb.setTotalProfitOrLossBeforeTax(totalProfitOrLossBeforeTax);
 
         profitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTaxWeb);
 
         transformer.addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLossApi);
 
-        assertEquals(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES, profitAndLoss.getProfitOrLossBeforeTax().
-                getInterestPayableAndSimilarCharges().getCurrentAmount());
-        assertEquals(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME, profitAndLoss.getProfitOrLossBeforeTax().
-                getInterestReceivableAndSimilarIncome().getCurrentAmount());
-        assertEquals(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX, profitAndLoss.getProfitOrLossBeforeTax().
-                getTotalProfitOrLossBeforeTax().getCurrentAmount());
+        assertEquals(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestPayableAndSimilarCharges().getCurrentAmount());
+        assertEquals(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestReceivableAndSimilarIncome().getCurrentAmount());
+        assertEquals(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getTotalProfitOrLossBeforeTax().getCurrentAmount());
 
-        assertEquals(PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES, profitAndLoss.getProfitOrLossBeforeTax().
-                getInterestPayableAndSimilarCharges().getPreviousAmount());
-        assertEquals(PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME, profitAndLoss.getProfitOrLossBeforeTax().
-                getInterestReceivableAndSimilarIncome().getPreviousAmount());
-        assertEquals(PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX, profitAndLoss.getProfitOrLossBeforeTax().
-                getTotalProfitOrLossBeforeTax().getPreviousAmount());
+        assertEquals(PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestPayableAndSimilarCharges().getPreviousAmount());
+        assertEquals(PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestReceivableAndSimilarIncome().getPreviousAmount());
+        assertEquals(PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX,
+                profitAndLoss.getProfitOrLossBeforeTax().
+                        getTotalProfitOrLossBeforeTax().getPreviousAmount());
     }
 
 
@@ -148,28 +166,34 @@ class ProfitOrLossBeforeTaxTransformerTests {
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.ProfitOrLossBeforeTax();
 
         InterestPayableAndSimilarCharges interestPayableAndSimilarCharges = new InterestPayableAndSimilarCharges();
-        interestPayableAndSimilarCharges.setCurrentAmount(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
+        interestPayableAndSimilarCharges.setCurrentAmount(
+                CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
 
         InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome = new InterestReceivableAndSimilarIncome();
-        interestReceivableAndSimilarIncome.setCurrentAmount(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
+        interestReceivableAndSimilarIncome.setCurrentAmount(
+                CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
 
         TotalProfitOrLossBeforeTax totalProfitOrLossBeforeTax = new TotalProfitOrLossBeforeTax();
         totalProfitOrLossBeforeTax.setCurrentAmount(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
 
         profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(interestPayableAndSimilarCharges);
-        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(interestReceivableAndSimilarIncome);
+        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(
+                interestReceivableAndSimilarIncome);
         profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(totalProfitOrLossBeforeTax);
 
         profitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTax);
 
         transformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
 
-        assertEquals(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME, currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().
-                getInterestReceivableAndSimilarIncome());
-        assertEquals(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES, currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().
-                getInterestPayableAndSimilarCharges());
-        assertEquals(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX, currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().
-                getTotalProfitOrLossBeforeTax());
+        assertEquals(CURRENT_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME,
+                currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestReceivableAndSimilarIncome());
+        assertEquals(CURRENT_INTEREST_PAYABLE_AND_SIMILAR_CHARGES,
+                currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestPayableAndSimilarCharges());
+        assertEquals(CURRENT_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX,
+                currentPeriodProfitAndLoss.getProfitOrLossBeforeTax().
+                        getTotalProfitOrLossBeforeTax());
 
     }
 
@@ -186,28 +210,34 @@ class ProfitOrLossBeforeTaxTransformerTests {
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.ProfitOrLossBeforeTax();
 
         InterestPayableAndSimilarCharges interestPayableAndSimilarCharges = new InterestPayableAndSimilarCharges();
-        interestPayableAndSimilarCharges.setPreviousAmount(PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
+        interestPayableAndSimilarCharges.setPreviousAmount(
+                PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES);
 
         InterestReceivableAndSimilarIncome interestReceivableAndSimilarIncome = new InterestReceivableAndSimilarIncome();
-        interestReceivableAndSimilarIncome.setPreviousAmount(PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
+        interestReceivableAndSimilarIncome.setPreviousAmount(
+                PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME);
 
         TotalProfitOrLossBeforeTax totalProfitOrLossBeforeTax = new TotalProfitOrLossBeforeTax();
         totalProfitOrLossBeforeTax.setPreviousAmount(PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX);
 
         profitOrLossBeforeTax.setInterestPayableAndSimilarCharges(interestPayableAndSimilarCharges);
-        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(interestReceivableAndSimilarIncome);
+        profitOrLossBeforeTax.setInterestReceivableAndSimilarIncome(
+                interestReceivableAndSimilarIncome);
         profitOrLossBeforeTax.setTotalProfitOrLossBeforeTax(totalProfitOrLossBeforeTax);
 
         profitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTax);
 
         transformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
 
-        assertEquals(PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME, previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().
-                getInterestReceivableAndSimilarIncome());
-        assertEquals(PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES, previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().
-                getInterestPayableAndSimilarCharges());
-        assertEquals(PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX, previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().
-                getTotalProfitOrLossBeforeTax());
+        assertEquals(PREVIOUS_INTEREST_RECEIVABLE_AND_SIMILAR_INCOME,
+                previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestReceivableAndSimilarIncome());
+        assertEquals(PREVIOUS_INTEREST_PAYABLE_AND_SIMILAR_CHARGES,
+                previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().
+                        getInterestPayableAndSimilarCharges());
+        assertEquals(PREVIOUS_TOTAL_PROFIT_OR_LOSS_BEFORE_TAX,
+                previousPeriodProfitAndLoss.getProfitOrLossBeforeTax().
+                        getTotalProfitOrLossBeforeTax());
 
     }
 
@@ -223,10 +253,11 @@ class ProfitOrLossBeforeTaxTransformerTests {
                 profitOrLossBeforeTaxWeb =
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.ProfitOrLossBeforeTax();
 
-        profitOrLossBeforeTaxWeb.setInterestReceivableAndSimilarIncome(new InterestReceivableAndSimilarIncome());
-        profitOrLossBeforeTaxWeb.setInterestPayableAndSimilarCharges(new InterestPayableAndSimilarCharges());
+        profitOrLossBeforeTaxWeb.setInterestReceivableAndSimilarIncome(
+                new InterestReceivableAndSimilarIncome());
+        profitOrLossBeforeTaxWeb.setInterestPayableAndSimilarCharges(
+                new InterestPayableAndSimilarCharges());
         profitOrLossBeforeTaxWeb.setTotalProfitOrLossBeforeTax(new TotalProfitOrLossBeforeTax());
-
 
         profitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTaxWeb);
 
@@ -247,8 +278,10 @@ class ProfitOrLossBeforeTaxTransformerTests {
                 profitOrLossBeforeTaxWeb =
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossbeforetax.ProfitOrLossBeforeTax();
 
-        profitOrLossBeforeTaxWeb.setInterestReceivableAndSimilarIncome(new InterestReceivableAndSimilarIncome());
-        profitOrLossBeforeTaxWeb.setInterestPayableAndSimilarCharges(new InterestPayableAndSimilarCharges());
+        profitOrLossBeforeTaxWeb.setInterestReceivableAndSimilarIncome(
+                new InterestReceivableAndSimilarIncome());
+        profitOrLossBeforeTaxWeb.setInterestPayableAndSimilarCharges(
+                new InterestPayableAndSimilarCharges());
         profitOrLossBeforeTaxWeb.setTotalProfitOrLossBeforeTax(new TotalProfitOrLossBeforeTax());
 
         profitAndLoss.setProfitOrLossBeforeTax(profitOrLossBeforeTaxWeb);

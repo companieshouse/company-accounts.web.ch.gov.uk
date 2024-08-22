@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossForFinancialYear;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
+import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitOrLossForFinancialYear;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
-import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.TotalProfitOrLossForFinancialYear;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.Tax;
+import uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.items.TotalProfitOrLossForFinancialYear;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.ProfitOrLossForFinancialYearTransformer;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,8 +46,10 @@ class ProfitOrLossForFinancialYearTransformerTests {
 
         assertNotNull(profitAndLoss.getProfitOrLossForFinancialYear());
 
-        assertEquals(CURRENT_TAX, profitAndLoss.getProfitOrLossForFinancialYear().getTax().getCurrentAmount());
-        assertEquals(CURRENT_TOTAL, profitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear().getCurrentAmount());
+        assertEquals(CURRENT_TAX,
+                profitAndLoss.getProfitOrLossForFinancialYear().getTax().getCurrentAmount());
+        assertEquals(CURRENT_TOTAL, profitAndLoss.getProfitOrLossForFinancialYear()
+                .getTotalProfitOrLossForFinancialYear().getCurrentAmount());
     }
 
     @Test
@@ -60,7 +62,8 @@ class ProfitOrLossForFinancialYearTransformerTests {
         profitOrLossForFinancialYear.setTax(PREVIOUS_TAX);
         profitOrLossForFinancialYear.setTotalProfitOrLossForFinancialYear(PREVIOUS_TOTAL);
 
-        previousPeriodProfitAndLossApi.setProfitOrLossForFinancialYear(profitOrLossForFinancialYear);
+        previousPeriodProfitAndLossApi.setProfitOrLossForFinancialYear(
+                profitOrLossForFinancialYear);
 
         ProfitAndLoss profitAndLoss = new ProfitAndLoss();
 
@@ -80,10 +83,14 @@ class ProfitOrLossForFinancialYearTransformerTests {
 
         transformer.addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLossApi);
 
-        assertEquals(CURRENT_TAX, profitAndLoss.getProfitOrLossForFinancialYear().getTax().getCurrentAmount());
-        assertEquals(CURRENT_TOTAL, profitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear().getCurrentAmount());
-        assertEquals(PREVIOUS_TAX, profitAndLoss.getProfitOrLossForFinancialYear().getTax().getPreviousAmount());
-        assertEquals(PREVIOUS_TOTAL, profitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear().getPreviousAmount());
+        assertEquals(CURRENT_TAX,
+                profitAndLoss.getProfitOrLossForFinancialYear().getTax().getCurrentAmount());
+        assertEquals(CURRENT_TOTAL, profitAndLoss.getProfitOrLossForFinancialYear()
+                .getTotalProfitOrLossForFinancialYear().getCurrentAmount());
+        assertEquals(PREVIOUS_TAX,
+                profitAndLoss.getProfitOrLossForFinancialYear().getTax().getPreviousAmount());
+        assertEquals(PREVIOUS_TOTAL, profitAndLoss.getProfitOrLossForFinancialYear()
+                .getTotalProfitOrLossForFinancialYear().getPreviousAmount());
     }
 
     @Test
@@ -132,8 +139,10 @@ class ProfitOrLossForFinancialYearTransformerTests {
 
         transformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
 
-        assertEquals(CURRENT_TAX, currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax());
-        assertEquals(CURRENT_TOTAL, currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear());
+        assertEquals(CURRENT_TAX,
+                currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax());
+        assertEquals(CURRENT_TOTAL, currentPeriodProfitAndLoss.getProfitOrLossForFinancialYear()
+                .getTotalProfitOrLossForFinancialYear());
     }
 
     @Test
@@ -160,8 +169,10 @@ class ProfitOrLossForFinancialYearTransformerTests {
 
         transformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
 
-        assertEquals(PREVIOUS_TAX, previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax());
-        assertEquals(PREVIOUS_TOTAL, previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTotalProfitOrLossForFinancialYear());
+        assertEquals(PREVIOUS_TAX,
+                previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear().getTax());
+        assertEquals(PREVIOUS_TOTAL, previousPeriodProfitAndLoss.getProfitOrLossForFinancialYear()
+                .getTotalProfitOrLossForFinancialYear());
     }
 
     @Test
@@ -176,7 +187,8 @@ class ProfitOrLossForFinancialYearTransformerTests {
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.ProfitOrLossForFinancialYear();
 
         profitOrLossForFinancialYearWeb.setTax(new Tax());
-        profitOrLossForFinancialYearWeb.setTotalProfitOrLossForFinancialYear(new TotalProfitOrLossForFinancialYear());
+        profitOrLossForFinancialYearWeb.setTotalProfitOrLossForFinancialYear(
+                new TotalProfitOrLossForFinancialYear());
 
         profitAndLoss.setProfitOrLossForFinancialYear(profitOrLossForFinancialYearWeb);
 
@@ -197,7 +209,8 @@ class ProfitOrLossForFinancialYearTransformerTests {
                 new uk.gov.companieshouse.web.accounts.model.profitandloss.profitorlossforfinancialyear.ProfitOrLossForFinancialYear();
 
         profitOrLossForFinancialYearWeb.setTax(new Tax());
-        profitOrLossForFinancialYearWeb.setTotalProfitOrLossForFinancialYear(new TotalProfitOrLossForFinancialYear());
+        profitOrLossForFinancialYearWeb.setTotalProfitOrLossForFinancialYear(
+                new TotalProfitOrLossForFinancialYear());
 
         profitAndLoss.setProfitOrLossForFinancialYear(profitOrLossForFinancialYearWeb);
 

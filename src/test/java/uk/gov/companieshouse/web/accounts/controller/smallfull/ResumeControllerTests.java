@@ -1,5 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,16 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import uk.gov.companieshouse.web.accounts.service.smallfull.ResumeService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -51,7 +50,7 @@ class ResumeControllerTests {
     private MockMvc mockMvc;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -60,12 +59,15 @@ class ResumeControllerTests {
     @DisplayName("Get resume redirect success path")
     void getRequestSuccess() throws Exception {
 
-        when(resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT);
+        when(resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(
+                UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT);
 
         this.mockMvc.perform(get(RESUME_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + MOCK_REDIRECT));
 
-        verify(resumeService, times(1)).getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(resumeService, times(1)).getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
     }
 }

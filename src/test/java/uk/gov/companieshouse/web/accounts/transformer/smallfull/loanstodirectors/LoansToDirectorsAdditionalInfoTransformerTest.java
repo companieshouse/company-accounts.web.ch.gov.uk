@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirector
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,13 +18,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoansToDirectorsAdditionalInfoTransformerTest {
 
+    private static final String ADDITIONAL_INFORMATION_DETAILS = "additionl information details";
     @Mock
     private LoanToAdd loanToAdd;
-
     @InjectMocks
     private LoansToDirectorsAdditionalInfoTransformer loansToDirectorsAdditionalInfoTransformer = new LoansToDirectorsAdditionalInfoTransformer();
-
-    private static final String ADDITIONAL_INFORMATION_DETAILS = "additionl information details";
 
     @Test
     @DisplayName("Get loans to directors additioal information API")
@@ -32,7 +31,8 @@ class LoansToDirectorsAdditionalInfoTransformerTest {
         LoansToDirectorsAdditionalInfo loansToDirectorsAdditionalInfo = new LoansToDirectorsAdditionalInfo();
         loansToDirectorsAdditionalInfo.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
 
-        AdditionalInformationApi additionalInforApi = loansToDirectorsAdditionalInfoTransformer.mapLoansToDirectorsAdditonalInfoToApi(loansToDirectorsAdditionalInfo);
+        AdditionalInformationApi additionalInforApi = loansToDirectorsAdditionalInfoTransformer.mapLoansToDirectorsAdditonalInfoToApi(
+                loansToDirectorsAdditionalInfo);
 
         assertNotNull(additionalInforApi);
         assertEquals(ADDITIONAL_INFORMATION_DETAILS, additionalInforApi.getDetails());
@@ -45,9 +45,11 @@ class LoansToDirectorsAdditionalInfoTransformerTest {
         AdditionalInformationApi additionalInformationApi = new AdditionalInformationApi();
         additionalInformationApi.setDetails(ADDITIONAL_INFORMATION_DETAILS);
 
-        LoansToDirectorsAdditionalInfo loansToDirectorsAdditionalInfo = loansToDirectorsAdditionalInfoTransformer.mapLoansToDirectorsAdditionalInfoToWeb(additionalInformationApi);
+        LoansToDirectorsAdditionalInfo loansToDirectorsAdditionalInfo = loansToDirectorsAdditionalInfoTransformer.mapLoansToDirectorsAdditionalInfoToWeb(
+                additionalInformationApi);
 
         assertNotNull(loansToDirectorsAdditionalInfo);
-        assertEquals(ADDITIONAL_INFORMATION_DETAILS, loansToDirectorsAdditionalInfo.getAdditionalInfoDetails());
+        assertEquals(ADDITIONAL_INFORMATION_DETAILS,
+                loansToDirectorsAdditionalInfo.getAdditionalInfoDetails());
     }
 }

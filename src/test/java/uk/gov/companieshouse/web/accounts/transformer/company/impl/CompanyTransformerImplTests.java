@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.company.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,40 +19,31 @@ import uk.gov.companieshouse.api.model.company.account.LastAccountsApi;
 import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.transformer.company.CompanyDetailTransformer;
 
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyTransformerImplTests {
 
 
-    @Mock
-    private CompanyGet companyGet;
-
-    @Mock
-    private ApiResponse<CompanyProfileApi> responseWithData;
-
-    @Mock
-    private CompanyDetail companyDetail;
-
-    private CompanyDetailTransformer companyDetailTransformer = new CompanyDetailTransformerImpl();
-
     private static final String COMPANY_NAME = "company";
     private static final String COMPANY_NUMBER = "number";
-
     private static final String ADDRESS_LINE_1 = "address line 1";
     private static final String ADDRESS_LINE_2 = "address line 2";
     private static final String POSTAL_CODE = "postal code";
-    private static final String ADDRESS_FORMATTED = ADDRESS_LINE_1 + ", " + ADDRESS_LINE_2 + ", " + POSTAL_CODE;
-
+    private static final String ADDRESS_FORMATTED =
+            ADDRESS_LINE_1 + ", " + ADDRESS_LINE_2 + ", " + POSTAL_CODE;
     private static final LocalDate NEXT_ACCOUNT_DATE = LocalDate.of(2016, 5, 3);
     private static final LocalDate LAST_ACCOUNT_DATE = LocalDate.of(2015, 5, 3);
     private static final LocalDate DUE_BY_DATE = LocalDate.of(2017, 1, 1);
+    @Mock
+    private CompanyGet companyGet;
+    @Mock
+    private ApiResponse<CompanyProfileApi> responseWithData;
+    @Mock
+    private CompanyDetail companyDetail;
+    private CompanyDetailTransformer companyDetailTransformer = new CompanyDetailTransformerImpl();
 
-    private CompanyProfileApi createMockCompanyProfileApi(boolean hasRegisteredOfficeAddress, boolean hasAccounts) {
+    private CompanyProfileApi createMockCompanyProfileApi(boolean hasRegisteredOfficeAddress,
+            boolean hasAccounts) {
 
         CompanyProfileApi companyProfile = new CompanyProfileApi();
 
@@ -83,7 +78,8 @@ class CompanyTransformerImplTests {
     @DisplayName("Get Company Detail - All fields Populated Path")
     void getCompanyDetailAllPopulated() {
 
-        CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(createMockCompanyProfileApi(true, true));
+        CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(
+                createMockCompanyProfileApi(true, true));
 
         assertEquals(COMPANY_NAME, companyDetailReturned.getCompanyName());
         assertEquals(COMPANY_NUMBER, companyDetailReturned.getCompanyNumber());
@@ -97,7 +93,8 @@ class CompanyTransformerImplTests {
     @DisplayName("Get Company Detail - No Accounts Path")
     void getCompanyDetailNoAccounts() {
 
-        CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(createMockCompanyProfileApi(true, false));
+        CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(
+                createMockCompanyProfileApi(true, false));
 
         assertEquals(COMPANY_NAME, companyDetailReturned.getCompanyName());
         assertEquals(COMPANY_NUMBER, companyDetailReturned.getCompanyNumber());
@@ -111,7 +108,8 @@ class CompanyTransformerImplTests {
     @DisplayName("Get Company Detail - No Address Path")
     void getCompanyDetailNoAddress() {
 
-        CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(createMockCompanyProfileApi(false, true));
+        CompanyDetail companyDetailReturned = companyDetailTransformer.getCompanyDetail(
+                createMockCompanyProfileApi(false, true));
 
         assertEquals(COMPANY_NAME, companyDetailReturned.getCompanyName());
         assertEquals(COMPANY_NUMBER, companyDetailReturned.getCompanyNumber());

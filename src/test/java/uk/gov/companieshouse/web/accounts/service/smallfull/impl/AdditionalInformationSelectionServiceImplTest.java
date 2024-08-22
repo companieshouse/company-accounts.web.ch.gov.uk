@@ -49,11 +49,13 @@ class AdditionalInformationSelectionServiceImplTest {
     @DisplayName("Get additional information selection - no existing statements")
     void getAdditionalInformationSelectionNoExistingStatements() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
         AdditionalInformationSelection returned =
-                additionalInformationSelectionService.getAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                additionalInformationSelectionService.getAdditionalInformationSelection(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertNull(returned.getHasAdditionalInformation());
@@ -61,15 +63,18 @@ class AdditionalInformationSelectionServiceImplTest {
 
     @Test
     @DisplayName("Get additional information selection - statements do not include additional information")
-    void getAdditionalInformationSelectionStatementsDoNotIncludeAdditionalInformation() throws ServiceException {
+    void getAdditionalInformationSelectionStatementsDoNotIncludeAdditionalInformation()
+            throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getAdditionalInformation()).thenReturn(null);
 
         AdditionalInformationSelection returned =
-                additionalInformationSelectionService.getAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                additionalInformationSelectionService.getAdditionalInformationSelection(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertNull(returned.getHasAdditionalInformation());
@@ -77,15 +82,18 @@ class AdditionalInformationSelectionServiceImplTest {
 
     @Test
     @DisplayName("Get additional information selection - statements include additional information")
-    void getAdditionalInformationSelectionStatementsIncludeAdditionalInformation() throws ServiceException {
+    void getAdditionalInformationSelectionStatementsIncludeAdditionalInformation()
+            throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getAdditionalInformation()).thenReturn(ADDITIONAL_INFORMATION);
 
         AdditionalInformationSelection returned =
-                additionalInformationSelectionService.getAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                additionalInformationSelectionService.getAdditionalInformationSelection(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertTrue(returned.getHasAdditionalInformation());
@@ -99,9 +107,11 @@ class AdditionalInformationSelectionServiceImplTest {
 
         assertAll(() ->
                 additionalInformationSelectionService
-                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformationSelection));
+                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                additionalInformationSelection));
 
-        verify(directorsReportStatementsService, never()).getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(directorsReportStatementsService, never()).getDirectorsReportStatements(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -110,12 +120,14 @@ class AdditionalInformationSelectionServiceImplTest {
 
         when(additionalInformationSelection.getHasAdditionalInformation()).thenReturn(false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
         assertAll(() ->
                 additionalInformationSelectionService
-                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformationSelection));
+                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                additionalInformationSelection));
     }
 
     @Test
@@ -124,18 +136,21 @@ class AdditionalInformationSelectionServiceImplTest {
 
         when(additionalInformationSelection.getHasAdditionalInformation()).thenReturn(false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getPrincipalActivities()).thenReturn(PRINCIPAL_ACTIVITIES);
 
         assertAll(() ->
                 additionalInformationSelectionService
-                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformationSelection));
+                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                additionalInformationSelection));
 
         verify(statementsApi).setAdditionalInformation(null);
 
-        verify(directorsReportStatementsService).updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi);
+        verify(directorsReportStatementsService).updateDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, statementsApi);
     }
 
     @Test
@@ -144,13 +159,16 @@ class AdditionalInformationSelectionServiceImplTest {
 
         when(additionalInformationSelection.getHasAdditionalInformation()).thenReturn(false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         assertAll(() ->
                 additionalInformationSelectionService
-                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformationSelection));
+                        .submitAdditionalInformationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                additionalInformationSelection));
 
-        verify(directorsReportStatementsService).deleteDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(directorsReportStatementsService).deleteDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
     }
 }

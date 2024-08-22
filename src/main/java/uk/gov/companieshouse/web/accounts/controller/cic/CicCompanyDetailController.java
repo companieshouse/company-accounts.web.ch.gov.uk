@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +14,6 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 
 @Controller
 @NextController(CICStepsToCompleteController.class)

@@ -107,8 +107,8 @@ class CurrentPeriodServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String CURRENT_PERIOD_URI = "/transactions/" + TRANSACTION_ID +
-                                                        "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                        "/small-full/current-period";
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/current-period";
 
     private static final String CURRENT_PERIOD_LINK = "currentPeriodLink";
 
@@ -123,14 +123,16 @@ class CurrentPeriodServiceImplTests {
 
     @Test
     @DisplayName("Get current period - success")
-    void getCurrentPeriodSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void getCurrentPeriodSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
         when(currentPeriodGet.execute()).thenReturn(responseWithData);
         when(responseWithData.getData()).thenReturn(currentPeriod);
 
         CurrentPeriodApi returnedCurrentPeriod =
-                currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returnedCurrentPeriod);
         assertEquals(currentPeriod, returnedCurrentPeriod);
@@ -138,24 +140,28 @@ class CurrentPeriodServiceImplTests {
 
     @Test
     @DisplayName("Get current period - api error response exception")
-    void getCurrentPeriodApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+    void getCurrentPeriodApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
         when(currentPeriodGet.execute()).thenThrow(apiErrorResponseException);
 
         assertThrows(ServiceException.class,
-                () -> currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get current period - uri validation exception")
-    void getCurrentPeriodURIValidationException() throws ApiErrorResponseException, URIValidationException {
+    void getCurrentPeriodURIValidationException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(currentPeriodResourceHandler.get(CURRENT_PERIOD_URI)).thenReturn(currentPeriodGet);
         when(currentPeriodGet.execute()).thenThrow(uriValidationException);
 
         assertThrows(ServiceException.class,
-                () -> currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -165,13 +171,15 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodCreate);
+        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodCreate);
         when(currentPeriodCreate.execute()).thenReturn(responseWithData);
         when(responseWithData.hasErrors()).thenReturn(false);
 
         assertAll(() ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
 
         verify(existingValidationErrors, never()).addAll(anyList());
@@ -184,7 +192,8 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodCreate);
+        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodCreate);
         when(currentPeriodCreate.execute()).thenReturn(responseWithData);
         when(responseWithData.hasErrors()).thenReturn(true);
 
@@ -194,7 +203,8 @@ class CurrentPeriodServiceImplTests {
 
         assertAll(() ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
 
         verify(existingValidationErrors).addAll(submissionValidationErrors);
@@ -208,16 +218,18 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodCreate);
+        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodCreate);
         when(currentPeriodCreate.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, CURRENT_PERIOD_RESOURCE);
+                .handleSubmissionException(apiErrorResponseException, CURRENT_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
     }
 
@@ -229,16 +241,18 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(null);
 
-        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodCreate);
+        when(currentPeriodResourceHandler.create(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodCreate);
         when(currentPeriodCreate.execute()).thenThrow(uriValidationException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, CURRENT_PERIOD_RESOURCE);
+                .handleURIValidationException(uriValidationException, CURRENT_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
     }
 
@@ -249,13 +263,15 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
-        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodUpdate);
+        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodUpdate);
         when(currentPeriodUpdate.execute()).thenReturn(responseNoData);
         when(responseNoData.hasErrors()).thenReturn(false);
 
         assertAll(() ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
 
         verify(existingValidationErrors, never()).addAll(anyList());
@@ -268,7 +284,8 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
-        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodUpdate);
+        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodUpdate);
         when(currentPeriodUpdate.execute()).thenReturn(responseNoData);
         when(responseNoData.hasErrors()).thenReturn(true);
 
@@ -278,7 +295,8 @@ class CurrentPeriodServiceImplTests {
 
         assertAll(() ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
 
         verify(existingValidationErrors).addAll(submissionValidationErrors);
@@ -292,16 +310,18 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
-        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodUpdate);
+        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodUpdate);
         when(currentPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, CURRENT_PERIOD_RESOURCE);
+                .handleSubmissionException(apiErrorResponseException, CURRENT_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
     }
 
@@ -313,16 +333,18 @@ class CurrentPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentPeriod()).thenReturn(CURRENT_PERIOD_LINK);
 
-        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(currentPeriodUpdate);
+        when(currentPeriodResourceHandler.update(CURRENT_PERIOD_URI, currentPeriod)).thenReturn(
+                currentPeriodUpdate);
         when(currentPeriodUpdate.execute()).thenThrow(uriValidationException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, CURRENT_PERIOD_RESOURCE);
+                .handleURIValidationException(uriValidationException, CURRENT_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 currentPeriodService
-                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitCurrentPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 currentPeriod, existingValidationErrors));
     }
 }

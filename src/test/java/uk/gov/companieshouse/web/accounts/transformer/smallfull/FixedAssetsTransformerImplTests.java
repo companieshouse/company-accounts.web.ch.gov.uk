@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,13 +14,9 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.FixedAssetsApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.FixedInvestments;
-import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.model.smallfull.IntangibleAssets;
+import uk.gov.companieshouse.web.accounts.model.smallfull.TangibleAssets;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.FixedAssetsTransformerImpl;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -196,7 +196,8 @@ class FixedAssetsTransformerImplTests {
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
-    private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
+    private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod,
+            Boolean previousPeriod) {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
         TangibleAssets tangibleAssets = new TangibleAssets();
@@ -304,14 +305,18 @@ class FixedAssetsTransformerImplTests {
     }
 
     private void assertCurrentPeriodValuesCorrect(BalanceSheet balanceSheet) {
-        assertEquals(CURRENT_INTANGIBLE_ASSETS, balanceSheet.getFixedAssets().getIntangibleAssets().getCurrentAmount());
-        assertEquals(CURRENT_TANGIBLE_ASSETS, balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
+        assertEquals(CURRENT_INTANGIBLE_ASSETS,
+                balanceSheet.getFixedAssets().getIntangibleAssets().getCurrentAmount());
+        assertEquals(CURRENT_TANGIBLE_ASSETS,
+                balanceSheet.getFixedAssets().getTangibleAssets().getCurrentAmount());
         assertEquals(CURRENT_TOTAL_FIXED_ASSETS, balanceSheet.getFixedAssets().getCurrentTotal());
     }
 
     private void assertPreviousPeriodValuesCorrect(BalanceSheet balanceSheet) {
-        assertEquals(PREVIOUS_INTANGIBLE_ASSETS, balanceSheet.getFixedAssets().getIntangibleAssets().getPreviousAmount());
-        assertEquals(PREVIOUS_TANGIBLE_ASSETS, balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
+        assertEquals(PREVIOUS_INTANGIBLE_ASSETS,
+                balanceSheet.getFixedAssets().getIntangibleAssets().getPreviousAmount());
+        assertEquals(PREVIOUS_TANGIBLE_ASSETS,
+                balanceSheet.getFixedAssets().getTangibleAssets().getPreviousAmount());
         assertEquals(PREVIOUS_TOTAL_FIXED_ASSETS, balanceSheet.getFixedAssets().getPreviousTotal());
     }
 

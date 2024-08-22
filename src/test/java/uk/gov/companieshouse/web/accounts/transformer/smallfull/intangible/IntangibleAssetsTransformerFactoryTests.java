@@ -30,8 +30,9 @@ class IntangibleAssetsTransformerFactoryTests {
     }
 
     @Test
-    @DisplayName("Asserts the factory returns an other intangible assets transformer when requesting "
-            + "with the appropriate resource type")
+    @DisplayName(
+            "Asserts the factory returns an other intangible assets transformer when requesting "
+                    + "with the appropriate resource type")
     void getOtherIntangibleAssetsTransformer() {
 
         IntangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(

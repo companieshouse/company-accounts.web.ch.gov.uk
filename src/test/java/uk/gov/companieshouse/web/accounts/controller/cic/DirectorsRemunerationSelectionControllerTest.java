@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -62,10 +62,11 @@ class DirectorsRemunerationSelectionControllerTest {
     private static final String TRANSACTION_ID = "transactionId";
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String DIRECTORS_REMUNERATION_SELECTION_PATH = "/company/" + COMPANY_NUMBER +
-                                                                                "/transaction/" + TRANSACTION_ID +
-                                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                                "/cic/directors-remuneration-selection";
+    private static final String DIRECTORS_REMUNERATION_SELECTION_PATH =
+            "/company/" + COMPANY_NUMBER +
+                    "/transaction/" + TRANSACTION_ID +
+                    "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                    "/cic/directors-remuneration-selection";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
@@ -79,10 +80,11 @@ class DirectorsRemunerationSelectionControllerTest {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(selectionController).build();
     }
@@ -91,17 +93,18 @@ class DirectorsRemunerationSelectionControllerTest {
     @DisplayName("Get directors remuneration selection - success path")
     void getDirectorsRemunerationSelectionSuccess() throws Exception {
 
-        when(selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(selection);
 
         when(selection.getHasProvidedDirectorsRemuneration())
                 .thenReturn(true);
 
         this.mockMvc.perform(get(DIRECTORS_REMUNERATION_SELECTION_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(DIRECTORS_REMUNERATION_SELECTION_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(DIRECTORS_REMUNERATION_SELECTION_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(DIRECTORS_REMUNERATION_SELECTION_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(DIRECTORS_REMUNERATION_SELECTION_MODEL_ATTR));
 
         verify(selection, never()).setHasProvidedDirectorsRemuneration(anyBoolean());
     }
@@ -110,7 +113,8 @@ class DirectorsRemunerationSelectionControllerTest {
     @DisplayName("Get directors remuneration selection - derived from cache")
     void getDirectorsRemunerationSelectionDerivedFromCache() throws Exception {
 
-        when(selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(selection);
 
         when(selection.getHasProvidedDirectorsRemuneration())
@@ -138,7 +142,8 @@ class DirectorsRemunerationSelectionControllerTest {
     @DisplayName("Get directors remuneration selection - service exception")
     void getDirectorsRemunerationSelectionServiceException() throws Exception {
 
-        when(selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(DIRECTORS_REMUNERATION_SELECTION_PATH))
@@ -155,16 +160,23 @@ class DirectorsRemunerationSelectionControllerTest {
 
         when(companyAccountsDataState.getCicStatements()).thenReturn(cicStatements);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(createPostRequestWithParam(HAS_PROVIDED_DIRECTORS_REMUNERATION).session(session))
+        this.mockMvc.perform(
+                        createPostRequestWithParam(HAS_PROVIDED_DIRECTORS_REMUNERATION).session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(selectionService).submitDirectorsRemunerationSelection(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorsRemunerationSelection.class));
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                any(DirectorsRemunerationSelection.class));
 
-        verify(cicStatements).setHasProvidedDirectorsRemuneration(HAS_PROVIDED_DIRECTORS_REMUNERATION);
+        verify(cicStatements).setHasProvidedDirectorsRemuneration(
+                HAS_PROVIDED_DIRECTORS_REMUNERATION);
     }
 
     @Test
@@ -176,7 +188,8 @@ class DirectorsRemunerationSelectionControllerTest {
                 .andExpect(view().name(DIRECTORS_REMUNERATION_SELECTION_VIEW));
 
         verify(selectionService, never()).submitDirectorsRemunerationSelection(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorsRemunerationSelection.class));
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                any(DirectorsRemunerationSelection.class));
     }
 
     @Test
@@ -185,14 +198,16 @@ class DirectorsRemunerationSelectionControllerTest {
 
         doThrow(ServiceException.class)
                 .when(selectionService).submitDirectorsRemunerationSelection(
-                        eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(DirectorsRemunerationSelection.class));
+                        eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(DirectorsRemunerationSelection.class));
 
         this.mockMvc.perform(createPostRequestWithParam(HAS_PROVIDED_DIRECTORS_REMUNERATION))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
 
-    private MockHttpServletRequestBuilder createPostRequestWithParam(Boolean hasProvidedDirectorsRemuneration) {
+    private MockHttpServletRequestBuilder createPostRequestWithParam(
+            Boolean hasProvidedDirectorsRemuneration) {
 
         String beanElement = "hasProvidedDirectorsRemuneration";
         String data = hasProvidedDirectorsRemuneration == null ? null : "0";

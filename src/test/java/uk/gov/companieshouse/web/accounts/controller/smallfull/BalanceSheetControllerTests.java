@@ -12,67 +12,52 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
-import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BalanceSheetControllerTests {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String BALANCE_SHEET_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/balance-sheet";
+    private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
+    private static final String ERROR_VIEW = "error";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
     private MockMvc mockMvc;
-
     @Mock
     private BalanceSheetService balanceSheetService;
-
     @Mock
     private NavigatorService navigatorService;
-
     @InjectMocks
     private BalanceSheetController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String BALANCE_SHEET_PATH = "/company/" + COMPANY_NUMBER +
-                                                     "/transaction/" + TRANSACTION_ID +
-                                                     "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                     "/small-full/balance-sheet";
-
-    private static final String BALANCE_SHEET_MODEL_ATTR = "balanceSheet";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String BALANCE_SHEET_VIEW = "smallfull/balanceSheet";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -80,15 +65,17 @@ class BalanceSheetControllerTests {
     @DisplayName("Get balance sheet view success path")
     void getRequestSuccess() throws Exception {
 
-        when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(new BalanceSheet());
+        when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(new BalanceSheet());
 
         this.mockMvc.perform(get(BALANCE_SHEET_PATH))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name(BALANCE_SHEET_VIEW))
-                    .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
-                    .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(BALANCE_SHEET_VIEW))
+                .andExpect(model().attributeExists(BALANCE_SHEET_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
-        verify(balanceSheetService, times(1)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        verify(balanceSheetService, times(1)).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER);
     }
 
     @Test
@@ -96,7 +83,8 @@ class BalanceSheetControllerTests {
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
         doThrow(ServiceException.class)
-                .when(balanceSheetService).getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                .when(balanceSheetService)
+                .getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         this.mockMvc.perform(get(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
@@ -108,8 +96,13 @@ class BalanceSheetControllerTests {
     @DisplayName("Post balance sheet success path")
     void postRequestSuccess() throws Exception {
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(new ArrayList<>());
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
+        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class),
+                anyString())).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -121,7 +114,8 @@ class BalanceSheetControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-                .when(balanceSheetService).postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString());
+                .when(balanceSheetService)
+                .postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString());
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
@@ -140,13 +134,14 @@ class BalanceSheetControllerTests {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class), anyString())).thenReturn(errors);
+        when(balanceSheetService.postBalanceSheet(anyString(), anyString(), any(BalanceSheet.class),
+                anyString())).thenReturn(errors);
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(BALANCE_SHEET_VIEW));
     }
-    
+
     @Test
     @DisplayName("Post balance sheet with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
@@ -156,7 +151,7 @@ class BalanceSheetControllerTests {
         String invalidData = "test";
 
         this.mockMvc.perform(post(BALANCE_SHEET_PATH)
-                .param(beanElement, invalidData))
+                        .param(beanElement, invalidData))
                 .andExpect(status().isOk())
                 .andExpect(view().name(BALANCE_SHEET_VIEW))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));

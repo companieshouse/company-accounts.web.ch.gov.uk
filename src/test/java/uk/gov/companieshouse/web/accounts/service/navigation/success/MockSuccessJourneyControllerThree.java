@@ -10,7 +10,8 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
  */
 @PreviousController(MockSuccessJourneyControllerTwo.class)
 @RequestMapping("/mock-success-journey-controller-three/{companyNumber}/{transactionId}/{companyAccountsId}")
-public class MockSuccessJourneyControllerThree extends BaseController implements ConditionalController {
+public class MockSuccessJourneyControllerThree extends BaseController implements
+        ConditionalController {
 
     @Override
     protected String getTemplateName() {
@@ -18,7 +19,8 @@ public class MockSuccessJourneyControllerThree extends BaseController implements
     }
 
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+    public boolean willRender(String companyNumber, String transactionId,
+            String companyAccountsId) {
         return true;
     }
 }

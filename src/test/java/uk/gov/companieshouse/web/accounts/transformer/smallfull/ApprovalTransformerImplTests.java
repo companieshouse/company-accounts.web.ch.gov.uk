@@ -21,21 +21,15 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.ApprovalTra
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ApprovalTransformerImplTests {
 
+    private static final String DIRECTOR_NAME = "directorName";
+    private static final String APPROVAL_DAY = "7";
+    private static final String APPROVAL_MONTH = "12";
+    private static final String APPROVAL_YEAR = "2018";
+    private static final LocalDate APPROVAL_DATE = LocalDate.of(2018, 12, 7);
     @Mock
     private DateTransformer dateTransformer;
-
     @InjectMocks
     private ApprovalTransformer approvalTransformer = new ApprovalTransformerImpl();
-
-    private static final String DIRECTOR_NAME = "directorName";
-
-    private static final String APPROVAL_DAY = "7";
-
-    private static final String APPROVAL_MONTH =  "12";
-
-    private static final String APPROVAL_YEAR = "2018";
-
-    private static final LocalDate APPROVAL_DATE = LocalDate.of(2018, 12, 7);
 
     @Test
     @DisplayName("Get Approval Api")

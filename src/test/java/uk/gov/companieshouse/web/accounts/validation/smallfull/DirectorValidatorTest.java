@@ -29,42 +29,32 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorValidatorTest {
 
-    @Mock
-    private SmallFullService smallFullService;
-
-    @Mock
-    private ApiClientService apiClientService;
-
-    @Mock
-    private ApiClient apiClient;
-
-    @InjectMocks
-    private DirectorValidator validator;
-
     private static final String DIRECTOR_NAME = "directorName";
-
     private static final String DIRECTOR_TO_ADD = "directorToAdd";
     private static final String DIRECTOR_MUST_BE_ADDED = "validation.directorToAdd.submissionRequired";
     private static final String AT_LEAST_ONE_DIRECTOR_REQUIRED = "validation.addOrRemoveDirectors.oneRequired";
-
     private static final String NAME = DIRECTOR_TO_ADD + ".name";
     private static final String NAME_NOT_PRESENT = "validation.element.missing.director.name";
-
-    private static final String WAS_DIRECTOR_APPOINTED = DIRECTOR_TO_ADD + ".wasDirectorAppointedDuringPeriod";
+    private static final String WAS_DIRECTOR_APPOINTED =
+            DIRECTOR_TO_ADD + ".wasDirectorAppointedDuringPeriod";
     private static final String APPOINTED_NOT_SELECTED = "validation.directorToAdd.appointment.selectionNotMade";
-
-    private static final String DID_DIRECTOR_RESIGN = DIRECTOR_TO_ADD + ".didDirectorResignDuringPeriod";
+    private static final String DID_DIRECTOR_RESIGN =
+            DIRECTOR_TO_ADD + ".didDirectorResignDuringPeriod";
     private static final String RESIGNATION_NOT_SELECTED = "validation.directorToAdd.resignation.selectionNotMade";
-
     private static final String TRANSACTION_ID = "transactionId";
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
     private static final String OUTSIDE_VALID_DATE_RANGE = "validation.date.outside.currentPeriod.accounting_period";
-
     private static final LocalDate NEXT_ACCOUNTS_PERIOD_START = LocalDate.of(2019, 1, 1);
     private static final LocalDate NEXT_ACCOUNTS_PERIOD_END = LocalDate.of(2019, 12, 31);
-
     private static final LocalDate VALID_APPOINTMENT_DATE = NEXT_ACCOUNTS_PERIOD_START.plusDays(1);
+    @Mock
+    private SmallFullService smallFullService;
+    @Mock
+    private ApiClientService apiClientService;
+    @Mock
+    private ApiClient apiClient;
+    @InjectMocks
+    private DirectorValidator validator;
 
     @Test
     @DisplayName("Validate director to add - success")
@@ -144,7 +134,8 @@ class DirectorValidatorTest {
         addOrRemoveDirectors.setExistingDirectors(new Director[]{new Director()});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -159,7 +150,8 @@ class DirectorValidatorTest {
         directorToAdd.setName(DIRECTOR_NAME);
         addOrRemoveDirectors.setDirectorToAdd(directorToAdd);
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -174,7 +166,8 @@ class DirectorValidatorTest {
         AddOrRemoveDirectors addOrRemoveDirectors = new AddOrRemoveDirectors();
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -200,7 +193,8 @@ class DirectorValidatorTest {
         addOrRemoveDirectors.setExistingDirectors(new Director[]{director});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -225,7 +219,8 @@ class DirectorValidatorTest {
         addOrRemoveDirectors.setExistingDirectors(new Director[]{director});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -250,7 +245,8 @@ class DirectorValidatorTest {
         addOrRemoveDirectors.setExistingDirectors(new Director[]{director});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -279,7 +275,8 @@ class DirectorValidatorTest {
         addOrRemoveDirectors.setExistingDirectors(new Director[]{director, validDirector});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());
@@ -308,7 +305,8 @@ class DirectorValidatorTest {
         addOrRemoveDirectors.setExistingDirectors(new Director[]{director, validDirector});
         addOrRemoveDirectors.setDirectorToAdd(new DirectorToAdd());
 
-        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
+        List<ValidationError> validationErrors = validator.validateSubmitAddOrRemoveDirectors(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors);
 
         assertFalse(validationErrors.isEmpty());
         assertEquals(1, validationErrors.size());

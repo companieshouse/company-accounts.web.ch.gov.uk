@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.profitandloss;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class ProfitAndLossQuestion {
 

@@ -53,6 +53,6 @@ class OffBalanceSheetArrangementsTransformerImplTest {
     void getNoteType() {
 
         assertEquals(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS,
-                        transformer.getNoteType());
+                transformer.getNoteType());
     }
 }

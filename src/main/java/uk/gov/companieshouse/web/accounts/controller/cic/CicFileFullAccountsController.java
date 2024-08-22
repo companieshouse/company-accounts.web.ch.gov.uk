@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping({"/accounts/cic/full-accounts-criteria" , "/accounts/cic/{companyNumber}/full-accounts-criteria"})

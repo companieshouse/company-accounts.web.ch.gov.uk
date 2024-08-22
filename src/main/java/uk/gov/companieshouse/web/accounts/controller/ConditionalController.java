@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 /**
  * The {@code ConditionalController} interface defines a single method that
@@ -25,7 +26,7 @@ public interface ConditionalController {
      * @param transactionId     the transaction identifier
      * @param companyAccountsId the company accounts identifier
      *
-     * @see uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService
+     * @see NavigatorService
      * @see uk.gov.companieshouse.web.accounts.exception.NavigationException
      *
      * @return true if the template for a controller will be rendered

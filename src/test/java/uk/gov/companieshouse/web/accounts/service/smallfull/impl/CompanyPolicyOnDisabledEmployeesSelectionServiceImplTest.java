@@ -29,7 +29,7 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
     private DirectorsReportStatementsService directorsReportStatementsService;
 
     @InjectMocks
-    private CompanyPolicyOnDisabledEmployeesSelectionService companyPolicyOnDisabledEmployeesSelectionService = 
+    private CompanyPolicyOnDisabledEmployeesSelectionService companyPolicyOnDisabledEmployeesSelectionService =
             new CompanyPolicyOnDisabledEmployeesSelectionServiceImpl();
 
     @Mock
@@ -48,13 +48,16 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
 
     @Test
     @DisplayName("Get company policy on disabled employees selection - no existing statements")
-    void getCompanyPolicyOnDisabledEmployeesSelectionNoExistingStatements() throws ServiceException {
+    void getCompanyPolicyOnDisabledEmployeesSelectionNoExistingStatements()
+            throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
         CompanyPolicyOnDisabledEmployeesSelection returned =
-                companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertNull(returned.getHasCompanyPolicyOnDisabledEmployees());
@@ -62,15 +65,18 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
 
     @Test
     @DisplayName("Get company policy on disabled employees selection - statements do not include company policy on disabled employees")
-    void getCompanyPolicyOnDisabledEmployeesSelectionStatementsDoNotIncludeCompanyPolicyOnDisabledEmployees() throws ServiceException {
+    void getCompanyPolicyOnDisabledEmployeesSelectionStatementsDoNotIncludeCompanyPolicyOnDisabledEmployees()
+            throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getCompanyPolicyOnDisabledEmployees()).thenReturn(null);
 
         CompanyPolicyOnDisabledEmployeesSelection returned =
-                companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertNull(returned.getHasCompanyPolicyOnDisabledEmployees());
@@ -78,16 +84,19 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
 
     @Test
     @DisplayName("Get company policy on disabled employees selection - statements include company policy on disabled employees")
-    void getCompanyPolicyOnDisabledEmployeesSelectionStatementsIncludeCompanyPolicyOnDisabledEmployees() throws ServiceException {
+    void getCompanyPolicyOnDisabledEmployeesSelectionStatementsIncludeCompanyPolicyOnDisabledEmployees()
+            throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getCompanyPolicyOnDisabledEmployees()).thenReturn(
                 COMPANY_POLICY_ON_DISABLED_EMPLOYEES);
 
         CompanyPolicyOnDisabledEmployeesSelection returned =
-                companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                companyPolicyOnDisabledEmployeesSelectionService.getCompanyPolicyOnDisabledEmployeesSelection(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertTrue(returned.getHasCompanyPolicyOnDisabledEmployees());
@@ -95,64 +104,82 @@ class CompanyPolicyOnDisabledEmployeesSelectionServiceImplTest {
 
     @Test
     @DisplayName("Submit company policy on disabled employees selection - has company policy on disabled employees")
-    void submitCompanyPolicyOnDisabledEmployeesSelectionHasCompanyPolicyOnDisabledEmployees() throws ServiceException {
+    void submitCompanyPolicyOnDisabledEmployeesSelectionHasCompanyPolicyOnDisabledEmployees()
+            throws ServiceException {
 
-        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(true);
+        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(
+                true);
 
         assertAll(() ->
                 companyPolicyOnDisabledEmployeesSelectionService
-                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
+                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
 
-        verify(directorsReportStatementsService, never()).getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(directorsReportStatementsService, never()).getDirectorsReportStatements(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
     @DisplayName("Submit company policy on disabled employees selection - no existing statements")
-    void submitCompanyPolicyOnDisabledEmployeesSelectionNoExistingStatements() throws ServiceException {
+    void submitCompanyPolicyOnDisabledEmployeesSelectionNoExistingStatements()
+            throws ServiceException {
 
-        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(false);
+        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(
+                false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
         assertAll(() ->
                 companyPolicyOnDisabledEmployeesSelectionService
-                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
+                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
     }
 
     @Test
     @DisplayName("Submit company policy on disabled employees selection - has other statements")
-    void submitCompanyPolicyOnDisabledEmployeesSelectionHasOtherStatements() throws ServiceException {
+    void submitCompanyPolicyOnDisabledEmployeesSelectionHasOtherStatements()
+            throws ServiceException {
 
-        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(false);
+        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(
+                false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getPrincipalActivities()).thenReturn(PRINCIPAL_ACTIVITIES);
 
         assertAll(() ->
                 companyPolicyOnDisabledEmployeesSelectionService
-                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
+                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
 
         verify(statementsApi).setCompanyPolicyOnDisabledEmployees(null);
 
-        verify(directorsReportStatementsService).updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi);
+        verify(directorsReportStatementsService).updateDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, statementsApi);
     }
 
     @Test
     @DisplayName("Submit company policy on disabled employees selection - has no other statements")
-    void submitCompanyPolicyOnDisabledEmployeesSelectionHasNoOtherStatements() throws ServiceException {
+    void submitCompanyPolicyOnDisabledEmployeesSelectionHasNoOtherStatements()
+            throws ServiceException {
 
-        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(false);
+        when(companyPolicyOnDisabledEmployeesSelection.getHasCompanyPolicyOnDisabledEmployees()).thenReturn(
+                false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         assertAll(() ->
                 companyPolicyOnDisabledEmployeesSelectionService
-                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
+                        .submitCompanyPolicyOnDisabledEmployeesSelection(TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID, companyPolicyOnDisabledEmployeesSelection));
 
-        verify(directorsReportStatementsService).deleteDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(directorsReportStatementsService).deleteDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
     }
 }

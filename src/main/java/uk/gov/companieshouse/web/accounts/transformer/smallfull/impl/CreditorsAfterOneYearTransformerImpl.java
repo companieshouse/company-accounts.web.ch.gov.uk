@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.creditorsafteroneyear.CreditorsAfterOneYearApi;
@@ -12,9 +14,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteron
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.OtherCreditors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorsafteroneyear.Total;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
-
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @Component
 public class CreditorsAfterOneYearTransformerImpl

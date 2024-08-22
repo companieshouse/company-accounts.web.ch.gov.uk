@@ -1,5 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT_URL_PREFIX;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,17 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT_URL_PREFIX;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -33,7 +32,7 @@ class CicCriteriaControllerTest {
     private CicCriteriaController controller;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -64,7 +63,7 @@ class CicCriteriaControllerTest {
     void postRequestCriteriaMet() throws Exception {
 
         mockMvc.perform(post(CIC_CRITERIA_PATH).
-                param("isCriteriaMet", "1"))
+                        param("isCriteriaMet", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_SUCCESS_VIEW));
     }
@@ -74,7 +73,7 @@ class CicCriteriaControllerTest {
     void postRequestCriteriaNotMet() throws Exception {
 
         mockMvc.perform(post(CIC_CRITERIA_PATH).
-                param("isCriteriaMet", "0"))
+                        param("isCriteriaMet", "0"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
     }

@@ -50,9 +50,12 @@ class GrossProfitAndLossTransformerTests {
 
         assertNotNull(profitAndLoss.getGrossProfitOrLoss());
 
-        assertEquals(CURRENT_TURNOVER, profitAndLoss.getGrossProfitOrLoss().getTurnover().getCurrentAmount());
-        assertEquals(CURRENT_COST_OF_SALES, profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getCurrentAmount());
-        assertEquals(CURRENT_GROSS_TOTAL, profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getCurrentAmount());
+        assertEquals(CURRENT_TURNOVER,
+                profitAndLoss.getGrossProfitOrLoss().getTurnover().getCurrentAmount());
+        assertEquals(CURRENT_COST_OF_SALES,
+                profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getCurrentAmount());
+        assertEquals(CURRENT_GROSS_TOTAL,
+                profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getCurrentAmount());
     }
 
     @Test
@@ -90,12 +93,18 @@ class GrossProfitAndLossTransformerTests {
 
         transformer.addPreviousPeriodToWebModel(profitAndLoss, previousPeriodProfitAndLossApi);
 
-        assertEquals(CURRENT_TURNOVER, profitAndLoss.getGrossProfitOrLoss().getTurnover().getCurrentAmount());
-        assertEquals(CURRENT_COST_OF_SALES, profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getCurrentAmount());
-        assertEquals(CURRENT_GROSS_TOTAL, profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getCurrentAmount());
-        assertEquals(PREVIOUS_TURNOVER, profitAndLoss.getGrossProfitOrLoss().getTurnover().getPreviousAmount());
-        assertEquals(PREVIOUS_COST_OF_SALES, profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getPreviousAmount());
-        assertEquals(PREVIOUS_GROSS_TOTAL, profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getPreviousAmount());
+        assertEquals(CURRENT_TURNOVER,
+                profitAndLoss.getGrossProfitOrLoss().getTurnover().getCurrentAmount());
+        assertEquals(CURRENT_COST_OF_SALES,
+                profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getCurrentAmount());
+        assertEquals(CURRENT_GROSS_TOTAL,
+                profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getCurrentAmount());
+        assertEquals(PREVIOUS_TURNOVER,
+                profitAndLoss.getGrossProfitOrLoss().getTurnover().getPreviousAmount());
+        assertEquals(PREVIOUS_COST_OF_SALES,
+                profitAndLoss.getGrossProfitOrLoss().getCostOfSales().getPreviousAmount());
+        assertEquals(PREVIOUS_GROSS_TOTAL,
+                profitAndLoss.getGrossProfitOrLoss().getGrossTotal().getPreviousAmount());
     }
 
     @Test
@@ -148,9 +157,12 @@ class GrossProfitAndLossTransformerTests {
 
         transformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
 
-        assertEquals(CURRENT_TURNOVER, currentPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover());
-        assertEquals(CURRENT_COST_OF_SALES, currentPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales());
-        assertEquals(CURRENT_GROSS_TOTAL, currentPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal());
+        assertEquals(CURRENT_TURNOVER,
+                currentPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover());
+        assertEquals(CURRENT_COST_OF_SALES,
+                currentPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales());
+        assertEquals(CURRENT_GROSS_TOTAL,
+                currentPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal());
     }
 
     @Test
@@ -181,9 +193,12 @@ class GrossProfitAndLossTransformerTests {
 
         transformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
 
-        assertEquals(PREVIOUS_TURNOVER, previousPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover());
-        assertEquals(PREVIOUS_COST_OF_SALES, previousPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales());
-        assertEquals(PREVIOUS_GROSS_TOTAL, previousPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal());
+        assertEquals(PREVIOUS_TURNOVER,
+                previousPeriodProfitAndLoss.getGrossProfitOrLoss().getTurnover());
+        assertEquals(PREVIOUS_COST_OF_SALES,
+                previousPeriodProfitAndLoss.getGrossProfitOrLoss().getCostOfSales());
+        assertEquals(PREVIOUS_GROSS_TOTAL,
+                previousPeriodProfitAndLoss.getGrossProfitOrLoss().getGrossTotal());
     }
 
     @Test

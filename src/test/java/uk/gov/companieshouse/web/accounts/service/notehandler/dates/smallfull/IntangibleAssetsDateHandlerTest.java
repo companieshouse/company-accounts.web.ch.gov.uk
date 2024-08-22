@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class IntangibleAssetsDateHandlerTest {
 
     @InjectMocks
     private DateHandler<IntangibleAssets> intangibleAssetsDateHandler =
-                    new IntangibleAssetsDateHandler();
+            new IntangibleAssetsDateHandler();
 
     private static final String TRANSACTION_ID = "transactionId";
 
@@ -49,7 +50,7 @@ class IntangibleAssetsDateHandlerTest {
     @DisplayName("Add dates")
     void addDates() throws ServiceException {
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-                        .thenReturn(smallFullApi);
+                .thenReturn(smallFullApi);
 
         AccountingPeriodApi lastAccountingPeriodApi = new AccountingPeriodApi();
         lastAccountingPeriodApi.setPeriodEndOn(LocalDate.now().minusYears(1).minusDays(1));
@@ -62,22 +63,23 @@ class IntangibleAssetsDateHandlerTest {
         when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);
 
         assertAll(() -> intangibleAssetsDateHandler.addDates(apiClient, TRANSACTION_ID,
-                        COMPANY_ACCOUNTS_ID, intangibleAssets));
+                COMPANY_ACCOUNTS_ID, intangibleAssets));
 
         verify(intangibleAssets).setLastAccountsPeriodEndOn(
-                        smallFullApi.getLastAccounts().getPeriodEndOn());
+                smallFullApi.getLastAccounts().getPeriodEndOn());
 
         verify(intangibleAssets).setNextAccountsPeriodStartOn(
-                        smallFullApi.getNextAccounts().getPeriodStartOn());
+                smallFullApi.getNextAccounts().getPeriodStartOn());
 
         verify(intangibleAssets).setNextAccountsPeriodEndOn(
-                        smallFullApi.getNextAccounts().getPeriodEndOn());
+                smallFullApi.getNextAccounts().getPeriodEndOn());
     }
 
     @Test
     @DisplayName("Get note type")
     void getNoteType() {
 
-        assertEquals(NoteType.SMALL_FULL_INTANGIBLE_ASSETS, intangibleAssetsDateHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_INTANGIBLE_ASSETS,
+                intangibleAssetsDateHandler.getNoteType());
     }
 }

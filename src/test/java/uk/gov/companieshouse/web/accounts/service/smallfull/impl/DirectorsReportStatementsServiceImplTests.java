@@ -56,7 +56,7 @@ class DirectorsReportStatementsServiceImplTests {
 
     @Mock
     private SmallFullResourceHandler smallFullResourceHandler;
-    
+
     @Mock
     private DirectorsReportResourceHandler directorsReportResourceHandler;
 
@@ -100,8 +100,9 @@ class DirectorsReportStatementsServiceImplTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String DIRECTORS_REPORT_STATEMENTS_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-                                                    COMPANY_ACCOUNTS_ID + "/small-full/directors-report/statements";
+    private static final String DIRECTORS_REPORT_STATEMENTS_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/directors-report/statements";
 
     private static final String RESOURCE_NAME = "directors report statements";
 
@@ -127,7 +128,8 @@ class DirectorsReportStatementsServiceImplTests {
         when(responseWithData.getData()).thenReturn(statementsApi);
 
         StatementsApi returnedDirectorsReportStatements =
-                directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertEquals(statementsApi, returnedDirectorsReportStatements);
     }
@@ -144,10 +146,11 @@ class DirectorsReportStatementsServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -162,9 +165,10 @@ class DirectorsReportStatementsServiceImplTests {
 
         doNothing()
                 .when(serviceExceptionHandler)
-                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertNull(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertNull(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -179,10 +183,11 @@ class DirectorsReportStatementsServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -192,7 +197,7 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsCreate);
+                .thenReturn(statementsCreate);
 
         when(statementsCreate.execute()).thenReturn(responseWithData);
 
@@ -200,7 +205,8 @@ class DirectorsReportStatementsServiceImplTests {
 
         List<ValidationError> validationErrors =
                 directorsReportStatementsService
-                        .createDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi);
+                        .createDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                statementsApi);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -212,13 +218,13 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsCreate);
+                .thenReturn(statementsCreate);
 
         when(statementsCreate.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 directorsReportStatementsService.createDirectorsReportStatements(
@@ -232,7 +238,7 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsCreate);
+                .thenReturn(statementsCreate);
 
         when(statementsCreate.execute()).thenReturn(responseWithData);
 
@@ -243,7 +249,8 @@ class DirectorsReportStatementsServiceImplTests {
 
         List<ValidationError> validationErrors =
                 directorsReportStatementsService
-                        .createDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi);
+                        .createDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                statementsApi);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -255,13 +262,13 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .create(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsCreate);
+                .thenReturn(statementsCreate);
 
         when(statementsCreate.execute()).thenThrow(uriValidationException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 directorsReportStatementsService.createDirectorsReportStatements(
@@ -275,7 +282,7 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsUpdate);
+                .thenReturn(statementsUpdate);
 
         when(statementsUpdate.execute()).thenReturn(responseNoData);
 
@@ -283,7 +290,8 @@ class DirectorsReportStatementsServiceImplTests {
 
         List<ValidationError> validationErrors =
                 directorsReportStatementsService
-                        .updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi);
+                        .updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                statementsApi);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -295,13 +303,13 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsUpdate);
+                .thenReturn(statementsUpdate);
 
         when(statementsUpdate.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 directorsReportStatementsService.updateDirectorsReportStatements(
@@ -315,7 +323,7 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsUpdate);
+                .thenReturn(statementsUpdate);
 
         when(statementsUpdate.execute()).thenReturn(responseNoData);
 
@@ -338,13 +346,13 @@ class DirectorsReportStatementsServiceImplTests {
 
         when(statementsResourceHandler
                 .update(DIRECTORS_REPORT_STATEMENTS_URI, statementsApi))
-                        .thenReturn(statementsUpdate);
+                .thenReturn(statementsUpdate);
 
         when(statementsUpdate.execute()).thenThrow(uriValidationException);
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 directorsReportStatementsService.updateDirectorsReportStatements(
@@ -360,7 +368,8 @@ class DirectorsReportStatementsServiceImplTests {
                 .thenReturn(statementsDelete);
 
         assertAll(() ->
-                directorsReportStatementsService.deleteDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportStatementsService.deleteDirectorsReportStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
 
         verify(statementsDelete).execute();
     }
@@ -377,10 +386,11 @@ class DirectorsReportStatementsServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportStatementsService.deleteDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportStatementsService.deleteDirectorsReportStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -395,9 +405,10 @@ class DirectorsReportStatementsServiceImplTests {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportStatementsService.deleteDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportStatementsService.deleteDirectorsReportStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 }

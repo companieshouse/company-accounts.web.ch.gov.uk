@@ -29,9 +29,10 @@ class NoteTransformerFactoryTest {
     private NoteTransformer<Note, ApiResource> noteTransformer;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
-        when(noteTransformer.getNoteType()).thenReturn(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
+        when(noteTransformer.getNoteType()).thenReturn(
+                NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         List<NoteTransformer<Note, ApiResource>> noteTransformers = new ArrayList<>();
         noteTransformers.add(noteTransformer);
@@ -44,7 +45,8 @@ class NoteTransformerFactoryTest {
     void getNoteTransformerSuccess() {
 
         NoteTransformer<Note, ApiResource> returned =
-                noteTransformerFactory.getNoteTransformer(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
+                noteTransformerFactory.getNoteTransformer(
+                        NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         assertNotNull(returned);
         assertEquals(noteTransformer, returned);
@@ -55,6 +57,7 @@ class NoteTransformerFactoryTest {
     void getNoteTransformerMissingInfrastructureException() {
 
         assertThrows(MissingInfrastructureException.class, () ->
-                noteTransformerFactory.getNoteTransformer(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
+                noteTransformerFactory.getNoteTransformer(
+                        NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
     }
 }

@@ -73,7 +73,7 @@ class TangibleAssetsTransformerFactoryTests {
         TangibleAssetsResourceTransformer transformer = factory.getResourceTransformer(
                 TangibleAssetsResource.PLANT_AND_MACHINERY);
 
-            assertTrue(transformer instanceof TangibleAssetsPlantAndMachineryTransformerImpl);
+        assertTrue(transformer instanceof TangibleAssetsPlantAndMachineryTransformerImpl);
     }
 
     @Test

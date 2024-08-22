@@ -21,12 +21,11 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportStatementsTransformerImplTests {
 
-    private DirectorsReportStatementsTransformer statementsTransformer = new DirectorsReportStatementsTransformerImpl();
-
     private static final String ADDITIONAL_INFORMATION = "additionalInformation";
     private static final String COMPANY_POLICY_ON_DISABLED_EMPLOYEES = "companyPolicyOnDisabledEmployees";
     private static final String POLITICAL_AND_CHARITABLE_DONATIONS = "politicalAndCharitableDonations";
     private static final String PRINCIPAL_ACTIVITIES = "principalActivities";
+    private DirectorsReportStatementsTransformer statementsTransformer = new DirectorsReportStatementsTransformerImpl();
 
     @Test
     @DisplayName("Get additional information - null statements")
@@ -50,7 +49,8 @@ class DirectorsReportStatementsTransformerImplTests {
                 statementsTransformer.getAdditionalInformation(statementsApi);
 
         assertNotNull(additionalInformation);
-        assertEquals(ADDITIONAL_INFORMATION, additionalInformation.getAdditionalInformationDetails());
+        assertEquals(ADDITIONAL_INFORMATION,
+                additionalInformation.getAdditionalInformationDetails());
     }
 
     @Test
@@ -89,7 +89,8 @@ class DirectorsReportStatementsTransformerImplTests {
                 statementsTransformer.getCompanyPolicyOnDisabledEmployees(statementsApi);
 
         assertNotNull(companyPolicyOnDisabledEmployees);
-        assertEquals(COMPANY_POLICY_ON_DISABLED_EMPLOYEES, companyPolicyOnDisabledEmployees.getCompanyPolicyOnDisabledEmployeesDetails());
+        assertEquals(COMPANY_POLICY_ON_DISABLED_EMPLOYEES,
+                companyPolicyOnDisabledEmployees.getCompanyPolicyOnDisabledEmployeesDetails());
     }
 
     @Test
@@ -97,13 +98,16 @@ class DirectorsReportStatementsTransformerImplTests {
     void setCompanyPolicyOnDisabledEmployees() {
 
         CompanyPolicyOnDisabledEmployees companyPolicyOnDisabledEmployees = new CompanyPolicyOnDisabledEmployees();
-        companyPolicyOnDisabledEmployees.setCompanyPolicyOnDisabledEmployeesDetails(COMPANY_POLICY_ON_DISABLED_EMPLOYEES);
+        companyPolicyOnDisabledEmployees.setCompanyPolicyOnDisabledEmployeesDetails(
+                COMPANY_POLICY_ON_DISABLED_EMPLOYEES);
 
         StatementsApi statementsApi = new StatementsApi();
 
-        statementsTransformer.setCompanyPolicyOnDisabledEmployees(statementsApi, companyPolicyOnDisabledEmployees);
+        statementsTransformer.setCompanyPolicyOnDisabledEmployees(statementsApi,
+                companyPolicyOnDisabledEmployees);
 
-        assertEquals(COMPANY_POLICY_ON_DISABLED_EMPLOYEES, statementsApi.getCompanyPolicyOnDisabledEmployees());
+        assertEquals(COMPANY_POLICY_ON_DISABLED_EMPLOYEES,
+                statementsApi.getCompanyPolicyOnDisabledEmployees());
     }
 
     @Test
@@ -128,7 +132,8 @@ class DirectorsReportStatementsTransformerImplTests {
                 statementsTransformer.getPoliticalAndCharitableDonations(statementsApi);
 
         assertNotNull(politicalAndCharitableDonations);
-        assertEquals(POLITICAL_AND_CHARITABLE_DONATIONS, politicalAndCharitableDonations.getPoliticalAndCharitableDonationsDetails());
+        assertEquals(POLITICAL_AND_CHARITABLE_DONATIONS,
+                politicalAndCharitableDonations.getPoliticalAndCharitableDonationsDetails());
     }
 
     @Test
@@ -136,13 +141,16 @@ class DirectorsReportStatementsTransformerImplTests {
     void setPoliticalAndCharitableDonations() {
 
         PoliticalAndCharitableDonations politicalAndCharitableDonations = new PoliticalAndCharitableDonations();
-        politicalAndCharitableDonations.setPoliticalAndCharitableDonationsDetails(POLITICAL_AND_CHARITABLE_DONATIONS);
+        politicalAndCharitableDonations.setPoliticalAndCharitableDonationsDetails(
+                POLITICAL_AND_CHARITABLE_DONATIONS);
 
         StatementsApi statementsApi = new StatementsApi();
 
-        statementsTransformer.setPoliticalAndCharitableDonations(statementsApi, politicalAndCharitableDonations);
+        statementsTransformer.setPoliticalAndCharitableDonations(statementsApi,
+                politicalAndCharitableDonations);
 
-        assertEquals(POLITICAL_AND_CHARITABLE_DONATIONS, statementsApi.getPoliticalAndCharitableDonations());
+        assertEquals(POLITICAL_AND_CHARITABLE_DONATIONS,
+                statementsApi.getPoliticalAndCharitableDonations());
     }
 
     @Test

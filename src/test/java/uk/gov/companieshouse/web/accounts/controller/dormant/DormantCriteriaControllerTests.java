@@ -26,14 +26,14 @@ class DormantCriteriaControllerTests {
 
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String DORMANT_CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
-        "/dormant/criteria";
+            "/dormant/criteria";
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
     private static final String DORMANT_ACCOUNTS_URI_MODEL_ATTR = "dormantAccountsUri";
     private static final String DORMANT_ACCOUNTS_URI_MODEL_VALUE = "http://test.entity.accounts.uri";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String CRITERIA_VIEW = "dormant/criteria";
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private MockMvc mockMvc;
     @Mock
@@ -48,17 +48,17 @@ class DormantCriteriaControllerTests {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         ReflectionTestUtils
-            .setField(controller, DORMANT_ACCOUNTS_URI_MODEL_ATTR,
-                DORMANT_ACCOUNTS_URI_MODEL_VALUE);
+                .setField(controller, DORMANT_ACCOUNTS_URI_MODEL_ATTR,
+                        DORMANT_ACCOUNTS_URI_MODEL_VALUE);
 
         when(mockNavigatorService.getPreviousControllerPath(any(), any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(DORMANT_CRITERIA_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(CRITERIA_VIEW))
-            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
-            .andExpect(model().attributeExists(DORMANT_ACCOUNTS_URI_MODEL_ATTR))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(CRITERIA_VIEW))
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                .andExpect(model().attributeExists(DORMANT_ACCOUNTS_URI_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 }

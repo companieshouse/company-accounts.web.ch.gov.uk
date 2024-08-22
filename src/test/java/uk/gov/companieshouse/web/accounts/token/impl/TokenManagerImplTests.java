@@ -35,7 +35,8 @@ class TokenManagerImplTests {
     @DisplayName("Token manager - encode an object to a JWT, decode it and ensure no data is lost")
     void tokenManagerEncodeDecode() throws JsonProcessingException, SignatureException {
 
-        when(mockEnvironmentReader.getMandatoryString(CHS_JWT_SECRET_ENV_VAR)).thenReturn(CHS_JWT_SECRET);
+        when(mockEnvironmentReader.getMandatoryString(CHS_JWT_SECRET_ENV_VAR)).thenReturn(
+                CHS_JWT_SECRET);
 
         TestNestedClass testNestedClass = new TestNestedClass();
         testNestedClass.setTestNestedValue("testNestedValue");
@@ -51,7 +52,8 @@ class TokenManagerImplTests {
         assertNotNull(result);
         assertEquals(testClass.getTestValue(), result.getTestValue());
         assertNotNull(result.getTestNestedClass());
-        assertEquals(testClass.getTestNestedClass().getTestNestedValue(), result.getTestNestedClass().getTestNestedValue());
+        assertEquals(testClass.getTestNestedClass().getTestNestedValue(),
+                result.getTestNestedClass().getTestNestedValue());
     }
 
     private static class TestClass {

@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.loanstodirectors;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class LoansToDirectorsAdditionalInfoQuestion {
 

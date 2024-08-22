@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.companieshouse.accountsdates.AccountsDatesHelper;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
@@ -109,7 +107,8 @@ class CompanyServiceImplTests {
 
     @Test
     @DisplayName("Get Company Profile - Success Path")
-    void getCompanyProfileSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void getCompanyProfileSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         initApiClient();
 
@@ -124,7 +123,8 @@ class CompanyServiceImplTests {
 
     @Test
     @DisplayName("Get Company Profile - Throws ApiErrorResponseException")
-    void getCompanyProfileThrowsApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+    void getCompanyProfileThrowsApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
 
         initApiClient();
 
@@ -136,7 +136,8 @@ class CompanyServiceImplTests {
 
     @Test
     @DisplayName("Get Company Profile - Throws URIValidationException")
-    void getCompanyProfileThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException {
+    void getCompanyProfileThrowsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException {
 
         initApiClient();
 
@@ -148,7 +149,8 @@ class CompanyServiceImplTests {
 
     @Test
     @DisplayName("Get Company Details - Success Path")
-    void getCompanyDetailSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void getCompanyDetailSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         initApiClient();
 
@@ -216,7 +218,7 @@ class CompanyServiceImplTests {
 
         when(accountsDatesHelper.generateBalanceSheetHeading(
                 NEXT_ACCOUNTS_PERIOD_START, NEXT_ACCOUNTS_PERIOD_END, false))
-                        .thenReturn(NEXT_ACCOUNTS_HEADING);
+                .thenReturn(NEXT_ACCOUNTS_HEADING);
 
         BalanceSheetHeadings balanceSheetHeadings =
                 companyService.getBalanceSheetHeadings(companyProfile);
@@ -249,8 +251,8 @@ class CompanyServiceImplTests {
 
         when(accountsDatesHelper.generateBalanceSheetHeading(
                 any(LocalDate.class), any(LocalDate.class), eq(true)))
-                        .thenReturn(LAST_ACCOUNTS_HEADING)
-                                .thenReturn(NEXT_ACCOUNTS_HEADING);
+                .thenReturn(LAST_ACCOUNTS_HEADING)
+                .thenReturn(NEXT_ACCOUNTS_HEADING);
 
         BalanceSheetHeadings balanceSheetHeadings =
                 companyService.getBalanceSheetHeadings(companyProfile);
@@ -259,83 +261,84 @@ class CompanyServiceImplTests {
         assertEquals(NEXT_ACCOUNTS_HEADING, balanceSheetHeadings.getCurrentPeriodHeading());
         assertEquals(LAST_ACCOUNTS_HEADING, balanceSheetHeadings.getPreviousPeriodHeading());
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 1 day")
     void getArdDatePlusOneDay() {
-    	int noOfDays = 1;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
+        int noOfDays = 1;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 2 days")
     void getArdDatePlusTwoDays() {
-    	int noOfDays = 2;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
+        int noOfDays = 2;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 3 days")
     void getArdDatePlusThreeDays() {
-    	int noOfDays = 3;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
+        int noOfDays = 3;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 4 days")
     void getArdDatePlusFourDays() {
-    	int noOfDays = 4;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
+        int noOfDays = 4;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 5 days")
     void getArdDatePlusFiveDays() {
-    	int noOfDays = 5;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
+        int noOfDays = 5;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 6 days")
     void getArdDatePlusSixDays() {
-    	int noOfDays = 6;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
+        int noOfDays = 6;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 7 days")
     void getArdDatePlusSevenDays() {
-    	int noOfDays = 7;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
+        int noOfDays = 7;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays, futureArdDates);
     }
-    
+
     @Test
     @DisplayName("Get ARD date plus 8 days - Should only be up to 7")
     void getArdDatePlusEightDays() {
-    	int noOfDays = 8;
-    	LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
-    	List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
-    	assertCorrectFutureDates(periodEndOn, noOfDays - 1, futureArdDates);
+        int noOfDays = 8;
+        LocalDate periodEndOn = LocalDate.now().minusDays(noOfDays);
+        List<LocalDate> futureArdDates = companyService.getFutureDatesForArd(periodEndOn);
+        assertCorrectFutureDates(periodEndOn, noOfDays - 1, futureArdDates);
     }
-    
-    private void assertCorrectFutureDates(LocalDate ardDate, int noOfDays, List<LocalDate> futureArdDates) {
-    	assertEquals(futureArdDates.size(), noOfDays);
-    	for(int i = 1; i <= noOfDays; i++) {
-    		assertEquals(ardDate.plusDays(i), futureArdDates.get(i-1));
-    	}
+
+    private void assertCorrectFutureDates(LocalDate ardDate, int noOfDays,
+            List<LocalDate> futureArdDates) {
+        assertEquals(futureArdDates.size(), noOfDays);
+        for (int i = 1; i <= noOfDays; i++) {
+            assertEquals(ardDate.plusDays(i), futureArdDates.get(i - 1));
+        }
     }
 }

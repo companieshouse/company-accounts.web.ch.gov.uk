@@ -1,10 +1,9 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull;
 
+import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
-
-import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @ValidationModel
 public class Approval {

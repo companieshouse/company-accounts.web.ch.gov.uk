@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl;
 
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Amortisation;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.Cost;
 import uk.gov.companieshouse.api.model.accounts.smallfull.intangible.IntangibleApi;
@@ -22,10 +25,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbo
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.IntangibleAssetsNetBookValue;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.IntangibleAssetsResourceTransformer;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class IntangibleAssetsOtherIntangibleAssetsTransformerImpl extends
         IntangibleAssetsResourceTransformerImpl implements IntangibleAssetsResourceTransformer {

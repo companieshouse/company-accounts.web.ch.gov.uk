@@ -1,11 +1,13 @@
 package uk.gov.companieshouse.web.accounts.exception;
 
+import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+
 /**
  * The class {@code NavigationException} is a form of {@link RuntimeException}
  * that is thrown if errors occur when attempting to determine if
  * a conditional controller should render or not during navigation.
  *
- * @see uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService
+ * @see NavigatorService
  * @see uk.gov.companieshouse.web.accounts.controller.ConditionalController
  **/
 public class NavigationException extends RuntimeException {

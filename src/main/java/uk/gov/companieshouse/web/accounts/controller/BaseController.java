@@ -1,5 +1,10 @@
 package uk.gov.companieshouse.web.accounts.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -11,13 +16,6 @@ import uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication;
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 
 public abstract class BaseController {
 
@@ -78,9 +76,8 @@ public abstract class BaseController {
      *                      API request
      */
     protected void bindValidationErrors(BindingResult bindingResult, List<ValidationError> errors) {
-        Collections.sort(errors,
-                Comparator.comparing(ValidationError::getFieldPath)
-                        .thenComparing(ValidationError::getMessageKey));
+        errors.sort(Comparator.comparing(ValidationError::getFieldPath)
+                .thenComparing(ValidationError::getMessageKey));
 
         errors.forEach(error ->
                 bindingResult.rejectValue(error.getFieldPath(),

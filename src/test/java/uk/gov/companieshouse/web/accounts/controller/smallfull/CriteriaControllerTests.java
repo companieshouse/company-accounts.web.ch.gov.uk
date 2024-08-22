@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,28 +26,26 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CriteriaControllerTests {
 
-    private MockMvc mockMvc;
-
-    @Mock
-    private NavigatorService navigatorService;
-
-    @InjectMocks
-    private CriteriaController controller;
-
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
-                                                    "/small-full/criteria";
+            "/small-full/criteria";
     private static final String CRITERIA_MODEL_ATTR = "criteria";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String CRITERIA_VIEW = "smallfull/criteria";
     private static final String ALTERNATIVE_FILING_PATH = "redirect:/company/" + COMPANY_NUMBER +
-                                                            "/submit-abridged-accounts/alternative-filing-options";
+            "/submit-abridged-accounts/alternative-filing-options";
     private static final String OTHER_FILING_PATH = "redirect:/company/" + COMPANY_NUMBER +
-        "/select-account-type";
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            "/select-account-type";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private MockMvc mockMvc;
+    @Mock
+    private NavigatorService navigatorService;
+    @InjectMocks
+    private CriteriaController controller;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -70,10 +68,12 @@ class CriteriaControllerTests {
         String beanElement = "isCriteriaMet";
         String criteriaMet = "yes";
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -86,7 +86,7 @@ class CriteriaControllerTests {
         String criteriaNotMet = "noAlternativeFilingMethod";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaNotMet))
+                        .param(beanElement, criteriaNotMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(ALTERNATIVE_FILING_PATH));
     }
@@ -99,7 +99,7 @@ class CriteriaControllerTests {
         String criteriaNotMet = "noOtherAccounts";
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, criteriaNotMet))
+                        .param(beanElement, criteriaNotMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(OTHER_FILING_PATH));
     }
@@ -113,7 +113,7 @@ class CriteriaControllerTests {
         String invalidData = null;
 
         this.mockMvc.perform(post(CRITERIA_PATH)
-                .param(beanElement, invalidData))
+                        .param(beanElement, invalidData))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CRITERIA_VIEW));
     }

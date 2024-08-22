@@ -47,11 +47,11 @@ class CicReviewServiceImplTest {
     void getReview() throws ServiceException {
 
         when(cicStatementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicStatementsApi);
+                .thenReturn(cicStatementsApi);
         when(cicStatementsTransformer.getCicReview(cicStatementsApi)).thenReturn(cicReview);
 
         CicReview review = cicReviewService
-            .getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                .getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(cicReview, review);
     }
@@ -61,10 +61,10 @@ class CicReviewServiceImplTest {
     void getReviewServiceException() throws ServiceException {
 
         doThrow(ServiceException.class).when(cicStatementsService)
-            .getCicStatementsApi(anyString(), anyString());
+                .getCicStatementsApi(anyString(), anyString());
 
         assertThrows(ServiceException.class,
-            () -> cicReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> cicReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
 }
