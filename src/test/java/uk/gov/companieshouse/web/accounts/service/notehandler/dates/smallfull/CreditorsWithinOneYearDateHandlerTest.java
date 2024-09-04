@@ -1,5 +1,10 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.dates.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,11 +20,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheetHeadings;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.creditorswithinoneyear.CreditorsWithinOneYear;
 import uk.gov.companieshouse.web.accounts.service.notehandler.dates.DateHandler;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -54,9 +54,11 @@ class CreditorsWithinOneYearDateHandlerTest {
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
-        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(
+                balanceSheetHeadings);
 
-        assertAll(() -> creditorsWithinOneYearDateHandler.addDates(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID, creditorsWithinOneYear));
+        assertAll(() -> creditorsWithinOneYearDateHandler.addDates(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, creditorsWithinOneYear));
 
         verify(creditorsWithinOneYear).setBalanceSheetHeadings(balanceSheetHeadings);
     }
@@ -65,6 +67,7 @@ class CreditorsWithinOneYearDateHandlerTest {
     @DisplayName("Get note type")
     void getNoteType() {
 
-        assertEquals(NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR, creditorsWithinOneYearDateHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR,
+                creditorsWithinOneYearDateHandler.getNoteType());
     }
 }

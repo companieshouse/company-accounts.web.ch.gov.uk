@@ -54,9 +54,11 @@ class StocksDateHandlerTest {
         when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(smallFullApi);
 
-        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(balanceSheetHeadings);
+        when(smallFullService.getBalanceSheetHeadings(smallFullApi)).thenReturn(
+                balanceSheetHeadings);
 
-        assertAll(() -> stocksDateHandler.addDates(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID, stocks));
+        assertAll(() -> stocksDateHandler.addDates(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                stocks));
 
         verify(stocks).setBalanceSheetHeadings(balanceSheetHeadings);
     }

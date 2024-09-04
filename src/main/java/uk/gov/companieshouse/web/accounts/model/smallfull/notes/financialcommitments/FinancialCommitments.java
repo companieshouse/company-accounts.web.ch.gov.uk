@@ -1,10 +1,9 @@
 package uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitments;
 
+import jakarta.validation.constraints.NotBlank;
 import uk.gov.companieshouse.web.accounts.model.Note;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
-
-import javax.validation.constraints.NotBlank;
 
 @ValidationModel
 public class FinancialCommitments implements Note {

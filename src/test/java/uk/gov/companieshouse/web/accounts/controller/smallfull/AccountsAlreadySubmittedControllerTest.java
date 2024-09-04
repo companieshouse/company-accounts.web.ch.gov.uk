@@ -1,6 +1,11 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,11 +13,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AccountsAlreadySubmittedControllerTest {
@@ -31,13 +31,11 @@ class AccountsAlreadySubmittedControllerTest {
             "/small-full/approved-accounts";
 
     private static final String SUBMITTED_ACCOUNTS_VIEW = "smallfull/accountsAlreadySubmitted";
-
+    private final AccountsAlreadySubmittedController accountsAlreadySubmittedController = new AccountsAlreadySubmittedController();
     private MockMvc mockMvc;
 
-    private AccountsAlreadySubmittedController accountsAlreadySubmittedController = new AccountsAlreadySubmittedController();
-
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(accountsAlreadySubmittedController).build();
     }
 
@@ -56,6 +54,7 @@ class AccountsAlreadySubmittedControllerTest {
 
         this.mockMvc.perform(post(SUBMITTED_ACCOUNTS_PATH))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + YOUR_FILINGS_PATH));
+                .andExpect(
+                        view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + YOUR_FILINGS_PATH));
     }
 }

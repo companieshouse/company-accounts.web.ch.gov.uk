@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriTemplate;
@@ -18,9 +20,6 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 import uk.gov.companieshouse.web.accounts.util.ValidationContext;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.helper.ServiceExceptionHandler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class SecretaryServiceImpl implements SecretaryService {

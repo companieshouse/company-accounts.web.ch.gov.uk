@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -97,7 +98,7 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
 
     @Mock
     private URIValidationException uriValidationException;
-    
+
     @Mock
     private LoansToDirectorsAdditionalInfoTransformer loansToDirectorsAdditionalInfoTransformer;
 
@@ -108,8 +109,10 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String ADDITIONAL_INFORMATION_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-            COMPANY_ACCOUNTS_ID + "/small-full/notes/loans-to-directors/additional-information";
+    private static final String ADDITIONAL_INFORMATION_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID
+                    + "/small-full/notes/loans-to-directors/additional-information";
 
     private static final String RESOURCE_NAME = "loans to directors additional information";
 
@@ -118,8 +121,10 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.loansToDirectors()).thenReturn(loansToDirectorsResourceHandler);
-        when(loansToDirectorsResourceHandler.additionalInformation()).thenReturn(additionalInformationResourceHandler);
+        when(smallFullResourceHandler.loansToDirectors()).thenReturn(
+                loansToDirectorsResourceHandler);
+        when(loansToDirectorsResourceHandler.additionalInformation()).thenReturn(
+                additionalInformationResourceHandler);
     }
 
     @Test
@@ -128,7 +133,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditionalInfoToWeb(additionalInformationApi)).thenReturn(additionalInformationWeb);
+                .mapLoansToDirectorsAdditionalInfoToWeb(additionalInformationApi)).thenReturn(
+                additionalInformationWeb);
 
         when(additionalInformationResourceHandler.get(ADDITIONAL_INFORMATION_URI)).thenReturn(
                 additionalInformationGet);
@@ -138,7 +144,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
         when(responseWithData.getData()).thenReturn(additionalInformationApi);
 
         LoansToDirectorsAdditionalInfo returnedAdditionalInformation =
-                loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertEquals(additionalInformationWeb, returnedAdditionalInformation);
     }
@@ -158,7 +165,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
                 .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -175,7 +183,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
                 .when(serviceExceptionHandler)
                 .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertNotNull(loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertNotNull(loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -193,7 +202,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
                 .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -202,7 +212,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
+                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(
+                additionalInformationApi);
 
         when(additionalInformationResourceHandler
                 .create(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
@@ -214,7 +225,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
 
         List<ValidationError> validationErrors =
                 loansToDirectorsAdditionalInfoService
-                        .createAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformationWeb);
+                        .createAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                additionalInformationWeb);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -225,7 +237,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
+                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(
+                additionalInformationApi);
 
         when(additionalInformationResourceHandler
                 .create(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
@@ -248,7 +261,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
+                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(
+                additionalInformationApi);
 
         when(additionalInformationResourceHandler
                 .create(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
@@ -263,7 +277,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
 
         List<ValidationError> validationErrors =
                 loansToDirectorsAdditionalInfoService
-                        .createAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformationWeb);
+                        .createAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                additionalInformationWeb);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -274,7 +289,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
+                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(
+                additionalInformationApi);
 
         when(additionalInformationResourceHandler
                 .create(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
@@ -297,7 +313,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
+                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(
+                additionalInformationApi);
 
         when(additionalInformationResourceHandler
                 .update(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
@@ -309,7 +326,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
 
         List<ValidationError> validationErrors =
                 loansToDirectorsAdditionalInfoService
-                        .updateAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformationWeb);
+                        .updateAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                additionalInformationWeb);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -320,7 +338,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
+                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(
+                additionalInformationApi);
 
         when(additionalInformationResourceHandler
                 .update(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
@@ -345,7 +364,7 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
         when(loansToDirectorsAdditionalInfoTransformer
                 .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb))
                 .thenReturn(additionalInformationApi);
- 
+
         when(additionalInformationResourceHandler
                 .update(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
                 .thenReturn(additionalInformationUpdate);
@@ -370,7 +389,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
             throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(loansToDirectorsAdditionalInfoTransformer
-                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(additionalInformationApi);
+                .mapLoansToDirectorsAdditonalInfoToApi(additionalInformationWeb)).thenReturn(
+                additionalInformationApi);
 
         when(additionalInformationResourceHandler
                 .update(ADDITIONAL_INFORMATION_URI, additionalInformationApi))
@@ -396,7 +416,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
                 .thenReturn(additionalInformationDelete);
 
         assertAll(() ->
-                loansToDirectorsAdditionalInfoService.deleteAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                loansToDirectorsAdditionalInfoService.deleteAdditionalInformation(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
 
         verify(additionalInformationDelete).execute();
     }
@@ -416,7 +437,8 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
                 .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                loansToDirectorsAdditionalInfoService.deleteAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                loansToDirectorsAdditionalInfoService.deleteAdditionalInformation(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -434,6 +456,7 @@ class LoansToDirectorsAdditionalInfoServiceImplTest {
                 .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                loansToDirectorsAdditionalInfoService.deleteAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                loansToDirectorsAdditionalInfoService.deleteAdditionalInformation(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 }

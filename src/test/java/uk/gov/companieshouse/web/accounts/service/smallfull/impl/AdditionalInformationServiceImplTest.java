@@ -52,14 +52,16 @@ class AdditionalInformationServiceImplTest {
     @DisplayName("Get additional information")
     void getAdditionalInformation() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(directorsReportStatementsTransformer.getAdditionalInformation(statementsApi))
                 .thenReturn(additionalInformation);
 
         AdditionalInformation returned =
-                additionalInformationService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                additionalInformationService.getAdditionalInformation(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertEquals(additionalInformation, returned);
     }
@@ -68,33 +70,41 @@ class AdditionalInformationServiceImplTest {
     @DisplayName("Submit additional information - create")
     void submitAdditionalInformationCreate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
-        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
+        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID),
+                eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
                 .thenReturn(validationErrors);
 
-        List<ValidationError> returned = additionalInformationService.submitAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformation);
+        List<ValidationError> returned = additionalInformationService.submitAdditionalInformation(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformation);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setAdditionalInformation(any(StatementsApi.class), eq(additionalInformation));
+        verify(directorsReportStatementsTransformer).setAdditionalInformation(
+                any(StatementsApi.class), eq(additionalInformation));
     }
 
     @Test
     @DisplayName("Submit additional information - update")
     void submitAdditionalInformationUpdate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
-        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi))
+        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, statementsApi))
                 .thenReturn(validationErrors);
 
-        List<ValidationError> returned = additionalInformationService.submitAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformation);
+        List<ValidationError> returned = additionalInformationService.submitAdditionalInformation(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, additionalInformation);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setAdditionalInformation(statementsApi, additionalInformation);
+        verify(directorsReportStatementsTransformer).setAdditionalInformation(statementsApi,
+                additionalInformation);
     }
 }

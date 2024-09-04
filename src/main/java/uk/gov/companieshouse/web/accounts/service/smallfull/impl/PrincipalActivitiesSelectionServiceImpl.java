@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivitiesSelection;
-import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesSelectionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesSelectionService;
 
 @Service
 public class PrincipalActivitiesSelectionServiceImpl implements PrincipalActivitiesSelectionService {

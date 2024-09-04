@@ -53,7 +53,8 @@ class CreditorsAfterOneYearTransformerTests {
                 transformer.toWeb(creditorsAfterOneYearApi);
 
         assertEquals(BANK_LOANS_CURRENT,
-                creditorsAfterOneYear.getBankLoansAndOverdrafts().getCurrentBankLoansAndOverdrafts());
+                creditorsAfterOneYear.getBankLoansAndOverdrafts()
+                        .getCurrentBankLoansAndOverdrafts());
         assertEquals(FINANCE_LEASES_CURRENT,
                 creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts()
                         .getCurrentFinanceLeasesAndHirePurchaseContracts());
@@ -94,7 +95,6 @@ class CreditorsAfterOneYearTransformerTests {
 
         PreviousPeriod previousPeriod = new PreviousPeriod();
 
-
         previousPeriod.setBankLoansAndOverdrafts(BANK_LOANS_PREVIOUS);
         previousPeriod.setFinanceLeasesAndHirePurchaseContracts(FINANCE_LEASES_PREVIOUS);
         previousPeriod.setOtherCreditors(OTHER_CREDITORS_PREVIOUS);
@@ -106,7 +106,8 @@ class CreditorsAfterOneYearTransformerTests {
                 transformer.toWeb(creditorsAfterOneYearApi);
 
         assertEquals(BANK_LOANS_PREVIOUS,
-                creditorsAfterOneYear.getBankLoansAndOverdrafts().getPreviousBankLoansAndOverdrafts());
+                creditorsAfterOneYear.getBankLoansAndOverdrafts()
+                        .getPreviousBankLoansAndOverdrafts());
         assertEquals(FINANCE_LEASES_PREVIOUS,
                 creditorsAfterOneYear.getFinanceLeasesAndHirePurchaseContracts()
                         .getPreviousFinanceLeasesAndHirePurchaseContracts());

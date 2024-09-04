@@ -84,10 +84,10 @@ class DirectorServiceImplTest {
 
     @Mock
     private DirectorDelete directorDelete;
-    
+
     @Mock
     private ValidationContext validationContext;
-    
+
     @Mock
     private DateValidator dateValidator;
 
@@ -102,7 +102,7 @@ class DirectorServiceImplTest {
 
     @Mock
     private ApiResponse<DirectorApi[]> responseWithMultipleDirectors;
-    
+
     @Mock
     private ApiErrorResponseException apiErrorResponseException;
 
@@ -118,11 +118,13 @@ class DirectorServiceImplTest {
 
     private static final String DIRECTOR_ID = "directorId";
 
-    private static final String DIRECTORS_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-                                                        COMPANY_ACCOUNTS_ID + "/small-full/directors-report/directors";
+    private static final String DIRECTORS_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/directors-report/directors";
 
-    private static final String DIRECTORS_URI_WITH_ID = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-                                                        COMPANY_ACCOUNTS_ID + "/small-full/directors-report/directors/" + DIRECTOR_ID;
+    private static final String DIRECTORS_URI_WITH_ID =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/directors-report/directors/" + DIRECTOR_ID;
 
     private static final String RESOURCE_NAME = "directors";
 
@@ -145,7 +147,8 @@ class DirectorServiceImplTest {
         Director[] allDirectors = new Director[1];
         when(directorTransformer.getAllDirectors(directors)).thenReturn(allDirectors);
 
-        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                false);
 
         assertEquals(allDirectors, response);
     }
@@ -166,7 +169,8 @@ class DirectorServiceImplTest {
         Director[] responseDirectors = createArrayOfDirectors();
         when(directorTransformer.getAllDirectors(any())).thenReturn(responseDirectors);
 
-        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, true);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                true);
 
         assertEquals(responseDirectors, response);
     }
@@ -182,9 +186,11 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.getAll(DIRECTORS_URI)).thenReturn(directorGetAll);
         when(directorGetAll.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doNothing().when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false);
+        Director[] response = directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                false);
 
         assertNotNull(response);
         assertEquals(0, response.length);
@@ -201,9 +207,11 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.getAll(DIRECTORS_URI)).thenReturn(directorGetAll);
         when(directorGetAll.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
+        assertThrows(ServiceException.class,
+                () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
     }
 
     @Test
@@ -217,9 +225,11 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.getAll(DIRECTORS_URI)).thenReturn(directorGetAll);
         when(directorGetAll.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
+        assertThrows(ServiceException.class,
+                () -> directorService.getAllDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, false));
     }
 
     @Test
@@ -230,8 +240,9 @@ class DirectorServiceImplTest {
         when(directorValidator.validateDirectorToAdd(directorToAdd)).thenReturn(new ArrayList<>());
 
         when(directorToAdd.getWasDirectorAppointedDuringPeriod()).thenReturn(true);
-        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "directorToAdd.appointmentDate", ".director.appointment_date"))
-                        .thenReturn(new ArrayList<>());
+        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(),
+                "directorToAdd.appointmentDate", ".director.appointment_date"))
+                .thenReturn(new ArrayList<>());
 
         when(directorToAdd.getDidDirectorResignDuringPeriod()).thenReturn(false);
 
@@ -246,7 +257,8 @@ class DirectorServiceImplTest {
         when(directorCreate.execute()).thenReturn(responseWithSingleDirector);
         when(responseWithSingleDirector.hasErrors()).thenReturn(false);
 
-        List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorToAdd);
+        List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, directorToAdd);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -263,10 +275,12 @@ class DirectorServiceImplTest {
         ValidationError validationError = new ValidationError();
         List<ValidationError> dateValidationErrors = new ArrayList<>();
         dateValidationErrors.add(validationError);
-        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(), "directorToAdd.resignationDate", ".director.resignation_date"))
+        when(dateValidator.validateDate(directorToAdd.getAppointmentDate(),
+                "directorToAdd.resignationDate", ".director.resignation_date"))
                 .thenReturn(dateValidationErrors);
 
-        List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorToAdd);
+        List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, directorToAdd);
 
         assertEquals(dateValidationErrors, validationErrors);
 
@@ -298,9 +312,11 @@ class DirectorServiceImplTest {
         ValidationError validationError = new ValidationError();
         List<ValidationError> apiValidationErrors = new ArrayList<>();
         apiValidationErrors.add(validationError);
-        when(validationContext.getValidationErrors(responseWithSingleDirector.getErrors())).thenReturn(apiValidationErrors);
+        when(validationContext.getValidationErrors(
+                responseWithSingleDirector.getErrors())).thenReturn(apiValidationErrors);
 
-        List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorToAdd);
+        List<ValidationError> validationErrors = directorService.createDirector(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, directorToAdd);
 
         assertEquals(apiValidationErrors, validationErrors);
     }
@@ -324,9 +340,12 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.create(DIRECTORS_URI, directorApi)).thenReturn(directorCreate);
         when(directorCreate.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorToAdd));
+        assertThrows(ServiceException.class,
+                () -> directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        directorToAdd));
     }
 
     @Test
@@ -348,9 +367,12 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.create(DIRECTORS_URI, directorApi)).thenReturn(directorCreate);
         when(directorCreate.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorToAdd));
+        assertThrows(ServiceException.class,
+                () -> directorService.createDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        directorToAdd));
     }
 
     @Test
@@ -364,7 +386,8 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.delete(DIRECTORS_URI_WITH_ID)).thenReturn(directorDelete);
 
-        assertAll(() -> directorService.deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, DIRECTOR_ID));
+        assertAll(() -> directorService.deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                DIRECTOR_ID));
 
         verify(directorDelete).execute();
     }
@@ -380,9 +403,12 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.delete(DIRECTORS_URI_WITH_ID)).thenReturn(directorDelete);
         when(directorDelete.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, DIRECTOR_ID));
+        assertThrows(ServiceException.class,
+                () -> directorService.deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        DIRECTOR_ID));
     }
 
     @Test
@@ -396,9 +422,12 @@ class DirectorServiceImplTest {
         when(directorsReportResourceHandler.directors()).thenReturn(directorResourceHandler);
         when(directorResourceHandler.delete(DIRECTORS_URI_WITH_ID)).thenReturn(directorDelete);
         when(directorDelete.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorService.deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, DIRECTOR_ID));
+        assertThrows(ServiceException.class,
+                () -> directorService.deleteDirector(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        DIRECTOR_ID));
     }
 
     @Test
@@ -406,9 +435,12 @@ class DirectorServiceImplTest {
     void submitAddOrRemoveDirectors() throws ServiceException {
 
         List<ValidationError> validationErrors = new ArrayList<>();
-        when(directorValidator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors)).thenReturn(validationErrors);
+        when(directorValidator.validateSubmitAddOrRemoveDirectors(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, addOrRemoveDirectors)).thenReturn(validationErrors);
 
-        assertEquals(validationErrors, directorService.submitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, addOrRemoveDirectors));
+        assertEquals(validationErrors,
+                directorService.submitAddOrRemoveDirectors(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        addOrRemoveDirectors));
     }
 
     private DirectorApi[] createArrayOfDirectorsApi() {

@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytransactions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,35 +16,24 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactio
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransaction;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionToAdd;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RptTransactionsTransformerImplTest {
 
+    private static final String NAME_OF_RELATED_PARTY = "nameOfRelatedParty";
+    private static final String DESCRIPTION_OF_TRANSACTION = "description";
+    private static final String TRANSACTION_TYPE = "transactionType";
+    private static final String RELATIONSHIP = "relationship";
+    private static final String RPT_TRANSACTION_ID = "rptTransactionId";
+    private static final String RPT_TRANSACTIONS_SELF_LINK =
+            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/notes/related-party-transactions/transactions/"
+                    + RPT_TRANSACTION_ID;
     @Mock
     private RptBreakdownTransformer rptBreakdownTransformer;
-
     @Mock
     private RptTransactionToAdd rptTransactionToAdd;
-
     @InjectMocks
     private RptTransactionsTransformer rptTransactionsTransformer = new RptTransactionsTransformerImpl();
-
-    private static final String NAME_OF_RELATED_PARTY = "nameOfRelatedParty";
-
-    private static final String DESCRIPTION_OF_TRANSACTION = "description";
-
-    private static final String TRANSACTION_TYPE = "transactionType";
-
-    private static final String RELATIONSHIP = "relationship";
-
-    private static final String RPT_TRANSACTION_ID = "rptTransactionId";
-
-    private static final String RPT_TRANSACTIONS_SELF_LINK =
-            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/notes/related-party-transactions/transactions/" + RPT_TRANSACTION_ID;
 
     @Test
     @DisplayName("Get RPT transaction API - no breakdown")
@@ -52,7 +45,8 @@ class RptTransactionsTransformerImplTest {
         rptTransactionToAdd.setRelationship(RELATIONSHIP);
         rptTransactionToAdd.setTransactionType(TRANSACTION_TYPE);
 
-        RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(rptTransactionToAdd);
+        RptTransactionApi rptTransactionApi = rptTransactionsTransformer.getRptTransactionsApi(
+                rptTransactionToAdd);
 
         assertNotNull(rptTransactionApi);
         assertEquals(NAME_OF_RELATED_PARTY, rptTransactionApi.getNameOfRelatedParty());
@@ -71,18 +65,21 @@ class RptTransactionsTransformerImplTest {
         rptTransactionApi.setDescriptionOfTransaction(DESCRIPTION_OF_TRANSACTION);
         rptTransactionApi.setRelationship(RELATIONSHIP);
         rptTransactionApi.setTransactionType(TRANSACTION_TYPE);
-        rptTransactionApi.setBreakdown(rptBreakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd));
+        rptTransactionApi.setBreakdown(
+                rptBreakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd));
 
         RptTransactionLinks rptTransactionLinks = new RptTransactionLinks();
         rptTransactionLinks.setSelf(RPT_TRANSACTIONS_SELF_LINK);
 
         rptTransactionApi.setLinks(rptTransactionLinks);
 
-        RptTransaction[] allRptTransactions = rptTransactionsTransformer.getAllRptTransactions(new RptTransactionApi[]{rptTransactionApi});
+        RptTransaction[] allRptTransactions = rptTransactionsTransformer.getAllRptTransactions(
+                new RptTransactionApi[]{rptTransactionApi});
 
         assertEquals(1, allRptTransactions.length);
         assertEquals(NAME_OF_RELATED_PARTY, allRptTransactions[0].getNameOfRelatedParty());
-        assertEquals(DESCRIPTION_OF_TRANSACTION, allRptTransactions[0].getDescriptionOfTransaction());
+        assertEquals(DESCRIPTION_OF_TRANSACTION,
+                allRptTransactions[0].getDescriptionOfTransaction());
         assertEquals(TRANSACTION_TYPE, allRptTransactions[0].getTransactionType());
         assertEquals(RELATIONSHIP, allRptTransactions[0].getRelationship());
         assertEquals(rptTransactionToAdd.getBreakdown(), allRptTransactions[0].getBreakdown());

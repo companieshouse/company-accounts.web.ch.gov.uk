@@ -1,5 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT_URL_PREFIX;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,11 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.web.servlet.view.UrlBasedViewResolver.REDIRECT_URL_PREFIX;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -70,7 +72,7 @@ class CicSelectAccountTypeControllerTest {
     void postCicSelectAccountSelectionMadeMicro() throws Exception {
 
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
-                param("selectedAccountTypeName", "micro-entity"))
+                        param("selectedAccountTypeName", "micro-entity"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
     }
@@ -80,7 +82,7 @@ class CicSelectAccountTypeControllerTest {
     void postCicSelectAccountSelectionMadeAbridged() throws Exception {
 
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
-                param("selectedAccountTypeName", "abridged"))
+                        param("selectedAccountTypeName", "abridged"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
     }
@@ -90,7 +92,7 @@ class CicSelectAccountTypeControllerTest {
     void postCicSelectAccountSelectionMadeDormant() throws Exception {
 
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
-                param("selectedAccountTypeName", "dormant"))
+                        param("selectedAccountTypeName", "dormant"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
     }
@@ -100,7 +102,7 @@ class CicSelectAccountTypeControllerTest {
     void postCicSelectAccountSelectionMadeFull() throws Exception {
 
         mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
-                param("selectedAccountTypeName", "full"))
+                        param("selectedAccountTypeName", "full"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_FILE_FULL_ACCOUNTS_VIEW_PATH));
     }

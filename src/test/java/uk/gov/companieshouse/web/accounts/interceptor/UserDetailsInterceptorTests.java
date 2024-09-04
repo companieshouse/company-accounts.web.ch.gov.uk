@@ -1,5 +1,17 @@
 package uk.gov.companieshouse.web.accounts.interceptor;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,20 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.ModelAndView;
 import uk.gov.companieshouse.web.accounts.session.SessionService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -73,7 +71,8 @@ class UserDetailsInterceptorTests {
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
         when(httpServletRequest.getRequestURI()).thenReturn(NON_RESUME_REQUEST_URL);
 
-        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(),
+                modelAndView);
 
         verify(modelAndView, times(1)).addObject(USER_EMAIL, TEST_EMAIL_ADDRESS);
     }
@@ -95,7 +94,8 @@ class UserDetailsInterceptorTests {
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.POST.toString());
         when(modelAndView.getViewName()).thenReturn("error");
 
-        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(),
+                modelAndView);
 
         verify(modelAndView, times(1)).addObject(USER_EMAIL, TEST_EMAIL_ADDRESS);
     }
@@ -107,7 +107,8 @@ class UserDetailsInterceptorTests {
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.POST.toString());
         when(modelAndView.getViewName()).thenReturn("redirect:abc");
 
-        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(),
+                modelAndView);
 
         verify(modelAndView, never()).addObject(anyString(), any());
     }
@@ -122,7 +123,8 @@ class UserDetailsInterceptorTests {
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
         when(httpServletRequest.getRequestURI()).thenReturn(NON_RESUME_REQUEST_URL);
 
-        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(),
+                modelAndView);
 
         verify(modelAndView, never()).addObject(anyString(), any());
     }
@@ -134,7 +136,8 @@ class UserDetailsInterceptorTests {
         when(httpServletRequest.getMethod()).thenReturn(HttpMethod.GET.toString());
         when(httpServletRequest.getRequestURI()).thenReturn(RESUME_REQUEST_URL);
 
-        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(), modelAndView);
+        userDetailsInterceptor.postHandle(httpServletRequest, httpServletResponse, new Object(),
+                modelAndView);
 
         verify(modelAndView, never()).addObject(anyString(), any());
     }

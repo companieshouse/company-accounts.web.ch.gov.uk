@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,31 +16,22 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoanL
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoanTransformerImplTest {
 
+    private static final String NAME = "name";
+    private static final String DESCRIPTION = "description";
+    private static final String LOAN_ID = "loanId";
+    private static final String LOAN_SELF_LINK =
+            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/notes/loans-to-directors/loans/"
+                    + LOAN_ID;
     @Mock
     private BreakdownTransformer breakdownTransformer;
-
     @Mock
     private LoanToAdd loanToAdd;
-
     @InjectMocks
     private LoanTransformer loanTransformer = new LoanTransformerImpl();
-
-    private static final String NAME = "name";
-
-    private static final String DESCRIPTION = "description";
-
-    private static final String LOAN_ID = "loanId";
-
-    private static final String LOAN_SELF_LINK =
-            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/notes/loans-to-directors/loans/" + LOAN_ID;
 
     @Test
     @DisplayName("Get loan API - no breakdown")

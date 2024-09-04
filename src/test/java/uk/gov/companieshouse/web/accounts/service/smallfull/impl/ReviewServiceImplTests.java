@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -137,17 +136,21 @@ class ReviewServiceImplTests {
     void getReview() throws ServiceException {
 
         ProfitAndLoss mockProfitAndLoss = new ProfitAndLoss();
-        when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
+        when(profitAndLossService.getProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER))
                 .thenReturn(mockProfitAndLoss);
 
         BalanceSheet mockBalanceSheet = new BalanceSheet();
-        when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
-            .thenReturn(mockBalanceSheet);
+        when(balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER))
+                .thenReturn(mockBalanceSheet);
 
         Statements mockStatements = new Statements();
-        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(mockStatements);
+        when(statementsService.getBalanceSheetStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(mockStatements);
 
-        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
+        when(accountingPoliciesNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_ACCOUNTING_POLICIES))
                 .thenReturn(accountingPolicies);
 
         BasisOfPreparation mockBasisOfPreparation = new BasisOfPreparation();
@@ -157,56 +160,70 @@ class ReviewServiceImplTests {
         when(accountingPolicies.getTurnoverPolicy()).thenReturn(mockTurnoverPolicy);
 
         TangibleDepreciationPolicy mockTangibleDepreciationPolicy = new TangibleDepreciationPolicy();
-        when(accountingPolicies.getTangibleDepreciationPolicy()).thenReturn(mockTangibleDepreciationPolicy);
+        when(accountingPolicies.getTangibleDepreciationPolicy()).thenReturn(
+                mockTangibleDepreciationPolicy);
 
         IntangibleAmortisationPolicy mockIntangibleAmortisationPolicy = new IntangibleAmortisationPolicy();
-        when(accountingPolicies.getIntangibleAmortisationPolicy()).thenReturn(mockIntangibleAmortisationPolicy);
+        when(accountingPolicies.getIntangibleAmortisationPolicy()).thenReturn(
+                mockIntangibleAmortisationPolicy);
 
         ValuationInformationPolicy valuationInformationPolicy = new ValuationInformationPolicy();
-        when(accountingPolicies.getValuationInformationPolicy()).thenReturn(valuationInformationPolicy);
+        when(accountingPolicies.getValuationInformationPolicy()).thenReturn(
+                valuationInformationPolicy);
 
         OtherAccountingPolicy mockOtherAccounting = new OtherAccountingPolicy();
         when(accountingPolicies.getOtherAccountingPolicy()).thenReturn(mockOtherAccounting);
-        
+
         CreditorsWithinOneYear mockCreditorsWithinOneYear = new CreditorsWithinOneYear();
-        when(creditorsWithinOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR))
-            .thenReturn(mockCreditorsWithinOneYear);
+        when(creditorsWithinOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR))
+                .thenReturn(mockCreditorsWithinOneYear);
 
         CreditorsAfterOneYear mockCreditorsAfterOneYear = new CreditorsAfterOneYear();
-        when(creditorsAfterOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR))
-            .thenReturn(mockCreditorsAfterOneYear);
+        when(creditorsAfterOneYearService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR))
+                .thenReturn(mockCreditorsAfterOneYear);
 
         Debtors mockDebtors = new Debtors();
-        when(debtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenReturn(mockDebtors);
+        when(debtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_DEBTORS)).thenReturn(mockDebtors);
 
         Employees mockEmployees = new Employees();
-        when(employeesService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_EMPLOYEES)).thenReturn(mockEmployees);
+        when(employeesService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_EMPLOYEES)).thenReturn(mockEmployees);
 
         StocksNote mockStocks = new StocksNote();
-        when(stocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS)).thenReturn(mockStocks);
+        when(stocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_STOCKS)).thenReturn(mockStocks);
 
         TangibleAssets mockTangibleAssets = new TangibleAssets();
-        when(tangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS))
+        when(tangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_TANGIBLE_ASSETS))
                 .thenReturn(mockTangibleAssets);
 
         IntangibleAssets mockIntangibleAssets = new IntangibleAssets();
-        when(intangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
+        when(intangibleAssetsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_INTANGIBLE_ASSETS))
                 .thenReturn(mockIntangibleAssets);
-        
+
         FixedAssetsInvestments mockFixedAssetsInvestments = new FixedAssetsInvestments();
-        when(fixedAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT))
+        when(fixedAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT))
                 .thenReturn(mockFixedAssetsInvestments);
 
         CurrentAssetsInvestments mockCurrentAssetsInvestments = new CurrentAssetsInvestments();
-        when(currentAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS))
+        when(currentAssetsInvestmentsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS))
                 .thenReturn(mockCurrentAssetsInvestments);
 
         OffBalanceSheetArrangements mockOffBalanceSheetArrangements = new OffBalanceSheetArrangements();
-        when(offBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
+        when(offBalanceSheetArrangementsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenReturn(mockOffBalanceSheetArrangements);
 
         FinancialCommitments mockFinancialCommitments = new FinancialCommitments();
-        when(financialCommitmentsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
+        when(financialCommitmentsNoteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS))
                 .thenReturn(mockFinancialCommitments);
 
         Loan[] loans = new Loan[2];
@@ -216,17 +233,20 @@ class ReviewServiceImplTests {
         when(loanService.getAllLoans(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(loans);
 
         LoansToDirectorsAdditionalInfo additionalInfo = new LoansToDirectorsAdditionalInfo();
-        when(loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(additionalInfo);
+        when(loansToDirectorsAdditionalInfoService.getAdditionalInformation(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(additionalInfo);
 
         LocalDate periodStartOn = LocalDate.now().minusYears(1);
         LocalDate periodEndOn = LocalDate.now();
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getNextAccounts()).thenReturn(nextAccounts);
         when(nextAccounts.getPeriodStartOn()).thenReturn(periodStartOn);
         when(nextAccounts.getPeriodEndOn()).thenReturn(periodEndOn);
 
-        Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        Review review = reviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER);
 
         assertNotNull(review);
         assertEquals(mockProfitAndLoss, review.getProfitAndLoss());

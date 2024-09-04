@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
@@ -20,10 +24,6 @@ import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 import uk.gov.companieshouse.web.accounts.validation.smallfull.RadioAndTextValidator;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @NextController(TangibleDepreciationPolicyController.class)
@@ -75,6 +75,7 @@ public class TurnoverPolicyController extends BaseController {
         @ModelAttribute("turnoverPolicy") @Valid TurnoverPolicy turnoverPolicy,
         BindingResult bindingResult,
         Model model,
+        RedirectAttributes redirectAttributes,
         HttpServletRequest request) {
 
         addBackPageAttributeToModel(model, companyNumber, transactionId, companyAccountsId);
@@ -105,6 +106,15 @@ public class TurnoverPolicyController extends BaseController {
         }
 
         cacheIsPolicyIncluded(request, turnoverPolicy);
+
+        try {
+            redirectAttributes.addFlashAttribute("backButton", model.getAttribute("backButton"));
+            redirectAttributes.addFlashAttribute("turnoverPolicy", turnoverPolicy);
+            redirectAttributes.addFlashAttribute("templateName", getTemplateName());
+        } catch (NullPointerException e){
+            LOGGER.errorRequest(request, "model.getAttribute(\"backButton\") was null :\n" + e.getMessage(), e);
+            return ERROR_VIEW;
+        }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber, transactionId,
             companyAccountsId);

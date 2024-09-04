@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -72,15 +71,17 @@ class StatementsServiceImplTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String STATEMENTS_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-                                                    COMPANY_ACCOUNTS_ID + "/small-full/statements";
+    private static final String STATEMENTS_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/statements";
 
     @BeforeEach
     void setUp() {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.balanceSheetStatements()).thenReturn(statementsResourceHandler);
+        when(smallFullResourceHandler.balanceSheetStatements()).thenReturn(
+                statementsResourceHandler);
     }
 
     @Test
@@ -95,7 +96,8 @@ class StatementsServiceImplTests {
         when(responseWithData.getData()).thenReturn(statementsApi);
         when(transformer.getBalanceSheetStatements(statementsApi)).thenReturn(new Statements());
 
-        Statements statements = statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        Statements statements = statementsService.getBalanceSheetStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertNotNull(statements);
     }
@@ -134,7 +136,8 @@ class StatementsServiceImplTests {
         when(statementsResourceHandler.create(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsCreate);
 
-        assertAll(() -> statementsService.createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(() -> statementsService.createBalanceSheetStatementsResource(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
 
         verify(statementsCreate).execute();
     }
@@ -149,7 +152,8 @@ class StatementsServiceImplTests {
         when(statementsCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class, () ->
-                statementsService.createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                statementsService.createBalanceSheetStatementsResource(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -162,7 +166,8 @@ class StatementsServiceImplTests {
         when(statementsCreate.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class, () ->
-                statementsService.createBalanceSheetStatementsResource(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                statementsService.createBalanceSheetStatementsResource(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -173,7 +178,8 @@ class StatementsServiceImplTests {
         when(statementsResourceHandler.update(anyString(), any(BalanceSheetStatementsApi.class)))
                 .thenReturn(statementsUpdate);
 
-        assertAll(() -> statementsService.acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(() -> statementsService.acceptBalanceSheetStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
 
         verify(statementsUpdate).execute();
     }
@@ -188,7 +194,8 @@ class StatementsServiceImplTests {
         doThrow(ApiErrorResponseException.class).when(statementsUpdate).execute();
 
         assertThrows(ServiceException.class, () ->
-                statementsService.acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                statementsService.acceptBalanceSheetStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -201,7 +208,8 @@ class StatementsServiceImplTests {
         doThrow(URIValidationException.class).when(statementsUpdate).execute();
 
         assertThrows(ServiceException.class, () ->
-                statementsService.acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                statementsService.acceptBalanceSheetStatements(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
 }

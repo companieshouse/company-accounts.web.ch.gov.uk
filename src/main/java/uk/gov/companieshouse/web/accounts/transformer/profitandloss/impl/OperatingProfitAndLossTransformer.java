@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl;
 
 
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.profitandloss.ProfitAndLossApi;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.ProfitAndLoss;
@@ -9,9 +11,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorl
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.DistributionCosts;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OperatingTotal;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OtherOperatingIncome;
-
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @Component
 public class OperatingProfitAndLossTransformer {

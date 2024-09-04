@@ -14,20 +14,14 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Date;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DateValidatorTest {
-    
-    private final DateValidator dateValidator = new DateValidator();
-    
+
     private static final String FIELD_PATH = "fieldPath";
-    
     private static final String JSON_PATH_SUFFIX = ".json_path_suffix";
-
     private static final String DATE_MISSING = "validation.date.missing";
-
     private static final String DATE_INCOMPLETE = "validation.date.incomplete";
-
     private static final String DATE_FORMAT_INVALID = "validation.date.format";
-
     private static final String DATE_INVALID = "validation.date.nonExistent";
+    private final DateValidator dateValidator = new DateValidator();
 
     @Test
     @DisplayName("Validate Date - No Fields Provided")
@@ -35,7 +29,8 @@ class DateValidatorTest {
 
         Date date = new Date();
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
@@ -51,7 +46,8 @@ class DateValidatorTest {
         date.setMonth("12");
         date.setYear("2018");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
@@ -67,7 +63,8 @@ class DateValidatorTest {
         date.setDay("12");
         date.setYear("2018");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
@@ -83,7 +80,8 @@ class DateValidatorTest {
         date.setDay("12");
         date.setMonth("12");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
@@ -100,11 +98,13 @@ class DateValidatorTest {
         date.setMonth("3");
         date.setYear("2018");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
-        assertEquals(DATE_FORMAT_INVALID + JSON_PATH_SUFFIX, validationErrors.get(0).getMessageKey());
+        assertEquals(DATE_FORMAT_INVALID + JSON_PATH_SUFFIX,
+                validationErrors.get(0).getMessageKey());
         assertEquals(FIELD_PATH, validationErrors.get(0).getFieldPath());
     }
 
@@ -117,11 +117,13 @@ class DateValidatorTest {
         date.setMonth("Mar");
         date.setYear("2018");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
-        assertEquals(DATE_FORMAT_INVALID + JSON_PATH_SUFFIX, validationErrors.get(0).getMessageKey());
+        assertEquals(DATE_FORMAT_INVALID + JSON_PATH_SUFFIX,
+                validationErrors.get(0).getMessageKey());
         assertEquals(FIELD_PATH, validationErrors.get(0).getFieldPath());
     }
 
@@ -134,11 +136,13 @@ class DateValidatorTest {
         date.setMonth("3");
         date.setYear("18");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
-        assertEquals(DATE_FORMAT_INVALID + JSON_PATH_SUFFIX, validationErrors.get(0).getMessageKey());
+        assertEquals(DATE_FORMAT_INVALID + JSON_PATH_SUFFIX,
+                validationErrors.get(0).getMessageKey());
         assertEquals(FIELD_PATH, validationErrors.get(0).getFieldPath());
     }
 
@@ -151,7 +155,8 @@ class DateValidatorTest {
         date.setMonth("13");
         date.setYear("2018");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertNotNull(validationErrors);
         assertEquals(1, validationErrors.size());
@@ -168,7 +173,8 @@ class DateValidatorTest {
         date.setMonth("10");
         date.setYear("2018");
 
-        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH, JSON_PATH_SUFFIX);
+        List<ValidationError> validationErrors = dateValidator.validateDate(date, FIELD_PATH,
+                JSON_PATH_SUFFIX);
 
         assertEquals(0, validationErrors.size());
     }

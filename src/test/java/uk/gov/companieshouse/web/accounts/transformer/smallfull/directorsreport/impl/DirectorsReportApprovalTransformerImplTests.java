@@ -22,21 +22,15 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportApprovalTransformerImplTests {
 
+    private static final String NAME = "name";
+    private static final String APPROVAL_DAY = "7";
+    private static final String APPROVAL_MONTH = "12";
+    private static final String APPROVAL_YEAR = "2018";
+    private static final LocalDate APPROVAL_DATE = LocalDate.of(2018, 12, 7);
     @Mock
     private DateTransformer dateTransformer;
-
     @InjectMocks
     private DirectorsReportApprovalTransformer approvalTransformer = new DirectorsReportApprovalTransformerImpl();
-
-    private static final String NAME = "name";
-
-    private static final String APPROVAL_DAY = "7";
-
-    private static final String APPROVAL_MONTH =  "12";
-
-    private static final String APPROVAL_YEAR = "2018";
-
-    private static final LocalDate APPROVAL_DATE = LocalDate.of(2018, 12, 7);
 
     @Test
     @DisplayName("Get Directors Report Approval Api")
@@ -70,7 +64,8 @@ class DirectorsReportApprovalTransformerImplTests {
         approvalApi.setName(NAME);
         approvalApi.setDate(APPROVAL_DATE);
 
-        DirectorsReportApproval approval = approvalTransformer.getDirectorsReportApproval(approvalApi);
+        DirectorsReportApproval approval = approvalTransformer.getDirectorsReportApproval(
+                approvalApi);
 
         assertEquals(NAME, approval.getName());
         assertNotNull(approval.getDate());

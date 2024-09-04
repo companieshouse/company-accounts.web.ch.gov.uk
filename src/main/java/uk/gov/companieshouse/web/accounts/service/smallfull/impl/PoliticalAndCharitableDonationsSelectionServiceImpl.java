@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndCharitableDonationsSelection;
-import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsSelectionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsSelectionService;
 
 @Service
 public class PoliticalAndCharitableDonationsSelectionServiceImpl implements PoliticalAndCharitableDonationsSelectionService {

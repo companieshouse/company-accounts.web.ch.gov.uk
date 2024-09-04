@@ -58,7 +58,7 @@ class DirectorsReportApprovalServiceImplTest {
 
     @Mock
     private ApiClient apiClient;
-    
+
     @Mock
     private SmallFullResourceHandler smallFullResourceHandler;
 
@@ -117,8 +117,9 @@ class DirectorsReportApprovalServiceImplTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String APPROVAL_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-        COMPANY_ACCOUNTS_ID + "/small-full/directors-report/approval";
+    private static final String APPROVAL_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/directors-report/approval";
 
     private static final String MOCK_APPROVAL_LINK = "mockApprovalLink";
 
@@ -130,26 +131,30 @@ class DirectorsReportApprovalServiceImplTest {
 
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
-    void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void createApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(
@@ -160,7 +165,8 @@ class DirectorsReportApprovalServiceImplTest {
         when(approvalCreate.execute()).thenReturn(mockApiResponse);
 
         List<ValidationError> validationErrors =
-            directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval);
+                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, directorsReportApproval);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -169,39 +175,45 @@ class DirectorsReportApprovalServiceImplTest {
     @DisplayName("Submit Approval - POST - Date Validation Errors")
     void createApprovalDateValidationErrors() throws ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(false);
 
         List<ValidationError> validationErrors =
-                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval);
+                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, directorsReportApproval);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
 
     @Test
     @DisplayName("Submit Approval - POST - URIValidationException Thrown")
-    void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
-        ServiceException {
+    void createApprovalThrowsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException,
+            ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(
@@ -213,35 +225,39 @@ class DirectorsReportApprovalServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval));
+                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, directorsReportApproval));
     }
 
     @Test
     @DisplayName("Submit Approval - POST - Validation Errors")
     void createApprovalReturnsValidationErrors()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(
@@ -253,9 +269,11 @@ class DirectorsReportApprovalServiceImplTest {
 
         when(mockApiResponse.hasErrors()).thenReturn(true);
 
-        when(validationContext.getValidationErrors(mockApiResponse.getErrors())).thenReturn(mockValidationErrors);
+        when(validationContext.getValidationErrors(mockApiResponse.getErrors())).thenReturn(
+                mockValidationErrors);
 
-        List<ValidationError> validationErrors = directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval);
+        List<ValidationError> validationErrors = directorsReportApprovalService.submitDirectorsReportApproval(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -263,26 +281,29 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Submit Approval - POST - Generic ApiErrorResponseException Thrown")
     void createApprovalThrowsGenericApiErrorResponseException()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.create(APPROVAL_URI, approvalApi)).thenReturn(
@@ -294,34 +315,39 @@ class DirectorsReportApprovalServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval));
+                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, directorsReportApproval));
     }
 
     @Test
     @DisplayName("Submit Approval - PUT - Success Path")
-    void updateApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void updateApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(
@@ -332,34 +358,39 @@ class DirectorsReportApprovalServiceImplTest {
         when(approvalUpdate.execute()).thenReturn(mockVoidApiResponse);
 
         List<ValidationError> validationErrors =
-            directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval);
+                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, directorsReportApproval);
 
         assertTrue(validationErrors.isEmpty());
     }
 
     @Test
     @DisplayName("Submit Approval - PUT - URIValidationException Thrown")
-    void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException,
-        ServiceException {
+    void updateApprovalURIValidationExceptionThrown()
+            throws ApiErrorResponseException, URIValidationException,
+            ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(
@@ -371,35 +402,39 @@ class DirectorsReportApprovalServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval));
+                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, directorsReportApproval));
     }
 
     @Test
     @DisplayName("Submit Approval - PUT - Validation Errors")
     void updateApprovalReturnsValidationErrors()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(
@@ -411,9 +446,11 @@ class DirectorsReportApprovalServiceImplTest {
 
         when(mockVoidApiResponse.hasErrors()).thenReturn(true);
 
-        when(validationContext.getValidationErrors(mockVoidApiResponse.getErrors())).thenReturn(mockValidationErrors);
+        when(validationContext.getValidationErrors(mockVoidApiResponse.getErrors())).thenReturn(
+                mockValidationErrors);
 
-        List<ValidationError> validationErrors = directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval);
+        List<ValidationError> validationErrors = directorsReportApprovalService.submitDirectorsReportApproval(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -421,26 +458,29 @@ class DirectorsReportApprovalServiceImplTest {
     @Test
     @DisplayName("Submit Approval - PUT - Generic ApiErrorResponseException Thrown")
     void updateApprovalThrowsGenericApiErrorResponseException()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(directorsReportApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        
+
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
 
         when(directorsReportResourceHandler.approval()).thenReturn(approvalResourceHandler);
 
-        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(directorsReportApi);
+        when(directorsReportReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
+                .thenReturn(directorsReportApi);
 
         when(directorsReportApi.getLinks()).thenReturn(directorsReportLinks);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(directorsReportApproval)).thenReturn(
+        when(directorsReportApprovalTransformer.getDirectorsReportApprovalApi(
+                directorsReportApproval)).thenReturn(
                 approvalApi);
 
         when(approvalResourceHandler.update(APPROVAL_URI, approvalApi)).thenReturn(
@@ -455,12 +495,14 @@ class DirectorsReportApprovalServiceImplTest {
                 .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsReportApproval));
+                directorsReportApprovalService.submitDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID, directorsReportApproval));
     }
 
     @Test
     @DisplayName("Get Approval - Success Path")
-    void getApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void getApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -476,15 +518,18 @@ class DirectorsReportApprovalServiceImplTest {
 
         when(mockApiResponse.getData()).thenReturn(approvalApi);
 
-        when(directorsReportApprovalTransformer.getDirectorsReportApproval(approvalApi)).thenReturn(directorsReportApproval);
+        when(directorsReportApprovalTransformer.getDirectorsReportApproval(approvalApi)).thenReturn(
+                directorsReportApproval);
 
         assertEquals(directorsReportApproval,
-                directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get Approval - Not Found")
-    void getApprovalNotFound() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void getApprovalNotFound()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -498,14 +543,17 @@ class DirectorsReportApprovalServiceImplTest {
 
         when(approvalGet.execute()).thenThrow(apiErrorResponseException);
 
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doNothing().when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertNotNull(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertNotNull(directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get Approval - Generic ApiErrorResponseException Thrown")
-    void getApprovalThrowsGenericApiErrorResponseException() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void getApprovalThrowsGenericApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -519,15 +567,18 @@ class DirectorsReportApprovalServiceImplTest {
 
         when(approvalGet.execute()).thenThrow(apiErrorResponseException);
 
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get Approval - URIValidationException Thrown")
-    void getApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void getApprovalThrowsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -541,9 +592,11 @@ class DirectorsReportApprovalServiceImplTest {
 
         when(approvalGet.execute()).thenThrow(uriValidationException);
 
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportApprovalService.getDirectorsReportApproval(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 }

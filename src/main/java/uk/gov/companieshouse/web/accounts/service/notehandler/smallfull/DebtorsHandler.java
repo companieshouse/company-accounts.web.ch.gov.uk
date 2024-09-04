@@ -1,9 +1,9 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
-import org.springframework.web.util.UriTemplate;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.handler.Executor;
 import uk.gov.companieshouse.api.model.ApiResponse;

@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -56,13 +55,13 @@ class DirectorsRemunerationControllerTest {
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(directorsRemunerationController)
-            .build();
+                .build();
     }
 
     @Test
@@ -70,14 +69,14 @@ class DirectorsRemunerationControllerTest {
     void getRequestDirectorsRemunerationSuccess() throws Exception {
 
         when(directorsRemunerationService
-            .getDirectorsRemuneration(anyString(), anyString()))
-            .thenReturn(new DirectorsRemuneration());
+                .getDirectorsRemuneration(anyString(), anyString()))
+                .thenReturn(new DirectorsRemuneration());
 
         this.mockMvc.perform(get(DIRECTORS_REMUNERATION_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(DIRECTORS_REMUNERATION_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(DIRECTORS_REMUNERATION_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(DIRECTORS_REMUNERATION_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(DIRECTORS_REMUNERATION_MODEL_ATTR));
     }
 
     @Test
@@ -85,12 +84,12 @@ class DirectorsRemunerationControllerTest {
     void getRequestDirectorsRemunerationServiceException() throws Exception {
 
         when(directorsRemunerationService
-            .getDirectorsRemuneration(anyString(), anyString()))
-            .thenThrow(ServiceException.class);
+                .getDirectorsRemuneration(anyString(), anyString()))
+                .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(DIRECTORS_REMUNERATION_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -98,16 +97,21 @@ class DirectorsRemunerationControllerTest {
     void postRequestDirectorsRemunerationSuccess() throws Exception {
 
         when(directorsRemunerationService
-            .submitDirectorsRemuneration(anyString(), anyString(),
-                any(DirectorsRemuneration.class))).thenReturn(new ArrayList<>());
+                .submitDirectorsRemuneration(anyString(), anyString(),
+                        any(DirectorsRemuneration.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc
-            .perform(post(DIRECTORS_REMUNERATION_PATH).param(DIRECTORS_REMUNERATION_PARAM, "value"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+                .perform(post(DIRECTORS_REMUNERATION_PATH).param(DIRECTORS_REMUNERATION_PARAM,
+                        "value"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test
@@ -115,13 +119,14 @@ class DirectorsRemunerationControllerTest {
     void postRequestDirectorsRemunerationServiceException() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(directorsRemunerationService)
-            .submitDirectorsRemuneration(anyString(), anyString(),
-                any(DirectorsRemuneration.class));
+                .when(directorsRemunerationService)
+                .submitDirectorsRemuneration(anyString(), anyString(),
+                        any(DirectorsRemuneration.class));
         this.mockMvc
-            .perform(post(DIRECTORS_REMUNERATION_PATH).param(DIRECTORS_REMUNERATION_PARAM, "value"))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .perform(post(DIRECTORS_REMUNERATION_PATH).param(DIRECTORS_REMUNERATION_PARAM,
+                        "value"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -129,9 +134,9 @@ class DirectorsRemunerationControllerTest {
     void postRequestDirectorsRemunerationBindingErrors() throws Exception {
 
         this.mockMvc
-            .perform(post(DIRECTORS_REMUNERATION_PATH).param(DIRECTORS_REMUNERATION_PARAM, ""))
-            .andExpect(status().isOk())
-            .andExpect(view().name(DIRECTORS_REMUNERATION_VIEW));
+                .perform(post(DIRECTORS_REMUNERATION_PATH).param(DIRECTORS_REMUNERATION_PARAM, ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name(DIRECTORS_REMUNERATION_VIEW));
     }
 
 

@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -32,44 +33,31 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.ProfitAndLossService
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProfitAndLossQuestionControllerTest {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String PROFIT_AND_LOSS_QUESTION_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/profit-and-loss-question";
+    private static final String PROFIT_AND_LOSS_QUESTION_MODEL_ATTR = "profitAndLossQuestion";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String PROFIT_AND_LOSS_QUESTION_VIEW = "smallfull/profitAndLossQuestion";
+    private static final String ERROR_VIEW = "error";
+    private static final String PROFIT_AND_LOSS_SELECTION = "hasIncludedProfitAndLoss";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
     private MockMvc mockMvc;
-
     @Mock
     private ProfitAndLossService profitAndLossService;
-
     @Mock
     private NavigatorService navigatorService;
-
     @InjectMocks
     private ProfitAndLossQuestionController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String PROFIT_AND_LOSS_QUESTION_PATH = "/company/" + COMPANY_NUMBER +
-                                                                "/transaction/" + TRANSACTION_ID +
-                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                "/small-full/profit-and-loss-question";
-
-    private static final String PROFIT_AND_LOSS_QUESTION_MODEL_ATTR = "profitAndLossQuestion";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String PROFIT_AND_LOSS_QUESTION_VIEW = "smallfull/profitAndLossQuestion";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String PROFIT_AND_LOSS_SELECTION = "hasIncludedProfitAndLoss";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
-    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
-    
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -77,43 +65,55 @@ class ProfitAndLossQuestionControllerTest {
     @Test
     @DisplayName("Get profit and loss")
     void getRequest() throws Exception {
-        
+
         this.mockMvc.perform(get(PROFIT_AND_LOSS_QUESTION_PATH)
-            .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
-            .andExpect(status().isOk())
-            .andExpect(view().name(PROFIT_AND_LOSS_QUESTION_VIEW))
-            .andExpect(model().attributeExists(PROFIT_AND_LOSS_QUESTION_MODEL_ATTR))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                        .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(PROFIT_AND_LOSS_QUESTION_VIEW))
+                .andExpect(model().attributeExists(PROFIT_AND_LOSS_QUESTION_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
     @DisplayName("Post profit and loss - has not included profit and loss")
     void postRequestHasNotIncludedProfitAndLoss() throws Exception {
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        
-        this.mockMvc.perform(post(PROFIT_AND_LOSS_QUESTION_PATH)
-            .param(PROFIT_AND_LOSS_SELECTION, "0")
-            .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
-        verify(profitAndLossService).deleteProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        this.mockMvc.perform(post(PROFIT_AND_LOSS_QUESTION_PATH)
+                        .param(PROFIT_AND_LOSS_SELECTION, "0")
+                        .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
+
+        verify(profitAndLossService).deleteProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER);
     }
 
     @Test
     @DisplayName("Post profit and loss - has included profit and loss")
     void postRequestHasIncludedProfitAndLoss() throws Exception {
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(PROFIT_AND_LOSS_QUESTION_PATH)
-                .param(PROFIT_AND_LOSS_SELECTION, "1")
-                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                        .param(PROFIT_AND_LOSS_SELECTION, "1")
+                        .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
-        verify(profitAndLossService, never()).deleteProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+        verify(profitAndLossService, never()).deleteProfitAndLoss(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
     }
 
     @Test
@@ -122,14 +122,15 @@ class ProfitAndLossQuestionControllerTest {
 
         doThrow(ServiceException.class)
                 .when(profitAndLossService)
-                        .deleteProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                .deleteProfitAndLoss(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
 
         this.mockMvc.perform(post(PROFIT_AND_LOSS_QUESTION_PATH)
-                .param(PROFIT_AND_LOSS_SELECTION, "0"))
+                        .param(PROFIT_AND_LOSS_SELECTION, "0"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(),
+                ArgumentMatchers.<String>any());
     }
 
     @Test

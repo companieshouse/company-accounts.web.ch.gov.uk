@@ -2,6 +2,7 @@ package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -63,9 +63,9 @@ class TransferOfAssetsSelectionControllerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String TRANSFER_OF_ASSETS_SELECTION_PATH = "/company/" + COMPANY_NUMBER +
-                                                                                "/transaction/" + TRANSACTION_ID +
-                                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                                "/cic/transfer-of-assets-selection";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/cic/transfer-of-assets-selection";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
@@ -79,10 +79,11 @@ class TransferOfAssetsSelectionControllerTest {
 
     private static final String ERROR_VIEW = "error";
 
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(selectionController).build();
     }
@@ -98,10 +99,10 @@ class TransferOfAssetsSelectionControllerTest {
                 .thenReturn(true);
 
         this.mockMvc.perform(get(TRANSFER_OF_ASSETS_SELECTION_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(TRANSFER_OF_ASSETS_SELECTION_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TRANSFER_OF_ASSETS_SELECTION_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(TRANSFER_OF_ASSETS_SELECTION_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(TRANSFER_OF_ASSETS_SELECTION_MODEL_ATTR));
 
         verify(selection, never()).setHasProvidedTransferOfAssets(anyBoolean());
     }
@@ -155,9 +156,14 @@ class TransferOfAssetsSelectionControllerTest {
 
         when(companyAccountsDataState.getCicStatements()).thenReturn(cicStatements);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(createPostRequestWithParam(HAS_PROVIDED_TRANSFER_OF_ASSETS).session(session))
+        this.mockMvc.perform(
+                        createPostRequestWithParam(HAS_PROVIDED_TRANSFER_OF_ASSETS).session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
@@ -192,7 +198,8 @@ class TransferOfAssetsSelectionControllerTest {
                 .andExpect(view().name(ERROR_VIEW));
     }
 
-    private MockHttpServletRequestBuilder createPostRequestWithParam(Boolean hasProvidedTransferOfAssets) {
+    private MockHttpServletRequestBuilder createPostRequestWithParam(
+            Boolean hasProvidedTransferOfAssets) {
 
         String beanElement = "hasProvidedTransferOfAssets";
         String data = hasProvidedTransferOfAssets == null ? null : "0";

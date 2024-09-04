@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.CurrentAssetsApi;
@@ -10,9 +12,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.Transformer;
-
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @Component("currentAssetsTransformer")
 public class CurrentAssetsTransformerImpl implements Transformer {

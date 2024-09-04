@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,7 +80,7 @@ class CreditorsAfterOneYearHandlerTest {
     private CreditorsAfterOneYearHandler creditorsAfterOneYearHandler;
 
     @BeforeEach
-    void before () {
+    void before() {
         creditorsAfterOneYearHandler = new CreditorsAfterOneYearHandler(smallFullService);
     }
 
@@ -97,7 +98,8 @@ class CreditorsAfterOneYearHandlerTest {
 
         when(creditorsAfterOneYearResourceHandler.get(URI)).thenReturn(creditorsAfterOneYearGet);
 
-        Executor<ApiResponse<CreditorsAfterOneYearApi>> creditorsAfterOneYearApiGet = creditorsAfterOneYearHandler.get(apiClient, URI);
+        Executor<ApiResponse<CreditorsAfterOneYearApi>> creditorsAfterOneYearApiGet = creditorsAfterOneYearHandler.get(
+                apiClient, URI);
 
         assertNotNull(creditorsAfterOneYearApiGet);
         assertEquals(creditorsAfterOneYearApiGet, creditorsAfterOneYearGet);
@@ -106,13 +108,16 @@ class CreditorsAfterOneYearHandlerTest {
 
     @Test
     @DisplayName("Update CreditorsAfterOneYear Resource")
-    void updateCreditorsAfterOneYearResource() throws ApiErrorResponseException, URIValidationException {
+    void updateCreditorsAfterOneYearResource()
+            throws ApiErrorResponseException, URIValidationException {
 
         setupCreditorsAfterOneYearResourceHandler();
 
-        when(creditorsAfterOneYearResourceHandler.update(URI, creditorsAfterOneYearApi)).thenReturn(creditorsAfterOneYearUpdate);
+        when(creditorsAfterOneYearResourceHandler.update(URI, creditorsAfterOneYearApi)).thenReturn(
+                creditorsAfterOneYearUpdate);
 
-        Executor<ApiResponse<Void>> updatedCreditorsAfterOneYear = creditorsAfterOneYearHandler.update(apiClient, URI, creditorsAfterOneYearApi);
+        Executor<ApiResponse<Void>> updatedCreditorsAfterOneYear = creditorsAfterOneYearHandler.update(
+                apiClient, URI, creditorsAfterOneYearApi);
 
         assertNotNull(updatedCreditorsAfterOneYear);
         assertEquals(updatedCreditorsAfterOneYear, creditorsAfterOneYearUpdate);
@@ -125,9 +130,11 @@ class CreditorsAfterOneYearHandlerTest {
 
         setupCreditorsAfterOneYearResourceHandler();
 
-        when(creditorsAfterOneYearResourceHandler.create(URI, creditorsAfterOneYearApi)).thenReturn(creditorsAfterOneYearCreate);
+        when(creditorsAfterOneYearResourceHandler.create(URI, creditorsAfterOneYearApi)).thenReturn(
+                creditorsAfterOneYearCreate);
 
-        Executor<ApiResponse<CreditorsAfterOneYearApi>> createCreditorsAfterOneYearApi = creditorsAfterOneYearHandler.create(apiClient, URI, creditorsAfterOneYearApi);
+        Executor<ApiResponse<CreditorsAfterOneYearApi>> createCreditorsAfterOneYearApi = creditorsAfterOneYearHandler.create(
+                apiClient, URI, creditorsAfterOneYearApi);
 
         assertNotNull(createCreditorsAfterOneYearApi);
         assertEquals(createCreditorsAfterOneYearApi, creditorsAfterOneYearCreate);
@@ -140,9 +147,11 @@ class CreditorsAfterOneYearHandlerTest {
 
         setupCreditorsAfterOneYearResourceHandler();
 
-        when(creditorsAfterOneYearResourceHandler.delete(URI)).thenReturn(creditorsAfterOneYearDelete);
+        when(creditorsAfterOneYearResourceHandler.delete(URI)).thenReturn(
+                creditorsAfterOneYearDelete);
 
-        Executor<ApiResponse<Void>> deleteCreditorsAfterOneYearApi = creditorsAfterOneYearHandler.delete(apiClient, URI);
+        Executor<ApiResponse<Void>> deleteCreditorsAfterOneYearApi = creditorsAfterOneYearHandler.delete(
+                apiClient, URI);
 
         assertNotNull(deleteCreditorsAfterOneYearApi);
         assertEquals(deleteCreditorsAfterOneYearApi, creditorsAfterOneYearDelete);
@@ -153,33 +162,41 @@ class CreditorsAfterOneYearHandlerTest {
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-        when(smallFullLinks.getCreditorsAfterMoreThanOneYearNote()).thenReturn(CREDITORS_AFTER_ONE_YEAR_NOTE);
+        when(smallFullLinks.getCreditorsAfterMoreThanOneYearNote()).thenReturn(
+                CREDITORS_AFTER_ONE_YEAR_NOTE);
 
-        assertTrue(creditorsAfterOneYearHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(creditorsAfterOneYearHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
-        assertThrows(ServiceException.class, () -> creditorsAfterOneYearHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> creditorsAfterOneYearHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test method returns CreditorsAfterOneYear as NoteType")
-    void testCreditorsAfterOneYearReturned()  {
+    void testCreditorsAfterOneYearReturned() {
 
-        assertEquals(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR, creditorsAfterOneYearHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR,
+                creditorsAfterOneYearHandler.getNoteType());
     }
 
     private void setupCreditorsAfterOneYearResourceHandler() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.creditorsAfterOneYear()).thenReturn(creditorsAfterOneYearResourceHandler);
+        when(smallFullResourceHandler.creditorsAfterOneYear()).thenReturn(
+                creditorsAfterOneYearResourceHandler);
     }
 
 }

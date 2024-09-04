@@ -7,8 +7,7 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTests;
 
 /**
- * Mock conditional controller class for testing missing expected number of
- * path variables.
+ * Mock conditional controller class for testing missing expected number of path variables.
  *
  * @see NavigatorServiceTests
  */
@@ -22,7 +21,8 @@ public class MockControllerFour extends BaseController implements ConditionalCon
     }
 
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+    public boolean willRender(String companyNumber, String transactionId,
+            String companyAccountsId) {
         return false;
     }
 }

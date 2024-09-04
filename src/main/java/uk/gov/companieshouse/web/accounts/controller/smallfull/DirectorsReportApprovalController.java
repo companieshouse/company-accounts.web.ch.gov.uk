@@ -1,6 +1,9 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
-import org.apache.commons.lang.BooleanUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,17 +23,11 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.Director;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.DirectorsReportApproval;
-import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportApprovalService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SecretaryService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @NextController(ProfitAndLossQuestionController.class)

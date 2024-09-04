@@ -1,11 +1,25 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,22 +39,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -67,9 +65,9 @@ class StocksControllerTests {
     private static final String COMPANY_NUMBER = "companyNumber";
 
     private static final String SMALL_FULL_STOCKS_PATH = "/company/" + COMPANY_NUMBER +
-        "/transaction/" + TRANSACTION_ID +
-        "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-        "/small-full/stocks";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/stocks";
 
     private static final String STOCKS_VIEW = "smallfull/stocks";
 
@@ -79,14 +77,15 @@ class StocksControllerTests {
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String ERROR_VIEW = "error";
 
     private static final String TEST_PATH = "stocks.currentStocks";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -94,16 +93,21 @@ class StocksControllerTests {
     @DisplayName("Get stocks view success path")
     void getRequestSuccess() throws Exception {
 
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
+        ;
         when(mockStocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS))
-            .thenReturn(new StocksNote());
+                .thenReturn(new StocksNote());
 
         this.mockMvc.perform(get(SMALL_FULL_STOCKS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(STOCKS_VIEW))
-            .andExpect(model().attributeExists(STOCKS_MODEL_ATTR))
-            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(STOCKS_VIEW))
+                .andExpect(model().attributeExists(STOCKS_MODEL_ATTR))
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -111,26 +115,31 @@ class StocksControllerTests {
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
         when(mockStocksService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS))
-            .thenThrow(ServiceException.class);
+                .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(SMALL_FULL_STOCKS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
     @DisplayName("Post stocks success path")
     void postRequestSuccess() throws Exception {
 
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockStocksService.submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS)))
-            .thenReturn(new ArrayList<>());
+        when(mockNavigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockStocksService.submit(anyString(), anyString(), any(StocksNote.class),
+                eq(NoteType.SMALL_FULL_STOCKS)))
+                .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test
@@ -138,12 +147,13 @@ class StocksControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockStocksService).submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS));
+                .when(mockStocksService).submit(anyString(), anyString(), any(StocksNote.class),
+                        eq(NoteType.SMALL_FULL_STOCKS));
 
         this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -157,22 +167,25 @@ class StocksControllerTests {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockStocksService.submit(anyString(), anyString(), any(StocksNote.class), eq(NoteType.SMALL_FULL_STOCKS)))
-            .thenReturn(errors);
+        when(mockStocksService.submit(anyString(), anyString(), any(StocksNote.class),
+                eq(NoteType.SMALL_FULL_STOCKS)))
+                .thenReturn(errors);
 
         this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(STOCKS_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(STOCKS_VIEW));
     }
 
     @Test
     @DisplayName("Test will render with stocks present on balancesheet")
     void willRenderStocksPresent() throws Exception {
 
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
-            .thenReturn(getMockBalanceSheet());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER))
+                .thenReturn(getMockBalanceSheet());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertTrue(renderPage);
     }
@@ -181,10 +194,12 @@ class StocksControllerTests {
     @DisplayName("Test will render with stocks not present on balancesheet")
     void willRenderStocksNotPresent() throws Exception {
 
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
-            .thenReturn(getMockBalanceSheetNoDebtors());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER))
+                .thenReturn(getMockBalanceSheetNoDebtors());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertFalse(renderPage);
     }
@@ -193,10 +208,12 @@ class StocksControllerTests {
     @DisplayName("Test will not render with 0 values in stocks on balance sheet")
     void willNotRenderStocksZeroValues() throws Exception {
 
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER))
-            .thenReturn(getMockBalanceSheetZeroValues());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER))
+                .thenReturn(getMockBalanceSheetZeroValues());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertFalse(renderPage);
     }
@@ -210,10 +227,10 @@ class StocksControllerTests {
         String invalidData = "test";
 
         this.mockMvc.perform(post(SMALL_FULL_STOCKS_PATH)
-            .param(beanElement, invalidData))
-            .andExpect(status().isOk())
-            .andExpect(view().name(STOCKS_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                        .param(beanElement, invalidData))
+                .andExpect(status().isOk())
+                .andExpect(view().name(STOCKS_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     private BalanceSheet getMockBalanceSheet() {

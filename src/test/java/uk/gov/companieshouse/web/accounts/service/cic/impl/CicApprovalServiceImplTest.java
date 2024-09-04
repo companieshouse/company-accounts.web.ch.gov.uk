@@ -107,8 +107,9 @@ class CicApprovalServiceImplTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String APPROVAL_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-        COMPANY_ACCOUNTS_ID + "/cic-report/cic-approval";
+    private static final String APPROVAL_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/cic-report/cic-approval";
 
     private static final String MOCK_APPROVAL_LINK = "mockApprovalLink";
 
@@ -120,9 +121,11 @@ class CicApprovalServiceImplTest {
 
     @Test
     @DisplayName("Submit Approval - POST - Success Path")
-    void createApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void createApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -133,20 +136,22 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalCreate);
+        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalCreate);
 
         when(cicReportLinks.getApproval()).thenReturn(null);
 
         when(cicApprovalCreate.execute()).thenReturn(mockApiResponse);
 
         List<ValidationError> validationErrors =
-            cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
+                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        cicApproval);
 
         assertTrue(validationErrors.isEmpty());
     }
@@ -155,22 +160,26 @@ class CicApprovalServiceImplTest {
     @DisplayName("Submit Approval - POST - Date Validation Errors")
     void createApprovalDateValidationErrors() throws ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(false);
 
         List<ValidationError> validationErrors =
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
+                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        cicApproval);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
 
     @Test
     @DisplayName("Submit Approval - POST - URIValidationException Thrown")
-    void createApprovalThrowsURIValidationException() throws ApiErrorResponseException, URIValidationException,
-        ServiceException {
+    void createApprovalThrowsURIValidationException()
+            throws ApiErrorResponseException, URIValidationException,
+            ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -181,13 +190,14 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalCreate);
+        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalCreate);
 
         when(cicReportLinks.getApproval()).thenReturn(null);
 
@@ -195,18 +205,20 @@ class CicApprovalServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval));
+                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        cicApproval));
     }
 
     @Test
     @DisplayName("Submit Approval - POST - Validation Errors")
     void createApprovalReturnsValidationErrors()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -217,13 +229,14 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalCreate);
+        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalCreate);
 
         when(cicReportLinks.getApproval()).thenReturn(null);
 
@@ -231,9 +244,11 @@ class CicApprovalServiceImplTest {
 
         when(mockApiResponse.hasErrors()).thenReturn(true);
 
-        when(validationContext.getValidationErrors(mockApiResponse.getErrors())).thenReturn(mockValidationErrors);
+        when(validationContext.getValidationErrors(mockApiResponse.getErrors())).thenReturn(
+                mockValidationErrors);
 
-        List<ValidationError> validationErrors = cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
+        List<ValidationError> validationErrors = cicApprovalService.submitCicApproval(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -241,9 +256,10 @@ class CicApprovalServiceImplTest {
     @Test
     @DisplayName("Submit Approval - POST - Generic ApiErrorResponseException Thrown")
     void createApprovalThrowsGenericApiErrorResponseException()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -254,13 +270,14 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalCreate);
+        when(cicApprovalResourceHandler.create(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalCreate);
 
         when(cicReportLinks.getApproval()).thenReturn(null);
 
@@ -268,17 +285,20 @@ class CicApprovalServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval));
+                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        cicApproval));
     }
 
     @Test
     @DisplayName("Submit Approval - PUT - Success Path")
-    void updateApprovalSuccess() throws ApiErrorResponseException, URIValidationException, ServiceException {
+    void updateApprovalSuccess()
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -289,30 +309,34 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalUpdate);
+        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalUpdate);
 
         when(cicReportLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
         when(cicApprovalUpdate.execute()).thenReturn(mockVoidApiResponse);
 
         List<ValidationError> validationErrors =
-            cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
+                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        cicApproval);
 
         assertTrue(validationErrors.isEmpty());
     }
 
     @Test
     @DisplayName("Submit Approval - PUT - URIValidationException Thrown")
-    void updateApprovalURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException,
-        ServiceException {
+    void updateApprovalURIValidationExceptionThrown()
+            throws ApiErrorResponseException, URIValidationException,
+            ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -323,13 +347,14 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalUpdate);
+        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalUpdate);
 
         when(cicReportLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
@@ -337,18 +362,20 @@ class CicApprovalServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval));
+                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        cicApproval));
     }
 
     @Test
     @DisplayName("Submit Approval - PUT - Validation Errors")
     void updateApprovalReturnsValidationErrors()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -359,13 +386,14 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalUpdate);
+        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalUpdate);
 
         when(cicReportLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
@@ -373,9 +401,11 @@ class CicApprovalServiceImplTest {
 
         when(mockVoidApiResponse.hasErrors()).thenReturn(true);
 
-        when(validationContext.getValidationErrors(mockVoidApiResponse.getErrors())).thenReturn(mockValidationErrors);
+        when(validationContext.getValidationErrors(mockVoidApiResponse.getErrors())).thenReturn(
+                mockValidationErrors);
 
-        List<ValidationError> validationErrors = cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
+        List<ValidationError> validationErrors = cicApprovalService.submitCicApproval(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval);
 
         assertEquals(mockValidationErrors, validationErrors);
     }
@@ -383,9 +413,10 @@ class CicApprovalServiceImplTest {
     @Test
     @DisplayName("Submit Approval - PUT - Generic ApiErrorResponseException Thrown")
     void updateApprovalThrowsGenericApiErrorResponseException()
-        throws ApiErrorResponseException, URIValidationException, ServiceException {
+            throws ApiErrorResponseException, URIValidationException, ServiceException {
 
-        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH, DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
+        when(dateValidator.validateDate(cicApproval.getDate(), DATE_FIELD_PATH,
+                DATE_JSON_PATH_SUFFIX)).thenReturn(mockValidationErrors);
 
         when(mockValidationErrors.isEmpty()).thenReturn(true);
 
@@ -396,13 +427,14 @@ class CicApprovalServiceImplTest {
         when(cicReportResourceHandler.approval()).thenReturn(cicApprovalResourceHandler);
 
         when(cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
-            .thenReturn(cicReportApi);
+                .thenReturn(cicReportApi);
 
         when(cicReportApi.getLinks()).thenReturn(cicReportLinks);
 
         when(cicApprovalTransformer.getCicApprovalApi(cicApproval)).thenReturn(cicApprovalApi);
 
-        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(cicApprovalUpdate);
+        when(cicApprovalResourceHandler.update(APPROVAL_URI, cicApprovalApi)).thenReturn(
+                cicApprovalUpdate);
 
         when(cicReportLinks.getApproval()).thenReturn(MOCK_APPROVAL_LINK);
 
@@ -413,6 +445,7 @@ class CicApprovalServiceImplTest {
                 .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicApproval));
+                cicApprovalService.submitCicApproval(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        cicApproval));
     }
 }

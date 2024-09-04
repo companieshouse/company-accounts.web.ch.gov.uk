@@ -1,11 +1,21 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,18 +29,6 @@ import uk.gov.companieshouse.web.accounts.model.cic.statements.CompanyActivities
 import uk.gov.companieshouse.web.accounts.model.state.CompanyAccountsDataState;
 import uk.gov.companieshouse.web.accounts.service.cic.statements.CompanyActivitiesAndImpactService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
-import java.util.ArrayList;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -65,15 +63,15 @@ class CompanyActivitiesAndImpactControllerTest {
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(companyActivitiesAndImpactController)
-            .build();
+                .build();
     }
 
     @Test
@@ -81,14 +79,14 @@ class CompanyActivitiesAndImpactControllerTest {
     void getRequestCompanyActivitiesAndImpactSuccess() throws Exception {
 
         when(companyActivitiesAndImpactService
-            .getCompanyActivitiesAndImpact(anyString(), anyString()))
-            .thenReturn(new CompanyActivitiesAndImpact());
+                .getCompanyActivitiesAndImpact(anyString(), anyString()))
+                .thenReturn(new CompanyActivitiesAndImpact());
 
         this.mockMvc.perform(get(COMPANY_ACTIVITY_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(COMPANY_ACTIVITY_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(COMPANY_ACTIVITY_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(COMPANY_ACTIVITY_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(COMPANY_ACTIVITY_MODEL_ATTR));
     }
 
     @Test
@@ -96,12 +94,12 @@ class CompanyActivitiesAndImpactControllerTest {
     void getRequestCompanyActivitiesAndImpactServiceException() throws Exception {
 
         when(companyActivitiesAndImpactService
-            .getCompanyActivitiesAndImpact(anyString(), anyString()))
-            .thenThrow(ServiceException.class);
+                .getCompanyActivitiesAndImpact(anyString(), anyString()))
+                .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(COMPANY_ACTIVITY_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -115,15 +113,20 @@ class CompanyActivitiesAndImpactControllerTest {
         session.setAttribute(COMPANY_ACCOUNTS_DATA_STATE, companyAccountsDataState);
 
         when(companyActivitiesAndImpactService
-            .submitCompanyActivitiesAndImpact(anyString(), anyString(),
-                any(CompanyActivitiesAndImpact.class))).thenReturn(new ArrayList<>());
+                .submitCompanyActivitiesAndImpact(anyString(), anyString(),
+                        any(CompanyActivitiesAndImpact.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).session(session).param("activitiesAndImpact", "value"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+        this.mockMvc.perform(
+                        post(COMPANY_ACTIVITY_PATH).session(session).param("activitiesAndImpact", "value"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test
@@ -131,21 +134,21 @@ class CompanyActivitiesAndImpactControllerTest {
     void postRequestCompanyActivitiesAndImpactServiceException() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(companyActivitiesAndImpactService)
-            .submitCompanyActivitiesAndImpact(anyString(), anyString(),
-                any(CompanyActivitiesAndImpact.class));
+                .when(companyActivitiesAndImpactService)
+                .submitCompanyActivitiesAndImpact(anyString(), anyString(),
+                        any(CompanyActivitiesAndImpact.class));
         this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("activitiesAndImpact", "value"))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
     @DisplayName("Accept CompanyActivitiesAndImpact - binding errors")
     void postRequestCompanyActivitiesAndImpactBindingErrors() throws Exception {
 
-        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("activitiesAndImpact", "") )
-            .andExpect(status().isOk())
-            .andExpect(view().name(COMPANY_ACTIVITY_VIEW));
+        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("activitiesAndImpact", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name(COMPANY_ACTIVITY_VIEW));
     }
 
 

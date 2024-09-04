@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,8 +15,6 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccountTypeController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
-
-import javax.validation.Valid;
 
 @Controller
 @NextController(StepsToCompleteController.class)

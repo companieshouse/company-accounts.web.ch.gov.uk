@@ -73,7 +73,8 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
     void mapFullApiResourceToEmptyWebModel() {
 
         TangibleAssets tangibleAssets = new TangibleAssets();
-        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(true, true);
+        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(true,
+                true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, fixturesAndFittings);
 
         assertWebModelsMapped(tangibleAssets, true, true);
@@ -84,7 +85,8 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
     void mapApiResourceWithoutCostToEmptyWebModel() {
 
         TangibleAssets tangibleAssets = new TangibleAssets();
-        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(false, true);
+        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(false,
+                true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, fixturesAndFittings);
 
         assertWebModelsMapped(tangibleAssets, false, true);
@@ -96,7 +98,8 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
     void mapApiResourceWithoutDepreciationToEmptyWebModel() {
 
         TangibleAssets tangibleAssets = new TangibleAssets();
-        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(true, false);
+        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(true,
+                false);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, fixturesAndFittings);
 
         assertWebModelsMapped(tangibleAssets, true, false);
@@ -109,7 +112,8 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
 
         TangibleAssets tangibleAssets = createTangibleAssetsWithPreExistingResources();
 
-        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(true, true);
+        TangibleAssetsResource fixturesAndFittings = createFixturesAndFittingsApiResource(true,
+                true);
         transformer.mapTangibleAssetsResourceToWebModel(tangibleAssets, fixturesAndFittings);
 
         assertWebModelsMapped(tangibleAssets, true, true);
@@ -219,7 +223,7 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
     }
 
     private TangibleAssetsResource createFixturesAndFittingsApiResource(boolean includeCost,
-                                                                        boolean includeDepreciation) {
+            boolean includeDepreciation) {
 
         TangibleAssetsResource fixturesAndFittings = new TangibleAssetsResource();
 
@@ -412,8 +416,8 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
     }
 
     private void assertWebModelsMapped(TangibleAssets tangibleAssets,
-                                       boolean expectCostFieldsMapped,
-                                       boolean expectDepreciationFieldsMapped) {
+            boolean expectCostFieldsMapped,
+            boolean expectDepreciationFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(tangibleAssets);
@@ -421,33 +425,43 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
         if (expectDepreciationFieldsMapped) {
             assertDepreciationFieldsMappedToWebModel(tangibleAssets);
         }
-        assertEquals(CURRENT_PERIOD, tangibleAssets.getNetBookValue().getCurrentPeriod().getFixturesAndFittings());
-        assertEquals(PREVIOUS_PERIOD, tangibleAssets.getNetBookValue().getPreviousPeriod().getFixturesAndFittings());
+        assertEquals(CURRENT_PERIOD,
+                tangibleAssets.getNetBookValue().getCurrentPeriod().getFixturesAndFittings());
+        assertEquals(PREVIOUS_PERIOD,
+                tangibleAssets.getNetBookValue().getPreviousPeriod().getFixturesAndFittings());
     }
 
     private void assertCostFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
 
-        assertEquals(COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getFixturesAndFittings());
+        assertEquals(COST_AT_PERIOD_START,
+                tangibleAssets.getCost().getAtPeriodStart().getFixturesAndFittings());
         assertEquals(ADDITIONS, tangibleAssets.getCost().getAdditions().getFixturesAndFittings());
         assertEquals(DISPOSALS, tangibleAssets.getCost().getDisposals().getFixturesAndFittings());
-        assertEquals(REVALUATIONS, tangibleAssets.getCost().getRevaluations().getFixturesAndFittings());
+        assertEquals(REVALUATIONS,
+                tangibleAssets.getCost().getRevaluations().getFixturesAndFittings());
         assertEquals(TRANSFERS, tangibleAssets.getCost().getTransfers().getFixturesAndFittings());
-        assertEquals(COST_AT_PERIOD_END, tangibleAssets.getCost().getAtPeriodEnd().getFixturesAndFittings());
+        assertEquals(COST_AT_PERIOD_END,
+                tangibleAssets.getCost().getAtPeriodEnd().getFixturesAndFittings());
     }
 
     private void assertDepreciationFieldsMappedToWebModel(TangibleAssets tangibleAssets) {
 
-        assertEquals(DEPRECIATION_AT_PERIOD_START, tangibleAssets.getDepreciation().getAtPeriodStart().getFixturesAndFittings());
-        assertEquals(CHARGE_FOR_YEAR, tangibleAssets.getDepreciation().getChargeForYear().getFixturesAndFittings());
-        assertEquals(ON_DISPOSALS, tangibleAssets.getDepreciation().getOnDisposals().getFixturesAndFittings());
-        assertEquals(OTHER_ADJUSTMENTS, tangibleAssets.getDepreciation().getOtherAdjustments().getFixturesAndFittings());
-        assertEquals(DEPRECIATION_AT_PERIOD_END, tangibleAssets.getDepreciation().getAtPeriodEnd().getFixturesAndFittings());
+        assertEquals(DEPRECIATION_AT_PERIOD_START,
+                tangibleAssets.getDepreciation().getAtPeriodStart().getFixturesAndFittings());
+        assertEquals(CHARGE_FOR_YEAR,
+                tangibleAssets.getDepreciation().getChargeForYear().getFixturesAndFittings());
+        assertEquals(ON_DISPOSALS,
+                tangibleAssets.getDepreciation().getOnDisposals().getFixturesAndFittings());
+        assertEquals(OTHER_ADJUSTMENTS,
+                tangibleAssets.getDepreciation().getOtherAdjustments().getFixturesAndFittings());
+        assertEquals(DEPRECIATION_AT_PERIOD_END,
+                tangibleAssets.getDepreciation().getAtPeriodEnd().getFixturesAndFittings());
     }
 
     private void assertApiFeildsMapped(TangibleAssetsResource resource,
-                                       boolean expectCostFieldsMapped,
-                                       boolean expectDepreciationFieldsMapped,
-                                       boolean expectNetBookValueFieldsMapped) {
+            boolean expectCostFieldsMapped,
+            boolean expectDepreciationFieldsMapped,
+            boolean expectNetBookValueFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
@@ -494,18 +508,31 @@ class TangibleAssetsFixturesAndFittingsTransformerImplTests {
 
     private void assertPreExistingFieldsUnaffected(TangibleAssets tangibleAssets) {
 
-        assertEquals(OTHER_COST_AT_PERIOD_START, tangibleAssets.getCost().getAtPeriodStart().getLandAndBuildings());
-        assertEquals(OTHER_ADDITIONS, tangibleAssets.getCost().getAdditions().getLandAndBuildings());
-        assertEquals(OTHER_DISPOSALS, tangibleAssets.getCost().getDisposals().getLandAndBuildings());
-        assertEquals(OTHER_REVALUATIONS, tangibleAssets.getCost().getRevaluations().getLandAndBuildings());
-        assertEquals(OTHER_TRANSFERS, tangibleAssets.getCost().getTransfers().getLandAndBuildings());
-        assertEquals(OTHER_COST_AT_PERIOD_END, tangibleAssets.getCost().getAtPeriodEnd().getLandAndBuildings());
-        assertEquals(OTHER_DEPRECIATION_AT_PERIOD_START, tangibleAssets.getDepreciation().getAtPeriodStart().getLandAndBuildings());
-        assertEquals(OTHER_CHARGE_FOR_YEAR, tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings());
-        assertEquals(OTHER_ON_DISPOSALS, tangibleAssets.getDepreciation().getOnDisposals().getLandAndBuildings());
-        assertEquals(OTHER_OTHER_ADJUSTMENTS, tangibleAssets.getDepreciation().getOtherAdjustments().getLandAndBuildings());
-        assertEquals(OTHER_DEPRECIATION_AT_PERIOD_END, tangibleAssets.getDepreciation().getAtPeriodEnd().getLandAndBuildings());
-        assertEquals(OTHER_CURRENT_PERIOD, tangibleAssets.getNetBookValue().getCurrentPeriod().getLandAndBuildings());
-        assertEquals(OTHER_PREVIOUS_PERIOD, tangibleAssets.getNetBookValue().getPreviousPeriod().getLandAndBuildings());
+        assertEquals(OTHER_COST_AT_PERIOD_START,
+                tangibleAssets.getCost().getAtPeriodStart().getLandAndBuildings());
+        assertEquals(OTHER_ADDITIONS,
+                tangibleAssets.getCost().getAdditions().getLandAndBuildings());
+        assertEquals(OTHER_DISPOSALS,
+                tangibleAssets.getCost().getDisposals().getLandAndBuildings());
+        assertEquals(OTHER_REVALUATIONS,
+                tangibleAssets.getCost().getRevaluations().getLandAndBuildings());
+        assertEquals(OTHER_TRANSFERS,
+                tangibleAssets.getCost().getTransfers().getLandAndBuildings());
+        assertEquals(OTHER_COST_AT_PERIOD_END,
+                tangibleAssets.getCost().getAtPeriodEnd().getLandAndBuildings());
+        assertEquals(OTHER_DEPRECIATION_AT_PERIOD_START,
+                tangibleAssets.getDepreciation().getAtPeriodStart().getLandAndBuildings());
+        assertEquals(OTHER_CHARGE_FOR_YEAR,
+                tangibleAssets.getDepreciation().getChargeForYear().getLandAndBuildings());
+        assertEquals(OTHER_ON_DISPOSALS,
+                tangibleAssets.getDepreciation().getOnDisposals().getLandAndBuildings());
+        assertEquals(OTHER_OTHER_ADJUSTMENTS,
+                tangibleAssets.getDepreciation().getOtherAdjustments().getLandAndBuildings());
+        assertEquals(OTHER_DEPRECIATION_AT_PERIOD_END,
+                tangibleAssets.getDepreciation().getAtPeriodEnd().getLandAndBuildings());
+        assertEquals(OTHER_CURRENT_PERIOD,
+                tangibleAssets.getNetBookValue().getCurrentPeriod().getLandAndBuildings());
+        assertEquals(OTHER_PREVIOUS_PERIOD,
+                tangibleAssets.getNetBookValue().getPreviousPeriod().getLandAndBuildings());
     }
 }

@@ -1,5 +1,13 @@
 package uk.gov.companieshouse.web.accounts.controller.corporationtax;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,37 +22,27 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CorporationTaxControllerTests {
-
-    private MockMvc mockMvc;
-
-    @Mock
-    private NavigatorService navigatorService;
-
-    @InjectMocks
-    private CorporationTaxController controller;
 
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String PATH = "/company/" + COMPANY_NUMBER + "/corporation-tax";
     private static final String MODEL_ATTR = "corporationTax";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String VIEW = "corporationtax/corporationTax";
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
     private static final String TAX_EXTERNAL_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
             "https://www.gov.uk/file-your-company-accounts-and-tax-return";
+    private MockMvc mockMvc;
+    @Mock
+    private NavigatorService navigatorService;
+    @InjectMocks
+    private CorporationTaxController controller;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -68,7 +66,7 @@ class CorporationTaxControllerTests {
         String criteriaMet = "true";
 
         this.mockMvc.perform(post(PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(TAX_EXTERNAL_PATH));
     }
@@ -84,7 +82,7 @@ class CorporationTaxControllerTests {
                 .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -97,7 +95,7 @@ class CorporationTaxControllerTests {
         String criteriaMet = null;
 
         this.mockMvc.perform(post(PATH)
-                .param(beanElement, criteriaMet))
+                        .param(beanElement, criteriaMet))
                 .andExpect(status().isOk())
                 .andExpect(view().name(VIEW));
     }

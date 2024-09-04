@@ -17,8 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PoliticalAndCharitableDonations;
-import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.PoliticalAndCharitableDonationsService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorsReportStatementsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -52,14 +52,16 @@ class PoliticalAndCharitableDonationsServiceImplTest {
     @DisplayName("Get political and charitable donations")
     void getPoliticalAndCharitableDonations() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(directorsReportStatementsTransformer.getPoliticalAndCharitableDonations(statementsApi))
                 .thenReturn(politicalAndCharitableDonations);
 
         PoliticalAndCharitableDonations returned =
-                politicalAndCharitableDonationsService.getPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                politicalAndCharitableDonationsService.getPoliticalAndCharitableDonations(
+                        TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(politicalAndCharitableDonations, returned);
     }
@@ -68,37 +70,45 @@ class PoliticalAndCharitableDonationsServiceImplTest {
     @DisplayName("Submit political and charitable donations - create")
     void submitPoliticalAndCharitableDonationsCreate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
-        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
+        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID),
+                eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
                 .thenReturn(validationErrors);
 
         List<ValidationError> returned =
                 politicalAndCharitableDonationsService
-                        .submitPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, politicalAndCharitableDonations);
+                        .submitPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                politicalAndCharitableDonations);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setPoliticalAndCharitableDonations(any(StatementsApi.class), eq(politicalAndCharitableDonations));
+        verify(directorsReportStatementsTransformer).setPoliticalAndCharitableDonations(
+                any(StatementsApi.class), eq(politicalAndCharitableDonations));
     }
 
     @Test
     @DisplayName("Submit political and charitable donations - update")
     void submitPoliticalAndCharitableDonationsUpdate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
-        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi))
+        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, statementsApi))
                 .thenReturn(validationErrors);
 
         List<ValidationError> returned =
                 politicalAndCharitableDonationsService
-                        .submitPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, politicalAndCharitableDonations);
+                        .submitPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                politicalAndCharitableDonations);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setPoliticalAndCharitableDonations(statementsApi, politicalAndCharitableDonations);
+        verify(directorsReportStatementsTransformer).setPoliticalAndCharitableDonations(
+                statementsApi, politicalAndCharitableDonations);
     }
 }

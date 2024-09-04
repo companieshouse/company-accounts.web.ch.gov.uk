@@ -133,7 +133,7 @@ class CicStatementsServiceImplTest {
 
         doNothing()
                 .when(serviceExceptionHandler)
-                        .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertNull(statementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -149,7 +149,7 @@ class CicStatementsServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class,
                 () -> statementsService.getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
@@ -210,7 +210,7 @@ class CicStatementsServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 statementsService.createCicStatementsApi(
@@ -229,7 +229,7 @@ class CicStatementsServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 statementsService.createCicStatementsApi(
@@ -289,7 +289,7 @@ class CicStatementsServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, RESOURCE_NAME);
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 statementsService.updateCicStatementsApi(
@@ -308,7 +308,7 @@ class CicStatementsServiceImplTest {
 
         doThrow(ServiceException.class)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
                 statementsService.updateCicStatementsApi(

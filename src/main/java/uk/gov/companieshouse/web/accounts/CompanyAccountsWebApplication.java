@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import uk.gov.companieshouse.web.accounts.interceptor.LoggingInterceptor;
 import uk.gov.companieshouse.web.accounts.interceptor.CompanyAccountsDataStateInterceptor;
+import uk.gov.companieshouse.web.accounts.interceptor.LoggingInterceptor;
 import uk.gov.companieshouse.web.accounts.interceptor.UserDetailsInterceptor;
 
 @SpringBootApplication

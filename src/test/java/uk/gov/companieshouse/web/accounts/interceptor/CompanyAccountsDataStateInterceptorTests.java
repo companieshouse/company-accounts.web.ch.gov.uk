@@ -12,13 +12,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -48,17 +48,18 @@ class CompanyAccountsDataStateInterceptorTests {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String CRITERIA_URI = "/company/" + COMPANY_NUMBER + "/small-full/criteria";
+    private static final String CRITERIA_URI =
+            "/company/" + COMPANY_NUMBER + "/small-full/criteria";
 
     private static final String BALANCE_SHEET_URI = "/company/" + COMPANY_NUMBER +
-                                                    "/transaction/" + TRANSACTION_ID +
-                                                    "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                    "/small-full/criteria";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/criteria";
 
     private static final String APPROVAL_URI = "/company/" + COMPANY_NUMBER +
-                                                "/transaction/" + TRANSACTION_ID +
-                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                "/small-full/approval";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/approval";
 
     @Mock
     private HttpServletRequest mockRequest;
@@ -113,7 +114,8 @@ class CompanyAccountsDataStateInterceptorTests {
         companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
         verify(mockTokenManager, never()).decodeJWT(anyString(), any());
-        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
+        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE),
+                any(CompanyAccountsDataState.class));
     }
 
     @Test
@@ -126,12 +128,15 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
 
         companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
-        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
+        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE),
+                any(CompanyAccountsDataState.class));
     }
 
     @Test
@@ -144,7 +149,8 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenReturn(
                 mockCompanyAccountsDataStates);
         when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
                 mockCompanyAccountsStates);
@@ -152,9 +158,11 @@ class CompanyAccountsDataStateInterceptorTests {
 
         companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
         verify(mockCompanyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
-        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE), any(CompanyAccountsDataState.class));
+        verify(mockSession, times(1)).setAttribute(eq(STATE_REQUEST_ATTRIBUTE),
+                any(CompanyAccountsDataState.class));
     }
 
     @Test
@@ -167,7 +175,8 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenReturn(
                 mockCompanyAccountsDataStates);
         when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
                 mockCompanyAccountsStates);
@@ -176,7 +185,8 @@ class CompanyAccountsDataStateInterceptorTests {
 
         companyAccountsDataStateInterceptor.preHandle(mockRequest, mockResponse, new Object());
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
         verify(mockCompanyAccountsStates, times(1)).get(COMPANY_ACCOUNTS_ID);
         verify(mockSession, times(1)).setAttribute(STATE_REQUEST_ATTRIBUTE,
                 mockCompanyAccountsDataState);
@@ -209,7 +219,8 @@ class CompanyAccountsDataStateInterceptorTests {
         when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
                 mockCompanyAccountsDataState);
 
-        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(
+                STATE_COOKIE_VALUE);
 
         doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
@@ -232,20 +243,23 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenThrow(SignatureException.class);
 
         when(mockRequest.getSession()).thenReturn(mockSession);
         when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
                 mockCompanyAccountsDataState);
 
-        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(
+                STATE_COOKIE_VALUE);
 
         doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
                 .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
 
         verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
@@ -262,7 +276,8 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenReturn(
                 mockCompanyAccountsDataStates);
 
         when(mockRequest.getSession()).thenReturn(mockSession);
@@ -273,14 +288,16 @@ class CompanyAccountsDataStateInterceptorTests {
                 mockCompanyAccountsStates);
         when(mockCompanyAccountsStates.size()).thenReturn(1);
 
-        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(
+                STATE_COOKIE_VALUE);
 
         doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
                 .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
 
         verify(mockCompanyAccountsStates, times(1)).put(COMPANY_ACCOUNTS_ID,
                 mockCompanyAccountsDataState);
@@ -300,7 +317,8 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenReturn(
                 mockCompanyAccountsDataStates);
 
         when(mockRequest.getSession()).thenReturn(mockSession);
@@ -310,14 +328,16 @@ class CompanyAccountsDataStateInterceptorTests {
         when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
                 mockCompanyAccountsStates);
 
-        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(
+                STATE_COOKIE_VALUE);
 
         doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
                 .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
 
         verify(mockCompanyAccountsStates, times(1)).remove(COMPANY_ACCOUNTS_ID);
 
@@ -335,7 +355,8 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenReturn(
                 mockCompanyAccountsDataStates);
 
         when(mockRequest.getSession()).thenReturn(mockSession);
@@ -345,18 +366,21 @@ class CompanyAccountsDataStateInterceptorTests {
         // Build a state map with keys numbered 1 to 5
         Map<String, CompanyAccountsDataState> companyAccountsStates = new HashMap<>();
         for (int i = 0; i < 5; i++) {
-            companyAccountsStates.put(Integer.toString(i+1), new CompanyAccountsDataState());
+            companyAccountsStates.put(Integer.toString(i + 1), new CompanyAccountsDataState());
         }
-        when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(companyAccountsStates);
+        when(mockCompanyAccountsDataStates.getCompanyAccountsDataStateMap()).thenReturn(
+                companyAccountsStates);
 
-        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(STATE_COOKIE_VALUE);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenReturn(
+                STATE_COOKIE_VALUE);
 
         doNothing().when(mockResponse).addCookie(any(Cookie.class));
 
         companyAccountsDataStateInterceptor
                 .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
 
         verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 
@@ -377,21 +401,24 @@ class CompanyAccountsDataStateInterceptorTests {
         Cookie[] cookies = new Cookie[]{createStateCookie()};
         when(mockRequest.getCookies()).thenReturn(cookies);
 
-        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class)).thenReturn(
+        when(mockTokenManager.decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class)).thenReturn(
                 mockCompanyAccountsDataStates);
 
         when(mockRequest.getSession()).thenReturn(mockSession);
         when(mockSession.getAttribute(STATE_REQUEST_ATTRIBUTE)).thenReturn(
                 mockCompanyAccountsDataState);
 
-        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenThrow(JsonProcessingException.class);
+        when(mockTokenManager.createJWT(any(CompanyAccountsDataStates.class))).thenThrow(
+                JsonProcessingException.class);
 
         doNothing().when(mockResponse).setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         companyAccountsDataStateInterceptor
                 .postHandle(mockRequest, mockResponse, new Object(), mockModelAndView);
 
-        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE, CompanyAccountsDataStates.class);
+        verify(mockTokenManager, times(1)).decodeJWT(STATE_COOKIE_VALUE,
+                CompanyAccountsDataStates.class);
 
         verify(mockTokenManager, times(1)).createJWT(any(CompanyAccountsDataStates.class));
 

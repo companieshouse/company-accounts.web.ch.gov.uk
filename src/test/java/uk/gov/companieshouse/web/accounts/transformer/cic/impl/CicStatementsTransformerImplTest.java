@@ -19,16 +19,12 @@ import uk.gov.companieshouse.web.accounts.transformer.cic.CicStatementsTransform
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CicStatementsTransformerImplTest {
 
-    private final CicStatementsTransformer transformer = new CicStatementsTransformerImpl();
-
     private static final String COMPANY_ACTIVITIES_AND_IMPACT = "companyActivitiesAndImpact";
     private static final String UPDATED_COMPANY_ACTIVITIES_AND_IMPACT = "updatedCompanyActivitiesAndImpact";
-
     private static final String CONSULTATION_WITH_STAKEHOLDERS = "consultationWithStakeholders";
-
     private static final String DIRECTORS_REMUNERATION = "directorsRemuneration";
-
     private static final String TRANSFER_OF_ASSETS = "transferOfAssets";
+    private final CicStatementsTransformer transformer = new CicStatementsTransformerImpl();
 
     @Test
     @DisplayName("Get company activities and impact - null statements object")
@@ -49,7 +45,8 @@ class CicStatementsTransformerImplTest {
                 transformer.getCompanyActivitiesAndImpact(createCicStatementsApi());
 
         assertNotNull(companyActivitiesAndImpact);
-        assertEquals(COMPANY_ACTIVITIES_AND_IMPACT, companyActivitiesAndImpact.getActivitiesAndImpact());
+        assertEquals(COMPANY_ACTIVITIES_AND_IMPACT,
+                companyActivitiesAndImpact.getActivitiesAndImpact());
     }
 
     @Test
@@ -64,8 +61,10 @@ class CicStatementsTransformerImplTest {
         transformer.setCompanyActivitiesAndImpact(companyActivitiesAndImpact, cicStatementsApi);
 
         ReportStatementsApi reportStatements = cicStatementsApi.getReportStatements();
-        assertEquals(UPDATED_COMPANY_ACTIVITIES_AND_IMPACT, reportStatements.getCompanyActivitiesAndImpact());
-        assertEquals(CONSULTATION_WITH_STAKEHOLDERS, reportStatements.getConsultationWithStakeholders());
+        assertEquals(UPDATED_COMPANY_ACTIVITIES_AND_IMPACT,
+                reportStatements.getCompanyActivitiesAndImpact());
+        assertEquals(CONSULTATION_WITH_STAKEHOLDERS,
+                reportStatements.getConsultationWithStakeholders());
         assertEquals(DIRECTORS_REMUNERATION, reportStatements.getDirectorsRemuneration());
         assertEquals(TRANSFER_OF_ASSETS, reportStatements.getTransferOfAssets());
     }

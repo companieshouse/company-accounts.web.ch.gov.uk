@@ -4,8 +4,8 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTests;
 
 /**
- * Mock controller class for testing missing navigation annotations {@code NextController}
- * and {@code PreviousController}.
+ * Mock controller class for testing missing navigation annotations {@code NextController} and
+ * {@code PreviousController}.
  *
  * @see NavigatorServiceTests
  */

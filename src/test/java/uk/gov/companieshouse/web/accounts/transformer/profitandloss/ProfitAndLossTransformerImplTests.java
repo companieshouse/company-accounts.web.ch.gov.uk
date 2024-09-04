@@ -47,27 +47,36 @@ class ProfitAndLossTransformerImplTests {
         ProfitAndLossApi currentPeriodProfitAndLoss = new ProfitAndLossApi();
         ProfitAndLossApi previousPeriodProfitAndLoss = new ProfitAndLossApi();
 
-        assertNotNull(transformer.getProfitAndLoss(currentPeriodProfitAndLoss, previousPeriodProfitAndLoss));
+        assertNotNull(transformer.getProfitAndLoss(currentPeriodProfitAndLoss,
+                previousPeriodProfitAndLoss));
 
         verify(grossProfitAndLossTransformer)
-                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), eq(currentPeriodProfitAndLoss));
+                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(currentPeriodProfitAndLoss));
         verify(grossProfitAndLossTransformer)
-                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), eq(previousPeriodProfitAndLoss));
+                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(previousPeriodProfitAndLoss));
 
         verify(operatingProfitAndLossTransformer)
-                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), eq(currentPeriodProfitAndLoss));
+                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(currentPeriodProfitAndLoss));
         verify(operatingProfitAndLossTransformer)
-                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), eq(previousPeriodProfitAndLoss));
+                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(previousPeriodProfitAndLoss));
 
         verify(profitOrLossBeforeTaxTransformer)
-                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), eq(currentPeriodProfitAndLoss));
+                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(currentPeriodProfitAndLoss));
         verify(profitOrLossBeforeTaxTransformer)
-                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), eq(previousPeriodProfitAndLoss));
+                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(previousPeriodProfitAndLoss));
 
         verify(profitOrLossForFinancialYearTransformer)
-                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class), eq(currentPeriodProfitAndLoss));
+                .addCurrentPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(currentPeriodProfitAndLoss));
         verify(profitOrLossForFinancialYearTransformer)
-                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class), eq(previousPeriodProfitAndLoss));
+                .addPreviousPeriodToWebModel(any(ProfitAndLoss.class),
+                        eq(previousPeriodProfitAndLoss));
     }
 
     @Test
@@ -105,10 +114,14 @@ class ProfitAndLossTransformerImplTests {
 
         assertNotNull(transformer.getCurrentPeriodProfitAndLoss(profitAndLoss));
 
-        verify(grossProfitAndLossTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
-        verify(operatingProfitAndLossTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
-        verify(profitOrLossBeforeTaxTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
-        verify(profitOrLossForFinancialYearTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
+        verify(grossProfitAndLossTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss),
+                any(ProfitAndLossApi.class));
+        verify(operatingProfitAndLossTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss),
+                any(ProfitAndLossApi.class));
+        verify(profitOrLossBeforeTaxTransformer).addCurrentPeriodToApiModel(eq(profitAndLoss),
+                any(ProfitAndLossApi.class));
+        verify(profitOrLossForFinancialYearTransformer).addCurrentPeriodToApiModel(
+                eq(profitAndLoss), any(ProfitAndLossApi.class));
     }
 
     @Test
@@ -119,10 +132,14 @@ class ProfitAndLossTransformerImplTests {
 
         assertNotNull(transformer.getPreviousPeriodProfitAndLoss(profitAndLoss));
 
-        verify(grossProfitAndLossTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
-        verify(operatingProfitAndLossTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
-        verify(profitOrLossBeforeTaxTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
-        verify(profitOrLossForFinancialYearTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss), any(ProfitAndLossApi.class));
+        verify(grossProfitAndLossTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss),
+                any(ProfitAndLossApi.class));
+        verify(operatingProfitAndLossTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss),
+                any(ProfitAndLossApi.class));
+        verify(profitOrLossBeforeTaxTransformer).addPreviousPeriodToApiModel(eq(profitAndLoss),
+                any(ProfitAndLossApi.class));
+        verify(profitOrLossForFinancialYearTransformer).addPreviousPeriodToApiModel(
+                eq(profitAndLoss), any(ProfitAndLossApi.class));
     }
 }
 

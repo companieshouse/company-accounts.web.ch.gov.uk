@@ -6,7 +6,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
@@ -64,15 +62,19 @@ class TangibleAssetsDateHandlerTest {
         AccountingPeriodApi nextAccountingPeriodApi = new AccountingPeriodApi();
         nextAccountingPeriodApi.setPeriodStartOn(LocalDate.now().minusYears(1));
         nextAccountingPeriodApi.setPeriodEndOn(LocalDate.now());
-        
-        when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);        
+
+        when(smallFullApi.getLastAccounts()).thenReturn(lastAccountingPeriodApi);
         when(smallFullApi.getNextAccounts()).thenReturn(nextAccountingPeriodApi);
 
-        assertAll(() -> tangibleAssetsDateHandler.addDates(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID, tangibleAssets));
+        assertAll(() -> tangibleAssetsDateHandler.addDates(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, tangibleAssets));
 
-        verify(tangibleAssets).setLastAccountsPeriodEndOn(smallFullApi.getLastAccounts().getPeriodEndOn());
-        verify(tangibleAssets).setNextAccountsPeriodStartOn(smallFullApi.getNextAccounts().getPeriodStartOn());
-        verify(tangibleAssets).setNextAccountsPeriodEndOn(smallFullApi.getNextAccounts().getPeriodEndOn());
+        verify(tangibleAssets).setLastAccountsPeriodEndOn(
+                smallFullApi.getLastAccounts().getPeriodEndOn());
+        verify(tangibleAssets).setNextAccountsPeriodStartOn(
+                smallFullApi.getNextAccounts().getPeriodStartOn());
+        verify(tangibleAssets).setNextAccountsPeriodEndOn(
+                smallFullApi.getNextAccounts().getPeriodEndOn());
     }
 
     @Test

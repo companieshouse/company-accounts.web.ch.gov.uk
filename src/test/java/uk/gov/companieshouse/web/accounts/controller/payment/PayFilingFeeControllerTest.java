@@ -36,7 +36,7 @@ class PayFilingFeeControllerTest {
     private PayFilingFeeController controller;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -54,15 +54,16 @@ class PayFilingFeeControllerTest {
     private static final String ERROR_VIEW = "error";
 
     private static final String PAY_FILING_FEE_PATH =
-        "/company/"+COMPANY_NUMBER+"/transaction/"+TRANSACTION_ID+"/company-accounts/"+COMPANY_ACCOUNTS_ID+"/pay-filing-fee";
+            "/company/" + COMPANY_NUMBER + "/transaction/" + TRANSACTION_ID + "/company-accounts/"
+                    + COMPANY_ACCOUNTS_ID + "/pay-filing-fee";
 
     @Test
     @DisplayName("Pay filing fee get request - Success")
     void getPayFilingFeeSuccess() throws Exception {
 
         this.mockMvc.perform(get(PAY_FILING_FEE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(PAY_FILING_FEE_VIEW))
+                .andExpect(status().isOk())
+                .andExpect(view().name(PAY_FILING_FEE_VIEW))
                 .andExpect(model().attributeExists(PAY_FILING_FEE_MODEL_ATTR));
     }
 
@@ -70,37 +71,39 @@ class PayFilingFeeControllerTest {
     @DisplayName("Pay filing fee post request - Yes")
     void postPayFilingFeeYesChoice() throws Exception {
         mockMvc.perform(post(PAY_FILING_FEE_PATH).
-            param(PAY_FILING_FEE_MODEL_ATTR, "1"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX+paymentService.createPaymentSessionForTransaction(TRANSACTION_ID) + SUMMARY_FALSE_PARAMETER));
+                        param(PAY_FILING_FEE_MODEL_ATTR, "1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX
+                        + paymentService.createPaymentSessionForTransaction(TRANSACTION_ID)
+                        + SUMMARY_FALSE_PARAMETER));
     }
 
     @Test
     @DisplayName("Pay filing fee post request - No")
     void postPayFilingFeeNoChoice() throws Exception {
         mockMvc.perform(post(PAY_FILING_FEE_PATH).
-            param(PAY_FILING_FEE_MODEL_ATTR, "0"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX+NO_CHOICE_URL));
+                        param(PAY_FILING_FEE_MODEL_ATTR, "0"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX + NO_CHOICE_URL));
     }
 
     @Test
     @DisplayName("Pay filing fee post request - No Decision Made")
     void postPayFilingFeeNoChoiceMade() throws Exception {
         mockMvc.perform(post(PAY_FILING_FEE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(PAY_FILING_FEE_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(PAY_FILING_FEE_VIEW));
     }
 
     @Test
     @DisplayName("Pay filing fee throws exception")
     void payFilingFeeThrowsException() throws Exception {
         doThrow(ServiceException.class)
-            .when(paymentService).createPaymentSessionForTransaction(TRANSACTION_ID);
+                .when(paymentService).createPaymentSessionForTransaction(TRANSACTION_ID);
 
         this.mockMvc.perform(post(PAY_FILING_FEE_PATH)
-            .param(PAY_FILING_FEE_MODEL_ATTR, "1"))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                        .param(PAY_FILING_FEE_MODEL_ATTR, "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 }
