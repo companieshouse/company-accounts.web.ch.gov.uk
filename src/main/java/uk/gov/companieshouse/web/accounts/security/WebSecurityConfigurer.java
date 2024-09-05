@@ -21,8 +21,8 @@ public class WebSecurityConfigurer {
         @Bean
         public SecurityFilterChain govUkAccountsSecurityFilterChain(HttpSecurity http)
                 throws Exception {
-            return http.authorizeHttpRequests(
-                            authRequests -> authRequests.requestMatchers("/accounts/**"))
+
+            return http.securityMatcher("/accounts/**")
                     .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
                     .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class).build();
         }
