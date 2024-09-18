@@ -108,6 +108,14 @@
             <artifactId>spring-web</artifactId>
             <version>6.1.12</version>
         </dependency>
+        <!--CVE-2024-38816(7.5)-->
+        <!--Manually imported to override vulnerable version,
+        please remove once vulnerability is addressed in latest version of spring-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>6.1.13</version>
+        </dependency>
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
