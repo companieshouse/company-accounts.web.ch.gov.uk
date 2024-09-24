@@ -54,10 +54,10 @@
         <spring-security-core.version>6.3.3</spring-security-core.version>
         <spring-security-config.version>6.3.3</spring-security-config.version>
 
-        <spring-boot-dependencies.version>3.3.2</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>3.3.3</spring-boot-dependencies.version>
         <spring-test.version>6.1.12</spring-test.version>
         <spring-core.version>6.1.12</spring-core.version>
-        <spring-boot-maven-plugin.version>3.3.2</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>3.3.3</spring-boot-maven-plugin.version>
 
         <!-- Maven and Surefire plugins -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>

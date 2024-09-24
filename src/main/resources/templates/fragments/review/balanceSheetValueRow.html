@@ -1,28 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Balance Sheet Review Value Row</title>
+  <title>Balance Sheet Review Value Row</title>
 </head>
-    <body>
-        <div th:fragment="balanceSheetValueRow" th:if="${currentAmount != null || previousAmount != null}" class="app-check-your-answers__contents">
-            <dt class="app-check-your-answers__question" th:id="${identifier != null} ? 'review-' + ${identifier} + '-title' : null" th:text="${description}" th:classappend="${isTotalRow == null && isBoldLegend == null} ? 'govuk-!-font-weight-regular' : ''"></dt>
+<body>
+<div class="app-check-your-answers__contents" th:fragment="balanceSheetValueRow"
+     th:if="${currentAmount != null || previousAmount != null}">
+  <dt class="app-check-your-answers__question"
+      th:classappend="${isTotalRow == null && isBoldLegend == null} ? 'govuk-!-font-weight-regular' : ''"
+      th:id="${identifier != null} ? 'review-' + ${identifier} + '-title' : null"
+      th:text="${description}"></dt>
 
-            <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-                <span class="mobile-only-label" th:text="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading + ':'}"></span>
+  <dd class="app-check-your-answers__answer"
+      th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+    <span class="mobile-only-label"
+          th:text="*{balanceSheet.balanceSheetHeadings.currentPeriodHeading + ':'}"></span>
 
-                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null" th:if="${isEmployees==true}" th:text="${currentAmount != null ? #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"></span>
-                <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null" th:unless="${isEmployees==true}" th:text="${currentAmount != null ? new java.text.DecimalFormat('£###,###;-£###,###').format(currentAmount) : ''}"></span>
+    <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
+          th:if="${isEmployees==true}"
+          th:text="${currentAmount != null ? #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"></span>
+    <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
+          th:text="${currentAmount != null ? #numbers.formatCurrency(currentAmount) : ''}"
+          th:unless="${isEmployees==true}"></span>
 
-            </dd>
-            <dd class="app-check-your-answers__answer" th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
-                <span class="mobile-only-label" th:text="${previousAmount != null} ? *{balanceSheet.balanceSheetHeadings.previousPeriodHeading + ':'} : ''"></span>
-              <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
-                    th:if="${isEmployees==true}" th:text="${previousAmount != null ? #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}"></span>
-              <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
-                    th:unless="${isEmployees==true}" th:text="${previousAmount != null ? new java.text.DecimalFormat('£###,###;-£###,###').format(previousAmount) : ''}"></span>
-            </dd>
+  </dd>
+  <dd class="app-check-your-answers__answer"
+      th:classappend="${isTotalRow} ? 'govuk-!-font-weight-bold' : ''">
+    <span class="mobile-only-label"
+          th:text="${previousAmount != null} ? *{balanceSheet.balanceSheetHeadings.previousPeriodHeading + ':'} : ''"></span>
+    <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
+          th:if="${isEmployees==true}"
+          th:text="${previousAmount != null ? #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}"></span>
+    <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
+          th:text="${previousAmount != null ? #numbers.formatCurrency(previousAmount) : ''}"
+          th:unless="${isEmployees==true}"></span>
+  </dd>
 
-            <dd class="app-check-your-answers__change"></dd>
-        </div>
-    </body>
+  <dd class="app-check-your-answers__change"></dd>
+</div>
+</body>
 </html>

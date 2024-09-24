@@ -40,7 +40,7 @@
                         </th>
                         <td th:id="rptTransactions-table-balance-at-period-end[__${stat.index}__]"
                             class="govuk-table__cell--summary"
-                            th:text="${new java.text.DecimalFormat('£###,###;-£###,###').format(transaction.breakdown.balanceAtPeriodEnd)}">
+                            th:text="${#numbers.formatCurrency(transaction.breakdown.balanceAtPeriodEnd)}">
                         </td>
                         <td class="govuk-table__cell--summary">
                             <form class="form" th:action="@{/company/{companyNumber}/transaction/{transactionId}/company-accounts/{companyAccountsId}/small-full/note/add-or-remove-transactions/remove/{rptTransactionId}
