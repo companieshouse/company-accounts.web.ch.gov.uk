@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -55,13 +54,13 @@ class ConsultationWithStakeholdersControllerTest {
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(consultationWithStakeholdersController)
-            .build();
+                .build();
     }
 
     @Test
@@ -69,14 +68,14 @@ class ConsultationWithStakeholdersControllerTest {
     void getRequestConsultationWithStakeholdersSuccess() throws Exception {
 
         when(consultationWithStakeholdersService
-            .getConsultationWithStakeholders(anyString(), anyString()))
-            .thenReturn(new ConsultationWithStakeholders());
+                .getConsultationWithStakeholders(anyString(), anyString()))
+                .thenReturn(new ConsultationWithStakeholders());
 
         this.mockMvc.perform(get(COMPANY_ACTIVITY_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(CONSULTATION_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(CONSULTATION_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(CONSULTATION_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(CONSULTATION_MODEL_ATTR));
     }
 
 
@@ -85,12 +84,12 @@ class ConsultationWithStakeholdersControllerTest {
     void getRequestConsultationWithStakeholdersServiceException() throws Exception {
 
         when(consultationWithStakeholdersService
-            .getConsultationWithStakeholders(anyString(), anyString()))
-            .thenThrow(ServiceException.class);
+                .getConsultationWithStakeholders(anyString(), anyString()))
+                .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(COMPANY_ACTIVITY_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -98,15 +97,20 @@ class ConsultationWithStakeholdersControllerTest {
     void postRequestConsultationWithStakeholdersSuccess() throws Exception {
 
         when(consultationWithStakeholdersService
-            .submitConsultationWithStakeholders(anyString(), anyString(),
-                any(ConsultationWithStakeholders.class))).thenReturn(new ArrayList<>());
+                .submitConsultationWithStakeholders(anyString(), anyString(),
+                        any(ConsultationWithStakeholders.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
-        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("consultationWithStakeholders", "value"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+        this.mockMvc.perform(
+                        post(COMPANY_ACTIVITY_PATH).param("consultationWithStakeholders", "value"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test
@@ -114,12 +118,13 @@ class ConsultationWithStakeholdersControllerTest {
     void postRequestConsultationWithStakeholdersServiceException() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(consultationWithStakeholdersService)
-            .submitConsultationWithStakeholders(anyString(), anyString(),
-                any(ConsultationWithStakeholders.class));
-        this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("consultationWithStakeholders", "value"))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .when(consultationWithStakeholdersService)
+                .submitConsultationWithStakeholders(anyString(), anyString(),
+                        any(ConsultationWithStakeholders.class));
+        this.mockMvc.perform(
+                        post(COMPANY_ACTIVITY_PATH).param("consultationWithStakeholders", "value"))
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -127,8 +132,8 @@ class ConsultationWithStakeholdersControllerTest {
     void postRequestConsultationWithStakeholdersBindingErrors() throws Exception {
 
         this.mockMvc.perform(post(COMPANY_ACTIVITY_PATH).param("consultationWithStakeholders", ""))
-            .andExpect(status().isOk())
-            .andExpect(view().name(CONSULTATION_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(CONSULTATION_VIEW));
     }
 
 

@@ -12,7 +12,8 @@ import uk.gov.companieshouse.web.accounts.controller.ConditionalController;
 @NextController(MockSuccessJourneyControllerThree.class)
 @PreviousController(MockSuccessJourneyControllerOne.class)
 @RequestMapping("/mock-success-journey-controller-two/{companyNumber}/{transactionId}/{companyAccountsId}")
-public class MockSuccessJourneyControllerTwo extends BaseController implements ConditionalController {
+public class MockSuccessJourneyControllerTwo extends BaseController implements
+        ConditionalController {
 
     @Override
     protected String getTemplateName() {
@@ -20,7 +21,8 @@ public class MockSuccessJourneyControllerTwo extends BaseController implements C
     }
 
     @Override
-    public boolean willRender(String companyNumber, String transactionId, String companyAccountsId) {
+    public boolean willRender(String companyNumber, String transactionId,
+            String companyAccountsId) {
         return false;
     }
 }

@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,12 +28,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.fixedassetsinvestments
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -80,7 +80,8 @@ class FixedAssetsInvestmentsHandlerTest {
     @Test
     @DisplayName("Get FixedAssetsInvestments resource URI")
     void getFixedAssetsInvestmentsURI() {
-        assertEquals(URI, fixedAssetsInvestmentsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertEquals(URI,
+                fixedAssetsInvestmentsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -89,9 +90,11 @@ class FixedAssetsInvestmentsHandlerTest {
 
         setupFixedAssetsInvestmentsHandler();
 
-        when(fixedAssetsInvestmentsHandler.get(apiClient, URI)).thenReturn(fixedAssetsInvestmentsGet);
+        when(fixedAssetsInvestmentsHandler.get(apiClient, URI)).thenReturn(
+                fixedAssetsInvestmentsGet);
 
-        Executor<ApiResponse<FixedAssetsInvestmentsApi>> getFixedAssetsInvestmentsApi = fixedAssetsInvestmentsHandler.get(apiClient, URI);
+        Executor<ApiResponse<FixedAssetsInvestmentsApi>> getFixedAssetsInvestmentsApi = fixedAssetsInvestmentsHandler.get(
+                apiClient, URI);
 
         assertNotNull(getFixedAssetsInvestmentsApi);
         assertEquals(getFixedAssetsInvestmentsApi, fixedAssetsInvestmentsGet);
@@ -103,9 +106,11 @@ class FixedAssetsInvestmentsHandlerTest {
 
         setupFixedAssetsInvestmentsHandler();
 
-        when(fixedAssetsInvestmentsHandler.update(apiClient, URI, fixedAssetsInvestmentsApi)).thenReturn(fixedAssetsInvestmentsUpdate);
+        when(fixedAssetsInvestmentsHandler.update(apiClient, URI,
+                fixedAssetsInvestmentsApi)).thenReturn(fixedAssetsInvestmentsUpdate);
 
-        Executor<ApiResponse<Void>> updatedFixedAssetsInvestments = fixedAssetsInvestmentsHandler.update(apiClient, URI, fixedAssetsInvestmentsApi);
+        Executor<ApiResponse<Void>> updatedFixedAssetsInvestments = fixedAssetsInvestmentsHandler.update(
+                apiClient, URI, fixedAssetsInvestmentsApi);
 
         assertNotNull(updatedFixedAssetsInvestments);
         assertEquals(updatedFixedAssetsInvestments, fixedAssetsInvestmentsUpdate);
@@ -117,9 +122,11 @@ class FixedAssetsInvestmentsHandlerTest {
 
         setupFixedAssetsInvestmentsHandler();
 
-        when(fixedAssetsInvestmentsHandler.create(apiClient, URI, fixedAssetsInvestmentsApi)).thenReturn(fixedAssetsInvestmentsCreate);
+        when(fixedAssetsInvestmentsHandler.create(apiClient, URI,
+                fixedAssetsInvestmentsApi)).thenReturn(fixedAssetsInvestmentsCreate);
 
-        Executor<ApiResponse<FixedAssetsInvestmentsApi>> createFixedAssetsInvestments = fixedAssetsInvestmentsHandler.create(apiClient, URI, fixedAssetsInvestmentsApi);
+        Executor<ApiResponse<FixedAssetsInvestmentsApi>> createFixedAssetsInvestments = fixedAssetsInvestmentsHandler.create(
+                apiClient, URI, fixedAssetsInvestmentsApi);
 
         assertNotNull(createFixedAssetsInvestments);
         assertEquals(createFixedAssetsInvestments, fixedAssetsInvestmentsCreate);
@@ -131,9 +138,11 @@ class FixedAssetsInvestmentsHandlerTest {
 
         setupFixedAssetsInvestmentsHandler();
 
-        when(fixedAssetsInvestmentsHandler.delete(apiClient, URI)).thenReturn(fixedAssetsInvestmentsDelete);
+        when(fixedAssetsInvestmentsHandler.delete(apiClient, URI)).thenReturn(
+                fixedAssetsInvestmentsDelete);
 
-        Executor<ApiResponse<Void>> deleteFixedAssetsInvestmentsApi = fixedAssetsInvestmentsHandler.delete(apiClient, URI);
+        Executor<ApiResponse<Void>> deleteFixedAssetsInvestmentsApi = fixedAssetsInvestmentsHandler.delete(
+                apiClient, URI);
 
         assertNotNull(deleteFixedAssetsInvestmentsApi);
         assertEquals(deleteFixedAssetsInvestmentsApi, fixedAssetsInvestmentsDelete);
@@ -143,32 +152,40 @@ class FixedAssetsInvestmentsHandlerTest {
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-        when(smallFullLinks.getFixedAssetsInvestmentsNote()).thenReturn(FIXED_ASSETS_INVESTMENTS_NOTE);
+        when(smallFullLinks.getFixedAssetsInvestmentsNote()).thenReturn(
+                FIXED_ASSETS_INVESTMENTS_NOTE);
 
-        assertTrue(fixedAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(fixedAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
-        assertThrows(ServiceException.class, () -> fixedAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> fixedAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test method returns FixedAssetsInvestments as NoteType")
     void testFixedAssetsInvestmentsReturned() {
 
-        assertEquals(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT, fixedAssetsInvestmentsHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT,
+                fixedAssetsInvestmentsHandler.getNoteType());
     }
 
     private void setupFixedAssetsInvestmentsHandler() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.fixedAssetsInvestments()).thenReturn(fixedAssetsInvestmentsResourceHandler);
+        when(smallFullResourceHandler.fixedAssetsInvestments()).thenReturn(
+                fixedAssetsInvestmentsResourceHandler);
     }
 }

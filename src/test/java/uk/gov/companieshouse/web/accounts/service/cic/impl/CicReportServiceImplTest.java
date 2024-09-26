@@ -61,8 +61,8 @@ class CicReportServiceImplTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String CIC_REPORT_URI = "/transactions/" + TRANSACTION_ID +
-                                                    "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                    "/cic-report";
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/cic-report";
 
     @BeforeEach
     private void setUp() {
@@ -86,7 +86,8 @@ class CicReportServiceImplTest {
 
     @Test
     @DisplayName("Create CIC report - ApiErrorResponseException")
-    void createCicReportApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+    void createCicReportApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -101,7 +102,8 @@ class CicReportServiceImplTest {
 
     @Test
     @DisplayName("Create CIC report - URIValidationException")
-    void createCicReportURIValidationException() throws ApiErrorResponseException, URIValidationException {
+    void createCicReportURIValidationException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
 
@@ -133,25 +135,29 @@ class CicReportServiceImplTest {
 
     @Test
     @DisplayName("Get CIC report - ApiErrorResponseException")
-    void getCicReportApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+    void getCicReportApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(cicReportResourceHandler.get(CIC_REPORT_URI)).thenReturn(cicReportGet);
 
         when(cicReportGet.execute()).thenThrow(ApiErrorResponseException.class);
 
         assertThrows(ServiceException.class,
-                () -> cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> cicReportService.getCicReport(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get CIC report - URIValidationException")
-    void getCicReportURIValidationException() throws ApiErrorResponseException, URIValidationException {
+    void getCicReportURIValidationException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(cicReportResourceHandler.get(CIC_REPORT_URI)).thenReturn(cicReportGet);
 
         when(cicReportGet.execute()).thenThrow(URIValidationException.class);
 
         assertThrows(ServiceException.class,
-                () -> cicReportService.getCicReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> cicReportService.getCicReport(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 }

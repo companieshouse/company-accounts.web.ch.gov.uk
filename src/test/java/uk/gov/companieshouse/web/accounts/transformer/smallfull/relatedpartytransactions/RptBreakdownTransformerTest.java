@@ -1,6 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.relatedpartytransactions;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,9 +13,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactio
 import uk.gov.companieshouse.api.model.accounts.smallfull.relatedpartytransactions.RptTransactionBreakdownApi;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionBreakdown;
 import uk.gov.companieshouse.web.accounts.model.relatedpartytransactions.RptTransactionToAdd;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -35,7 +35,8 @@ class RptBreakdownTransformerTest {
 
         rptTransactionToAdd.setBreakdown(breakdown);
 
-        RptTransactionBreakdownApi rptTransactionApi = rptBreakdownTransformer.mapRptTransactionsBreakdownToApi(rptTransactionToAdd);
+        RptTransactionBreakdownApi rptTransactionApi = rptBreakdownTransformer.mapRptTransactionsBreakdownToApi(
+                rptTransactionToAdd);
 
         assertNotNull(rptTransactionApi);
         assertEquals(rptTransactionApi.getBalanceAtPeriodEnd(), (Long) 5L);
@@ -53,7 +54,8 @@ class RptBreakdownTransformerTest {
 
         rptTransactionApi.setBreakdown(rptTransactionBreakdownApi);
 
-        RptTransactionBreakdown breakdown = rptBreakdownTransformer.mapRptTransactionsBreakdownToWeb(rptTransactionApi);
+        RptTransactionBreakdown breakdown = rptBreakdownTransformer.mapRptTransactionsBreakdownToWeb(
+                rptTransactionApi);
 
         assertNotNull(breakdown);
         assertEquals(breakdown.getBalanceAtPeriodEnd(), (Long) 1L);

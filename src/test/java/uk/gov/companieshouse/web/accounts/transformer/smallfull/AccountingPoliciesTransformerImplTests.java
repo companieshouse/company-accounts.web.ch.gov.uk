@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,12 +21,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolici
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.TurnoverPolicy;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.accountingpolicies.ValuationInformationPolicy;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.AccountingPoliciesTransformerImpl;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -49,12 +49,15 @@ class AccountingPoliciesTransformerImplTests {
     void getBasisOfPreparationSelectedPreparedStatement() {
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setBasisOfMeasurementAndPreparation(AccountingRegulatoryStandard.FRS101.toString());
+        accountingPoliciesApi.setBasisOfMeasurementAndPreparation(
+                AccountingRegulatoryStandard.FRS101.toString());
 
-        BasisOfPreparation basisOfPreparation = transformer.toWeb(accountingPoliciesApi).getBasisOfPreparation();
+        BasisOfPreparation basisOfPreparation = transformer.toWeb(accountingPoliciesApi)
+                .getBasisOfPreparation();
 
         assertNotNull(basisOfPreparation);
-        assertEquals(AccountingRegulatoryStandard.FRS101, basisOfPreparation.getAccountingRegulatoryStandard());
+        assertEquals(AccountingRegulatoryStandard.FRS101,
+                basisOfPreparation.getAccountingRegulatoryStandard());
     }
 
     @Test
@@ -62,40 +65,47 @@ class AccountingPoliciesTransformerImplTests {
     void getBasisOfPreparationCustomStatement() {
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setBasisOfMeasurementAndPreparation(BASIS_OF_PREPARATION_CUSTOM_STATEMENT);
+        accountingPoliciesApi.setBasisOfMeasurementAndPreparation(
+                BASIS_OF_PREPARATION_CUSTOM_STATEMENT);
 
-        BasisOfPreparation basisOfPreparation = transformer.toWeb(accountingPoliciesApi).getBasisOfPreparation();
+        BasisOfPreparation basisOfPreparation = transformer.toWeb(accountingPoliciesApi)
+                .getBasisOfPreparation();
 
         assertNotNull(basisOfPreparation);
-        assertNotEquals(AccountingRegulatoryStandard.FRS102, basisOfPreparation.getAccountingRegulatoryStandard());
+        assertNotEquals(AccountingRegulatoryStandard.FRS102,
+                basisOfPreparation.getAccountingRegulatoryStandard());
     }
 
     @Test
     @DisplayName("Set Basis of Preparation - Selected prepared statement")
     void setBasisOfPreparationSelectedPreparedStatement() {
 
-        BasisOfPreparation basisOfPreparation = createBasisOfPreparation(AccountingRegulatoryStandard.FRS101);
+        BasisOfPreparation basisOfPreparation = createBasisOfPreparation(
+                AccountingRegulatoryStandard.FRS101);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setBasisOfPreparation(basisOfPreparation);
 
         AccountingPoliciesApi accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
-        assertEquals(AccountingRegulatoryStandard.FRS101.toString(), accountingPoliciesApi.getBasisOfMeasurementAndPreparation());
+        assertEquals(AccountingRegulatoryStandard.FRS101.toString(),
+                accountingPoliciesApi.getBasisOfMeasurementAndPreparation());
     }
 
     @Test
     @DisplayName("Set Basis of Preparation - Custom statement")
     void setBasisOfPreparationCustomStatement() {
 
-        BasisOfPreparation basisOfPreparation = createBasisOfPreparation(AccountingRegulatoryStandard.FRS101);
+        BasisOfPreparation basisOfPreparation = createBasisOfPreparation(
+                AccountingRegulatoryStandard.FRS101);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setBasisOfPreparation(basisOfPreparation);
 
         AccountingPoliciesApi accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
-        assertEquals(AccountingRegulatoryStandard.FRS101.toString(), accountingPoliciesApi.getBasisOfMeasurementAndPreparation());
+        assertEquals(AccountingRegulatoryStandard.FRS101.toString(),
+                accountingPoliciesApi.getBasisOfMeasurementAndPreparation());
     }
 
     @Test
@@ -113,8 +123,9 @@ class AccountingPoliciesTransformerImplTests {
     @DisplayName("Returned empty turnover policy object when turnover policy is null within accounting policies api")
     void shouldGetTurnoverPolicyWhenAccountingPoliciesApiIsSetAndTurnoverPolicyIsNull() {
 
-        AccountingPoliciesApi accountingPoliciesApi =  new AccountingPoliciesApi();
-        TurnoverPolicy turnoverPolicy = transformer.toWeb(accountingPoliciesApi).getTurnoverPolicy();
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
+        TurnoverPolicy turnoverPolicy = transformer.toWeb(accountingPoliciesApi)
+                .getTurnoverPolicy();
 
         assertNotNull(turnoverPolicy);
         assertNull(turnoverPolicy.getIsIncludeTurnoverSelected());
@@ -128,7 +139,8 @@ class AccountingPoliciesTransformerImplTests {
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
         accountingPoliciesApi.setTurnoverPolicy(TURNOVER_POLICY_DETAILS);
 
-        TurnoverPolicy turnoverPolicy = transformer.toWeb(accountingPoliciesApi).getTurnoverPolicy();
+        TurnoverPolicy turnoverPolicy = transformer.toWeb(accountingPoliciesApi)
+                .getTurnoverPolicy();
 
         assertNotNull(turnoverPolicy);
         assertTrue(turnoverPolicy.getIsIncludeTurnoverSelected());
@@ -143,7 +155,8 @@ class AccountingPoliciesTransformerImplTests {
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setTurnoverPolicy(turnoverPolicy);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
 
         AccountingPoliciesApi accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
@@ -160,7 +173,8 @@ class AccountingPoliciesTransformerImplTests {
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setTurnoverPolicy(turnoverPolicy);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
 
         AccountingPoliciesApi accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
@@ -187,13 +201,15 @@ class AccountingPoliciesTransformerImplTests {
     void getIntangibleAmortisationPolicyDataPresentInApiModel() {
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(INTANGIBLE_AMORTISATION_POLICY_DETAILS);
+        accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(
+                INTANGIBLE_AMORTISATION_POLICY_DETAILS);
 
         IntangibleAmortisationPolicy intangibleAmortisationPolicy =
                 transformer.toWeb(accountingPoliciesApi).getIntangibleAmortisationPolicy();
 
         assertNotNull(intangibleAmortisationPolicy);
-        assertEquals(INTANGIBLE_AMORTISATION_POLICY_DETAILS, intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails());
+        assertEquals(INTANGIBLE_AMORTISATION_POLICY_DETAILS,
+                intangibleAmortisationPolicy.getIntangibleAmortisationPolicyDetails());
         assertTrue(intangibleAmortisationPolicy.getIncludeIntangibleAmortisationPolicy());
     }
 
@@ -201,14 +217,17 @@ class AccountingPoliciesTransformerImplTests {
     @DisplayName("Set intangible amortisation policy - details not provided")
     void setIntangibleAmortisationPolicyDetailsNotProvided() {
 
-        IntangibleAmortisationPolicy intangibleAmortisationPolicy = createIntangibleAmortisationPolicy(false);
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy = createIntangibleAmortisationPolicy(
+                false);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(INTANGIBLE_AMORTISATION_POLICY_DETAILS);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
+        accountingPoliciesApi.setIntangibleFixedAssetsAmortisationPolicy(
+                INTANGIBLE_AMORTISATION_POLICY_DETAILS);
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
 
         accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
@@ -219,30 +238,35 @@ class AccountingPoliciesTransformerImplTests {
     @DisplayName("Set intangible amortisation policy - details provided")
     void setIntangibleAmortisationPolicyDetailsProvided() {
 
-        IntangibleAmortisationPolicy intangibleAmortisationPolicy = createIntangibleAmortisationPolicy(true);
+        IntangibleAmortisationPolicy intangibleAmortisationPolicy = createIntangibleAmortisationPolicy(
+                true);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setIntangibleAmortisationPolicy(intangibleAmortisationPolicy);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS102));
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS102));
 
         AccountingPoliciesApi accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
-
-        assertEquals(INTANGIBLE_AMORTISATION_POLICY_DETAILS, accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy());
+        assertEquals(INTANGIBLE_AMORTISATION_POLICY_DETAILS,
+                accountingPoliciesApi.getIntangibleFixedAssetsAmortisationPolicy());
     }
 
     @Test
     @DisplayName("Set tangible depreciation policy - details not provided")
     void setTangibleDepreciationPolicyDetailsNotProvided() {
 
-        TangibleDepreciationPolicy tangibleDepreciationPolicy = createTangibleDepreciationPolicy(false);
+        TangibleDepreciationPolicy tangibleDepreciationPolicy = createTangibleDepreciationPolicy(
+                false);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setTangibleDepreciationPolicy(tangibleDepreciationPolicy);
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(TANGIBLE_DEPRECIATION_POLICY_DETAILS);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
+        accountingPoliciesApi.setTangibleFixedAssetsDepreciationPolicy(
+                TANGIBLE_DEPRECIATION_POLICY_DETAILS);
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
 
         accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
@@ -253,23 +277,25 @@ class AccountingPoliciesTransformerImplTests {
     @DisplayName("Set tangible depreciation policy - details provided")
     void setTangibleDepreciationPolicyDetailsProvided() {
 
-        TangibleDepreciationPolicy tangibleDepreciationPolicy = createTangibleDepreciationPolicy(true);
+        TangibleDepreciationPolicy tangibleDepreciationPolicy = createTangibleDepreciationPolicy(
+                true);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setTangibleDepreciationPolicy(tangibleDepreciationPolicy);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS102));
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS102));
 
         AccountingPoliciesApi accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
-
-        assertEquals(TANGIBLE_DEPRECIATION_POLICY_DETAILS, accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy());
+        assertEquals(TANGIBLE_DEPRECIATION_POLICY_DETAILS,
+                accountingPoliciesApi.getTangibleFixedAssetsDepreciationPolicy());
     }
 
     @Test
     @DisplayName("Get valuation information policy - no data in API model")
     void getValuationInformationPolicyNoDataInApiModel() {
 
-        AccountingPoliciesApi accountingPoliciesApi =  new AccountingPoliciesApi();
+        AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
 
         ValuationInformationPolicy valuationInformationPolicy =
                 transformer.toWeb(accountingPoliciesApi).getValuationInformationPolicy();
@@ -284,13 +310,15 @@ class AccountingPoliciesTransformerImplTests {
     void getValuationInformationPolicyDataPresentInApiModel() {
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setValuationInformationAndPolicy(VALUATION_INFORMATION_POLICY_DETAILS);
+        accountingPoliciesApi.setValuationInformationAndPolicy(
+                VALUATION_INFORMATION_POLICY_DETAILS);
 
         ValuationInformationPolicy valuationInformationPolicy =
                 transformer.toWeb(accountingPoliciesApi).getValuationInformationPolicy();
 
         assertNotNull(valuationInformationPolicy);
-        assertEquals(VALUATION_INFORMATION_POLICY_DETAILS, valuationInformationPolicy.getValuationInformationPolicyDetails());
+        assertEquals(VALUATION_INFORMATION_POLICY_DETAILS,
+                valuationInformationPolicy.getValuationInformationPolicyDetails());
         assertTrue(valuationInformationPolicy.getIncludeValuationInformationPolicy());
     }
 
@@ -298,14 +326,17 @@ class AccountingPoliciesTransformerImplTests {
     @DisplayName("Set valuation information policy - details not provided")
     void setValuationInformationPolicyDetailsNotProvided() {
 
-        ValuationInformationPolicy valuationInformationPolicy = createValuationInformationPolicy(false);
+        ValuationInformationPolicy valuationInformationPolicy = createValuationInformationPolicy(
+                false);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setValuationInformationPolicy(valuationInformationPolicy);
 
         AccountingPoliciesApi accountingPoliciesApi = new AccountingPoliciesApi();
-        accountingPoliciesApi.setValuationInformationAndPolicy(VALUATION_INFORMATION_POLICY_DETAILS);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
+        accountingPoliciesApi.setValuationInformationAndPolicy(
+                VALUATION_INFORMATION_POLICY_DETAILS);
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
 
         accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
@@ -316,15 +347,18 @@ class AccountingPoliciesTransformerImplTests {
     @DisplayName("Set valuation information policy - details provided")
     void setValuationInformationPolicyDetailsProvided() {
 
-        ValuationInformationPolicy valuationInformationPolicy = createValuationInformationPolicy(true);
+        ValuationInformationPolicy valuationInformationPolicy = createValuationInformationPolicy(
+                true);
 
         AccountingPolicies accountingPolicies = new AccountingPolicies();
         accountingPolicies.setValuationInformationPolicy(valuationInformationPolicy);
-        accountingPolicies.setBasisOfPreparation(createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
+        accountingPolicies.setBasisOfPreparation(
+                createBasisOfPreparation(AccountingRegulatoryStandard.FRS101));
 
         AccountingPoliciesApi accountingPoliciesApi = transformer.toApi(accountingPolicies);
 
-        assertEquals(VALUATION_INFORMATION_POLICY_DETAILS, accountingPoliciesApi.getValuationInformationAndPolicy());
+        assertEquals(VALUATION_INFORMATION_POLICY_DETAILS,
+                accountingPoliciesApi.getValuationInformationAndPolicy());
     }
 
     @Test
@@ -334,7 +368,8 @@ class AccountingPoliciesTransformerImplTests {
         assertEquals(NoteType.SMALL_FULL_ACCOUNTING_POLICIES, transformer.getNoteType());
     }
 
-    private BasisOfPreparation createBasisOfPreparation(AccountingRegulatoryStandard isPreparedInAccordanceWithStandards) {
+    private BasisOfPreparation createBasisOfPreparation(
+            AccountingRegulatoryStandard isPreparedInAccordanceWithStandards) {
 
         BasisOfPreparation basisOfPreparation = new BasisOfPreparation();
         basisOfPreparation.setAccountingRegulatoryStandard(isPreparedInAccordanceWithStandards);

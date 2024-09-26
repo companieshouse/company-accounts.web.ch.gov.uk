@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -9,10 +13,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.BalanceSheetApi;
 import uk.gov.companieshouse.web.accounts.model.smallfull.BalanceSheet;
 import uk.gov.companieshouse.web.accounts.model.smallfull.CalledUpShareCapitalNotPaid;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CalledUpShareCapitalNotPaidTransformerImpl;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -37,7 +37,8 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
         assertNull(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
     }
 
     @Test
@@ -57,8 +58,10 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
 
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
-        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
     }
 
     @Test
@@ -75,7 +78,8 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
         assertNull(balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
-        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
+        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
     }
 
     @Test
@@ -95,8 +99,10 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
 
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid());
         assertNotNull(balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
-        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
+        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheet.getCalledUpShareCapitalNotPaid().getPreviousAmount());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheet.getCalledUpShareCapitalNotPaid().getCurrentAmount());
     }
 
     @Test
@@ -117,7 +123,8 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertNull(balanceSheetApi.getCurrentAssets());
         assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNotNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
-        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheetApi.getCalledUpShareCapitalNotPaid());
+        assertEquals(CURRENT_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
 
@@ -156,7 +163,8 @@ class CalledUpShareCapitalNotPaidTransformerImplTests {
         assertNull(balanceSheetApi.getCurrentAssets());
         assertNull(balanceSheetApi.getOtherLiabilitiesOrAssets());
         assertNotNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
-        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID, balanceSheetApi.getCalledUpShareCapitalNotPaid());
+        assertEquals(PREVIOUS_CALLED_UP_SHARE_CAPITAL_NOT_PAID,
+                balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
     @Test

@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -13,9 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,59 +42,41 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @TestInstance(Lifecycle.PER_CLASS)
 class OffBalanceSheetArrangementsControllerTest {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/off-balance-sheet-arrangements";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_MODEL_ATTR = "offBalanceSheetArrangements";
+    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_VIEW = "smallfull/offBalanceSheetArrangements";
+    private static final String ERROR_VIEW = "error";
+    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS = "offBalanceSheetArrangementsDetails";
     private MockMvc mockMvc;
-
     @Mock
     private HttpServletRequest request;
-
     @Mock
     private HttpSession httpSession;
-
     @Mock
     private NoteService<OffBalanceSheetArrangements> noteService;
-
     @Mock
     private CompanyAccountsDataState companyAccountsDataState;
-
     @Mock
     private OffBalanceSheetArrangements offBalanceSheetArrangements;
-
     @Mock
     private NavigatorService navigatorService;
-
     @Mock
     private List<ValidationError> validationErrors;
-
     @InjectMocks
     private OffBalanceSheetArrangementsController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_PATH = "/company/" + COMPANY_NUMBER +
-                                                                                "/transaction/" + TRANSACTION_ID +
-                                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                                "/small-full/off-balance-sheet-arrangements";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_MODEL_ATTR = "offBalanceSheetArrangements";
-
-    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_VIEW = "smallfull/offBalanceSheetArrangements";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String COMPANY_ACCOUNTS_STATE = "companyAccountsDataState";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
-    private static final String OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS = "offBalanceSheetArrangementsDetails";
-
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -101,7 +84,8 @@ class OffBalanceSheetArrangementsControllerTest {
     @DisplayName("Get off balance sheet arrangements - success")
     void getOffBalanceSheetArrangementsSuccess() throws Exception {
 
-        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenReturn(offBalanceSheetArrangements);
 
         mockMvc.perform(get(OFF_BALANCE_SHEET_ARRANGEMENTS_PATH))
@@ -115,7 +99,8 @@ class OffBalanceSheetArrangementsControllerTest {
     @DisplayName("Get off balance sheet arrangements - ServiceException")
     void getOffBalanceSheetArrangementsThrowsServiceException() throws Exception {
 
-        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
+        when(noteService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS))
                 .thenThrow(ServiceException.class);
 
         mockMvc.perform(get(OFF_BALANCE_SHEET_ARRANGEMENTS_PATH))
@@ -128,15 +113,22 @@ class OffBalanceSheetArrangementsControllerTest {
     void submitOffBalanceSheetArrangementsSuccess() throws Exception {
 
         when(noteService.submit(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(OffBalanceSheetArrangements.class), eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)))
-                        .thenReturn(validationErrors);
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(OffBalanceSheetArrangements.class),
+                eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()
+        )).thenReturn(MOCK_CONTROLLER_PATH);
 
         mockMvc.perform(post(OFF_BALANCE_SHEET_ARRANGEMENTS_PATH)
-                .param(OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS, OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS))
+                        .param(OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS,
+                                OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -146,17 +138,20 @@ class OffBalanceSheetArrangementsControllerTest {
     void submitOffBalanceSheetArrangementsWithValidationErrors() throws Exception {
 
         when(noteService.submit(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(OffBalanceSheetArrangements.class), eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)))
-                        .thenReturn(validationErrors);
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(OffBalanceSheetArrangements.class),
+                eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)))
+                .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
 
         mockMvc.perform(post(OFF_BALANCE_SHEET_ARRANGEMENTS_PATH)
-                .param(OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS, OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS))
+                        .param(OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS,
+                                OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS))
                 .andExpect(status().isOk())
                 .andExpect(view().name(OFF_BALANCE_SHEET_ARRANGEMENTS_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(),
+                ArgumentMatchers.<String>any());
     }
 
     @Test
@@ -164,11 +159,13 @@ class OffBalanceSheetArrangementsControllerTest {
     void submitOffBalanceSheetArrangementsThrowsServiceException() throws Exception {
 
         when(noteService.submit(
-                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(OffBalanceSheetArrangements.class), eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)))
-                        .thenThrow(ServiceException.class);
+                eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(OffBalanceSheetArrangements.class),
+                eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS)))
+                .thenThrow(ServiceException.class);
 
         mockMvc.perform(post(OFF_BALANCE_SHEET_ARRANGEMENTS_PATH)
-                .param(OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS, OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS))
+                        .param(OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS,
+                                OFF_BALANCE_SHEET_ARRANGEMENTS_DETAILS))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -182,7 +179,9 @@ class OffBalanceSheetArrangementsControllerTest {
                 .andExpect(view().name(OFF_BALANCE_SHEET_ARRANGEMENTS_VIEW));
 
         verify(noteService, never())
-                .submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(OffBalanceSheetArrangements.class), eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS));
+                .submit(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(OffBalanceSheetArrangements.class),
+                        eq(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS));
     }
 
     @Test
@@ -201,7 +200,8 @@ class OffBalanceSheetArrangementsControllerTest {
 
         when(request.getSession()).thenReturn(httpSession);
         when(httpSession.getAttribute(COMPANY_ACCOUNTS_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedOffBalanceSheetArrangements()).thenReturn(false);
+        when(companyAccountsDataState.getHasIncludedOffBalanceSheetArrangements()).thenReturn(
+                false);
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 }

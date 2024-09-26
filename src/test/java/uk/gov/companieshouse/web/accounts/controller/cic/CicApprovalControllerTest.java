@@ -54,9 +54,9 @@ class CicApprovalControllerTest {
     private static final String APPROVAL_VIEW = "cic/cicApproval";
 
     private static final String APPROVAL_PATH = "/company/" + COMPANY_NUMBER +
-        "/transaction/" + TRANSACTION_ID +
-        "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-        "/cic/approval";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/cic/approval";
 
     private static final String BACK_PAGE_MODEL_ATTR = "backButton";
 
@@ -71,12 +71,17 @@ class CicApprovalControllerTest {
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
-        when(navigatorService.getPreviousControllerPath(any(), any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+    public void setup() {
+        when(navigatorService.getPreviousControllerPath(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
+        ;
         this.mockMvc = MockMvcBuilders.standaloneSetup(cicApprovalController).build();
     }
 
@@ -89,11 +94,11 @@ class CicApprovalControllerTest {
                 .thenReturn(new CicApproval());
 
         this.mockMvc.perform(get(APPROVAL_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(APPROVAL_VIEW))
-            .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(APPROVAL_VIEW))
+                .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
     }
 
     @Test
@@ -110,7 +115,8 @@ class CicApprovalControllerTest {
                 .andExpect(model().attributeExists(BACK_PAGE_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR))
-                .andExpect(model().attribute(APPROVAL_MODEL_ATTR, hasProperty("dateInvalidated", is(true))));
+                .andExpect(model().attribute(APPROVAL_MODEL_ATTR,
+                        hasProperty("dateInvalidated", is(true))));
     }
 
     @Test
@@ -121,12 +127,12 @@ class CicApprovalControllerTest {
         validationErrors.add(new ValidationError());
 
         when(cicApprovalService.submitCicApproval(anyString(), anyString(), any(CicApproval.class)))
-            .thenReturn(validationErrors);
+                .thenReturn(validationErrors);
 
         this.mockMvc.perform(post(APPROVAL_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(APPROVAL_VIEW))
-            .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(APPROVAL_VIEW))
+                .andExpect(model().attributeExists(APPROVAL_MODEL_ATTR));
     }
 
     @Test
@@ -134,11 +140,11 @@ class CicApprovalControllerTest {
     void postRequestSubmitApprovalExceptionFailure() throws Exception {
 
         when(cicApprovalService.submitCicApproval(anyString(), anyString(), any(CicApproval.class)))
-            .thenThrow(ServiceException.class);
+                .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(APPROVAL_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -146,9 +152,9 @@ class CicApprovalControllerTest {
     void postRequestSuccess() throws Exception {
 
         when(cicApprovalService.submitCicApproval(anyString(), anyString(), any(CicApproval.class)))
-            .thenReturn(new ArrayList<>());
+                .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(APPROVAL_PATH))
-            .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
 }

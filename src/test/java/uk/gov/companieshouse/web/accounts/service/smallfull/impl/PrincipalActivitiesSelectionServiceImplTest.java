@@ -18,8 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivitiesSelection;
-import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesSelectionService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesSelectionService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -49,11 +49,13 @@ class PrincipalActivitiesSelectionServiceImplTest {
     @DisplayName("Get principal activities selection - no existing statements")
     void getPrincipalActivitiesSelectionNoExistingStatements() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
         PrincipalActivitiesSelection returned =
-                principalActivitiesSelectionService.getPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                principalActivitiesSelectionService.getPrincipalActivitiesSelection(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertNull(returned.getHasPrincipalActivities());
@@ -61,15 +63,18 @@ class PrincipalActivitiesSelectionServiceImplTest {
 
     @Test
     @DisplayName("Get principal activities selection - statements do not include principal activities")
-    void getPrincipalActivitiesSelectionStatementsDoNotIncludePrincipalActivities() throws ServiceException {
+    void getPrincipalActivitiesSelectionStatementsDoNotIncludePrincipalActivities()
+            throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getPrincipalActivities()).thenReturn(null);
 
         PrincipalActivitiesSelection returned =
-                principalActivitiesSelectionService.getPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                principalActivitiesSelectionService.getPrincipalActivitiesSelection(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertNull(returned.getHasPrincipalActivities());
@@ -77,15 +82,18 @@ class PrincipalActivitiesSelectionServiceImplTest {
 
     @Test
     @DisplayName("Get principal activities selection - statements include principal activities")
-    void getPrincipalActivitiesSelectionStatementsIncludePrincipalActivities() throws ServiceException {
+    void getPrincipalActivitiesSelectionStatementsIncludePrincipalActivities()
+            throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getPrincipalActivities()).thenReturn(PRINCIPAL_ACTIVITIES);
 
         PrincipalActivitiesSelection returned =
-                principalActivitiesSelectionService.getPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                principalActivitiesSelectionService.getPrincipalActivitiesSelection(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returned);
         assertTrue(returned.getHasPrincipalActivities());
@@ -99,9 +107,11 @@ class PrincipalActivitiesSelectionServiceImplTest {
 
         assertAll(() ->
                 principalActivitiesSelectionService
-                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivitiesSelection));
+                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                principalActivitiesSelection));
 
-        verify(directorsReportStatementsService, never()).getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(directorsReportStatementsService, never()).getDirectorsReportStatements(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
 
     @Test
@@ -110,12 +120,14 @@ class PrincipalActivitiesSelectionServiceImplTest {
 
         when(principalActivitiesSelection.getHasPrincipalActivities()).thenReturn(false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
         assertAll(() ->
                 principalActivitiesSelectionService
-                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivitiesSelection));
+                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                principalActivitiesSelection));
     }
 
     @Test
@@ -124,18 +136,21 @@ class PrincipalActivitiesSelectionServiceImplTest {
 
         when(principalActivitiesSelection.getHasPrincipalActivities()).thenReturn(false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(statementsApi.getAdditionalInformation()).thenReturn(ADDITIONAL_INFORMATION);
 
         assertAll(() ->
                 principalActivitiesSelectionService
-                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivitiesSelection));
+                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                principalActivitiesSelection));
 
         verify(statementsApi).setPrincipalActivities(null);
 
-        verify(directorsReportStatementsService).updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi);
+        verify(directorsReportStatementsService).updateDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, statementsApi);
     }
 
     @Test
@@ -144,13 +159,16 @@ class PrincipalActivitiesSelectionServiceImplTest {
 
         when(principalActivitiesSelection.getHasPrincipalActivities()).thenReturn(false);
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         assertAll(() ->
                 principalActivitiesSelectionService
-                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivitiesSelection));
+                        .submitPrincipalActivitiesSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                                principalActivitiesSelection));
 
-        verify(directorsReportStatementsService).deleteDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(directorsReportStatementsService).deleteDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
     }
 }

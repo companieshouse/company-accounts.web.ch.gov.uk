@@ -75,7 +75,7 @@ class CompanyActivitiesAndImpactServiceImplTest {
 
         when(cicStatementsService.createCicStatementsApi(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(CicStatementsApi.class)))
-                        .thenReturn(validationErrors);
+                .thenReturn(validationErrors);
 
         List<ValidationError> returnedValidationErrors =
                 companyActivitiesAndImpactService.submitCompanyActivitiesAndImpact(
@@ -84,7 +84,8 @@ class CompanyActivitiesAndImpactServiceImplTest {
         assertEquals(validationErrors, returnedValidationErrors);
 
         verify(cicStatementsTransformer)
-                .setCompanyActivitiesAndImpact(eq(companyActivitiesAndImpact), any(CicStatementsApi.class));
+                .setCompanyActivitiesAndImpact(eq(companyActivitiesAndImpact),
+                        any(CicStatementsApi.class));
     }
 
     @Test
@@ -96,7 +97,7 @@ class CompanyActivitiesAndImpactServiceImplTest {
 
         when(cicStatementsService.updateCicStatementsApi(
                 eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(CicStatementsApi.class)))
-                        .thenReturn(validationErrors);
+                .thenReturn(validationErrors);
 
         List<ValidationError> returnedValidationErrors =
                 companyActivitiesAndImpactService.submitCompanyActivitiesAndImpact(

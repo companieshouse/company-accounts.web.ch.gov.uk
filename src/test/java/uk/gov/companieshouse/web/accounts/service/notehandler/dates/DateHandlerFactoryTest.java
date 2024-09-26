@@ -28,9 +28,10 @@ class DateHandlerFactoryTest {
     private DateHandler<Note> dateHandler;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
-        when(dateHandler.getNoteType()).thenReturn(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
+        when(dateHandler.getNoteType()).thenReturn(
+                NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         List<DateHandler<Note>> dateHandlers = new ArrayList<>();
         dateHandlers.add(dateHandler);
@@ -43,7 +44,8 @@ class DateHandlerFactoryTest {
     void getDateHandlerSuccess() {
 
         DateHandler<Note> returned =
-                dateHandlerFactory.getDateHandler(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
+                dateHandlerFactory.getDateHandler(
+                        NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         assertNotNull(returned);
         assertEquals(dateHandler, returned);

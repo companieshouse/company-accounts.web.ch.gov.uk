@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.companieshouse.api.ApiClient;
 import uk.gov.companieshouse.api.handler.Executor;
 import uk.gov.companieshouse.api.handler.smallfull.SmallFullResourceHandler;
@@ -73,7 +72,9 @@ class TangibleAssetsHandlerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/notes/tangible-assets";
+    private static final String URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID
+                    + "/small-full/notes/tangible-assets";
 
     private static final String TANGIBLE_ASSETS = "tangibleAssets";
 
@@ -92,7 +93,8 @@ class TangibleAssetsHandlerTest {
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
         when(tangibleAssetsResourceHandler.get(URI)).thenReturn(tangibleAssetsGet);
 
-        Executor<ApiResponse<TangibleApi>> getTangibleApi = tangibleAssetsHandler.get(apiClient, URI);
+        Executor<ApiResponse<TangibleApi>> getTangibleApi = tangibleAssetsHandler.get(apiClient,
+                URI);
 
         assertNotNull(getTangibleApi);
         assertEquals(tangibleAssetsGet, getTangibleApi);
@@ -104,9 +106,11 @@ class TangibleAssetsHandlerTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
-        when(tangibleAssetsResourceHandler.update(URI, tangibleAssetsApi)).thenReturn(tangibleAssetsUpdate);
+        when(tangibleAssetsResourceHandler.update(URI, tangibleAssetsApi)).thenReturn(
+                tangibleAssetsUpdate);
 
-        Executor<ApiResponse<Void>> updatedTangibleApi = tangibleAssetsHandler.update(apiClient, URI, tangibleAssetsApi);
+        Executor<ApiResponse<Void>> updatedTangibleApi = tangibleAssetsHandler.update(apiClient,
+                URI, tangibleAssetsApi);
 
         assertNotNull(updatedTangibleApi);
         assertEquals(tangibleAssetsUpdate, updatedTangibleApi);
@@ -118,9 +122,11 @@ class TangibleAssetsHandlerTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
-        when(tangibleAssetsResourceHandler.create(URI, tangibleAssetsApi)).thenReturn(tangibleAssetsCreate);
+        when(tangibleAssetsResourceHandler.create(URI, tangibleAssetsApi)).thenReturn(
+                tangibleAssetsCreate);
 
-        Executor<ApiResponse<TangibleApi>> createTangibleApi = tangibleAssetsHandler.create(apiClient, URI, tangibleAssetsApi);
+        Executor<ApiResponse<TangibleApi>> createTangibleApi = tangibleAssetsHandler.create(
+                apiClient, URI, tangibleAssetsApi);
 
         assertNotNull(createTangibleApi);
         assertEquals(tangibleAssetsCreate, createTangibleApi);
@@ -134,7 +140,8 @@ class TangibleAssetsHandlerTest {
         when(smallFullResourceHandler.tangible()).thenReturn(tangibleAssetsResourceHandler);
         when(tangibleAssetsResourceHandler.delete(URI)).thenReturn(tangibleAssetsDelete);
 
-        Executor<ApiResponse<Void>> deleteTangibleApi = tangibleAssetsHandler.delete(apiClient, URI);
+        Executor<ApiResponse<Void>> deleteTangibleApi = tangibleAssetsHandler.delete(apiClient,
+                URI);
 
         assertNotNull(deleteTangibleApi);
         assertEquals(tangibleAssetsDelete, deleteTangibleApi);
@@ -144,27 +151,31 @@ class TangibleAssetsHandlerTest {
     @DisplayName("Parent resource exists")
     void parentResourceExists() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn(TANGIBLE_ASSETS);
 
-        assertTrue(tangibleAssetsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(tangibleAssetsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Parent resource does not exist")
     void parentResourceDoesNotExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn(null);
 
-        assertFalse(tangibleAssetsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertFalse(tangibleAssetsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get NoteType")
-    void getNoteType()  {
+    void getNoteType() {
 
         assertEquals(NoteType.SMALL_FULL_TANGIBLE_ASSETS, tangibleAssetsHandler.getNoteType());
     }

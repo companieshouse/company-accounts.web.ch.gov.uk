@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -32,44 +33,31 @@ import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportServi
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorsReportQuestionControllerTest {
 
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String DIRECTORS_REPORT_QUESTION_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/directors-report-question";
+    private static final String DIRECTORS_REPORT_QUESTION_MODEL_ATTR = "directorsReportQuestion";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String DIRECTORS_REPORT_QUESTION_VIEW = "smallfull/directorsReportQuestion";
+    private static final String ERROR_VIEW = "error";
+    private static final String DIRECTORS_REPORT_SELECTION = "hasIncludedDirectorsReport";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
     private MockMvc mockMvc;
-
     @Mock
     private DirectorsReportService directorsReportService;
-
     @Mock
     private NavigatorService navigatorService;
-
     @InjectMocks
     private DirectorsReportQuestionController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String DIRECTORS_REPORT_QUESTION_PATH = "/company/" + COMPANY_NUMBER +
-                                                                "/transaction/" + TRANSACTION_ID +
-                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                "/small-full/directors-report-question";
-
-    private static final String DIRECTORS_REPORT_QUESTION_MODEL_ATTR = "directorsReportQuestion";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String DIRECTORS_REPORT_QUESTION_VIEW = "smallfull/directorsReportQuestion";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String DIRECTORS_REPORT_SELECTION = "hasIncludedDirectorsReport";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
-    private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
-    
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -77,26 +65,30 @@ class DirectorsReportQuestionControllerTest {
     @Test
     @DisplayName("Get directors report")
     void getRequest() throws Exception {
-        
+
         this.mockMvc.perform(get(DIRECTORS_REPORT_QUESTION_PATH)
-            .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
-            .andExpect(status().isOk())
-            .andExpect(view().name(DIRECTORS_REPORT_QUESTION_VIEW))
-            .andExpect(model().attributeExists(DIRECTORS_REPORT_QUESTION_MODEL_ATTR))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                        .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(DIRECTORS_REPORT_QUESTION_VIEW))
+                .andExpect(model().attributeExists(DIRECTORS_REPORT_QUESTION_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
     @DisplayName("Post directors report - has not included directors report")
     void postRequestHasNotIncludedDirectorsReport() throws Exception {
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
+
         this.mockMvc.perform(post(DIRECTORS_REPORT_QUESTION_PATH)
-            .param(DIRECTORS_REPORT_SELECTION, "0")
-            .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+                        .param(DIRECTORS_REPORT_SELECTION, "0")
+                        .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
         verify(directorsReportService).deleteDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
     }
@@ -105,11 +97,15 @@ class DirectorsReportQuestionControllerTest {
     @DisplayName("Post directors report - has included directors report")
     void postRequestHasIncludedDirectorsReport() throws Exception {
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(DIRECTORS_REPORT_QUESTION_PATH)
-                .param(DIRECTORS_REPORT_SELECTION, "1")
-                .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
+                        .param(DIRECTORS_REPORT_SELECTION, "1")
+                        .sessionAttr(COMPANY_ACCOUNTS_DATA_STATE, new CompanyAccountsDataState()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
 
@@ -122,14 +118,15 @@ class DirectorsReportQuestionControllerTest {
 
         doThrow(ServiceException.class)
                 .when(directorsReportService)
-                        .deleteDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                .deleteDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(DIRECTORS_REPORT_QUESTION_PATH)
-                .param(DIRECTORS_REPORT_SELECTION, "0"))
+                        .param(DIRECTORS_REPORT_SELECTION, "0"))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(),
+                ArgumentMatchers.<String>any());
     }
 
     @Test

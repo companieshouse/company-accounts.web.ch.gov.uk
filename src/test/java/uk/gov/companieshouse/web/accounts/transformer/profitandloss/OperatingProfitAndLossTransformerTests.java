@@ -1,8 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.profitandloss;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,10 +17,6 @@ import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorl
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OperatingTotal;
 import uk.gov.companieshouse.web.accounts.model.profitandloss.operatingprofitorloss.items.OtherOperatingIncome;
 import uk.gov.companieshouse.web.accounts.transformer.profitandloss.impl.OperatingProfitAndLossTransformer;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -175,12 +174,15 @@ class OperatingProfitAndLossTransformerTests {
 
         transformer.addCurrentPeriodToApiModel(profitAndLoss, currentPeriodProfitAndLoss);
 
-        assertEquals(CURRENT_ADMINISTRATIVE_EXPENSES, currentPeriodProfitAndLoss.getOperatingProfitOrLoss().
-                getAdministrativeExpenses());
-        assertEquals(CURRENT_DISTRIBUTION_COSTS, currentPeriodProfitAndLoss.getOperatingProfitOrLoss().
-                getDistributionCosts());
-        assertEquals(CURRENT_OTHER_OPERATING_INCOME, currentPeriodProfitAndLoss.getOperatingProfitOrLoss().
-                getOtherOperatingIncome());
+        assertEquals(CURRENT_ADMINISTRATIVE_EXPENSES,
+                currentPeriodProfitAndLoss.getOperatingProfitOrLoss().
+                        getAdministrativeExpenses());
+        assertEquals(CURRENT_DISTRIBUTION_COSTS,
+                currentPeriodProfitAndLoss.getOperatingProfitOrLoss().
+                        getDistributionCosts());
+        assertEquals(CURRENT_OTHER_OPERATING_INCOME,
+                currentPeriodProfitAndLoss.getOperatingProfitOrLoss().
+                        getOtherOperatingIncome());
         assertEquals(CURRENT_OPERATING_TOTAL, currentPeriodProfitAndLoss.getOperatingProfitOrLoss().
                 getOperatingTotal());
     }
@@ -218,14 +220,18 @@ class OperatingProfitAndLossTransformerTests {
 
         transformer.addPreviousPeriodToApiModel(profitAndLoss, previousPeriodProfitAndLoss);
 
-        assertEquals(PREVIOUS_ADMINISTRATIVE_EXPENSES, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
-                getAdministrativeExpenses());
-        assertEquals(PREVIOUS_DISTRIBUTION_COSTS, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
-                getDistributionCosts());
-        assertEquals(PREVIOUS_OTHER_OPERATING_INCOME, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
-                getOtherOperatingIncome());
-        assertEquals(PREVIOUS_OPERATING_TOTAL, previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
-                getOperatingTotal());
+        assertEquals(PREVIOUS_ADMINISTRATIVE_EXPENSES,
+                previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+                        getAdministrativeExpenses());
+        assertEquals(PREVIOUS_DISTRIBUTION_COSTS,
+                previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+                        getDistributionCosts());
+        assertEquals(PREVIOUS_OTHER_OPERATING_INCOME,
+                previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+                        getOtherOperatingIncome());
+        assertEquals(PREVIOUS_OPERATING_TOTAL,
+                previousPeriodProfitAndLoss.getOperatingProfitOrLoss().
+                        getOperatingTotal());
     }
 
     @Test

@@ -1,20 +1,20 @@
 package uk.gov.companieshouse.web.accounts.interceptor;
 
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.session.SessionService;
 
 @Component
-public class UserDetailsInterceptor extends HandlerInterceptorAdapter {
+public class UserDetailsInterceptor implements HandlerInterceptor {
 
     private static final String USER_EMAIL = "userEmail";
 

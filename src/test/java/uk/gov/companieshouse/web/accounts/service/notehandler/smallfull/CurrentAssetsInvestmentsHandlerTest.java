@@ -72,7 +72,9 @@ class CurrentAssetsInvestmentsHandlerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/notes/current-assets-investments";
+    private static final String URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID
+                    + "/small-full/notes/current-assets-investments";
 
     private static final String CURRENT_ASSETS_INVESTMENTS = "currentAssetsInvestments";
 
@@ -80,7 +82,8 @@ class CurrentAssetsInvestmentsHandlerTest {
     @DisplayName("Get the resource URI")
     void getResourceURI() {
 
-        assertEquals(URI, currentAssetsInvestmentsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertEquals(URI,
+                currentAssetsInvestmentsHandler.getUri(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -88,10 +91,13 @@ class CurrentAssetsInvestmentsHandlerTest {
     void getCurrentAssetsInvestmentsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
-        when(currentAssetsInvestmentsResourceHandler.get(URI)).thenReturn(currentAssetsInvestmentsGet);
+        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(
+                currentAssetsInvestmentsResourceHandler);
+        when(currentAssetsInvestmentsResourceHandler.get(URI)).thenReturn(
+                currentAssetsInvestmentsGet);
 
-        Executor<ApiResponse<CurrentAssetsInvestmentsApi>> getCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.get(apiClient, URI);
+        Executor<ApiResponse<CurrentAssetsInvestmentsApi>> getCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.get(
+                apiClient, URI);
 
         assertNotNull(getCurrentAssetsInvestmentsApi);
         assertEquals(currentAssetsInvestmentsGet, getCurrentAssetsInvestmentsApi);
@@ -102,10 +108,13 @@ class CurrentAssetsInvestmentsHandlerTest {
     void updateCurrentAssetsInvestmentsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
-        when(currentAssetsInvestmentsResourceHandler.update(URI, currentAssetsInvestmentsApi)).thenReturn(currentAssetsInvestmentsUpdate);
+        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(
+                currentAssetsInvestmentsResourceHandler);
+        when(currentAssetsInvestmentsResourceHandler.update(URI,
+                currentAssetsInvestmentsApi)).thenReturn(currentAssetsInvestmentsUpdate);
 
-        Executor<ApiResponse<Void>> updatedCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.update(apiClient, URI, currentAssetsInvestmentsApi);
+        Executor<ApiResponse<Void>> updatedCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.update(
+                apiClient, URI, currentAssetsInvestmentsApi);
 
         assertNotNull(updatedCurrentAssetsInvestmentsApi);
         assertEquals(currentAssetsInvestmentsUpdate, updatedCurrentAssetsInvestmentsApi);
@@ -116,10 +125,13 @@ class CurrentAssetsInvestmentsHandlerTest {
     void createCurrentAssetsInvestmentsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
-        when(currentAssetsInvestmentsResourceHandler.create(URI, currentAssetsInvestmentsApi)).thenReturn(currentAssetsInvestmentsCreate);
+        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(
+                currentAssetsInvestmentsResourceHandler);
+        when(currentAssetsInvestmentsResourceHandler.create(URI,
+                currentAssetsInvestmentsApi)).thenReturn(currentAssetsInvestmentsCreate);
 
-        Executor<ApiResponse<CurrentAssetsInvestmentsApi>> createCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.create(apiClient, URI, currentAssetsInvestmentsApi);
+        Executor<ApiResponse<CurrentAssetsInvestmentsApi>> createCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.create(
+                apiClient, URI, currentAssetsInvestmentsApi);
 
         assertNotNull(createCurrentAssetsInvestmentsApi);
         assertEquals(currentAssetsInvestmentsCreate, createCurrentAssetsInvestmentsApi);
@@ -130,10 +142,13 @@ class CurrentAssetsInvestmentsHandlerTest {
     void deleteCurrentAssetsInvestmentsResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(currentAssetsInvestmentsResourceHandler);
-        when(currentAssetsInvestmentsResourceHandler.delete(URI)).thenReturn(currentAssetsInvestmentsDelete);
+        when(smallFullResourceHandler.currentAssetsInvestments()).thenReturn(
+                currentAssetsInvestmentsResourceHandler);
+        when(currentAssetsInvestmentsResourceHandler.delete(URI)).thenReturn(
+                currentAssetsInvestmentsDelete);
 
-        Executor<ApiResponse<Void>> deleteCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.delete(apiClient, URI);
+        Executor<ApiResponse<Void>> deleteCurrentAssetsInvestmentsApi = currentAssetsInvestmentsHandler.delete(
+                apiClient, URI);
 
         assertNotNull(deleteCurrentAssetsInvestmentsApi);
         assertEquals(currentAssetsInvestmentsDelete, deleteCurrentAssetsInvestmentsApi);
@@ -143,28 +158,34 @@ class CurrentAssetsInvestmentsHandlerTest {
     @DisplayName("Parent resource exists")
     void parentResourceExists() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
-        when(smallFullLinks.getCurrentAssetsInvestmentsNote()).thenReturn(CURRENT_ASSETS_INVESTMENTS);
+        when(smallFullLinks.getCurrentAssetsInvestmentsNote()).thenReturn(
+                CURRENT_ASSETS_INVESTMENTS);
 
-        assertTrue(currentAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(currentAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Parent resource does not exist")
     void parentResourceDoesNotExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getCurrentAssetsInvestmentsNote()).thenReturn(null);
 
-        assertFalse(currentAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertFalse(currentAssetsInvestmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get NoteType")
-    void getNoteType()  {
+    void getNoteType() {
 
-        assertEquals(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS, currentAssetsInvestmentsHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS,
+                currentAssetsInvestmentsHandler.getNoteType());
     }
 }

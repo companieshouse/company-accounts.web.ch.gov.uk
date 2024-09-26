@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,21 +18,17 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.employees.Employ
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.EmployeesTransformerImpl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EmployeesTransformerImplTests {
-    
+
     private static final Long AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT = 1L;
-    
+
     private static final Long AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS = 10L;
 
     private static final String DETAILS = "DETAILS";
-    
-    private final NoteTransformer<Employees, EmployeesApi>  transformer = new EmployeesTransformerImpl();
+
+    private final NoteTransformer<Employees, EmployeesApi> transformer = new EmployeesTransformerImpl();
 
     @Test
     @DisplayName("All Current period values added to employees web model")
@@ -44,7 +44,8 @@ class EmployeesTransformerImplTests {
 
         Employees employees = transformer.toWeb(employeesApi);
 
-        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT, employees.getAverageNumberOfEmployees().getCurrentAverageNumberOfEmployees());
+        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT,
+                employees.getAverageNumberOfEmployees().getCurrentAverageNumberOfEmployees());
         assertEquals(DETAILS, employees.getDetails());
     }
 
@@ -80,9 +81,10 @@ class EmployeesTransformerImplTests {
 
         Employees employees = transformer.toWeb(employeesApi);
 
-        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS, employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees());
+        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS,
+                employees.getAverageNumberOfEmployees().getPreviousAverageNumberOfEmployees());
     }
-    
+
     @Test
     @DisplayName("When employees API model is null the returned web model is non null")
     void NonNullEmployeesWebModelWhenNullAPIModel() {
@@ -98,7 +100,8 @@ class EmployeesTransformerImplTests {
         Employees employees = new Employees();
 
         AverageNumberOfEmployees averageNumberOfEmployees = new AverageNumberOfEmployees();
-        averageNumberOfEmployees.setCurrentAverageNumberOfEmployees(AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT);
+        averageNumberOfEmployees.setCurrentAverageNumberOfEmployees(
+                AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT);
         employees.setAverageNumberOfEmployees(averageNumberOfEmployees);
 
         EmployeesApi employeesApi = transformer.toApi(employees);
@@ -106,7 +109,8 @@ class EmployeesTransformerImplTests {
         assertNull(employeesApi.getCurrentPeriod().getDetails());
         uk.gov.companieshouse.api.model.accounts.smallfull.employees.CurrentPeriod currentPeriod = employeesApi.getCurrentPeriod();
 
-        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT, currentPeriod.getAverageNumberOfEmployees());
+        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_CURRENT,
+                currentPeriod.getAverageNumberOfEmployees());
     }
 
     @Test
@@ -116,14 +120,16 @@ class EmployeesTransformerImplTests {
         Employees employees = new Employees();
 
         AverageNumberOfEmployees averageNumberOfEmployees = new AverageNumberOfEmployees();
-        averageNumberOfEmployees.setPreviousAverageNumberOfEmployees(AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS);
+        averageNumberOfEmployees.setPreviousAverageNumberOfEmployees(
+                AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS);
         employees.setAverageNumberOfEmployees(averageNumberOfEmployees);
 
         EmployeesApi employeesApi = transformer.toApi(employees);
 
         uk.gov.companieshouse.api.model.accounts.smallfull.employees.PreviousPeriod previousPeriod = employeesApi.getPreviousPeriod();
 
-        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS, previousPeriod.getAverageNumberOfEmployees());
+        assertEquals(AVERAGE_NUMBER_OF_EMPLOYEES_PREVIOUS,
+                previousPeriod.getAverageNumberOfEmployees());
     }
 
     @Test

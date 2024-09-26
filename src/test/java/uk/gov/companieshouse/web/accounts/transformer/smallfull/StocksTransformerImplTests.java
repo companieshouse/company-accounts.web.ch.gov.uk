@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,18 +19,14 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.stocks.Total;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.StocksTransformerImpl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StocksTransformerImplTests {
 
-    private final NoteTransformer<StocksNote, StocksApi> transformer = new StocksTransformerImpl();
-
     private static final Long PAYMENT_ON_ACCOUNT_VALUE = 5L;
     private static final Long STOCKS_VALUE = 10L;
     private static final Long TOTAL_VALUE = 15L;
+    private final NoteTransformer<StocksNote, StocksApi> transformer = new StocksTransformerImpl();
 
     @Test
     @DisplayName("All current period values added to stock sheet web model")
@@ -46,7 +45,8 @@ class StocksTransformerImplTests {
         StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
-        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE,
+                stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
         assertEquals(STOCKS_VALUE, stocksNote.getStocks().getCurrentStocks());
         assertEquals(TOTAL_VALUE, stocksNote.getTotal().getCurrentTotal());
     }
@@ -67,7 +67,8 @@ class StocksTransformerImplTests {
         StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
-        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE,
+                stocksNote.getPaymentsOnAccount().getCurrentPaymentsOnAccount());
         assertEquals(TOTAL_VALUE, stocksNote.getTotal().getCurrentTotal());
     }
 
@@ -88,7 +89,8 @@ class StocksTransformerImplTests {
         StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
-        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE,
+                stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
         assertEquals(STOCKS_VALUE, stocksNote.getStocks().getPreviousStocks());
         assertEquals(TOTAL_VALUE, stocksNote.getTotal().getPreviousTotal());
     }
@@ -109,7 +111,8 @@ class StocksTransformerImplTests {
         StocksNote stocksNote = transformer.toWeb(stocksApi);
 
         assertNotNull(stocksNote);
-        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE,
+                stocksNote.getPaymentsOnAccount().getPreviousPaymentsOnAccount());
         assertEquals(TOTAL_VALUE, stocksNote.getTotal().getPreviousTotal());
     }
 
@@ -138,7 +141,8 @@ class StocksTransformerImplTests {
         StocksApi stocksApi = transformer.toApi(stocksNote);
 
         assertNotNull(stocksApi);
-        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getPreviousPeriod().getPaymentsOnAccount());
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE,
+                stocksApi.getPreviousPeriod().getPaymentsOnAccount());
         assertEquals(STOCKS_VALUE, stocksApi.getPreviousPeriod().getStocks());
         assertEquals(TOTAL_VALUE, stocksApi.getPreviousPeriod().getTotal());
     }
@@ -185,7 +189,8 @@ class StocksTransformerImplTests {
         StocksApi stocksApi = transformer.toApi(stocksNote);
 
         assertNotNull(stocksApi);
-        assertEquals(PAYMENT_ON_ACCOUNT_VALUE, stocksApi.getPreviousPeriod().getPaymentsOnAccount());
+        assertEquals(PAYMENT_ON_ACCOUNT_VALUE,
+                stocksApi.getPreviousPeriod().getPaymentsOnAccount());
         assertEquals(TOTAL_VALUE, stocksApi.getPreviousPeriod().getTotal());
     }
 

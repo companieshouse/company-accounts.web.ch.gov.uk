@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -55,13 +54,13 @@ class TransferOfAssetsControllerTest {
     private static final String ERROR_VIEW = "error";
 
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(transferOfAssetsController)
-            .build();
+                .build();
     }
 
     @Test
@@ -69,14 +68,14 @@ class TransferOfAssetsControllerTest {
     void getRequestConsultationWithStakeholdersSuccess() throws Exception {
 
         when(transferOfAssetsService
-            .getTransferOfAssets(anyString(), anyString()))
-            .thenReturn(new TransferOfAssets());
+                .getTransferOfAssets(anyString(), anyString()))
+                .thenReturn(new TransferOfAssets());
 
         this.mockMvc.perform(get(TRANSFER_OF_ASSETS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(TRANSFER_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TRANSFER_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(TRANSFER_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(TRANSFER_MODEL_ATTR));
     }
 
 
@@ -85,12 +84,12 @@ class TransferOfAssetsControllerTest {
     void getRequestConsultationWithStakeholdersServiceException() throws Exception {
 
         when(transferOfAssetsService
-            .getTransferOfAssets(anyString(), anyString()))
-            .thenThrow(ServiceException.class);
+                .getTransferOfAssets(anyString(), anyString()))
+                .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(TRANSFER_OF_ASSETS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -98,15 +97,19 @@ class TransferOfAssetsControllerTest {
     void postRequestConsultationWithStakeholdersSuccess() throws Exception {
 
         when(transferOfAssetsService
-            .submitTransferOfAssets(anyString(), anyString(),
-                any(TransferOfAssets.class))).thenReturn(new ArrayList<>());
+                .submitTransferOfAssets(anyString(), anyString(),
+                        any(TransferOfAssets.class))).thenReturn(new ArrayList<>());
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any()))
-            .thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(TRANSFER_OF_ASSETS_PATH).param("transferOfAssets", "value"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test
@@ -114,12 +117,12 @@ class TransferOfAssetsControllerTest {
     void postRequestConsultationWithStakeholdersServiceException() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(transferOfAssetsService)
-            .submitTransferOfAssets(anyString(), anyString(),
-                any(TransferOfAssets.class));
+                .when(transferOfAssetsService)
+                .submitTransferOfAssets(anyString(), anyString(),
+                        any(TransferOfAssets.class));
         this.mockMvc.perform(post(TRANSFER_OF_ASSETS_PATH).param("transferOfAssets", "value"))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW));
     }
 
     @Test
@@ -127,8 +130,8 @@ class TransferOfAssetsControllerTest {
     void postRequestConsultationWithStakeholdersBindingErrors() throws Exception {
 
         this.mockMvc.perform(post(TRANSFER_OF_ASSETS_PATH).param("transferOfAssets", ""))
-            .andExpect(status().isOk())
-            .andExpect(view().name(TRANSFER_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(TRANSFER_VIEW));
     }
 
 

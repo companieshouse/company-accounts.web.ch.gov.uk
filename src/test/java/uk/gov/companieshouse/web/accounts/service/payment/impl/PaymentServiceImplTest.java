@@ -80,7 +80,8 @@ class PaymentServiceImplTest {
     @BeforeEach
     private void setUp() {
 
-        paymentService = new PaymentServiceImpl(apiClientService, sessionService, environmentReader);
+        paymentService = new PaymentServiceImpl(apiClientService, sessionService,
+                environmentReader);
     }
 
     @Test

@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.model.state;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 public class DirectorsReportStatements implements Serializable {

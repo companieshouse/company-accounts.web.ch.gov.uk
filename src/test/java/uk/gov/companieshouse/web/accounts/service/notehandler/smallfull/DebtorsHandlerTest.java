@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,12 +28,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -72,7 +72,9 @@ class DebtorsHandlerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/notes/debtors";
+    private static final String URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID
+                    + "/small-full/notes/debtors";
 
     private static final String DEBTORS_NOTE = "debtorsNote";
 
@@ -105,7 +107,8 @@ class DebtorsHandlerTest {
         when(smallFullResourceHandler.debtors()).thenReturn(debtorsResourceHandler);
         when(debtorsResourceHandler.update(URI, debtorsApi)).thenReturn(debtorsUpdate);
 
-        Executor<ApiResponse<Void>> updatedDebtorsApi = debtorsHandler.update(apiClient, URI, debtorsApi);
+        Executor<ApiResponse<Void>> updatedDebtorsApi = debtorsHandler.update(apiClient, URI,
+                debtorsApi);
 
         assertNotNull(updatedDebtorsApi);
         assertEquals(updatedDebtorsApi, debtorsUpdate);
@@ -119,7 +122,8 @@ class DebtorsHandlerTest {
         when(smallFullResourceHandler.debtors()).thenReturn(debtorsResourceHandler);
         when(debtorsResourceHandler.create(URI, debtorsApi)).thenReturn(debtorsCreate);
 
-        Executor<ApiResponse<DebtorsApi>> createDebtorsApi = debtorsHandler.create(apiClient, URI, debtorsApi);
+        Executor<ApiResponse<DebtorsApi>> createDebtorsApi = debtorsHandler.create(apiClient, URI,
+                debtorsApi);
 
         assertNotNull(createDebtorsApi);
         assertEquals(createDebtorsApi, debtorsCreate);
@@ -143,27 +147,31 @@ class DebtorsHandlerTest {
     @DisplayName("Parent resource exists")
     void parentResourceExists() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getDebtorsNote()).thenReturn(DEBTORS_NOTE);
 
-        assertTrue(debtorsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(debtorsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Parent resource does not exist")
     void parentResourceDoesNotExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getDebtorsNote()).thenReturn(null);
 
-        assertFalse(debtorsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertFalse(debtorsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get NoteType")
-    void getNoteType()  {
+    void getNoteType() {
 
         assertEquals(NoteType.SMALL_FULL_DEBTORS, debtorsHandler.getNoteType());
     }

@@ -80,25 +80,30 @@ class DirectorsReportReviewServiceImplTest {
         when(secretaryService.getSecretary(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(SECRETARY);
 
-        when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(additionalInformation);
 
-        when(companyPolicyOnDisabledEmployeesService.getCompanyPolicyOnDisabledEmployees(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(companyPolicyOnDisabledEmployeesService.getCompanyPolicyOnDisabledEmployees(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(companyPolicyOnDisabledEmployees);
 
-        when(politicalAndCharitableDonationsService.getPoliticalAndCharitableDonations(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(politicalAndCharitableDonationsService.getPoliticalAndCharitableDonations(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(politicalAndCharitableDonations);
 
         when(principalActivitiesService.getPrincipalActivities(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(principalActivities);
 
-        DirectorsReportReview review = directorsReportReviewService.getReview(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        DirectorsReportReview review = directorsReportReviewService.getReview(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertNotNull(review);
         assertEquals(directors, review.getDirectors());
         assertEquals(SECRETARY, review.getSecretary());
         assertEquals(additionalInformation, review.getAdditionalInformation());
-        assertEquals(companyPolicyOnDisabledEmployees, review.getCompanyPolicyOnDisabledEmployees());
+        assertEquals(companyPolicyOnDisabledEmployees,
+                review.getCompanyPolicyOnDisabledEmployees());
         assertEquals(politicalAndCharitableDonations, review.getPoliticalAndCharitableDonations());
         assertEquals(principalActivities, review.getPrincipalActivities());
     }

@@ -24,22 +24,17 @@ import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DirectorTransformerImplTest {
 
+    private static final String NAME = "name";
+    private static final LocalDate APPOINTMENT_DATE = LocalDate.of(2019, 1, 1);
+    private static final LocalDate RESIGNATION_DATE = LocalDate.of(2019, 12, 31);
+    private static final String DIRECTOR_ID = "directorId";
+    private static final String DIRECTOR_SELF_LINK =
+            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/directors-report/directors/"
+                    + DIRECTOR_ID;
     @Mock
     private DateTransformer dateTransformer;
-
     @InjectMocks
     private DirectorTransformer directorTransformer = new DirectorTransformerImpl();
-
-    private static final String NAME = "name";
-
-    private static final LocalDate APPOINTMENT_DATE = LocalDate.of(2019, 1, 1);
-
-    private static final LocalDate RESIGNATION_DATE = LocalDate.of(2019, 12, 31);
-
-    private static final String DIRECTOR_ID = "directorId";
-
-    private static final String DIRECTOR_SELF_LINK =
-            "/transactions/transactionId/company-accounts/companyAccountsId/small-full/directors-report/directors/" + DIRECTOR_ID;
 
     @Test
     @DisplayName("Get director API - no dates")
@@ -67,7 +62,8 @@ class DirectorTransformerImplTest {
         directorToAdd.setWasDirectorAppointedDuringPeriod(true);
         directorToAdd.setDidDirectorResignDuringPeriod(false);
 
-        when(dateTransformer.toLocalDate(directorToAdd.getAppointmentDate())).thenReturn(APPOINTMENT_DATE);
+        when(dateTransformer.toLocalDate(directorToAdd.getAppointmentDate())).thenReturn(
+                APPOINTMENT_DATE);
 
         DirectorApi directorApi = directorTransformer.getDirectorApi(directorToAdd);
 
@@ -86,7 +82,8 @@ class DirectorTransformerImplTest {
         directorToAdd.setWasDirectorAppointedDuringPeriod(false);
         directorToAdd.setDidDirectorResignDuringPeriod(true);
 
-        when(dateTransformer.toLocalDate(directorToAdd.getResignationDate())).thenReturn(RESIGNATION_DATE);
+        when(dateTransformer.toLocalDate(directorToAdd.getResignationDate())).thenReturn(
+                RESIGNATION_DATE);
 
         DirectorApi directorApi = directorTransformer.getDirectorApi(directorToAdd);
 
@@ -110,7 +107,8 @@ class DirectorTransformerImplTest {
 
         directorApi.setLinks(directorLinks);
 
-        Director[] allDirectors = directorTransformer.getAllDirectors(new DirectorApi[]{directorApi});
+        Director[] allDirectors = directorTransformer.getAllDirectors(
+                new DirectorApi[]{directorApi});
 
         assertEquals(1, allDirectors.length);
         assertEquals(NAME, allDirectors[0].getName());

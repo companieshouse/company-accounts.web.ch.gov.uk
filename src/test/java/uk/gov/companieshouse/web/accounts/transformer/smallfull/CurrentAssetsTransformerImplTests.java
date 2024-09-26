@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,10 +18,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.CurrentAssetsInvestmen
 import uk.gov.companieshouse.web.accounts.model.smallfull.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Stocks;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.CurrentAssetsTransformerImpl;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -205,13 +205,13 @@ class CurrentAssetsTransformerImplTests {
         assertNull(balanceSheetApi.getCalledUpShareCapitalNotPaid());
     }
 
-    private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod, Boolean previousPeriod) {
+    private BalanceSheet mockBalanceSheetWithPeriods(Boolean currentPeriod,
+            Boolean previousPeriod) {
 
         CashAtBankAndInHand cashAtBankAndInHand = new CashAtBankAndInHand();
         Debtors debtors = new Debtors();
         Stocks stocks = new Stocks();
         CurrentAssetsInvestments investments = new CurrentAssetsInvestments();
-
 
         CurrentAssets currentAssets = new CurrentAssets();
         currentAssets.setCashAtBankAndInHand(cashAtBankAndInHand);
@@ -326,18 +326,26 @@ class CurrentAssetsTransformerImplTests {
     }
 
     private void assertCurrentPeriodValuesCorrect(BalanceSheet balanceSheet) {
-        assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND, balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
-        assertEquals(CURRENT_DEBTORS, balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
-        assertEquals(CURRENT_STOCKS, balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
-        assertEquals(CURRENT_INVESTMENTS, balanceSheet.getCurrentAssets().getInvestments().getCurrentAmount());
+        assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND,
+                balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getCurrentAmount());
+        assertEquals(CURRENT_DEBTORS,
+                balanceSheet.getCurrentAssets().getDebtors().getCurrentAmount());
+        assertEquals(CURRENT_STOCKS,
+                balanceSheet.getCurrentAssets().getStocks().getCurrentAmount());
+        assertEquals(CURRENT_INVESTMENTS,
+                balanceSheet.getCurrentAssets().getInvestments().getCurrentAmount());
         assertEquals(CURRENT_TOTAL, balanceSheet.getCurrentAssets().getCurrentTotal());
     }
 
     private void assertPreviousPeriodValuesCorrect(BalanceSheet balanceSheet) {
-        assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND, balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
-        assertEquals(PREVIOUS_DEBTORS, balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
-        assertEquals(PREVIOUS_STOCKS, balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
-        assertEquals(PREVIOUS_INVESTMENTS, balanceSheet.getCurrentAssets().getInvestments().getPreviousAmount());
+        assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND,
+                balanceSheet.getCurrentAssets().getCashAtBankAndInHand().getPreviousAmount());
+        assertEquals(PREVIOUS_DEBTORS,
+                balanceSheet.getCurrentAssets().getDebtors().getPreviousAmount());
+        assertEquals(PREVIOUS_STOCKS,
+                balanceSheet.getCurrentAssets().getStocks().getPreviousAmount());
+        assertEquals(PREVIOUS_INVESTMENTS,
+                balanceSheet.getCurrentAssets().getInvestments().getPreviousAmount());
         assertEquals(PREVIOUS_TOTAL, balanceSheet.getCurrentAssets().getPreviousTotal());
     }
 
@@ -351,7 +359,8 @@ class CurrentAssetsTransformerImplTests {
     }
 
     private void assertCurrentPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
+        assertEquals(CURRENT_CASH_IN_BANK_AND_IN_HAND,
+                balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
         assertEquals(CURRENT_DEBTORS, balanceSheetApi.getCurrentAssets().getDebtors());
         assertEquals(CURRENT_STOCKS, balanceSheetApi.getCurrentAssets().getStocks());
         assertEquals(CURRENT_INVESTMENTS, balanceSheetApi.getCurrentAssets().getInvestments());
@@ -359,7 +368,8 @@ class CurrentAssetsTransformerImplTests {
     }
 
     private void assertPreviousPeriodApiModelValuesCorrect(BalanceSheetApi balanceSheetApi) {
-        assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND, balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
+        assertEquals(PREVIOUS_CASH_IN_BANK_AND_IN_HAND,
+                balanceSheetApi.getCurrentAssets().getCashAtBankAndInHand());
         assertEquals(PREVIOUS_DEBTORS, balanceSheetApi.getCurrentAssets().getDebtors());
         assertEquals(PREVIOUS_STOCKS, balanceSheetApi.getCurrentAssets().getStocks());
         assertEquals(PREVIOUS_INVESTMENTS, balanceSheetApi.getCurrentAssets().getInvestments());

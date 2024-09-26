@@ -6,8 +6,8 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorServiceTests;
 
 /**
- * Mock controller class for testing missing {@code RequestMapping} value
- * when searching forwards or backwards in the controller chain.
+ * Mock controller class for testing missing {@code RequestMapping} value when searching forwards or
+ * backwards in the controller chain.
  *
  * @see NavigatorServiceTests
  */

@@ -2,7 +2,6 @@ package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

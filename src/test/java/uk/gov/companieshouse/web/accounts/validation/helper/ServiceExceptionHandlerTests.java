@@ -20,22 +20,24 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ServiceExceptionHandlerTests {
 
-    private final ServiceExceptionHandler serviceExceptionHandler = new ServiceExceptionHandlerImpl();
-
     private static final String RESOURCE_NAME = "resourceName";
+    private final ServiceExceptionHandler serviceExceptionHandler = new ServiceExceptionHandlerImpl();
 
     @Test
     @DisplayName("Handle submission exception")
     void handleSubmissionException() {
 
         HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
+                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
                         .build();
 
-        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(
+                httpResponseException);
 
         Throwable exception =
-                assertThrows(ServiceException.class, () -> serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME));
+                assertThrows(ServiceException.class,
+                        () -> serviceExceptionHandler.handleSubmissionException(e, RESOURCE_NAME));
 
         assertEquals("Error when submitting resource: " + RESOURCE_NAME, exception.getMessage());
         assertEquals(e, exception.getCause());
@@ -46,13 +48,16 @@ class ServiceExceptionHandlerTests {
     void handleDeletionException() {
 
         HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
+                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
                         .build();
 
-        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(
+                httpResponseException);
 
         Throwable exception =
-                assertThrows(ServiceException.class, () -> serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME));
+                assertThrows(ServiceException.class,
+                        () -> serviceExceptionHandler.handleDeletionException(e, RESOURCE_NAME));
 
         assertEquals("Error deleting resource: " + RESOURCE_NAME, exception.getMessage());
         assertEquals(e, exception.getCause());
@@ -63,13 +68,16 @@ class ServiceExceptionHandlerTests {
     void handleRetrievalExceptionInternalServerError() {
 
         HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
+                new HttpResponseException.Builder(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), new HttpHeaders())
                         .build();
 
-        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(
+                httpResponseException);
 
         Throwable exception =
-                assertThrows(ServiceException.class, () -> serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME));
+                assertThrows(ServiceException.class,
+                        () -> serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME));
 
         assertEquals("Error retrieving resource: " + RESOURCE_NAME, exception.getMessage());
         assertEquals(e, exception.getCause());
@@ -80,10 +88,12 @@ class ServiceExceptionHandlerTests {
     void handleRetrievalExceptionNotFound() {
 
         HttpResponseException httpResponseException =
-                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
+                new HttpResponseException.Builder(HttpStatus.NOT_FOUND.value(),
+                        HttpStatus.NOT_FOUND.getReasonPhrase(), new HttpHeaders())
                         .build();
 
-        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(httpResponseException);
+        ApiErrorResponseException e = ApiErrorResponseException.fromHttpResponseException(
+                httpResponseException);
 
         assertAll(() -> serviceExceptionHandler.handleRetrievalException(e, RESOURCE_NAME));
     }
@@ -95,7 +105,9 @@ class ServiceExceptionHandlerTests {
         URIValidationException e = new URIValidationException("Invalid URI");
 
         Throwable exception =
-                assertThrows(ServiceException.class, () -> serviceExceptionHandler.handleURIValidationException(e, RESOURCE_NAME));
+                assertThrows(ServiceException.class,
+                        () -> serviceExceptionHandler.handleURIValidationException(e,
+                                RESOURCE_NAME));
 
         assertEquals("Invalid URI for resource: " + RESOURCE_NAME, exception.getMessage());
         assertEquals(e, exception.getCause());

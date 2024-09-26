@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivities;
-import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorsReportStatementsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 

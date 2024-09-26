@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uk.gov.companieshouse.api.handler.smallfull.financialcommitments.FinancialCommitmentsApi;
@@ -7,9 +10,6 @@ import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.financialcommitments.FinancialCommitments;
 import uk.gov.companieshouse.web.accounts.transformer.NoteTransformer;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.FinancialCommitmentsTransformerImpl;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FinancialCommitmentsTransformerImplTest {
 
@@ -48,6 +48,6 @@ class FinancialCommitmentsTransformerImplTest {
     void getNoteType() {
 
         assertEquals(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS,
-                        transformer.getNoteType());
+                transformer.getNoteType());
     }
 }

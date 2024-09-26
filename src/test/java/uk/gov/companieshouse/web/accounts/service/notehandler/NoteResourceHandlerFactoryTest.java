@@ -28,9 +28,10 @@ class NoteResourceHandlerFactoryTest {
     private NoteResourceHandler<ApiResource> noteResourceHandler;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
-        when(noteResourceHandler.getNoteType()).thenReturn(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
+        when(noteResourceHandler.getNoteType()).thenReturn(
+                NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         List<NoteResourceHandler<ApiResource>> noteResourceHandlers = new ArrayList<>();
         noteResourceHandlers.add(noteResourceHandler);
@@ -43,7 +44,8 @@ class NoteResourceHandlerFactoryTest {
     void getNoteResourceHandlerSuccess() {
 
         NoteResourceHandler<ApiResource> returned =
-                noteResourceHandlerFactory.getNoteResourceHandler(NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
+                noteResourceHandlerFactory.getNoteResourceHandler(
+                        NoteType.SMALL_FULL_OFF_BALANCE_SHEET_ARRANGEMENTS);
 
         assertNotNull(returned);
         assertEquals(noteResourceHandler, returned);
@@ -54,6 +56,7 @@ class NoteResourceHandlerFactoryTest {
     void getNoteResourceHandlerMissingInfrastructureException() {
 
         assertThrows(MissingInfrastructureException.class, () ->
-                noteResourceHandlerFactory.getNoteResourceHandler(NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
+                noteResourceHandlerFactory.getNoteResourceHandler(
+                        NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS));
     }
 }

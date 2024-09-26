@@ -1,5 +1,12 @@
 package uk.gov.companieshouse.web.accounts.controller.cic;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,11 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -31,8 +33,7 @@ class CicFileFullAccountsControllerTest {
     private CicFileFullAccountsController controller;
 
     @BeforeEach
-    private void setup() {
-
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -41,11 +42,12 @@ class CicFileFullAccountsControllerTest {
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
 
-    private static final String CIC_MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String CIC_MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @Test
     @DisplayName("Get cic file full accounts view success path")
-    void getCicFileFullAccountsRequest() throws Exception{
+    void getCicFileFullAccountsRequest() throws Exception {
 
         mockMvc.perform(get(CIC_FILE_FULL_ACCOUNTS_VIEW_PATH))
                 .andExpect(status().isOk())

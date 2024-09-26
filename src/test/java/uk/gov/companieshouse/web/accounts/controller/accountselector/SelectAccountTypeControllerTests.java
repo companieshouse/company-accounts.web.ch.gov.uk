@@ -1,9 +1,8 @@
 package uk.gov.companieshouse.web.accounts.controller.accountselector;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -28,7 +27,7 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 class SelectAccountTypeControllerTests {
 
     private static final String MOCK_CONTROLLER_PATH =
-        UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String SELECT_ACCOUNT_TYPE_VIEW = "accountselector/selectAccountType";
 
@@ -37,21 +36,20 @@ class SelectAccountTypeControllerTests {
     private static final String TYPE_OF_ACCOUNTS_ATTR = "typeOfAccounts";
 
     private static final String COMPANY_NUMBER = "companyNumber";
-
     private static final String SELECT_ACCOUNT_TYPE_PATH =
-        "/company/" + COMPANY_NUMBER + "/select-account-type";
+            "/company/" + COMPANY_NUMBER + "/select-account-type";
 
     private static final UriTemplate MICRO_ENTITY_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/micro-entity/criteria");
+            new UriTemplate("/company/{companyNumber}/micro-entity/criteria");
 
     private static final UriTemplate DORMANT_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/dormant/criteria");
+            new UriTemplate("/company/{companyNumber}/dormant/criteria");
 
     private static final UriTemplate FULL_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/small-full/criteria");
+            new UriTemplate("/company/{companyNumber}/small-full/criteria");
 
     private static final UriTemplate ABRIDGED_ACCOUNTS_URI =
-        new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
+            new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
 
     private MockMvc mockMvc;
 
@@ -70,10 +68,10 @@ class SelectAccountTypeControllerTests {
     void getRequestSuccess() throws Exception {
 
         this.mockMvc.perform(get(SELECT_ACCOUNT_TYPE_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
 
     @Test
@@ -81,9 +79,9 @@ class SelectAccountTypeControllerTests {
     void postRequestForMicroEntitySuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "micro-entity",
-            status().is3xxRedirection(),
-            getRedirectUrlForAccount(MICRO_ENTITY_ACCOUNTS_URI));
+                "micro-entity",
+                status().is3xxRedirection(),
+                getRedirectUrlForAccount(MICRO_ENTITY_ACCOUNTS_URI));
     }
 
     @Test
@@ -91,9 +89,9 @@ class SelectAccountTypeControllerTests {
     void postRequestForAbridgedAccountSuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "abridged",
-            status().is3xxRedirection(),
-            getRedirectUrlForAccount(ABRIDGED_ACCOUNTS_URI));
+                "abridged",
+                status().is3xxRedirection(),
+                getRedirectUrlForAccount(ABRIDGED_ACCOUNTS_URI));
     }
 
     @Test
@@ -101,9 +99,9 @@ class SelectAccountTypeControllerTests {
     void postRequestForFullAccountSuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "full",
-            status().is3xxRedirection(),
-            getRedirectUrlForAccount(FULL_ACCOUNTS_URI));
+                "full",
+                status().is3xxRedirection(),
+                getRedirectUrlForAccount(FULL_ACCOUNTS_URI));
     }
 
     @Test
@@ -111,47 +109,58 @@ class SelectAccountTypeControllerTests {
     void postRequestForDormantAccountSuccess() throws Exception {
 
         performPostRequestAndValidateResponse(
-            "dormant",
-            status().is3xxRedirection(),
-            getRedirectUrlForAccount(DORMANT_ACCOUNTS_URI));
+                "dormant",
+                status().is3xxRedirection(),
+                getRedirectUrlForAccount(DORMANT_ACCOUNTS_URI));
     }
 
     @Test
     @DisplayName("Post any other account selected will not be re-directed")
     void postRequestAnyOtherAccountSuccess() throws Exception {
 
-        performPostRequestAndValidateResponse(
-            "anyOtherAccount",
-            status().isOk(),
-            SELECT_ACCOUNT_TYPE_VIEW);
+        performPostRequestAndValidateResponseNoAttributes(
+                "anyOtherAccount",
+                status().isOk(),
+                SELECT_ACCOUNT_TYPE_VIEW);
     }
 
     @Test
     @DisplayName("Post criteria with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
-        performPostRequestAndValidateResponse(
-            null,
-            status().isOk(),
-            SELECT_ACCOUNT_TYPE_VIEW);
+        performPostRequestAndValidateResponseNoAttributes(
+                null,
+                status().isOk(),
+                SELECT_ACCOUNT_TYPE_VIEW);
     }
 
     private void performPostRequestAndValidateResponse(
-        String beanElementValue,
-        ResultMatcher expectedStatus,
-        String expectedViewName) throws Exception {
+            String beanElementValue,
+            ResultMatcher expectedStatus,
+            String expectedViewName) throws Exception {
 
         this.mockMvc.perform(
-            post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
-            .andExpect(expectedStatus)
-            .andExpect(view().name(expectedViewName))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-            .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
+                        post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
+                .andExpect(expectedStatus)
+                .andExpect(view().name(expectedViewName))
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
+    }
+
+    private void performPostRequestAndValidateResponseNoAttributes(
+            String beanElementValue,
+            ResultMatcher expectedStatus,
+            String expectedViewName) throws Exception {
+
+        this.mockMvc.perform(
+                        post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
+                .andExpect(expectedStatus)
+                .andExpect(view().name(expectedViewName));
     }
 
     private String getRedirectUrlForAccount(UriTemplate accountTypeUri) {
         return
-            UrlBasedViewResolver.REDIRECT_URL_PREFIX + accountTypeUri.expand(COMPANY_NUMBER);
+                UrlBasedViewResolver.REDIRECT_URL_PREFIX + accountTypeUri.expand(COMPANY_NUMBER);
     }
 
 }

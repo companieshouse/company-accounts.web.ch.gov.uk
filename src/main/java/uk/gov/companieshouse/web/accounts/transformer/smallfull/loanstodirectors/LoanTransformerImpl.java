@@ -1,13 +1,12 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoanApi;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Loan;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class LoanTransformerImpl implements LoanTransformer {

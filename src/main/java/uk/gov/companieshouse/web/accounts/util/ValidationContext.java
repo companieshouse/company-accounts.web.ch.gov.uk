@@ -1,17 +1,6 @@
 package uk.gov.companieshouse.web.accounts.util;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
-import uk.gov.companieshouse.api.error.ApiError;
-import uk.gov.companieshouse.logging.Logger;
-import uk.gov.companieshouse.logging.LoggerFactory;
-import uk.gov.companieshouse.web.accounts.enumeration.ValidationMessage;
-import uk.gov.companieshouse.web.accounts.exception.MissingValidationMappingException;
-import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
-import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
-import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
+import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.APPLICATION_NAME_SPACE;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -22,9 +11,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication.APPLICATION_NAME_SPACE;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+import uk.gov.companieshouse.api.error.ApiError;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
+import uk.gov.companieshouse.web.accounts.enumeration.ValidationMessage;
+import uk.gov.companieshouse.web.accounts.exception.MissingValidationMappingException;
+import uk.gov.companieshouse.web.accounts.validation.ValidationError;
+import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
+import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
+import uk.gov.companieshouse.web.accounts.validation.ValidationParentMapping;
 
 /**
  * The {@code ValidationContext} class provides support methods for handling
@@ -128,7 +126,7 @@ public class ValidationContext {
 
             validationError.setMessageArguments(apiError.getErrorValues());
             return validationError;
-        }).collect(Collectors.toList());
+        }).toList();
     }
 
     /**

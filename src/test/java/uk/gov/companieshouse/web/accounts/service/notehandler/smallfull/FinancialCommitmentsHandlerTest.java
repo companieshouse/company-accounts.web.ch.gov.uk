@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -24,12 +30,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -76,7 +76,9 @@ class FinancialCommitmentsHandlerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/notes/financial-commitments";
+    private static final String URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID
+                    + "/small-full/notes/financial-commitments";
 
     private static final String FINANCIAL_COMMITMENTS_NOTE = "financialCommitments";
 
@@ -92,10 +94,12 @@ class FinancialCommitmentsHandlerTest {
     void getOffBalanceSheetResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
+        when(smallFullResourceHandler.financialCommitments()).thenReturn(
+                financialCommitmentsResourceHandler);
         when(financialCommitmentsResourceHandler.get(URI)).thenReturn(financialCommitmentsGet);
 
-        Executor<ApiResponse<FinancialCommitmentsApi>> financialCommitmentsApi = financialCommitmentsHandler.get(apiClient, URI);
+        Executor<ApiResponse<FinancialCommitmentsApi>> financialCommitmentsApi = financialCommitmentsHandler.get(
+                apiClient, URI);
 
         assertNotNull(financialCommitmentsApi);
         assertEquals(financialCommitmentsApi, financialCommitmentsGet);
@@ -107,10 +111,13 @@ class FinancialCommitmentsHandlerTest {
     void updateOffBalanceSheetResource() throws ApiErrorResponseException, URIValidationException {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
-        when(financialCommitmentsResourceHandler.update(URI, financialCommitmentsApi)).thenReturn(financialCommitmentsUpdate);
+        when(smallFullResourceHandler.financialCommitments()).thenReturn(
+                financialCommitmentsResourceHandler);
+        when(financialCommitmentsResourceHandler.update(URI, financialCommitmentsApi)).thenReturn(
+                financialCommitmentsUpdate);
 
-        Executor<ApiResponse<Void>> updatedFinancialCommitmentsApi = financialCommitmentsHandler.update(apiClient, URI, financialCommitmentsApi);
+        Executor<ApiResponse<Void>> updatedFinancialCommitmentsApi = financialCommitmentsHandler.update(
+                apiClient, URI, financialCommitmentsApi);
 
         assertNotNull(updatedFinancialCommitmentsApi);
         assertEquals(updatedFinancialCommitmentsApi, financialCommitmentsUpdate);
@@ -122,10 +129,13 @@ class FinancialCommitmentsHandlerTest {
     void createOffBalanceSheetResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
-        when(financialCommitmentsResourceHandler.create(URI, financialCommitmentsApi)).thenReturn(financialCommitmentsCreate);
+        when(smallFullResourceHandler.financialCommitments()).thenReturn(
+                financialCommitmentsResourceHandler);
+        when(financialCommitmentsResourceHandler.create(URI, financialCommitmentsApi)).thenReturn(
+                financialCommitmentsCreate);
 
-        Executor<ApiResponse<FinancialCommitmentsApi>> createFinancialCommitmentsApi = financialCommitmentsHandler.create(apiClient, URI, financialCommitmentsApi);
+        Executor<ApiResponse<FinancialCommitmentsApi>> createFinancialCommitmentsApi = financialCommitmentsHandler.create(
+                apiClient, URI, financialCommitmentsApi);
 
         assertNotNull(createFinancialCommitmentsApi);
         assertEquals(createFinancialCommitmentsApi, financialCommitmentsCreate);
@@ -137,29 +147,36 @@ class FinancialCommitmentsHandlerTest {
     void deleteOffBalanceSheetResource() {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
-        when(smallFullResourceHandler.financialCommitments()).thenReturn(financialCommitmentsResourceHandler);
-        when(financialCommitmentsResourceHandler.delete(URI)).thenReturn(financialCommitmentsDelete);
+        when(smallFullResourceHandler.financialCommitments()).thenReturn(
+                financialCommitmentsResourceHandler);
+        when(financialCommitmentsResourceHandler.delete(URI)).thenReturn(
+                financialCommitmentsDelete);
 
-        Executor<ApiResponse<Void>> deleteFinancialCommitmentsApi = financialCommitmentsHandler.delete(apiClient, URI);
+        Executor<ApiResponse<Void>> deleteFinancialCommitmentsApi = financialCommitmentsHandler.delete(
+                apiClient, URI);
 
         assertNotNull(deleteFinancialCommitmentsApi);
         assertEquals(deleteFinancialCommitmentsApi, financialCommitmentsDelete);
         verify(financialCommitmentsResourceHandler).delete(URI);
     }
 
-   @Test
+    @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
-        assertThrows(ServiceException.class, () -> financialCommitmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> financialCommitmentsHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test method returns FinancialCommitments as NoteType")
-    void testOffBalanceSheetArrangementsReturned()  {
+    void testOffBalanceSheetArrangementsReturned() {
 
-        assertEquals(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS, financialCommitmentsHandler.getNoteType());
+        assertEquals(NoteType.SMALL_FULL_FINANCIAL_COMMITMENTS,
+                financialCommitmentsHandler.getNoteType());
     }
 }

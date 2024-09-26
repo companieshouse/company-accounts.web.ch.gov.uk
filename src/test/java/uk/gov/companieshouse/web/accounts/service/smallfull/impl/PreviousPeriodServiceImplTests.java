@@ -107,8 +107,8 @@ class PreviousPeriodServiceImplTests {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String PREVIOUS_PERIOD_URI = "/transactions/" + TRANSACTION_ID +
-                                                        "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                        "/small-full/previous-period";
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/previous-period";
 
     private static final String PREVIOUS_PERIOD_LINK = "previousPeriodLink";
 
@@ -123,14 +123,16 @@ class PreviousPeriodServiceImplTests {
 
     @Test
     @DisplayName("Get previous period - success")
-    void getPreviousPeriodSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void getPreviousPeriodSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenReturn(responseWithData);
         when(responseWithData.getData()).thenReturn(previousPeriod);
 
         PreviousPeriodApi returnedPreviousPeriod =
-                previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertNotNull(returnedPreviousPeriod);
         assertEquals(previousPeriod, returnedPreviousPeriod);
@@ -138,24 +140,28 @@ class PreviousPeriodServiceImplTests {
 
     @Test
     @DisplayName("Get previous period - api error response exception")
-    void getPreviousPeriodApiErrorResponseException() throws ApiErrorResponseException, URIValidationException {
+    void getPreviousPeriodApiErrorResponseException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenThrow(apiErrorResponseException);
 
         assertThrows(ServiceException.class,
-                () -> previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get previous period - uri validation exception")
-    void getPreviousPeriodURIValidationException() throws ApiErrorResponseException, URIValidationException {
+    void getPreviousPeriodURIValidationException()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(previousPeriodResourceHandler.get(PREVIOUS_PERIOD_URI)).thenReturn(previousPeriodGet);
         when(previousPeriodGet.execute()).thenThrow(uriValidationException);
 
         assertThrows(ServiceException.class,
-                () -> previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -165,13 +171,15 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
-        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodCreate);
+        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodCreate);
         when(previousPeriodCreate.execute()).thenReturn(responseWithData);
         when(responseWithData.hasErrors()).thenReturn(false);
 
         assertAll(() ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
 
         verify(existingValidationErrors, never()).addAll(anyList());
@@ -184,7 +192,8 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
-        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodCreate);
+        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodCreate);
         when(previousPeriodCreate.execute()).thenReturn(responseWithData);
         when(responseWithData.hasErrors()).thenReturn(true);
 
@@ -194,7 +203,8 @@ class PreviousPeriodServiceImplTests {
 
         assertAll(() ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
 
         verify(existingValidationErrors).addAll(submissionValidationErrors);
@@ -208,16 +218,18 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
-        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodCreate);
+        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodCreate);
         when(previousPeriodCreate.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, PREVIOUS_PERIOD_RESOURCE);
+                .handleSubmissionException(apiErrorResponseException, PREVIOUS_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
     }
 
@@ -229,16 +241,18 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(null);
 
-        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodCreate);
+        when(previousPeriodResourceHandler.create(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodCreate);
         when(previousPeriodCreate.execute()).thenThrow(uriValidationException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, PREVIOUS_PERIOD_RESOURCE);
+                .handleURIValidationException(uriValidationException, PREVIOUS_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
     }
 
@@ -249,13 +263,15 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 
-        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodUpdate);
+        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodUpdate);
         when(previousPeriodUpdate.execute()).thenReturn(responseNoData);
         when(responseNoData.hasErrors()).thenReturn(false);
 
         assertAll(() ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
 
         verify(existingValidationErrors, never()).addAll(anyList());
@@ -268,7 +284,8 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 
-        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodUpdate);
+        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodUpdate);
         when(previousPeriodUpdate.execute()).thenReturn(responseNoData);
         when(responseNoData.hasErrors()).thenReturn(true);
 
@@ -278,7 +295,8 @@ class PreviousPeriodServiceImplTests {
 
         assertAll(() ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
 
         verify(existingValidationErrors).addAll(submissionValidationErrors);
@@ -292,16 +310,18 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 
-        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodUpdate);
+        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodUpdate);
         when(previousPeriodUpdate.execute()).thenThrow(apiErrorResponseException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleSubmissionException(apiErrorResponseException, PREVIOUS_PERIOD_RESOURCE);
+                .handleSubmissionException(apiErrorResponseException, PREVIOUS_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
     }
 
@@ -313,16 +333,18 @@ class PreviousPeriodServiceImplTests {
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getPreviousPeriod()).thenReturn(PREVIOUS_PERIOD_LINK);
 
-        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(previousPeriodUpdate);
+        when(previousPeriodResourceHandler.update(PREVIOUS_PERIOD_URI, previousPeriod)).thenReturn(
+                previousPeriodUpdate);
         when(previousPeriodUpdate.execute()).thenThrow(uriValidationException);
 
         doThrow(serviceException)
                 .when(serviceExceptionHandler)
-                        .handleURIValidationException(uriValidationException, PREVIOUS_PERIOD_RESOURCE);
+                .handleURIValidationException(uriValidationException, PREVIOUS_PERIOD_RESOURCE);
 
         assertThrows(ServiceException.class, () ->
                 previousPeriodService
-                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        .submitPreviousPeriod(apiClient, smallFull, TRANSACTION_ID,
+                                COMPANY_ACCOUNTS_ID,
                                 previousPeriod, existingValidationErrors));
     }
 }

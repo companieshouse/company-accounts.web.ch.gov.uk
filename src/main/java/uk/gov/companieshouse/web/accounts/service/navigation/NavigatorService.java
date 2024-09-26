@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.service.navigation;
 
 import java.lang.annotation.Annotation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;

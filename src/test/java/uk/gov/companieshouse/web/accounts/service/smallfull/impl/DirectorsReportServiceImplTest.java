@@ -79,7 +79,7 @@ class DirectorsReportServiceImplTest {
 
     @Mock
     private ApiResponse<DirectorsReportApi> responseWithData;
-    
+
     @Mock
     private ApiErrorResponseException apiErrorResponseException;
 
@@ -93,8 +93,9 @@ class DirectorsReportServiceImplTest {
 
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
-    private static final String DIRECTORS_REPORT_URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
-                                                        COMPANY_ACCOUNTS_ID + "/small-full/directors-report";
+    private static final String DIRECTORS_REPORT_URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" +
+                    COMPANY_ACCOUNTS_ID + "/small-full/directors-report";
 
     private static final String SMALL_FULL_DIRECTORS_LINK = "smallFullDirectorsLink";
 
@@ -107,11 +108,13 @@ class DirectorsReportServiceImplTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenReturn(responseWithData);
         when(responseWithData.getData()).thenReturn(directorsReportApi);
 
-        DirectorsReportApi response = directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        DirectorsReportApi response = directorsReportService.getDirectorsReport(apiClient,
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertEquals(directorsReportApi, response);
     }
@@ -123,11 +126,14 @@ class DirectorsReportServiceImplTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doNothing().when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
-        DirectorsReportApi response = directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        DirectorsReportApi response = directorsReportService.getDirectorsReport(apiClient,
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         assertNull(response);
     }
@@ -139,12 +145,15 @@ class DirectorsReportServiceImplTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -154,12 +163,15 @@ class DirectorsReportServiceImplTest {
 
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
         assertThrows(ServiceException.class, () ->
-                directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                directorsReportService.getDirectorsReport(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -170,12 +182,16 @@ class DirectorsReportServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
-        when(directorsReportResourceHandler.create(eq(DIRECTORS_REPORT_URI), any(DirectorsReportApi.class))).thenReturn(directorsReportCreate);
+        doNothing().when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        when(directorsReportResourceHandler.create(eq(DIRECTORS_REPORT_URI),
+                any(DirectorsReportApi.class))).thenReturn(directorsReportCreate);
 
-        assertAll(() -> directorsReportService.createDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(() -> directorsReportService.createDirectorsReport(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
 
         verify(directorsReportCreate).execute();
     }
@@ -188,13 +204,16 @@ class DirectorsReportServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenReturn(responseWithData);
         when(responseWithData.getData()).thenReturn(directorsReportApi);
 
-        assertAll(() -> directorsReportService.createDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(() -> directorsReportService.createDirectorsReport(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
 
-        verify(directorsReportResourceHandler, never()).create(eq(DIRECTORS_REPORT_URI), any(DirectorsReportApi.class));
+        verify(directorsReportResourceHandler, never()).create(eq(DIRECTORS_REPORT_URI),
+                any(DirectorsReportApi.class));
     }
 
     @Test
@@ -205,14 +224,20 @@ class DirectorsReportServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
-        when(directorsReportResourceHandler.create(eq(DIRECTORS_REPORT_URI), any(DirectorsReportApi.class))).thenReturn(directorsReportCreate);
+        doNothing().when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        when(directorsReportResourceHandler.create(eq(DIRECTORS_REPORT_URI),
+                any(DirectorsReportApi.class))).thenReturn(directorsReportCreate);
         when(directorsReportCreate.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleSubmissionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorsReportService.createDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> directorsReportService.createDirectorsReport(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -223,14 +248,20 @@ class DirectorsReportServiceImplTest {
         when(apiClientService.getApiClient()).thenReturn(apiClient);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(directorsReportGet);
+        when(directorsReportResourceHandler.get(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportGet);
         when(directorsReportGet.execute()).thenThrow(apiErrorResponseException);
-        doNothing().when(serviceExceptionHandler).handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
-        when(directorsReportResourceHandler.create(eq(DIRECTORS_REPORT_URI), any(DirectorsReportApi.class))).thenReturn(directorsReportCreate);
+        doNothing().when(serviceExceptionHandler)
+                .handleRetrievalException(apiErrorResponseException, RESOURCE_NAME);
+        when(directorsReportResourceHandler.create(eq(DIRECTORS_REPORT_URI),
+                any(DirectorsReportApi.class))).thenReturn(directorsReportCreate);
         when(directorsReportCreate.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorsReportService.createDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> directorsReportService.createDirectorsReport(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -239,14 +270,17 @@ class DirectorsReportServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getDirectorsReport()).thenReturn(SMALL_FULL_DIRECTORS_LINK);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.delete(DIRECTORS_REPORT_URI)).thenReturn(directorsReportDelete);
+        when(directorsReportResourceHandler.delete(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportDelete);
 
-        assertAll(() -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(() -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
 
         verify(directorsReportDelete).execute();
     }
@@ -256,11 +290,13 @@ class DirectorsReportServiceImplTest {
     void deleteDirectorsReportNoSmallFullLink() throws ServiceException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getDirectorsReport()).thenReturn(null);
 
-        assertAll(() -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertAll(() -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
 
         verify(apiClient, never()).smallFull();
     }
@@ -271,16 +307,21 @@ class DirectorsReportServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getDirectorsReport()).thenReturn(SMALL_FULL_DIRECTORS_LINK);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.delete(DIRECTORS_REPORT_URI)).thenReturn(directorsReportDelete);
+        when(directorsReportResourceHandler.delete(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportDelete);
         when(directorsReportDelete.execute()).thenThrow(apiErrorResponseException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleDeletionException(apiErrorResponseException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -289,15 +330,20 @@ class DirectorsReportServiceImplTest {
             throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         when(apiClientService.getApiClient()).thenReturn(apiClient);
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getDirectorsReport()).thenReturn(SMALL_FULL_DIRECTORS_LINK);
         when(apiClient.smallFull()).thenReturn(smallFullResourceHandler);
         when(smallFullResourceHandler.directorsReport()).thenReturn(directorsReportResourceHandler);
-        when(directorsReportResourceHandler.delete(DIRECTORS_REPORT_URI)).thenReturn(directorsReportDelete);
+        when(directorsReportResourceHandler.delete(DIRECTORS_REPORT_URI)).thenReturn(
+                directorsReportDelete);
         when(directorsReportDelete.execute()).thenThrow(uriValidationException);
-        doThrow(ServiceException.class).when(serviceExceptionHandler).handleURIValidationException(uriValidationException, RESOURCE_NAME);
+        doThrow(ServiceException.class).when(serviceExceptionHandler)
+                .handleURIValidationException(uriValidationException, RESOURCE_NAME);
 
-        assertThrows(ServiceException.class, () -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> directorsReportService.deleteDirectorsReport(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 }

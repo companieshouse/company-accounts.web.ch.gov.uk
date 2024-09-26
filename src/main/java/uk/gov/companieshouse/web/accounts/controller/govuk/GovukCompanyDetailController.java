@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,6 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/accounts/company/{companyNumber}/details")

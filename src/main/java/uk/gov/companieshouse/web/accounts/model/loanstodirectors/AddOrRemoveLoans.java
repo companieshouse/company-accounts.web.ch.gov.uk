@@ -1,9 +1,8 @@
 package uk.gov.companieshouse.web.accounts.model.loanstodirectors;
 
+import java.util.List;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPeriodApi;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
-
-import java.util.List;
 
 @ValidationModel
 public class AddOrRemoveLoans {

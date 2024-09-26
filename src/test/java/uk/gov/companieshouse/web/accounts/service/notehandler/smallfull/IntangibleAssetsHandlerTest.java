@@ -1,7 +1,11 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -87,7 +91,8 @@ class IntangibleAssetsHandlerTest {
 
         when(intangibleHandler.get(apiClient, URI)).thenReturn(intangibleGet);
 
-        Executor<ApiResponse<IntangibleApi>> intangibleApiGet = intangibleHandler.get(apiClient, URI);
+        Executor<ApiResponse<IntangibleApi>> intangibleApiGet = intangibleHandler.get(apiClient,
+                URI);
 
         assertNotNull(intangibleApiGet);
         assertEquals(intangibleApiGet, intangibleGet);
@@ -101,7 +106,8 @@ class IntangibleAssetsHandlerTest {
 
         when(intangibleHandler.update(apiClient, URI, intangibleApi)).thenReturn(intangibleUpdate);
 
-        Executor<ApiResponse<Void>> updatedIntangible = intangibleHandler.update(apiClient, URI, intangibleApi);
+        Executor<ApiResponse<Void>> updatedIntangible = intangibleHandler.update(apiClient, URI,
+                intangibleApi);
 
         assertNotNull(updatedIntangible);
         assertEquals(updatedIntangible, intangibleUpdate);
@@ -116,7 +122,8 @@ class IntangibleAssetsHandlerTest {
 
         when(intangibleHandler.create(apiClient, URI, intangibleApi)).thenReturn(intangibleCreate);
 
-        Executor<ApiResponse<IntangibleApi>> createIntangibleApi = intangibleHandler.create(apiClient, URI, intangibleApi);
+        Executor<ApiResponse<IntangibleApi>> createIntangibleApi = intangibleHandler.create(
+                apiClient, URI, intangibleApi);
 
         assertNotNull(createIntangibleApi);
         assertEquals(createIntangibleApi, intangibleCreate);
@@ -140,25 +147,30 @@ class IntangibleAssetsHandlerTest {
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getIntangibleAssetsNote()).thenReturn(INTANGIBLE_NOTE);
 
-        assertTrue(intangibleHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(intangibleHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
-        assertThrows(ServiceException.class, () -> intangibleHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> intangibleHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test method returns Intangible as NoteType")
-    void testIntangibleReturned()  {
+    void testIntangibleReturned() {
 
         assertEquals(NoteType.SMALL_FULL_INTANGIBLE_ASSETS, intangibleHandler.getNoteType());
     }

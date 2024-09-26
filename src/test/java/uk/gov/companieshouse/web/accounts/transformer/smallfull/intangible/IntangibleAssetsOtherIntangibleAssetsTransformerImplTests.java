@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -27,12 +33,6 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbo
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.IntangibleAssetsNetBookValue;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.intangible.netbookvalue.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.intangible.impl.IntangibleAssetsOtherIntangibleAssetsTransformerImpl;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -76,7 +76,8 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     void mapFullApiResourceToEmptyWebModel() {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
-        IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(true, true);
+        IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(
+                true, true);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, otherIntangibleAssets);
 
         assertWebModelsMapped(intangibleAssets, true, true);
@@ -87,7 +88,8 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     void mapApiResourceWithoutCostOrAmortisationToEmptyWebModel() {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
-        IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(false, false);
+        IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(
+                false, false);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, otherIntangibleAssets);
 
         assertWebModelsMapped(intangibleAssets, false, false);
@@ -102,7 +104,8 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
 
         IntangibleAssets intangibleAssets = createIntangibleAssetsWithPreExistingResources();
 
-        IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(true, true);
+        IntangibleAssetsResource otherIntangibleAssets = createOtherIntangibleAssetsApiResource(
+                true, true);
         transformer.mapIntangibleAssetsResourceToWebModel(intangibleAssets, otherIntangibleAssets);
 
         assertWebModelsMapped(intangibleAssets, true, true);
@@ -168,7 +171,8 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
         assertFalse(transformer.hasIntangibleAssetsToMapToApiResource(intangibleAssets));
     }
 
-    private IntangibleAssetsResource createOtherIntangibleAssetsApiResource(boolean includeCost, boolean includeAmortisation) {
+    private IntangibleAssetsResource createOtherIntangibleAssetsApiResource(boolean includeCost,
+            boolean includeAmortisation) {
 
         IntangibleAssetsResource otherIntangibleAssets = new IntangibleAssetsResource();
 
@@ -176,7 +180,7 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
             otherIntangibleAssets.setCost(createCostApiResource());
         }
 
-        if(includeAmortisation) {
+        if (includeAmortisation) {
             otherIntangibleAssets.setAmortisation(createAmortisationApiResource());
         }
 
@@ -280,22 +284,31 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
 
     private void assertPreExistingFieldsUnaffected(IntangibleAssets intangibleAssets) {
 
-        assertEquals(GOODWILL_COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getGoodwill());
+        assertEquals(GOODWILL_COST_AT_PERIOD_START,
+                intangibleAssets.getCost().getAtPeriodStart().getGoodwill());
         assertEquals(GOODWILL_ADDITIONS, intangibleAssets.getCost().getAdditions().getGoodwill());
         assertEquals(GOODWILL_DISPOSALS, intangibleAssets.getCost().getDisposals().getGoodwill());
-        assertEquals(GOODWILL_REVALUATIONS, intangibleAssets.getCost().getRevaluations().getGoodwill());
+        assertEquals(GOODWILL_REVALUATIONS,
+                intangibleAssets.getCost().getRevaluations().getGoodwill());
         assertEquals(GOODWILL_TRANSFERS, intangibleAssets.getCost().getTransfers().getGoodwill());
-        assertEquals(GOODWILL_COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getGoodwill());
+        assertEquals(GOODWILL_COST_AT_PERIOD_END,
+                intangibleAssets.getCost().getAtPeriodEnd().getGoodwill());
 
-        assertEquals(GOODWILL_AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getGoodwill());
-        assertEquals(GOODWILL_AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getGoodwill());
-        assertEquals(GOODWILL_AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getGoodwill());
-        assertEquals(GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getGoodwill());
-        assertEquals(GOODWILL_AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_AT_PERIOD_START,
+                intangibleAssets.getAmortisation().getAtPeriodStart().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_CHARGE_FOR_YEAR,
+                intangibleAssets.getAmortisation().getChargeForYear().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_ON_DISPOSALS,
+                intangibleAssets.getAmortisation().getOnDisposals().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_OTHER_ADJUSTMENTS,
+                intangibleAssets.getAmortisation().getOtherAdjustments().getGoodwill());
+        assertEquals(GOODWILL_AMORTISATION_AT_PERIOD_END,
+                intangibleAssets.getAmortisation().getAtPeriodEnd().getGoodwill());
     }
 
-    private IntangibleAssets createIntangibleAssetsWithOtherIntangibleAssetsResources(boolean includeCost, boolean includeAmortisation,
-                                                                                      boolean includeNetBookValue) {
+    private IntangibleAssets createIntangibleAssetsWithOtherIntangibleAssetsResources(
+            boolean includeCost, boolean includeAmortisation,
+            boolean includeNetBookValue) {
 
         IntangibleAssets intangibleAssets = new IntangibleAssets();
 
@@ -376,41 +389,55 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
     }
 
     private void assertWebModelsMapped(IntangibleAssets intangibleAssets,
-                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
+            boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToWebModel(intangibleAssets);
         }
 
-        if(expectAmortisationFieldsMapped) {
+        if (expectAmortisationFieldsMapped) {
             assertAmortisationFieldsMappedToWebModel(intangibleAssets);
         }
-        assertEquals(CURRENT_PERIOD, intangibleAssets.getNetBookValue().getCurrentPeriod().getOtherIntangibleAssets());
-        assertEquals(PREVIOUS_PERIOD, intangibleAssets.getNetBookValue().getPreviousPeriod().getOtherIntangibleAssets());
+        assertEquals(CURRENT_PERIOD,
+                intangibleAssets.getNetBookValue().getCurrentPeriod().getOtherIntangibleAssets());
+        assertEquals(PREVIOUS_PERIOD,
+                intangibleAssets.getNetBookValue().getPreviousPeriod().getOtherIntangibleAssets());
     }
 
     private void assertCostFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
 
-        assertEquals(COST_AT_PERIOD_START, intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
-        assertEquals(ADDITIONS, intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
-        assertEquals(DISPOSALS, intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
-        assertEquals(REVALUATIONS, intangibleAssets.getCost().getRevaluations().getOtherIntangibleAssets());
-        assertEquals(TRANSFERS, intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
-        assertEquals(COST_AT_PERIOD_END, intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
+        assertEquals(COST_AT_PERIOD_START,
+                intangibleAssets.getCost().getAtPeriodStart().getOtherIntangibleAssets());
+        assertEquals(ADDITIONS,
+                intangibleAssets.getCost().getAdditions().getOtherIntangibleAssets());
+        assertEquals(DISPOSALS,
+                intangibleAssets.getCost().getDisposals().getOtherIntangibleAssets());
+        assertEquals(REVALUATIONS,
+                intangibleAssets.getCost().getRevaluations().getOtherIntangibleAssets());
+        assertEquals(TRANSFERS,
+                intangibleAssets.getCost().getTransfers().getOtherIntangibleAssets());
+        assertEquals(COST_AT_PERIOD_END,
+                intangibleAssets.getCost().getAtPeriodEnd().getOtherIntangibleAssets());
     }
 
     private void assertAmortisationFieldsMappedToWebModel(IntangibleAssets intangibleAssets) {
 
-        assertEquals(AMORTISATION_AT_PERIOD_START, intangibleAssets.getAmortisation().getAtPeriodStart().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_CHARGE_FOR_YEAR, intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_ON_DISPOSALS, intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS, intangibleAssets.getAmortisation().getOtherAdjustments().getOtherIntangibleAssets());
-        assertEquals(AMORTISATION_AT_PERIOD_END, intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
+        assertEquals(AMORTISATION_AT_PERIOD_START,
+                intangibleAssets.getAmortisation().getAtPeriodStart().getOtherIntangibleAssets());
+        assertEquals(AMORTISATION_CHARGE_FOR_YEAR,
+                intangibleAssets.getAmortisation().getChargeForYear().getOtherIntangibleAssets());
+        assertEquals(AMORTISATION_ON_DISPOSALS,
+                intangibleAssets.getAmortisation().getOnDisposals().getOtherIntangibleAssets());
+        assertEquals(AMORTISATION_OTHER_ADJUSTMENTS,
+                intangibleAssets.getAmortisation().getOtherAdjustments()
+                        .getOtherIntangibleAssets());
+        assertEquals(AMORTISATION_AT_PERIOD_END,
+                intangibleAssets.getAmortisation().getAtPeriodEnd().getOtherIntangibleAssets());
     }
 
     private void assertApiFieldsMapped(IntangibleAssetsResource resource,
-                                       boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped,
-                                       boolean expectNetBookValueFieldsMapped) {
+            boolean expectCostFieldsMapped, boolean expectAmortisationFieldsMapped,
+            boolean expectNetBookValueFieldsMapped) {
 
         if (expectCostFieldsMapped) {
             assertCostFieldsMappedToApiResource(resource.getCost());
@@ -420,8 +447,7 @@ class IntangibleAssetsOtherIntangibleAssetsTransformerImplTests {
 
         if (expectAmortisationFieldsMapped) {
             assertAmortisationFieldsMappedToApiResource(resource.getAmortisation());
-        }
-        else {
+        } else {
             assertNull(resource.getAmortisation());
         }
         if (expectNetBookValueFieldsMapped) {

@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.accounts.service.smallfull.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +15,6 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -39,14 +39,15 @@ class ResumeServiceImplTests {
     private void setUp() throws ServiceException {
         when(companyService.getCompanyProfile(COMPANY_NUMBER)).thenReturn(companyProfileApi);
     }
-    
+
     @Test
     @DisplayName("Get resume redirect success path for non-cic company")
     void getResumeRedirect() throws ServiceException {
 
         when(companyProfileApi.isCommunityInterestCompany()).thenReturn(false);
 
-        String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         String expectedRedirect = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                 "/company/" + COMPANY_NUMBER +
@@ -63,7 +64,8 @@ class ResumeServiceImplTests {
 
         when(companyProfileApi.isCommunityInterestCompany()).thenReturn(true);
 
-        String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        String redirect = resumeService.getResumeRedirect(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         String expectedRedirect = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                 "/company/" + COMPANY_NUMBER +

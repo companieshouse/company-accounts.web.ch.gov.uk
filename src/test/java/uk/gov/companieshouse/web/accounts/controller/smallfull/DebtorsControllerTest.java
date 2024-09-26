@@ -1,11 +1,27 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,24 +40,6 @@ import uk.gov.companieshouse.web.accounts.service.NoteService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.BalanceSheetService;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -68,9 +66,9 @@ class DebtorsControllerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String SMALL_FULL_PATH = "/company/" + COMPANY_NUMBER +
-        "/transaction/" + TRANSACTION_ID +
-        "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-        "/small-full";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full";
 
     private static final String DEBTORS_PATH = SMALL_FULL_PATH + "/debtors";
 
@@ -86,10 +84,11 @@ class DebtorsControllerTest {
 
     private static final String TEST_PATH = "tradeDebtors.currentTradeDebtors";
 
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -97,41 +96,54 @@ class DebtorsControllerTest {
     @DisplayName("Get debtors view success path")
     void getRequestSuccess() throws Exception {
 
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenReturn(new Debtors());
+        when(mockNavigatorService.getPreviousControllerPath(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_DEBTORS)).thenReturn(new Debtors());
 
         this.mockMvc.perform(get(DEBTORS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(DEBTORS_VIEW))
-            .andExpect(model().attributeExists(DEBTORS_MODEL_ATTR))
-            .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(DEBTORS_VIEW))
+                .andExpect(model().attributeExists(DEBTORS_MODEL_ATTR))
+                .andExpect(model().attributeExists(BACK_BUTTON_MODEL_ATTR))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
 
-        verify(mockDebtorsService, times(1)).get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
+        verify(mockDebtorsService, times(1)).get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_DEBTORS);
     }
 
     @Test
     @DisplayName("Get debtors view failure path due to error on debtors retrieval")
     void getRequestFailureInGetBalanceSheet() throws Exception {
 
-        when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS)).thenThrow(ServiceException.class);
+        when(mockDebtorsService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_DEBTORS)).thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(DEBTORS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
     @DisplayName("Post debtors success path")
     void postRequestSuccess() throws Exception {
 
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
-        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS))).thenReturn(new ArrayList<>());
+        when(mockNavigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class),
+                eq(NoteType.SMALL_FULL_DEBTORS))).thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(DEBTORS_PATH))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(view().name(MOCK_CONTROLLER_PATH));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
 
     @Test
@@ -139,12 +151,13 @@ class DebtorsControllerTest {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class)
-            .when(mockDebtorsService).submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS));
+                .when(mockDebtorsService).submit(anyString(), anyString(), any(Debtors.class),
+                        eq(NoteType.SMALL_FULL_DEBTORS));
 
         this.mockMvc.perform(post(DEBTORS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(ERROR_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(status().isOk())
+                .andExpect(view().name(ERROR_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     @Test
@@ -158,19 +171,22 @@ class DebtorsControllerTest {
         List<ValidationError> errors = new ArrayList<>();
         errors.add(validationError);
 
-        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class), eq(NoteType.SMALL_FULL_DEBTORS))).thenReturn(errors);
+        when(mockDebtorsService.submit(anyString(), anyString(), any(Debtors.class),
+                eq(NoteType.SMALL_FULL_DEBTORS))).thenReturn(errors);
 
         this.mockMvc.perform(post(DEBTORS_PATH))
-            .andExpect(status().isOk())
-            .andExpect(view().name(DEBTORS_VIEW));
+                .andExpect(status().isOk())
+                .andExpect(view().name(DEBTORS_VIEW));
     }
 
     @Test
     @DisplayName("Test will render with Debtors present on balancesheet")
     void willRenderDebtorsPresent() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(getMockBalanceSheet());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertTrue(renderPage);
     }
@@ -178,9 +194,11 @@ class DebtorsControllerTest {
     @Test
     @DisplayName("Test will render with Debtors not present on balancesheet")
     void willRenderDebtorsNotPresent() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoDebtors());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(getMockBalanceSheetNoDebtors());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertFalse(renderPage);
     }
@@ -188,9 +206,11 @@ class DebtorsControllerTest {
     @Test
     @DisplayName("Test will not render with 0 values in debtors on balance sheet")
     void willNotRenderDebtorsZeroValues() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(getMockBalanceSheetZeroValues());
 
-        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        boolean renderPage = controller.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         assertFalse(renderPage);
     }
@@ -204,10 +224,10 @@ class DebtorsControllerTest {
         String invalidData = "test";
 
         this.mockMvc.perform(post(DEBTORS_PATH)
-            .param(beanElement, invalidData))
-            .andExpect(status().isOk())
-            .andExpect(view().name(DEBTORS_VIEW))
-            .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                        .param(beanElement, invalidData))
+                .andExpect(status().isOk())
+                .andExpect(view().name(DEBTORS_VIEW))
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 
     private BalanceSheet getMockBalanceSheet() {

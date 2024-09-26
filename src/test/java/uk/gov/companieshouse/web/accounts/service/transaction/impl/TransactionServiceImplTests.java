@@ -1,5 +1,19 @@
 package uk.gov.companieshouse.web.accounts.service.transaction.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,21 +37,6 @@ import uk.gov.companieshouse.api.model.transaction.TransactionStatus;
 import uk.gov.companieshouse.web.accounts.api.ApiClientService;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.transaction.TransactionService;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -92,10 +91,11 @@ class TransactionServiceImplTests {
 
         when(apiClient.transactions()).thenReturn(transactionsResourceHandler);
     }
-    
+
     @Test
     @DisplayName("Create Transaction - Success Path")
-    void createTransactionSuccess() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void createTransactionSuccess()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         Transaction createdTransaction = new Transaction();
         createdTransaction.setId(TRANSACTION_ID);
@@ -114,31 +114,36 @@ class TransactionServiceImplTests {
 
     @Test
     @DisplayName("Create Transaction - API Error Response Exception Thrown")
-    void createTransactionApiResponseExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+    void createTransactionApiResponseExceptionThrown()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(transactionsResourceHandler.create(anyString(), any(Transaction.class)))
                 .thenReturn(transactionsCreate);
 
         when(transactionsCreate.execute()).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ServiceException.class, () -> transactionService.createTransaction(COMPANY_NUMBER));
+        assertThrows(ServiceException.class,
+                () -> transactionService.createTransaction(COMPANY_NUMBER));
     }
 
     @Test
     @DisplayName("Create Transaction - URIValidationException Thrown")
-    void createTransactionURIValidationExceptionThrown() throws ApiErrorResponseException, URIValidationException {
+    void createTransactionURIValidationExceptionThrown()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(transactionsResourceHandler.create(anyString(), any(Transaction.class)))
                 .thenReturn(transactionsCreate);
 
         when(transactionsCreate.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(ServiceException.class, () -> transactionService.createTransaction(COMPANY_NUMBER));
+        assertThrows(ServiceException.class,
+                () -> transactionService.createTransaction(COMPANY_NUMBER));
     }
 
     @Test
     @DisplayName("Close Transaction - Success Path for payable transaction")
-    void closeTransactionSuccessForPayableTransaction() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void closeTransactionSuccessForPayableTransaction()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         Transaction transaction = new Transaction();
         transaction.setId(TRANSACTION_ID);
@@ -170,7 +175,8 @@ class TransactionServiceImplTests {
 
     @Test
     @DisplayName("Close Transaction - Success Path for non payable transaction")
-    void closeTransactionSuccessForNonPayableTransaction() throws ServiceException, ApiErrorResponseException, URIValidationException {
+    void closeTransactionSuccessForNonPayableTransaction()
+            throws ServiceException, ApiErrorResponseException, URIValidationException {
 
         Transaction transaction = new Transaction();
         transaction.setId(TRANSACTION_ID);
@@ -199,29 +205,34 @@ class TransactionServiceImplTests {
 
     @Test
     @DisplayName("Close Transaction - API Error Response Exception Thrown on Get")
-    void closeTransactionApiResponseExceptionThrownOnGet() throws ApiErrorResponseException, URIValidationException {
+    void closeTransactionApiResponseExceptionThrownOnGet()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
 
         when(transactionsGet.execute()).thenThrow(ApiErrorResponseException.class);
 
-        assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+        assertThrows(ServiceException.class,
+                () -> transactionService.closeTransaction(TRANSACTION_ID));
     }
 
     @Test
     @DisplayName("Close Transaction - URIValidationException Thrown on Get")
-    void closeTransactionURIValidationExceptionThrownOnGet() throws ApiErrorResponseException, URIValidationException {
+    void closeTransactionURIValidationExceptionThrownOnGet()
+            throws ApiErrorResponseException, URIValidationException {
 
         when(transactionsResourceHandler.get(GET_TRANSACTION_URI)).thenReturn(transactionsGet);
 
         when(transactionsGet.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+        assertThrows(ServiceException.class,
+                () -> transactionService.closeTransaction(TRANSACTION_ID));
     }
 
     @Test
     @DisplayName("Close Transaction - API Error Response Exception Thrown on Update")
-    void closeTransactionApiResponseExceptionThrownOnUpdate() throws ApiErrorResponseException, URIValidationException {
+    void closeTransactionApiResponseExceptionThrownOnUpdate()
+            throws ApiErrorResponseException, URIValidationException {
 
         Transaction transaction = new Transaction();
         transaction.setId(TRANSACTION_ID);
@@ -239,12 +250,14 @@ class TransactionServiceImplTests {
 
         doThrow(ApiErrorResponseException.class).when(transactionsUpdate).execute();
 
-        assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+        assertThrows(ServiceException.class,
+                () -> transactionService.closeTransaction(TRANSACTION_ID));
     }
 
     @Test
     @DisplayName("Close Transaction - URIValidationException Thrown on Update")
-    void closeTransactionURIValidationExceptionThrownOnUpdate() throws ApiErrorResponseException, URIValidationException {
+    void closeTransactionURIValidationExceptionThrownOnUpdate()
+            throws ApiErrorResponseException, URIValidationException {
 
         Transaction transaction = new Transaction();
         transaction.setId(TRANSACTION_ID);
@@ -262,7 +275,8 @@ class TransactionServiceImplTests {
 
         doThrow(URIValidationException.class).when(transactionsUpdate).execute();
 
-        assertThrows(ServiceException.class, () -> transactionService.closeTransaction(TRANSACTION_ID));
+        assertThrows(ServiceException.class,
+                () -> transactionService.closeTransaction(TRANSACTION_ID));
     }
 
     @Test
@@ -270,9 +284,9 @@ class TransactionServiceImplTests {
     void UpdateTransactionResumeLink() throws ServiceException {
 
         String resumeLink = "/company/" + COMPANY_NUMBER +
-            "/transaction/" + TRANSACTION_ID +
-            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-            "/resume";
+                "/transaction/" + TRANSACTION_ID +
+                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+                "/resume";
 
         when(transactionsResourceHandler.update(anyString(), any(Transaction.class)))
                 .thenReturn(transactionsUpdate);
@@ -302,7 +316,9 @@ class TransactionServiceImplTests {
         resource.setLinks(links);
 
         Map<String, Resource> resources = new HashMap<>();
-        resources.put("/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID, resource);
+        resources.put(
+                "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID,
+                resource);
 
         Transaction transaction = new Transaction();
         transaction.setResources(resources);
@@ -325,7 +341,9 @@ class TransactionServiceImplTests {
         resource.setLinks(new HashMap<>());
 
         Map<String, Resource> resources = new HashMap<>();
-        resources.put("/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID, resource);
+        resources.put(
+                "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID,
+                resource);
 
         Transaction transaction = new Transaction();
         transaction.setResources(resources);

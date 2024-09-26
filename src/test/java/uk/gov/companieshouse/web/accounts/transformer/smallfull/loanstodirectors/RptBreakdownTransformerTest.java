@@ -1,5 +1,8 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.loanstodirectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -9,9 +12,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoanA
 import uk.gov.companieshouse.api.model.accounts.smallfull.loanstodirectors.LoanBreakdownApi;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.Breakdown;
 import uk.gov.companieshouse.web.accounts.model.loanstodirectors.LoanToAdd;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,10 +40,10 @@ class RptBreakdownTransformerTest {
         LoanBreakdownApi loanBreakdownApi = breakdownTransformer.mapLoanBreakdownToApi(loanToAdd);
 
         assertNotNull(loanBreakdownApi);
-        assertEquals(loanBreakdownApi.getBalanceAtPeriodEnd(),(Long) 5L);
-        assertEquals(loanBreakdownApi.getBalanceAtPeriodStart(),(Long) 6L);
-        assertEquals(loanBreakdownApi.getAdvancesCreditsRepaid(),(Long) 7L);
-        assertEquals(loanBreakdownApi.getAdvancesCreditsMade(),(Long) 8L);
+        assertEquals(loanBreakdownApi.getBalanceAtPeriodEnd(), (Long) 5L);
+        assertEquals(loanBreakdownApi.getBalanceAtPeriodStart(), (Long) 6L);
+        assertEquals(loanBreakdownApi.getAdvancesCreditsRepaid(), (Long) 7L);
+        assertEquals(loanBreakdownApi.getAdvancesCreditsMade(), (Long) 8L);
     }
 
     @Test
@@ -62,9 +62,9 @@ class RptBreakdownTransformerTest {
         Breakdown breakdown = breakdownTransformer.mapLoanBreakdownToWeb(loanApi);
 
         assertNotNull(breakdown);
-        assertEquals(breakdown.getBalanceAtPeriodEnd(),(Long) 1L);
-        assertEquals(breakdown.getBalanceAtPeriodStart(),(Long) 2L);
-        assertEquals(breakdown.getAdvancesCreditsRepaid(),(Long) 3L);
-        assertEquals(breakdown.getAdvancesCreditsMade(),(Long) 4L);
+        assertEquals(breakdown.getBalanceAtPeriodEnd(), (Long) 1L);
+        assertEquals(breakdown.getBalanceAtPeriodStart(), (Long) 2L);
+        assertEquals(breakdown.getAdvancesCreditsRepaid(), (Long) 3L);
+        assertEquals(breakdown.getAdvancesCreditsMade(), (Long) 4L);
     }
 }

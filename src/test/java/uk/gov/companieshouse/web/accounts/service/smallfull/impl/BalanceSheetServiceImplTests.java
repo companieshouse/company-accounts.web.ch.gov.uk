@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -172,12 +173,14 @@ class BalanceSheetServiceImplTests {
 
         when(companyProfile.getType()).thenReturn(LBG_TYPE);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
 
         when(smallFullService.getBalanceSheetHeadings(smallFull)).thenReturn(balanceSheetHeadings);
 
         BalanceSheet returnedBalanceSheet =
-                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER);
 
         assertEquals(balanceSheet, returnedBalanceSheet);
 
@@ -201,7 +204,8 @@ class BalanceSheetServiceImplTests {
 
         when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(previousPeriod);
 
         when(transformer.getBalanceSheet(currentPeriod, previousPeriod))
@@ -209,12 +213,14 @@ class BalanceSheetServiceImplTests {
 
         when(companyProfile.getType()).thenReturn(NON_LBG_TYPE);
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFull);
 
         when(smallFullService.getBalanceSheetHeadings(smallFull)).thenReturn(balanceSheetHeadings);
 
         BalanceSheet returnedBalanceSheet =
-                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER);
 
         assertEquals(balanceSheet, returnedBalanceSheet);
 
@@ -230,7 +236,8 @@ class BalanceSheetServiceImplTests {
         ReflectionTestUtils.setField(balanceSheetService, CACHED_BALANCE_SHEET, balanceSheet);
 
         BalanceSheet returnedBalanceSheet =
-                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER);
+                balanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                        COMPANY_NUMBER);
 
         assertEquals(balanceSheet, returnedBalanceSheet);
 
@@ -258,15 +265,18 @@ class BalanceSheetServiceImplTests {
         when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(currentPeriod);
 
-        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(
+                currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
         assertNotNull(
                 balanceSheetService
-                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
+                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet,
+                                COMPANY_NUMBER));
 
-        verify(previousPeriodService, never()).getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(previousPeriodService, never()).getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         verify(transformer, never()).getPreviousPeriodBalanceSheet(balanceSheet);
 
@@ -298,15 +308,18 @@ class BalanceSheetServiceImplTests {
         when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
-        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(
+                currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
         assertNotNull(
                 balanceSheetService
-                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
+                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet,
+                                COMPANY_NUMBER));
 
-        verify(previousPeriodService, never()).getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(previousPeriodService, never()).getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
 
         verify(transformer, never()).getPreviousPeriodBalanceSheet(balanceSheet);
 
@@ -333,21 +346,25 @@ class BalanceSheetServiceImplTests {
 
         when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(previousPeriod);
 
-        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(previousPeriodBalanceSheet);
+        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(
+                previousPeriodBalanceSheet);
 
         when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(currentPeriod);
 
-        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(
+                currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
         assertNotNull(
                 balanceSheetService
-                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
+                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet,
+                                COMPANY_NUMBER));
 
         verify(previousPeriod).setBalanceSheet(previousPeriodBalanceSheet);
 
@@ -376,21 +393,25 @@ class BalanceSheetServiceImplTests {
 
         when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
-        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(previousPeriodBalanceSheet);
+        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(
+                previousPeriodBalanceSheet);
 
         when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
-        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(
+                currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
         assertNotNull(
                 balanceSheetService
-                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
+                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet,
+                                COMPANY_NUMBER));
 
         verify(previousPeriodService)
                 .submitPreviousPeriod(eq(apiClient), eq(smallFull), eq(TRANSACTION_ID),
@@ -415,15 +436,18 @@ class BalanceSheetServiceImplTests {
 
         when(companyService.isMultiYearFiler(companyProfile)).thenReturn(true);
 
-        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(previousPeriodService.getPreviousPeriod(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(previousPeriod);
 
-        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(previousPeriodBalanceSheet);
+        when(transformer.getPreviousPeriodBalanceSheet(balanceSheet)).thenReturn(
+                previousPeriodBalanceSheet);
 
         when(currentPeriodService.getCurrentPeriod(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(currentPeriod);
 
-        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(currentPeriodBalanceSheet);
+        when(transformer.getCurrentPeriodBalanceSheet(balanceSheet)).thenReturn(
+                currentPeriodBalanceSheet);
 
         when(smallFull.getLinks()).thenReturn(smallFullLinks);
 
@@ -431,7 +455,8 @@ class BalanceSheetServiceImplTests {
 
         assertNotNull(
                 balanceSheetService
-                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet, COMPANY_NUMBER));
+                        .postBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, balanceSheet,
+                                COMPANY_NUMBER));
 
         verify(previousPeriod).setBalanceSheet(previousPeriodBalanceSheet);
 
@@ -452,7 +477,8 @@ class BalanceSheetServiceImplTests {
 
         when(smallFullLinks.getDebtorsNote()).thenReturn(DEBTORS_LINK);
         when(smallFullLinks.getCreditorsWithinOneYearNote()).thenReturn(CREDITORS_WITHIN_LINK);
-        when(smallFullLinks.getCreditorsAfterMoreThanOneYearNote()).thenReturn(CREDITORS_AFTER_LINK);
+        when(smallFullLinks.getCreditorsAfterMoreThanOneYearNote()).thenReturn(
+                CREDITORS_AFTER_LINK);
         when(smallFullLinks.getIntangibleAssetsNote()).thenReturn(INTANGIBLE_LINK);
         when(smallFullLinks.getTangibleAssetsNote()).thenReturn(TANGIBLE_LINK);
         when(smallFullLinks.getFixedAssetsInvestmentsNote()).thenReturn(FIXED_ASSETS_LINK);
@@ -462,13 +488,21 @@ class BalanceSheetServiceImplTests {
 
     private void assertAllConditionalNotesDeleted() throws ServiceException {
 
-        verify(creditorsWithinOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
-        verify(debtorsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_DEBTORS);
-        verify(creditorsAfterOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
-        verify(tangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_TANGIBLE_ASSETS);
-        verify(intangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
-        verify(fixedAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
-        verify(stocksService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_STOCKS);
-        verify(currentAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
+        verify(creditorsWithinOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_CREDITORS_WITHIN_ONE_YEAR);
+        verify(debtorsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_DEBTORS);
+        verify(creditorsAfterOneYearService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR);
+        verify(tangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_TANGIBLE_ASSETS);
+        verify(intangibleAssetsNoteService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_INTANGIBLE_ASSETS);
+        verify(fixedAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_FIXED_ASSETS_INVESTMENT);
+        verify(stocksService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_STOCKS);
+        verify(currentAssetsInvestmentsService).delete(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                NoteType.SMALL_FULL_CURRENT_ASSETS_INVESTMENTS);
     }
 }

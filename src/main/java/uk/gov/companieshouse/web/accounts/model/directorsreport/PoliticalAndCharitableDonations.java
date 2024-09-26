@@ -1,9 +1,8 @@
 package uk.gov.companieshouse.web.accounts.model.directorsreport;
 
+import jakarta.validation.constraints.NotBlank;
 import uk.gov.companieshouse.web.accounts.validation.ValidationMapping;
 import uk.gov.companieshouse.web.accounts.validation.ValidationModel;
-
-import javax.validation.constraints.NotBlank;
 
 @ValidationModel
 public class PoliticalAndCharitableDonations {

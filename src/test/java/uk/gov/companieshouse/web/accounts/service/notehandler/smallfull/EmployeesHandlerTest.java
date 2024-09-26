@@ -1,5 +1,11 @@
 package uk.gov.companieshouse.web.accounts.service.notehandler.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,12 +28,6 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.employees.EmployeesApi
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.smallfull.SmallFullService;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -68,7 +68,7 @@ class EmployeesHandlerTest {
 
     @InjectMocks
     private EmployeesHandler employeesHandler;
-    
+
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
@@ -105,7 +105,8 @@ class EmployeesHandlerTest {
 
         when(employeesHandler.update(apiClient, URI, employeesApi)).thenReturn(employeesUpdate);
 
-        Executor<ApiResponse<Void>> updatedEmployees = employeesHandler.update(apiClient, URI, employeesApi);
+        Executor<ApiResponse<Void>> updatedEmployees = employeesHandler.update(apiClient, URI,
+                employeesApi);
 
         assertNotNull(updatedEmployees);
         assertEquals(updatedEmployees, employeesUpdate);
@@ -119,7 +120,8 @@ class EmployeesHandlerTest {
 
         when(employeesHandler.create(apiClient, URI, employeesApi)).thenReturn(employeesCreate);
 
-        Executor<ApiResponse<EmployeesApi>> createEmployeesApi = employeesHandler.create(apiClient, URI, employeesApi);
+        Executor<ApiResponse<EmployeesApi>> createEmployeesApi = employeesHandler.create(apiClient,
+                URI, employeesApi);
 
         assertNotNull(createEmployeesApi);
         assertEquals(createEmployeesApi, employeesCreate);
@@ -143,25 +145,30 @@ class EmployeesHandlerTest {
     @DisplayName("Test parent resource exist")
     void testParentResourceExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getEmployeesNote()).thenReturn(EMPLOYEES_NOTE);
 
-        assertTrue(employeesHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(employeesHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test parent resource throws service exception")
     void testParentResourceThrowsServiceException() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenThrow(ServiceException.class);
 
-        assertThrows(ServiceException.class, () -> employeesHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertThrows(ServiceException.class,
+                () -> employeesHandler.parentResourceExists(apiClient, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Test method returns Employees as NoteType")
-    void testEmployeesReturned()  {
+    void testEmployeesReturned() {
 
         assertEquals(NoteType.SMALL_FULL_EMPLOYEES, employeesHandler.getNoteType());
     }

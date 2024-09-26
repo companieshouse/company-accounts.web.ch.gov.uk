@@ -3,6 +3,7 @@ package uk.gov.companieshouse.web.accounts.controller.smallfull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -12,8 +13,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,9 +47,9 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
 
     private static final String ADDITIONAL_INFORMATION_PATH = "/company/" + COMPANY_NUMBER +
-                                                                "/transaction/" + TRANSACTION_ID +
-                                                                "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                                "/small-full/notes/add-or-remove-loans/additional-information";
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/notes/add-or-remove-loans/additional-information";
 
     private static final String ADDITIONAL_INFORMATION_MODEL_ATTR = "loansToDirectorsAdditionalInfo";
 
@@ -59,7 +61,8 @@ class LoansToDirectorsAdditionalInfoControllerTest {
 
     private static final String ADDITIONAL_INFORMATION_DETAILS = "additionalInfoDetails";
 
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
 
     private static final String COMPANY_ACCOUNTS_DATA_STATE = "companyAccountsDataState";
 
@@ -90,7 +93,7 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     private LoansToDirectorsAdditionalInfoController controller;
 
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -99,7 +102,8 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     @DisplayName("Get request - success")
     void getAdditionalInformationSuccess() throws Exception {
 
-        when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(additionalInformation);
 
         this.mockMvc.perform(get(ADDITIONAL_INFORMATION_PATH))
@@ -113,7 +117,8 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     @DisplayName("Get request - service exception")
     void getAdditionalInformationThrowsServiceException() throws Exception {
 
-        when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(additionalInformationService.getAdditionalInformation(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(get(ADDITIONAL_INFORMATION_PATH))
@@ -130,15 +135,20 @@ class LoansToDirectorsAdditionalInfoControllerTest {
                 .thenReturn(additionalInformation);
 
         when(additionalInformationService
-                .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(LoansToDirectorsAdditionalInfo.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
-                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                        .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -152,17 +162,19 @@ class LoansToDirectorsAdditionalInfoControllerTest {
                 .thenReturn(additionalInformation);
 
         when(additionalInformationService
-                .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(LoansToDirectorsAdditionalInfo.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
-                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                        .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADDITIONAL_INFORMATION_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(),
+                ArgumentMatchers.<String>any());
     }
 
     @Test
@@ -174,11 +186,12 @@ class LoansToDirectorsAdditionalInfoControllerTest {
                 .thenReturn(additionalInformation);
 
         when(additionalInformationService
-                .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .createAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(LoansToDirectorsAdditionalInfo.class)))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
-                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                        .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -188,7 +201,7 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     void postAdditionalInformationUpdateSuccess() throws Exception {
 
         LoansToDirectorsAdditionalInfo populatedAdditionalInformation = new LoansToDirectorsAdditionalInfo();
-        
+
         populatedAdditionalInformation.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
 
         when(additionalInformationService
@@ -196,15 +209,20 @@ class LoansToDirectorsAdditionalInfoControllerTest {
                 .thenReturn(populatedAdditionalInformation);
 
         when(additionalInformationService
-                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(LoansToDirectorsAdditionalInfo.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(true);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
-                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                        .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(MOCK_CONTROLLER_PATH));
     }
@@ -214,7 +232,7 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     void postAdditionalInformationUpdateWithValidationErrors() throws Exception {
 
         LoansToDirectorsAdditionalInfo populatedAdditionalInformation = new LoansToDirectorsAdditionalInfo();
-        
+
         populatedAdditionalInformation.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
 
         when(additionalInformationService
@@ -222,17 +240,19 @@ class LoansToDirectorsAdditionalInfoControllerTest {
                 .thenReturn(populatedAdditionalInformation);
 
         when(additionalInformationService
-                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(LoansToDirectorsAdditionalInfo.class)))
                 .thenReturn(validationErrors);
 
         when(validationErrors.isEmpty()).thenReturn(false);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
-                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                        .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ADDITIONAL_INFORMATION_VIEW));
 
-        verify(navigatorService, never()).getNextControllerRedirect(any(), ArgumentMatchers.<String>any());
+        verify(navigatorService, never()).getNextControllerRedirect(any(),
+                ArgumentMatchers.<String>any());
     }
 
     @Test
@@ -240,7 +260,7 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     void postAdditionalInformationUpdateThrowsServiceException() throws Exception {
 
         LoansToDirectorsAdditionalInfo populatedAdditionalInformation = new LoansToDirectorsAdditionalInfo();
-        
+
         populatedAdditionalInformation.setAdditionalInfoDetails(ADDITIONAL_INFORMATION_DETAILS);
 
         when(additionalInformationService
@@ -248,11 +268,12 @@ class LoansToDirectorsAdditionalInfoControllerTest {
                 .thenReturn(populatedAdditionalInformation);
 
         when(additionalInformationService
-                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(LoansToDirectorsAdditionalInfo.class)))
+                .updateAdditionalInformation(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID),
+                        any(LoansToDirectorsAdditionalInfo.class)))
                 .thenThrow(ServiceException.class);
 
         this.mockMvc.perform(post(ADDITIONAL_INFORMATION_PATH)
-                .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
+                        .param(ADDITIONAL_INFORMATION_DETAILS, ADDITIONAL_INFORMATION_DETAILS))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW));
     }
@@ -271,8 +292,10 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     void willRenderFalse() throws ServiceException {
 
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo()).thenReturn(true);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(
+                companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo()).thenReturn(
+                true);
 
         assertTrue(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -282,8 +305,10 @@ class LoansToDirectorsAdditionalInfoControllerTest {
     void willRenderTrue() throws ServiceException {
 
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(companyAccountsDataState);
-        when(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo()).thenReturn(false);
+        when(session.getAttribute(COMPANY_ACCOUNTS_DATA_STATE)).thenReturn(
+                companyAccountsDataState);
+        when(companyAccountsDataState.getHasIncludedLoansToDirectorsAdditionalInfo()).thenReturn(
+                false);
 
         assertFalse(controller.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }

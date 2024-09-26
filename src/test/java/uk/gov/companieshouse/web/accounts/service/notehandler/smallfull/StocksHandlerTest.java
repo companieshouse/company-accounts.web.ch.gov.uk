@@ -72,7 +72,9 @@ class StocksHandlerTest {
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
     private static final String TRANSACTION_ID = "transactionId";
 
-    private static final String URI = "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID + "/small-full/notes/stocks";
+    private static final String URI =
+            "/transactions/" + TRANSACTION_ID + "/company-accounts/" + COMPANY_ACCOUNTS_ID
+                    + "/small-full/notes/stocks";
 
     private static final String STOCKS_NOTE = "stocksNote";
 
@@ -105,7 +107,8 @@ class StocksHandlerTest {
         when(smallFullResourceHandler.stocks()).thenReturn(stocksResourceHandler);
         when(stocksResourceHandler.update(URI, stocksApi)).thenReturn(stocksUpdate);
 
-        Executor<ApiResponse<Void>> updatedStocksApi = stocksHandler.update(apiClient, URI, stocksApi);
+        Executor<ApiResponse<Void>> updatedStocksApi = stocksHandler.update(apiClient, URI,
+                stocksApi);
 
         assertNotNull(updatedStocksApi);
         assertEquals(updatedStocksApi, stocksUpdate);
@@ -119,7 +122,8 @@ class StocksHandlerTest {
         when(smallFullResourceHandler.stocks()).thenReturn(stocksResourceHandler);
         when(stocksResourceHandler.create(URI, stocksApi)).thenReturn(stocksCreate);
 
-        Executor<ApiResponse<StocksApi>> createStocksApi = stocksHandler.create(apiClient, URI, stocksApi);
+        Executor<ApiResponse<StocksApi>> createStocksApi = stocksHandler.create(apiClient, URI,
+                stocksApi);
 
         assertNotNull(createStocksApi);
         assertEquals(createStocksApi, stocksCreate);
@@ -143,27 +147,31 @@ class StocksHandlerTest {
     @DisplayName("Parent resource exists")
     void parentResourceExists() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getStocksNote()).thenReturn(STOCKS_NOTE);
 
-        assertTrue(stocksHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertTrue(
+                stocksHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Parent resource does not exist")
     void parentResourceDoesNotExist() throws ServiceException {
 
-        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
+        when(smallFullService.getSmallFullAccounts(apiClient, TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID)).thenReturn(smallFullApi);
         when(smallFullApi.getLinks()).thenReturn(smallFullLinks);
         when(smallFullLinks.getStocksNote()).thenReturn(null);
 
-        assertFalse(stocksHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+        assertFalse(
+                stocksHandler.parentResourceExists(apiClient, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
 
     @Test
     @DisplayName("Get NoteType")
-    void getNoteType()  {
+    void getNoteType() {
 
         assertEquals(NoteType.SMALL_FULL_STOCKS, stocksHandler.getNoteType());
     }

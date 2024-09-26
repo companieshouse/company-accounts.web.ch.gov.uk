@@ -17,8 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.model.accounts.directorsreport.StatementsApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.directorsreport.PrincipalActivities;
-import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesService;
 import uk.gov.companieshouse.web.accounts.service.smallfull.DirectorsReportStatementsService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.PrincipalActivitiesService;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.directorsreport.DirectorsReportStatementsTransformer;
 import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 
@@ -52,14 +52,16 @@ class PrincipalActivitiesServiceImplTest {
     @DisplayName("Get principal activities")
     void getPrincipalActivities() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
         when(directorsReportStatementsTransformer.getPrincipalActivities(statementsApi))
                 .thenReturn(principalActivities);
 
         PrincipalActivities returned =
-                principalActivitiesService.getPrincipalActivities(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                principalActivitiesService.getPrincipalActivities(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertEquals(principalActivities, returned);
     }
@@ -68,33 +70,41 @@ class PrincipalActivitiesServiceImplTest {
     @DisplayName("Submit principal activities - create")
     void submitPrincipalActivitiesCreate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(null);
 
-        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID), eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
+        when(directorsReportStatementsService.createDirectorsReportStatements(eq(TRANSACTION_ID),
+                eq(COMPANY_ACCOUNTS_ID), any(StatementsApi.class)))
                 .thenReturn(validationErrors);
 
-        List<ValidationError> returned = principalActivitiesService.submitPrincipalActivities(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivities);
+        List<ValidationError> returned = principalActivitiesService.submitPrincipalActivities(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivities);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setPrincipalActivities(any(StatementsApi.class), eq(principalActivities));
+        verify(directorsReportStatementsTransformer).setPrincipalActivities(
+                any(StatementsApi.class), eq(principalActivities));
     }
 
     @Test
     @DisplayName("Submit principal activities - update")
     void submitPrincipalActivitiesUpdate() throws ServiceException {
 
-        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
+        when(directorsReportStatementsService.getDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID))
                 .thenReturn(statementsApi);
 
-        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, statementsApi))
+        when(directorsReportStatementsService.updateDirectorsReportStatements(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID, statementsApi))
                 .thenReturn(validationErrors);
 
-        List<ValidationError> returned = principalActivitiesService.submitPrincipalActivities(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivities);
+        List<ValidationError> returned = principalActivitiesService.submitPrincipalActivities(
+                TRANSACTION_ID, COMPANY_ACCOUNTS_ID, principalActivities);
 
         assertEquals(validationErrors, returned);
 
-        verify(directorsReportStatementsTransformer).setPrincipalActivities(statementsApi, principalActivities);
+        verify(directorsReportStatementsTransformer).setPrincipalActivities(statementsApi,
+                principalActivities);
     }
 }

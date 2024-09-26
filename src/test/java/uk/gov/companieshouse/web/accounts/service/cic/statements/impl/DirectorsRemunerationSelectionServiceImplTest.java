@@ -63,7 +63,8 @@ class DirectorsRemunerationSelectionServiceImplTest {
                 .thenReturn(DEFAULT_DIRECTORS_REMUNERATION_STATEMENT);
 
         DirectorsRemunerationSelection selection =
-                selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertNotNull(selection);
         assertNull(selection.getHasProvidedDirectorsRemuneration());
@@ -82,7 +83,8 @@ class DirectorsRemunerationSelectionServiceImplTest {
                 .thenReturn(OTHER_STATEMENT);
 
         DirectorsRemunerationSelection selection =
-                selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                selectionService.getDirectorsRemunerationSelection(TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID);
 
         assertNotNull(selection);
         assertTrue(selection.getHasProvidedDirectorsRemuneration());
@@ -98,12 +100,14 @@ class DirectorsRemunerationSelectionServiceImplTest {
         selectionService.submitDirectorsRemunerationSelection(
                 TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsRemunerationSelection);
 
-        verify(cicStatementsService, never()).getCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        verify(cicStatementsService, never()).getCicStatementsApi(TRANSACTION_ID,
+                COMPANY_ACCOUNTS_ID);
     }
 
     @Test
     @DisplayName("Submit directors remuneration selection - no remuneration but API resource already default")
-    void submitDirectorsRemunerationNoRemunerationButApiResourceAlreadyDefault() throws ServiceException {
+    void submitDirectorsRemunerationNoRemunerationButApiResourceAlreadyDefault()
+            throws ServiceException {
 
         when(directorsRemunerationSelection.getHasProvidedDirectorsRemuneration())
                 .thenReturn(false);
@@ -125,7 +129,8 @@ class DirectorsRemunerationSelectionServiceImplTest {
 
     @Test
     @DisplayName("Submit directors remuneration selection - no remuneration and API resource statement not default")
-    void submitDirectorsRemunerationNoRemunerationAndApiResourceNotDefault() throws ServiceException {
+    void submitDirectorsRemunerationNoRemunerationAndApiResourceNotDefault()
+            throws ServiceException {
 
         when(directorsRemunerationSelection.getHasProvidedDirectorsRemuneration())
                 .thenReturn(false);
@@ -141,7 +146,8 @@ class DirectorsRemunerationSelectionServiceImplTest {
         selectionService.submitDirectorsRemunerationSelection(
                 TRANSACTION_ID, COMPANY_ACCOUNTS_ID, directorsRemunerationSelection);
 
-        verify(reportStatementsApi).setDirectorsRemuneration(DEFAULT_DIRECTORS_REMUNERATION_STATEMENT);
+        verify(reportStatementsApi).setDirectorsRemuneration(
+                DEFAULT_DIRECTORS_REMUNERATION_STATEMENT);
 
         verify(cicStatementsService)
                 .updateCicStatementsApi(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, cicStatementsApi);

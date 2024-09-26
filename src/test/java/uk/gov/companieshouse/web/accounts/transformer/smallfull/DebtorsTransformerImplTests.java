@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -9,15 +11,13 @@ import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
-import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.PrepaymentsAndAccruedIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.OtherDebtors;
+import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.PrepaymentsAndAccruedIncome;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Total;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.TradeDebtors;
 import uk.gov.companieshouse.web.accounts.transformer.smallfull.impl.DebtorsTransformerImpl;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -31,7 +31,7 @@ class DebtorsTransformerImplTests {
 
     private static final long TRADE_DEBTORS_PREVIOUS = 10L;
     private static final long PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS = 20L;
-    private static final long OTHER_DEBTORS_PREVIOUS= 30L;
+    private static final long OTHER_DEBTORS_PREVIOUS = 30L;
     private static final long GREATER_THAN_ONE_YEAR_PREVIOUS = 40L;
     private static final long TOTAL_PREVIOUS = 60L;
     private static final String DETAILS = "DETAILS";
@@ -56,10 +56,15 @@ class DebtorsTransformerImplTests {
 
         Debtors debtors = transformer.toWeb(debtorsApi);
 
-        assertEquals(TRADE_DEBTORS_CURRENT, debtors.getTradeDebtors().getCurrentTradeDebtors().longValue());
-        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome().longValue());
-        assertEquals(OTHER_DEBTORS_CURRENT, debtors.getOtherDebtors().getCurrentOtherDebtors().longValue());
-        assertEquals(GREATER_THAN_ONE_YEAR_CURRENT, debtors.getGreaterThanOneYear().getCurrentGreaterThanOneYear().longValue());
+        assertEquals(TRADE_DEBTORS_CURRENT,
+                debtors.getTradeDebtors().getCurrentTradeDebtors().longValue());
+        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT,
+                debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome()
+                        .longValue());
+        assertEquals(OTHER_DEBTORS_CURRENT,
+                debtors.getOtherDebtors().getCurrentOtherDebtors().longValue());
+        assertEquals(GREATER_THAN_ONE_YEAR_CURRENT,
+                debtors.getGreaterThanOneYear().getCurrentGreaterThanOneYear().longValue());
         assertEquals(TOTAL_CURRENT, debtors.getTotal().getCurrentTotal().longValue());
         assertEquals(DETAILS, debtors.getDetails());
     }
@@ -81,8 +86,11 @@ class DebtorsTransformerImplTests {
 
         Debtors debtors = transformer.toWeb(debtorsApi);
 
-        assertEquals(TRADE_DEBTORS_CURRENT, debtors.getTradeDebtors().getCurrentTradeDebtors().longValue());
-        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome().longValue());
+        assertEquals(TRADE_DEBTORS_CURRENT,
+                debtors.getTradeDebtors().getCurrentTradeDebtors().longValue());
+        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT,
+                debtors.getPrepaymentsAndAccruedIncome().getCurrentPrepaymentsAndAccruedIncome()
+                        .longValue());
         assertEquals(TOTAL_CURRENT, debtors.getTotal().getCurrentTotal().longValue());
         assertEquals(DETAILS, debtors.getDetails());
     }
@@ -96,7 +104,8 @@ class DebtorsTransformerImplTests {
         PreviousPeriod debtorsPreviousPeriod = new PreviousPeriod();
 
         debtorsPreviousPeriod.setTradeDebtors(TRADE_DEBTORS_PREVIOUS);
-        debtorsPreviousPeriod.setPrepaymentsAndAccruedIncome(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS);
+        debtorsPreviousPeriod.setPrepaymentsAndAccruedIncome(
+                PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS);
         debtorsPreviousPeriod.setOtherDebtors(OTHER_DEBTORS_PREVIOUS);
         debtorsPreviousPeriod.setGreaterThanOneYear(GREATER_THAN_ONE_YEAR_PREVIOUS);
         debtorsPreviousPeriod.setTotal(TOTAL_PREVIOUS);
@@ -105,10 +114,15 @@ class DebtorsTransformerImplTests {
 
         Debtors debtors = transformer.toWeb(debtorsApi);
 
-        assertEquals(TRADE_DEBTORS_PREVIOUS, debtors.getTradeDebtors().getPreviousTradeDebtors().longValue());
-        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS, debtors.getPrepaymentsAndAccruedIncome().getPreviousPrepaymentsAndAccruedIncome().longValue());
-        assertEquals(OTHER_DEBTORS_PREVIOUS, debtors.getOtherDebtors().getPreviousOtherDebtors().longValue());
-        assertEquals(GREATER_THAN_ONE_YEAR_PREVIOUS, debtors.getGreaterThanOneYear().getPreviousGreaterThanOneYear().longValue());
+        assertEquals(TRADE_DEBTORS_PREVIOUS,
+                debtors.getTradeDebtors().getPreviousTradeDebtors().longValue());
+        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS,
+                debtors.getPrepaymentsAndAccruedIncome().getPreviousPrepaymentsAndAccruedIncome()
+                        .longValue());
+        assertEquals(OTHER_DEBTORS_PREVIOUS,
+                debtors.getOtherDebtors().getPreviousOtherDebtors().longValue());
+        assertEquals(GREATER_THAN_ONE_YEAR_PREVIOUS,
+                debtors.getGreaterThanOneYear().getPreviousGreaterThanOneYear().longValue());
         assertEquals(TOTAL_PREVIOUS, debtors.getTotal().getPreviousTotal().longValue());
     }
 
@@ -143,7 +157,8 @@ class DebtorsTransformerImplTests {
         debtors.setOtherDebtors(otherDebtors);
 
         PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
-        prepaymentsAndAccruedIncome.setPreviousPrepaymentsAndAccruedIncome(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS);
+        prepaymentsAndAccruedIncome.setPreviousPrepaymentsAndAccruedIncome(
+                PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS);
         debtors.setPrepaymentsAndAccruedIncome(prepaymentsAndAccruedIncome);
 
         GreaterThanOneYear greaterThanOneYear = new GreaterThanOneYear();
@@ -156,10 +171,14 @@ class DebtorsTransformerImplTests {
 
         DebtorsApi debtorsApi = transformer.toApi(debtors);
 
-        assertEquals(TRADE_DEBTORS_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors().longValue());
-        assertEquals(GREATER_THAN_ONE_YEAR_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear().longValue());
-        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome().longValue());
-        assertEquals(OTHER_DEBTORS_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getOtherDebtors().longValue());
+        assertEquals(TRADE_DEBTORS_PREVIOUS,
+                debtorsApi.getDebtorsPreviousPeriod().getTradeDebtors().longValue());
+        assertEquals(GREATER_THAN_ONE_YEAR_PREVIOUS,
+                debtorsApi.getDebtorsPreviousPeriod().getGreaterThanOneYear().longValue());
+        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_PREVIOUS,
+                debtorsApi.getDebtorsPreviousPeriod().getPrepaymentsAndAccruedIncome().longValue());
+        assertEquals(OTHER_DEBTORS_PREVIOUS,
+                debtorsApi.getDebtorsPreviousPeriod().getOtherDebtors().longValue());
         assertEquals(TOTAL_PREVIOUS, debtorsApi.getDebtorsPreviousPeriod().getTotal().longValue());
     }
 
@@ -169,7 +188,8 @@ class DebtorsTransformerImplTests {
         debtors.setTradeDebtors(tradeDebtors);
 
         PrepaymentsAndAccruedIncome prepaymentsAndAccruedIncome = new PrepaymentsAndAccruedIncome();
-        prepaymentsAndAccruedIncome.setCurrentPrepaymentsAndAccruedIncome(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT);
+        prepaymentsAndAccruedIncome.setCurrentPrepaymentsAndAccruedIncome(
+                PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT);
         debtors.setPrepaymentsAndAccruedIncome(prepaymentsAndAccruedIncome);
 
         GreaterThanOneYear greaterThanOneYear = new GreaterThanOneYear();
@@ -186,10 +206,14 @@ class DebtorsTransformerImplTests {
 
         DebtorsApi debtorsApi = transformer.toApi(debtors);
 
-        assertEquals(TRADE_DEBTORS_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors().longValue());
-        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome().longValue());
-        assertEquals(GREATER_THAN_ONE_YEAR_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getGreaterThanOneYear().longValue());
-        assertEquals(OTHER_DEBTORS_CURRENT, debtorsApi.getDebtorsCurrentPeriod().getOtherDebtors().longValue());
+        assertEquals(TRADE_DEBTORS_CURRENT,
+                debtorsApi.getDebtorsCurrentPeriod().getTradeDebtors().longValue());
+        assertEquals(PREPAYMENTS_AND_ACCRUED_INCOME_CURRENT,
+                debtorsApi.getDebtorsCurrentPeriod().getPrepaymentsAndAccruedIncome().longValue());
+        assertEquals(GREATER_THAN_ONE_YEAR_CURRENT,
+                debtorsApi.getDebtorsCurrentPeriod().getGreaterThanOneYear().longValue());
+        assertEquals(OTHER_DEBTORS_CURRENT,
+                debtorsApi.getDebtorsCurrentPeriod().getOtherDebtors().longValue());
         assertEquals(TOTAL_CURRENT, debtors.getTotal().getCurrentTotal().longValue());
     }
 

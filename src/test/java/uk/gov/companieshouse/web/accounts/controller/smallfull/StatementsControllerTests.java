@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -24,49 +24,37 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Statements;
-import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
+import uk.gov.companieshouse.web.accounts.service.smallfull.StatementsService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class StatementsControllerTests {
 
-    private MockMvc mockMvc;
-
-    @Mock
-    private StatementsService statementsService;
-
+    private static final String COMPANY_NUMBER = "companyNumber";
+    private static final String TRANSACTION_ID = "transactionId";
+    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
+    private static final String STATEMENTS_PATH = "/company/" + COMPANY_NUMBER +
+            "/transaction/" + TRANSACTION_ID +
+            "/company-accounts/" + COMPANY_ACCOUNTS_ID +
+            "/small-full/balance-sheet-statements";
+    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
+    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String STATEMENTS_MODEL_ATTR = "statements";
+    private static final String STATEMENTS_VIEW = "smallfull/statements";
+    private static final String ERROR_VIEW = "error";
+    private static final String MOCK_CONTROLLER_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
     @Mock
     NavigatorService navigatorService;
-
+    private MockMvc mockMvc;
+    @Mock
+    private StatementsService statementsService;
     @InjectMocks
     private StatementsController controller;
 
-    private static final String COMPANY_NUMBER = "companyNumber";
-
-    private static final String TRANSACTION_ID = "transactionId";
-
-    private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
-    private static final String STATEMENTS_PATH = "/company/" + COMPANY_NUMBER +
-                                                    "/transaction/" + TRANSACTION_ID +
-                                                    "/company-accounts/" + COMPANY_ACCOUNTS_ID +
-                                                    "/small-full/balance-sheet-statements";
-
-    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
-    private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
-    private static final String STATEMENTS_MODEL_ATTR = "statements";
-
-    private static final String STATEMENTS_VIEW = "smallfull/statements";
-
-    private static final String ERROR_VIEW = "error";
-
-    private static final String MOCK_CONTROLLER_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
     @BeforeEach
-    private void setup() {
+    public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -78,7 +66,12 @@ class StatementsControllerTests {
         when(statementsService.getBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID))
                 .thenReturn(new Statements());
 
-        when(navigatorService.getPreviousControllerPath(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getPreviousControllerPath(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(get(STATEMENTS_PATH))
                 .andExpect(status().isOk())
@@ -104,9 +97,14 @@ class StatementsControllerTests {
     @DisplayName("Accept statements - success path")
     void postRequestSuccess() throws Exception {
 
-        doNothing().when(statementsService).acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+        doNothing().when(statementsService)
+                .acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
-        when(navigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(navigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
 
         this.mockMvc.perform(post(STATEMENTS_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -118,7 +116,8 @@ class StatementsControllerTests {
     void postRequestStatementsServiceException() throws Exception {
 
         doThrow(ServiceException.class)
-                .when(statementsService).acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
+                .when(statementsService)
+                .acceptBalanceSheetStatements(TRANSACTION_ID, COMPANY_ACCOUNTS_ID);
 
         this.mockMvc.perform(post(STATEMENTS_PATH))
                 .andExpect(status().isOk())

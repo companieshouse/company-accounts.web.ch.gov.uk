@@ -23,7 +23,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -47,61 +46,51 @@ import uk.gov.companieshouse.web.accounts.validation.ValidationError;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreditorsAfterOneYearControllerTests {
 
-    @InjectMocks
-    private CreditorsAfterOneYearController mockController;
-
-    @Mock
-    private NavigatorService mockNavigatorService;
-
-    @Mock
-    private NoteService<CreditorsAfterOneYear> mockService;
-
-    @Mock
-    private BalanceSheetService mockBalanceSheetService;
-
-    @BeforeEach
-    private void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(mockController).build();
-    }
-
-    private MockMvc mockMvc;
-
     private static final String MOCK_CONTROLLER_PATH =
             UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
-
     private static final String COMPANY_NUMBER = "companyNumber";
-
     private static final String TRANSACTION_ID = "transactionId";
-
     private static final String COMPANY_ACCOUNTS_ID = "companyAccountsId";
-
     private static final String SMALL_FULL_PATH = "/company/" + COMPANY_NUMBER +
             "/transaction/" + TRANSACTION_ID +
             "/company-accounts/" + COMPANY_ACCOUNTS_ID +
             "/small-full";
-
     private static final String CREDITORS_AFTER_ONE_YEAR_PATH = SMALL_FULL_PATH + "/creditors" +
             "-after-more-than-one-year";
-
     private static final String CREDITORS_AFTER_ONE_YEAR_MODEL_ATTR = "creditorsAfterOneYear";
-
     private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
-
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-
     private static final String CREDITORS_AFTER_ONE_YEAR_VIEW = "smallfull/creditorsAfterOneYear";
-
     private static final String ERROR_VIEW = "error";
-
     private static final String CURRENT_TOTAL_PATH = "total.currentTotal";
+    @InjectMocks
+    private CreditorsAfterOneYearController mockController;
+    @Mock
+    private NavigatorService mockNavigatorService;
+    @Mock
+    private NoteService<CreditorsAfterOneYear> mockService;
+    @Mock
+    private BalanceSheetService mockBalanceSheetService;
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(mockController).build();
+    }
 
     @Test
     @DisplayName("Get creditors after one year view success path")
     void getRequestSuccess() throws Exception {
 
-        when(mockNavigatorService.getPreviousControllerPath(any(), any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getPreviousControllerPath(
+                any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
         when(mockService.get(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
-                NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR)).thenReturn(new CreditorsAfterOneYear());
+                NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR)).thenReturn(
+                new CreditorsAfterOneYear());
 
         this.mockMvc.perform(get(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())
@@ -132,10 +121,14 @@ class CreditorsAfterOneYearControllerTests {
     @DisplayName("Post creditors after one year success path")
     void postRequestSuccess() throws Exception {
 
-        when(mockNavigatorService.getNextControllerRedirect(any(), ArgumentMatchers.<String>any())).thenReturn(MOCK_CONTROLLER_PATH);
+        when(mockNavigatorService.getNextControllerRedirect(any(Class.class),
+                anyString(),
+                anyString(),
+                anyString()))
+                .thenReturn(MOCK_CONTROLLER_PATH);
         when(mockService.submit(anyString(), anyString(), any(CreditorsAfterOneYear.class),
-                        eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR)))
-                                        .thenReturn(new ArrayList<>());
+                eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR)))
+                .thenReturn(new ArrayList<>());
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().is3xxRedirection())
@@ -147,14 +140,15 @@ class CreditorsAfterOneYearControllerTests {
     void postRequestFailure() throws Exception {
 
         doThrow(ServiceException.class).when(mockService).submit(anyString(), anyString(),
-                        any(CreditorsAfterOneYear.class),
-                        eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR));
+                any(CreditorsAfterOneYear.class),
+                eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR));
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(ERROR_VIEW))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
+
     @Test
     @DisplayName("Post creditors after one year with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
@@ -164,7 +158,7 @@ class CreditorsAfterOneYearControllerTests {
         String invalidData = "test";
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH)
-                .param(beanElement, invalidData))
+                        .param(beanElement, invalidData))
                 .andExpect(status().isOk())
                 .andExpect(view().name(CREDITORS_AFTER_ONE_YEAR_VIEW))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
@@ -173,7 +167,8 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Test will render with Creditors After One Year present on balancesheet")
     void willRenderCreditorsAfterOneYearPresent() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheetWithCreditorsAfterOneYear());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(mockBalanceSheetWithCreditorsAfterOneYear());
 
         assertTrue(mockController.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -181,7 +176,8 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Test will not render with Creditors After One Year missing from balancesheet")
     void willRenderWhenCreditorsaFTEROneYearNotPresent() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheetWithoutCreditorsAfterOneYear());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(mockBalanceSheetWithoutCreditorsAfterOneYear());
 
         assertFalse(mockController.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -189,7 +185,8 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Test will not render with Creditors After One Year zero from balancesheet")
     void willRenderWhenCreditorsAfterOneYearZero() throws Exception {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenReturn(mockBalanceSheetWithZeroCreditorsAfterOneYear());
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenReturn(mockBalanceSheetWithZeroCreditorsAfterOneYear());
 
         assertFalse(mockController.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
     }
@@ -197,10 +194,12 @@ class CreditorsAfterOneYearControllerTests {
     @Test
     @DisplayName("Test will not render when there is a service exception")
     void willRenderWithCreditorsAfterOneYearServiceException() throws ServiceException {
-        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID, COMPANY_NUMBER)).thenThrow(ServiceException.class);
+        when(mockBalanceSheetService.getBalanceSheet(TRANSACTION_ID, COMPANY_ACCOUNTS_ID,
+                COMPANY_NUMBER)).thenThrow(ServiceException.class);
 
         assertThrows(ServiceException.class,
-                () -> mockController.willRender(COMPANY_NUMBER, TRANSACTION_ID, COMPANY_ACCOUNTS_ID));
+                () -> mockController.willRender(COMPANY_NUMBER, TRANSACTION_ID,
+                        COMPANY_ACCOUNTS_ID));
     }
 
     @Test
@@ -215,7 +214,7 @@ class CreditorsAfterOneYearControllerTests {
         errors.add(validationError);
 
         when(mockService.submit(anyString(), anyString(), any(CreditorsAfterOneYear.class),
-                        eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR))).thenReturn(errors);
+                eq(NoteType.SMALL_FULL_CREDITORS_AFTER_ONE_YEAR))).thenReturn(errors);
 
         this.mockMvc.perform(post(CREDITORS_AFTER_ONE_YEAR_PATH))
                 .andExpect(status().isOk())
