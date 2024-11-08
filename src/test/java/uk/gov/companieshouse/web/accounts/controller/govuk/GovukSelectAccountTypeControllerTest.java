@@ -102,6 +102,16 @@ class GovukSelectAccountTypeControllerTest {
     }
 
     @Test
+    @DisplayName("Post select account type for package accounts, success path")
+    void postRequestForPackageAccountsSuccess() throws Exception {
+
+        performPostRequestAndValidateResponse(
+                "package",
+                status().is3xxRedirection()
+        );
+    }
+
+    @Test
     @DisplayName("Post criteria with binding result errors")
     void postRequestBindingResultErrors() throws Exception {
 
