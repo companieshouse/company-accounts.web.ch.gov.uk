@@ -33,6 +33,9 @@ public class GovukSelectAccountTypeController extends BaseController {
     @Value("${abridged-accounts.uri}")
     private String abridgedAccountsUri;
 
+    @Value("${package-accounts.uri}")
+    private String packageAccountsUri;
+
     @GetMapping
     public String getTypeOfAccounts(Model model) {
 
@@ -81,6 +84,10 @@ public class GovukSelectAccountTypeController extends BaseController {
 
         if ("dormant".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + dormantAccountsUri;
+        }
+
+        if ("package".equalsIgnoreCase(selectedAccount)) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + packageAccountsUri;
         }
 
         throw new NavigationException("Failed to redirect to another webpage");
