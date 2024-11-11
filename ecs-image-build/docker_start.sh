@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 # Start script for company-accounts-web
 
 
