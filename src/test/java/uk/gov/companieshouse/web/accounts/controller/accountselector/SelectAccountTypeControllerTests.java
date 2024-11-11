@@ -115,6 +115,16 @@ class SelectAccountTypeControllerTests {
     }
 
     @Test
+    @DisplayName("Post select account type for package account, success path")
+    void postRequestForPackageAccountSuccess() throws Exception {
+
+        performPostRequestAndValidateResponse(
+                "package",
+                status().is3xxRedirection()
+        );
+    }
+
+    @Test
     @DisplayName("Post any other account selected will not be re-directed")
     void postRequestAnyOtherAccountSuccess() throws Exception {
 
@@ -146,6 +156,17 @@ class SelectAccountTypeControllerTests {
                 .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(flash().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
     }
+    
+    private void performPostRequestAndValidateResponse(
+            String beanElementValue,
+            ResultMatcher expectedStatus) throws Exception {
+
+        this.mockMvc.perform(
+                        post(SELECT_ACCOUNT_TYPE_PATH).param("selectedAccountTypeName", beanElementValue))
+                .andExpect(expectedStatus)
+                .andExpect(flash().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(flash().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
+    }
 
     private void performPostRequestAndValidateResponseNoAttributes(
             String beanElementValue,
@@ -162,6 +183,7 @@ class SelectAccountTypeControllerTests {
         return
                 UrlBasedViewResolver.REDIRECT_URL_PREFIX + accountTypeUri.expand(COMPANY_NUMBER);
     }
+
 
 }
 
