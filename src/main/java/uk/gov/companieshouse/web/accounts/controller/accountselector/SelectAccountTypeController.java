@@ -1,6 +1,8 @@
 package uk.gov.companieshouse.web.accounts.controller.accountselector;
 
 import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,9 @@ public class SelectAccountTypeController extends BaseController {
 
     private static final UriTemplate ABRIDGED_ACCOUNTS_URI =
             new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
+
+    @Value("${package-accounts.uri}")
+    private String packageAccountsUri;
 
     @GetMapping
     public String getTypeOfAccounts(Model model) {
@@ -76,6 +81,9 @@ public class SelectAccountTypeController extends BaseController {
         if ("dormant".equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + DORMANT_ACCOUNTS_URI
                     .expand(companyNumber).toString();
+        }
+        if ("package".equalsIgnoreCase(selectedAccount)) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + packageAccountsUri;
         }
 
         return getTemplateName();
