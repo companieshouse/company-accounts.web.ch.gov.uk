@@ -9,6 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import uk.gov.companieshouse.auth.filter.CompanyAuthFilter;
 import uk.gov.companieshouse.auth.filter.HijackFilter;
+import uk.gov.companieshouse.csrf.config.ChsCsrfMitigationHttpSecurityBuilder;
 import uk.gov.companieshouse.session.handler.SessionHandler;
 
 @EnableWebSecurity
@@ -20,16 +21,20 @@ public class WebSecurityConfigurer {
     public SecurityFilterChain govUkAccountsSecurityFilterChain(HttpSecurity http)
             throws Exception {
 
-        return http.securityMatcher("/accounts/**")
-                .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class).build();
+        return ChsCsrfMitigationHttpSecurityBuilder.configureWebCsrfMitigations(
+                        http.securityMatcher("/accounts/**")
+                                .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
+                                .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class))
+                .build();
     }
 
     @Order(2)
     @Bean
     public SecurityFilterChain healthCheckSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http.securityMatcher("/company-accounts-web/healthcheck").authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/company-accounts-web/healthcheck").permitAll())
+        return ChsCsrfMitigationHttpSecurityBuilder.configureWebCsrfMitigations(
+                        http.securityMatcher("/company-accounts-web/healthcheck").authorizeHttpRequests(
+                                auth -> auth.requestMatchers("/company-accounts-web/healthcheck")
+                                        .permitAll()))
                 .build();
     }
 
@@ -37,10 +42,10 @@ public class WebSecurityConfigurer {
     @Bean
     public SecurityFilterChain companyAccountsSecurityFilterChain(HttpSecurity http)
             throws Exception {
-        http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class);
-
-        return http.build();
+        return ChsCsrfMitigationHttpSecurityBuilder.configureWebCsrfMitigations(
+                        http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
+                                .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
+                                .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class))
+                .build();
     }
 }
