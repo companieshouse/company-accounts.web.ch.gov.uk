@@ -10,7 +10,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import uk.gov.companieshouse.auth.filter.CompanyAuthFilter;
 import uk.gov.companieshouse.auth.filter.HijackFilter;
 import uk.gov.companieshouse.csrf.config.ChsCsrfMitigationHttpSecurityBuilder;
-import uk.gov.companieshouse.session.handler.SessionHandler;
 
 @EnableWebSecurity
 @Configuration
@@ -23,7 +22,6 @@ public class WebSecurityConfigurer {
 
         return ChsCsrfMitigationHttpSecurityBuilder.configureWebCsrfMitigations(
                         http.securityMatcher("/accounts/**")
-                                .addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
                                 .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class))
                 .build();
     }
@@ -43,7 +41,7 @@ public class WebSecurityConfigurer {
     public SecurityFilterChain companyAccountsSecurityFilterChain(HttpSecurity http)
             throws Exception {
         return ChsCsrfMitigationHttpSecurityBuilder.configureWebCsrfMitigations(
-                        http.addFilterBefore(new SessionHandler(), BasicAuthenticationFilter.class)
+                        http
                                 .addFilterBefore(new HijackFilter(), BasicAuthenticationFilter.class)
                                 .addFilterBefore(new CompanyAuthFilter(), BasicAuthenticationFilter.class))
                 .build();
