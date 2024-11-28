@@ -84,7 +84,7 @@
                   Dormant company accounts
                 </label>
               </div>
-              <div class="govuk-radios__item">
+              <div class="govuk-radios__item" th:if="${packageAccountsEnabled}">
                 <input class="govuk-radios__input piwik-event" id="packageAccountsButton"
                        name="chooseAccountsRadio"
                        type="radio"
