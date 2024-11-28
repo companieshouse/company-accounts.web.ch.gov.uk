@@ -38,10 +38,14 @@ public class SelectAccountTypeController extends BaseController {
     @Value("${package-accounts.uri}")
     private String packageAccountsUri;
 
+    @Value("${package-accounts.enabled}")
+    private String packageAccountsEnabled;
+
     @GetMapping
     public String getTypeOfAccounts(Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
+        model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
 
         return getTemplateName();
     }
