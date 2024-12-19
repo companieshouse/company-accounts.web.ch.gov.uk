@@ -35,8 +35,8 @@ public class SelectAccountTypeController extends BaseController {
     private static final UriTemplate ABRIDGED_ACCOUNTS_URI =
             new UriTemplate("/company/{companyNumber}/submit-abridged-accounts/criteria");
 
-    @Value("${package-accounts.uri}")
-    private String packageAccountsUri;
+    private static final UriTemplate PACKAGE_ACCOUNTS_URI =
+            new UriTemplate("/accounts-filing/company/{companyNumber}");
 
     @Value("${package-accounts.enabled}")
     private String packageAccountsEnabled;
@@ -87,7 +87,7 @@ public class SelectAccountTypeController extends BaseController {
                     .expand(companyNumber).toString();
         }
         if ("package".equalsIgnoreCase(selectedAccount)) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + packageAccountsUri;
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + PACKAGE_ACCOUNTS_URI.expand(companyNumber);
         }
 
         return getTemplateName();
