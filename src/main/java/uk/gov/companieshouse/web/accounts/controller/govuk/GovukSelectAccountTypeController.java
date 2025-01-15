@@ -58,6 +58,7 @@ public class GovukSelectAccountTypeController extends BaseController {
         addBackPageAttributeToModel(model);
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
             return getTemplateName();
         }
 
