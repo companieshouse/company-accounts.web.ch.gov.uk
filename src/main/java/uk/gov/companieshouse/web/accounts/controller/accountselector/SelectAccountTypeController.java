@@ -57,6 +57,7 @@ public class SelectAccountTypeController extends BaseController {
             BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
             return getTemplateName();
         }
 
