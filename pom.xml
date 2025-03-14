@@ -17,6 +17,18 @@
         <relativePath/>
     </parent>
 
+    <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>${spring-boot-dependencies.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+          </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -52,13 +64,7 @@
         <junit-jupiter-engine.version>5.12.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>5.12.0</mockito-junit-jupiter.version>
 
-        <spring-security-core.version>6.3.4</spring-security-core.version>
-        <spring-security-config.version>6.3.3</spring-security-config.version>
-
         <spring-boot-dependencies.version>3.4.3</spring-boot-dependencies.version>
-        <spring-test.version>6.1.12</spring-test.version>
-        <spring-core.version>6.2.3</spring-core.version>
-        <spring-boot-maven-plugin.version>3.4.3</spring-boot-maven-plugin.version>
 
         <!-- Maven and Surefire plugins -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -69,24 +75,10 @@
         <junit-jupiter.version>5.12.0</junit-jupiter.version>
     </properties>
 
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${spring-core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -204,7 +196,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>${spring-security-core.version}</version>
         </dependency>
 
         <dependency>
@@ -215,7 +206,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring-security-config.version}</version>
         </dependency>
 
         <!-- Logging dependencies -->
@@ -246,7 +236,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring-test.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -270,7 +259,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot-maven-plugin.version}</version>
                 <configuration>
                     <mainClass>uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication</mainClass>
                     <layout>ZIP</layout>
