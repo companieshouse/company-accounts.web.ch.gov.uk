@@ -39,11 +39,20 @@ public class GovukSelectAccountTypeController extends BaseController {
     @Value("${package-accounts.enabled}")
     private String packageAccountsEnabled;
 
+    @Value("${dormant-accounts.enabled}")
+    private String dormantAccountsEnabled;
+
+    @Value("${micro-accounts.enabled}")
+    private String microAccountsEnabled;
+
+    @Value("${abridged-accounts.enabled}")
+    private String abridgedAccountsEnabled;
+
     @GetMapping
     public String getTypeOfAccounts(Model model) {
 
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
-        model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
+        enableAccountsAttributesToModel(model);
 
         addBackPageAttributeToModel(model);
 
@@ -58,7 +67,7 @@ public class GovukSelectAccountTypeController extends BaseController {
         addBackPageAttributeToModel(model);
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
+            enableAccountsAttributesToModel(model);
             return getTemplateName();
         }
 
@@ -102,5 +111,12 @@ public class GovukSelectAccountTypeController extends BaseController {
     @Override
     protected String getTemplateName() {
         return "accountselector/selectAccountType";
+    }
+
+    private void enableAccountsAttributesToModel(Model model) {
+        model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
+        model.addAttribute("dormantCompanyAccountsEnabled", dormantAccountsEnabled);
+        model.addAttribute("microEntityAccountsEnabled", microAccountsEnabled);
+        model.addAttribute("abridgedAccountsEnabled", abridgedAccountsEnabled);
     }
 }

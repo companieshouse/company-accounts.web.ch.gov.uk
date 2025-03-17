@@ -17,11 +17,16 @@ import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
+import uk.gov.companieshouse.web.accounts.util.AccountType;
 
 @Controller
 @PreviousController(SelectAccountTypeController.class)
 @RequestMapping("/company/{companyNumber}/select-account-type")
 public class SelectAccountTypeController extends BaseController {
+
+    private static final String TEMPLATE_NAME = "templateName";
+
+    private static final String TYPE_OF_ACCOUNTS = "typeOfAccounts";
 
     private static final UriTemplate MICRO_ENTITY_ACCOUNTS_URI =
             new UriTemplate("/company/{companyNumber}/micro-entity/criteria");
@@ -41,11 +46,20 @@ public class SelectAccountTypeController extends BaseController {
     @Value("${package-accounts.enabled}")
     private String packageAccountsEnabled;
 
+    @Value("${dormant-accounts.enabled}")
+    private String dormantAccountsEnabled;
+
+    @Value("${micro-accounts.enabled}")
+    private String microAccountsEnabled;
+
+    @Value("${abridged-accounts.enabled}")
+    private String abridgedAccountsEnabled;
+
     @GetMapping
     public String getTypeOfAccounts(Model model) {
 
-        model.addAttribute("typeOfAccounts", new TypeOfAccounts());
-        model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
+        model.addAttribute(TYPE_OF_ACCOUNTS, new TypeOfAccounts());
+        enableAccountsAttributesToModel(model);
 
         return getTemplateName();
     }
@@ -53,41 +67,41 @@ public class SelectAccountTypeController extends BaseController {
     @PostMapping
     public String postTypeOfAccounts(
             @PathVariable String companyNumber,
-            @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
+            @ModelAttribute(TYPE_OF_ACCOUNTS) @Valid TypeOfAccounts typeOfAccounts,
             BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("packageAccountsEnabled", packageAccountsEnabled);
+            enableAccountsAttributesToModel(model);
             return getTemplateName();
         }
 
-        redirectAttributes.addFlashAttribute("typeOfAccounts", typeOfAccounts);
-        redirectAttributes.addFlashAttribute("templateName", getTemplateName());
+        redirectAttributes.addFlashAttribute(TYPE_OF_ACCOUNTS, typeOfAccounts);
+        redirectAttributes.addFlashAttribute(TEMPLATE_NAME, getTemplateName());
 
         return getReDirectPageURL(companyNumber, typeOfAccounts.getSelectedAccountTypeName());
     }
 
     private String getReDirectPageURL(String companyNumber, String selectedAccount) {
 
-        if ("micro-entity".equalsIgnoreCase(selectedAccount)) {
+        if (AccountType.MICRO_ACCOUNT.equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + MICRO_ENTITY_ACCOUNTS_URI
                     .expand(companyNumber).toString();
         }
 
-        if ("abridged".equalsIgnoreCase(selectedAccount)) {
+        if (AccountType.ABRIDGED_ACCOUNT.equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + ABRIDGED_ACCOUNTS_URI
                     .expand(companyNumber).toString();
         }
 
-        if ("full".equalsIgnoreCase(selectedAccount)) {
+        if (AccountType.FULL_ACCOUNT.equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FULL_ACCOUNTS_URI
                     .expand(companyNumber).toString();
         }
-        if ("dormant".equalsIgnoreCase(selectedAccount)) {
+        if (AccountType.DORMANT_ACCOUNT.equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + DORMANT_ACCOUNTS_URI
                     .expand(companyNumber).toString();
         }
-        if ("package".equalsIgnoreCase(selectedAccount)) {
+        if (AccountType.PACKAGE_ACCOUNT.equalsIgnoreCase(selectedAccount)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX + PACKAGE_ACCOUNTS_URI.expand(companyNumber);
         }
 
@@ -97,5 +111,12 @@ public class SelectAccountTypeController extends BaseController {
     @Override
     protected String getTemplateName() {
         return "accountselector/selectAccountType";
+    }
+
+    private void enableAccountsAttributesToModel(Model model) {
+        model.addAttribute(AccountType.PACKAGE_ACCOUNT.getModelAttribute(), packageAccountsEnabled);
+        model.addAttribute(AccountType.DORMANT_ACCOUNT.getModelAttribute(), dormantAccountsEnabled);
+        model.addAttribute(AccountType.MICRO_ACCOUNT.getModelAttribute(), microAccountsEnabled);
+        model.addAttribute(AccountType.ABRIDGED_ACCOUNT.getModelAttribute(), abridgedAccountsEnabled);
     }
 }

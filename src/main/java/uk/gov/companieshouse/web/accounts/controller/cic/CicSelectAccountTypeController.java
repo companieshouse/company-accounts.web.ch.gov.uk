@@ -2,6 +2,8 @@ package uk.gov.companieshouse.web.accounts.controller.cic;
 
 import jakarta.validation.Valid;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.model.accounts.TypeOfAccounts;
+import uk.gov.companieshouse.web.accounts.util.AccountType;
 
 @Controller
 @RequestMapping({"/accounts/cic/select-account-type", "/accounts/cic/{companyNumber}/select-account-type"})
@@ -28,10 +31,26 @@ public class CicSelectAccountTypeController extends BaseController {
     private static final UriTemplate FILE_FULL_ACCOUNTS_COMP_NUM_LINK =
             new UriTemplate("/accounts/cic/{companyNumber}/full-accounts-criteria");
 
+    private static final String PACKAGE_ACCOUNTS_URL_LINK = "/accounts-filing/";
+    private static final UriTemplate PACKAGE_ACCOUNTS_COMP_URL_LINK = new UriTemplate("/accounts-filing/company/{companyNumber}");
+
     private static final String BACK_BUTTON_URL_LINK = "/accounts/cic/select-account-type";
     private static final UriTemplate BACK_BUTTON_URL_COMP_NUM_LINK =
             new UriTemplate("/accounts/cic/{companyNumber}/select-account-type");
 
+    
+    @Value("${cic.package-accounts.enabled}")
+    private String packageAccountsEnabled;
+
+    @Value("${cic.dormant-accounts.enabled}")
+    private String dormantAccountsEnabled;
+
+    @Value("${cic.micro-accounts.enabled}")
+    private String microAccountsEnabled;
+
+    @Value("${cic.abridged-accounts.enabled}")
+    private String abridgedAccountsEnabled;
+    
     @Override
     protected String getTemplateName() {
         return "accountselector/selectAccountType";
@@ -39,22 +58,29 @@ public class CicSelectAccountTypeController extends BaseController {
 
     @GetMapping
     public String getCicTypeOfAccounts(Model model) {
-
         model.addAttribute("typeOfAccounts", new TypeOfAccounts());
-
+        enableAccountsAttributesToModel(model);
         return getTemplateName();
     }
 
     @PostMapping
     public String postCicTypeOfAccounts(@PathVariable Optional<String> companyNumber, @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
-                                        BindingResult bindingResult, RedirectAttributes attributes) {
+                                        BindingResult bindingResult, RedirectAttributes attributes, Model model) {
 
         if (bindingResult.hasErrors()) {
+            enableAccountsAttributesToModel(model);
             return getTemplateName();
         }
 
         String accountType = typeOfAccounts.getSelectedAccountTypeName();
-        if (!"full".equalsIgnoreCase(accountType)) {
+        
+        if (AccountType.FULL_ACCOUNT.equalsIgnoreCase(accountType)) {
+            return redirectUrl(companyNumber, FILE_FULL_ACCOUNTS_COMP_NUM_LINK, FILE_FULL_ACCOUNTS_URL_LINK);
+        }
+        else if(AccountType.PACKAGE_ACCOUNT.equalsIgnoreCase(accountType)) {
+            return redirectUrl(companyNumber, PACKAGE_ACCOUNTS_COMP_URL_LINK, PACKAGE_ACCOUNTS_URL_LINK);
+        }
+        else {
 
             attributes.addAttribute("accountType", accountType);
 
@@ -69,15 +95,22 @@ public class CicSelectAccountTypeController extends BaseController {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANT_FILE_ONLINE_YET_URL_LINK;
             }
 
-        } else {
-
-            if (companyNumber.isPresent()) {
-                return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                        FILE_FULL_ACCOUNTS_COMP_NUM_LINK.expand(companyNumber.get()).toString();
-            } else {
-
-                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + FILE_FULL_ACCOUNTS_URL_LINK;
-            }
         }
+    }
+
+    private String redirectUrl(Optional<String> companyNumber, final UriTemplate companyNumberPath, final String nonCompanyNumberPath) {
+        if (companyNumber.isPresent()) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                    companyNumberPath.expand(companyNumber.get()).toString();
+        } else {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX + nonCompanyNumberPath;
+        }
+    }
+
+    private void enableAccountsAttributesToModel(Model model) {
+        model.addAttribute(AccountType.PACKAGE_ACCOUNT.getModelAttribute(), packageAccountsEnabled);
+        model.addAttribute(AccountType.DORMANT_ACCOUNT.getModelAttribute(), dormantAccountsEnabled);
+        model.addAttribute(AccountType.MICRO_ACCOUNT.getModelAttribute(), microAccountsEnabled);
+        model.addAttribute(AccountType.ABRIDGED_ACCOUNT.getModelAttribute(), abridgedAccountsEnabled);
     }
 }
