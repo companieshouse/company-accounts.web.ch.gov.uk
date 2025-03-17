@@ -37,8 +37,6 @@ class SelectAccountTypeControllerTests {
 
     private static final String PACKAGE_ACCOUNTS_ENABLED = "packageAccountsEnabled";
 
-    private static final String MICRO_ACCOUNTS_ENABLED = "microAccountsEnabled";
-
     private static final String SELECT_ACCOUNT_TYPE_VIEW = "accountselector/selectAccountType";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
@@ -76,7 +74,7 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Get select account type view, success path")
     void getRequestSuccess() throws Exception {
-        ReflectionTestUtils.setField(controller, MICRO_ACCOUNTS_ENABLED, "true");
+        ReflectionTestUtils.setField(controller, MICRO_ENTITY_ACCOUNTS_ENABLED, "true");
         ReflectionTestUtils.setField(controller, PACKAGE_ACCOUNTS_ENABLED, "true");
         ReflectionTestUtils.setField(controller, DORMANT_ACCOUNTS_ENABLED, "true");
         ReflectionTestUtils.setField(controller, ABRIDGED_ACCOUNTS_ENABLED, "true");

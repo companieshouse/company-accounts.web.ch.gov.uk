@@ -50,7 +50,7 @@ public class SelectAccountTypeController extends BaseController {
     private String dormantAccountsEnabled;
 
     @Value("${micro-accounts.enabled}")
-    private String microAccountsEnabled;
+    private String microEntityAccountsEnabled;
 
     @Value("${abridged-accounts.enabled}")
     private String abridgedAccountsEnabled;
@@ -116,7 +116,7 @@ public class SelectAccountTypeController extends BaseController {
     private void enableAccountsAttributesToModel(Model model) {
         model.addAttribute(AccountType.PACKAGE_ACCOUNT.getModelAttribute(), packageAccountsEnabled);
         model.addAttribute(AccountType.DORMANT_ACCOUNT.getModelAttribute(), dormantAccountsEnabled);
-        model.addAttribute(AccountType.MICRO_ACCOUNT.getModelAttribute(), microAccountsEnabled);
+        model.addAttribute(AccountType.MICRO_ACCOUNT.getModelAttribute(), microEntityAccountsEnabled);
         model.addAttribute(AccountType.ABRIDGED_ACCOUNT.getModelAttribute(), abridgedAccountsEnabled);
     }
 }
