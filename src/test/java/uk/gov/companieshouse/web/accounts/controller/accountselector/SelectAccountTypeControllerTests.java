@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,8 +27,17 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SelectAccountTypeControllerTests {
 
-    private static final String MOCK_CONTROLLER_PATH =
-            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
+    private static final String DORMANT_COMPANY_ACCOUNTS_ENABLED = "dormantCompanyAccountsEnabled";
+
+    private static final String MICRO_ENTITY_ACCOUNTS_ENABLED = "microEntityAccountsEnabled";
+
+    private static final String ABRIDGED_ACCOUNTS_ENABLED = "abridgedAccountsEnabled";
+
+    private static final String DORMANT_ACCOUNTS_ENABLED = "dormantAccountsEnabled";
+
+    private static final String PACKAGE_ACCOUNTS_ENABLED = "packageAccountsEnabled";
+
+    private static final String MICRO_ACCOUNTS_ENABLED = "microAccountsEnabled";
 
     private static final String SELECT_ACCOUNT_TYPE_VIEW = "accountselector/selectAccountType";
 
@@ -66,12 +76,19 @@ class SelectAccountTypeControllerTests {
     @Test
     @DisplayName("Get select account type view, success path")
     void getRequestSuccess() throws Exception {
-
+        ReflectionTestUtils.setField(controller, MICRO_ACCOUNTS_ENABLED, "true");
+        ReflectionTestUtils.setField(controller, PACKAGE_ACCOUNTS_ENABLED, "true");
+        ReflectionTestUtils.setField(controller, DORMANT_ACCOUNTS_ENABLED, "true");
+        ReflectionTestUtils.setField(controller, ABRIDGED_ACCOUNTS_ENABLED, "true");
         this.mockMvc.perform(get(SELECT_ACCOUNT_TYPE_PATH))
                 .andExpect(status().isOk())
                 .andExpect(view().name(SELECT_ACCOUNT_TYPE_VIEW))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
-                .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR));
+                .andExpect(model().attributeExists(TYPE_OF_ACCOUNTS_ATTR))
+                .andExpect(model().attribute(MICRO_ENTITY_ACCOUNTS_ENABLED, "true"))
+                .andExpect(model().attribute(PACKAGE_ACCOUNTS_ENABLED, "true"))
+                .andExpect(model().attribute(DORMANT_COMPANY_ACCOUNTS_ENABLED, "true"))
+                .andExpect(model().attribute(ABRIDGED_ACCOUNTS_ENABLED, "true"));
     }
 
     @Test

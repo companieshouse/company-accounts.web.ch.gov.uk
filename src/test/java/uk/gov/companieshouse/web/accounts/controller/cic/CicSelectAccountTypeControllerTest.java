@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
@@ -25,13 +26,25 @@ class CicSelectAccountTypeControllerTest {
 
     private MockMvc mockMvc;
 
+
+    private static final String DORMANT_COMPANY_ACCOUNTS_ENABLED = "dormantCompanyAccountsEnabled";
+    private static final String MICRO_ENTITY_ACCOUNTS_ENABLED = "microEntityAccountsEnabled";
+    private static final String ABRIDGED_ACCOUNTS_ENABLED = "abridgedAccountsEnabled";
+    private static final String DORMANT_ACCOUNTS_ENABLED = "dormantAccountsEnabled";
+    private static final String PACKAGE_ACCOUNTS_ENABLED = "packageAccountsEnabled";
+    private static final String MICRO_ACCOUNTS_ENABLED = "microAccountsEnabled";
     private static final String CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH = "/accounts/cic/select-account-type";
+    private static final String CIC_SELECT_ACCOUNT_TYPE_WTIH_COMPANY_NUMBER_VIEW_PATH = "/accounts/cic/00000000/select-account-type";
     private static final String CIC_SELECT_ACCOUNT_TYPE_VIEW_NAME = "accountselector/selectAccountType";
 
     private static final String CIC_CANT_FILE_ONLINE_YET_VIEW_PATH = REDIRECT_URL_PREFIX
             + "/accounts/cic/cant-file-online-yet";
     private static final String CIC_FILE_FULL_ACCOUNTS_VIEW_PATH = REDIRECT_URL_PREFIX
             + "/accounts/cic/full-accounts-criteria";
+    private static final String CIC_PACKAGE_ACCOUNTS_VIEW_PATH = REDIRECT_URL_PREFIX 
+            + "/accounts-filing/";
+    private static final String CIC_PACKAGE_ACCOUNTS_WITH_COMPANY_NUMBER_VIEW_PATH = REDIRECT_URL_PREFIX 
+    + "/accounts-filing/company/00000000";
 
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
     private static final String TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR = "typeOfAccounts";
@@ -44,6 +57,10 @@ class CicSelectAccountTypeControllerTest {
 
     @BeforeEach
     void setUpBeforeEach() {
+        ReflectionTestUtils.setField(controller, MICRO_ACCOUNTS_ENABLED, "false");
+        ReflectionTestUtils.setField(controller, PACKAGE_ACCOUNTS_ENABLED, "true");
+        ReflectionTestUtils.setField(controller, DORMANT_ACCOUNTS_ENABLED, "false");
+        ReflectionTestUtils.setField(controller, ABRIDGED_ACCOUNTS_ENABLED, "false");
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -55,7 +72,11 @@ class CicSelectAccountTypeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(CIC_SELECT_ACCOUNT_TYPE_VIEW_NAME))
                 .andExpect(model().attributeExists(TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR))
-                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+                .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
+                .andExpect(model().attribute(MICRO_ENTITY_ACCOUNTS_ENABLED, "false"))
+                .andExpect(model().attribute(PACKAGE_ACCOUNTS_ENABLED, "true"))
+                .andExpect(model().attribute(DORMANT_COMPANY_ACCOUNTS_ENABLED, "false"))
+                .andExpect(model().attribute(ABRIDGED_ACCOUNTS_ENABLED, "false"));
     }
 
     @Test
@@ -105,5 +126,25 @@ class CicSelectAccountTypeControllerTest {
                         param("selectedAccountTypeName", "full"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_FILE_FULL_ACCOUNTS_VIEW_PATH));
+    }
+    
+    @Test
+    @DisplayName("Post cic select account selection made - package")
+    void postCicSelectAccountSelectionMadePackage() throws Exception {
+
+        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
+                        param("selectedAccountTypeName", "package"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(CIC_PACKAGE_ACCOUNTS_VIEW_PATH));
+    }
+
+    @Test
+    @DisplayName("Post cic select account selection made - package with company number")
+    void postCicSelectAccountSelectionMadePackageWithCompanyNumber() throws Exception {
+
+        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_WTIH_COMPANY_NUMBER_VIEW_PATH).
+                        param("selectedAccountTypeName", "package"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(CIC_PACKAGE_ACCOUNTS_WITH_COMPANY_NUMBER_VIEW_PATH));
     }
 }
