@@ -25,9 +25,9 @@ class CicSelectAccountTypeControllerTest {
 
     private MockMvc mockMvc;
 
-    private static final String CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH = "/accounts/cic/select-account-type";
-    private static final String CIC_SELECT_ACCOUNT_TYPE_WTIH_COMPANY_NUMBER_VIEW_PATH = "/accounts/cic/00000000/select-account-type";
-    private static final String CIC_SELECT_ACCOUNT_TYPE_VIEW_NAME = "accountselector/selectAccountType";
+    private static final String CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH = "/accounts/cic/select-account-type";
+    private static final String CIC_SELECT_ACCOUNTS_TYPE_WTIH_COMPANY_NUMBER_VIEW_PATH = "/accounts/cic/00000000/select-account-type";
+    private static final String CIC_SELECT_ACCOUNTS_TYPE_VIEW_NAME = "accountselector/selectAccountType";
 
     private static final String CIC_CANT_FILE_ONLINE_YET_VIEW_PATH = REDIRECT_URL_PREFIX
             + "/accounts/cic/cant-file-online-yet";
@@ -56,9 +56,9 @@ class CicSelectAccountTypeControllerTest {
     @DisplayName("Get cic select account type view success path")
     void getCicSelectAccountTypeRequest() throws Exception {
 
-        mockMvc.perform(get(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH))
+        mockMvc.perform(get(CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(CIC_SELECT_ACCOUNT_TYPE_VIEW_NAME))
+                .andExpect(view().name(CIC_SELECT_ACCOUNTS_TYPE_VIEW_NAME))
                 .andExpect(model().attributeExists(TEMPLATE_ACCOUNT_TYPE_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR))
                 .andExpect(model().attribute("packageAccountsEnabled", true));
@@ -68,16 +68,16 @@ class CicSelectAccountTypeControllerTest {
     @DisplayName("Post cic select account type Binding Error")
     void postCicSelectAccountBindingError() throws Exception {
 
-        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH))
+        mockMvc.perform(post(CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH))
                 .andExpect(status().isOk())
-                .andExpect(view().name(CIC_SELECT_ACCOUNT_TYPE_VIEW_NAME));
+                .andExpect(view().name(CIC_SELECT_ACCOUNTS_TYPE_VIEW_NAME));
     }
 
     @Test
     @DisplayName("Post cic select account selection made - micro-entity")
     void postCicSelectAccountSelectionMadeMicro() throws Exception {
 
-        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
+        mockMvc.perform(post(CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH).
                         param("selectedAccountTypeName", "micro-entity"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
@@ -87,7 +87,7 @@ class CicSelectAccountTypeControllerTest {
     @DisplayName("Post cic select account selection made - abridged")
     void postCicSelectAccountSelectionMadeAbridged() throws Exception {
 
-        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
+        mockMvc.perform(post(CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH).
                         param("selectedAccountTypeName", "abridged"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
@@ -97,7 +97,7 @@ class CicSelectAccountTypeControllerTest {
     @DisplayName("Post cic select account selection made - dormant")
     void postCicSelectAccountSelectionMadeDormant() throws Exception {
 
-        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
+        mockMvc.perform(post(CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH).
                         param("selectedAccountTypeName", "dormant"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_CANT_FILE_ONLINE_YET_VIEW_PATH));
@@ -107,7 +107,7 @@ class CicSelectAccountTypeControllerTest {
     @DisplayName("Post cic select account selection made - full")
     void postCicSelectAccountSelectionMadeFull() throws Exception {
 
-        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
+        mockMvc.perform(post(CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH).
                         param("selectedAccountTypeName", "full"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_FILE_FULL_ACCOUNTS_VIEW_PATH));
@@ -117,7 +117,7 @@ class CicSelectAccountTypeControllerTest {
     @DisplayName("Post cic select account selection made - package")
     void postCicSelectAccountSelectionMadePackage() throws Exception {
 
-        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_VIEW_PATH).
+        mockMvc.perform(post(CIC_SELECT_ACCOUNTS_TYPE_VIEW_PATH).
                         param("selectedAccountTypeName", "package"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_PACKAGE_ACCOUNTS_VIEW_PATH));
@@ -127,7 +127,7 @@ class CicSelectAccountTypeControllerTest {
     @DisplayName("Post cic select account selection made - package with company number")
     void postCicSelectAccountSelectionMadePackageWithCompanyNumber() throws Exception {
 
-        mockMvc.perform(post(CIC_SELECT_ACCOUNT_TYPE_WTIH_COMPANY_NUMBER_VIEW_PATH).
+        mockMvc.perform(post(CIC_SELECT_ACCOUNTS_TYPE_WTIH_COMPANY_NUMBER_VIEW_PATH).
                         param("selectedAccountTypeName", "package"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(CIC_PACKAGE_ACCOUNTS_WITH_COMPANY_NUMBER_VIEW_PATH));
