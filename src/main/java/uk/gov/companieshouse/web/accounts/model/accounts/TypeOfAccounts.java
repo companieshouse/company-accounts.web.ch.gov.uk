@@ -21,7 +21,7 @@ public class TypeOfAccounts {
         return userJourneyAccountsType;
     }
     
-    public void setUserJourneyAccountsType(String userJourneyAccountType) {
-        this.userJourneyAccountsType = userJourneyAccountType;
+    public void setUserJourneyAccountsType(String userJourneyAccountsType) {
+        this.userJourneyAccountsType = userJourneyAccountsType;
     }
 }
