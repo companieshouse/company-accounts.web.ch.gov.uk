@@ -7,7 +7,7 @@ public class TypeOfAccounts {
     @NotNull(message = "{typeOfAccounts.selectionNotMade}")
     private String selectedAccountTypeName;
 
-    private String userJourneyAccountType;
+    private String userJourneyAccountsType;
     
     public String getSelectedAccountTypeName() {
         return selectedAccountTypeName;
@@ -17,11 +17,11 @@ public class TypeOfAccounts {
         this.selectedAccountTypeName = selectedAccountTypeName;
     }
 
-    public String getUserJourneyAccountType() {
-        return userJourneyAccountType;
+    public String getUserJourneyAccountsType() {
+        return userJourneyAccountsType;
     }
     
-    public void setUserJourneyAccountType(String userJourney) {
-        this.userJourneyAccountType = userJourney;
+    public void setUserJourneyAccountsType(String userJourneyAccountType) {
+        this.userJourneyAccountsType = userJourneyAccountType;
     }
 }

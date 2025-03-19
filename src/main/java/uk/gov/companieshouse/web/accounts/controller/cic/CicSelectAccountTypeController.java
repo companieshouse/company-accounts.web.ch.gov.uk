@@ -47,7 +47,7 @@ public class CicSelectAccountTypeController extends BaseController {
     public String getCicTypeOfAccounts(Model model) {
 
         var typeOfAccounts = new TypeOfAccounts();
-        typeOfAccounts.setUserJourneyAccountType(CIC);
+        typeOfAccounts.setUserJourneyAccountsType(CIC);
         model.addAttribute("typeOfAccounts", typeOfAccounts);
         model.addAttribute("packageAccountsEnabled", true);
 
