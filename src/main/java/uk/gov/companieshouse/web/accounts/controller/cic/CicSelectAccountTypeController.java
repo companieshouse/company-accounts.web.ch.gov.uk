@@ -56,9 +56,11 @@ public class CicSelectAccountTypeController extends BaseController {
 
     @PostMapping
     public String postCicTypeOfAccounts(@PathVariable Optional<String> companyNumber, @ModelAttribute("typeOfAccounts") @Valid TypeOfAccounts typeOfAccounts,
-                                        BindingResult bindingResult, RedirectAttributes attributes) {
+                                        BindingResult bindingResult, RedirectAttributes attributes, Model model) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("typeOfAccounts", typeOfAccounts);
+            model.addAttribute("packageAccountsEnabled", true);    
             return getTemplateName();
         }
 
