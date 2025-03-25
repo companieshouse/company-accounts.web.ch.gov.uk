@@ -59,6 +59,7 @@ public class CicSelectAccountTypeController extends BaseController {
                                         BindingResult bindingResult, RedirectAttributes attributes, Model model) {
 
         if (bindingResult.hasErrors()) {
+            typeOfAccounts.setUserJourneyAccountsType(CIC);
             model.addAttribute("typeOfAccounts", typeOfAccounts);
             model.addAttribute("packageAccountsEnabled", true);    
             return getTemplateName();
