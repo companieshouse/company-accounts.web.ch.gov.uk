@@ -39,17 +39,17 @@
 
         <hamcrest.version>3.0</hamcrest.version>
 
-        <java-session-handler.version>4.1.0</java-session-handler.version>
+        <java-session-handler.version>4.1.7</java-session-handler.version>
 
-        <api-sdk-java.version>6.0.19</api-sdk-java.version>
+        <api-sdk-java.version>6.2.2</api-sdk-java.version>
 
-        <sdk-manager-java.version>3.0.9</sdk-manager-java.version>
+        <sdk-manager-java.version>3.0.10</sdk-manager-java.version>
 
-        <structured-logging.version>3.0.26</structured-logging.version>
+        <structured-logging.version>3.0.27</structured-logging.version>
 
-        <common-web-java.version>3.0.17</common-web-java.version>
+        <common-web-java.version>3.0.38</common-web-java.version>
 
-        <web-security-java.version>3.1.0</web-security-java.version>
+        <web-security-java.version>3.1.5</web-security-java.version>
 
         <company-accounts-library.version>3.0.1</company-accounts-library.version>
 
@@ -64,7 +64,7 @@
         <junit-jupiter-engine.version>5.12.0</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>5.12.0</mockito-junit-jupiter.version>
 
-        <spring-boot-dependencies.version>3.4.3</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>3.4.5</spring-boot-dependencies.version>
 
         <!-- Maven and Surefire plugins -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -259,6 +259,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
                 <configuration>
                     <mainClass>uk.gov.companieshouse.web.accounts.CompanyAccountsWebApplication</mainClass>
                     <layout>ZIP</layout>
