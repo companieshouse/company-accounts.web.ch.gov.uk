@@ -54,6 +54,7 @@
         <company-accounts-library.version>3.0.1</company-accounts-library.version>
 
         <environment-reader-library.version>3.0.1</environment-reader-library.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
 
         <jjwt-api.version>0.12.6</jjwt-api.version>
 
@@ -163,6 +164,12 @@
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>environment-reader-library</artifactId>
             <version>${environment-reader-library.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
         </dependency>
 
         <dependency>
