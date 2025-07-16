@@ -9,8 +9,6 @@ locals {
   kms_alias                  = "alias/${var.aws_profile}/environment-services-kms"
   lb_listener_rule_priority  = 300
   lb_listener_paths          = ["/company/*/small-full/*","/company/*/corporation-tax","/company/*/select-account-type","/company/*/cic/*","/accounts/select-account-type","/company/*/dormant/*","/company/*/*/criteria","/accounts/full-accounts-criteria*","/accounts/c*","/accounts/alternative-filing-options","/company/*/micro-entity/*","/company/*/transaction/*/company-accounts/*","/accounts/select-account-type/*"]
-  
-
   healthcheck_path           = "/company-accounts-web/healthcheck" #healthcheck path for company accounts web
   healthcheck_matcher        = "200"
   s3_config_bucket           = data.vault_generic_secret.shared_s3.data["config_bucket_name"]

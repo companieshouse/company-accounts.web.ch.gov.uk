@@ -19,6 +19,13 @@
 
     <dependencyManagement>
         <dependencies>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-instrumentation-bom</artifactId>
+            <version>${opentelemetry-instrumentation-bom.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+          </dependency>
           <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-dependencies</artifactId>
@@ -34,26 +41,27 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
 
-        <thymeleaf-layout-dialect.version>3.3.0</thymeleaf-layout-dialect.version>
+        <thymeleaf-layout-dialect.version>3.4.0</thymeleaf-layout-dialect.version>
         <thymeleaf-extras-java8time.version>3.0.4.RELEASE</thymeleaf-extras-java8time.version>
 
         <hamcrest.version>3.0</hamcrest.version>
 
         <java-session-handler.version>4.1.7</java-session-handler.version>
 
-        <api-sdk-java.version>6.2.2</api-sdk-java.version>
+        <api-sdk-java.version>6.3.1</api-sdk-java.version>
 
         <sdk-manager-java.version>3.0.10</sdk-manager-java.version>
 
-        <structured-logging.version>3.0.27</structured-logging.version>
+        <structured-logging.version>3.0.32</structured-logging.version>
 
-        <common-web-java.version>3.0.38</common-web-java.version>
+        <common-web-java.version>3.0.40</common-web-java.version>
 
         <web-security-java.version>3.1.5</web-security-java.version>
 
         <company-accounts-library.version>3.0.1</company-accounts-library.version>
 
         <environment-reader-library.version>3.0.1</environment-reader-library.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
 
         <jjwt-api.version>0.12.6</jjwt-api.version>
 
@@ -61,18 +69,20 @@
 
         <jjwt-jackson.version>0.12.6</jjwt-jackson.version>
 
-        <junit-jupiter-engine.version>5.12.0</junit-jupiter-engine.version>
-        <mockito-junit-jupiter.version>5.12.0</mockito-junit-jupiter.version>
+        <junit-jupiter-engine.version>5.13.1</junit-jupiter-engine.version>
+        <mockito-junit-jupiter.version>5.18.0</mockito-junit-jupiter.version>
 
-        <spring-boot-dependencies.version>3.4.5</spring-boot-dependencies.version>
+        <opentelemetry-instrumentation-bom.version>2.14.0</opentelemetry-instrumentation-bom.version>
+
+        <spring-boot-dependencies.version>3.5.3</spring-boot-dependencies.version>
 
         <!-- Maven and Surefire plugins -->
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-        <maven-plugin.version>3.5.2</maven-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-plugin.version>3.5.3</maven-plugin.version>
         <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <jib-maven-plugin.version>3.4.2</jib-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-        <junit-jupiter.version>5.12.0</junit-jupiter.version>
+        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
+        <junit-jupiter.version>5.13.1</junit-jupiter.version>
     </properties>
 
     <dependencies>
@@ -124,6 +134,11 @@
         </dependency>
 
         <dependency>
+          <groupId>io.opentelemetry.instrumentation</groupId>
+          <artifactId>opentelemetry-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.sonarsource.scanner.maven</groupId>
             <artifactId>sonar-maven-plugin</artifactId>
             <version>${sonar-maven-plugin.version}</version>
@@ -163,6 +178,12 @@
             <groupId>uk.gov.companieshouse</groupId>
             <artifactId>environment-reader-library</artifactId>
             <version>${environment-reader-library.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
         </dependency>
 
         <dependency>
