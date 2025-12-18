@@ -19,9 +19,9 @@ These screens allow clients to interact with company accounts data.
 4. Then run 'aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 169942020521.dkr.ecr.eu-west-1.amazonaws.com'
 
 #### Enable company accounts development workflow
-1. To enable the accounts module when you are tilting up, run the command: './bin/chs-dev modules enable accounts'
+1. To enable the accounts module, run the command: './bin/chs-dev modules enable accounts'
 2. To enable development workflow and make changes to company-accounts-web, run the command: './bin/chs-dev development enable company-accounts-web-ch-gov-uk' 
-3. To start up the services enabled through the accounts module activation, run the command: 'tilt up' and stop them using 'tilt down'
+3. To start up the services enabled through the accounts module activation, run the command: 'chs-dev up' and stop them using 'chs-dev down'
 4. When services are up and running, open http://chs.local in the browser and log in to CHS platform using username demo@ch.gov.uk and password.
 
 ### Deployment
