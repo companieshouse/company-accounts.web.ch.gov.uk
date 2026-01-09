@@ -99,8 +99,8 @@
         <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
         <sonar.login/>
         <sonar.password/>
-        <sonar.projectKey>uk.gov.companieshouse:presenter-account-api</sonar.projectKey>
-        <sonar.projectName>presenter-account-api</sonar.projectName>
+        <sonar.projectKey>uk.gov.companieshouse:company-accounts.web.ch.gov.uk</sonar.projectKey>
+        <sonar.projectName>company-accounts.web.ch.gov.uk</sonar.projectName>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.sources>src/main</sonar.sources>
         <sonar.tests>src/test</sonar.tests>
