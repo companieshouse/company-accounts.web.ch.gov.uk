@@ -33,11 +33,30 @@
             <type>pom</type>
             <scope>import</scope>
           </dependency>
-                    <!-- Temporary managed override to force a patched commons-lang3 version. -->
+                    <!-- 
+                        Override dependency to fix CVE-2025-48924
+                        Review to see if all:
+                        - sdk-manager-java >3.0.14
+                        - sonar-maven-plugin >5.5.0.6356
+                        - common-web-java >4.1.0
+                        supply an updated version of this, 
+                        allowing removal of this dependency.
+                    -->
                     <dependency>
                         <groupId>org.apache.commons</groupId>
                         <artifactId>commons-lang3</artifactId>
                         <version>${commons-lang3.version}</version>
+                    </dependency>
+                    <!-- 
+                        Override dependency to fix CVE-2025-68161
+                        Review to see if spring-boot... > 3.5.10
+                        supply an updated version of this, 
+                        allowing removal of this dependency.
+                    -->
+                    <dependency>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-api</artifactId>
+                        <version>${log4j-api.version}</version>
                     </dependency>
         </dependencies>
     </dependencyManagement>
@@ -80,7 +99,7 @@
 
         <opentelemetry-instrumentation-bom.version>2.23.0</opentelemetry-instrumentation-bom.version>
 
-        <spring-boot-dependencies.version>3.5.9</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>3.5.10</spring-boot-dependencies.version>
 
         <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
 
@@ -92,8 +111,9 @@
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <junit-jupiter.version>5.13.1</junit-jupiter.version>
 
-           <!-- TEMPORARY: please review when upgrading pom -->
-           <commons-lang3.version>3.19.0</commons-lang3.version>
+        <!-- TEMPORARY: please review when upgrading pom -->
+        <commons-lang3.version>3.19.0</commons-lang3.version>
+        <log4j-api.version>2.25.3</log4j-api.version>
 
         <!--sonar configuration-->
         <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
