@@ -53,6 +53,6 @@ public class GovukCorporationTaxController extends BaseController {
     @Override
     protected String getTemplateName() {
 
-        return "corporationtax/corporationTax";
+        return "corporationtax/shutterPage";
     }
 }

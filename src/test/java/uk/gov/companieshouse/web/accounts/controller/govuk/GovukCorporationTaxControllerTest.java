@@ -36,7 +36,7 @@ class GovukCorporationTaxControllerTest {
     private static final String PATH = "/accounts/corporation-tax";
     private static final String MODEL_ATTR = "corporationTax";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
-    private static final String VIEW = "corporationtax/corporationTax";
+    private static final String VIEW = "corporationtax/shutterPage";
     private static final String MOCK_CONTROLLER_PATH =
             UrlBasedViewResolver.REDIRECT_URL_PREFIX + "mockControllerPath";
     private static final String TAX_EXTERNAL_PATH = UrlBasedViewResolver.REDIRECT_URL_PREFIX +
