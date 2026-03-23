@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/baseLayout}">
+<head>
+    <title id="page-title-heading">
+        This service is no longer available
+    </title>
+</head>
+
+<body>
+<div id="main-content" layout:fragment="content" class="govuk-main-wrapper" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div id="corporationTax-shutter">
+
+                    <fieldset class="govuk-fieldset">
+                        <h1 class="govuk-heading-l">
+                            <span>This service is no longer available</span>
+                        </h1>
+                        <br>
+
+                        <div>
+                            <p>
+                                The service to file your accounts online with Companies House and Company Tax Return with HMRC at the same time has closed.
+                            </p>
+                            <p>
+                                <a href="https://www.gov.uk/government/publications/life-of-a-company-annual-requirements" target="blank">
+                                    Read our guidance on filing your Companies House accounts</a>
+                                to find other ways to file your annual accounts.
+                            </p>
+                            <p>Check for
+                                <a href="https://www.gov.uk/government/organisations/hm-revenue-customs" target="blank">
+                                    guidance from HMRC</a>
+                                to find  software to file your annual accounts and Company Tax returns with HMRC.
+                            </p>
+                        </div>
+                    </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
