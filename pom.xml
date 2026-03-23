@@ -49,7 +49,7 @@
                     </dependency>
                     <!--
                         Override dependency to fix CVE-2025-68161
-                       CVE-2020-29582(5.3)if spring-boot... > 3.5.12
+                        Review to see if spring-boot... > 3.5.12
                         supply an updated version of this,
                         allowing removal of this dependency.
                     -->
