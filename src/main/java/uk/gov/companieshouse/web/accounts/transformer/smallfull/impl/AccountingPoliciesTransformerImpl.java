@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.AccountingPoliciesApi;
 import uk.gov.companieshouse.web.accounts.enumeration.AccountingRegulatoryStandard;
