@@ -1,7 +1,7 @@
 package uk.gov.companieshouse.web.accounts.transformer.smallfull.tangible.impl;
 
 import java.util.stream.Stream;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.model.accounts.smallfull.tangible.TangibleApi;

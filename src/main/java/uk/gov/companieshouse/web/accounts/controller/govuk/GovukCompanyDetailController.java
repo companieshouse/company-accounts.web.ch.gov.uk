@@ -1,7 +1,7 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

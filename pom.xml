@@ -69,6 +69,29 @@
                         <artifactId>kotlin-stdlib</artifactId>
                         <version>${kotlin-stdlib.version}</version>
                     </dependency>
+
+            <!-- The tomcat-embedded dependencies can be removed if spring-boot > 4.0.5 fixed the vulnerabilities-->
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>${tomcat-embedded.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-websocket</artifactId>
+                <version>11.0.21</version>
+                <scope>compile</scope>
+            </dependency>
+
+
+            <!-- Fixes vulnerabilities for sonar plugins -->
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>${plexus-utils.version}</version>
+                <scope>compile</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -84,7 +107,7 @@
 
         <java-session-handler.version>4.1.7</java-session-handler.version>
 
-        <api-sdk-java.version>6.6.1</api-sdk-java.version>
+        <api-sdk-java.version>6.6.16</api-sdk-java.version>
 
         <sdk-manager-java.version>3.0.14</sdk-manager-java.version>
 
@@ -115,7 +138,7 @@
 
         <spring-boot-dependencies.version>3.5.12</spring-boot-dependencies.version>
 
-        <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.6.0.6792</sonar-maven-plugin.version>
 
         <!-- Maven and Surefire plugins -->
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
@@ -128,6 +151,12 @@
         <!-- TEMPORARY: please review when upgrading pom -->
         <commons-lang3.version>3.19.0</commons-lang3.version>
         <log4j-api.version>2.25.3</log4j-api.version>
+
+        <!-- The tomcat-embedded dependencies can be removed if spring-boot > 3.5.12 fixed the vulnerabilities-->
+        <tomcat-embedded.version>11.0.21</tomcat-embedded.version>
+
+        <!-- Fixes vulnerabilities for sonar plugins -->
+        <plexus-utils.version>4.0.3</plexus-utils.version>
 
         <!--sonar configuration-->
         <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
