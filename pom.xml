@@ -119,7 +119,7 @@
 
         <opentelemetry-instrumentation-bom.version>2.27.0</opentelemetry-instrumentation-bom.version>
 
-        <spring-boot-dependencies.version>3.5.13</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>3.5.14</spring-boot-dependencies.version>
 
         <sonar-maven-plugin.version>5.6.0.6792</sonar-maven-plugin.version>
 
