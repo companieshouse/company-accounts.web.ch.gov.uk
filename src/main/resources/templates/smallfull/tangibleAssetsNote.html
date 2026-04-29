@@ -8,20 +8,20 @@
   <div id="templateName" th:attr="data-id=${templateName},data-metadata=${metadata}" hidden></div>
 
   <link
-      th:href="@{{cdnUrl}/stylesheets/chs-styles.css(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      th:href="@{${cdnUrl} + '/stylesheets/chs-styles.css'}"
       media="all" rel="stylesheet" type="text/css" />
 
   <link
       rel="icon"
-      th:href="@{{cdnUrl}/images/favicon.ico?0.17.3(cdnUrl=${@environment.getProperty('cdn.url')})}"
+      th:href="@{${cdnUrl} + '/images/favicon.ico?0.17.3'}"
       type="image/x-icon" />
 
 </head>
 <body>
-<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/details-polyfill.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/app/body-js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/vendor/require.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/vendor/jquery-3.3.1.min.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/lib/company-accounts-web/details-polyfill.js'}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/app/body-js-enable.js'}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/vendor/require.js'}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/vendor/jquery-3.3.1.min.js'}" type="text/javascript"></script>
 <div class="entire-wrapper">
   <div class="govuk-width-container govuk-width-container-override">
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
@@ -1044,11 +1044,11 @@
 <div class="push"></div>
 </div>
 <div th:replace="fragments/footer :: footer"></div>
-<script th:src="@{{cdnUrl}/javascripts/app/js-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/app/radio-buttons.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/app/piwik-enable.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/autocalculate-input-fields.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
-<script th:src="@{{cdnUrl}/javascripts/lib/company-accounts-web/resource-numeric-field-validation.js(cdnUrl=${@environment.getProperty('cdn.url')})}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/app/js-enable.js'}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/app/radio-buttons.js'}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/app/piwik-enable.js'}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/lib/company-accounts-web/autocalculate-input-fields.js'}" type="text/javascript"></script>
+<script th:src="@{${cdnUrl} + '/javascripts/lib/company-accounts-web/resource-numeric-field-validation.js'}" type="text/javascript"></script>
 <div th:replace="fragments/piwik :: piwik"></div>
 </body>
 </html>
