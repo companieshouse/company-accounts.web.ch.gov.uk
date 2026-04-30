@@ -7,13 +7,12 @@
 <div th:fragment="piwik" class="govuk-visually-hidden">
   <script th:inline="javascript">
                 (function() {
-                    bindPiwikListener('company-accounts', /*[[${@environment.getProperty('piwik.url')}]]*/, /*[[${@environment.getProperty('piwik.siteId')}]]*/);
+                    bindPiwikListener('company-accounts', /*[[${piwikUrl}]]*/, /*[[${piwikSiteId}]]*/);
                 })();
             </script>
   <noscript>
     <p>
-      <img th:src="@{{piwikUrl}/piwik.php?idsite={siteId}(piwikUrl=${@environment.getProperty('piwik.url')},
-                             siteId=${@environment.getProperty('piwik.site.id')})}" style="border:0;" alt="" />
+      <img th:src="@{${piwikUrl} + '/piwik.php?idsite=' + ${piwikSiteId}}" style="border:0;" alt="" />
     </p>
   </noscript>
 </div>
