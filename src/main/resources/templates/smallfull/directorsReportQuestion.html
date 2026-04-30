@@ -20,7 +20,7 @@
              th:classappend="${#fields.hasErrors('hasIncludedDirectorsReport')} ? 'govuk-form-group--error' : ''">
 
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include a directors\' report?',
+              legendText=${'Do your prepared accounts include a directors'' report?'},
               radioButtonsFieldName = 'hasIncludedDirectorsReport'
               )">
           </div>
