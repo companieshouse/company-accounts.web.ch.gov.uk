@@ -20,9 +20,9 @@
              th:classappend="${#fields.hasErrors('includeIntangibleAmortisationPolicy')} ? 'govuk-form-group--error' : ''">
 
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include an \'intangible fixed assets amortisation\' policy?',
-              boxLabelTextJavaScriptOn = 'Give details of your \'intangible fixed assets amortisation\' policy',
-              boxLabelTextJavaScriptOff = 'If yes, enter your \'intangible fixed assets amortisation\' policy',
+              legendText = ${'Do your prepared accounts include an ''intangible fixed assets amortisation'' policy?'},
+              boxLabelTextJavaScriptOn = ${'Give details of your ''intangible fixed assets amortisation'' policy'},
+              boxLabelTextJavaScriptOff = ${'If yes, enter your ''intangible fixed assets amortisation'' policy'},
               radioButtonsFieldName = 'includeIntangibleAmortisationPolicy',
               textBoxFieldName = 'intangibleAmortisationPolicyDetails',
               dataTargetTextFieldName = 'intangibleAmortisationPolicy-text-box',

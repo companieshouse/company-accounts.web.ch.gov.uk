@@ -20,7 +20,7 @@
              th:classappend="${#fields.hasErrors('hasIncludedRelatedPartyTransactions')} ? 'govuk-form-group--error' : ''">
 
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include any \'related party transactions\'?',
+              legendText = ${'Do your prepared accounts include any ''related party transactions''?'},
               radioButtonsFieldName = 'hasIncludedRelatedPartyTransactions'
               )">
           </div>
