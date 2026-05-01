@@ -448,7 +448,7 @@
         </div>
 
         <div th:replace="fragments/review/balanceSheetValueRow :: balanceSheetValueRow (
-                            description = 'Total shareholders\' funds',
+                            description = ${'Total shareholders'' funds'},
                             identifier = 'total-shareholders-funds',
                             currentAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.currentAmount},
                             previousAmount = *{balanceSheet?.capitalAndReserves?.totalShareholdersFunds?.previousAmount},
