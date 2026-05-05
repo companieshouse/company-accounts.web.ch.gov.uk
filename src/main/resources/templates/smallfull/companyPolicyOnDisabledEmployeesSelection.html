@@ -20,7 +20,7 @@
              th:classappend="${#fields.hasErrors('hasCompanyPolicyOnDisabledEmployees')} ? 'govuk-form-group--error' : ''">
 
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Does the directors\' report in your prepared accounts include a company policy on disabled employees?',
+              legendText=${'Does the directors'' report in your prepared accounts include a company policy on disabled employees?'},
               radioButtonsFieldName = 'hasCompanyPolicyOnDisabledEmployees'
               )">
           </div>

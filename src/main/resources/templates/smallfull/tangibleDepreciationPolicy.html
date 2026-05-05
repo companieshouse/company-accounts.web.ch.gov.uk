@@ -20,9 +20,9 @@
         <div class="govuk-form-group"
              th:classappend="${#fields.hasErrors('hasTangibleDepreciationPolicySelected')} ? 'govuk-form-group--error' : ''">
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include a \'tangible fixed assets depreciation\' policy?',
-              boxLabelTextJavaScriptOn = 'Give details of your \'tangible fixed assets depreciation\' policy',
-              boxLabelTextJavaScriptOff = 'If yes, enter your \'tangible fixed assets depreciation\' policy',
+              legendText = ${'Do your prepared accounts include a ''tangible fixed assets depreciation'' policy?'},
+              boxLabelTextJavaScriptOn = ${'Give details of your ''tangible fixed assets depreciation'' policy'},
+              boxLabelTextJavaScriptOff = ${'If yes, enter your ''tangible fixed assets depreciation'' policy'},
               radioButtonsFieldName = 'hasTangibleDepreciationPolicySelected',
               textBoxFieldName = 'tangibleDepreciationPolicyDetails',
               dataTargetTextFieldName = 'tangible-depreciation-policy-text-box',

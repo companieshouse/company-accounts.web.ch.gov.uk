@@ -21,9 +21,9 @@
              th:classappend="${#fields.hasErrors('includeValuationInformationPolicy')} ? 'govuk-form-group--error' : ''">
 
           <div th:replace="fragments/inlineYesNoRadioButtons :: inlineYesNoRadioButtons (
-              legendText = 'Do your prepared accounts include a \'valuation information\' policy?',
-              boxLabelTextJavaScriptOn = 'Give details of your \'valuation information\' policy',
-              boxLabelTextJavaScriptOff = 'If yes, enter your \'valuation information\' policy',
+              legendText = ${'Do your prepared accounts include a ''valuation information'' policy?'},
+              boxLabelTextJavaScriptOn = ${'Give details of your ''valuation information'' policy'},
+              boxLabelTextJavaScriptOff = ${'If yes, enter your ''valuation information'' policy'},
               radioButtonsFieldName = 'includeValuationInformationPolicy',
               textBoxFieldName = 'valuationInformationPolicyDetails',
               dataTargetTextFieldName = 'valuationInformationPolicy-text-box',

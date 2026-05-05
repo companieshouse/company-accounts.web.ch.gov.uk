@@ -20,7 +20,7 @@
              th:classappend="${#fields.hasErrors('hasIncludedOffBalanceSheetArrangements')} ? 'govuk-form-group--error' : ''">
 
           <div th:replace="fragments/inlineYesNoRadioButtonsNoTextBox :: inlineYesNoRadioButtonsNoTextBox (
-              legendText = 'Do your prepared accounts include any \'off balance sheet arrangements\'?',
+              legendText = ${'Do your prepared accounts include any ''off balance sheet arrangements''?'},
               hint = 'This could include the nature, purpose and financial impact on entity.',
               radioButtonsFieldName = 'hasIncludedOffBalanceSheetArrangements'
               )">
