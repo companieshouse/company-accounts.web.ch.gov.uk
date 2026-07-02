@@ -63,18 +63,6 @@
                 <artifactId>log4j-to-slf4j</artifactId>
                 <version>${log4j-api.version}</version>
             </dependency>
-            <!--
-                Override dependency to fix  CVE-2020-29582(5.3)
-                Review to see if opentelemetry-instrumentation-bom.version > 2.27.0
-                supply an updated version of this,
-                allowing removal of this dependency
-            -->
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib</artifactId>
-                <version>${kotlin-stdlib.version}</version>
-            </dependency>
-
 
             <!-- Fixes vulnerabilities for sonar plugins -->
             <dependency>
@@ -122,7 +110,7 @@
         <junit-jupiter-engine.version>5.13.1</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>5.18.0</mockito-junit-jupiter.version>
 
-        <opentelemetry-instrumentation-bom.version>2.27.0</opentelemetry-instrumentation-bom.version>
+        <opentelemetry-instrumentation-bom.version>2.29.0</opentelemetry-instrumentation-bom.version>
 
         <spring-boot-dependencies.version>3.5.15</spring-boot-dependencies.version>
 
