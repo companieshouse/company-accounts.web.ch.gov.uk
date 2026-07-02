@@ -60,12 +60,8 @@ class GovukCompanyDetailControllerTest {
             UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + COMPANY_NUMBER
                     + "/cic/steps-to-complete";
 
-    private static final String FILE_ACCOUNTS_DIFFERENTLY_PATH =
-            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + COMPANY_NUMBER
-                    + "/file-these-accounts-differently";
-
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", "FC,NF,SF");
