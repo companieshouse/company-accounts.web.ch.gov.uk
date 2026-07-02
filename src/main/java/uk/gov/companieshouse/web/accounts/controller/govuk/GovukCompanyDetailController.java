@@ -1,8 +1,11 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +28,9 @@ public class GovukCompanyDetailController extends BaseController {
     private static final UriTemplate SMALL_FULL_STEPS_TO_COMPLETE =
             new UriTemplate("/company/{companyNumber}/small-full/steps-to-complete");
 
+    private static final UriTemplate FILE_ACCOUNTS_DIFFERENTLY =
+        new UriTemplate("/company/{companyNumber}/file-these-accounts-differently");
+
     private static final UriTemplate CIC_STEPS_TO_COMPLETE =
             new UriTemplate("/company/{companyNumber}/cic/steps-to-complete");
 
@@ -32,6 +38,9 @@ public class GovukCompanyDetailController extends BaseController {
 
     private static final boolean SHOW_CONTINUE = true;
     private static final String MODEL_ATTR_SHOW_CONTINUE = "showContinue";
+
+    @Value("${overseas.company.prefixes}")
+    private String overseasCompanyPrefixes;
 
     @Override
     protected String getTemplateName() {
@@ -60,6 +69,11 @@ public class GovukCompanyDetailController extends BaseController {
     public String postCompanyDetail(@PathVariable String companyNumber, HttpServletRequest request) {
 
         try {
+            if (isOverseasCompany(companyNumber)) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                    FILE_ACCOUNTS_DIFFERENTLY.expand(companyNumber).toString();
+            }
+
             if (BooleanUtils.isTrue(companyService.getCompanyProfile(companyNumber)
                     .isCommunityInterestCompany())) {
 
@@ -74,5 +88,14 @@ public class GovukCompanyDetailController extends BaseController {
             LOGGER.errorRequest(request, e.getMessage(), e);
             return ERROR_VIEW;
         }
+    }
+
+    private boolean isOverseasCompany(String companyNumber) {
+
+        String companyNumberUpperCase = companyNumber.toUpperCase();
+        List<String> prefixes = Arrays.asList(overseasCompanyPrefixes.split(","));
+
+        return prefixes.stream()
+            .anyMatch(prefix -> companyNumberUpperCase.startsWith(prefix.trim()));
     }
 }

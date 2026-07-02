@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -59,10 +60,15 @@ class GovukCompanyDetailControllerTest {
             UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + COMPANY_NUMBER
                     + "/cic/steps-to-complete";
 
+    private static final String FILE_ACCOUNTS_DIFFERENTLY_PATH =
+            UrlBasedViewResolver.REDIRECT_URL_PREFIX + "/company/" + COMPANY_NUMBER
+                    + "/file-these-accounts-differently";
+
     @BeforeEach
     public void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", "FC,NF,SF");
     }
 
     @Test
@@ -115,6 +121,16 @@ class GovukCompanyDetailControllerTest {
         mockMvc.perform(post(COMPANY_DETAIL_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(SMALL_FULL_STEPS_TO_COMPLETE_PATH));
+    }
+
+    @Test
+    @DisplayName("Post Gov uk Company Details - Overseas Company")
+    void postRequestOverseasCompany() throws Exception {
+
+        mockMvc.perform(post("/accounts/company/FC123456/details"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX
+                        + "/company/FC123456/file-these-accounts-differently"));
     }
 
     @Test
