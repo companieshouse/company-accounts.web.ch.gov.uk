@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts;
+package uk.gov.companieshouse.web.accounts.configuration;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
