@@ -14,17 +14,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CriteriaControllerTests {
+class CriteriaControllerTest {
 
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
@@ -41,12 +42,14 @@ class CriteriaControllerTests {
     private MockMvc mockMvc;
     @Mock
     private NavigatorService navigatorService;
-    @InjectMocks
-    private CriteriaController controller;
+
+    @Mock
+    private OverseasCompanyNumberService overseasCompanyNumberService;
 
     @BeforeEach
-    public void setup() {
-
+    void setup() {
+        CriteriaController controller = new CriteriaController(overseasCompanyNumberService);
+        ReflectionTestUtils.setField(controller, "navigatorService", navigatorService);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -59,6 +62,21 @@ class CriteriaControllerTests {
                 .andExpect(view().name(CRITERIA_VIEW))
                 .andExpect(model().attributeExists(CRITERIA_MODEL_ATTR))
                 .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
+    }
+
+    @Test
+    @DisplayName("Post criteria with overseas company number")
+    void postRequestOverseasCompany() throws Exception {
+
+        String beanElement = "isCriteriaMet";
+        String criteriaMet = "yes";
+
+        when(overseasCompanyNumberService.isOverseasCompany("FC123456")).thenReturn(true);
+
+        this.mockMvc.perform(post("/company/FC123456/small-full/criteria")
+                        .param(beanElement, criteriaMet))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/company/FC123456/file-these-accounts-differently"));
     }
 
     @Test

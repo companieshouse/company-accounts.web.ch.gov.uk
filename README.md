@@ -2,6 +2,13 @@
 The Companies House web application for handling company accounts
 These screens allow clients to interact with company accounts data.
 
+### Configuration
+
+- `overseas.company.prefixes=${OVERSEAS_COMPANY_PREFIXES:FC,NF,SF}`
+  - Controls which company number prefixes are treated as overseas companies.
+  - This is configurable via the `OVERSEAS_COMPANY_PREFIXES` environment variable so prefix support can be updated without code changes.
+  - Default value is `FC,NF,SF`.
+
 ### Requirements
 
 - Java 21

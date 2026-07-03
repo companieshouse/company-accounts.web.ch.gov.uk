@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +21,7 @@ import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -32,8 +32,8 @@ class GovukCompanyDetailControllerTest {
     @Mock
     private CompanyService companyService;
 
-    @InjectMocks
-    private GovukCompanyDetailController controller;
+    @Mock
+    private OverseasCompanyNumberService overseasCompanyNumberService;
 
     @Mock
     private CompanyDetail companyDetail;
@@ -60,8 +60,8 @@ class GovukCompanyDetailControllerTest {
                     + "/cic/steps-to-complete";
 
     @BeforeEach
-    public void setup() {
-
+    void setup() {
+        GovukCompanyDetailController controller = new GovukCompanyDetailController(companyService, overseasCompanyNumberService);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -115,6 +115,18 @@ class GovukCompanyDetailControllerTest {
         mockMvc.perform(post(COMPANY_DETAIL_PATH))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(SMALL_FULL_STEPS_TO_COMPLETE_PATH));
+    }
+
+    @Test
+    @DisplayName("Post Gov uk Company Details - Overseas Company")
+    void postRequestOverseasCompany() throws Exception {
+
+        when(overseasCompanyNumberService.isOverseasCompany("FC123456")).thenReturn(true);
+
+        mockMvc.perform(post("/accounts/company/FC123456/details"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX
+                        + "/company/FC123456/file-these-accounts-differently"));
     }
 
     @Test
