@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import jakarta.validation.Valid;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -27,7 +26,7 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 public class CriteriaController extends BaseController {
 
     @Value("${overseas.company.prefixes}")
-    private String overseasCompanyPrefixes;
+    private List<String> overseasCompanyPrefixes;
 
     private static final UriTemplate FILE_ACCOUNTS_DIFFERENTLY =
         new UriTemplate("/company/{companyNumber}/file-these-accounts-differently");
@@ -77,9 +76,8 @@ public class CriteriaController extends BaseController {
     private boolean isOverseasCompany(String companyNumber) {
 
         String companyNumberUpperCase = companyNumber.toUpperCase();
-        List<String> prefixes = Arrays.asList(overseasCompanyPrefixes.split(","));
 
-        return prefixes.stream()
+        return overseasCompanyPrefixes.stream()
             .anyMatch(prefix -> companyNumberUpperCase.startsWith(prefix.trim()));
     }
 }

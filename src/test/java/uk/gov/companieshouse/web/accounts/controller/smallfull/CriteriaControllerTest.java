@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CriteriaControllerTests {
+class CriteriaControllerTest {
 
     private static final String COMPANY_NUMBER = "companyNumber";
     private static final String CRITERIA_PATH = "/company/" + COMPANY_NUMBER +
@@ -46,10 +47,9 @@ class CriteriaControllerTests {
     private CriteriaController controller;
 
     @BeforeEach
-    public void setup() {
-
+    void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", "FC,NF,SF");
+        ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", List.of("FC", "NF", "SF"));
     }
 
     @Test

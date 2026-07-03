@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ class GovukCompanyDetailControllerTest {
     void setup() {
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", "FC,NF,SF");
+        ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", List.of("FC", "NF", "SF"));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.govuk;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class GovukCompanyDetailController extends BaseController {
     private static final String MODEL_ATTR_SHOW_CONTINUE = "showContinue";
 
     @Value("${overseas.company.prefixes}")
-    private String overseasCompanyPrefixes;
+    private List<String> overseasCompanyPrefixes;
 
     @Override
     protected String getTemplateName() {
@@ -93,9 +92,8 @@ public class GovukCompanyDetailController extends BaseController {
     private boolean isOverseasCompany(String companyNumber) {
 
         String companyNumberUpperCase = companyNumber.toUpperCase();
-        List<String> prefixes = Arrays.asList(overseasCompanyPrefixes.split(","));
 
-        return prefixes.stream()
+        return overseasCompanyPrefixes.stream()
             .anyMatch(prefix -> companyNumberUpperCase.startsWith(prefix.trim()));
     }
 }
