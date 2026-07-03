@@ -10,17 +10,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.util.UriTemplate;
 import uk.gov.companieshouse.web.accounts.annotation.NextController;
 import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccountTypeController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
+import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
 
 @Controller
 @NextController(StepsToCompleteController.class)
 @PreviousController(SelectAccountTypeController.class)
 @RequestMapping("/company/{companyNumber}/small-full/criteria")
 public class CriteriaController extends BaseController {
+
+    private final OverseasCompanyNumberService overseasCompanyNumberService;
+
+    public CriteriaController(OverseasCompanyNumberService overseasCompanyNumberService) {
+        this.overseasCompanyNumberService = overseasCompanyNumberService;
+    }
+
+    private static final UriTemplate FILE_ACCOUNTS_DIFFERENTLY =
+        new UriTemplate("/company/{companyNumber}/file-these-accounts-differently");
 
     @GetMapping
     public String getCriteria(@PathVariable String companyNumber, Model model) {
@@ -40,6 +51,10 @@ public class CriteriaController extends BaseController {
     public String postCriteria(@PathVariable String companyNumber,
                                @ModelAttribute("criteria") @Valid Criteria criteria,
                                BindingResult bindingResult, Model model) {
+        if (overseasCompanyNumberService.isOverseasCompany(companyNumber)) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                FILE_ACCOUNTS_DIFFERENTLY.expand(companyNumber);
+        }
 
         addBackPageAttributeToModel(model, companyNumber);
 
