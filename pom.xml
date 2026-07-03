@@ -13,7 +13,7 @@
     <parent>
         <groupId>uk.gov.companieshouse</groupId>
         <artifactId>companies-house-parent</artifactId>
-        <version>2.1.13</version>
+        <version>2.1.14</version>
         <relativePath/>
     </parent>
 
@@ -65,7 +65,7 @@
             </dependency>
             <!--
                 Override dependency to fix  CVE-2020-29582(5.3)
-                Review to see if opentelemetry-instrumentation-bom.version > 2.27.0
+                Review to see if opentelemetry-instrumentation-bom.version > 2.29.0
                 supply an updated version of this,
                 allowing removal of this dependency
             -->
@@ -106,7 +106,7 @@
 
         <common-web-java.version>4.1.0</common-web-java.version>
 
-        <web-security-java.version>3.1.5</web-security-java.version>
+        <web-security-java.version>3.1.18</web-security-java.version>
 
         <company-accounts-library.version>3.0.1</company-accounts-library.version>
 
@@ -122,7 +122,7 @@
         <junit-jupiter-engine.version>5.13.1</junit-jupiter-engine.version>
         <mockito-junit-jupiter.version>5.18.0</mockito-junit-jupiter.version>
 
-        <opentelemetry-instrumentation-bom.version>2.27.0</opentelemetry-instrumentation-bom.version>
+        <opentelemetry-instrumentation-bom.version>2.29.0</opentelemetry-instrumentation-bom.version>
 
         <spring-boot-dependencies.version>3.5.16</spring-boot-dependencies.version>
 
