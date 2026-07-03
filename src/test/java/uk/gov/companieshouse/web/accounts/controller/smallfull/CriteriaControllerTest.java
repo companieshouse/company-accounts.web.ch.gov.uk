@@ -9,19 +9,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
 import uk.gov.companieshouse.web.accounts.service.navigation.NavigatorService;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,13 +42,15 @@ class CriteriaControllerTest {
     private MockMvc mockMvc;
     @Mock
     private NavigatorService navigatorService;
-    @InjectMocks
-    private CriteriaController controller;
+
+    @Mock
+    private OverseasCompanyNumberService overseasCompanyNumberService;
 
     @BeforeEach
     void setup() {
+        CriteriaController controller = new CriteriaController(overseasCompanyNumberService);
+        ReflectionTestUtils.setField(controller, "navigatorService", navigatorService);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", List.of("FC", "NF", "SF"));
     }
 
     @Test
@@ -69,6 +70,8 @@ class CriteriaControllerTest {
 
         String beanElement = "isCriteriaMet";
         String criteriaMet = "yes";
+
+        when(overseasCompanyNumberService.isOverseasCompany("FC123456")).thenReturn(true);
 
         this.mockMvc.perform(post("/company/FC123456/small-full/criteria")
                         .param(beanElement, criteriaMet))

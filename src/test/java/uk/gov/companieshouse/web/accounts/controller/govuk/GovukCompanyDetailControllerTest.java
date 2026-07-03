@@ -7,16 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
@@ -24,6 +21,7 @@ import uk.gov.companieshouse.api.model.company.CompanyProfileApi;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
+import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,8 +32,8 @@ class GovukCompanyDetailControllerTest {
     @Mock
     private CompanyService companyService;
 
-    @InjectMocks
-    private GovukCompanyDetailController controller;
+    @Mock
+    private OverseasCompanyNumberService overseasCompanyNumberService;
 
     @Mock
     private CompanyDetail companyDetail;
@@ -63,9 +61,8 @@ class GovukCompanyDetailControllerTest {
 
     @BeforeEach
     void setup() {
-
+        GovukCompanyDetailController controller = new GovukCompanyDetailController(companyService, overseasCompanyNumberService);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        ReflectionTestUtils.setField(controller, "overseasCompanyPrefixes", List.of("FC", "NF", "SF"));
     }
 
     @Test
@@ -123,6 +120,8 @@ class GovukCompanyDetailControllerTest {
     @Test
     @DisplayName("Post Gov uk Company Details - Overseas Company")
     void postRequestOverseasCompany() throws Exception {
+
+        when(overseasCompanyNumberService.isOverseasCompany("FC123456")).thenReturn(true);
 
         mockMvc.perform(post("/accounts/company/FC123456/details"))
                 .andExpect(status().is3xxRedirection())

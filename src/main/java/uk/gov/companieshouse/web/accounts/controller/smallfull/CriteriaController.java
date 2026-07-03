@@ -1,8 +1,6 @@
 package uk.gov.companieshouse.web.accounts.controller.smallfull;
 
 import jakarta.validation.Valid;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +16,7 @@ import uk.gov.companieshouse.web.accounts.annotation.PreviousController;
 import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.controller.accountselector.SelectAccountTypeController;
 import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
+import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
 
 @Controller
 @NextController(StepsToCompleteController.class)
@@ -25,8 +24,11 @@ import uk.gov.companieshouse.web.accounts.model.smallfull.Criteria;
 @RequestMapping("/company/{companyNumber}/small-full/criteria")
 public class CriteriaController extends BaseController {
 
-    @Value("${overseas.company.prefixes}")
-    private List<String> overseasCompanyPrefixes;
+    private final OverseasCompanyNumberService overseasCompanyNumberService;
+
+    public CriteriaController(OverseasCompanyNumberService overseasCompanyNumberService) {
+        this.overseasCompanyNumberService = overseasCompanyNumberService;
+    }
 
     private static final UriTemplate FILE_ACCOUNTS_DIFFERENTLY =
         new UriTemplate("/company/{companyNumber}/file-these-accounts-differently");
@@ -49,9 +51,9 @@ public class CriteriaController extends BaseController {
     public String postCriteria(@PathVariable String companyNumber,
                                @ModelAttribute("criteria") @Valid Criteria criteria,
                                BindingResult bindingResult, Model model) {
-        if (isOverseasCompany(companyNumber)) {
+        if (overseasCompanyNumberService.isOverseasCompany(companyNumber)) {
             return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                FILE_ACCOUNTS_DIFFERENTLY.expand(companyNumber).toString();
+                FILE_ACCOUNTS_DIFFERENTLY.expand(companyNumber);
         }
 
         addBackPageAttributeToModel(model, companyNumber);
@@ -71,13 +73,5 @@ public class CriteriaController extends BaseController {
         }
 
         return navigatorService.getNextControllerRedirect(this.getClass(), companyNumber);
-    }
-
-    private boolean isOverseasCompany(String companyNumber) {
-
-        String companyNumberUpperCase = companyNumber.toUpperCase();
-
-        return overseasCompanyPrefixes.stream()
-            .anyMatch(prefix -> companyNumberUpperCase.startsWith(prefix.trim()));
     }
 }
