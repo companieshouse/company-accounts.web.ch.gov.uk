@@ -141,8 +141,6 @@
         <log4j-api.version>2.25.4</log4j-api.version>
         <kotlin-stdlib.version>2.3.20</kotlin-stdlib.version>
         <plexus-utils.version>4.0.3</plexus-utils.version>
-        <!-- Remove this if structured-logging version > 3.0.57 updated this dependency to >= 1.42.0 -->
-        <open-telemetry.version>1.42.0</open-telemetry.version>
         <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.55-->
         <tomcat-embed.version>10.1.56</tomcat-embed.version>
         <!-- End of temporarily overridden dependencies -->
@@ -164,17 +162,6 @@
 
     <dependencies>
         <!-- Temporarily overridden dependencies -->
-        <!-- Remove this if structured-logging version > 3.0.57 updated this dependency to >= 1.42.0 -->
-        <dependency>
-            <groupId>io.opentelemetry.semconv</groupId>
-            <artifactId>opentelemetry-semconv</artifactId>
-            <version>${open-telemetry.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry.semconv</groupId>
-            <artifactId>opentelemetry-semconv-incubating</artifactId>
-            <version>${open-telemetry.version}-alpha</version>
-        </dependency>
         <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.55 -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
