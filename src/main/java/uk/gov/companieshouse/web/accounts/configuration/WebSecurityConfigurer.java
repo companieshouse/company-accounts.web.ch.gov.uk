@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.web.accounts.security;
+package uk.gov.companieshouse.web.accounts.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
