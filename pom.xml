@@ -75,28 +75,6 @@
                 <version>${kotlin-stdlib.version}</version>
             </dependency>
 
-            <!--
-                Override dependency to fix CVE-2026-50229(6.1), CVE-2026-55276(9.1),
-                CVE-2026-53434(9.1), CVE-2026-55956(6.5), CVE-2026-53404(7.3), CVE-2026-55955(6.5)
-                Review to see if spring-boot-dependencies > 3.5.16
-                supplies an updated version of this,
-                allowing removal of this dependency.
-            -->
-            <dependency>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-core</artifactId>
-                <version>10.1.56</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.tomcat.embed</groupId>
-                <artifactId>tomcat-embed-websocket</artifactId>
-                <version>10.1.56</version>
-                <scope>compile</scope>
-            </dependency>
-
-
             <!-- Fixes vulnerabilities for sonar plugins -->
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
