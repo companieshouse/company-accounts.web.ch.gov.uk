@@ -2,9 +2,9 @@ package uk.gov.companieshouse.web.accounts.transformer.smallfull.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.CurrentPeriod;
-import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
-import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.PreviousPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.debtors.CurrentPeriod;
+import uk.gov.companieshouse.api.model.accounts.smallfull.debtors.DebtorsApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.debtors.PreviousPeriod;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.Debtors;
 import uk.gov.companieshouse.web.accounts.model.smallfull.notes.debtors.GreaterThanOneYear;

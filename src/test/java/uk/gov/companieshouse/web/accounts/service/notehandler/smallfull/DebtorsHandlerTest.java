@@ -22,7 +22,7 @@ import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsDelete
 import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsGet;
 import uk.gov.companieshouse.api.handler.smallfull.debtors.request.DebtorsUpdate;
 import uk.gov.companieshouse.api.model.ApiResponse;
-import uk.gov.companieshouse.api.model.accounts.smallfull.Debtors.DebtorsApi;
+import uk.gov.companieshouse.api.model.accounts.smallfull.debtors.DebtorsApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullApi;
 import uk.gov.companieshouse.api.model.accounts.smallfull.SmallFullLinks;
 import uk.gov.companieshouse.web.accounts.enumeration.NoteType;
