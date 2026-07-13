@@ -51,15 +51,16 @@ public class CriteriaController extends BaseController {
     public String postCriteria(@PathVariable String companyNumber,
                                @ModelAttribute("criteria") @Valid Criteria criteria,
                                BindingResult bindingResult, Model model) {
-        if (overseasCompanyNumberService.isOverseasCompany(companyNumber)) {
-            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
-                FILE_ACCOUNTS_DIFFERENTLY.expand(companyNumber);
-        }
-
         addBackPageAttributeToModel(model, companyNumber);
 
         if (bindingResult.hasErrors()) {
             return getTemplateName();
+        }
+
+        if (overseasCompanyNumberService.isOverseasCompany(companyNumber) &&
+            criteria.getIsCriteriaMet().equalsIgnoreCase("yes")) {
+            return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
+                FILE_ACCOUNTS_DIFFERENTLY.expand(companyNumber);
         }
 
         if (criteria.getIsCriteriaMet().equalsIgnoreCase("noAlternativeFilingMethod")) {
