@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+      layout:decorate="~{layouts/baseLayout}">
 <head>
     <title></title>
 </head>
 <body>
 
-<div th:fragment="changesToAccountsBanner" class="govuk-notification-banner" role="region"
+<section th:fragment="changesToAccountsBanner" class="govuk-notification-banner"
      aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner"
      data-govuk-notification-banner-init="">
     <div class="govuk-notification-banner__header">
@@ -23,7 +24,7 @@
                                                           href="https://www.gov.uk/guidance/using-software-to-file-your-companys-information">
                 using software to file company information (opens in new tab)</a>.</p>
     </div>
-</div>
+</section>
 
 </body>
 </html>
