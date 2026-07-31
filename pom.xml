@@ -33,13 +33,13 @@
             <type>pom</type>
             <scope>import</scope>
           </dependency>
-            <!-- 
+            <!--
                 Override dependency to fix CVE-2025-48924
                 Review to see if all:
                 - sdk-manager-java >3.0.14
                 - sonar-maven-plugin >5.5.0.6356
                 - common-web-java >4.1.0
-                supply an updated version of this, 
+                supply an updated version of this,
                 allowing removal of this dependency.
             -->
             <dependency>
@@ -137,11 +137,11 @@
 
         <!-- Temporarily overridden dependencies -->
         <commons-lang3.version>3.19.0</commons-lang3.version>
-        <log4j-api.version>2.25.4</log4j-api.version>
+        <log4j-api.version>2.25.5</log4j-api.version>
         <kotlin-stdlib.version>2.3.20</kotlin-stdlib.version>
         <plexus-utils.version>4.0.3</plexus-utils.version>
         <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.55-->
-        <tomcat-embed.version>10.1.56</tomcat-embed.version>
+        <tomcat-embed.version>10.1.57</tomcat-embed.version>
         <!-- End of temporarily overridden dependencies -->
 
         <!--sonar configuration-->
