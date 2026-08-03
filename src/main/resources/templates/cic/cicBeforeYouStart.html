@@ -6,6 +6,9 @@
 
 <head>
   <title>File your annual CIC report and accounts</title>
+
+  <link th:href="@{${cdnUrl} + '/stylesheets/services/company-accounts/app.css'}"
+        media="all" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -14,6 +17,7 @@
       <form id="cicBeforeYouStart-form" th:action="@{''}" class="form" method="post">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
+            <div th:replace="fragments/changesToAccountsBanner :: changesToAccountsBanner"></div>
             <div class="text">
 
               <div th:replace="fragments/numberedHeading :: numberedHeading (
