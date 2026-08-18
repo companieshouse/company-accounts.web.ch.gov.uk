@@ -2,129 +2,154 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/baseLayout}">
+      layout:decorate="~{layouts/baseLayout}"
+      lang="en"
+>
+  <head>
+    <title>Full Accounts Criteria</title>
+    <link th:href="@{${cdnUrl} + '/stylesheets/services/company-accounts/app.css'}" media="all" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="main-content" layout:fragment="content">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-<head>
-  <title>Full Accounts Criteria</title>
-</head>
-<body>
-<div id="main-content" layout:fragment="content">
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-
-      <form id="criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
-        <div th:replace="fragments/globalErrors :: globalErrors"></div>
-        <header>
-          <h1 id="page-title" class="govuk-heading-l">
-            File full accounts
-          </h1>
-        </header>
-
-        <h2 class="govuk-heading-m" id="criteria-sub-heading">Criteria</h2>
-
-          <p id="criteria-overview">Check your prepared accounts to see if you meet the criteria.</p>
-
-        <p id="company-criteria-list-heading">You <b>cannot</b> file full accounts using the new service if your company type is:</p>
-
-        <ul class="govuk-list govuk-list--bullet" id="company-criteria-list">
-          <li>a charity</li>
-          <li>a PLC</li>
-        </ul>
-
-        <p id="criteria-list-heading">You <b>can</b> file full accounts here if:</p>
-
-        
-        <ul class="govuk-list govuk-list--bullet" id="criteria-list">
-          <li>your accounts have been prepared under the provisions of FRS101 or FRS102 reporting standards</li>
-          <li>your directors' report includes details of no more than 20 directors</li>
-          <li>your balance sheet doesn’t have 'revaluation reserve'</li>
-          <li>you only need to add notes (if applicable) for 'accounting policies', 'employees', 'tangible assets', 'intangible assets',
-            'fixed assets investments', 'stocks', 'debtors', 'current assets investments', 'creditors - amounts falling
-            due within one year', 'creditors - amounts falling due after one year', 'financial commitments', 'loans to directors', or 'off balance sheet arrangements'</li>
-          <li>you only need to change the date the accounts are made up to by up to 7 days</li>
-        </ul>
-
-        <p id="criteria-additional-requirements">For accounting periods beginning on or after 6 April 2025, your company must also meet at least 2 of the following conditions:</p>
-
-        <ul class="govuk-list govuk-list--bullet" id="criteria-additional-requirements-list">
-          <li>annual turnover must be not more than £15 million</li>
-          <li>the balance sheet total must be not more than £7.5 million</li>
-          <li>the average number of employees must be not more than 50</li>
-        </ul>
-
-        <p id="criteria-additional-requirements-1">For accounting periods beginning on or after 1 January 2016 up to 5 April 2025, your company must also meet at least 2 of the following conditions:</p>
-
-        <ul class="govuk-list govuk-list--bullet" id="criteria-additional-requirements-list-1">
-          <li>annual turnover must be not more than £10.2 million</li>
-          <li>the balance sheet total must be not more than £5.1 million</li>
-          <li>the average number of employees must be not more than 50</li>
-        </ul>
-
-        <p class="govuk-body">
-          <a href="https://www.gov.uk/government/publications/life-of-a-company-annual-requirements/life-of-a-company-part-1-accounts" class="govuk-link" target="_blank">More information on thresholds (link opens in new tab)</a>
-        </p>
-
-        <p id="criteria-information">You may also wish to seek professional advice.</p>
-
-        <h2 class="govuk-heading-m" id="criteria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
-
-        <div class="govuk-form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'govuk-form-group--error' : ''">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-visually-hidden">Do your prepared full accounts meet the criteria?</legend>
-
-            <span class="govuk-error-message"
-                  id="isCriteriaMet-errorId"
-                  th:if="${#fields.hasErrors('isCriteriaMet')}"
-                  th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" >
-                            </span>
-
-            <div class="govuk-radios">
-              <div class="govuk-radios__item">
-                <input id="yesButton"
-                       type="radio"
-                       value="yes"
-                       th:field="*{isCriteriaMet}"
-                       th:errorclass="govuk-error-message"
-                       class="govuk-radios__input piwik-event" data-event-id="Yes"/>
-                <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
-                  Yes
-                </label>
+          <form id="criteria-form" th:action="@{''}" th:object="${criteria}" class="form" method="post">
+            <div th:replace="fragments/globalErrors :: globalErrors"></div>
+            <section th:unless="${#fields.hasErrors('*')}" class="govuk-notification-banner" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+              <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                  Changes to accounts
+                </h2>
               </div>
-
-              <div class="govuk-radios__item">
-                <input id="noAlternativeFilingButton"
-                       type="radio"
-                       value="noAlternativeFilingMethod"
-                       th:field="*{isCriteriaMet}"
-                       th:errorclass="govuk-error-message"
-                       class="govuk-radios__input piwik-event" data-event-id="No other full"/>
-                <label class="govuk-label govuk-radios__label" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
-                  No - show me other ways to file full accounts
-                </label>
+              <div class="govuk-notification-banner__content">
+                <h3 class="govuk-notification-banner__heading">
+                  From 1 April 2028, all companies must file their accounts using commercial software.
+                </h3>
+                <p class="govuk-body">
+                  This applies to directors who file accounts themselves, and agents or accountants who file accounts for
+                  their clients.
+                </p>
+                <p class="govuk-body">
+                  You will no longer be able to file accounts on paper or using our digital services. To prepare for the
+                  change, find out more about filing
+                  <a class="govuk-notification-banner__link" href="https://www.gov.uk/guidance/using-software-to-file-your-companys-information" rel="noreferrer noopener" target="_blank">
+                    Using software to file your company's information (opens in a new tab)<!--
+                  --></a>.
+                </p>
               </div>
+            </section>
+            <header>
+              <h1 id="page-title" class="govuk-heading-l">
+                File full accounts
+              </h1>
+            </header>
 
-              <div class="govuk-radios__item">
-                <input id="noOtherAccountsButton"
-                       type="radio"
-                       value="noOtherAccounts"
-                       th:field="*{isCriteriaMet}"
-                       th:errorclass="govuk-error-message"
-                       class="govuk-radios__input piwik-event" data-event-id="No other accounts"/>
-                <label class="govuk-label govuk-radios__label" for="noOtherAccountsButton" id="noButton-label">
-                  No - I'll file other types of accounts
-                </label>
-              </div>
+            <h2 class="govuk-heading-m" id="criteria-sub-heading">Criteria</h2>
 
+              <p id="criteria-overview">Check your prepared accounts to see if you meet the criteria.</p>
+
+            <p id="company-criteria-list-heading">You <b>cannot</b> file full accounts using the new service if your company type is:</p>
+
+            <ul class="govuk-list govuk-list--bullet" id="company-criteria-list">
+              <li>a charity</li>
+              <li>a PLC</li>
+            </ul>
+
+            <p id="criteria-list-heading">You <b>can</b> file full accounts here if:</p>
+
+
+            <ul class="govuk-list govuk-list--bullet" id="criteria-list">
+              <li>your accounts have been prepared under the provisions of FRS101 or FRS102 reporting standards</li>
+              <li>your directors' report includes details of no more than 20 directors</li>
+              <li>your balance sheet doesn’t have 'revaluation reserve'</li>
+              <li>you only need to add notes (if applicable) for 'accounting policies', 'employees', 'tangible assets', 'intangible assets',
+                'fixed assets investments', 'stocks', 'debtors', 'current assets investments', 'creditors - amounts falling
+                due within one year', 'creditors - amounts falling due after one year', 'financial commitments', 'loans to directors', or 'off balance sheet arrangements'</li>
+              <li>you only need to change the date the accounts are made up to by up to 7 days</li>
+            </ul>
+
+            <p id="criteria-additional-requirements">For accounting periods beginning on or after 6 April 2025, your company must also meet at least 2 of the following conditions:</p>
+
+            <ul class="govuk-list govuk-list--bullet" id="criteria-additional-requirements-list">
+              <li>annual turnover must be not more than £15 million</li>
+              <li>the balance sheet total must be not more than £7.5 million</li>
+              <li>the average number of employees must be not more than 50</li>
+            </ul>
+
+            <p id="criteria-additional-requirements-1">For accounting periods beginning on or after 1 January 2016 up to 5 April 2025, your company must also meet at least 2 of the following conditions:</p>
+
+            <ul class="govuk-list govuk-list--bullet" id="criteria-additional-requirements-list-1">
+              <li>annual turnover must be not more than £10.2 million</li>
+              <li>the balance sheet total must be not more than £5.1 million</li>
+              <li>the average number of employees must be not more than 50</li>
+            </ul>
+
+            <p class="govuk-body">
+              <a href="https://www.gov.uk/government/publications/life-of-a-company-annual-requirements/life-of-a-company-part-1-accounts" class="govuk-link" target="_blank">More information on thresholds (link opens in new tab)</a>
+            </p>
+
+            <p id="criteria-information">You may also wish to seek professional advice.</p>
+
+            <h2 class="govuk-heading-m" id="criteria-submit-heading">Do your prepared full accounts meet the criteria?</h2>
+
+            <div class="govuk-form-group" th:classappend="${#fields.hasErrors('isCriteriaMet')} ? 'govuk-form-group--error' : ''">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-visually-hidden">Do your prepared full accounts meet the criteria?</legend>
+
+                <span class="govuk-error-message"
+                      id="isCriteriaMet-errorId"
+                      th:if="${#fields.hasErrors('isCriteriaMet')}"
+                      th:each="e : ${#fields.errors('isCriteriaMet')}" th:text="${e}" >
+                                </span>
+
+                <div class="govuk-radios">
+                  <div class="govuk-radios__item">
+                    <input id="yesButton"
+                           type="radio"
+                           value="yes"
+                           th:field="*{isCriteriaMet}"
+                           th:errorclass="govuk-error-message"
+                           class="govuk-radios__input piwik-event" data-event-id="Yes"/>
+                    <label class="govuk-label govuk-radios__label" for="yesButton" id="yesButton-label">
+                      Yes
+                    </label>
+                  </div>
+
+                  <div class="govuk-radios__item">
+                    <input id="noAlternativeFilingButton"
+                           type="radio"
+                           value="noAlternativeFilingMethod"
+                           th:field="*{isCriteriaMet}"
+                           th:errorclass="govuk-error-message"
+                           class="govuk-radios__input piwik-event" data-event-id="No other full"/>
+                    <label class="govuk-label govuk-radios__label" for="noAlternativeFilingButton" id="noAlternativeFilingButton-label">
+                      No - show me other ways to file full accounts
+                    </label>
+                  </div>
+
+                  <div class="govuk-radios__item">
+                    <input id="noOtherAccountsButton"
+                           type="radio"
+                           value="noOtherAccounts"
+                           th:field="*{isCriteriaMet}"
+                           th:errorclass="govuk-error-message"
+                           class="govuk-radios__input piwik-event" data-event-id="No other accounts"/>
+                    <label class="govuk-label govuk-radios__label" for="noOtherAccountsButton" id="noButton-label">
+                      No - I'll file other types of accounts
+                    </label>
+                  </div>
+
+                </div>
+              </fieldset>
             </div>
-          </fieldset>
-        </div>
 
-        <div class="govuk-form-group">
-          <input id="next-button" class="govuk-button piwik-event" data-event-id="Small full criteria - Save and continue" type="submit" role="button" value="Continue"/>
+            <div class="govuk-form-group">
+              <input id="next-button" class="govuk-button piwik-event" data-event-id="Small full criteria - Save and continue" type="submit" value="Continue"/>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
-  </div>
-</div>
-</body>
+  </body>
 </html>
