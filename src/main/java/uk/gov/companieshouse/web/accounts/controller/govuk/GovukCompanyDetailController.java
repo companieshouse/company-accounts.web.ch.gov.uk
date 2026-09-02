@@ -14,6 +14,7 @@ import uk.gov.companieshouse.web.accounts.controller.BaseController;
 import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
+import uk.gov.companieshouse.web.accounts.service.company.UkEstablishmentCompanyNumberService;
 
 @Controller
 @RequestMapping("/accounts/company/{companyNumber}/details")
@@ -21,11 +22,14 @@ public class GovukCompanyDetailController extends BaseController {
 
     private final CompanyService companyService;
     private final OverseasCompanyNumberService overseasCompanyNumberService;
+    private final UkEstablishmentCompanyNumberService ukEstablishmentCompanyNumberService;
 
     public GovukCompanyDetailController(CompanyService companyService,
-                                        OverseasCompanyNumberService overseasCompanyNumberService) {
+                                        OverseasCompanyNumberService overseasCompanyNumberService,
+                                        UkEstablishmentCompanyNumberService ukEstablishmentCompanyNumberService) {
         this.companyService = companyService;
         this.overseasCompanyNumberService = overseasCompanyNumberService;
+        this.ukEstablishmentCompanyNumberService = ukEstablishmentCompanyNumberService;
     }
 
     private static final UriTemplate SMALL_FULL_STEPS_TO_COMPLETE =
@@ -33,6 +37,9 @@ public class GovukCompanyDetailController extends BaseController {
 
     private static final UriTemplate FILE_ACCOUNTS_DIFFERENTLY =
         new UriTemplate("/company/{companyNumber}/file-these-accounts-differently");
+
+    private static final String CANNOT_FILE_FULL_ACCOUNTS_FOR_COMPANY_TYPE =
+        "/accounts/cannot-file-full-accounts-for-company-type";
 
     private static final UriTemplate CIC_STEPS_TO_COMPLETE =
             new UriTemplate("/company/{companyNumber}/cic/steps-to-complete");
@@ -73,6 +80,10 @@ public class GovukCompanyDetailController extends BaseController {
             if (overseasCompanyNumberService.isOverseasCompany(companyNumber)) {
                 return UrlBasedViewResolver.REDIRECT_URL_PREFIX +
                     FILE_ACCOUNTS_DIFFERENTLY.expand(companyNumber);
+            }
+
+            if (ukEstablishmentCompanyNumberService.isUkEstablishmentCompany(companyNumber)) {
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANNOT_FILE_FULL_ACCOUNTS_FOR_COMPANY_TYPE;
             }
 
             if (BooleanUtils.isTrue(companyService.getCompanyProfile(companyNumber)

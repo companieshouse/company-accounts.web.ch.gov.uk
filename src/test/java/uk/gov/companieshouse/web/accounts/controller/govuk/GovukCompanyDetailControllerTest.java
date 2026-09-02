@@ -22,6 +22,7 @@ import uk.gov.companieshouse.web.accounts.exception.ServiceException;
 import uk.gov.companieshouse.web.accounts.model.company.CompanyDetail;
 import uk.gov.companieshouse.web.accounts.service.company.CompanyService;
 import uk.gov.companieshouse.web.accounts.service.company.OverseasCompanyNumberService;
+import uk.gov.companieshouse.web.accounts.service.company.UkEstablishmentCompanyNumberService;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,6 +35,9 @@ class GovukCompanyDetailControllerTest {
 
     @Mock
     private OverseasCompanyNumberService overseasCompanyNumberService;
+
+    @Mock
+    private UkEstablishmentCompanyNumberService ukEstablishmentCompanyNumberService;
 
     @Mock
     private CompanyDetail companyDetail;
@@ -61,7 +65,8 @@ class GovukCompanyDetailControllerTest {
 
     @BeforeEach
     void setup() {
-        GovukCompanyDetailController controller = new GovukCompanyDetailController(companyService, overseasCompanyNumberService);
+        GovukCompanyDetailController controller = new GovukCompanyDetailController(companyService,
+            overseasCompanyNumberService, ukEstablishmentCompanyNumberService);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -127,6 +132,18 @@ class GovukCompanyDetailControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX
                         + "/company/FC123456/file-these-accounts-differently"));
+    }
+
+    @Test
+    @DisplayName("Post Gov uk Company Details - UK Establishment Company")
+    void postRequestUkEstablishmentCompany() throws Exception {
+
+        when(ukEstablishmentCompanyNumberService.isUkEstablishmentCompany("BR123456")).thenReturn(true);
+
+        mockMvc.perform(post("/accounts/company/BR123456/details"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX
+                + "/cannot-file-full-accounts-for-company-type"));
     }
 
     @Test

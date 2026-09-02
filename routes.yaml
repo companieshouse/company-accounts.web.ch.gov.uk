@@ -32,3 +32,4 @@ routes:
    28: ^/company/(.*)/transaction/(.*)/company-accounts/(.*)/pay-filing-fee
    29: ^/accounts/file-these-accounts-differently
    30: ^/company/(.*)/file-these-accounts-differently
+   31: ^/accounts/cannot-file-full-accounts-for-company-type
