@@ -107,7 +107,7 @@
 
         <web-security-java.version>3.1.18</web-security-java.version>
 
-        <company-accounts-library.version>3.0.1</company-accounts-library.version>
+        <company-accounts-library.version>3.0.6</company-accounts-library.version>
 
         <environment-reader-library.version>3.0.1</environment-reader-library.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
@@ -140,8 +140,8 @@
         <log4j-api.version>2.25.5</log4j-api.version>
         <kotlin-stdlib.version>2.3.20</kotlin-stdlib.version>
         <plexus-utils.version>4.0.3</plexus-utils.version>
-        <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.55-->
-        <tomcat-embed.version>10.1.57</tomcat-embed.version>
+        <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.57-->
+        <tomcat-embed.version>10.1.59</tomcat-embed.version>
         <!-- End of temporarily overridden dependencies -->
 
         <!--sonar configuration-->
