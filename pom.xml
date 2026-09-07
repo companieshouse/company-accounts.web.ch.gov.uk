@@ -82,6 +82,19 @@
                 <version>${plexus-utils.version}</version>
                 <scope>compile</scope>
             </dependency>
+
+            <!--
+                Override dependency to fix CVE-2026-54515(5.3)
+                Review to see if company-accounts-library > 3.0.6
+                supplies an updated version of this,
+                allowing removal of this dependency.
+            -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.21.6</version>
+                <scope>compile</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -95,19 +108,19 @@
 
         <hamcrest.version>3.0</hamcrest.version>
 
-        <java-session-handler.version>4.1.7</java-session-handler.version>
+        <java-session-handler.version>4.1.23</java-session-handler.version>
 
-        <api-sdk-java.version>7.1.1</api-sdk-java.version>
+        <api-sdk-java.version>7.2.3</api-sdk-java.version>
 
-        <sdk-manager-java.version>3.0.14</sdk-manager-java.version>
+        <sdk-manager-java.version>4.0.0</sdk-manager-java.version>
 
-        <structured-logging.version>3.0.57</structured-logging.version>
+        <structured-logging.version>4.0.4</structured-logging.version>
 
         <common-web-java.version>4.1.0</common-web-java.version>
 
-        <web-security-java.version>3.1.18</web-security-java.version>
+        <web-security-java.version>3.1.19</web-security-java.version>
 
-        <company-accounts-library.version>3.0.1</company-accounts-library.version>
+        <company-accounts-library.version>3.0.6</company-accounts-library.version>
 
         <environment-reader-library.version>3.0.1</environment-reader-library.version>
         <commons-beanutils.version>1.11.0</commons-beanutils.version>
@@ -123,7 +136,7 @@
 
         <opentelemetry-instrumentation-bom.version>2.29.0</opentelemetry-instrumentation-bom.version>
 
-        <spring-boot-dependencies.version>3.5.16</spring-boot-dependencies.version>
+        <spring-boot-dependencies.version>4.1.1</spring-boot-dependencies.version>
 
         <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
@@ -141,7 +154,7 @@
         <kotlin-stdlib.version>2.3.20</kotlin-stdlib.version>
         <plexus-utils.version>4.0.3</plexus-utils.version>
         <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.55-->
-        <tomcat-embed.version>10.1.57</tomcat-embed.version>
+        <tomcat-embed.version>11.0.25</tomcat-embed.version>
         <!-- End of temporarily overridden dependencies -->
 
         <!--sonar configuration-->
@@ -161,7 +174,7 @@
 
     <dependencies>
         <!-- Temporarily overridden dependencies -->
-        <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.55 -->
+        <!-- Removed this if spring-boot > 4.1.1 updated this dependency to >= 11.0.24 -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
@@ -193,11 +206,6 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
@@ -219,9 +227,8 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
