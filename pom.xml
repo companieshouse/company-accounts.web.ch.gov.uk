@@ -153,7 +153,7 @@
         <log4j-api.version>2.25.5</log4j-api.version>
         <kotlin-stdlib.version>2.3.20</kotlin-stdlib.version>
         <plexus-utils.version>4.0.3</plexus-utils.version>
-        <!-- Removed this if spring-boot > 3.5.16 updated this dependency to >= 10.1.55-->
+        <!-- Removed this if spring-boot > 4.1.1 updated this dependency to >= 11.0.24 -->
         <tomcat-embed.version>11.0.25</tomcat-embed.version>
         <!-- End of temporarily overridden dependencies -->
 
