@@ -143,7 +143,7 @@ class GovukCompanyDetailControllerTest {
         mockMvc.perform(post("/accounts/company/BR123456/details"))
             .andExpect(status().is3xxRedirection())
             .andExpect(view().name(UrlBasedViewResolver.REDIRECT_URL_PREFIX
-                + "/cannot-file-full-accounts-for-company-type"));
+                + "/accounts/cannot-file-full-accounts-for-company-type"));
     }
 
     @Test
