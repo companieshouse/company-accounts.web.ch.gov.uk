@@ -19,20 +19,20 @@
 
     <dependencyManagement>
         <dependencies>
-        <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-instrumentation-bom</artifactId>
-            <version>${opentelemetry-instrumentation-bom.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-          </dependency>
-          <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-dependencies</artifactId>
-            <version>${spring-boot-dependencies.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-          </dependency>
+            <dependency>
+                <groupId>io.opentelemetry.instrumentation</groupId>
+                <artifactId>opentelemetry-instrumentation-bom</artifactId>
+                <version>${opentelemetry-instrumentation-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!--
                 Override dependency to fix CVE-2025-48924
                 Review to see if all:
@@ -173,6 +173,16 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-opentelemetry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+            <version>2.26.1-alpha</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- Temporarily overridden dependencies -->
         <!-- Removed this if spring-boot > 4.1.1 updated this dependency to >= 11.0.24 -->
         <dependency>
@@ -232,11 +242,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
-        <dependency>
-          <groupId>io.opentelemetry.instrumentation</groupId>
-          <artifactId>opentelemetry-spring-boot-starter</artifactId>
         </dependency>
 
         <dependency>
@@ -336,11 +341,11 @@
             <artifactId>structured-logging</artifactId>
             <version>${structured-logging.version}</version>
             <exclusions>
-                  <exclusion>
-                      <groupId>org.slf4j</groupId>
-                      <artifactId>*</artifactId>
-                  </exclusion>
-              </exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
