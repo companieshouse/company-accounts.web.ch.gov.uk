@@ -38,8 +38,8 @@ public class GovukCompanyDetailController extends BaseController {
     private static final UriTemplate FILE_ACCOUNTS_DIFFERENTLY =
         new UriTemplate("/company/{companyNumber}/file-these-accounts-differently");
 
-    private static final String CANNOT_FILE_FULL_ACCOUNTS_FOR_COMPANY_TYPE =
-        "/accounts/cannot-file-full-accounts-for-company-type";
+    private static final UriTemplate CANNOT_FILE_FULL_ACCOUNTS_FOR_COMPANY_TYPE =
+        new UriTemplate("/accounts/company/{companyNumber}/cannot-file-full-accounts-for-company-type");
 
     private static final UriTemplate CIC_STEPS_TO_COMPLETE =
             new UriTemplate("/company/{companyNumber}/cic/steps-to-complete");
@@ -83,7 +83,8 @@ public class GovukCompanyDetailController extends BaseController {
             }
 
             if (ukEstablishmentCompanyNumberService.isUkEstablishmentCompany(companyNumber)) {
-                return UrlBasedViewResolver.REDIRECT_URL_PREFIX + CANNOT_FILE_FULL_ACCOUNTS_FOR_COMPANY_TYPE;
+                return UrlBasedViewResolver.REDIRECT_URL_PREFIX
+                    + CANNOT_FILE_FULL_ACCOUNTS_FOR_COMPANY_TYPE.expand(companyNumber);
             }
 
             if (BooleanUtils.isTrue(companyService.getCompanyProfile(companyNumber)
