@@ -17,9 +17,12 @@ class CannotFileFullAccountsForCompanyTypeControllerTest {
 
     private MockMvc mockMvc;
 
-    private static final String PATH = "/accounts/cannot-file-full-accounts-for-company-type";
+    private static final String COMPANY_NUMBER = "BR123456";
+    private static final String PATH = "/accounts/company/" + COMPANY_NUMBER
+        + "/cannot-file-full-accounts-for-company-type";
     private static final String VIEW = "smallfull/cannotFileFullAccountsForCompanyType";
     private static final String TEMPLATE_NAME_MODEL_ATTR = "templateName";
+    private static final String BACK_BUTTON_MODEL_ATTR = "backButton";
 
     @BeforeEach
     void setup() {
@@ -33,6 +36,8 @@ class CannotFileFullAccountsForCompanyTypeControllerTest {
         this.mockMvc.perform(get(PATH))
             .andExpect(status().isOk())
             .andExpect(view().name(VIEW))
+            .andExpect(model().attribute(BACK_BUTTON_MODEL_ATTR,
+                "/company/" + COMPANY_NUMBER + "/small-full/criteria"))
             .andExpect(model().attributeExists(TEMPLATE_NAME_MODEL_ATTR));
     }
 }
