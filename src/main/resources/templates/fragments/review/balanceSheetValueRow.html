@@ -18,9 +18,9 @@
 
     <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
           th:if="${isEmployees==true}"
-          th:text="${currentAmount != null ? #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"></span>
+          th:text="${currentAmount != null ? '£' + #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"></span>
     <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-current-amount' : null"
-          th:text="${currentAmount != null ? #numbers.formatCurrency(currentAmount) : ''}"
+          th:text="${currentAmount != null ? '£' + #numbers.formatInteger(currentAmount, 0, 'COMMA') : ''}"
           th:unless="${isEmployees==true}"></span>
 
   </dd>
@@ -30,9 +30,9 @@
           th:text="${previousAmount != null} ? *{balanceSheet.balanceSheetHeadings.previousPeriodHeading + ':'} : ''"></span>
     <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
           th:if="${isEmployees==true}"
-          th:text="${previousAmount != null ? #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}"></span>
+          th:text="${previousAmount != null ? '£' + #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}"></span>
     <span th:id="${identifier != null} ? 'review-' + ${identifier} + '-previous-amount' : null"
-          th:text="${previousAmount != null ? #numbers.formatCurrency(previousAmount) : ''}"
+          th:text="${previousAmount != null ? '£' + #numbers.formatInteger(previousAmount, 0, 'COMMA') : ''}"
           th:unless="${isEmployees==true}"></span>
   </dd>
 
