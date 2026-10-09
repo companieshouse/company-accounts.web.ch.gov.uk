@@ -13,7 +13,7 @@
     <parent>
         <groupId>uk.gov.companieshouse</groupId>
         <artifactId>companies-house-parent</artifactId>
-        <version>2.1.14</version>
+        <version>3.0.0</version>
         <relativePath/>
     </parent>
 
@@ -159,8 +159,6 @@
 
         <!--sonar configuration-->
         <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
-        <sonar.login/>
-        <sonar.password/>
         <sonar.projectKey>uk.gov.companieshouse:company-accounts.web.ch.gov.uk</sonar.projectKey>
         <sonar.projectName>company-accounts.web.ch.gov.uk</sonar.projectName>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
